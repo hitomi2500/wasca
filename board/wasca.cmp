@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = 06.05.2015 0:59:04
+Cmp-Mod V01 Created by Cvpcb (2015-01-16 BZR 5376)-product   date = 06.05.2015 10:59:02
 
 BeginCmp
 TimeStamp = /553AE73B;
@@ -365,16 +365,16 @@ IdModule  = Connect:SD_Card_Receptacle;
 EndCmp
 
 BeginCmp
-TimeStamp = /5549505F;
+TimeStamp = /5549E3D1;
 Reference = CON2;
-ValeurCmp = USB-MICRO-B;
+ValeurCmp = USB_OTG;
 IdModule  = Connect:USB_Micro-B;
 EndCmp
 
 BeginCmp
-TimeStamp = /554187D4;
+TimeStamp = /5549EFB4;
 Reference = D1;
-ValeurCmp = D_Schottky_x2_KCom;
+ValeurCmp = D_Schottky_x2_KCom_AAK;
 IdModule  = Housings_SOT-23_SOT-143_TSOT-6:SOT-23_Handsoldering;
 EndCmp
 
