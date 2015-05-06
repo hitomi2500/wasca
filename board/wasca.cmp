@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (2015-01-16 BZR 5376)-product   date = 06.05.2015 10:59:02
+Cmp-Mod V01 Created by Cvpcb (2015-01-16 BZR 5376)-product   date = 06.05.2015 11:24:59
 
 BeginCmp
 TimeStamp = /553AE73B;
@@ -354,7 +354,7 @@ BeginCmp
 TimeStamp = /5530C876;
 Reference = CN1;
 ValeurCmp = CARTRIDGE_EDGE_CONNECTOR;
-IdModule  = ;
+IdModule  = Wasca:CARTRIDGE_EDGE_CONNECTOR2;
 EndCmp
 
 BeginCmp
@@ -382,7 +382,7 @@ BeginCmp
 TimeStamp = /5530A78B;
 Reference = IC1;
 ValeurCmp = MT48LC32M16A2TG;
-IdModule  = TSOPII-54;
+IdModule  = Wasca:TSOP_II_54;
 EndCmp
 
 BeginCmp
