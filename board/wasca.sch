@@ -35,6 +35,7 @@ LIBS:ftdi
 LIBS:74xgxx
 LIBS:switches
 LIBS:maxim
+LIBS:wasca-cache
 EELAYER 25 0
 EELAYER END
 $Descr A2 23386 16535
@@ -133,21 +134,21 @@ Text Label 3500 7850 0    40   ~ 0
 ABUS_D10
 Text Label 3500 7950 0    40   ~ 0
 ABUS_D11
-Text Label 5600 7150 0    40   ~ 0
+Text Label 5700 7150 0    40   ~ 0
 ABUS_D7
-Text Label 5600 7250 0    40   ~ 0
+Text Label 5700 7250 0    40   ~ 0
 ABUS_D6
-Text Label 5600 7350 0    40   ~ 0
+Text Label 5700 7350 0    40   ~ 0
 ABUS_D5
-Text Label 5600 7450 0    40   ~ 0
+Text Label 5700 7450 0    40   ~ 0
 ABUS_D4
-Text Label 5600 7650 0    40   ~ 0
+Text Label 5700 7650 0    40   ~ 0
 ABUS_D15
-Text Label 5600 7750 0    40   ~ 0
+Text Label 5700 7750 0    40   ~ 0
 ABUS_D14
-Text Label 5600 7850 0    40   ~ 0
+Text Label 5700 7850 0    40   ~ 0
 ABUS_D13
-Text Label 5600 7950 0    40   ~ 0
+Text Label 5700 7950 0    40   ~ 0
 ABUS_D12
 Entry Wire Line
 	3300 7250 3200 7350
@@ -482,21 +483,21 @@ Entry Wire Line
 	6600 7150 6700 7050
 Entry Wire Line
 	6600 7050 6700 6950
-Text Label 6900 6350 0    40   ~ 0
-ABUS_D7
-Text Label 6900 6450 0    40   ~ 0
-ABUS_D6
-Text Label 6900 6550 0    40   ~ 0
-ABUS_D5
-Text Label 6900 6650 0    40   ~ 0
-ABUS_D4
-Text Label 6900 6750 0    40   ~ 0
-ABUS_D15
-Text Label 6900 6850 0    40   ~ 0
-ABUS_D14
-Text Label 6900 6950 0    40   ~ 0
-ABUS_D13
 Text Label 6900 7050 0    40   ~ 0
+ABUS_D7
+Text Label 6900 6950 0    40   ~ 0
+ABUS_D6
+Text Label 6900 6850 0    40   ~ 0
+ABUS_D5
+Text Label 6900 6750 0    40   ~ 0
+ABUS_D4
+Text Label 6900 6650 0    40   ~ 0
+ABUS_D15
+Text Label 6900 6550 0    40   ~ 0
+ABUS_D14
+Text Label 6900 6450 0    40   ~ 0
+ABUS_D13
+Text Label 6900 6350 0    40   ~ 0
 ABUS_D12
 Entry Wire Line
 	6150 6150 6250 6050
@@ -568,53 +569,53 @@ Text Label 9800 5850 0    40   ~ 0
 ABUS_3V_MUX6
 Text Label 9800 5950 0    40   ~ 0
 ABUS_3V_MUX7
-Text Label 3500 11100 0    40   ~ 0
+Text Label 3500 10700 0    40   ~ 0
 ABUS_D0
-Text Label 3500 11200 0    40   ~ 0
+Text Label 3500 10600 0    40   ~ 0
 ABUS_D1
-Text Label 3500 11300 0    40   ~ 0
+Text Label 3500 10500 0    40   ~ 0
 ABUS_D2
-Text Label 3500 11400 0    40   ~ 0
+Text Label 3500 10400 0    40   ~ 0
 ABUS_D3
-Text Label 3500 11500 0    40   ~ 0
+Text Label 3500 10300 0    40   ~ 0
 ABUS_D8
-Text Label 3500 11600 0    40   ~ 0
+Text Label 3500 10200 0    40   ~ 0
 ABUS_D9
-Text Label 3500 11700 0    40   ~ 0
+Text Label 3500 10100 0    40   ~ 0
 ABUS_D10
-Text Label 3500 11800 0    40   ~ 0
+Text Label 3500 10000 0    40   ~ 0
 ABUS_D11
 Entry Wire Line
-	3200 11700 3300 11800
+	3200 10600 3300 10700
 Entry Wire Line
-	3200 11600 3300 11700
+	3200 10500 3300 10600
 Entry Wire Line
-	3200 11500 3300 11600
+	3200 10400 3300 10500
 Entry Wire Line
-	3200 11400 3300 11500
+	3200 10300 3300 10400
 Entry Wire Line
-	3200 11300 3300 11400
+	3200 10200 3300 10300
 Entry Wire Line
-	3200 11200 3300 11300
+	3200 10100 3300 10200
 Entry Wire Line
-	3200 11100 3300 11200
+	3200 10000 3300 10100
 Entry Wire Line
-	3200 11000 3300 11100
-Text Label 3500 10700 0    40   ~ 0
+	3200 9900 3300 10000
+Text Label 3500 11100 0    40   ~ 0
 ABUS_A1
-Text Label 3500 10400 0    40   ~ 0
+Text Label 3500 11400 0    40   ~ 0
 ABUS_A9
-Text Label 3500 10500 0    40   ~ 0
+Text Label 3500 11300 0    40   ~ 0
 ABUS_A11
-Text Label 3500 10600 0    40   ~ 0
+Text Label 3500 11200 0    40   ~ 0
 ABUS_A10
-Text Label 3500 10300 0    40   ~ 0
+Text Label 3500 11500 0    40   ~ 0
 ABUS_A8
-Text Label 3500 10000 0    40   ~ 0
+Text Label 3500 11800 0    40   ~ 0
 ABUS_A15
-Text Label 3500 10100 0    40   ~ 0
+Text Label 3500 11700 0    40   ~ 0
 ABUS_A12
-Text Label 3500 10200 0    40   ~ 0
+Text Label 3500 11600 0    40   ~ 0
 ABUS_A13
 Entry Wire Line
 	3000 5450 3100 5350
@@ -633,21 +634,21 @@ Entry Wire Line
 Entry Wire Line
 	3000 6250 3100 6150
 Entry Wire Line
-	3000 9900 3100 10000
+	3000 11000 3100 11100
 Entry Wire Line
-	3000 10000 3100 10100
+	3000 11100 3100 11200
 Entry Wire Line
-	3000 10100 3100 10200
+	3000 11200 3100 11300
 Entry Wire Line
-	3000 10200 3100 10300
+	3000 11300 3100 11400
 Entry Wire Line
-	3000 10300 3100 10400
+	3000 11400 3100 11500
 Entry Wire Line
-	3000 10400 3100 10500
+	3000 11500 3100 11600
 Entry Wire Line
-	3000 10500 3100 10600
+	3000 11600 3100 11700
 Entry Wire Line
-	3000 10600 3100 10700
+	3000 11700 3100 11800
 Text Label 6400 10000 0    40   ~ 0
 ABUS_3V_MUX8
 Text Label 6400 10100 0    40   ~ 0
@@ -800,13 +801,13 @@ Text Label 6900 2300 0    40   ~ 0
 ABUS_WR0
 Text Label 7150 12200 0    40   ~ 0
 ABUS_A17
-Text Label 6900 3200 0    40   ~ 0
-ABUS_A23
 Text Label 6900 3300 0    40   ~ 0
+ABUS_A23
+Text Label 6900 3200 0    40   ~ 0
 ABUS_A21
-Text Label 6900 3400 0    40   ~ 0
-ABUS_A19
 Text Label 6900 3100 0    40   ~ 0
+ABUS_A19
+Text Label 6900 3400 0    40   ~ 0
 ABUS_A25
 Text Label 7150 12900 0    40   ~ 0
 DOTCLK
@@ -857,13 +858,13 @@ Text Label 9150 2200 0    40   ~ 0
 ABUS_3V_CS2
 Text Label 9150 2300 0    40   ~ 0
 ABUS_3V_WR0
-Text Label 9150 3200 0    40   ~ 0
-ABUS_3V_A23
 Text Label 9150 3300 0    40   ~ 0
+ABUS_3V_A23
+Text Label 9150 3200 0    40   ~ 0
 ABUS_3V_A21
-Text Label 9150 3400 0    40   ~ 0
-ABUS_3V_A19
 Text Label 9150 3100 0    40   ~ 0
+ABUS_3V_A19
+Text Label 9150 3400 0    40   ~ 0
 ABUS_3V_A25
 Text Label 9400 12200 0    40   ~ 0
 ABUS_3V_A17
@@ -935,7 +936,7 @@ Text Label 7300 11700 0    40   ~ 0
 +5V
 Text Label 7050 1100 0    40   ~ 0
 +5V
-Text Label 9200 1100 0    40   ~ 0
+Text Label 9250 1100 0    40   ~ 0
 +3_3V
 Text Label 9500 11700 0    40   ~ 0
 +3_3V
@@ -1471,7 +1472,7 @@ Connection ~ 5600 1700
 Wire Wire Line
 	3300 7150 4050 7150
 Wire Bus Line
-	3200 7250 3200 11700
+	3200 7250 3200 10600
 Wire Wire Line
 	3300 7250 4050 7250
 Wire Wire Line
@@ -1885,21 +1886,21 @@ Wire Bus Line
 Wire Bus Line
 	6350 8250 6500 8250
 Wire Wire Line
-	6700 6350 7450 6350
-Wire Wire Line
-	6700 6450 7450 6450
-Wire Wire Line
-	6700 6550 7450 6550
-Wire Wire Line
-	6700 6650 7450 6650
-Wire Wire Line
-	6700 6750 7450 6750
-Wire Wire Line
-	6700 6850 7450 6850
+	6700 7050 7450 7050
 Wire Wire Line
 	6700 6950 7450 6950
 Wire Wire Line
-	6700 7050 7450 7050
+	6700 6850 7450 6850
+Wire Wire Line
+	6700 6750 7450 6750
+Wire Wire Line
+	6700 6650 7450 6650
+Wire Wire Line
+	6700 6550 7450 6550
+Wire Wire Line
+	6700 6450 7450 6450
+Wire Wire Line
+	6700 6350 7450 6350
 Wire Bus Line
 	6250 5150 6250 6050
 Wire Wire Line
@@ -1923,12 +1924,7 @@ Wire Bus Line
 Wire Bus Line
 	6350 5050 6500 5050
 Wire Wire Line
-	8950 6350 9050 6350
-Wire Wire Line
-	9050 6350 9050 5250
-Wire Wire Line
 	8950 5250 10650 5250
-Connection ~ 9050 5250
 Wire Wire Line
 	8950 5350 10650 5350
 Wire Wire Line
@@ -1944,74 +1940,39 @@ Wire Wire Line
 Wire Wire Line
 	8950 5950 10650 5950
 Wire Wire Line
-	9150 6450 8950 6450
-Connection ~ 9150 5350
+	3300 10700 4050 10700
 Wire Wire Line
-	9250 5450 9250 6550
+	3300 10600 4050 10600
 Wire Wire Line
-	9250 6550 8950 6550
-Connection ~ 9250 5450
+	3300 10500 4050 10500
 Wire Wire Line
-	9350 5550 9350 6650
+	3300 10400 4050 10400
 Wire Wire Line
-	9350 6650 8950 6650
-Connection ~ 9350 5550
+	3300 10300 4050 10300
 Wire Wire Line
-	9450 5650 9450 6750
+	3300 10200 4050 10200
 Wire Wire Line
-	9450 6750 8950 6750
-Connection ~ 9450 5650
+	3300 10100 4050 10100
 Wire Wire Line
-	9550 5750 9550 6850
+	3300 10000 4050 10000
 Wire Wire Line
-	9550 6850 8950 6850
-Connection ~ 9550 5750
+	3100 11100 4050 11100
 Wire Wire Line
-	9650 5850 9650 6950
+	3100 11400 4050 11400
 Wire Wire Line
-	9650 6950 8950 6950
-Connection ~ 9650 5850
+	3100 11300 4050 11300
 Wire Wire Line
-	9750 5950 9750 7050
+	3100 11200 4050 11200
 Wire Wire Line
-	9750 7050 8950 7050
-Connection ~ 9750 5950
+	3100 11500 4050 11500
 Wire Wire Line
-	9150 6450 9150 5350
+	3100 11800 4050 11800
 Wire Wire Line
-	3300 11100 4050 11100
+	3100 11700 4050 11700
 Wire Wire Line
-	3300 11200 4050 11200
-Wire Wire Line
-	3300 11300 4050 11300
-Wire Wire Line
-	3300 11400 4050 11400
-Wire Wire Line
-	3300 11500 4050 11500
-Wire Wire Line
-	3300 11600 4050 11600
-Wire Wire Line
-	3300 11700 4050 11700
-Wire Wire Line
-	3300 11800 4050 11800
-Wire Wire Line
-	3100 10700 4050 10700
-Wire Wire Line
-	3100 10400 4050 10400
-Wire Wire Line
-	3100 10500 4050 10500
-Wire Wire Line
-	3100 10600 4050 10600
-Wire Wire Line
-	3100 10300 4050 10300
-Wire Wire Line
-	3100 10000 4050 10000
-Wire Wire Line
-	3100 10100 4050 10100
-Wire Wire Line
-	3100 10200 4050 10200
+	3100 11600 4050 11600
 Wire Bus Line
-	3000 5450 3000 10600
+	3000 5450 3000 11700
 Wire Wire Line
 	5550 11100 5650 11100
 Wire Wire Line
@@ -2208,13 +2169,13 @@ Wire Wire Line
 Wire Wire Line
 	6950 12200 7700 12200
 Wire Wire Line
-	6700 3200 7450 3200
-Wire Wire Line
 	6700 3300 7450 3300
 Wire Wire Line
-	6700 3400 7450 3400
+	6700 3200 7450 3200
 Wire Wire Line
 	6700 3100 7450 3100
+Wire Wire Line
+	6700 3400 7450 3400
 Wire Wire Line
 	6950 12900 7700 12900
 Wire Wire Line
@@ -2254,13 +2215,13 @@ Wire Wire Line
 Wire Wire Line
 	8950 2300 9700 2300
 Wire Wire Line
-	8950 3200 9700 3200
-Wire Wire Line
 	8950 3300 9700 3300
 Wire Wire Line
-	8950 3400 9700 3400
+	8950 3200 9700 3200
 Wire Wire Line
 	8950 3100 9700 3100
+Wire Wire Line
+	8950 3400 9700 3400
 Wire Wire Line
 	9200 12200 9950 12200
 Wire Wire Line
@@ -2321,12 +2282,12 @@ Wire Wire Line
 	7350 1200 7350 1100
 Connection ~ 7350 1100
 Wire Wire Line
-	8900 1100 9850 1100
+	8950 1100 9900 1100
 Wire Wire Line
-	8900 1200 9000 1200
+	8950 1200 9050 1200
 Wire Wire Line
-	9000 1200 9000 1100
-Connection ~ 9000 1100
+	9050 1200 9050 1100
+Connection ~ 9050 1100
 Wire Wire Line
 	9200 11700 10100 11700
 Wire Wire Line
@@ -3311,23 +3272,23 @@ $EndComp
 $Comp
 L C_Small C9
 U 1 1 553A6292
-P 9850 1200
-F 0 "C9" H 9860 1270 50  0000 L CNN
-F 1 "0.1uF" H 9860 1120 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 9850 1200 60  0001 C CNN
-F 3 "" H 9850 1200 60  0000 C CNN
-	1    9850 1200
+P 9900 1200
+F 0 "C9" H 9910 1270 50  0000 L CNN
+F 1 "0.1uF" H 9910 1120 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0603_HandSoldering" H 9900 1200 60  0001 C CNN
+F 3 "" H 9900 1200 60  0000 C CNN
+	1    9900 1200
 	1    0    0    -1  
 $EndComp
 $Comp
 L GND #PWR052
 U 1 1 553A6298
-P 9850 1300
-F 0 "#PWR052" H 9850 1050 50  0001 C CNN
-F 1 "GND" H 9850 1150 50  0001 C CNN
-F 2 "" H 9850 1300 60  0000 C CNN
-F 3 "" H 9850 1300 60  0000 C CNN
-	1    9850 1300
+P 9900 1300
+F 0 "#PWR052" H 9900 1050 50  0001 C CNN
+F 1 "GND" H 9900 1150 50  0001 C CNN
+F 2 "" H 9900 1300 60  0000 C CNN
+F 3 "" H 9900 1300 60  0000 C CNN
+	1    9900 1300
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -3863,4 +3824,44 @@ F 3 "" H 14300 9700 60  0000 C CNN
 	1    14300 9700
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	8950 6350 9050 6350
+Wire Wire Line
+	9050 6350 9050 5950
+Connection ~ 9050 5950
+Wire Wire Line
+	8950 6450 9150 6450
+Wire Wire Line
+	9150 6450 9150 5850
+Connection ~ 9150 5850
+Wire Wire Line
+	8950 6550 9250 6550
+Wire Wire Line
+	9250 6550 9250 5750
+Connection ~ 9250 5750
+Wire Wire Line
+	8950 6650 9350 6650
+Wire Wire Line
+	9350 6650 9350 5650
+Connection ~ 9350 5650
+Wire Wire Line
+	8950 6750 9450 6750
+Wire Wire Line
+	9450 6750 9450 5550
+Connection ~ 9450 5550
+Wire Wire Line
+	8950 6850 9550 6850
+Wire Wire Line
+	9550 6850 9550 5450
+Connection ~ 9550 5450
+Wire Wire Line
+	8950 6950 9650 6950
+Wire Wire Line
+	9650 6950 9650 5350
+Connection ~ 9650 5350
+Wire Wire Line
+	8950 7050 9750 7050
+Wire Wire Line
+	9750 7050 9750 5250
+Connection ~ 9750 5250
 $EndSCHEMATC
