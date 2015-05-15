@@ -483,21 +483,21 @@ Entry Wire Line
 	6600 7150 6700 7050
 Entry Wire Line
 	6600 7050 6700 6950
-Text Label 6900 7050 0    40   ~ 0
-ABUS_D7
-Text Label 6900 6950 0    40   ~ 0
-ABUS_D6
-Text Label 6900 6850 0    40   ~ 0
-ABUS_D5
-Text Label 6900 6750 0    40   ~ 0
-ABUS_D4
-Text Label 6900 6650 0    40   ~ 0
-ABUS_D15
-Text Label 6900 6550 0    40   ~ 0
-ABUS_D14
-Text Label 6900 6450 0    40   ~ 0
-ABUS_D13
 Text Label 6900 6350 0    40   ~ 0
+ABUS_D7
+Text Label 6900 6450 0    40   ~ 0
+ABUS_D6
+Text Label 6900 6550 0    40   ~ 0
+ABUS_D5
+Text Label 6900 6650 0    40   ~ 0
+ABUS_D4
+Text Label 6900 6750 0    40   ~ 0
+ABUS_D15
+Text Label 6900 6850 0    40   ~ 0
+ABUS_D14
+Text Label 6900 6950 0    40   ~ 0
+ABUS_D13
+Text Label 6900 7050 0    40   ~ 0
 ABUS_D12
 Entry Wire Line
 	6150 6150 6250 6050
@@ -771,43 +771,43 @@ F 3 "" H 8250 1350 60  0000 C CNN
 	1    8250 1700
 	-1   0    0    -1  
 $EndComp
-Text Label 6900 1900 0    40   ~ 0
+Text Label 6900 2700 0    40   ~ 0
 ABUS_FC1
-Text Label 6900 2000 0    40   ~ 0
+Text Label 6900 2300 0    40   ~ 0
 ABUS_TIM1
 Text Label 7150 13900 0    40   ~ 0
 ABUS_WAIT
 Text Label 7150 14000 0    40   ~ 0
 ABUS_IRQ
-Text Label 6900 1600 0    40   ~ 0
-ABUS_RD
-Text Label 6900 1700 0    40   ~ 0
-ABUS_CS1
-Text Label 6900 1800 0    40   ~ 0
-ABUS_WR1
-Text Label 6900 2700 0    40   ~ 0
-ABUS_FC0
-Text Label 6900 2800 0    40   ~ 0
-ABUS_TIM0
-Text Label 6900 2900 0    40   ~ 0
-ABUS_TIM2
 Text Label 6900 3000 0    40   ~ 0
+ABUS_RD
+Text Label 6900 2900 0    40   ~ 0
+ABUS_CS1
+Text Label 6900 2800 0    40   ~ 0
+ABUS_WR1
+Text Label 6900 1900 0    40   ~ 0
+ABUS_FC0
+Text Label 6900 1800 0    40   ~ 0
+ABUS_TIM0
+Text Label 6900 1700 0    40   ~ 0
+ABUS_TIM2
+Text Label 6900 1600 0    40   ~ 0
 ABUS_AS
-Text Label 6900 2100 0    40   ~ 0
-ABUS_CS0
 Text Label 6900 2200 0    40   ~ 0
+ABUS_CS0
+Text Label 6900 2100 0    40   ~ 0
 ABUS_CS2
-Text Label 6900 2300 0    40   ~ 0
+Text Label 6900 2000 0    40   ~ 0
 ABUS_WR0
 Text Label 7150 12200 0    40   ~ 0
 ABUS_A17
-Text Label 6900 3300 0    40   ~ 0
-ABUS_A23
 Text Label 6900 3200 0    40   ~ 0
+ABUS_A23
+Text Label 6900 3300 0    40   ~ 0
 ABUS_A21
-Text Label 6900 3100 0    40   ~ 0
-ABUS_A19
 Text Label 6900 3400 0    40   ~ 0
+ABUS_A19
+Text Label 6900 3100 0    40   ~ 0
 ABUS_A25
 Text Label 7150 12900 0    40   ~ 0
 DOTCLK
@@ -1886,21 +1886,21 @@ Wire Bus Line
 Wire Bus Line
 	6350 8250 6500 8250
 Wire Wire Line
-	6700 7050 7450 7050
-Wire Wire Line
-	6700 6950 7450 6950
-Wire Wire Line
-	6700 6850 7450 6850
-Wire Wire Line
-	6700 6750 7450 6750
-Wire Wire Line
-	6700 6650 7450 6650
-Wire Wire Line
-	6700 6550 7450 6550
+	6700 6350 7450 6350
 Wire Wire Line
 	6700 6450 7450 6450
 Wire Wire Line
-	6700 6350 7450 6350
+	6700 6550 7450 6550
+Wire Wire Line
+	6700 6650 7450 6650
+Wire Wire Line
+	6700 6750 7450 6750
+Wire Wire Line
+	6700 6850 7450 6850
+Wire Wire Line
+	6700 6950 7450 6950
+Wire Wire Line
+	6700 7050 7450 7050
 Wire Bus Line
 	6250 5150 6250 6050
 Wire Wire Line
@@ -2139,43 +2139,43 @@ Wire Wire Line
 Wire Wire Line
 	12300 3150 13050 3150
 Wire Wire Line
-	6700 1900 7450 1900
+	6700 2700 7450 2700
 Wire Wire Line
-	6700 2000 7450 2000
+	6700 2300 7450 2300
 Wire Wire Line
 	6950 13900 7700 13900
 Wire Wire Line
 	6950 14000 7700 14000
 Wire Wire Line
-	6700 1600 7450 1600
-Wire Wire Line
-	6700 1700 7450 1700
-Wire Wire Line
-	6700 1800 7450 1800
-Wire Wire Line
-	6700 2700 7450 2700
-Wire Wire Line
-	6700 2800 7450 2800
+	6700 3000 7450 3000
 Wire Wire Line
 	6700 2900 7450 2900
 Wire Wire Line
-	6700 3000 7450 3000
+	6700 2800 7450 2800
 Wire Wire Line
-	6700 2100 7450 2100
+	6700 1900 7450 1900
+Wire Wire Line
+	6700 1800 7450 1800
+Wire Wire Line
+	6700 1700 7450 1700
+Wire Wire Line
+	6700 1600 7450 1600
 Wire Wire Line
 	6700 2200 7450 2200
 Wire Wire Line
-	6700 2300 7450 2300
+	6700 2100 7450 2100
+Wire Wire Line
+	6700 2000 7450 2000
 Wire Wire Line
 	6950 12200 7700 12200
 Wire Wire Line
-	6700 3300 7450 3300
-Wire Wire Line
 	6700 3200 7450 3200
 Wire Wire Line
-	6700 3100 7450 3100
+	6700 3300 7450 3300
 Wire Wire Line
 	6700 3400 7450 3400
+Wire Wire Line
+	6700 3100 7450 3100
 Wire Wire Line
 	6950 12900 7700 12900
 Wire Wire Line
