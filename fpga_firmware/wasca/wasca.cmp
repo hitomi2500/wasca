@@ -1,0 +1,35 @@
+	component wasca is
+		port (
+			altpll_0_areset_conduit_export              : in    std_logic                     := 'X';             -- export
+			altpll_0_locked_conduit_export              : out   std_logic;                                        -- export
+			altpll_0_phasedone_conduit_export           : out   std_logic;                                        -- export
+			clk_clk                                     : in    std_logic                     := 'X';             -- clk
+			external_sdram_controller_wire_addr         : out   std_logic_vector(12 downto 0);                    -- addr
+			external_sdram_controller_wire_ba           : out   std_logic_vector(1 downto 0);                     -- ba
+			external_sdram_controller_wire_cas_n        : out   std_logic;                                        -- cas_n
+			external_sdram_controller_wire_cke          : out   std_logic;                                        -- cke
+			external_sdram_controller_wire_cs_n         : out   std_logic;                                        -- cs_n
+			external_sdram_controller_wire_dq           : inout std_logic_vector(15 downto 0) := (others => 'X'); -- dq
+			external_sdram_controller_wire_dqm          : out   std_logic_vector(1 downto 0);                     -- dqm
+			external_sdram_controller_wire_ras_n        : out   std_logic;                                        -- ras_n
+			external_sdram_controller_wire_we_n         : out   std_logic;                                        -- we_n
+			pio_0_external_connection_export            : inout std_logic_vector(3 downto 0)  := (others => 'X'); -- export
+			reset_reset_n                               : in    std_logic                     := 'X';             -- reset_n
+			sd_card_spi_external_MISO                   : in    std_logic                     := 'X';             -- MISO
+			sd_card_spi_external_MOSI                   : out   std_logic;                                        -- MOSI
+			sd_card_spi_external_SCLK                   : out   std_logic;                                        -- SCLK
+			sd_card_spi_external_SS_n                   : out   std_logic;                                        -- SS_n
+			sega_saturn_abus_slave_0_abus_address       : in    std_logic_vector(25 downto 0) := (others => 'X'); -- address
+			sega_saturn_abus_slave_0_abus_chipselect    : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- chipselect
+			sega_saturn_abus_slave_0_abus_read          : in    std_logic                     := 'X';             -- read
+			sega_saturn_abus_slave_0_abus_write         : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- write
+			sega_saturn_abus_slave_0_abus_functioncode  : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- functioncode
+			sega_saturn_abus_slave_0_abus_timing        : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- timing
+			sega_saturn_abus_slave_0_abus_waitrequest   : out   std_logic;                                        -- waitrequest
+			sega_saturn_abus_slave_0_abus_addressstrobe : in    std_logic                     := 'X';             -- addressstrobe
+			sega_saturn_abus_slave_0_abus_interrupt     : in    std_logic                     := 'X';             -- interrupt
+			sega_saturn_abus_slave_0_abus_readdata      : out   std_logic_vector(15 downto 0);                    -- readdata
+			sega_saturn_abus_slave_0_abus_writedata     : in    std_logic_vector(15 downto 0) := (others => 'X')  -- writedata
+		);
+	end component wasca;
+
