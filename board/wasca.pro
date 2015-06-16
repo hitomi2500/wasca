@@ -1,8 +1,6 @@
-update=26.05.2015 20:49:42
+update=06.06.2015 1:19:36
 version=1
 last_client=kicad
-[general]
-version=1
 [cvpcb]
 version=1
 NetIExt=net
@@ -65,3 +63,5 @@ LibName32=ftdi
 LibName33=74xgxx
 LibName34=switches
 LibName35=maxim
+[general]
+version=1
