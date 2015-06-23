@@ -93,21 +93,17 @@
    type="VHDL"
    library="rsp_demux_004" />
  <file
-   path="simulation/submodules/wasca_mm_interconnect_0_rsp_demux_002.vho"
+   path="simulation/submodules/wasca_mm_interconnect_0_rsp_demux_003.vho"
    type="VHDL"
-   library="rsp_demux_002" />
- <file
-   path="simulation/submodules/wasca_mm_interconnect_0_rsp_demux_001.vho"
-   type="VHDL"
-   library="rsp_demux_001" />
+   library="rsp_demux_003" />
  <file
    path="simulation/submodules/wasca_mm_interconnect_0_rsp_demux.vho"
    type="VHDL"
    library="rsp_demux" />
  <file
-   path="simulation/submodules/wasca_mm_interconnect_0_cmd_mux_002.vho"
+   path="simulation/submodules/wasca_mm_interconnect_0_cmd_mux_003.vho"
    type="VHDL"
-   library="cmd_mux_002" />
+   library="cmd_mux_003" />
  <file
    path="simulation/submodules/wasca_mm_interconnect_0_cmd_mux_001.vho"
    type="VHDL"
@@ -229,9 +225,9 @@
    library="external_sdram_controller_s1_burst_adapter"
    simulator="riviera" />
  <file
-   path="simulation/submodules/wasca_mm_interconnect_0_router_005.vho"
+   path="simulation/submodules/wasca_mm_interconnect_0_router_006.vho"
    type="VHDL"
-   library="router_005" />
+   library="router_006" />
  <file
    path="simulation/submodules/wasca_mm_interconnect_0_router_004.vho"
    type="VHDL"
@@ -257,9 +253,9 @@
    type="VHDL"
    library="altpll_0_pll_slave_agent_rdata_fifo" />
  <file
-   path="simulation/submodules/wasca_mm_interconnect_0_onchip_flash_0_csr_agent_rsp_fifo.vho"
+   path="simulation/submodules/wasca_mm_interconnect_0_onchip_flash_0_data_agent_rsp_fifo.vho"
    type="VHDL"
-   library="onchip_flash_0_csr_agent_rsp_fifo" />
+   library="onchip_flash_0_data_agent_rsp_fifo" />
  <file
    path="simulation/submodules/wasca_mm_interconnect_0_external_sdram_controller_s1_agent_rdata_fifo.vho"
    type="VHDL"
@@ -435,19 +431,15 @@
    type="VHDL"
    library="mm_interconnect_0" />
  <file
-   path="simulation/submodules/wasca_mm_interconnect_0_onchip_flash_0_csr_agent.vhd"
-   type="VHDL"
-   library="mm_interconnect_0" />
- <file
    path="simulation/submodules/wasca_mm_interconnect_0_onchip_flash_0_data_agent.vhd"
    type="VHDL"
    library="mm_interconnect_0" />
  <file
-   path="simulation/submodules/wasca_mm_interconnect_0_external_sdram_controller_s1_translator.vhd"
+   path="simulation/submodules/wasca_mm_interconnect_0_nios2_gen2_0_debug_mem_slave_agent.vhd"
    type="VHDL"
    library="mm_interconnect_0" />
  <file
-   path="simulation/submodules/wasca_mm_interconnect_0_onchip_flash_0_csr_translator.vhd"
+   path="simulation/submodules/wasca_mm_interconnect_0_external_sdram_controller_s1_translator.vhd"
    type="VHDL"
    library="mm_interconnect_0" />
  <file
@@ -518,11 +510,6 @@
    library="onchip_flash_0"
    simulator="modelsim" />
  <file
-   path="simulation/submodules/mentor/altera_onchip_flash_avmm_csr_controller.v"
-   type="VERILOG_ENCRYPT"
-   library="onchip_flash_0"
-   simulator="modelsim" />
- <file
    path="simulation/submodules/aldec/altera_onchip_flash_util.v"
    type="VERILOG_ENCRYPT"
    library="onchip_flash_0"
@@ -534,11 +521,6 @@
    simulator="riviera" />
  <file
    path="simulation/submodules/aldec/altera_onchip_flash_avmm_data_controller.v"
-   type="VERILOG_ENCRYPT"
-   library="onchip_flash_0"
-   simulator="riviera" />
- <file
-   path="simulation/submodules/aldec/altera_onchip_flash_avmm_csr_controller.v"
    type="VERILOG_ENCRYPT"
    library="onchip_flash_0"
    simulator="riviera" />

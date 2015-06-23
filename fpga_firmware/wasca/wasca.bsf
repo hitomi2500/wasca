@@ -102,13 +102,6 @@ agreement for further details.
 		(line (pt 0 680)(pt 272 680)(line_width 1))
 	)
 	(port
-		(pt 0 696)
-		(input)
-		(text "sega_saturn_abus_slave_0_abus_interrupt" (rect 0 0 174 12)(font "Arial" (font_size 8)))
-		(text "sega_saturn_abus_slave_0_abus_interrupt" (rect 4 685 238 696)(font "Arial" (font_size 8)))
-		(line (pt 0 696)(pt 272 696)(line_width 1))
-	)
-	(port
 		(pt 0 728)
 		(input)
 		(text "sega_saturn_abus_slave_0_abus_writedata[15..0]" (rect 0 0 200 12)(font "Arial" (font_size 8)))
@@ -212,6 +205,13 @@ agreement for further details.
 		(text "sega_saturn_abus_slave_0_abus_waitrequest" (rect 0 0 186 12)(font "Arial" (font_size 8)))
 		(text "sega_saturn_abus_slave_0_abus_waitrequest" (rect 4 653 250 664)(font "Arial" (font_size 8)))
 		(line (pt 0 664)(pt 272 664)(line_width 1))
+	)
+	(port
+		(pt 0 696)
+		(output)
+		(text "sega_saturn_abus_slave_0_abus_interrupt" (rect 0 0 174 12)(font "Arial" (font_size 8)))
+		(text "sega_saturn_abus_slave_0_abus_interrupt" (rect 4 685 238 696)(font "Arial" (font_size 8)))
+		(line (pt 0 696)(pt 272 696)(line_width 1))
 	)
 	(port
 		(pt 0 712)

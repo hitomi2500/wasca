@@ -33,7 +33,7 @@ entity wasca_toplevel is
 		sega_saturn_abus_slave_0_abus_timing        : in    std_logic_vector(2 downto 0)  := (others => '0'); --                               .timing
 		sega_saturn_abus_slave_0_abus_waitrequest   : out   std_logic;                                        --                               .waitrequest
 		sega_saturn_abus_slave_0_abus_addressstrobe : in    std_logic                     := '0';             --                               .addressstrobe
-		sega_saturn_abus_slave_0_abus_interrupt     : in    std_logic                     := '0';              --                               .interrupt
+		sega_saturn_abus_slave_0_abus_interrupt     : out    std_logic                     := '0';              --                               .interrupt
 		sega_saturn_abus_slave_0_abus_muxing	     : out   std_logic_vector(1	 downto 0)  := (others => '0'); --                               .muxing
 		sega_saturn_abus_slave_0_abus_direction	  : out   std_logic                     := '0'              --                               .direction
 	);
@@ -71,7 +71,7 @@ architecture rtl of wasca_toplevel is
 			sega_saturn_abus_slave_0_abus_timing        : in    std_logic_vector(2 downto 0)  := (others => '0'); --                               .timing
 			sega_saturn_abus_slave_0_abus_waitrequest   : out   std_logic;                                        --                               .waitrequest
 			sega_saturn_abus_slave_0_abus_addressstrobe : in    std_logic                     := '0';             --                               .addressstrobe
-			sega_saturn_abus_slave_0_abus_interrupt     : in    std_logic                     := '0';             --                               .interrupt
+			sega_saturn_abus_slave_0_abus_interrupt     : out    std_logic                     := '0';             --                               .interrupt
 			sega_saturn_abus_slave_0_abus_readdata      : out   std_logic_vector(15 downto 0);                    --                               .readdata
 			sega_saturn_abus_slave_0_abus_writedata     : in    std_logic_vector(15 downto 0) := (others => '0')  --                               .writedata
 		);
