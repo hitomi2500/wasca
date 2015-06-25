@@ -165,29 +165,30 @@ begin
 	process (clock)
 	begin
 		if rising_edge(clock) then
-			if chipselect_latched \= "11" then
+			if chipselect_latched = "11" then
+				--chipselect deasserted
+				abus_direction <= '0'; --high-z
+				abus_muxing <= "00"; --address
+			else
 				--chipselect asserted
 				case (my_little_transaction_dir) is
 					when DIR_NONE => 
-						null;
+						abus_direction <= '0'; --high-z
+						abus_muxing <= "11"; --data
 					when DIR_READ =>
-						null;
+						abus_direction <= '1'; --active
+						abus_muxing <= "11"; --data
 					when DIR_WRITE =>
-						null;
+						abus_direction <= '0'; --high-z
+						abus_muxing <= "11"; --data
 				end case;
-			else
-				abus_direction <= '0';
-				abus_muxing <= "00";
 			end if;
 		end if;
 	end process;
 	
-	
-
 	abus_waitrequest <= '0';
 	
-	--avalon read logic
-	
+	--avalon read stuff
 	
 	
 	--avalon-to-abus mapping
