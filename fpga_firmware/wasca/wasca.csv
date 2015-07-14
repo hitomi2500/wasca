@@ -1,12 +1,12 @@
-# system info wasca on 2015.06.23.11:23:44
+# system info wasca on 2015.07.15.01:37:08
 system_info:
 name,value
 DEVICE,10M04SCE144A7G
 DEVICE_FAMILY,MAX 10
-GENERATION_ID,1435043653
+GENERATION_ID,1436853243
 #
 #
-# Files generated for wasca on 2015.06.23.11:23:44
+# Files generated for wasca on 2015.07.15.01:37:08
 files:
 filepath,kind,attributes,module,is_top
 simulation/wasca.vhd,VHDL,,wasca,true

@@ -97,6 +97,30 @@
          type = "int";
       }
    }
+   element wasca
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
+   element wasca
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
+   element wasca
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
@@ -342,7 +366,7 @@
   <parameter name="casLatency" value="3" />
   <parameter name="clockRate" value="116000000" />
   <parameter name="columnWidth" value="10" />
-  <parameter name="componentName">$${FILENAME}_external_sdram_controller</parameter>
+  <parameter name="componentName">wasca_external_sdram_controller</parameter>
   <parameter name="dataWidth" value="16" />
   <parameter name="generateSimulationModel" value="false" />
   <parameter name="initNOPDelay" value="0.0" />
@@ -362,8 +386,8 @@
    kind="altera_nios2_gen2"
    version="15.0"
    enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="3" />
-  <parameter name="AUTO_CLK_RESET_DOMAIN" value="3" />
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="1" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="1" />
   <parameter name="AUTO_DEVICE" value="10M04SCE144A7G" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="7" />
   <parameter name="bht_ramBlockType" value="Automatic" />
@@ -552,7 +576,7 @@
   <parameter name="READ_BURST_COUNT" value="8" />
   <parameter name="READ_BURST_MODE" value="Incrementing" />
   <parameter name="SECTOR_ACCESS_MODE">Hidden,Read only,Hidden,Read only,Hidden</parameter>
-  <parameter name="autoInitializationFileName">$${FILENAME}_onchip_flash_0</parameter>
+  <parameter name="autoInitializationFileName">wasca_onchip_flash_0</parameter>
   <parameter name="initFlashContent" value="true" />
   <parameter name="initializationFileName">altera_onchip_flash.hex</parameter>
   <parameter name="initializationFileNameForSim">altera_onchip_flash.dat</parameter>
@@ -564,7 +588,7 @@
    version="15.0"
    enabled="1">
   <parameter name="allowInSystemMemoryContentEditor" value="false" />
-  <parameter name="autoInitializationFileName">$${FILENAME}_onchip_memory2_0</parameter>
+  <parameter name="autoInitializationFileName">wasca_onchip_memory2_0</parameter>
   <parameter name="blockType" value="AUTO" />
   <parameter name="copyInitFile" value="false" />
   <parameter name="dataWidth" value="32" />

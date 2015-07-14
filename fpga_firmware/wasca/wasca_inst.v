@@ -27,7 +27,6 @@
 		.sega_saturn_abus_slave_0_abus_waitrequest   (<connected-to-sega_saturn_abus_slave_0_abus_waitrequest>),   //                               .waitrequest
 		.sega_saturn_abus_slave_0_abus_addressstrobe (<connected-to-sega_saturn_abus_slave_0_abus_addressstrobe>), //                               .addressstrobe
 		.sega_saturn_abus_slave_0_abus_interrupt     (<connected-to-sega_saturn_abus_slave_0_abus_interrupt>),     //                               .interrupt
-		.sega_saturn_abus_slave_0_abus_readdata      (<connected-to-sega_saturn_abus_slave_0_abus_readdata>),      //                               .readdata
-		.sega_saturn_abus_slave_0_abus_writedata     (<connected-to-sega_saturn_abus_slave_0_abus_writedata>)      //                               .writedata
+		.sega_saturn_abus_slave_0_abus_addressdata   (<connected-to-sega_saturn_abus_slave_0_abus_addressdata>)    //                               .addressdata
 	);
 

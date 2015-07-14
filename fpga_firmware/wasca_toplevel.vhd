@@ -25,7 +25,7 @@ entity wasca_toplevel is
 		sd_card_spi_external_SCLK                   : out   std_logic;                                        --                               .SCLK
 		sd_card_spi_external_SS_n                   : out   std_logic;                                        --                               .SS_n
 		sega_saturn_abus_slave_0_abus_address       : in    std_logic_vector(25 downto 16) := (others => '0'); --  sega_saturn_abus_slave_0_abus.address
-		sega_saturn_abus_slave_0_abus_mux          : inout std_logic_vector(15 downto 0) := (others => '0'); --                               .data
+		sega_saturn_abus_slave_0_abus_addressdata   : inout std_logic_vector(15 downto 0) := (others => '0'); --                               .data
 		sega_saturn_abus_slave_0_abus_chipselect    : in    std_logic_vector(2 downto 0)  := (others => '0'); --                               .chipselect
 		sega_saturn_abus_slave_0_abus_read          : in    std_logic                     := '0';             --                               .read
 		sega_saturn_abus_slave_0_abus_write         : in    std_logic_vector(1 downto 0)  := (others => '0'); --                               .write
@@ -63,7 +63,8 @@ architecture rtl of wasca_toplevel is
 			sd_card_spi_external_MOSI                   : out   std_logic;                                        --                               .MOSI
 			sd_card_spi_external_SCLK                   : out   std_logic;                                        --                               .SCLK
 			sd_card_spi_external_SS_n                   : out   std_logic;                                        --                               .SS_n
-			sega_saturn_abus_slave_0_abus_address       : in    std_logic_vector(25 downto 0) := (others => '0'); --  sega_saturn_abus_slave_0_abus.address
+			sega_saturn_abus_slave_0_abus_address       : in    std_logic_vector(9 downto 0) := (others => '0'); --  sega_saturn_abus_slave_0_abus.address
+			sega_saturn_abus_slave_0_abus_addressdata   : inout std_logic_vector(15 downto 0) := (others => '0'); --  
 			sega_saturn_abus_slave_0_abus_chipselect    : in    std_logic_vector(2 downto 0)  := (others => '0'); --                               .chipselect
 			sega_saturn_abus_slave_0_abus_read          : in    std_logic                     := '0';             --                               .read
 			sega_saturn_abus_slave_0_abus_write         : in    std_logic_vector(1 downto 0)  := (others => '0'); --                               .write
@@ -71,9 +72,7 @@ architecture rtl of wasca_toplevel is
 			sega_saturn_abus_slave_0_abus_timing        : in    std_logic_vector(2 downto 0)  := (others => '0'); --                               .timing
 			sega_saturn_abus_slave_0_abus_waitrequest   : out   std_logic;                                        --                               .waitrequest
 			sega_saturn_abus_slave_0_abus_addressstrobe : in    std_logic                     := '0';             --                               .addressstrobe
-			sega_saturn_abus_slave_0_abus_interrupt     : out    std_logic                     := '0';             --                               .interrupt
-			sega_saturn_abus_slave_0_abus_readdata      : out   std_logic_vector(15 downto 0);                    --                               .readdata
-			sega_saturn_abus_slave_0_abus_writedata     : in    std_logic_vector(15 downto 0) := (others => '0')  --                               .writedata
+			sega_saturn_abus_slave_0_abus_interrupt     : out    std_logic                     := '0'             --                               .interrupt
 		);
 	end component;
 
@@ -82,14 +81,14 @@ architecture rtl of wasca_toplevel is
 	--signal altpll_0_locked_conduit_export : std_logic := '0';
 	signal altpll_0_phasedone_conduit_export : std_logic := '0';
 	
-	signal sega_saturn_abus_slave_0_abus_address_demuxed : std_logic_vector(25 downto 0) := (others => '0');
-	signal sega_saturn_abus_slave_0_abus_data_demuxed : std_logic_vector(15 downto 0) := (others => '0');
+	--signal sega_saturn_abus_slave_0_abus_address_demuxed : std_logic_vector(25 downto 0) := (others => '0');
+	--signal sega_saturn_abus_slave_0_abus_data_demuxed : std_logic_vector(15 downto 0) := (others => '0');
 	
 	begin
 	
-	sega_saturn_abus_slave_0_abus_address_demuxed(25 downto 16) <= sega_saturn_abus_slave_0_abus_address;
-	sega_saturn_abus_slave_0_abus_address_demuxed(15 downto 0) <= sega_saturn_abus_slave_0_abus_mux;
-	sega_saturn_abus_slave_0_abus_data_demuxed <= sega_saturn_abus_slave_0_abus_mux;
+	--sega_saturn_abus_slave_0_abus_address_demuxed(25 downto 16) <= sega_saturn_abus_slave_0_abus_address;
+	--sega_saturn_abus_slave_0_abus_address_demuxed(15 downto 0) <= sega_saturn_abus_slave_0_abus_mux;
+	--sega_saturn_abus_slave_0_abus_data_demuxed <= sega_saturn_abus_slave_0_abus_mux;
 	sega_saturn_abus_slave_0_abus_muxing <= "01";
 	sega_saturn_abus_slave_0_abus_direction <= '1';
 	
@@ -114,7 +113,8 @@ architecture rtl of wasca_toplevel is
 			sd_card_spi_external_MOSI => sd_card_spi_external_MOSI,
 			sd_card_spi_external_SCLK => sd_card_spi_external_SCLK,
 			sd_card_spi_external_SS_n => sd_card_spi_external_SS_n,
-			sega_saturn_abus_slave_0_abus_address => sega_saturn_abus_slave_0_abus_address_demuxed,
+			sega_saturn_abus_slave_0_abus_address(9 downto 0) => sega_saturn_abus_slave_0_abus_address(25 downto 16),
+			sega_saturn_abus_slave_0_abus_addressdata => sega_saturn_abus_slave_0_abus_addressdata,
 			sega_saturn_abus_slave_0_abus_chipselect => sega_saturn_abus_slave_0_abus_chipselect,
 			sega_saturn_abus_slave_0_abus_read => sega_saturn_abus_slave_0_abus_read,
 			sega_saturn_abus_slave_0_abus_write => sega_saturn_abus_slave_0_abus_write,
@@ -122,9 +122,7 @@ architecture rtl of wasca_toplevel is
 			sega_saturn_abus_slave_0_abus_timing => sega_saturn_abus_slave_0_abus_timing,
 			sega_saturn_abus_slave_0_abus_waitrequest => sega_saturn_abus_slave_0_abus_waitrequest,
 			sega_saturn_abus_slave_0_abus_addressstrobe => sega_saturn_abus_slave_0_abus_addressstrobe,
-			sega_saturn_abus_slave_0_abus_interrupt => sega_saturn_abus_slave_0_abus_interrupt,
-			sega_saturn_abus_slave_0_abus_writedata => sega_saturn_abus_slave_0_abus_data_demuxed,
-			sega_saturn_abus_slave_0_abus_writedata => open
+			sega_saturn_abus_slave_0_abus_interrupt => sega_saturn_abus_slave_0_abus_interrupt
 		);
 
 end architecture rtl; -- of wasca_toplevel

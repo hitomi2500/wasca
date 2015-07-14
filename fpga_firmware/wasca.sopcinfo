@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="wasca" kind="wasca" version="1.0" fabric="QSYS">
  <!-- Format version 15.0 145 (Future versions may contain additional information.) -->
- <!-- 2015.06.23.11:23:49 -->
+ <!-- 2015.07.15.01:37:20 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1435044229</value>
+  <value>1436909840</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -10304,7 +10304,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>abus_address</name>
     <direction>Input</direction>
-    <width>26</width>
+    <width>10</width>
     <role>address</role>
    </port>
    <port>
@@ -10356,16 +10356,10 @@ parameters are a RESULT of the module parameters. -->
     <role>interrupt</role>
    </port>
    <port>
-    <name>abus_readdata</name>
-    <direction>Output</direction>
+    <name>abus_addressdata</name>
+    <direction>Bidir</direction>
     <width>16</width>
-    <role>readdata</role>
-   </port>
-   <port>
-    <name>abus_writedata</name>
-    <direction>Input</direction>
-    <width>16</width>
-    <role>writedata</role>
+    <role>addressdata</role>
    </port>
   </interface>
   <interface name="avalon_master" kind="avalon_master" version="15.0">

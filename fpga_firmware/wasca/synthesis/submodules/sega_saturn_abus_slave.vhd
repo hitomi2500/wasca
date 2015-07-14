@@ -55,9 +55,23 @@ signal abus_chipselect2          : std_logic_vector(2 downto 0)  := (others => '
 signal abus_read_pulse           : std_logic                     := '0';             --              .read
 signal abus_write_pulse           : std_logic_vector(1 downto 0)  := (others => '0'); --              .write
 signal abus_chipselect_pulse          : std_logic_vector(2 downto 0)  := (others => '0'); --              .chipselect
+signal abus_read_pulse_off           : std_logic                     := '0';             --              .read
+signal abus_write_pulse_off           : std_logic_vector(1 downto 0)  := (others => '0'); --              .write
+signal abus_chipselect_pulse_off          : std_logic_vector(2 downto 0)  := (others => '0'); --              .chipselect
 
 signal abus_anypulse            : std_logic                     := '0'; 
 signal abus_anypulse2           : std_logic                     := '0'; 
+signal abus_anypulse_off            : std_logic                     := '0'; 
+
+signal abus_address_latched         : std_logic_vector(25 downto 0) := (others => '0'); --          abus.address
+signal abus_chipselect_latched         : std_logic_vector(1 downto 0) := (others => '0'); --          abus.address
+signal abus_direction            : std_logic                     := '0'; 
+signal abus_muxing         : std_logic_vector(1 downto 0) := (others => '0'); --          abus.address
+signal abus_data_out         : std_logic_vector(15 downto 0) := (others => '0');
+signal abus_data_in         : std_logic_vector(15 downto 0) := (others => '0');
+signal abus_waitrequest_read            : std_logic                     := '0'; 
+signal abus_waitrequest_write            : std_logic                     := '0'; 
+
 
 TYPE transaction_dir IS (DIR_NONE,DIR_WRITE,DIR_READ);
 SIGNAL my_little_transaction_dir : transaction_dir := DIR_NONE; 
@@ -137,7 +151,7 @@ begin
 		if rising_edge(clock) then
 			if abus_write_pulse(0) = '1' or abus_write_pulse(1) = '1' then
 				my_little_transaction_dir <= DIR_WRITE;
-			if abus_read_pulse = '1' then
+			elsif abus_read_pulse = '1' then
 				my_little_transaction_dir <= DIR_READ;
 			elsif abus_anypulse_off = '1' then
 				my_little_transaction_dir <= DIR_NONE;
@@ -150,13 +164,13 @@ begin
 	begin
 		if rising_edge(clock) then
 			if abus_chipselect_pulse(0) = '1' then
-				chipselect_latched <= "00";
+				abus_chipselect_latched <= "00";
 			elsif abus_chipselect_pulse(1) = '1' then
-				chipselect_latched <= "01";
+				abus_chipselect_latched <= "01";
 			elsif abus_chipselect_pulse(2) = '1' then
-				chipselect_latched <= "10";
+				abus_chipselect_latched <= "10";
 			elsif abus_anypulse_off = '1' then
-				chipselect_latched <= "11";
+				abus_chipselect_latched <= "11";
 			end if;
 		end if;
 	end process;
@@ -165,7 +179,7 @@ begin
 	process (clock)
 	begin
 		if rising_edge(clock) then
-			if chipselect_latched = "11" then
+			if abus_chipselect_latched = "11" then
 				--chipselect deasserted
 				abus_direction <= '0'; --high-z
 				abus_muxing <= "00"; --address
@@ -186,22 +200,43 @@ begin
 		end if;
 	end process;
 	
-	abus_waitrequest <= '0';
-	
-	--avalon read stuff
+	--if abus read access is detected, issue avalon read transaction
+	--wait until readdatavalid, then disable read and abus wait
+	process (clock)
+	begin
+		if rising_edge(clock) then
+			if my_little_transaction_dir = DIR_READ and abus_chipselect_latched != "11" then
+				avalon_read <= '1';
+				abus_waitrequest_read <= '1';
+			elsif avalon_readdatavalid = '1' then
+				avalon_read <= '0';
+				abus_waitrequest_read <= '0';
+				abus_data_out <= avalon_readdata;
+			end if;
+		end if;
+	end process;
+
+	--if abus write access is detected, issue avalon write transaction
+	--disable abus wait immediately
+	--TODO: check if avalon_writedata is already valid at this moment
+	process (clock)
+	begin
+		if rising_edge(clock) then
+			if my_little_transaction_dir = DIR_WRITE and abus_chipselect_latched != "11" then
+				avalon_write <= '1';
+				abus_waitrequest_write <= '1';
+			else
+				avalon_write <= '0';
+				abus_waitrequest_read <= '0';
+			end if;
+		end if;
+	end process;
 	
 	
 	--avalon-to-abus mapping
 	avalon_address <= abus_address_latched;
-	avalon_writedata <= abus_writedata_buf;
-	abus_readdata_buf <= avalon_readdata;
-
-	avalon_read <= '0';
-
-	avalon_write <= '0';
-
-	avalon_writedata <= "0000000000000000";
-
+	avalon_writedata <= abus_addressdata_buf;
 	avalon_burstcount <= '0';
+	abus_waitrequest <= abus_waitrequest_read or abus_waitrequest_write;
 
 end architecture rtl; -- of sega_saturn_abus_slave

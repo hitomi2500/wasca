@@ -19,7 +19,7 @@
 			sd_card_spi_external_MOSI                   : out   std_logic;                                        -- MOSI
 			sd_card_spi_external_SCLK                   : out   std_logic;                                        -- SCLK
 			sd_card_spi_external_SS_n                   : out   std_logic;                                        -- SS_n
-			sega_saturn_abus_slave_0_abus_address       : in    std_logic_vector(25 downto 0) := (others => 'X'); -- address
+			sega_saturn_abus_slave_0_abus_address       : in    std_logic_vector(9 downto 0)  := (others => 'X'); -- address
 			sega_saturn_abus_slave_0_abus_chipselect    : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- chipselect
 			sega_saturn_abus_slave_0_abus_read          : in    std_logic                     := 'X';             -- read
 			sega_saturn_abus_slave_0_abus_write         : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- write
@@ -27,9 +27,8 @@
 			sega_saturn_abus_slave_0_abus_timing        : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- timing
 			sega_saturn_abus_slave_0_abus_waitrequest   : out   std_logic;                                        -- waitrequest
 			sega_saturn_abus_slave_0_abus_addressstrobe : in    std_logic                     := 'X';             -- addressstrobe
-			sega_saturn_abus_slave_0_abus_interrupt     : in    std_logic                     := 'X';             -- interrupt
-			sega_saturn_abus_slave_0_abus_readdata      : out   std_logic_vector(15 downto 0);                    -- readdata
-			sega_saturn_abus_slave_0_abus_writedata     : in    std_logic_vector(15 downto 0) := (others => 'X')  -- writedata
+			sega_saturn_abus_slave_0_abus_interrupt     : out   std_logic;                                        -- interrupt
+			sega_saturn_abus_slave_0_abus_addressdata   : inout std_logic_vector(15 downto 0) := (others => 'X')  -- addressdata
 		);
 	end component wasca;
 
@@ -63,7 +62,6 @@
 			sega_saturn_abus_slave_0_abus_waitrequest   => CONNECTED_TO_sega_saturn_abus_slave_0_abus_waitrequest,   --                               .waitrequest
 			sega_saturn_abus_slave_0_abus_addressstrobe => CONNECTED_TO_sega_saturn_abus_slave_0_abus_addressstrobe, --                               .addressstrobe
 			sega_saturn_abus_slave_0_abus_interrupt     => CONNECTED_TO_sega_saturn_abus_slave_0_abus_interrupt,     --                               .interrupt
-			sega_saturn_abus_slave_0_abus_readdata      => CONNECTED_TO_sega_saturn_abus_slave_0_abus_readdata,      --                               .readdata
-			sega_saturn_abus_slave_0_abus_writedata     => CONNECTED_TO_sega_saturn_abus_slave_0_abus_writedata      --                               .writedata
+			sega_saturn_abus_slave_0_abus_addressdata   => CONNECTED_TO_sega_saturn_abus_slave_0_abus_addressdata    --                               .addressdata
 		);
 
