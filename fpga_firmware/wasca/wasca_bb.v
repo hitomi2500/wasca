@@ -4,6 +4,7 @@ module wasca (
 	altpll_0_locked_conduit_export,
 	altpll_0_phasedone_conduit_export,
 	clk_clk,
+	clock_116_mhz_clk,
 	external_sdram_controller_wire_addr,
 	external_sdram_controller_wire_ba,
 	external_sdram_controller_wire_cas_n,
@@ -15,10 +16,7 @@ module wasca (
 	external_sdram_controller_wire_we_n,
 	pio_0_external_connection_export,
 	reset_reset_n,
-	sd_card_spi_external_MISO,
-	sd_card_spi_external_MOSI,
-	sd_card_spi_external_SCLK,
-	sd_card_spi_external_SS_n,
+	reset_0_reset_n,
 	sega_saturn_abus_slave_0_abus_address,
 	sega_saturn_abus_slave_0_abus_chipselect,
 	sega_saturn_abus_slave_0_abus_read,
@@ -28,13 +26,20 @@ module wasca (
 	sega_saturn_abus_slave_0_abus_waitrequest,
 	sega_saturn_abus_slave_0_abus_addressstrobe,
 	sega_saturn_abus_slave_0_abus_interrupt,
-	sega_saturn_abus_slave_0_abus_readdata,
-	sega_saturn_abus_slave_0_abus_writedata);	
+	sega_saturn_abus_slave_0_abus_addressdata,
+	sega_saturn_abus_slave_0_abus_direction,
+	sega_saturn_abus_slave_0_abus_muxing,
+	sega_saturn_abus_slave_0_abus_disableout,
+	altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd,
+	altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat,
+	altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3,
+	altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock);	
 
 	input		altpll_0_areset_conduit_export;
 	output		altpll_0_locked_conduit_export;
 	output		altpll_0_phasedone_conduit_export;
 	input		clk_clk;
+	output		clock_116_mhz_clk;
 	output	[12:0]	external_sdram_controller_wire_addr;
 	output	[1:0]	external_sdram_controller_wire_ba;
 	output		external_sdram_controller_wire_cas_n;
@@ -46,11 +51,8 @@ module wasca (
 	output		external_sdram_controller_wire_we_n;
 	inout	[3:0]	pio_0_external_connection_export;
 	input		reset_reset_n;
-	input		sd_card_spi_external_MISO;
-	output		sd_card_spi_external_MOSI;
-	output		sd_card_spi_external_SCLK;
-	output		sd_card_spi_external_SS_n;
-	input	[25:0]	sega_saturn_abus_slave_0_abus_address;
+	input		reset_0_reset_n;
+	input	[9:0]	sega_saturn_abus_slave_0_abus_address;
 	input	[2:0]	sega_saturn_abus_slave_0_abus_chipselect;
 	input		sega_saturn_abus_slave_0_abus_read;
 	input	[1:0]	sega_saturn_abus_slave_0_abus_write;
@@ -58,7 +60,13 @@ module wasca (
 	input	[2:0]	sega_saturn_abus_slave_0_abus_timing;
 	output		sega_saturn_abus_slave_0_abus_waitrequest;
 	input		sega_saturn_abus_slave_0_abus_addressstrobe;
-	input		sega_saturn_abus_slave_0_abus_interrupt;
-	output	[15:0]	sega_saturn_abus_slave_0_abus_readdata;
-	input	[15:0]	sega_saturn_abus_slave_0_abus_writedata;
+	output		sega_saturn_abus_slave_0_abus_interrupt;
+	inout	[15:0]	sega_saturn_abus_slave_0_abus_addressdata;
+	output		sega_saturn_abus_slave_0_abus_direction;
+	output	[1:0]	sega_saturn_abus_slave_0_abus_muxing;
+	output		sega_saturn_abus_slave_0_abus_disableout;
+	inout		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd;
+	inout		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat;
+	inout		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3;
+	output		altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock;
 endmodule

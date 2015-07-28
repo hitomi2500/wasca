@@ -39,22 +39,22 @@ module wasca_external_sdram_controller_input_efifo_module (
   output           almost_full;
   output           empty;
   output           full;
-  output  [ 43: 0] rd_data;
+  output  [ 42: 0] rd_data;
   input            clk;
   input            rd;
   input            reset_n;
   input            wr;
-  input   [ 43: 0] wr_data;
+  input   [ 42: 0] wr_data;
 
   wire             almost_empty;
   wire             almost_full;
   wire             empty;
   reg     [  1: 0] entries;
-  reg     [ 43: 0] entry_0;
-  reg     [ 43: 0] entry_1;
+  reg     [ 42: 0] entry_0;
+  reg     [ 42: 0] entry_1;
   wire             full;
   reg              rd_address;
-  reg     [ 43: 0] rd_data;
+  reg     [ 42: 0] rd_data;
   wire    [  1: 0] rdwr;
   reg              wr_address;
   assign rdwr = {rd, wr};
@@ -194,7 +194,7 @@ module wasca_external_sdram_controller (
   output  [  1: 0] zs_dqm;
   output           zs_ras_n;
   output           zs_we_n;
-  input   [ 24: 0] az_addr;
+  input   [ 23: 0] az_addr;
   input   [  1: 0] az_be_n;
   input            az_cs;
   input   [ 15: 0] az_data;
@@ -205,7 +205,7 @@ module wasca_external_sdram_controller (
 
   wire    [ 23: 0] CODE;
   reg              ack_refresh_request;
-  reg     [ 24: 0] active_addr;
+  reg     [ 23: 0] active_addr;
   wire    [  1: 0] active_bank;
   reg              active_cs_n;
   reg     [ 15: 0] active_data;
@@ -214,14 +214,14 @@ module wasca_external_sdram_controller (
   wire             almost_empty;
   wire             almost_full;
   wire             bank_match;
-  wire    [  9: 0] cas_addr;
+  wire    [  8: 0] cas_addr;
   wire             clk_en;
   wire    [  3: 0] cmd_all;
   wire    [  2: 0] cmd_code;
   wire             cs_n;
   wire             csn_decode;
   wire             csn_match;
-  wire    [ 24: 0] f_addr;
+  wire    [ 23: 0] f_addr;
   wire    [  1: 0] f_bank;
   wire             f_cs_n;
   wire    [ 15: 0] f_data;
@@ -230,7 +230,7 @@ module wasca_external_sdram_controller (
   reg              f_pop;
   wire             f_rnw;
   wire             f_select;
-  wire    [ 43: 0] fifo_read_data;
+  wire    [ 42: 0] fifo_read_data;
   reg     [ 12: 0] i_addr;
   reg     [  3: 0] i_cmd;
   reg     [  3: 0] i_count;
@@ -295,14 +295,14 @@ module wasca_external_sdram_controller (
       .wr_data      ({az_wr_n, az_addr, az_wr_n ? 2'b0 : az_be_n, az_data})
     );
 
-  assign f_bank = {f_addr[24],f_addr[10]};
+  assign f_bank = {f_addr[23],f_addr[9]};
   // Refresh/init counter.
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
           refresh_counter <= 11600;
       else if (refresh_counter == 0)
-          refresh_counter <= 1812;
+          refresh_counter <= 927;
       else 
         refresh_counter <= refresh_counter - 1'b1;
     end
@@ -365,7 +365,7 @@ module wasca_external_sdram_controller (
               3'b001: begin
                   i_state <= 3'b011;
                   i_cmd <= {{1{1'b0}},3'h2};
-                  i_count <= 2;
+                  i_count <= 3;
                   i_next <= 3'b010;
               end // 3'b001 
           
@@ -411,13 +411,13 @@ module wasca_external_sdram_controller (
     end
 
 
-  assign active_bank = {active_addr[24],active_addr[10]};
+  assign active_bank = {active_addr[23],active_addr[9]};
   assign csn_match = active_cs_n == f_cs_n;
   assign rnw_match = active_rnw == f_rnw;
   assign bank_match = active_bank == f_bank;
-  assign row_match = {active_addr[23 : 11]} == {f_addr[23 : 11]};
+  assign row_match = {active_addr[22 : 10]} == {f_addr[22 : 10]};
   assign pending = csn_match && rnw_match && bank_match && row_match && !f_empty;
-  assign cas_addr = f_select ? { {3{1'b0}},f_addr[9 : 0] } : { {3{1'b0}},active_addr[9 : 0] };
+  assign cas_addr = f_select ? { {4{1'b0}},f_addr[8 : 0] } : { {4{1'b0}},active_addr[8 : 0] };
   // **** Main FSM ****
   always @(posedge clk or negedge reset_n)
     begin
@@ -456,7 +456,7 @@ module wasca_external_sdram_controller (
                         begin
                           m_state <= 9'b001000000;
                           m_next <= 9'b010000000;
-                          m_count <= 2;
+                          m_count <= 3;
                           active_cs_n <= 1'b1;
                         end
                       else if (!f_empty)
@@ -483,10 +483,10 @@ module wasca_external_sdram_controller (
                   m_state <= 9'b000000100;
                   m_cmd <= {csn_decode,3'h3};
                   m_bank <= active_bank;
-                  m_addr <= active_addr[23 : 11];
+                  m_addr <= active_addr[22 : 10];
                   m_data <= active_data;
                   m_dqm <= active_dqm;
-                  m_count <= 3;
+                  m_count <= 4;
                   m_next <= active_rnw ? 9'b000001000 : 9'b000010000;
               end // 9'b000000010 
           
@@ -584,7 +584,7 @@ module wasca_external_sdram_controller (
                   else 
                     begin
                       m_state <= 9'b001000000;
-                      m_count <= 2;
+                      m_count <= 3;
                     end
               end // 9'b000100000 
           

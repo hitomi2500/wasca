@@ -38,7 +38,7 @@
 
 // ------------------------------------------
 // Generation parameters:
-//   output_name:         wasca_mm_interconnect_0_cmd_mux_003
+//   output_name:         wasca_mm_interconnect_0_cmd_mux_002
 //   NUM_INPUTS:          1
 //   ARBITRATION_SHARES:  1
 //   ARBITRATION_SCHEME   "round-robin"
@@ -48,7 +48,7 @@
 //   ST_CHANNEL_W:        7
 // ------------------------------------------
 
-module wasca_mm_interconnect_0_cmd_mux_003
+module wasca_mm_interconnect_0_cmd_mux_002
 (
     // ----------------------
     // Sinks

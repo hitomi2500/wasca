@@ -17,11 +17,19 @@
          type = "String";
       }
    }
+   element Altera_UP_SD_Card_Avalon_Interface_0
+   {
+      datum _sortIndex
+      {
+         value = "10";
+         type = "int";
+      }
+   }
    element altpll_0
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "7";
          type = "int";
       }
    }
@@ -29,7 +37,15 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "3";
+         type = "int";
+      }
+   }
+   element clk_1
+   {
+      datum _sortIndex
+      {
+         value = "8";
          type = "int";
       }
    }
@@ -38,6 +54,14 @@
       datum _sortIndex
       {
          value = "0";
+         type = "int";
+      }
+   }
+   element jtag_uart_0
+   {
+      datum _sortIndex
+      {
+         value = "9";
          type = "int";
       }
    }
@@ -61,7 +85,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "6";
          type = "int";
       }
    }
@@ -69,7 +93,7 @@
    {
       datum _sortIndex
       {
-         value = "3";
+         value = "2";
          type = "int";
       }
    }
@@ -77,15 +101,7 @@
    {
       datum _sortIndex
       {
-         value = "5";
-         type = "int";
-      }
-   }
-   element sd_card_spi
-   {
-      datum _sortIndex
-      {
-         value = "2";
+         value = "4";
          type = "int";
       }
    }
@@ -93,16 +109,24 @@
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "5";
          type = "int";
+      }
+   }
+   element wasca
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
       }
    }
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
- <parameter name="device" value="10M04SCE144A7G" />
+ <parameter name="device" value="10M08SAE144C8GES" />
  <parameter name="deviceFamily" value="MAX 10" />
- <parameter name="deviceSpeedGrade" value="7" />
+ <parameter name="deviceSpeedGrade" value="8" />
  <parameter name="fabricMode" value="QSYS" />
  <parameter name="generateLegacySim" value="false" />
  <parameter name="generationId" value="0" />
@@ -119,6 +143,11 @@
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
+   name="altera_up_sd_card_avalon_interface_0_conduit_end"
+   internal="Altera_UP_SD_Card_Avalon_Interface_0.conduit_end"
+   type="conduit"
+   dir="end" />
+ <interface
    name="altpll_0_areset_conduit"
    internal="altpll_0.areset_conduit"
    type="conduit"
@@ -134,6 +163,7 @@
    type="conduit"
    dir="end" />
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
+ <interface name="clock_116_mhz" internal="clk_1.clk" type="clock" dir="start" />
  <interface
    name="external_sdram_controller_wire"
    internal="external_sdram_controller.wire"
@@ -145,16 +175,20 @@
    type="conduit"
    dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
- <interface
-   name="sd_card_spi_external"
-   internal="sd_card_spi.external"
-   type="conduit"
-   dir="end" />
+ <interface name="reset_0" internal="clk_1.clk_in_reset" type="reset" dir="end" />
  <interface
    name="sega_saturn_abus_slave_0_abus"
    internal="sega_saturn_abus_slave_0.abus"
    type="conduit"
    dir="end" />
+ <module
+   name="Altera_UP_SD_Card_Avalon_Interface_0"
+   kind="Altera_UP_SD_Card_Avalon_Interface"
+   version="15.0"
+   enabled="1">
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="116000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
+ </module>
  <module name="altpll_0" kind="altpll" version="15.0" enabled="1">
   <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
   <parameter name="AUTO_INCLK_INTERFACE_CLOCK_RATE" value="22579200" />
@@ -328,20 +362,26 @@
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
  </module>
+ <module name="clk_1" kind="clock_source" version="15.0" enabled="1">
+  <parameter name="clockFrequency" value="116000000" />
+  <parameter name="clockFrequencyKnown" value="true" />
+  <parameter name="inputClockFrequency" value="116000000" />
+  <parameter name="resetSynchronousEdges" value="NONE" />
+ </module>
  <module
    name="external_sdram_controller"
    kind="altera_avalon_new_sdram_controller"
    version="15.0"
    enabled="1">
-  <parameter name="TAC" value="5.5" />
+  <parameter name="TAC" value="7.0" />
   <parameter name="TMRD" value="3" />
-  <parameter name="TRCD" value="20.0" />
+  <parameter name="TRCD" value="30.0" />
   <parameter name="TRFC" value="70.0" />
-  <parameter name="TRP" value="20.0" />
+  <parameter name="TRP" value="30.0" />
   <parameter name="TWR" value="14.0" />
   <parameter name="casLatency" value="3" />
   <parameter name="clockRate" value="116000000" />
-  <parameter name="columnWidth" value="10" />
+  <parameter name="columnWidth" value="9" />
   <parameter name="componentName">$${FILENAME}_external_sdram_controller</parameter>
   <parameter name="dataWidth" value="16" />
   <parameter name="generateSimulationModel" value="false" />
@@ -353,19 +393,38 @@
   <parameter name="numberOfChipSelects" value="1" />
   <parameter name="pinsSharedViaTriState" value="false" />
   <parameter name="powerUpDelay" value="100.0" />
-  <parameter name="refreshPeriod" value="15.625" />
+  <parameter name="refreshPeriod" value="8.0" />
   <parameter name="registerDataIn" value="true" />
   <parameter name="rowWidth" value="13" />
+ </module>
+ <module
+   name="jtag_uart_0"
+   kind="altera_avalon_jtag_uart"
+   version="15.0"
+   enabled="1">
+  <parameter name="allowMultipleConnections" value="false" />
+  <parameter name="avalonSpec" value="2.0" />
+  <parameter name="clkFreq" value="116000000" />
+  <parameter name="hubInstanceID" value="0" />
+  <parameter name="readBufferDepth" value="64" />
+  <parameter name="readIRQThreshold" value="8" />
+  <parameter name="simInputCharacterStream" value="" />
+  <parameter name="simInteractiveOptions">NO_INTERACTIVE_WINDOWS</parameter>
+  <parameter name="useRegistersForReadBuffer" value="false" />
+  <parameter name="useRegistersForWriteBuffer" value="false" />
+  <parameter name="useRelativePathForSimFile" value="false" />
+  <parameter name="writeBufferDepth" value="64" />
+  <parameter name="writeIRQThreshold" value="8" />
  </module>
  <module
    name="nios2_gen2_0"
    kind="altera_nios2_gen2"
    version="15.0"
    enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="3" />
-  <parameter name="AUTO_CLK_RESET_DOMAIN" value="3" />
-  <parameter name="AUTO_DEVICE" value="10M04SCE144A7G" />
-  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="7" />
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="5" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="5" />
+  <parameter name="AUTO_DEVICE" value="10M08SAE144C8GES" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="8" />
   <parameter name="bht_ramBlockType" value="Automatic" />
   <parameter name="breakOffset" value="32" />
   <parameter name="breakSlave" value="None" />
@@ -381,7 +440,7 @@
   <parameter name="dataAddrWidth" value="27" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x12800' /><slave name='onchip_memory2_0.s1' start='0x20000' end='0x21000' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x21000' end='0x21800' /><slave name='altpll_0.pll_slave' start='0x22000' end='0x22010' /><slave name='sd_card_spi.spi_control_port' start='0x23000' end='0x23020' /><slave name='pio_0.s1' start='0x24000' end='0x24010' /><slave name='external_sdram_controller.s1' start='0x4000000' end='0x8000000' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x40000' end='0x41000' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' /><slave name='altpll_0.pll_slave' start='0x42000' end='0x42010' /><slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x43000' end='0x43400' /><slave name='pio_0.s1' start='0x44000' end='0x44010' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x50000' end='0x50008' /><slave name='external_sdram_controller.s1' start='0x4000000' end='0x6000000' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -406,7 +465,7 @@
   <parameter name="deviceFeaturesSystemInfo">ADDRESS_STALL 1 ADVANCED_INFO 0 ALLOWS_COMPILING_OTHER_FAMILY_IP 1 ANY_QFP 0 CELL_LEVEL_BACK_ANNOTATION_DISABLED 0 COMPILER_SUPPORT 1 DSP 1 DSP_SHIFTER_BLOCK 0 DUMP_ASM_LAB_BITS_FOR_POWER 1 EMUL 0 ENABLE_ADVANCED_IO_ANALYSIS_GUI_FEATURES 0 ENABLE_PIN_PLANNER 0 ENGINEERING_SAMPLE 0 EPCS 1 ESB 0 FAKE1 0 FAKE2 0 FAKE3 0 FAMILY_LEVEL_INSTALLATION_ONLY 0 FASTEST 0 FINAL_TIMING_MODEL 0 FITTER_USE_FALLING_EDGE_DELAY 1 GENERATE_DC_ON_CURRENT_WARNING_FOR_INTERNAL_CLAMPING_DIODE 0 HARDCOPY 0 HAS_18_BIT_MULTS 0 HAS_ACE_SUPPORT 1 HAS_ACTIVE_PARALLEL_FLASH_SUPPORT 0 HAS_ADJUSTABLE_OUTPUT_IO_TIMING_MEAS_POINT 1 HAS_ADVANCED_IO_INVERTED_CORNER 0 HAS_ADVANCED_IO_POWER_SUPPORT 1 HAS_ADVANCED_IO_TIMING_SUPPORT 1 HAS_ALM_SUPPORT 0 HAS_ATOM_AND_ROUTING_POWER_MODELED_TOGETHER 0 HAS_AUTO_DERIVE_CLOCK_UNCERTAINTY_SUPPORT 0 HAS_AUTO_FIT_SUPPORT 1 HAS_BALANCED_OPT_TECHNIQUE_SUPPORT 1 HAS_BENEFICIAL_SKEW_SUPPORT 1 HAS_BITLEVEL_DRIVE_STRENGTH_CONTROL 0 HAS_BSDL_FILE_GENERATION 0 HAS_CDB_RE_NETWORK_PRESERVATION_SUPPORT 0 HAS_CGA_SUPPORT 1 HAS_CHECK_NETLIST_SUPPORT 0 HAS_CLOCK_REGION_CHECKER_ENABLED 1 HAS_CORE_JUNCTION_TEMP_DERATING 0 HAS_CROSSTALK_SUPPORT 0 HAS_CUSTOM_REGION_SUPPORT 1 HAS_DAP_JTAG_FROM_HPS 0 HAS_DATA_DRIVEN_ACVQ_HSSI_SUPPORT 0 HAS_DDB_FDI_SUPPORT 0 HAS_DESIGN_ANALYZER_SUPPORT 0 HAS_DETAILED_IO_RAIL_POWER_MODEL 1 HAS_DETAILED_LEIM_STATIC_POWER_MODEL 0 HAS_DETAILED_LE_POWER_MODEL 1 HAS_DETAILED_ROUTING_MUX_STATIC_POWER_MODEL 0 HAS_DETAILED_THERMAL_CIRCUIT_PARAMETER_SUPPORT 1 HAS_DEVICE_MIGRATION_SUPPORT 1 HAS_DIAGONAL_MIGRATION_SUPPORT 0 HAS_EMIF_TOOLKIT_SUPPORT 0 HAS_ERROR_DETECTION_SUPPORT 0 HAS_FAMILY_VARIANT_MIGRATION_SUPPORT 0 HAS_FANOUT_FREE_NODE_SUPPORT 1 HAS_FAST_FIT_SUPPORT 1 HAS_FITTER_ECO_SUPPORT 1 HAS_FIT_NETLIST_OPT_RETIME_SUPPORT 1 HAS_FIT_NETLIST_OPT_SUPPORT 1 HAS_FORMAL_VERIFICATION_SUPPORT 0 HAS_FPGA_XCHANGE_SUPPORT 0 HAS_FSAC_LUTRAM_REGISTER_PACKING_SUPPORT 0 HAS_FULL_DAT_MIN_TIMING_SUPPORT 1 HAS_FULL_INCREMENTAL_DESIGN_SUPPORT 1 HAS_FUNCTIONAL_SIMULATION_SUPPORT 1 HAS_FUNCTIONAL_VERILOG_SIMULATION_SUPPORT 0 HAS_FUNCTIONAL_VHDL_SIMULATION_SUPPORT 0 HAS_GLITCH_FILTERING_SUPPORT 1 HAS_HARDCOPYII_SUPPORT 0 HAS_HC_READY_SUPPORT 0 HAS_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_HOLD_TIME_AVOIDANCE_ACROSS_CLOCK_SPINE_SUPPORT 1 HAS_HSPICE_WRITER_SUPPORT 0 HAS_HSSI_POWER_CALCULATOR 1 HAS_IBISO_WRITER_SUPPORT 0 HAS_ICD_DATA_IP 0 HAS_IDB_SUPPORT 0 HAS_INCREMENTAL_DAT_SUPPORT 1 HAS_INCREMENTAL_SYNTHESIS_SUPPORT 1 HAS_IO_ASSIGNMENT_ANALYSIS_SUPPORT 1 HAS_IO_DECODER 0 HAS_IO_PLACEMENT_OPTIMIZATION_SUPPORT 1 HAS_IO_PLACEMENT_USING_GEOMETRY_RULE 0 HAS_IO_PLACEMENT_USING_PHYSIC_RULE 0 HAS_IO_SMART_RECOMPILE_SUPPORT 0 HAS_JITTER_SUPPORT 1 HAS_JTAG_SLD_HUB_SUPPORT 1 HAS_LOGIC_LOCK_SUPPORT 1 HAS_MICROPROCESSOR 0 HAS_MIF_SMART_COMPILE_SUPPORT 1 HAS_MINMAX_TIMING_MODELING_SUPPORT 1 HAS_MIN_TIMING_ANALYSIS_SUPPORT 1 HAS_MUX_RESTRUCTURE_SUPPORT 1 HAS_NEW_HC_FLOW_SUPPORT 0 HAS_NEW_SERDES_MAX_RESOURCE_COUNT_REPORTING_SUPPORT 1 HAS_NEW_VPR_SUPPORT 1 HAS_NONSOCKET_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_NO_HARDBLOCK_PARTITION_SUPPORT 0 HAS_NO_JTAG_USERCODE_SUPPORT 0 HAS_OPERATING_SETTINGS_AND_CONDITIONS_REPORTING_SUPPORT 1 HAS_PAD_LOCATION_ASSIGNMENT_SUPPORT 0 HAS_PARTIAL_RECONFIG_SUPPORT 0 HAS_PASSIVE_PARALLEL_SUPPORT 0 HAS_PHYSICAL_DESIGN_PLANNER_SUPPORT 0 HAS_PHYSICAL_NETLIST_OUTPUT 0 HAS_PHYSICAL_ROUTING_SUPPORT 0 HAS_PIN_SPECIFIC_VOLTAGE_SUPPORT 1 HAS_PLDM_REF_SUPPORT 0 HAS_POWER_BINNING_LIMITS_DATA 1 HAS_POWER_ESTIMATION_SUPPORT 1 HAS_PRELIMINARY_CLOCK_UNCERTAINTY_NUMBERS 0 HAS_PRE_FITTER_FPP_SUPPORT 0 HAS_PRE_FITTER_LUTRAM_NETLIST_CHECKER_ENABLED 0 HAS_PVA_SUPPORT 1 HAS_QUARTUS_HIERARCHICAL_DESIGN_SUPPORT 0 HAS_RAPID_RECOMPILE_SUPPORT 0 HAS_RCF_SUPPORT 1 HAS_RCF_SUPPORT_FOR_DEBUGGING 0 HAS_RED_BLACK_SEPARATION_SUPPORT 0 HAS_RE_LEVEL_TIMING_GRAPH_SUPPORT 1 HAS_RISEFALL_DELAY_SUPPORT 1 HAS_SIGNAL_PROBE_SUPPORT 1 HAS_SIGNAL_TAP_SUPPORT 1 HAS_SIMULATOR_SUPPORT 0 HAS_SPLIT_IO_SUPPORT 1 HAS_SPLIT_LC_SUPPORT 1 HAS_STRICT_PRESERVATION_SUPPORT 1 HAS_SYNTHESIS_ON_ATOMS 0 HAS_SYNTH_FSYN_NETLIST_OPT_SUPPORT 1 HAS_SYNTH_NETLIST_OPT_RETIME_SUPPORT 0 HAS_SYNTH_NETLIST_OPT_SUPPORT 1 HAS_TCL_FITTER_SUPPORT 0 HAS_TECHNOLOGY_MIGRATION_SUPPORT 0 HAS_TEMPLATED_REGISTER_PACKING_SUPPORT 1 HAS_TIME_BORROWING_SUPPORT 0 HAS_TIMING_DRIVEN_SYNTHESIS_SUPPORT 1 HAS_TIMING_INFO_SUPPORT 1 HAS_TIMING_OPERATING_CONDITIONS 1 HAS_TIMING_SIMULATION_SUPPORT 0 HAS_TITAN_BASED_MAC_REGISTER_PACKER_SUPPORT 0 HAS_U2B2_SUPPORT 0 HAS_USER_HIGH_SPEED_LOW_POWER_TILE_SUPPORT 0 HAS_USE_FITTER_INFO_SUPPORT 1 HAS_VCCPD_POWER_RAIL 0 HAS_VERTICAL_MIGRATION_SUPPORT 1 HAS_VIEWDRAW_SYMBOL_SUPPORT 0 HAS_VIO_SUPPORT 1 HAS_VIRTUAL_DEVICES 0 HAS_WYSIWYG_DFFEAS_SUPPORT 1 HAS_XIBISO2_WRITER_SUPPORT 1 HAS_XIBISO_WRITER_SUPPORT 0 IFP_USE_LEGACY_IO_CHECKER 0 INCREMENTAL_DESIGN_SUPPORTS_COMPATIBLE_CONSTRAINTS 1 INSTALLED 0 INTERNAL_POF_SUPPORT_ENABLED 0 INTERNAL_USE_ONLY 0 ISSUE_MILITARY_TEMPERATURE_WARNING 0 IS_CONFIG_ROM 0 IS_DEFAULT_FAMILY 0 IS_FOR_INTERNAL_TESTING_ONLY 0 IS_HARDCOPY_FAMILY 0 IS_HBGA_PACKAGE 0 IS_HIGH_CURRENT_PART 0 IS_LOW_POWER_PART 0 IS_SDM_ONLY_PACKAGE 0 IS_SMI_PART 0 LOAD_BLK_TYPE_DATA_FROM_ATOM_WYS_INFO 0 LVDS_IO 0 M10K_MEMORY 0 M144K_MEMORY 0 M20K_MEMORY 0 M4K_MEMORY 0 M512_MEMORY 0 M9K_MEMORY 1 MLAB_MEMORY 0 MRAM_MEMORY 0 NOT_LISTED 0 NOT_MIGRATABLE 0 NO_FITTER_DELAY_CACHE_GENERATED 0 NO_PIN_OUT 0 NO_POF 0 NO_RPE_SUPPORT 0 NO_SUPPORT_FOR_LOGICLOCK_CONTENT_BACK_ANNOTATION 0 NO_SUPPORT_FOR_STA_CLOCK_UNCERTAINTY_CHECK 0 NO_TDC_SUPPORT 0 POSTFIT_BAK_DATABASE_EXPORT_ENABLED 0 POSTMAP_BAK_DATABASE_EXPORT_ENABLED 0 PROGRAMMER_ONLY 0 PROGRAMMER_SUPPORT 1 PVA_SUPPORTS_ONLY_SUBSET_OF_ATOMS 0 QFIT_IN_DEVELOPMENT 0 QMAP_IN_DEVELOPMENT 0 RAM_LOGICAL_NAME_CHECKING_IN_CUT_ENABLED 1 REPORTS_METASTABILITY_MTBF 1 REQUIRES_INSTALLATION_PATCH 0 REQUIRES_LIST_OF_TEMPERATURE_AND_VOLTAGE_OPERATING_CONDITIONS 1 REQUIRE_QUARTUS_HIERARCHICAL_DESIGN 0 REQUIRE_SPECIAL_HANDLING_FOR_LOCAL_LABLINE 1 RESERVES_SIGNAL_PROBE_PINS 0 RESOLVE_MAX_FANOUT_EARLY 1 RESOLVE_MAX_FANOUT_LATE 0 RESPECTS_FIXED_SIZED_LOCKED_LOCATION_LOGICLOCK 1 RESTRICTED_USER_SELECTION 0 RISEFALL_SUPPORT_IS_HIDDEN 0 SHOW_HIDDEN_FAMILY_IN_PROGRAMMER 0 STRICT_TIMING_DB_CHECKS 0 SUPPORTS_ADDITIONAL_OPTIONS_FOR_UNUSED_IO 0 SUPPORTS_CRC 1 SUPPORTS_DIFFERENTIAL_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_DSP_BALANCING_BACK_ANNOTATION 0 SUPPORTS_GENERATION_OF_EARLY_POWER_ESTIMATOR_FILE 1 SUPPORTS_GLOBAL_SIGNAL_BACK_ANNOTATION 0 SUPPORTS_HIPI_RETIMING 0 SUPPORTS_MAC_CHAIN_OUT_ADDER 0 SUPPORTS_RAM_PACKING_BACK_ANNOTATION 0 SUPPORTS_REG_PACKING_BACK_ANNOTATION 0 SUPPORTS_SIGNALPROBE_REGISTER_PIPELINING 1 SUPPORTS_SINGLE_ENDED_AIOT_BOARD_TRACE_MODEL 1 SUPPORTS_USER_MANUAL_LOGIC_DUPLICATION 1 SUPPORTS_VID 0 TMV_RUN_CUSTOMIZABLE_VIEWER 0 TMV_RUN_INTERNAL_DETAILS 1 TMV_RUN_INTERNAL_DETAILS_ON_IO 0 TMV_RUN_INTERNAL_DETAILS_ON_IOBUF 1 TMV_RUN_INTERNAL_DETAILS_ON_LCELL 0 TMV_RUN_INTERNAL_DETAILS_ON_LRAM 0 TRANSCEIVER_3G_BLOCK 0 TRANSCEIVER_6G_BLOCK 0 USES_ACV_FOR_FLED 1 USES_ADB_FOR_BACK_ANNOTATION 1 USES_ALTERA_LNSIM 0 USES_ASIC_ROUTING_POWER_CALCULATOR 0 USES_DATA_DRIVEN_PLL_COMPUTATION_UTIL 1 USES_DEV 1 USES_ICP_FOR_ECO_FITTER 0 USES_LIBERTY_TIMING 0 USES_NETWORK_ROUTING_POWER_CALCULATOR 0 USES_PART_INFO_FOR_DISPLAYING_CORE_VOLTAGE_VALUE 0 USES_POWER_SIGNAL_ACTIVITIES 1 USES_PVAFAM2 0 USES_SECOND_GENERATION_PART_INFO 0 USES_SECOND_GENERATION_POWER_ANALYZER 0 USES_THIRD_GENERATION_TIMING_MODELS_TIS 1 USES_U2B2_TIMING_MODELS 0 USES_XML_FORMAT_FOR_EMIF_PIN_MAP_FILE 0 USE_ADVANCED_IO_POWER_BY_DEFAULT 1 USE_ADVANCED_IO_TIMING_BY_DEFAULT 1 USE_BASE_FAMILY_DDB_PATH 0 USE_OCT_AUTO_CALIBRATION 1 USE_RELAX_IO_ASSIGNMENT_RULES 1 USE_RISEFALL_ONLY 1 USE_SEPARATE_LIST_FOR_TECH_MIGRATION 0 USE_SINGLE_COMPILER_PASS_PLL_MIF_FILE_WRITER 1 USE_TITAN_IO_BASED_IO_REGISTER_PACKER_UTIL 0 USING_28NM_OR_OLDER_TIMING_METHODOLOGY 0 WYSIWYG_BUS_WIDTH_CHECKING_IN_CUT_ENABLED 1</parameter>
   <parameter name="dividerType" value="no_div" />
   <parameter name="exceptionOffset" value="32" />
-  <parameter name="exceptionSlave" value="onchip_flash_0.data" />
+  <parameter name="exceptionSlave" value="onchip_memory2_0.s1" />
   <parameter name="faAddrWidth" value="1" />
   <parameter name="faSlaveMapParam" value="" />
   <parameter name="fa_cache_line" value="2" />
@@ -419,15 +478,15 @@
   <parameter name="icache_size" value="4096" />
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Tiny" />
-  <parameter name="instAddrWidth" value="18" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x12800' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x21000' end='0x21800' /></address-map>]]></parameter>
+  <parameter name="instAddrWidth" value="27" />
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x40000' end='0x41000' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' /><slave name='external_sdram_controller.s1' start='0x4000000' end='0x6000000' /></address-map>]]></parameter>
   <parameter name="instructionMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="instructionMasterHighPerformanceMapParam" value="" />
   <parameter name="instruction_master_high_performance_paddr_base" value="0" />
   <parameter name="instruction_master_high_performance_paddr_size" value="0" />
   <parameter name="instruction_master_paddr_base" value="0" />
   <parameter name="instruction_master_paddr_size" value="0" />
-  <parameter name="internalIrqMaskSystemInfo" value="1" />
+  <parameter name="internalIrqMaskSystemInfo" value="2" />
   <parameter name="io_regionbase" value="0" />
   <parameter name="io_regionsize" value="0" />
   <parameter name="master_addr_map" value="false" />
@@ -455,7 +514,7 @@
   <parameter name="ocimem_ramInit" value="false" />
   <parameter name="regfile_ramBlockType" value="Automatic" />
   <parameter name="resetOffset" value="0" />
-  <parameter name="resetSlave" value="onchip_flash_0.data" />
+  <parameter name="resetSlave" value="onchip_memory2_0.s1" />
   <parameter name="resetrequest_enabled" value="false" />
   <parameter name="setting_HBreakTest" value="false" />
   <parameter name="setting_HDLSimCachesCleared" value="true" />
@@ -541,20 +600,20 @@
    name="onchip_flash_0"
    kind="altera_onchip_flash"
    version="15.0"
-   enabled="1">
+   enabled="0">
   <parameter name="AUTO_CLOCK_RATE" value="116000000" />
   <parameter name="CLOCK_FREQUENCY" value="116.0" />
   <parameter name="CONFIGURATION_MODE">Single Compressed Image</parameter>
   <parameter name="CONFIGURATION_SCHEME">Internal Configuration</parameter>
   <parameter name="DATA_INTERFACE" value="Parallel" />
   <parameter name="DEVICE_FAMILY" value="MAX 10" />
-  <parameter name="PART_NAME" value="10M04SCE144A7G" />
+  <parameter name="PART_NAME" value="10M08SAE144C8GES" />
   <parameter name="READ_BURST_COUNT" value="8" />
   <parameter name="READ_BURST_MODE" value="Incrementing" />
-  <parameter name="SECTOR_ACCESS_MODE">Hidden,Read only,Hidden,Read only,Hidden</parameter>
-  <parameter name="autoInitializationFileName">$${FILENAME}_onchip_flash_0</parameter>
-  <parameter name="initFlashContent" value="true" />
-  <parameter name="initializationFileName">altera_onchip_flash.hex</parameter>
+  <parameter name="SECTOR_ACCESS_MODE">Read only,Read only,Read only,Read only,Hidden</parameter>
+  <parameter name="autoInitializationFileName">wasca_onchip_flash_0</parameter>
+  <parameter name="initFlashContent" value="false" />
+  <parameter name="initializationFileName">wasca_onchip_flash_0.hex</parameter>
   <parameter name="initializationFileNameForSim">altera_onchip_flash.dat</parameter>
   <parameter name="useNonDefaultInitFile" value="false" />
  </module>
@@ -602,26 +661,6 @@
   <parameter name="width" value="4" />
  </module>
  <module
-   name="sd_card_spi"
-   kind="altera_avalon_spi"
-   version="15.0"
-   enabled="1">
-  <parameter name="avalonSpec" value="2.0" />
-  <parameter name="clockPhase" value="0" />
-  <parameter name="clockPolarity" value="0" />
-  <parameter name="dataWidth" value="8" />
-  <parameter name="disableAvalonFlowControl" value="false" />
-  <parameter name="inputClockRate" value="116000000" />
-  <parameter name="insertDelayBetweenSlaveSelectAndSClk" value="false" />
-  <parameter name="insertSync" value="false" />
-  <parameter name="lsbOrderedFirst" value="false" />
-  <parameter name="masterSPI" value="true" />
-  <parameter name="numberOfSlaves" value="1" />
-  <parameter name="syncRegDepth" value="2" />
-  <parameter name="targetClockRate" value="128000" />
-  <parameter name="targetSlaveSelectToSClkDelay" value="0.0" />
- </module>
- <module
    name="sega_saturn_abus_slave_0"
    kind="sega_saturn_abus_slave"
    version="1.0"
@@ -639,6 +678,24 @@
    kind="avalon"
    version="15.0"
    start="nios2_gen2_0.data_master"
+   end="jtag_uart_0.avalon_jtag_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00050000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="nios2_gen2_0.data_master"
+   end="Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00043000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="nios2_gen2_0.data_master"
    end="onchip_flash_0.data">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
@@ -650,7 +707,7 @@
    start="nios2_gen2_0.data_master"
    end="nios2_gen2_0.debug_mem_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00021000" />
+  <parameter name="baseAddress" value="0x00041000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -659,7 +716,7 @@
    start="nios2_gen2_0.data_master"
    end="altpll_0.pll_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00022000" />
+  <parameter name="baseAddress" value="0x00042000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -677,7 +734,7 @@
    start="nios2_gen2_0.data_master"
    end="onchip_memory2_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00020000" />
+  <parameter name="baseAddress" value="0x00040000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -686,16 +743,7 @@
    start="nios2_gen2_0.data_master"
    end="pio_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00024000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.0"
-   start="nios2_gen2_0.data_master"
-   end="sd_card_spi.spi_control_port">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00023000" />
+  <parameter name="baseAddress" value="0x00044000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -713,7 +761,25 @@
    start="nios2_gen2_0.instruction_master"
    end="nios2_gen2_0.debug_mem_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00021000" />
+  <parameter name="baseAddress" value="0x00041000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="nios2_gen2_0.instruction_master"
+   end="external_sdram_controller.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x04000000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="nios2_gen2_0.instruction_master"
+   end="onchip_memory2_0.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00040000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -722,7 +788,6 @@
    start="altpll_0.c0"
    end="onchip_flash_0.clk" />
  <connection kind="clock" version="15.0" start="altpll_0.c0" end="pio_0.clk" />
- <connection kind="clock" version="15.0" start="altpll_0.c0" end="sd_card_spi.clk" />
  <connection
    kind="clock"
    version="15.0"
@@ -733,11 +798,18 @@
    version="15.0"
    start="altpll_0.c0"
    end="external_sdram_controller.clk" />
+ <connection kind="clock" version="15.0" start="altpll_0.c0" end="jtag_uart_0.clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="altpll_0.c0"
+   end="Altera_UP_SD_Card_Avalon_Interface_0.clk" />
  <connection
    kind="clock"
    version="15.0"
    start="altpll_0.c0"
    end="onchip_memory2_0.clk1" />
+ <connection kind="clock" version="15.0" start="altpll_0.c0" end="clk_1.clk_in" />
  <connection
    kind="clock"
    version="15.0"
@@ -752,8 +824,8 @@
    kind="interrupt"
    version="15.0"
    start="nios2_gen2_0.irq"
-   end="sd_card_spi.irq">
-  <parameter name="irqNumber" value="0" />
+   end="jtag_uart_0.irq">
+  <parameter name="irqNumber" value="1" />
  </connection>
  <connection
    kind="reset"
@@ -779,17 +851,22 @@
    kind="reset"
    version="15.0"
    start="nios2_gen2_0.debug_reset_request"
-   end="sd_card_spi.reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="nios2_gen2_0.debug_reset_request"
    end="pio_0.reset" />
  <connection
    kind="reset"
    version="15.0"
    start="nios2_gen2_0.debug_reset_request"
    end="sega_saturn_abus_slave_0.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="nios2_gen2_0.debug_reset_request"
+   end="jtag_uart_0.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="nios2_gen2_0.debug_reset_request"
+   end="Altera_UP_SD_Card_Avalon_Interface_0.reset" />
  <connection
    kind="reset"
    version="15.0"

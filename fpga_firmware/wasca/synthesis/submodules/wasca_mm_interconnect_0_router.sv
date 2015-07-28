@@ -47,16 +47,16 @@ module wasca_mm_interconnect_0_router_default_decode
      parameter DEFAULT_CHANNEL = 0,
                DEFAULT_WR_CHANNEL = -1,
                DEFAULT_RD_CHANNEL = -1,
-               DEFAULT_DESTID = 1 
+               DEFAULT_DESTID = 2 
    )
-  (output [74 - 72 : 0] default_destination_id,
+  (output [72 - 70 : 0] default_destination_id,
    output [7-1 : 0] default_wr_channel,
    output [7-1 : 0] default_rd_channel,
    output [7-1 : 0] default_src_channel
   );
 
   assign default_destination_id = 
-    DEFAULT_DESTID[74 - 72 : 0];
+    DEFAULT_DESTID[72 - 70 : 0];
 
   generate
     if (DEFAULT_CHANNEL == -1) begin : no_default_channel_assignment
@@ -93,7 +93,7 @@ module wasca_mm_interconnect_0_router
     // Command Sink (Input)
     // -------------------
     input                       sink_valid,
-    input  [88-1 : 0]    sink_data,
+    input  [86-1 : 0]    sink_data,
     input                       sink_startofpacket,
     input                       sink_endofpacket,
     output                      sink_ready,
@@ -102,7 +102,7 @@ module wasca_mm_interconnect_0_router
     // Command Source (Output)
     // -------------------
     output                          src_valid,
-    output reg [88-1    : 0] src_data,
+    output reg [86-1    : 0] src_data,
     output reg [7-1 : 0] src_channel,
     output                          src_startofpacket,
     output                          src_endofpacket,
@@ -112,18 +112,18 @@ module wasca_mm_interconnect_0_router
     // -------------------------------------------------------
     // Local parameters and variables
     // -------------------------------------------------------
-    localparam PKT_ADDR_H = 44;
+    localparam PKT_ADDR_H = 45;
     localparam PKT_ADDR_L = 18;
-    localparam PKT_DEST_ID_H = 74;
-    localparam PKT_DEST_ID_L = 72;
-    localparam PKT_PROTECTION_H = 78;
-    localparam PKT_PROTECTION_L = 76;
-    localparam ST_DATA_W = 88;
+    localparam PKT_DEST_ID_H = 72;
+    localparam PKT_DEST_ID_L = 70;
+    localparam PKT_PROTECTION_H = 76;
+    localparam PKT_PROTECTION_L = 74;
+    localparam ST_DATA_W = 86;
     localparam ST_CHANNEL_W = 7;
     localparam DECODER_TYPE = 0;
 
-    localparam PKT_TRANS_WRITE = 47;
-    localparam PKT_TRANS_READ  = 48;
+    localparam PKT_TRANS_WRITE = 48;
+    localparam PKT_TRANS_READ  = 49;
 
     localparam PKT_ADDR_W = PKT_ADDR_H-PKT_ADDR_L + 1;
     localparam PKT_DEST_ID_W = PKT_DEST_ID_H-PKT_DEST_ID_L + 1;
@@ -134,13 +134,13 @@ module wasca_mm_interconnect_0_router
     // Figure out the number of bits to mask off for each slave span
     // during address decoding
     // -------------------------------------------------------
-    localparam PAD0 = log2ceil(64'h4000000 - 64'h0); 
+    localparam PAD0 = log2ceil(64'h2000000 - 64'h0); 
     // -------------------------------------------------------
     // Work out which address bits are significant based on the
     // address range of the slaves. If the required width is too
     // large or too small, we use the address field width instead.
     // -------------------------------------------------------
-    localparam ADDR_RANGE = 64'h4000000;
+    localparam ADDR_RANGE = 64'h2000000;
     localparam RANGE_ADDR_WIDTH = log2ceil(ADDR_RANGE);
     localparam OPTIMIZED_ADDR_H = (RANGE_ADDR_WIDTH > PKT_ADDR_W) ||
                                   (RANGE_ADDR_WIDTH == 0) ?
@@ -184,9 +184,9 @@ module wasca_mm_interconnect_0_router
         // --------------------------------------------------
            
          
-          // ( 0 .. 4000000 )
+          // ( 0 .. 2000000 )
           src_channel = 7'b1;
-          src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 1;
+          src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 2;
 	     
         
 

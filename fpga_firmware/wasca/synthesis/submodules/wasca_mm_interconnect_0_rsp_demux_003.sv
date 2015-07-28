@@ -28,7 +28,7 @@
 // ------------------------------------------
 // Generation parameters:
 //   output_name:         wasca_mm_interconnect_0_rsp_demux_003
-//   ST_DATA_W:           106
+//   ST_DATA_W:           104
 //   ST_CHANNEL_W:        7
 //   NUM_OUTPUTS:         1
 //   VALID_WIDTH:         1
@@ -46,7 +46,7 @@ module wasca_mm_interconnect_0_rsp_demux_003
     // Sink
     // -------------------
     input  [1-1      : 0]   sink_valid,
-    input  [106-1    : 0]   sink_data, // ST_DATA_W=106
+    input  [104-1    : 0]   sink_data, // ST_DATA_W=104
     input  [7-1 : 0]   sink_channel, // ST_CHANNEL_W=7
     input                         sink_startofpacket,
     input                         sink_endofpacket,
@@ -56,7 +56,7 @@ module wasca_mm_interconnect_0_rsp_demux_003
     // Sources 
     // -------------------
     output reg                      src0_valid,
-    output reg [106-1    : 0] src0_data, // ST_DATA_W=106
+    output reg [104-1    : 0] src0_data, // ST_DATA_W=104
     output reg [7-1 : 0] src0_channel, // ST_CHANNEL_W=7
     output reg                      src0_startofpacket,
     output reg                      src0_endofpacket,
