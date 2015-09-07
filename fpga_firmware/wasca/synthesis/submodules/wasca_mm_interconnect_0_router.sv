@@ -49,21 +49,21 @@ module wasca_mm_interconnect_0_router_default_decode
                DEFAULT_RD_CHANNEL = -1,
                DEFAULT_DESTID = 2 
    )
-  (output [72 - 70 : 0] default_destination_id,
-   output [7-1 : 0] default_wr_channel,
-   output [7-1 : 0] default_rd_channel,
-   output [7-1 : 0] default_src_channel
+  (output [77 - 74 : 0] default_destination_id,
+   output [9-1 : 0] default_wr_channel,
+   output [9-1 : 0] default_rd_channel,
+   output [9-1 : 0] default_src_channel
   );
 
   assign default_destination_id = 
-    DEFAULT_DESTID[72 - 70 : 0];
+    DEFAULT_DESTID[77 - 74 : 0];
 
   generate
     if (DEFAULT_CHANNEL == -1) begin : no_default_channel_assignment
       assign default_src_channel = '0;
     end
     else begin : default_channel_assignment
-      assign default_src_channel = 7'b1 << DEFAULT_CHANNEL;
+      assign default_src_channel = 9'b1 << DEFAULT_CHANNEL;
     end
   endgenerate
 
@@ -73,8 +73,8 @@ module wasca_mm_interconnect_0_router_default_decode
       assign default_rd_channel = '0;
     end
     else begin : default_rw_channel_assignment
-      assign default_wr_channel = 7'b1 << DEFAULT_WR_CHANNEL;
-      assign default_rd_channel = 7'b1 << DEFAULT_RD_CHANNEL;
+      assign default_wr_channel = 9'b1 << DEFAULT_WR_CHANNEL;
+      assign default_rd_channel = 9'b1 << DEFAULT_RD_CHANNEL;
     end
   endgenerate
 
@@ -93,7 +93,7 @@ module wasca_mm_interconnect_0_router
     // Command Sink (Input)
     // -------------------
     input                       sink_valid,
-    input  [86-1 : 0]    sink_data,
+    input  [91-1 : 0]    sink_data,
     input                       sink_startofpacket,
     input                       sink_endofpacket,
     output                      sink_ready,
@@ -102,8 +102,8 @@ module wasca_mm_interconnect_0_router
     // Command Source (Output)
     // -------------------
     output                          src_valid,
-    output reg [86-1    : 0] src_data,
-    output reg [7-1 : 0] src_channel,
+    output reg [91-1    : 0] src_data,
+    output reg [9-1 : 0] src_channel,
     output                          src_startofpacket,
     output                          src_endofpacket,
     input                           src_ready
@@ -114,12 +114,12 @@ module wasca_mm_interconnect_0_router
     // -------------------------------------------------------
     localparam PKT_ADDR_H = 45;
     localparam PKT_ADDR_L = 18;
-    localparam PKT_DEST_ID_H = 72;
-    localparam PKT_DEST_ID_L = 70;
-    localparam PKT_PROTECTION_H = 76;
-    localparam PKT_PROTECTION_L = 74;
-    localparam ST_DATA_W = 86;
-    localparam ST_CHANNEL_W = 7;
+    localparam PKT_DEST_ID_H = 77;
+    localparam PKT_DEST_ID_L = 74;
+    localparam PKT_PROTECTION_H = 81;
+    localparam PKT_PROTECTION_L = 79;
+    localparam ST_DATA_W = 91;
+    localparam ST_CHANNEL_W = 9;
     localparam DECODER_TYPE = 0;
 
     localparam PKT_TRANS_WRITE = 48;
@@ -134,13 +134,13 @@ module wasca_mm_interconnect_0_router
     // Figure out the number of bits to mask off for each slave span
     // during address decoding
     // -------------------------------------------------------
-    localparam PAD0 = log2ceil(64'h2000000 - 64'h0); 
+    localparam PAD0 = log2ceil(64'h6000000 - 64'h4000000); 
     // -------------------------------------------------------
     // Work out which address bits are significant based on the
     // address range of the slaves. If the required width is too
     // large or too small, we use the address field width instead.
     // -------------------------------------------------------
-    localparam ADDR_RANGE = 64'h2000000;
+    localparam ADDR_RANGE = 64'h6000000;
     localparam RANGE_ADDR_WIDTH = log2ceil(ADDR_RANGE);
     localparam OPTIMIZED_ADDR_H = (RANGE_ADDR_WIDTH > PKT_ADDR_W) ||
                                   (RANGE_ADDR_WIDTH == 0) ?
@@ -159,7 +159,7 @@ module wasca_mm_interconnect_0_router
     assign src_startofpacket = sink_startofpacket;
     assign src_endofpacket   = sink_endofpacket;
     wire [PKT_DEST_ID_W-1:0] default_destid;
-    wire [7-1 : 0] default_src_channel;
+    wire [9-1 : 0] default_src_channel;
 
 
 
@@ -184,8 +184,8 @@ module wasca_mm_interconnect_0_router
         // --------------------------------------------------
            
          
-          // ( 0 .. 2000000 )
-          src_channel = 7'b1;
+          // ( 4000000 .. 6000000 )
+          src_channel = 9'b1;
           src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 2;
 	     
         

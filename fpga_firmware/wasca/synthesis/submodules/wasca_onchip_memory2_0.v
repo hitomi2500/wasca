@@ -39,7 +39,7 @@ module wasca_onchip_memory2_0 (
 
 
   output  [ 31: 0] readdata;
-  input   [  9: 0] address;
+  input   [ 11: 0] address;
   input   [  3: 0] byteenable;
   input            chipselect;
   input            clk;
@@ -68,15 +68,15 @@ module wasca_onchip_memory2_0 (
   defparam the_altsyncram.byte_size = 8,
            the_altsyncram.init_file = "UNUSED",
            the_altsyncram.lpm_type = "altsyncram",
-           the_altsyncram.maximum_depth = 1024,
-           the_altsyncram.numwords_a = 1024,
+           the_altsyncram.maximum_depth = 2560,
+           the_altsyncram.numwords_a = 2560,
            the_altsyncram.operation_mode = "SINGLE_PORT",
            the_altsyncram.outdata_reg_a = "UNREGISTERED",
            the_altsyncram.ram_block_type = "AUTO",
            the_altsyncram.read_during_write_mode_mixed_ports = "DONT_CARE",
            the_altsyncram.width_a = 32,
            the_altsyncram.width_byteena_a = 4,
-           the_altsyncram.widthad_a = 10;
+           the_altsyncram.widthad_a = 12;
 
   //s1, which is an e_avalon_slave
   //s2, which is an e_avalon_slave
