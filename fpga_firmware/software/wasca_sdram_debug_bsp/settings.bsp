@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>06.09.2015 1:32:37</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1441492357268</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>04.10.2015 23:48:11</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1443991691900</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Saturn\wasca\fpga_firmware\software\wasca_sdram_debug_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
@@ -937,15 +937,9 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>Altera_UP_SD_Card_Avalon_Interface_0</slaveDescriptor>
-                <addressRange>0x00043000 - 0x000433FF</addressRange>
-                <addressSpan>1024</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>pio_0</slaveDescriptor>
-                <addressRange>0x00044000 - 0x0004400F</addressRange>
-                <addressSpan>16</addressSpan>
+                <slaveDescriptor>spi_0</slaveDescriptor>
+                <addressRange>0x00043000 - 0x0004301F</addressRange>
+                <addressSpan>32</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
@@ -956,8 +950,8 @@
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>onchip_memory2_0</slaveDescriptor>
-                <addressRange>0x00080000 - 0x000827FF</addressRange>
-                <addressSpan>10240</addressSpan>
+                <addressRange>0x00080000 - 0x00083FFF</addressRange>
+                <addressSpan>16384</addressSpan>
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>

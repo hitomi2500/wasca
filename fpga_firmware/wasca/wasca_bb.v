@@ -14,30 +14,30 @@ module wasca (
 	external_sdram_controller_wire_dqm,
 	external_sdram_controller_wire_ras_n,
 	external_sdram_controller_wire_we_n,
-	pio_0_external_connection_export,
-	sd_mmc_controller_0_sd_card_io_sd_clk_o_pad,
-	sd_mmc_controller_0_sd_card_io_sd_cmd_dat_i,
-	sd_mmc_controller_0_sd_card_io_sd_cmd_oe_o,
-	sd_mmc_controller_0_sd_card_io_sd_cmd_out_o,
-	sd_mmc_controller_0_sd_card_io_sd_dat_dat_i,
-	sd_mmc_controller_0_sd_card_io_sd_dat_oe_o,
-	sd_mmc_controller_0_sd_card_io_sd_dat_out_o,
 	sega_saturn_abus_slave_0_abus_address,
 	sega_saturn_abus_slave_0_abus_chipselect,
 	sega_saturn_abus_slave_0_abus_read,
 	sega_saturn_abus_slave_0_abus_write,
-	sega_saturn_abus_slave_0_abus_functioncode,
-	sega_saturn_abus_slave_0_abus_timing,
 	sega_saturn_abus_slave_0_abus_waitrequest,
-	sega_saturn_abus_slave_0_abus_addressstrobe,
 	sega_saturn_abus_slave_0_abus_interrupt,
 	sega_saturn_abus_slave_0_abus_addressdata,
 	sega_saturn_abus_slave_0_abus_direction,
 	sega_saturn_abus_slave_0_abus_muxing,
 	sega_saturn_abus_slave_0_abus_disableout,
 	sega_saturn_abus_slave_0_conduit_saturn_reset_saturn_reset,
+	spi_sd_card_MISO,
+	spi_sd_card_MOSI,
+	spi_sd_card_SCLK,
+	spi_sd_card_SS_n,
 	uart_0_external_connection_rxd,
-	uart_0_external_connection_txd);	
+	uart_0_external_connection_txd,
+	spi_stm32_MISO,
+	spi_stm32_MOSI,
+	spi_stm32_SCLK,
+	spi_stm32_SS_n,
+	audio_out_BCLK,
+	audio_out_DACDAT,
+	audio_out_DACLRCK);	
 
 	input		altpll_0_areset_conduit_export;
 	output		altpll_0_locked_conduit_export;
@@ -53,28 +53,28 @@ module wasca (
 	output	[1:0]	external_sdram_controller_wire_dqm;
 	output		external_sdram_controller_wire_ras_n;
 	output		external_sdram_controller_wire_we_n;
-	inout	[3:0]	pio_0_external_connection_export;
-	output		sd_mmc_controller_0_sd_card_io_sd_clk_o_pad;
-	input		sd_mmc_controller_0_sd_card_io_sd_cmd_dat_i;
-	output		sd_mmc_controller_0_sd_card_io_sd_cmd_oe_o;
-	output		sd_mmc_controller_0_sd_card_io_sd_cmd_out_o;
-	input	[3:0]	sd_mmc_controller_0_sd_card_io_sd_dat_dat_i;
-	output		sd_mmc_controller_0_sd_card_io_sd_dat_oe_o;
-	output	[3:0]	sd_mmc_controller_0_sd_card_io_sd_dat_out_o;
 	input	[9:0]	sega_saturn_abus_slave_0_abus_address;
 	input	[2:0]	sega_saturn_abus_slave_0_abus_chipselect;
 	input		sega_saturn_abus_slave_0_abus_read;
 	input	[1:0]	sega_saturn_abus_slave_0_abus_write;
-	input	[1:0]	sega_saturn_abus_slave_0_abus_functioncode;
-	input	[2:0]	sega_saturn_abus_slave_0_abus_timing;
 	output		sega_saturn_abus_slave_0_abus_waitrequest;
-	input		sega_saturn_abus_slave_0_abus_addressstrobe;
 	output		sega_saturn_abus_slave_0_abus_interrupt;
 	inout	[15:0]	sega_saturn_abus_slave_0_abus_addressdata;
 	output		sega_saturn_abus_slave_0_abus_direction;
 	output	[1:0]	sega_saturn_abus_slave_0_abus_muxing;
 	output		sega_saturn_abus_slave_0_abus_disableout;
 	input		sega_saturn_abus_slave_0_conduit_saturn_reset_saturn_reset;
+	input		spi_sd_card_MISO;
+	output		spi_sd_card_MOSI;
+	output		spi_sd_card_SCLK;
+	output		spi_sd_card_SS_n;
 	input		uart_0_external_connection_rxd;
 	output		uart_0_external_connection_txd;
+	output		spi_stm32_MISO;
+	input		spi_stm32_MOSI;
+	input		spi_stm32_SCLK;
+	input		spi_stm32_SS_n;
+	input		audio_out_BCLK;
+	output		audio_out_DACDAT;
+	input		audio_out_DACLRCK;
 endmodule

@@ -14,30 +14,30 @@
 			external_sdram_controller_wire_dqm                         : out   std_logic_vector(1 downto 0);                     -- dqm
 			external_sdram_controller_wire_ras_n                       : out   std_logic;                                        -- ras_n
 			external_sdram_controller_wire_we_n                        : out   std_logic;                                        -- we_n
-			pio_0_external_connection_export                           : inout std_logic_vector(3 downto 0)  := (others => 'X'); -- export
-			sd_mmc_controller_0_sd_card_io_sd_clk_o_pad                : out   std_logic;                                        -- sd_clk_o_pad
-			sd_mmc_controller_0_sd_card_io_sd_cmd_dat_i                : in    std_logic                     := 'X';             -- sd_cmd_dat_i
-			sd_mmc_controller_0_sd_card_io_sd_cmd_oe_o                 : out   std_logic;                                        -- sd_cmd_oe_o
-			sd_mmc_controller_0_sd_card_io_sd_cmd_out_o                : out   std_logic;                                        -- sd_cmd_out_o
-			sd_mmc_controller_0_sd_card_io_sd_dat_dat_i                : in    std_logic_vector(3 downto 0)  := (others => 'X'); -- sd_dat_dat_i
-			sd_mmc_controller_0_sd_card_io_sd_dat_oe_o                 : out   std_logic;                                        -- sd_dat_oe_o
-			sd_mmc_controller_0_sd_card_io_sd_dat_out_o                : out   std_logic_vector(3 downto 0);                     -- sd_dat_out_o
 			sega_saturn_abus_slave_0_abus_address                      : in    std_logic_vector(9 downto 0)  := (others => 'X'); -- address
 			sega_saturn_abus_slave_0_abus_chipselect                   : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- chipselect
 			sega_saturn_abus_slave_0_abus_read                         : in    std_logic                     := 'X';             -- read
 			sega_saturn_abus_slave_0_abus_write                        : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- write
-			sega_saturn_abus_slave_0_abus_functioncode                 : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- functioncode
-			sega_saturn_abus_slave_0_abus_timing                       : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- timing
 			sega_saturn_abus_slave_0_abus_waitrequest                  : out   std_logic;                                        -- waitrequest
-			sega_saturn_abus_slave_0_abus_addressstrobe                : in    std_logic                     := 'X';             -- addressstrobe
 			sega_saturn_abus_slave_0_abus_interrupt                    : out   std_logic;                                        -- interrupt
 			sega_saturn_abus_slave_0_abus_addressdata                  : inout std_logic_vector(15 downto 0) := (others => 'X'); -- addressdata
 			sega_saturn_abus_slave_0_abus_direction                    : out   std_logic;                                        -- direction
 			sega_saturn_abus_slave_0_abus_muxing                       : out   std_logic_vector(1 downto 0);                     -- muxing
 			sega_saturn_abus_slave_0_abus_disableout                   : out   std_logic;                                        -- disableout
 			sega_saturn_abus_slave_0_conduit_saturn_reset_saturn_reset : in    std_logic                     := 'X';             -- saturn_reset
+			spi_sd_card_MISO                                           : in    std_logic                     := 'X';             -- MISO
+			spi_sd_card_MOSI                                           : out   std_logic;                                        -- MOSI
+			spi_sd_card_SCLK                                           : out   std_logic;                                        -- SCLK
+			spi_sd_card_SS_n                                           : out   std_logic;                                        -- SS_n
 			uart_0_external_connection_rxd                             : in    std_logic                     := 'X';             -- rxd
-			uart_0_external_connection_txd                             : out   std_logic                                         -- txd
+			uart_0_external_connection_txd                             : out   std_logic;                                        -- txd
+			spi_stm32_MISO                                             : out   std_logic;                                        -- MISO
+			spi_stm32_MOSI                                             : in    std_logic                     := 'X';             -- MOSI
+			spi_stm32_SCLK                                             : in    std_logic                     := 'X';             -- SCLK
+			spi_stm32_SS_n                                             : in    std_logic                     := 'X';             -- SS_n
+			audio_out_BCLK                                             : in    std_logic                     := 'X';             -- BCLK
+			audio_out_DACDAT                                           : out   std_logic;                                        -- DACDAT
+			audio_out_DACLRCK                                          : in    std_logic                     := 'X'              -- DACLRCK
 		);
 	end component wasca;
 
@@ -57,29 +57,29 @@
 			external_sdram_controller_wire_dqm                         => CONNECTED_TO_external_sdram_controller_wire_dqm,                         --                                              .dqm
 			external_sdram_controller_wire_ras_n                       => CONNECTED_TO_external_sdram_controller_wire_ras_n,                       --                                              .ras_n
 			external_sdram_controller_wire_we_n                        => CONNECTED_TO_external_sdram_controller_wire_we_n,                        --                                              .we_n
-			pio_0_external_connection_export                           => CONNECTED_TO_pio_0_external_connection_export,                           --                     pio_0_external_connection.export
-			sd_mmc_controller_0_sd_card_io_sd_clk_o_pad                => CONNECTED_TO_sd_mmc_controller_0_sd_card_io_sd_clk_o_pad,                --                sd_mmc_controller_0_sd_card_io.sd_clk_o_pad
-			sd_mmc_controller_0_sd_card_io_sd_cmd_dat_i                => CONNECTED_TO_sd_mmc_controller_0_sd_card_io_sd_cmd_dat_i,                --                                              .sd_cmd_dat_i
-			sd_mmc_controller_0_sd_card_io_sd_cmd_oe_o                 => CONNECTED_TO_sd_mmc_controller_0_sd_card_io_sd_cmd_oe_o,                 --                                              .sd_cmd_oe_o
-			sd_mmc_controller_0_sd_card_io_sd_cmd_out_o                => CONNECTED_TO_sd_mmc_controller_0_sd_card_io_sd_cmd_out_o,                --                                              .sd_cmd_out_o
-			sd_mmc_controller_0_sd_card_io_sd_dat_dat_i                => CONNECTED_TO_sd_mmc_controller_0_sd_card_io_sd_dat_dat_i,                --                                              .sd_dat_dat_i
-			sd_mmc_controller_0_sd_card_io_sd_dat_oe_o                 => CONNECTED_TO_sd_mmc_controller_0_sd_card_io_sd_dat_oe_o,                 --                                              .sd_dat_oe_o
-			sd_mmc_controller_0_sd_card_io_sd_dat_out_o                => CONNECTED_TO_sd_mmc_controller_0_sd_card_io_sd_dat_out_o,                --                                              .sd_dat_out_o
 			sega_saturn_abus_slave_0_abus_address                      => CONNECTED_TO_sega_saturn_abus_slave_0_abus_address,                      --                 sega_saturn_abus_slave_0_abus.address
 			sega_saturn_abus_slave_0_abus_chipselect                   => CONNECTED_TO_sega_saturn_abus_slave_0_abus_chipselect,                   --                                              .chipselect
 			sega_saturn_abus_slave_0_abus_read                         => CONNECTED_TO_sega_saturn_abus_slave_0_abus_read,                         --                                              .read
 			sega_saturn_abus_slave_0_abus_write                        => CONNECTED_TO_sega_saturn_abus_slave_0_abus_write,                        --                                              .write
-			sega_saturn_abus_slave_0_abus_functioncode                 => CONNECTED_TO_sega_saturn_abus_slave_0_abus_functioncode,                 --                                              .functioncode
-			sega_saturn_abus_slave_0_abus_timing                       => CONNECTED_TO_sega_saturn_abus_slave_0_abus_timing,                       --                                              .timing
 			sega_saturn_abus_slave_0_abus_waitrequest                  => CONNECTED_TO_sega_saturn_abus_slave_0_abus_waitrequest,                  --                                              .waitrequest
-			sega_saturn_abus_slave_0_abus_addressstrobe                => CONNECTED_TO_sega_saturn_abus_slave_0_abus_addressstrobe,                --                                              .addressstrobe
 			sega_saturn_abus_slave_0_abus_interrupt                    => CONNECTED_TO_sega_saturn_abus_slave_0_abus_interrupt,                    --                                              .interrupt
 			sega_saturn_abus_slave_0_abus_addressdata                  => CONNECTED_TO_sega_saturn_abus_slave_0_abus_addressdata,                  --                                              .addressdata
 			sega_saturn_abus_slave_0_abus_direction                    => CONNECTED_TO_sega_saturn_abus_slave_0_abus_direction,                    --                                              .direction
 			sega_saturn_abus_slave_0_abus_muxing                       => CONNECTED_TO_sega_saturn_abus_slave_0_abus_muxing,                       --                                              .muxing
 			sega_saturn_abus_slave_0_abus_disableout                   => CONNECTED_TO_sega_saturn_abus_slave_0_abus_disableout,                   --                                              .disableout
 			sega_saturn_abus_slave_0_conduit_saturn_reset_saturn_reset => CONNECTED_TO_sega_saturn_abus_slave_0_conduit_saturn_reset_saturn_reset, -- sega_saturn_abus_slave_0_conduit_saturn_reset.saturn_reset
+			spi_sd_card_MISO                                           => CONNECTED_TO_spi_sd_card_MISO,                                           --                                   spi_sd_card.MISO
+			spi_sd_card_MOSI                                           => CONNECTED_TO_spi_sd_card_MOSI,                                           --                                              .MOSI
+			spi_sd_card_SCLK                                           => CONNECTED_TO_spi_sd_card_SCLK,                                           --                                              .SCLK
+			spi_sd_card_SS_n                                           => CONNECTED_TO_spi_sd_card_SS_n,                                           --                                              .SS_n
 			uart_0_external_connection_rxd                             => CONNECTED_TO_uart_0_external_connection_rxd,                             --                    uart_0_external_connection.rxd
-			uart_0_external_connection_txd                             => CONNECTED_TO_uart_0_external_connection_txd                              --                                              .txd
+			uart_0_external_connection_txd                             => CONNECTED_TO_uart_0_external_connection_txd,                             --                                              .txd
+			spi_stm32_MISO                                             => CONNECTED_TO_spi_stm32_MISO,                                             --                                     spi_stm32.MISO
+			spi_stm32_MOSI                                             => CONNECTED_TO_spi_stm32_MOSI,                                             --                                              .MOSI
+			spi_stm32_SCLK                                             => CONNECTED_TO_spi_stm32_SCLK,                                             --                                              .SCLK
+			spi_stm32_SS_n                                             => CONNECTED_TO_spi_stm32_SS_n,                                             --                                              .SS_n
+			audio_out_BCLK                                             => CONNECTED_TO_audio_out_BCLK,                                             --                                     audio_out.BCLK
+			audio_out_DACDAT                                           => CONNECTED_TO_audio_out_DACDAT,                                           --                                              .DACDAT
+			audio_out_DACLRCK                                          => CONNECTED_TO_audio_out_DACLRCK                                           --                                              .DACLRCK
 		);
 

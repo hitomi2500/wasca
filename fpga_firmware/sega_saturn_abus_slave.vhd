@@ -12,10 +12,10 @@ entity sega_saturn_abus_slave is
 		abus_chipselect      : in    std_logic_vector(2 downto 0)  := (others => '0'); --              .chipselect
 		abus_read            : in    std_logic                     := '0';             --              .read
 		abus_write           : in    std_logic_vector(1 downto 0)  := (others => '0'); --              .write
-		abus_functioncode    : in    std_logic_vector(1 downto 0)  := (others => '0'); --              .functioncode
-		abus_timing          : in    std_logic_vector(2 downto 0)  := (others => '0'); --              .timing
+		--abus_functioncode    : in    std_logic_vector(1 downto 0)  := (others => '0'); --              .functioncode
+		--abus_timing          : in    std_logic_vector(2 downto 0)  := (others => '0'); --              .timing
 		abus_waitrequest     : out   std_logic							  := '1';                                        --              .waitrequest
-		abus_addressstrobe   : in    std_logic                     := '0';             --              .addressstrobe
+		--abus_addressstrobe   : in    std_logic                     := '0';             --              .addressstrobe
 		abus_interrupt       : out   std_logic                     := '0';             --              .interrupt
 		abus_direction       : out   std_logic                     := '0';             --              .direction
 		abus_muxing	         : out   std_logic_vector(1 downto 0)  := "01";            --             .muxing
@@ -53,12 +53,12 @@ signal abus_read_ms            : std_logic                     := '0';          
 signal abus_read_buf            : std_logic                     := '0';             --              .read
 signal abus_write_ms           : std_logic_vector(1 downto 0)  := (others => '0'); --              .write
 signal abus_write_buf           : std_logic_vector(1 downto 0)  := (others => '0'); --              .write
-signal abus_functioncode_ms    : std_logic_vector(1 downto 0)  := (others => '0'); --              .functioncode
-signal abus_functioncode_buf    : std_logic_vector(1 downto 0)  := (others => '0'); --              .functioncode
-signal abus_timing_ms          : std_logic_vector(2 downto 0)  := (others => '0'); --              .timing
-signal abus_timing_buf          : std_logic_vector(2 downto 0)  := (others => '0'); --              .timing
-signal abus_addressstrobe_ms   : std_logic                     := '0';             --              .addressstrobe
-signal abus_addressstrobe_buf   : std_logic                     := '0';             --              .addressstrobe
+--signal abus_functioncode_ms    : std_logic_vector(1 downto 0)  := (others => '0'); --              .functioncode
+--signal abus_functioncode_buf    : std_logic_vector(1 downto 0)  := (others => '0'); --              .functioncode
+--signal abus_timing_ms          : std_logic_vector(2 downto 0)  := (others => '0'); --              .timing
+--signal abus_timing_buf          : std_logic_vector(2 downto 0)  := (others => '0'); --              .timing
+--signal abus_addressstrobe_ms   : std_logic                     := '0';             --              .addressstrobe
+--signal abus_addressstrobe_buf   : std_logic                     := '0';             --              .addressstrobe
 
 signal abus_read_buf2            : std_logic                     := '0';             --              .read
 signal abus_read_buf3            : std_logic                     := '0';             --              .read
@@ -142,18 +142,18 @@ begin
 			abus_chipselect_ms <= abus_chipselect; --work only with CS1 for now
 			abus_read_ms <= abus_read;
 			abus_write_ms <= abus_write;
-			abus_functioncode_ms <= abus_functioncode;
-			abus_timing_ms <= abus_timing;
-			abus_addressstrobe_ms <= abus_addressstrobe;
+			--abus_functioncode_ms <= abus_functioncode;
+			--abus_timing_ms <= abus_timing;
+			--abus_addressstrobe_ms <= abus_addressstrobe;
 			--2nd stage
 			abus_address_buf <= abus_address_ms;
 			abus_addressdata_buf <= abus_addressdata_ms;
 			abus_chipselect_buf <= abus_chipselect_ms;
 			abus_read_buf <= abus_read_ms;
 			abus_write_buf <= abus_write_ms;
-			abus_functioncode_buf <= abus_functioncode_ms;
-			abus_timing_buf <= abus_timing_ms;
-			abus_addressstrobe_buf <= abus_addressstrobe_ms;
+			--abus_functioncode_buf <= abus_functioncode_ms;
+			--abus_timing_buf <= abus_timing_ms;
+			--abus_addressstrobe_buf <= abus_addressstrobe_ms;
 		end if;
 	end process;
 	

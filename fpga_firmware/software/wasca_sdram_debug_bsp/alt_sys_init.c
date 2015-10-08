@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sun Sep 06 00:34:56 GMT+03:00 2015
+ * Generated: Sat Sep 19 01:39:20 FET 2015
  */
 
 /*
@@ -59,7 +59,7 @@
  */
 
 #include "altera_nios2_gen2_irq.h"
-#include "Altera_UP_SD_Card_Avalon_Interface.h"
+#include "altera_avalon_spi.h"
 #include "altera_avalon_uart.h"
 
 /*
@@ -67,8 +67,8 @@
  */
 
 ALTERA_NIOS2_GEN2_IRQ_INSTANCE ( NIOS2_GEN2_0, nios2_gen2_0);
+ALTERA_AVALON_SPI_INSTANCE ( SPI_0, spi_0);
 ALTERA_AVALON_UART_INSTANCE ( UART_0, uart_0);
-ALTERA_UP_SD_CARD_AVALON_INTERFACE_INSTANCE ( ALTERA_UP_SD_CARD_AVALON_INTERFACE_0, Altera_UP_SD_Card_Avalon_Interface_0);
 
 /*
  * Initialize the interrupt controller devices
@@ -91,6 +91,6 @@ void alt_irq_init ( const void* base )
 
 void alt_sys_init( void )
 {
+    ALTERA_AVALON_SPI_INIT ( SPI_0, spi_0);
     ALTERA_AVALON_UART_INIT ( UART_0, uart_0);
-    ALTERA_UP_SD_CARD_AVALON_INTERFACE_INIT ( ALTERA_UP_SD_CARD_AVALON_INTERFACE_0, Altera_UP_SD_Card_Avalon_Interface_0);
 }

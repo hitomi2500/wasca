@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sun Sep 06 01:16:42 GMT+03:00 2015
+ * Generated: Sun Oct 04 23:48:12 FET 2015
  */
 
 /*
@@ -53,20 +53,6 @@
 
 /* Include definitions from linker script generator */
 #include "linker.h"
-
-
-/*
- * Altera_UP_SD_Card_Avalon_Interface_0 configuration
- *
- */
-
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE 0x43000
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_IRQ -1
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME "/dev/Altera_UP_SD_Card_Avalon_Interface_0"
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_SPAN 1024
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_TYPE "Altera_UP_SD_Card_Avalon_Interface"
-#define ALT_MODULE_CLASS_Altera_UP_SD_Card_Avalon_Interface_0 Altera_UP_SD_Card_Avalon_Interface
 
 
 /*
@@ -149,11 +135,10 @@
 
 #define __ALTERA_AVALON_NEW_SDRAM_CONTROLLER
 #define __ALTERA_AVALON_ONCHIP_MEMORY2
-#define __ALTERA_AVALON_PIO
+#define __ALTERA_AVALON_SPI
 #define __ALTERA_AVALON_UART
 #define __ALTERA_NIOS2_GEN2
 #define __ALTERA_ONCHIP_FLASH
-#define __ALTERA_UP_SD_CARD_AVALON_INTERFACE
 #define __ALTPLL
 #define __SEGA_SATURN_ABUS_SLAVE
 
@@ -312,37 +297,10 @@
 #define ONCHIP_MEMORY2_0_READ_DURING_WRITE_MODE "DONT_CARE"
 #define ONCHIP_MEMORY2_0_SINGLE_CLOCK_OP 0
 #define ONCHIP_MEMORY2_0_SIZE_MULTIPLE 1
-#define ONCHIP_MEMORY2_0_SIZE_VALUE 10240
-#define ONCHIP_MEMORY2_0_SPAN 10240
+#define ONCHIP_MEMORY2_0_SIZE_VALUE 16384
+#define ONCHIP_MEMORY2_0_SPAN 16384
 #define ONCHIP_MEMORY2_0_TYPE "altera_avalon_onchip_memory2"
 #define ONCHIP_MEMORY2_0_WRITABLE 1
-
-
-/*
- * pio_0 configuration
- *
- */
-
-#define ALT_MODULE_CLASS_pio_0 altera_avalon_pio
-#define PIO_0_BASE 0x44000
-#define PIO_0_BIT_CLEARING_EDGE_REGISTER 0
-#define PIO_0_BIT_MODIFYING_OUTPUT_REGISTER 0
-#define PIO_0_CAPTURE 0
-#define PIO_0_DATA_WIDTH 4
-#define PIO_0_DO_TEST_BENCH_WIRING 0
-#define PIO_0_DRIVEN_SIM_VALUE 0
-#define PIO_0_EDGE_TYPE "NONE"
-#define PIO_0_FREQ 116000000
-#define PIO_0_HAS_IN 0
-#define PIO_0_HAS_OUT 0
-#define PIO_0_HAS_TRI 1
-#define PIO_0_IRQ -1
-#define PIO_0_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define PIO_0_IRQ_TYPE "NONE"
-#define PIO_0_NAME "/dev/pio_0"
-#define PIO_0_RESET_VALUE 0
-#define PIO_0_SPAN 16
-#define PIO_0_TYPE "altera_avalon_pio"
 
 
 /*
@@ -357,6 +315,37 @@
 #define SEGA_SATURN_ABUS_SLAVE_0_NAME "/dev/sega_saturn_abus_slave_0"
 #define SEGA_SATURN_ABUS_SLAVE_0_SPAN 512
 #define SEGA_SATURN_ABUS_SLAVE_0_TYPE "sega_saturn_abus_slave"
+
+
+/*
+ * spi_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_spi_0 altera_avalon_spi
+#define SPI_0_BASE 0x43000
+#define SPI_0_CLOCKMULT 1
+#define SPI_0_CLOCKPHASE 0
+#define SPI_0_CLOCKPOLARITY 0
+#define SPI_0_CLOCKUNITS "Hz"
+#define SPI_0_DATABITS 8
+#define SPI_0_DATAWIDTH 16
+#define SPI_0_DELAYMULT "1.0E-9"
+#define SPI_0_DELAYUNITS "ns"
+#define SPI_0_EXTRADELAY 0
+#define SPI_0_INSERT_SYNC 0
+#define SPI_0_IRQ 1
+#define SPI_0_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define SPI_0_ISMASTER 1
+#define SPI_0_LSBFIRST 0
+#define SPI_0_NAME "/dev/spi_0"
+#define SPI_0_NUMSLAVES 1
+#define SPI_0_PREFIX "spi_"
+#define SPI_0_SPAN 32
+#define SPI_0_SYNC_REG_DEPTH 2
+#define SPI_0_TARGETCLOCK 20000000u
+#define SPI_0_TARGETSSDELAY "0.0"
+#define SPI_0_TYPE "altera_avalon_spi"
 
 
 /*

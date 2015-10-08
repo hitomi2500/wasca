@@ -3,7 +3,7 @@
 # Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
 # SOPC Builder design path: ../../wasca.sopcinfo
 #
-# Generated: Sun Sep 06 00:34:56 GMT+03:00 2015
+# Generated: Fri Oct 02 19:58:50 FET 2015
 
 # DO NOT MODIFY THIS FILE
 #
@@ -50,7 +50,7 @@
 memory 0x0 0x2b000 cache
 
 # onchip_memory2_0
-memory 0x80000 0x82800 cache
+memory 0x80000 0x84000 cache
 
 # external_sdram_controller
 memory 0x4000000 0x6000000 cache

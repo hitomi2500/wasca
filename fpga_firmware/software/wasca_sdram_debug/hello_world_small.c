@@ -82,8 +82,133 @@
 #include "sys/alt_stdio.h"
 #include "system.h"
 #include "fat_filelib.h"
+#include "altera_avalon_spi.h"
+#include "altera_avalon_spi_regs.h"
 
 #define READ_BLOCK 17
+
+void SD_command_native(unsigned char cmd, unsigned long arg,
+                unsigned char crc, unsigned char read,
+                unsigned char * buffer) {
+    unsigned char i;
+    unsigned char c;
+    alt_u32 status;
+    alt_u32 currentbyte_tx;
+    alt_u32 currentbyte_rx;
+
+    alt_32 credits = 1;
+    IOWR_ALTERA_AVALON_SPI_SLAVE_SEL(SPI_0_BASE, 1);
+    IOWR_ALTERA_AVALON_SPI_CONTROL(SPI_0_BASE, ALTERA_AVALON_SPI_CONTROL_SSO_MSK);
+    IORD_ALTERA_AVALON_SPI_RXDATA(SPI_0_BASE);
+
+    /* Keep clocking until all the data has been processed. */
+    currentbyte_tx = 0;
+    currentbyte_rx = 0;
+    while (currentbyte_rx < (7+read) )
+    {
+  	  do
+ 	      {
+  	        status = IORD_ALTERA_AVALON_SPI_STATUS(SPI_0_BASE);
+  	      }
+  	      while (((status & ALTERA_AVALON_SPI_STATUS_TRDY_MSK) == 0 || credits == 0) &&
+  	              (status & ALTERA_AVALON_SPI_STATUS_RRDY_MSK) == 0);
+
+  	  if ((status & ALTERA_AVALON_SPI_STATUS_TRDY_MSK) != 0 && credits > 0 && currentbyte_tx < (7+read))
+  	      {
+  	        credits--;
+  	        switch (currentbyte_tx)
+  	        {
+  	        case 0:
+  	        	IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_0_BASE, cmd);
+  	        	break;
+  	        case 1:
+  	        	IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_0_BASE, (char)(arg>>24));
+  	        	break;
+  	        case 2:
+  	        	IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_0_BASE, (char)(arg>>16));
+  	        	break;
+  	        case 3:
+  	        	IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_0_BASE, (char)(arg>>8));
+  	        	break;
+  	        case 4:
+  	        	IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_0_BASE, (char)(arg));
+  	        	break;
+  	        case 5:
+  	        	IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_0_BASE, crc);
+  	        	break;
+  	        default:
+  	        	IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_0_BASE, 0xFF);
+  	        	break;
+ 	        }
+  	      currentbyte_tx++;
+
+   	    }
+
+      if ((status & ALTERA_AVALON_SPI_STATUS_RRDY_MSK) != 0)
+      {
+    	if (currentbyte_rx>6)
+        buffer[currentbyte_rx-7] = IORD_ALTERA_AVALON_SPI_RXDATA(SPI_0_BASE);
+        currentbyte_rx++;
+        credits++;
+
+      }
+
+    }
+
+    IOWR_ALTERA_AVALON_SPI_CONTROL(SPI_0_BASE, 0);
+
+}
+
+
+void SD_feed_single_clock() {
+    unsigned char i;
+    unsigned char c;
+    alt_u32 status;
+
+    IOWR_ALTERA_AVALON_SPI_SLAVE_SEL(SPI_0_BASE, 0);
+    //IOWR_ALTERA_AVALON_SPI_CONTROL(SPI_0_BASE, ALTERA_AVALON_SPI_CONTROL_SSO_MSK);
+    IORD_ALTERA_AVALON_SPI_RXDATA(SPI_0_BASE);
+
+    /* Keep clocking until all the data has been processed. */
+      do
+ 	      {
+  	        status = IORD_ALTERA_AVALON_SPI_STATUS(SPI_0_BASE);
+  	      }
+  	      while ((status & ALTERA_AVALON_SPI_STATUS_TRDY_MSK) == 0 );
+
+  	IOWR_ALTERA_AVALON_SPI_TXDATA(SPI_0_BASE, 0xFF);
+
+    //IOWR_ALTERA_AVALON_SPI_CONTROL(SPI_0_BASE, 0);
+
+}
+
+
+void SD_command(unsigned char cmd, unsigned long arg,
+                unsigned char crc, unsigned char read,
+                unsigned char * buffer) {
+    unsigned char i;//, buffer[8];
+    unsigned char c;
+
+    c=cmd;
+    alt_avalon_spi_command(SPI_0_BASE,0,1,&c,0,&c,ALT_AVALON_SPI_COMMAND_MERGE);
+    c=arg>>24;
+    alt_avalon_spi_command(SPI_0_BASE,0,1,&c,0,&c,ALT_AVALON_SPI_COMMAND_MERGE);
+    c=arg>>16;
+    alt_avalon_spi_command(SPI_0_BASE,0,1,&c,0,&c,ALT_AVALON_SPI_COMMAND_MERGE);
+    c=arg>>8;
+    alt_avalon_spi_command(SPI_0_BASE,0,1,&c,0,&c,ALT_AVALON_SPI_COMMAND_MERGE);
+    c=arg;
+    alt_avalon_spi_command(SPI_0_BASE,0,1,&c,0,&c,ALT_AVALON_SPI_COMMAND_MERGE);
+    c=crc;
+    alt_avalon_spi_command(SPI_0_BASE,0,1,&c,0,&c,ALT_AVALON_SPI_COMMAND_MERGE);
+
+    c=0xFF;
+    for(i=0; i<(read-1); i++)
+        alt_avalon_spi_command(SPI_0_BASE,0,1,&c,1,&(buffer[i]),ALT_AVALON_SPI_COMMAND_MERGE);
+
+    alt_avalon_spi_command(SPI_0_BASE,0,1,&c,1,&(buffer[read-1]),0);
+
+}
 
 int media_init()
 {
@@ -95,25 +220,25 @@ int media_read(unsigned long sector, unsigned char *buffer, unsigned long sector
 {
     unsigned long i,j;
     short int status;
-    unsigned char * pSD = (unsigned char *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE;
+ /*   unsigned char * pSD = (unsigned char *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE;
     int *command_argument_register = ((int *)(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE + 0x0000022C));
     short int *command_register = ((short int *)(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE + 0x00000230));
     short int *aux_status_register = ((short int *)(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE + 0x00000234));
 
     for (i=0;i<sector_count;i++)
     {
-  	  /* Wait until the operation completes. */
+  	  // Wait until the operation completes.
   	  do {
   	  status = *aux_status_register;
   	  } while ((status & 0x04)!=0);
   	  alt_printf("Read block %x wait done\n\r",sector+i);
 
-  	  /* Read 1st sector on the card */
+  	  // Read 1st sector on the card
     	  *command_argument_register = (sector+i) * 512;
     	  *command_register = READ_BLOCK;
     	  alt_printf("Read block %x\n\r",sector+i);
 
-    	  /* Wait until the operation completes. */
+    	  // Wait until the operation completes.
     	  do {
     	  status = *aux_status_register;
     	  } while ((status & 0x04)!=0);
@@ -123,7 +248,7 @@ int media_read(unsigned long sector, unsigned char *buffer, unsigned long sector
     		  buffer[i*512+j] = pSD[j];
     	  alt_printf("Read block %x done\n\r",sector+i);
 
-    }
+    }*/
 
     return 1;
 }
@@ -137,16 +262,40 @@ int media_write(unsigned long sector, unsigned char *buffer, unsigned long secto
 int main()
 { 
   int i;
-  unsigned char * pSD = (unsigned char *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE;
-  short int status;
-  int *command_argument_register = ((int *)(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE + 0x0000022C));
-  short int *command_register = ((short int *)(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE + 0x00000230));
-  short int *aux_status_register = ((short int *)(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE + 0x00000234));
+  unsigned char writebuf[512];
+  unsigned char readbuf[512];
+  char c;
+  //unsigned char buffer[8];
 
   alt_putstr("Hello from Nios II!\n\r");
 
+  //give SD card some clocks to init
+  /*for (i=0;i<100;i++)
+  {
+	  SD_command(0x40,0x00000000,0x95,1,readbuf);
+  }*/
 
-  alt_putstr("Waiting for SD card\n\r");
+  //cmd0, cmd8, cmd58
+  //SD_command_native(0xFF,0xFFFFFFFF,0xFF,0,readbuf);
+  //SD_command_native(0xFF,0xFFFFFFFF,0xFF,0,readbuf);
+  for (i=0;i<10;i++)
+	  SD_feed_single_clock();
+  SD_command_native(0x40,0x00000000,0x95,1,readbuf);
+  if (readbuf[0]!= 0x01)
+	  alt_printf("CMD 0 FAIL! Responce: %x \n\r",readbuf[0]);
+  SD_command_native(0x48,0x00000155,0x75,6,readbuf);
+  if ( (readbuf[0]!= 0x01) || (readbuf[3]!=0x01) || (readbuf[4]!=0x55) )
+	  alt_printf("CMD 8 FAIL! Responce: %x %x %x %x %x %x \n\r",readbuf[0],readbuf[1],readbuf[2],readbuf[3],readbuf[4],readbuf[5]);
+  //do
+  {
+	  SD_command_native(0x69,0x50FF8000,0x77,6,readbuf);
+	  alt_printf("ACMD41 Responce: %x %x %x %x %x %x \n\r",readbuf[0],readbuf[1],readbuf[2],readbuf[3],readbuf[4],readbuf[5]);
+  }
+
+
+  alt_printf("SD init done\n\r");
+
+  /*alt_putstr("Waiting for SD card\n\r");
   do {
 	  status = *aux_status_register;
   } while ((status & 0x02) == 0);

@@ -13,29 +13,29 @@
 		.external_sdram_controller_wire_dqm                         (<connected-to-external_sdram_controller_wire_dqm>),                         //                                              .dqm
 		.external_sdram_controller_wire_ras_n                       (<connected-to-external_sdram_controller_wire_ras_n>),                       //                                              .ras_n
 		.external_sdram_controller_wire_we_n                        (<connected-to-external_sdram_controller_wire_we_n>),                        //                                              .we_n
-		.pio_0_external_connection_export                           (<connected-to-pio_0_external_connection_export>),                           //                     pio_0_external_connection.export
-		.sd_mmc_controller_0_sd_card_io_sd_clk_o_pad                (<connected-to-sd_mmc_controller_0_sd_card_io_sd_clk_o_pad>),                //                sd_mmc_controller_0_sd_card_io.sd_clk_o_pad
-		.sd_mmc_controller_0_sd_card_io_sd_cmd_dat_i                (<connected-to-sd_mmc_controller_0_sd_card_io_sd_cmd_dat_i>),                //                                              .sd_cmd_dat_i
-		.sd_mmc_controller_0_sd_card_io_sd_cmd_oe_o                 (<connected-to-sd_mmc_controller_0_sd_card_io_sd_cmd_oe_o>),                 //                                              .sd_cmd_oe_o
-		.sd_mmc_controller_0_sd_card_io_sd_cmd_out_o                (<connected-to-sd_mmc_controller_0_sd_card_io_sd_cmd_out_o>),                //                                              .sd_cmd_out_o
-		.sd_mmc_controller_0_sd_card_io_sd_dat_dat_i                (<connected-to-sd_mmc_controller_0_sd_card_io_sd_dat_dat_i>),                //                                              .sd_dat_dat_i
-		.sd_mmc_controller_0_sd_card_io_sd_dat_oe_o                 (<connected-to-sd_mmc_controller_0_sd_card_io_sd_dat_oe_o>),                 //                                              .sd_dat_oe_o
-		.sd_mmc_controller_0_sd_card_io_sd_dat_out_o                (<connected-to-sd_mmc_controller_0_sd_card_io_sd_dat_out_o>),                //                                              .sd_dat_out_o
 		.sega_saturn_abus_slave_0_abus_address                      (<connected-to-sega_saturn_abus_slave_0_abus_address>),                      //                 sega_saturn_abus_slave_0_abus.address
 		.sega_saturn_abus_slave_0_abus_chipselect                   (<connected-to-sega_saturn_abus_slave_0_abus_chipselect>),                   //                                              .chipselect
 		.sega_saturn_abus_slave_0_abus_read                         (<connected-to-sega_saturn_abus_slave_0_abus_read>),                         //                                              .read
 		.sega_saturn_abus_slave_0_abus_write                        (<connected-to-sega_saturn_abus_slave_0_abus_write>),                        //                                              .write
-		.sega_saturn_abus_slave_0_abus_functioncode                 (<connected-to-sega_saturn_abus_slave_0_abus_functioncode>),                 //                                              .functioncode
-		.sega_saturn_abus_slave_0_abus_timing                       (<connected-to-sega_saturn_abus_slave_0_abus_timing>),                       //                                              .timing
 		.sega_saturn_abus_slave_0_abus_waitrequest                  (<connected-to-sega_saturn_abus_slave_0_abus_waitrequest>),                  //                                              .waitrequest
-		.sega_saturn_abus_slave_0_abus_addressstrobe                (<connected-to-sega_saturn_abus_slave_0_abus_addressstrobe>),                //                                              .addressstrobe
 		.sega_saturn_abus_slave_0_abus_interrupt                    (<connected-to-sega_saturn_abus_slave_0_abus_interrupt>),                    //                                              .interrupt
 		.sega_saturn_abus_slave_0_abus_addressdata                  (<connected-to-sega_saturn_abus_slave_0_abus_addressdata>),                  //                                              .addressdata
 		.sega_saturn_abus_slave_0_abus_direction                    (<connected-to-sega_saturn_abus_slave_0_abus_direction>),                    //                                              .direction
 		.sega_saturn_abus_slave_0_abus_muxing                       (<connected-to-sega_saturn_abus_slave_0_abus_muxing>),                       //                                              .muxing
 		.sega_saturn_abus_slave_0_abus_disableout                   (<connected-to-sega_saturn_abus_slave_0_abus_disableout>),                   //                                              .disableout
 		.sega_saturn_abus_slave_0_conduit_saturn_reset_saturn_reset (<connected-to-sega_saturn_abus_slave_0_conduit_saturn_reset_saturn_reset>), // sega_saturn_abus_slave_0_conduit_saturn_reset.saturn_reset
+		.spi_sd_card_MISO                                           (<connected-to-spi_sd_card_MISO>),                                           //                                   spi_sd_card.MISO
+		.spi_sd_card_MOSI                                           (<connected-to-spi_sd_card_MOSI>),                                           //                                              .MOSI
+		.spi_sd_card_SCLK                                           (<connected-to-spi_sd_card_SCLK>),                                           //                                              .SCLK
+		.spi_sd_card_SS_n                                           (<connected-to-spi_sd_card_SS_n>),                                           //                                              .SS_n
 		.uart_0_external_connection_rxd                             (<connected-to-uart_0_external_connection_rxd>),                             //                    uart_0_external_connection.rxd
-		.uart_0_external_connection_txd                             (<connected-to-uart_0_external_connection_txd>)                              //                                              .txd
+		.uart_0_external_connection_txd                             (<connected-to-uart_0_external_connection_txd>),                             //                                              .txd
+		.spi_stm32_MISO                                             (<connected-to-spi_stm32_MISO>),                                             //                                     spi_stm32.MISO
+		.spi_stm32_MOSI                                             (<connected-to-spi_stm32_MOSI>),                                             //                                              .MOSI
+		.spi_stm32_SCLK                                             (<connected-to-spi_stm32_SCLK>),                                             //                                              .SCLK
+		.spi_stm32_SS_n                                             (<connected-to-spi_stm32_SS_n>),                                             //                                              .SS_n
+		.audio_out_BCLK                                             (<connected-to-audio_out_BCLK>),                                             //                                     audio_out.BCLK
+		.audio_out_DACDAT                                           (<connected-to-audio_out_DACDAT>),                                           //                                              .DACDAT
+		.audio_out_DACLRCK                                          (<connected-to-audio_out_DACLRCK>)                                           //                                              .DACLRCK
 	);
 

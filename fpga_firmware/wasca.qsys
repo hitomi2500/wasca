@@ -21,7 +21,15 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "6";
+         type = "int";
+      }
+   }
+   element audio_0
+   {
+      datum _sortIndex
+      {
+         value = "11";
          type = "int";
       }
    }
@@ -37,7 +45,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "7";
          type = "int";
       }
    }
@@ -69,7 +77,7 @@
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "5";
          type = "int";
       }
    }
@@ -81,7 +89,7 @@
          type = "int";
       }
    }
-   element pio_0
+   element sega_saturn_abus_slave_0
    {
       datum _sortIndex
       {
@@ -89,7 +97,15 @@
          type = "int";
       }
    }
-   element sd_mmc_controller_0
+   element spi_sd_card
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
+      }
+   }
+   element spi_stm32
    {
       datum _sortIndex
       {
@@ -97,19 +113,11 @@
          type = "int";
       }
    }
-   element sega_saturn_abus_slave_0
-   {
-      datum _sortIndex
-      {
-         value = "5";
-         type = "int";
-      }
-   }
    element uart_0
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "8";
          type = "int";
       }
    }
@@ -181,21 +189,16 @@
    internal="altpll_0.phasedone_conduit"
    type="conduit"
    dir="end" />
+ <interface
+   name="audio_out"
+   internal="audio_0.external_interface"
+   type="conduit"
+   dir="end" />
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
  <interface name="clock_116_mhz" internal="clk_1.clk" type="clock" dir="start" />
  <interface
    name="external_sdram_controller_wire"
    internal="external_sdram_controller.wire"
-   type="conduit"
-   dir="end" />
- <interface
-   name="pio_0_external_connection"
-   internal="pio_0.external_connection"
-   type="conduit"
-   dir="end" />
- <interface
-   name="sd_mmc_controller_0_sd_card_io"
-   internal="sd_mmc_controller_0.sd_card_io"
    type="conduit"
    dir="end" />
  <interface
@@ -206,6 +209,16 @@
  <interface
    name="sega_saturn_abus_slave_0_conduit_saturn_reset"
    internal="sega_saturn_abus_slave_0.conduit_saturn_reset"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="spi_sd_card"
+   internal="spi_sd_card.external"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="spi_stm32"
+   internal="spi_stm32.external"
    type="conduit"
    dir="end" />
  <interface
@@ -380,6 +393,18 @@
   <parameter name="WIDTH_CLOCK" value="5" />
   <parameter name="WIDTH_PHASECOUNTERSELECT" value="" />
  </module>
+ <module
+   name="audio_0"
+   kind="altera_up_avalon_audio"
+   version="15.0"
+   enabled="1">
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="116000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="MAX 10" />
+  <parameter name="audio_in" value="false" />
+  <parameter name="audio_out" value="true" />
+  <parameter name="avalon_bus_type" value="Memory Mapped" />
+  <parameter name="dw" value="16" />
+ </module>
  <module name="clk_0" kind="clock_source" version="15.0" enabled="1">
   <parameter name="clockFrequency" value="22579200" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -445,7 +470,7 @@
   <parameter name="dataAddrWidth" value="27" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' /><slave name='uart_0.s1' start='0x40000' end='0x40020' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' /><slave name='altpll_0.pll_slave' start='0x42000' end='0x42010' /><slave name='sd_mmc_controller_0.avalon_slave_0' start='0x43000' end='0x43008' /><slave name='pio_0.s1' start='0x44000' end='0x44010' /><slave name='sega_saturn_abus_slave_0.avalon_nios' start='0x45000' end='0x45200' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x82800' /><slave name='external_sdram_controller.s1' start='0x4000000' end='0x6000000' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' /><slave name='uart_0.s1' start='0x40000' end='0x40020' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' /><slave name='altpll_0.pll_slave' start='0x42000' end='0x42010' /><slave name='spi_sd_card.spi_control_port' start='0x43000' end='0x43020' /><slave name='spi_stm32.spi_control_port' start='0x44000' end='0x44020' /><slave name='sega_saturn_abus_slave_0.avalon_nios' start='0x45000' end='0x45200' /><slave name='audio_0.avalon_audio_slave' start='0x46000' end='0x46010' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' /><slave name='external_sdram_controller.s1' start='0x4000000' end='0x6000000' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -484,14 +509,14 @@
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Tiny" />
   <parameter name="instAddrWidth" value="27" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x82800' /><slave name='external_sdram_controller.s1' start='0x4000000' end='0x6000000' /></address-map>]]></parameter>
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' /><slave name='external_sdram_controller.s1' start='0x4000000' end='0x6000000' /></address-map>]]></parameter>
   <parameter name="instructionMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="instructionMasterHighPerformanceMapParam" value="" />
   <parameter name="instruction_master_high_performance_paddr_base" value="0" />
   <parameter name="instruction_master_high_performance_paddr_size" value="0" />
   <parameter name="instruction_master_paddr_base" value="0" />
   <parameter name="instruction_master_paddr_size" value="0" />
-  <parameter name="internalIrqMaskSystemInfo" value="1" />
+  <parameter name="internalIrqMaskSystemInfo" value="15" />
   <parameter name="io_regionbase" value="0" />
   <parameter name="io_regionsize" value="0" />
   <parameter name="master_addr_map" value="false" />
@@ -639,7 +664,7 @@
   <parameter name="initMemContent" value="false" />
   <parameter name="initializationFileName" value="onchip_mem.hex" />
   <parameter name="instanceID" value="NONE" />
-  <parameter name="memorySize" value="10240" />
+  <parameter name="memorySize" value="16384" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
   <parameter name="resetrequest_enabled" value="true" />
   <parameter name="simAllowMRAMContentsFile" value="false" />
@@ -651,30 +676,47 @@
   <parameter name="useShallowMemBlocks" value="false" />
   <parameter name="writable" value="true" />
  </module>
- <module name="pio_0" kind="altera_avalon_pio" version="15.0" enabled="1">
-  <parameter name="bitClearingEdgeCapReg" value="false" />
-  <parameter name="bitModifyingOutReg" value="false" />
-  <parameter name="captureEdge" value="false" />
-  <parameter name="clockRate" value="116000000" />
-  <parameter name="direction" value="Bidir" />
-  <parameter name="edgeType" value="RISING" />
-  <parameter name="generateIRQ" value="false" />
-  <parameter name="irqType" value="LEVEL" />
-  <parameter name="resetValue" value="0" />
-  <parameter name="simDoTestBenchWiring" value="false" />
-  <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="4" />
- </module>
- <module
-   name="sd_mmc_controller_0"
-   kind="sd_mmc_controller"
-   version="1.0"
-   enabled="1" />
  <module
    name="sega_saturn_abus_slave_0"
    kind="sega_saturn_abus_slave"
    version="1.0"
    enabled="1" />
+ <module
+   name="spi_sd_card"
+   kind="altera_avalon_spi"
+   version="15.0"
+   enabled="1">
+  <parameter name="avalonSpec" value="2.0" />
+  <parameter name="clockPhase" value="0" />
+  <parameter name="clockPolarity" value="0" />
+  <parameter name="dataWidth" value="8" />
+  <parameter name="disableAvalonFlowControl" value="false" />
+  <parameter name="inputClockRate" value="116000000" />
+  <parameter name="insertDelayBetweenSlaveSelectAndSClk" value="false" />
+  <parameter name="insertSync" value="false" />
+  <parameter name="lsbOrderedFirst" value="false" />
+  <parameter name="masterSPI" value="true" />
+  <parameter name="numberOfSlaves" value="1" />
+  <parameter name="syncRegDepth" value="2" />
+  <parameter name="targetClockRate" value="20000000" />
+  <parameter name="targetSlaveSelectToSClkDelay" value="0.0" />
+ </module>
+ <module name="spi_stm32" kind="altera_avalon_spi" version="15.0" enabled="1">
+  <parameter name="avalonSpec" value="2.0" />
+  <parameter name="clockPhase" value="0" />
+  <parameter name="clockPolarity" value="0" />
+  <parameter name="dataWidth" value="8" />
+  <parameter name="disableAvalonFlowControl" value="false" />
+  <parameter name="inputClockRate" value="116000000" />
+  <parameter name="insertDelayBetweenSlaveSelectAndSClk" value="false" />
+  <parameter name="insertSync" value="false" />
+  <parameter name="lsbOrderedFirst" value="false" />
+  <parameter name="masterSPI" value="false" />
+  <parameter name="numberOfSlaves" value="1" />
+  <parameter name="syncRegDepth" value="2" />
+  <parameter name="targetClockRate" value="128000" />
+  <parameter name="targetSlaveSelectToSClkDelay" value="0.0" />
+ </module>
  <module name="uart_0" kind="altera_avalon_uart" version="15.0" enabled="1">
   <parameter name="baud" value="115200" />
   <parameter name="clockRate" value="116000000" />
@@ -704,18 +746,18 @@
    kind="avalon"
    version="15.0"
    start="nios2_gen2_0.data_master"
-   end="sega_saturn_abus_slave_0.avalon_nios">
+   end="audio_0.avalon_audio_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00045000" />
+  <parameter name="baseAddress" value="0x00046000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="15.0"
    start="nios2_gen2_0.data_master"
-   end="sd_mmc_controller_0.avalon_slave_0">
+   end="sega_saturn_abus_slave_0.avalon_nios">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00043000" />
+  <parameter name="baseAddress" value="0x00045000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -767,18 +809,27 @@
    kind="avalon"
    version="15.0"
    start="nios2_gen2_0.data_master"
-   end="pio_0.s1">
+   end="uart_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00044000" />
+  <parameter name="baseAddress" value="0x00040000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="15.0"
    start="nios2_gen2_0.data_master"
-   end="uart_0.s1">
+   end="spi_sd_card.spi_control_port">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00040000" />
+  <parameter name="baseAddress" value="0x00043000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="nios2_gen2_0.data_master"
+   end="spi_stm32.spi_control_port">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00044000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -821,12 +872,6 @@
    kind="clock"
    version="15.0"
    start="altpll_0.c0"
-   end="sd_mmc_controller_0.avalon_clock" />
- <connection kind="clock" version="15.0" start="altpll_0.c0" end="pio_0.clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="altpll_0.c0"
    end="nios2_gen2_0.clk" />
  <connection
    kind="clock"
@@ -839,6 +884,9 @@
    version="15.0"
    start="altpll_0.c0"
    end="external_sdram_controller.clk" />
+ <connection kind="clock" version="15.0" start="altpll_0.c0" end="spi_sd_card.clk" />
+ <connection kind="clock" version="15.0" start="altpll_0.c0" end="spi_stm32.clk" />
+ <connection kind="clock" version="15.0" start="altpll_0.c0" end="audio_0.clk" />
  <connection
    kind="clock"
    version="15.0"
@@ -859,14 +907,30 @@
    kind="interrupt"
    version="15.0"
    start="nios2_gen2_0.irq"
+   end="audio_0.interrupt">
+  <parameter name="irqNumber" value="3" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.0"
+   start="nios2_gen2_0.irq"
    end="uart_0.irq">
   <parameter name="irqNumber" value="0" />
  </connection>
  <connection
-   kind="reset"
+   kind="interrupt"
    version="15.0"
-   start="nios2_gen2_0.debug_reset_request"
-   end="sd_mmc_controller_0.avalon_reset" />
+   start="nios2_gen2_0.irq"
+   end="spi_sd_card.irq">
+  <parameter name="irqNumber" value="1" />
+ </connection>
+ <connection
+   kind="interrupt"
+   version="15.0"
+   start="nios2_gen2_0.irq"
+   end="spi_stm32.irq">
+  <parameter name="irqNumber" value="2" />
+ </connection>
  <connection
    kind="reset"
    version="15.0"
@@ -901,17 +965,27 @@
    kind="reset"
    version="15.0"
    start="nios2_gen2_0.debug_reset_request"
-   end="pio_0.reset" />
- <connection
-   kind="reset"
-   version="15.0"
-   start="nios2_gen2_0.debug_reset_request"
    end="sega_saturn_abus_slave_0.reset" />
  <connection
    kind="reset"
    version="15.0"
    start="nios2_gen2_0.debug_reset_request"
    end="uart_0.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="nios2_gen2_0.debug_reset_request"
+   end="spi_sd_card.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="nios2_gen2_0.debug_reset_request"
+   end="spi_stm32.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="nios2_gen2_0.debug_reset_request"
+   end="audio_0.reset" />
  <connection
    kind="reset"
    version="15.0"
