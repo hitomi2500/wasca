@@ -1,0 +1,310 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2014 Altera Corporation. All rights reserved.
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, the Altera Quartus II License Agreement,
+# the Altera MegaCore Function License Agreement, or other 
+# applicable license agreement, including, without limitation, 
+# that your use is for the sole purpose of programming logic 
+# devices manufactured by Altera and sold by Altera or its 
+# authorized distributors.  Please refer to the applicable 
+# agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II 64-Bit
+# Version 14.1.0 Build 186 12/03/2014 SJ Web Edition
+# Date created = 23:22:58  May 21, 2015
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		wasca_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus II software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+set_global_assignment -name FAMILY "MAX 10"
+set_global_assignment -name DEVICE 10M08SCE144I7G
+set_global_assignment -name TOP_LEVEL_ENTITY wasca_toplevel
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 14.1.0
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "23:22:58  MAY 21, 2015"
+set_global_assignment -name LAST_QUARTUS_VERSION 15.1.2
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name DEVICE_FILTER_PACKAGE EQFP
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 144
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 2
+set_global_assignment -name EDA_DESIGN_ENTRY_SYNTHESIS_TOOL Synplify
+set_global_assignment -name EDA_LMF_FILE synplcty.lmf -section_id eda_design_synthesis
+set_global_assignment -name EDA_INPUT_DATA_FORMAT VQM -section_id eda_design_synthesis
+set_global_assignment -name EDA_SIMULATION_TOOL "Active-HDL (VHDL)"
+set_global_assignment -name EDA_TIME_SCALE "1 ps" -section_id eda_simulation
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
+set_global_assignment -name EDA_BOARD_DESIGN_TIMING_TOOL "Stamp (Timing)"
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT STAMP -section_id eda_board_design_timing
+set_global_assignment -name EDA_BOARD_DESIGN_SYMBOL_TOOL "ViewDraw (Symbol)"
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VIEWDRAW -section_id eda_board_design_symbol
+set_global_assignment -name EDA_BOARD_DESIGN_SIGNAL_INTEGRITY_TOOL "IBIS (Signal Integrity)"
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT IBIS -section_id eda_board_design_signal_integrity
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_cke
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[12]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[11]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_write[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_write[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_waitrequest
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_read
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[8]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to reset_reset_n
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[9]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_ba
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dqm[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[12]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_ras_n
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_we_n
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_cas_n
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[14]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[10]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_address[20]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_address[22]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_address[18]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_address[16]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_chipselect[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_address[21]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_address[19]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_interrupt
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_chipselect[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_chipselect[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_address[24]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_address[23]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[15]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[9]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[13]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_address[25]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[11]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[10]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk_clk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sega_saturn_abus_slave_0_abus_address[17]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_cs_n
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dq[8]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_dqm[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to external_sdram_controller_wire_addr[4]
+set_global_assignment -name PROJECT_IP_REGENERATION_POLICY ALWAYS_REGENERATE_IP
+set_global_assignment -name VCCA_USER_VOLTAGE 3.3V
+set_global_assignment -name ENABLE_OCT_DONE OFF
+set_global_assignment -name ENABLE_CONFIGURATION_PINS OFF
+set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
+set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_global_assignment -name INTERNAL_FLASH_UPDATE_MODE "SINGLE COMP IMAGE"
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name FLOW_ENABLE_POWER_ANALYZER ON
+set_global_assignment -name POWER_DEFAULT_INPUT_IO_TOGGLE_RATE "12.5 %"
+set_global_assignment -name EXTERNAL_FLASH_FALLBACK_ADDRESS 00000000
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to clk_clk
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[12]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[11]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[10]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[8]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[9]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[7]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[6]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[5]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_addr[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_ba[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_ba[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_cas_n
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_cke
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_cs_n
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[15]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[14]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[13]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[12]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[11]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[10]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[9]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[8]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[7]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[6]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[5]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dq[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dqm[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_dqm[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_ras_n
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to external_sdram_controller_wire_we_n
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to reset_reset_n
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_address[25]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_address[24]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_address[23]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_address[22]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_address[21]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_address[20]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_address[19]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_address[18]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_address[17]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_address[16]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_chipselect[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_chipselect[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_chipselect[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_direction
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_interrupt
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_muxing[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_muxing[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_read
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_waitrequest
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_write[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to sega_saturn_abus_slave_0_abus_write[0]
+set_global_assignment -name ENABLE_SIGNALTAP ON
+set_global_assignment -name USE_SIGNALTAP_FILE wasca_signaltap.stp
+set_location_assignment PIN_6 -to sega_saturn_abus_slave_0_abus_addressdata[3]
+set_location_assignment PIN_7 -to sega_saturn_abus_slave_0_abus_addressdata[8]
+set_location_assignment PIN_8 -to sega_saturn_abus_slave_0_abus_addressdata[9]
+set_location_assignment PIN_10 -to sega_saturn_abus_slave_0_abus_addressdata[10]
+set_location_assignment PIN_11 -to sega_saturn_abus_slave_0_abus_addressdata[11]
+set_location_assignment PIN_12 -to sega_saturn_abus_slave_0_abus_direction
+set_location_assignment PIN_13 -to sega_saturn_abus_slave_0_abus_addressdata[7]
+set_location_assignment PIN_14 -to sega_saturn_abus_slave_0_abus_addressdata[6]
+set_location_assignment PIN_15 -to sega_saturn_abus_slave_0_abus_addressdata[5]
+set_location_assignment PIN_17 -to sega_saturn_abus_slave_0_abus_addressdata[4]
+set_location_assignment PIN_21 -to sega_saturn_abus_slave_0_abus_addressdata[15]
+set_location_assignment PIN_22 -to sega_saturn_abus_slave_0_abus_addressdata[14]
+set_location_assignment PIN_24 -to sega_saturn_abus_slave_0_abus_addressdata[13]
+set_location_assignment PIN_25 -to sega_saturn_abus_slave_0_abus_muxing[0]
+set_location_assignment PIN_26 -to sega_saturn_abus_slave_0_abus_addressdata[12]
+set_location_assignment PIN_27 -to sega_saturn_abus_slave_0_abus_muxing[1]
+set_location_assignment PIN_28 -to clk_clk
+set_location_assignment PIN_29 -to usb_spare1
+set_location_assignment PIN_30 -to usb_cs
+set_location_assignment PIN_32 -to usb_rd
+set_location_assignment PIN_33 -to usb_spare2
+set_location_assignment PIN_38 -to spi_sd_card_SS_n
+set_location_assignment PIN_39 -to spi_sd_card_MOSI
+set_location_assignment PIN_41 -to spi_sd_card_SCLK
+set_location_assignment PIN_43 -to sd_card_detect
+set_location_assignment PIN_44 -to spi_sd_card_MISO
+set_location_assignment PIN_45 -to external_sdram_controller_wire_dq[0]
+set_location_assignment PIN_46 -to external_sdram_controller_wire_dq[1]
+set_location_assignment PIN_47 -to external_sdram_controller_wire_dq[2]
+set_location_assignment PIN_48 -to external_sdram_controller_wire_dq[3]
+set_location_assignment PIN_50 -to external_sdram_controller_wire_dq[4]
+set_location_assignment PIN_52 -to external_sdram_controller_wire_dq[5]
+set_location_assignment PIN_54 -to external_sdram_controller_wire_dq[6]
+set_location_assignment PIN_55 -to external_sdram_controller_wire_dq[7]
+set_location_assignment PIN_56 -to external_sdram_controller_wire_dqm[0]
+set_location_assignment PIN_57 -to external_sdram_controller_wire_we_n
+set_location_assignment PIN_58 -to external_sdram_controller_wire_cas_n
+set_location_assignment PIN_59 -to external_sdram_controller_wire_ras_n
+set_location_assignment PIN_60 -to external_sdram_controller_wire_cs_n
+set_location_assignment PIN_61 -to external_sdram_controller_wire_ba[0]
+set_location_assignment PIN_62 -to external_sdram_controller_wire_ba[1]
+set_location_assignment PIN_64 -to external_sdram_controller_wire_addr[10]
+set_location_assignment PIN_65 -to external_sdram_controller_wire_addr[0]
+set_location_assignment PIN_66 -to external_sdram_controller_wire_addr[1]
+set_location_assignment PIN_69 -to external_sdram_controller_wire_addr[2]
+set_location_assignment PIN_70 -to external_sdram_controller_wire_addr[3]
+set_location_assignment PIN_74 -to external_sdram_controller_wire_dq[15]
+set_location_assignment PIN_75 -to external_sdram_controller_wire_dq[14]
+set_location_assignment PIN_76 -to external_sdram_controller_wire_dq[13]
+set_location_assignment PIN_77 -to external_sdram_controller_wire_dq[12]
+set_location_assignment PIN_78 -to external_sdram_controller_wire_dq[11]
+set_location_assignment PIN_79 -to external_sdram_controller_wire_dq[10]
+set_location_assignment PIN_80 -to external_sdram_controller_wire_dq[9]
+set_location_assignment PIN_81 -to external_sdram_controller_wire_dq[8]
+set_location_assignment PIN_84 -to external_sdram_controller_wire_dqm[1]
+set_location_assignment PIN_85 -to external_sdram_controller_wire_clk
+set_location_assignment PIN_86 -to external_sdram_controller_wire_cke
+set_location_assignment PIN_87 -to external_sdram_controller_wire_addr[12]
+set_location_assignment PIN_88 -to external_sdram_controller_wire_addr[11]
+set_location_assignment PIN_89 -to external_sdram_controller_wire_addr[9]
+set_location_assignment PIN_90 -to external_sdram_controller_wire_addr[8]
+set_location_assignment PIN_91 -to external_sdram_controller_wire_addr[7]
+set_location_assignment PIN_92 -to external_sdram_controller_wire_addr[6]
+set_location_assignment PIN_93 -to external_sdram_controller_wire_addr[5]
+set_location_assignment PIN_96 -to external_sdram_controller_wire_addr[4]
+set_location_assignment PIN_97 -to ledg1
+set_location_assignment PIN_98 -to ledr1
+set_location_assignment PIN_99 -to ddr_spare1
+set_location_assignment PIN_100 -to ddr_spare2
+set_location_assignment PIN_101 -to ddr_spare3
+set_location_assignment PIN_102 -to audio_SSEL
+set_location_assignment PIN_105 -to audio_out_DACDAT
+set_location_assignment PIN_106 -to audio_out_BCLK
+set_location_assignment PIN_110 -to audio_out_DACLRCK
+set_location_assignment PIN_111 -to reset_reset_n
+set_location_assignment PIN_112 -to sega_saturn_abus_slave_0_abus_address[25]
+set_location_assignment PIN_113 -to sega_saturn_abus_slave_0_abus_address[23]
+set_location_assignment PIN_114 -to sega_saturn_abus_slave_0_abus_address[21]
+set_location_assignment PIN_118 -to sega_saturn_abus_slave_0_abus_address[19]
+set_location_assignment PIN_119 -to sega_saturn_abus_slave_0_abus_address[17]
+set_location_assignment PIN_120 -to sega_saturn_abus_slave_0_abus_address[16]
+set_location_assignment PIN_121 -to sega_saturn_abus_slave_0_abus_address[18]
+set_location_assignment PIN_122 -to sega_saturn_abus_slave_0_abus_address[20]
+set_location_assignment PIN_123 -to sega_saturn_abus_slave_0_abus_address[22]
+set_location_assignment PIN_124 -to sega_saturn_abus_slave_0_abus_address[24]
+set_location_assignment PIN_126 -to sega_saturn_abus_slave_0_abus_read
+set_location_assignment PIN_127 -to sega_saturn_abus_slave_0_abus_chipselect[1]
+set_location_assignment PIN_129 -to sega_saturn_abus_slave_0_abus_write[1]
+set_location_assignment PIN_130 -to sega_saturn_abus_slave_0_abus_write[0]
+set_location_assignment PIN_131 -to sega_saturn_abus_slave_0_abus_chipselect[2]
+set_location_assignment PIN_132 -to sega_saturn_abus_slave_0_abus_chipselect[0]
+set_location_assignment PIN_134 -to sega_saturn_abus_slave_0_abus_waitrequest
+set_location_assignment PIN_135 -to sega_saturn_abus_slave_0_abus_interrupt
+set_location_assignment PIN_136 -to sega_saturn_abus_slave_0_abus_disableout
+set_location_assignment PIN_138 -to sega_saturn_abus_slave_0_abus_addressdata[2]
+set_location_assignment PIN_140 -to sega_saturn_abus_slave_0_abus_addressdata[1]
+set_location_assignment PIN_141 -to sega_saturn_abus_slave_0_abus_addressdata[0]
+set_global_assignment -name QSYS_FILE wasca.qsys
+set_global_assignment -name VHDL_FILE wasca_toplevel.vhd
+set_global_assignment -name SIGNALTAP_FILE wasca_signaltap.stp
+set_global_assignment -name CDF_FILE Chain4.cdf
+set_global_assignment -name ENABLE_BOOT_SEL_PIN OFF
+set_global_assignment -name POR_SCHEME "INSTANT ON"
+set_global_assignment -name EN_USER_IO_WEAK_PULLUP ON
+set_global_assignment -name EN_SPI_IO_WEAK_PULLUP ON
+set_global_assignment -name CDF_FILE output_files/Chain2.cdf
+set_global_assignment -name CDF_FILE output_files/Chain1.cdf
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

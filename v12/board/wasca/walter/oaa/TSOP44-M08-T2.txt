@@ -1,0 +1,1 @@
+https://bazaar.launchpad.net/~oyvind-aabling/kicad-newlib/mod/view/head:/modules/packages3d/oaa/TSOP44-M08-T2.wrl

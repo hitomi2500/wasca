@@ -1,0 +1,30 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP 2450BM14E0003
+D Johanson integrated balun+filter, optimized for Nordic nRF24
+$ENDCMP
+#
+$CMP ANT
+D RF antenna (integrated)
+$ENDCMP
+#
+$CMP BAL-NRF01D3
+D Integrated balun for use with NRF51822 (QFN48 package)
+$ENDCMP
+#
+$CMP CC2540
+D CC2540 Bluetooth Low Energy SoC
+K CC2540 Bluetooth Low Energy BLE CC2530 ZigBee 802.15.4 RF4CE SoC
+$ENDCMP
+#
+$CMP STM32F040C4
+D 32-bit ARM Cortex-M0 Microcontroller, 48MHz, 16KB Flash, 6KB RAM, USB, RTC, VQFP48
+K STM32 ARM Cortex-M0 MCU
+$ENDCMP
+#
+$CMP STM32F042C6T6
+D 32-bit ARM Cortex-M0 Microcontroller, 48MHz, 16KB Flash, 6KB RAM, USB, RTC, VQFP48
+K STM32 ARM Cortex-M0 MCU
+$ENDCMP
+#
+#End Doc Library

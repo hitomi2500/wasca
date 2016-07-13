@@ -1,0 +1,507 @@
+Cmp-Mod V01 Created by Cvpcb (2015-01-16 BZR 5376)-product   date = 06.05.2015 11:24:59
+
+BeginCmp
+TimeStamp = /553AE73B;
+Reference = C1;
+ValeurCmp = 10uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553A8E47;
+Reference = C2;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553ACC65;
+Reference = C3;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553A8F6E;
+Reference = C4;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553A47D9;
+Reference = C5;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553A633F;
+Reference = C6;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55383D80;
+Reference = C7;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553A4892;
+Reference = C8;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553A6292;
+Reference = C9;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553A373E;
+Reference = C10;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55383E52;
+Reference = C11;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55383C59;
+Reference = C12;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55407168;
+Reference = C13;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55383E5F;
+Reference = C14;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55383C66;
+Reference = C15;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55383D8D;
+Reference = C16;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55383E38;
+Reference = C17;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55382ACB;
+Reference = C18;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55383D66;
+Reference = C19;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55383E45;
+Reference = C20;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55383BC3;
+Reference = C21;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55383D73;
+Reference = C22;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55387180;
+Reference = C23;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538718C;
+Reference = C24;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5541CD75;
+Reference = C25;
+ValeurCmp = 10uF;
+IdModule  = Capacitors_SMD:C_1206_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553870EB;
+Reference = C26;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5541BCBA;
+Reference = C27;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553870F7;
+Reference = C28;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553870D3;
+Reference = C29;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553870DF;
+Reference = C30;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55419609;
+Reference = C31;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538AC1E;
+Reference = C32;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /554196B2;
+Reference = C33;
+ValeurCmp = 10uF;
+IdModule  = Capacitors_SMD:C_1206_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538AC2A;
+Reference = C34;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538ABF8;
+Reference = C35;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538AC04;
+Reference = C36;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538ABE0;
+Reference = C37;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538ABEC;
+Reference = C38;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553B803A;
+Reference = C39;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553B8CD5;
+Reference = C40;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553B4E42;
+Reference = C41;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553B8D6D;
+Reference = C42;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553B4EE3;
+Reference = C43;
+ValeurCmp = 1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553B3BF9;
+Reference = C44;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553B39D0;
+Reference = C45;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538F7C2;
+Reference = C46;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553B8E09;
+Reference = C47;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55391CEA;
+Reference = C48;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553B8EC5;
+Reference = C49;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553B8FA1;
+Reference = C50;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5530C876;
+Reference = CN1;
+ValeurCmp = CARTRIDGE_EDGE_CONNECTOR;
+IdModule  = usbcart:CARTRIDGE_EDGE_CONNECTOR2;
+EndCmp
+
+BeginCmp
+TimeStamp = /5537B422;
+Reference = CON1;
+ValeurCmp = SD_Card;
+IdModule  = Connect:SD_Card_Receptacle;
+EndCmp
+
+BeginCmp
+TimeStamp = /5549E3D1;
+Reference = CON2;
+ValeurCmp = USB_OTG;
+IdModule  = Connect:USB_Micro-B;
+EndCmp
+
+BeginCmp
+TimeStamp = /5549EFB4;
+Reference = D1;
+ValeurCmp = D_Schottky_x2_KCom_AAK;
+IdModule  = Housings_SOT-23_SOT-143_TSOT-6:SOT-23_Handsoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5530A78B;
+Reference = IC1;
+ValeurCmp = MT48LC32M16A2TG;
+IdModule  = usbcart:TSOP_II_54;
+EndCmp
+
+BeginCmp
+TimeStamp = /553815DE;
+Reference = L1;
+ValeurCmp = L_Small;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5536F553;
+Reference = R1;
+ValeurCmp = 50K;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55386F8B;
+Reference = R2;
+ValeurCmp = 50K;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55386FFB;
+Reference = R3;
+ValeurCmp = 50K;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538706B;
+Reference = R4;
+ValeurCmp = 50K;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /553870E7;
+Reference = R5;
+ValeurCmp = 50K;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55387161;
+Reference = R6;
+ValeurCmp = 27;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55387217;
+Reference = R7;
+ValeurCmp = 27;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538A649;
+Reference = R8;
+ValeurCmp = 4.7K;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /5538A931;
+Reference = R9;
+ValeurCmp = 4.7K;
+IdModule  = Resistors_SMD:R_0603_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /55357CB5;
+Reference = U1;
+ValeurCmp = 74ALVC164245;
+IdModule  = Housings_SSOP:TSSOP-48_6.1x12.5mm_Pitch0.5mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /5536D248;
+Reference = U2;
+ValeurCmp = 74ALVC164245;
+IdModule  = Housings_SSOP:TSSOP-48_6.1x12.5mm_Pitch0.5mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /55357BE8;
+Reference = U3;
+ValeurCmp = 74ALVC164245;
+IdModule  = Housings_SSOP:TSSOP-48_6.1x12.5mm_Pitch0.5mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /5536E7A3;
+Reference = U4;
+ValeurCmp = 74ALVC164245;
+IdModule  = Housings_SSOP:TSSOP-48_6.1x12.5mm_Pitch0.5mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /554091AB;
+Reference = U5;
+ValeurCmp = LD1117S33CTR;
+IdModule  = SMD_Packages:SOT-223;
+EndCmp
+
+BeginCmp
+TimeStamp = /5530484D;
+Reference = U6;
+ValeurCmp = 10M04SFE144C8G;
+IdModule  = Housings_QFP:TQFP-144_20x20mm_Pitch0.5mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /5537FBB9;
+Reference = U7;
+ValeurCmp = FT201XS;
+IdModule  = Housings_SSOP:SSOP-16_3.9x4.9mm_Pitch0.635mm;
+EndCmp
+
+EndListe

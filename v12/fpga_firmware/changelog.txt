@@ -1,0 +1,5 @@
+2016/07/11 :
+ - Copied sources from wasca 1.1.
+ - Upgraded project and IPs to version 15.1.
+ - Removed USB and STM32 modules.
+ - Changed target device to 10M08SCE144I7G and modified pin assignment accordingly.
