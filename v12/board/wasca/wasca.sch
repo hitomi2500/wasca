@@ -90,7 +90,7 @@ $Descr A1 33110 23386
 encoding utf-8
 Sheet 1 1
 Title "Wasca"
-Date "2016-07-11"
+Date "2016-07-14"
 Rev "1.2"
 Comp "cafe-alpha & hitomi2500"
 Comment1 ""

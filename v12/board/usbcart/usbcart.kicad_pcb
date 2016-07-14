@@ -15,9 +15,9 @@
   (page A4)
   (title_block
     (title "USB Mezzanine Board")
-    (date 2016-07-09)
+    (date 2016-07-14)
     (rev 4.1)
-    (company cafe-alpha)
+    (company "cafe-alpha (http://ppcenter.free.fr/satcart/)")
     (comment 2 "Distributed under GNU GENERAL PUBLIC LICENSE Version 2")
   )
 
@@ -1523,7 +1523,7 @@
       (xy -10.49782 1.94818) (xy 10.33018 1.94818) (xy 10.33018 -2.032) (xy 10.33018 -2.032)) (layer B.SilkS) (width 0.00254))
   )
 
-  (gr_text "Mfg. date :\n2016 July 11" (at 102.1 127.4) (layer F.SilkS)
+  (gr_text "Mfg. date :\n2016 July 14" (at 102.1 127.4) (layer F.SilkS)
     (effects (font (size 0.8992 0.8992) (thickness 0.1905)))
   )
   (gr_line (start 85.8 122.7) (end 85.8 123.3) (angle 90) (layer F.SilkS) (width 0.381))

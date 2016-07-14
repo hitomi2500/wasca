@@ -90,9 +90,9 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "USB Mezzanine Board"
-Date "2016-07-11"
+Date "2016-07-14"
 Rev "4.1"
-Comp "cafe-alpha"
+Comp "cafe-alpha (http://ppcenter.free.fr/satcart/)"
 Comment1 ""
 Comment2 "Distributed under GNU GENERAL PUBLIC LICENSE Version 2"
 Comment3 ""
