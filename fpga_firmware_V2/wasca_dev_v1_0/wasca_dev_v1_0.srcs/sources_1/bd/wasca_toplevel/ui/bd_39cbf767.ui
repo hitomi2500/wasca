@@ -1,0 +1,74 @@
+{
+   guistr: "# # String gsaved with Nlview 6.5.12  2016-01-29 bk=1.3547 VDI=39 GEI=35 GUI=JA:1.6
+#  -string -flagsOSRD
+preplace port abus_reset -pg 1 -y 550 -defaultsOSRD
+preplace port DDR -pg 1 -y 80 -defaultsOSRD
+preplace port abus_wait_dir -pg 1 -y 570 -defaultsOSRD
+preplace port abus_data_dir -pg 1 -y 380 -defaultsOSRD
+preplace port abus_wait -pg 1 -y 630 -defaultsOSRD
+preplace port abus_irq_dir -pg 1 -y 550 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -y 100 -defaultsOSRD
+preplace port abus_read -pg 1 -y 520 -defaultsOSRD
+preplace portBus abus_write -pg 1 -y 740 -defaultsOSRD
+preplace portBus abus_chipselect -pg 1 -y 600 -defaultsOSRD
+preplace portBus abus_address -pg 1 -y 170 -defaultsOSRD
+preplace portBus abus_irq -pg 1 -y 460 -defaultsOSRD
+preplace portBus data_to_and_from_pins -pg 1 -y 280 -defaultsOSRD
+preplace inst abus_chipselect_io -pg 1 -lvl 3 -y 620 -defaultsOSRD
+preplace inst rst_processing_system7_0_100M -pg 1 -lvl 1 -y 430 -defaultsOSRD
+preplace inst abus_write_io -pg 1 -lvl 3 -y 760 -defaultsOSRD
+preplace inst abus_read_io -pg 1 -lvl 3 -y 480 -defaultsOSRD
+preplace inst abus_address_lo -pg 1 -lvl 2 -y 330 -defaultsOSRD
+preplace inst xlconcat_0 -pg 1 -lvl 3 -y 340 -defaultsOSRD
+preplace inst abus_address_hi -pg 1 -lvl 2 -y 190 -defaultsOSRD
+preplace inst abus_wait_io -pg 1 -lvl 6 -y 640 -defaultsOSRD
+preplace inst ABus2AXI4Lite_0 -pg 1 -lvl 4 -y 280 -defaultsOSRD
+preplace inst abus_irq_io -pg 1 -lvl 6 -y 470 -defaultsOSRD
+preplace inst selectio_wiz_0 -pg 1 -lvl 6 -y 290 -defaultsOSRD
+preplace inst abus_a_lo -pg 1 -lvl 1 -y 280 -defaultsOSRD
+preplace inst axi_mem_intercon -pg 1 -lvl 5 -y 130 -defaultsOSRD
+preplace inst processing_system7_0_axi_periph -pg 1 -lvl 3 -y 160 -defaultsOSRD
+preplace inst abus_a_hi -pg 1 -lvl 1 -y 170 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 6 -y 110 -defaultsOSRD
+preplace netloc processing_system7_0_DDR 1 6 1 NJ
+preplace netloc abus_address_hi_io1_data_in_to_device 1 2 1 750
+preplace netloc abus_write_1 1 0 3 NJ 740 NJ 740 NJ
+preplace netloc abus_reset_1 1 0 4 NJ 550 NJ 550 NJ 550 NJ
+preplace netloc ABus2AXI4Lite_0_abus_data_direction 1 4 3 NJ 270 1840 380 NJ
+preplace netloc ABus2AXI4Lite_0_abus_irq 1 4 2 NJ 320 1820
+preplace netloc processing_system7_0_axi_periph_M00_AXI 1 3 1 N
+preplace netloc abus_address_1 1 0 1 20
+preplace netloc processing_system7_0_M_AXI_GP0 1 2 5 760 10 NJ 10 NJ 10 NJ 10 2260
+preplace netloc ABus2AXI4Lite_0_abus_data_out 1 4 2 NJ 260 1830
+preplace netloc ABus2AXI4Lite_0_abus_irq_direction 1 4 3 NJ 340 1800 550 NJ
+preplace netloc ABus2AXI4Lite_0_abus_wait_direction 1 4 3 NJ 300 1790 560 NJ
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 7 30 340 NJ 400 NJ 410 NJ 470 NJ 390 NJ 390 2270
+preplace netloc axi_mem_intercon_M00_AXI 1 5 1 1810
+preplace netloc abus_chipselect_io_data_in_to_device 1 3 1 1110
+preplace netloc rst_processing_system7_0_100M_peripheral_aresetn 1 1 4 NJ 470 740 400 1120 80 1490
+preplace netloc xlconcat_0_dout 1 3 1 1090
+preplace netloc abus_write_io_data_in_to_device 1 3 1 1140
+preplace netloc ABus2AXI4Lite_0_abus_wait 1 4 2 NJ 280 1810
+preplace netloc rst_processing_system7_0_100M_peripheral_reset 1 1 5 370 430 710 830 NJ 830 NJ 830 1830
+preplace netloc processing_system7_0_FIXED_IO 1 6 1 NJ
+preplace netloc S00_AXI_1 1 4 1 1450
+preplace netloc selectio_wiz_0_data_in_to_device 1 3 4 1150 100 NJ 250 NJ 370 2260
+preplace netloc abus_a_hi_Dout 1 1 1 NJ
+preplace netloc abus_address_lo_io_data_in_to_device 1 2 1 N
+preplace netloc abus_read_io_data_in_to_device 1 3 1 1100
+preplace netloc Net1 1 6 1 NJ
+preplace netloc Net 1 6 1 NJ
+preplace netloc rst_processing_system7_0_100M_interconnect_aresetn 1 1 4 NJ 450 720 20 NJ 90 1460
+preplace netloc processing_system7_0_FCLK_CLK0 1 0 7 20 330 350 260 760 690 1150 460 1480 400 1850 210 2260
+preplace netloc abus_a_lo_Dout 1 1 1 NJ
+preplace netloc Net2 1 6 1 NJ
+preplace netloc abus_chipselect_1 1 0 3 NJ 600 NJ 600 NJ
+preplace netloc processing_system7_0_axi_periph_M01_AXI 1 3 1 N
+preplace netloc abus_read_1 1 0 3 NJ 520 NJ 520 NJ
+levelinfo -pg 1 0 190 540 930 1300 1640 2060 2290 -top 0 -bot 840
+",
+}
+{
+   da_axi4_cnt: "4",
+   da_ps7_cnt: "1",
+}
