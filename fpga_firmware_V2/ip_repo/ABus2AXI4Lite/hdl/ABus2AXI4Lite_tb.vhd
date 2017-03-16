@@ -33,6 +33,22 @@ USE ieee.std_logic_1164.ALL;
 --USE ieee.numeric_std.ALL;
  
 ENTITY a_tb IS
+	generic (
+    -- Users to add parameters here
+
+    -- User parameters ends
+    -- Do not modify the parameters beyond this line
+
+
+    -- Parameters of Axi Master Bus Interface M00_AXI
+    C_MASTER_AXI_TARGET_SLAVE_BASE_ADDR    : std_logic_vector    := x"00000000";
+    C_MASTER_AXI_ADDR_WIDTH    : integer    := 32;
+    C_MASTER_AXI_DATA_WIDTH    : integer    := 32;
+    C_SYSREGS_AXI_ADDR_WIDTH : integer    := 32;
+    C_SYSREGS_AXI_DATA_WIDTH : integer    := 32;
+    C_FILESYS_AXI_ADDR_WIDTH : integer    := 32;
+    C_FILESYS_AXI_DATA_WIDTH : integer    := 32
+);
 END a_tb;
  
 ARCHITECTURE behavior OF a_tb IS 
@@ -41,39 +57,66 @@ ARCHITECTURE behavior OF a_tb IS
  
     COMPONENT ABus2AXI4Lite
     PORT(
-         abus_address : IN  std_logic_vector(25 downto 0);
-         abus_data_in : IN  std_logic_vector(15 downto 0);
-         abus_data_out : OUT  std_logic_vector(15 downto 0);
-         abus_data_direction : OUT  std_logic;
-         abus_chipselect : IN  std_logic_vector(2 downto 0);
-         abus_read : IN  std_logic;
-         abus_write : IN  std_logic_vector(1 downto 0);
-         abus_wait : OUT  std_logic;
-         abus_wait_direction : OUT  std_logic;
-         abus_irq : OUT  std_logic;
-         abus_irq_direction : OUT  std_logic;
-         abus_reset : IN  std_logic;
-         master_axi_aclk : IN  std_logic;
-         master_axi_aresetn : IN  std_logic;
-         master_axi_awaddr : OUT  std_logic_vector(31 downto 0);
-         master_axi_awprot : OUT  std_logic_vector(2 downto 0);
-         master_axi_awvalid : OUT  std_logic;
-         master_axi_awready : IN  std_logic;
-         master_axi_wdata : OUT  std_logic_vector(31 downto 0);
-         master_axi_wstrb : OUT  std_logic_vector(3 downto 0);
-         master_axi_wvalid : OUT  std_logic;
-         master_axi_wready : IN  std_logic;
-         master_axi_bresp : IN  std_logic_vector(1 downto 0);
-         master_axi_bvalid : IN  std_logic;
-         master_axi_bready : OUT  std_logic;
-         master_axi_araddr : OUT  std_logic_vector(31 downto 0);
-         master_axi_arprot : OUT  std_logic_vector(2 downto 0);
-         master_axi_arvalid : OUT  std_logic;
-         master_axi_arready : IN  std_logic;
-         master_axi_rdata : IN  std_logic_vector(31 downto 0);
-         master_axi_rresp : IN  std_logic_vector(1 downto 0);
-         master_axi_rvalid : IN  std_logic;
-         master_axi_rready : OUT  std_logic
+		-- abus ports
+    abus_address         : in    std_logic_vector(25 downto 0) := (others => '0'); --          abus.address
+    abus_data_in         : in std_logic_vector(15 downto 0) := (others => '0'); --          abus.addressdata
+    abus_data_out        : out std_logic_vector(15 downto 0) := (others => '0'); --          abus.addressdata
+    abus_data_direction  : out   std_logic                     := '0';             --              .direction
+    abus_chipselect      : in    std_logic_vector(2 downto 0)  := (others => '0'); --              .chipselect
+    abus_read            : in    std_logic                     := '0';             --              .read
+    abus_write           : in    std_logic_vector(1 downto 0)  := (others => '0'); --              .write
+    abus_wait            : out   std_logic                              := '1';                                        --              .waitrequest
+    abus_wait_direction  : out   std_logic                     := '0';             --              .direction
+    abus_irq             : out   std_logic                     := '0';             --              .interrupt
+    abus_irq_direction   : out   std_logic                     := '0';             --              .direction
+    abus_reset           : in    std_logic                     := '0';             --               .saturn_reset
+
+    -- Ports of Axi Master Bus Interface
+    master_axi_aclk    : in std_logic;
+    master_axi_aresetn    : in std_logic;
+    master_axi_awaddr    : out std_logic_vector(C_MASTER_AXI_ADDR_WIDTH-1 downto 0);
+    master_axi_awprot    : out std_logic_vector(2 downto 0);
+    master_axi_awvalid    : out std_logic;
+    master_axi_awready    : in std_logic;
+    master_axi_wdata    : out std_logic_vector(C_MASTER_AXI_DATA_WIDTH-1 downto 0);
+    master_axi_wstrb    : out std_logic_vector(C_MASTER_AXI_DATA_WIDTH/8-1 downto 0);
+    master_axi_wvalid    : out std_logic;
+    master_axi_wready    : in std_logic;
+    master_axi_bresp    : in std_logic_vector(1 downto 0);
+    master_axi_bvalid    : in std_logic;
+    master_axi_bready    : out std_logic;
+    master_axi_araddr    : out std_logic_vector(C_MASTER_AXI_ADDR_WIDTH-1 downto 0);
+    master_axi_arprot    : out std_logic_vector(2 downto 0);
+    master_axi_arvalid    : out std_logic;
+    master_axi_arready    : in std_logic;
+    master_axi_rdata    : in std_logic_vector(C_MASTER_AXI_DATA_WIDTH-1 downto 0);
+    master_axi_rresp    : in std_logic_vector(1 downto 0);
+    master_axi_rvalid    : in std_logic;
+    master_axi_rready    : out std_logic;
+
+    -- Ports of Sysregs Bus Interface
+    sysregs_axi_aclk    : in std_logic;
+    sysregs_axi_aresetn    : in std_logic;
+    sysregs_axi_awaddr    : in std_logic_vector(C_SYSREGS_AXI_ADDR_WIDTH-1 downto 0);
+    sysregs_axi_awprot    : in std_logic_vector(2 downto 0);
+    sysregs_axi_awvalid    : in std_logic;
+    sysregs_axi_awready    : out std_logic;
+    sysregs_axi_wdata    : in std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH-1 downto 0);
+    sysregs_axi_wstrb    : in std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH/8-1 downto 0);
+    sysregs_axi_wvalid    : in std_logic;
+    sysregs_axi_wready    : out std_logic;
+    sysregs_axi_bresp    : out std_logic_vector(1 downto 0);
+    sysregs_axi_bvalid    : out std_logic;
+    sysregs_axi_bready    : in std_logic;
+    sysregs_axi_araddr    : in std_logic_vector(C_SYSREGS_AXI_ADDR_WIDTH-1 downto 0);
+    sysregs_axi_arprot    : in std_logic_vector(2 downto 0);
+    sysregs_axi_arvalid    : in std_logic;
+    sysregs_axi_arready    : out std_logic;
+    sysregs_axi_rdata    : out std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH-1 downto 0);
+    sysregs_axi_rresp    : out std_logic_vector(1 downto 0);
+    sysregs_axi_rvalid    : out std_logic;
+    sysregs_axi_rready    : in std_logic
+
         );
     END COMPONENT;
     
@@ -119,6 +162,17 @@ ARCHITECTURE behavior OF a_tb IS
    signal master_axi_rdata : std_logic_vector(31 downto 0) := (others => '0');
    signal master_axi_rresp : std_logic_vector(1 downto 0) := (others => '0');
    signal master_axi_rvalid : std_logic := '0';
+   signal sysregs_axi_awaddr : std_logic_vector(31 downto 0) := (others => '0');
+   signal sysregs_axi_awprot : std_logic_vector(2 downto 0) := (others => '0');
+   signal sysregs_axi_awvalid : std_logic := '0';
+   signal sysregs_axi_wdata : std_logic_vector(31 downto 0) := (others => '0');
+   signal sysregs_axi_wstrb : std_logic_vector(3 downto 0) := (others => '0');
+   signal sysregs_axi_wvalid : std_logic := '0';
+   signal sysregs_axi_bready : std_logic := '0';
+   signal sysregs_axi_araddr : std_logic_vector(31 downto 0) := (others => '0');
+   signal sysregs_axi_arprot : std_logic_vector(2 downto 0) := (others => '0');
+   signal sysregs_axi_arvalid : std_logic := '0';
+   signal sysregs_axi_rready : std_logic := '0';
 
  	--Outputs
    signal abus_data_out : std_logic_vector(15 downto 0);
@@ -140,6 +194,16 @@ ARCHITECTURE behavior OF a_tb IS
    signal master_axi_arprot : std_logic_vector(2 downto 0) := (others => '0');
    signal master_axi_arvalid : std_logic := '0';
    signal master_axi_rready : std_logic := '0';
+   signal sysregs_axi_aclk : std_logic := '0';
+   signal sysregs_axi_aresetn : std_logic := '0';
+   signal sysregs_axi_awready : std_logic := '0';
+   signal sysregs_axi_wready : std_logic := '0';
+   signal sysregs_axi_bresp : std_logic_vector(1 downto 0) := (others => '0');
+   signal sysregs_axi_bvalid : std_logic := '0';
+   signal sysregs_axi_arready : std_logic := '0';
+   signal sysregs_axi_rdata : std_logic_vector(31 downto 0) := (others => '0');
+   signal sysregs_axi_rresp : std_logic_vector(1 downto 0) := (others => '0');
+   signal sysregs_axi_rvalid : std_logic := '0';
 
    -- Clock period definitions
    constant master_axi_aclk_period : time := 10 ns;
@@ -225,7 +289,28 @@ BEGIN
           master_axi_rdata => master_axi_rdata,
           master_axi_rresp => master_axi_rresp,
           master_axi_rvalid => master_axi_rvalid,
-          master_axi_rready => master_axi_rready
+          master_axi_rready => master_axi_rready,
+          sysregs_axi_aclk => sysregs_axi_aclk,
+          sysregs_axi_aresetn => sysregs_axi_aresetn,
+          sysregs_axi_awaddr => sysregs_axi_awaddr,
+          sysregs_axi_awprot => sysregs_axi_awprot,
+          sysregs_axi_awvalid => sysregs_axi_awvalid,
+          sysregs_axi_awready => sysregs_axi_awready,
+          sysregs_axi_wdata => sysregs_axi_wdata,
+          sysregs_axi_wstrb => sysregs_axi_wstrb,
+          sysregs_axi_wvalid => sysregs_axi_wvalid,
+          sysregs_axi_wready => sysregs_axi_wready,
+          sysregs_axi_bresp => sysregs_axi_bresp,
+          sysregs_axi_bvalid => sysregs_axi_bvalid,
+          sysregs_axi_bready => sysregs_axi_bready,
+          sysregs_axi_araddr => sysregs_axi_araddr,
+          sysregs_axi_arprot => sysregs_axi_arprot,
+          sysregs_axi_arvalid => sysregs_axi_arvalid,
+          sysregs_axi_arready => sysregs_axi_arready,
+          sysregs_axi_rdata => sysregs_axi_rdata,
+          sysregs_axi_rresp => sysregs_axi_rresp,
+          sysregs_axi_rvalid => sysregs_axi_rvalid,
+          sysregs_axi_rready => sysregs_axi_rready
         );
 
    das_mem: test_mem PORT MAP (
@@ -285,6 +370,40 @@ BEGIN
       abus_read_proc("00"&X"000002","101",abus_address,abus_chipselect,abus_read);
       abus_read_proc("00"&X"000004","101",abus_address,abus_chipselect,abus_read);
       abus_read_proc("00"&X"000006","101",abus_address,abus_chipselect,abus_read);
+
+      --wasca system regs write and read
+      wait for 1000 ns;	
+      abus_write_proc("11"&X"FFFFF4",X"ACBD","110",abus_address,abus_data_in,abus_chipselect,abus_write); --mode
+      abus_read_proc("11"&X"FFFFF0","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFFFF2","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFFFF4","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFFFF8","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFFFFA","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFFFFC","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFFFFE","110",abus_address,abus_chipselect,abus_read);
+
+      --wasca filesystem regs write and read
+      wait for 1000 ns;	
+      abus_write_proc("11"&X"FFEFF0",X"FADE","110",abus_address,abus_data_in,abus_chipselect,abus_write); --lock
+      abus_write_proc("11"&X"FFEFF2",X"0001","110",abus_address,abus_data_in,abus_chipselect,abus_write); --cmd
+      abus_read_proc("11"&X"FFFFF4","110",abus_address,abus_chipselect,abus_read);--status
+      abus_write_proc("11"&X"FFE000",X"DADA","110",abus_address,abus_data_in,abus_chipselect,abus_write); --data buf
+      abus_write_proc("11"&X"FFE002",X"DADA","110",abus_address,abus_data_in,abus_chipselect,abus_write); --data buf
+      abus_write_proc("11"&X"FFE7FC",X"DADA","110",abus_address,abus_data_in,abus_chipselect,abus_write); --data buf
+      abus_write_proc("11"&X"FFE7FE",X"DADA","110",abus_address,abus_data_in,abus_chipselect,abus_write); --data buf
+      abus_write_proc("11"&X"FFE800",X"CDCD","110",abus_address,abus_data_in,abus_chipselect,abus_write); --data buf
+      abus_write_proc("11"&X"FFE802",X"CDCD","110",abus_address,abus_data_in,abus_chipselect,abus_write); --data buf
+      abus_write_proc("11"&X"FFEFEC",X"CDCD","110",abus_address,abus_data_in,abus_chipselect,abus_write); --data buf
+      abus_write_proc("11"&X"FFEFEE",X"CDCD","110",abus_address,abus_data_in,abus_chipselect,abus_write); --data buf
+      abus_read_proc("11"&X"FFF000","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFF002","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFF7FC","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFF7FE","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFF800","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFF802","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFFFEC","110",abus_address,abus_chipselect,abus_read);
+      abus_read_proc("11"&X"FFFFEE","110",abus_address,abus_chipselect,abus_read);
+            
 
       wait;
    end process;

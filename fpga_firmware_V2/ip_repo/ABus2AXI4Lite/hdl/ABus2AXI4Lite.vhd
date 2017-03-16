@@ -78,30 +78,30 @@ entity ABus2AXI4Lite is
         sysregs_axi_rdata    : out std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH-1 downto 0);
         sysregs_axi_rresp    : out std_logic_vector(1 downto 0);
         sysregs_axi_rvalid    : out std_logic;
-        sysregs_axi_rready    : in std_logic;
+        sysregs_axi_rready    : in std_logic
 
-		-- Ports of Filesys Bus Interface
-        filesys_axi_aclk    : in std_logic;
-        filesys_axi_aresetn    : in std_logic;
-        filesys_axi_awaddr    : in std_logic_vector(C_FILESYS_AXI_ADDR_WIDTH-1 downto 0);
-        filesys_axi_awprot    : in std_logic_vector(2 downto 0);
-        filesys_axi_awvalid    : in std_logic;
-        filesys_axi_awready    : out std_logic;
-        filesys_axi_wdata    : in std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
-        filesys_axi_wstrb    : in std_logic_vector(C_FILESYS_AXI_DATA_WIDTH/8-1 downto 0);
-        filesys_axi_wvalid    : in std_logic;
-        filesys_axi_wready    : out std_logic;
-        filesys_axi_bresp    : out std_logic_vector(1 downto 0);
-        filesys_axi_bvalid    : out std_logic;
-        filesys_axi_bready    : in std_logic;
-        filesys_axi_araddr    : in std_logic_vector(C_FILESYS_AXI_ADDR_WIDTH-1 downto 0);
-        filesys_axi_arprot    : in std_logic_vector(2 downto 0);
-        filesys_axi_arvalid    : in std_logic;
-        filesys_axi_arready    : out std_logic;
-        filesys_axi_rdata    : out std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
-        filesys_axi_rresp    : out std_logic_vector(1 downto 0);
-        filesys_axi_rvalid    : out std_logic;
-        filesys_axi_rready    : in std_logic
+--		-- Ports of Filesys Bus Interface
+--        filesys_axi_aclk    : in std_logic;
+--        filesys_axi_aresetn    : in std_logic;
+--        filesys_axi_awaddr    : in std_logic_vector(C_FILESYS_AXI_ADDR_WIDTH-1 downto 0);
+--        filesys_axi_awprot    : in std_logic_vector(2 downto 0);
+--        filesys_axi_awvalid    : in std_logic;
+--        filesys_axi_awready    : out std_logic;
+--        filesys_axi_wdata    : in std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
+--        filesys_axi_wstrb    : in std_logic_vector(C_FILESYS_AXI_DATA_WIDTH/8-1 downto 0);
+--        filesys_axi_wvalid    : in std_logic;
+--        filesys_axi_wready    : out std_logic;
+--        filesys_axi_bresp    : out std_logic_vector(1 downto 0);
+--        filesys_axi_bvalid    : out std_logic;
+--        filesys_axi_bready    : in std_logic;
+--        filesys_axi_araddr    : in std_logic_vector(C_FILESYS_AXI_ADDR_WIDTH-1 downto 0);
+--        filesys_axi_arprot    : in std_logic_vector(2 downto 0);
+--        filesys_axi_arvalid    : in std_logic;
+--        filesys_axi_arready    : out std_logic;
+--        filesys_axi_rdata    : out std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
+--        filesys_axi_rresp    : out std_logic_vector(1 downto 0);
+--        filesys_axi_rvalid    : out std_logic;
+--        filesys_axi_rready    : in std_logic
 
 	);
 end ABus2AXI4Lite;
@@ -128,7 +128,7 @@ architecture arch_imp of ABus2AXI4Lite is
         abus_irq             : out   std_logic                     := '0';             --              .interrupt
         abus_irq_direction   : out   std_logic                     := '0';             --              .direction
         abus_reset           : in    std_logic                     := '0';             --               .saturn_reset
-		MASTER_AXI_ACLK	: in std_logic;
+        MASTER_AXI_ACLK	: in std_logic;
 		MASTER_AXI_ARESETN	: in std_logic;
 		MASTER_AXI_AWADDR	: out std_logic_vector(C_MASTER_AXI_ADDR_WIDTH-1 downto 0);
 		MASTER_AXI_AWPROT	: out std_logic_vector(2 downto 0);
@@ -226,7 +226,8 @@ architecture arch_imp of ABus2AXI4Lite is
 
 begin
 
--- Instantiation of Axi Bus Interface M00_AXI
+--the master interface goes to DDR3 memory
+--it needs mode signal to disable reading or writing memory in certain modes
 ABus2AXI4Lite_Master_AXI_inst : ABus2AXI4Lite_Master_AXI
 	generic map (
 		C_MASTER_TARGET_SLAVE_BASE_ADDR	=> C_MASTER_AXI_TARGET_SLAVE_BASE_ADDR,
@@ -246,6 +247,7 @@ ABus2AXI4Lite_Master_AXI_inst : ABus2AXI4Lite_Master_AXI
 		abus_irq	=> abus_irq,
 		abus_irq_direction	=> abus_irq_direction,
 		abus_reset => abus_reset,
+		MODE => MODE,
 		MASTER_AXI_ACLK	=> master_axi_aclk,
 		MASTER_AXI_ARESETN	=> master_axi_aresetn,
 		MASTER_AXI_AWADDR	=> master_axi_awaddr,
@@ -303,34 +305,34 @@ ABus2AXI4Lite_Sysreg_AXI_inst : ABus2AXI4Lite_Sysregs_AXI
 		SYSREGS_AXI_RREADY => sysregs_axi_rready
 	);
 
-ABus2AXI4Lite_Filesys_AXI_inst : ABus2AXI4Lite_Filesys_regs_AXI
-	generic map (
-		C_FILESYS_AXI_ADDR_WIDTH	=> C_FILESYS_AXI_ADDR_WIDTH,
-		C_FILESYS_AXI_DATA_WIDTH	=> C_FILESYS_AXI_DATA_WIDTH
-		)
-    port map(
-        FILESYS_AXI_ACLK => filesys_axi_aclk,
-		FILESYS_AXI_ARESETN => filesys_axi_aresetn,
-		FILESYS_AXI_AWADDR => filesys_axi_awaddr,
-		FILESYS_AXI_AWPROT => filesys_axi_awprot,
-		FILESYS_AXI_AWVALID => filesys_axi_awvalid,
-		FILESYS_AXI_AWREADY => filesys_axi_awready,
-		FILESYS_AXI_WDATA => filesys_axi_wdata,
-		FILESYS_AXI_WSTRB => filesys_axi_wstrb,
-		FILESYS_AXI_WVALID => filesys_axi_wvalid,
-		FILESYS_AXI_WREADY => filesys_axi_wready,
-		FILESYS_AXI_BRESP => filesys_axi_bresp,
-		FILESYS_AXI_BVALID => filesys_axi_bvalid,
-		FILESYS_AXI_BREADY => filesys_axi_bready,
-		FILESYS_AXI_ARADDR => filesys_axi_araddr,
-		FILESYS_AXI_ARPROT => filesys_axi_arprot,
-		FILESYS_AXI_ARVALID => filesys_axi_arvalid,
-		FILESYS_AXI_ARREADY => filesys_axi_arready,
-		FILESYS_AXI_RDATA => filesys_axi_rdata,
-		FILESYS_AXI_RRESP => filesys_axi_rresp,
-		FILESYS_AXI_RVALID => filesys_axi_rvalid,
-		FILESYS_AXI_RREADY => filesys_axi_rready
-	);
+--ABus2AXI4Lite_Filesys_AXI_inst : ABus2AXI4Lite_Filesys_regs_AXI
+--	generic map (
+--		C_FILESYS_AXI_ADDR_WIDTH	=> C_FILESYS_AXI_ADDR_WIDTH,
+--		C_FILESYS_AXI_DATA_WIDTH	=> C_FILESYS_AXI_DATA_WIDTH
+--		)
+--    port map(
+--        FILESYS_AXI_ACLK => filesys_axi_aclk,
+--		FILESYS_AXI_ARESETN => filesys_axi_aresetn,
+--		FILESYS_AXI_AWADDR => filesys_axi_awaddr,
+--		FILESYS_AXI_AWPROT => filesys_axi_awprot,
+--		FILESYS_AXI_AWVALID => filesys_axi_awvalid,
+--		FILESYS_AXI_AWREADY => filesys_axi_awready,
+--		FILESYS_AXI_WDATA => filesys_axi_wdata,
+--		FILESYS_AXI_WSTRB => filesys_axi_wstrb,
+--		FILESYS_AXI_WVALID => filesys_axi_wvalid,
+--		FILESYS_AXI_WREADY => filesys_axi_wready,
+--		FILESYS_AXI_BRESP => filesys_axi_bresp,
+--		FILESYS_AXI_BVALID => filesys_axi_bvalid,
+--		FILESYS_AXI_BREADY => filesys_axi_bready,
+--		FILESYS_AXI_ARADDR => filesys_axi_araddr,
+--		FILESYS_AXI_ARPROT => filesys_axi_arprot,
+--		FILESYS_AXI_ARVALID => filesys_axi_arvalid,
+--		FILESYS_AXI_ARREADY => filesys_axi_arready,
+--		FILESYS_AXI_RDATA => filesys_axi_rdata,
+--		FILESYS_AXI_RRESP => filesys_axi_rresp,
+--		FILESYS_AXI_RVALID => filesys_axi_rvalid,
+--		FILESYS_AXI_RREADY => filesys_axi_rready
+--	);
 	-- Add user logic here
 
 	-- User logic ends

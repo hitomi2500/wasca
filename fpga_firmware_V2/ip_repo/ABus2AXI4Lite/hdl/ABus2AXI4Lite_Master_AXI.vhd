@@ -22,7 +22,7 @@ entity ABus2AXI4Lite_Master_AXI is
         abus_irq             : out   std_logic                     := '0';             --              .interrupt
         abus_irq_direction   : out   std_logic                     := '0';             --              .direction
         abus_reset           : in    std_logic                     := '0';             --               .saturn_reset
-		-- User ports ends
+        -- User ports ends
 		-- Do not modify the ports beyond this line
 
 		-- AXI clock signal
@@ -202,8 +202,14 @@ architecture implementation of ABus2AXI4Lite_Master_AXI is
 
 
 begin
-	-- I/O Connections assignments
-
+	--some magic - deciding mode from MODE rerister input
+	process(MASTER_AXI_ACLK)
+    begin
+       if (rising_edge (MASTER_AXI_ACLK)) then  
+       REG_MODE
+       end if;
+    end process;	
+	
 	--Adding the offset address to the base addr of the slave
 	MASTER_AXI_AWADDR	<= std_logic_vector (unsigned(C_MASTER_TARGET_SLAVE_BASE_ADDR) + unsigned(axi_awaddr));
 	--AXI 4 write data
@@ -513,7 +519,7 @@ begin
         if (abus_write_pulse(0)='1' or abus_write_pulse(1)='1')
         or (abus_burst_pulse = '1' and abus_transaction_write = '1') then 
             if wasca_region = REGION_REGISTERS then
-                case abus_address(11 downto 2) is
+                case abus_address(11 downto 0) is
                 when X"FF4" =>
                     REG_MODE <= abus_data_in;
                 when others =>
@@ -532,7 +538,7 @@ begin
       if (rising_edge (MASTER_AXI_ACLK)) then
         if abus_read_pulse='1' or (abus_burst_pulse = '1' and abus_transaction_write = '1') then 
             if wasca_region = REGION_REGISTERS then
-                case abus_address(11 downto 2) is
+                case abus_address(11 downto 0) is
                 when X"FF0" =>
                     abus_data_out_regs <= REG_PCNTR;
                 when X"FF2" =>

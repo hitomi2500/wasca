@@ -397,19 +397,19 @@ begin
 	      when b"000" =>
 	        reg_data_out <= slv_reg0;
 	      when b"001" =>
-	        reg_data_out <= slv_reg1;
+	        reg_data_out <= HWVER & MODE;--slv_reg1;
 	      when b"010" =>
-	        reg_data_out <= X"0000"&MODE;--slv_reg2;
-	      when b"011" =>
-	        reg_data_out <= X"0000"&HWVER;--slv_reg3;
-	      when b"100" =>
-	        reg_data_out <= slv_reg4;
-	      when b"101" =>
-	        reg_data_out <= slv_reg5;
-	      when b"110" =>
-	        reg_data_out <= slv_reg6;
-	      when b"111" =>
-	        reg_data_out <= slv_reg7;
+	        reg_data_out <= slv_reg2;
+--	      when b"011" =>
+--	        reg_data_out <= slv_reg3;
+--	      when b"100" =>
+--	        reg_data_out <= slv_reg4;
+--	      when b"101" =>
+--	        reg_data_out <= slv_reg5;
+--	      when b"110" =>
+--	        reg_data_out <= slv_reg6;
+--	      when b"111" =>
+--	        reg_data_out <= slv_reg7;
 	      when others =>
 	        reg_data_out  <= (others => '0');
 	    end case;
@@ -436,10 +436,10 @@ begin
 
 	-- Add user logic here
 	PCNTR <= slv_reg0(15 downto 0);
-	STATUS <= slv_reg1(15 downto 0);
+	STATUS <= slv_reg0(31 downto 16);
     --MODE : in  std_logic_vector(15 downto 0);
 	--HWVER : in  std_logic_vector(15 downto 0);
-	SWVER <= slv_reg4(15 downto 0);
+	SWVER <= slv_reg2(15 downto 0);
 
 	-- User logic ends
 

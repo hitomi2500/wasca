@@ -12,10 +12,20 @@ entity ABus2AXI4Lite_Filesys_regs_AXI is
 		-- Width of S_AXI data bus
 		C_FILESYS_AXI_DATA_WIDTH	: integer	:= 32;
 		-- Width of S_AXI address bus
-		C_FILESYS_AXI_ADDR_WIDTH	: integer	:= 5
+		C_FILESYS_AXI_ADDR_WIDTH	: integer	:= 12
 	);
 	port (
 		-- Users to add ports here
+        abus_we : in std_logic_vector(1 downto 0);
+        abus_we_cmd : in std_logic_vector(1 downto 0);
+        abus_we_data : in std_logic_vector(1 downto 0);
+        abus_we_regs : in std_logic_vector(1 downto 0);
+        abus_addr : in std_logic_vector(12 downto 0);
+        abus_data_in : in std_logic_vector(15 downto 0);
+        abus_data_out : out std_logic_vector(15 downto 0);
+        abus_data_out_data : out std_logic_vector(15 downto 0);
+        abus_data_out_cmd : out std_logic_vector(15 downto 0);
+        abus_data_out_regs : out std_logic_vector(15 downto 0);
 
 		-- User ports ends
 		-- Do not modify the ports beyond this line
@@ -85,13 +95,29 @@ end ABus2AXI4Lite_Filesys_regs_AXI;
 
 architecture arch_imp of ABus2AXI4Lite_Filesys_regs_AXI is
 
+    component buffer_mem IS
+      PORT (
+        clka : IN STD_LOGIC;
+        ena : IN STD_LOGIC;
+        wea : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+        addra : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+        dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        douta : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+        clkb : IN STD_LOGIC;
+        enb : IN STD_LOGIC;
+        web : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+        addrb : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+        dinb : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        doutb : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+      );
+    END component;
+
 	-- AXI4LITE signals
-	signal axi_awaddr	: std_logic_vector(C_FILESYS_AXI_ADDR_WIDTH-1 downto 0);
+	signal axi_addr	: std_logic_vector(C_FILESYS_AXI_ADDR_WIDTH-1 downto 0);
 	signal axi_awready	: std_logic;
 	signal axi_wready	: std_logic;
 	signal axi_bresp	: std_logic_vector(1 downto 0);
 	signal axi_bvalid	: std_logic;
-	signal axi_araddr	: std_logic_vector(C_FILESYS_AXI_ADDR_WIDTH-1 downto 0);
 	signal axi_arready	: std_logic;
 	signal axi_rdata	: std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
 	signal axi_rresp	: std_logic_vector(1 downto 0);
@@ -103,23 +129,24 @@ architecture arch_imp of ABus2AXI4Lite_Filesys_regs_AXI is
 	-- ADDR_LSB = 2 for 32 bits (n downto 2)
 	-- ADDR_LSB = 3 for 64 bits (n downto 3)
 	constant ADDR_LSB  : integer := (C_FILESYS_AXI_DATA_WIDTH/32)+ 1;
-	constant OPT_MEM_ADDR_BITS : integer := 2;
 	------------------------------------------------
 	---- Signals for user logic register space example
 	--------------------------------------------------
 	---- Number of Slave Registers 8
 	signal slv_reg0	:std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
 	signal slv_reg1	:std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
-	signal slv_reg2	:std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
-	signal slv_reg3	:std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
-	signal slv_reg4	:std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
-	signal slv_reg5	:std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
-	signal slv_reg6	:std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
-	signal slv_reg7	:std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
-	signal slv_reg_rden	: std_logic;
-	signal slv_reg_wren	: std_logic;
+	signal slv_rden	: std_logic;
+	signal slv_wren	: std_logic;
 	signal reg_data_out	:std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
 	signal byte_index	: integer;
+	
+	signal axi_data_out_data	:std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
+    signal axi_data_out_cmd    :std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
+--    signal command_buffer_in    :std_logic_vector(C_FILESYS_AXI_DATA_WIDTH-1 downto 0);
+    --signal command_buffer_addr    :std_logic_vector(9 downto 0);
+    --signal data_buffer_addr    :std_logic_vector(9 downto 0);
+	signal axi_we_data	:std_logic_vector((C_FILESYS_AXI_DATA_WIDTH/8)-1 downto 0);
+    signal axi_we_cmd    :std_logic_vector((C_FILESYS_AXI_DATA_WIDTH/8)-1 downto 0);
 
 begin
 	-- I/O Connections assignments
@@ -164,11 +191,11 @@ begin
 	begin
 	  if rising_edge(FILESYS_AXI_ACLK) then 
 	    if FILESYS_AXI_ARESETN = '0' then
-	      axi_awaddr <= (others => '0');
+	      axi_addr <= (others => '0');
 	    else
 	      if (axi_awready = '0' and FILESYS_AXI_AWVALID = '1' and FILESYS_AXI_WVALID = '1') then
 	        -- Write Address latching
-	        axi_awaddr <= FILESYS_AXI_AWADDR;
+	        axi_addr <= FILESYS_AXI_AWADDR;
 	      end if;
 	    end if;
 	  end if;                   
@@ -205,99 +232,38 @@ begin
 	-- These registers are cleared when reset (active low) is applied.
 	-- Slave register write enable is asserted when valid address and data are available
 	-- and the slave is ready to accept the write address and write data.
-	slv_reg_wren <= axi_wready and FILESYS_AXI_WVALID and axi_awready and FILESYS_AXI_AWVALID ;
+	slv_wren <= axi_wready and FILESYS_AXI_WVALID and axi_awready and FILESYS_AXI_AWVALID ;
 
 	process (FILESYS_AXI_ACLK)
-	variable loc_addr :std_logic_vector(OPT_MEM_ADDR_BITS downto 0); 
+	variable reg_addr :std_logic_vector(2 downto 0); 
 	begin
 	  if rising_edge(FILESYS_AXI_ACLK) then 
 	    if FILESYS_AXI_ARESETN = '0' then
 	      slv_reg0 <= (others => '0');
 	      slv_reg1 <= (others => '0');
-	      slv_reg2 <= (others => '0');
-	      slv_reg3 <= (others => '0');
-	      slv_reg4 <= (others => '0');
-	      slv_reg5 <= (others => '0');
-	      slv_reg6 <= (others => '0');
-	      slv_reg7 <= (others => '0');
 	    else
-	      loc_addr := axi_awaddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB);
-	      if (slv_reg_wren = '1') then
-	        case loc_addr is
-	          when b"000" =>
-	            for byte_index in 0 to (C_FILESYS_AXI_DATA_WIDTH/8-1) loop
-	              if ( FILESYS_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 0
-	                slv_reg0(byte_index*8+7 downto byte_index*8) <= FILESYS_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"001" =>
-	            for byte_index in 0 to (C_FILESYS_AXI_DATA_WIDTH/8-1) loop
-	              if ( FILESYS_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 1
-	                slv_reg1(byte_index*8+7 downto byte_index*8) <= FILESYS_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"010" =>
-	            for byte_index in 0 to (C_FILESYS_AXI_DATA_WIDTH/8-1) loop
-	              if ( FILESYS_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 2
-	                slv_reg2(byte_index*8+7 downto byte_index*8) <= FILESYS_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"011" =>
-	            for byte_index in 0 to (C_FILESYS_AXI_DATA_WIDTH/8-1) loop
-	              if ( FILESYS_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 3
-	                slv_reg3(byte_index*8+7 downto byte_index*8) <= FILESYS_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"100" =>
-	            for byte_index in 0 to (C_FILESYS_AXI_DATA_WIDTH/8-1) loop
-	              if ( FILESYS_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 4
-	                slv_reg4(byte_index*8+7 downto byte_index*8) <= FILESYS_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"101" =>
-	            for byte_index in 0 to (C_FILESYS_AXI_DATA_WIDTH/8-1) loop
-	              if ( FILESYS_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 5
-	                slv_reg5(byte_index*8+7 downto byte_index*8) <= FILESYS_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"110" =>
-	            for byte_index in 0 to (C_FILESYS_AXI_DATA_WIDTH/8-1) loop
-	              if ( FILESYS_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 6
-	                slv_reg6(byte_index*8+7 downto byte_index*8) <= FILESYS_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"111" =>
-	            for byte_index in 0 to (C_FILESYS_AXI_DATA_WIDTH/8-1) loop
-	              if ( FILESYS_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 7
-	                slv_reg7(byte_index*8+7 downto byte_index*8) <= FILESYS_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when others =>
-	            slv_reg0 <= slv_reg0;
-	            slv_reg1 <= slv_reg1;
-	            slv_reg2 <= slv_reg2;
-	            slv_reg3 <= slv_reg3;
-	            slv_reg4 <= slv_reg4;
-	            slv_reg5 <= slv_reg5;
-	            slv_reg6 <= slv_reg6;
-	            slv_reg7 <= slv_reg7;
-	        end case;
+	      reg_addr := axi_addr(ADDR_LSB + 2 downto ADDR_LSB);
+	      axi_we_data <= (others=>'0');
+	      axi_we_cmd <= (others=>'0');
+	      if (slv_wren = '1') then
+	        if axi_addr(C_FILESYS_AXI_ADDR_WIDTH-1) = '0' then --data buffer
+	           axi_we_data <= FILESYS_AXI_WSTRB;
+	        elsif axi_addr(C_FILESYS_AXI_ADDR_WIDTH-1 downto C_FILESYS_AXI_ADDR_WIDTH-9) = X"FF" then --registers
+                case reg_addr is
+                  --only reg0 is writable
+                  when b"000" =>
+                    for byte_index in 0 to (C_FILESYS_AXI_DATA_WIDTH/8-1) loop
+                      if ( FILESYS_AXI_WSTRB(byte_index) = '1' ) then
+                        -- Respective byte enables are asserted as per write strobes                   
+                        -- slave registor 0
+                        slv_reg0(byte_index*8+7 downto byte_index*8) <= FILESYS_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+                      end if;
+                    end loop;
+                  when others => null;
+                end case;
+             else
+	           axi_we_cmd <= FILESYS_AXI_WSTRB;
+	         end if;
 	      end if;
 	    end if;
 	  end if;                   
@@ -338,13 +304,13 @@ begin
 	  if rising_edge(FILESYS_AXI_ACLK) then 
 	    if FILESYS_AXI_ARESETN = '0' then
 	      axi_arready <= '0';
-	      axi_araddr  <= (others => '1');
+	      axi_addr  <= (others => '1');
 	    else
 	      if (axi_arready = '0' and FILESYS_AXI_ARVALID = '1') then
 	        -- indicates that the slave has acceped the valid read address
 	        axi_arready <= '1';
 	        -- Read Address latching 
-	        axi_araddr  <= FILESYS_AXI_ARADDR;           
+	        axi_addr  <= FILESYS_AXI_ARADDR;           
 	      else
 	        axi_arready <= '0';
 	      end if;
@@ -382,34 +348,32 @@ begin
 	-- Implement memory mapped register select and read logic generation
 	-- Slave register read enable is asserted when valid address is available
 	-- and the slave is ready to accept the read address.
-	slv_reg_rden <= axi_arready and FILESYS_AXI_ARVALID and (not axi_rvalid) ;
+	slv_rden <= axi_arready and FILESYS_AXI_ARVALID and (not axi_rvalid) ;
 
-	process (slv_reg0, slv_reg1, slv_reg2, slv_reg3, slv_reg4, slv_reg5, slv_reg6, slv_reg7, axi_araddr, FILESYS_AXI_ARESETN, slv_reg_rden)
-	variable loc_addr :std_logic_vector(OPT_MEM_ADDR_BITS downto 0);
+	process (slv_reg0, slv_reg1, axi_addr, FILESYS_AXI_ARESETN, slv_rden)
+	variable reg_addr :std_logic_vector(2 downto 0);
 	begin
 	    -- Address decoding for reading registers
-	    loc_addr := axi_araddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB);
-	    case loc_addr is
-	      when b"000" =>
-	        reg_data_out <= slv_reg0;
-	      when b"001" =>
-	        reg_data_out <= slv_reg1;
-	      when b"010" =>
-	        reg_data_out <= slv_reg2;
-	      when b"011" =>
-	        reg_data_out <= slv_reg3;
-	      when b"100" =>
-	        reg_data_out <= slv_reg4;
-	      when b"101" =>
-	        reg_data_out <= slv_reg5;
-	      when b"110" =>
-	        reg_data_out <= slv_reg6;
-	      when b"111" =>
-	        reg_data_out <= slv_reg7;
-	      when others =>
-	        reg_data_out  <= (others => '0');
-	    end case;
+	    reg_addr := axi_addr(ADDR_LSB + 2 downto ADDR_LSB);
+	    if axi_addr(C_FILESYS_AXI_ADDR_WIDTH-1) = '0' then--data buffer
+	       reg_data_out <= axi_data_out_data;
+	    elsif axi_addr(C_FILESYS_AXI_ADDR_WIDTH-1 downto C_FILESYS_AXI_ADDR_WIDTH-9) = X"FF" then--registers
+            case reg_addr is
+              when b"000" =>
+                reg_data_out <= slv_reg0;
+              when b"001" =>
+                reg_data_out <= slv_reg1;
+              when others =>
+                reg_data_out  <= (others => '0');
+            end case;
+        else --command buffer
+	       reg_data_out <= axi_data_out_cmd;
+        end if;
 	end process; 
+
+    axi_we_cmd <= FILESYS_AXI_WSTRB when slv_wren = '1' and axi_addr(C_FILESYS_AXI_ADDR_WIDTH-1) = '1' 
+                                                       and axi_addr(C_FILESYS_AXI_ADDR_WIDTH-1 downto C_FILESYS_AXI_ADDR_WIDTH-9) /= X"FF"
+                 else (others => '0');
 
 	-- Output register or memory read data
 	process( FILESYS_AXI_ACLK ) is
@@ -418,7 +382,7 @@ begin
 	    if ( FILESYS_AXI_ARESETN = '0' ) then
 	      axi_rdata  <= (others => '0');
 	    else
-	      if (slv_reg_rden = '1') then
+	      if (slv_rden = '1') then
 	        -- When there is a valid read address (S_AXI_ARVALID) with 
 	        -- acceptance of read address by the slave (axi_arready), 
 	        -- output the read dada 
@@ -429,9 +393,45 @@ begin
 	  end if;
 	end process;
 
+--command_buffer_addr <= axi_addr(ADDR_LSB+9 downto ADDR_LSB);
 
-	-- Add user logic here
+    command_buffer: buffer_mem
+      PORT map(
+        --ABus port
+        clka => FILESYS_AXI_ACLK,
+        ena => '1',
+        wea => abus_we_cmd,
+        addra => abus_addr(10 downto 1),
+        dina => abus_data_in,
+        douta => abus_data_out_cmd,
+        --axi port
+        clkb => FILESYS_AXI_ACLK,
+        enb => '1',
+        web => axi_we_cmd,
+        addrb => axi_addr(ADDR_LSB+9 downto ADDR_LSB),
+        dinb => FILESYS_AXI_WDATA,
+        doutb => axi_data_out_cmd
+      );
 
-	-- User logic ends
+--data_buffer_addr <= axi_addr(ADDR_LSB+9 downto ADDR_LSB);
+
+    data_buffer: buffer_mem
+      PORT map(
+        --ABus port
+        clka => FILESYS_AXI_ACLK,
+        ena => '1',
+        wea => abus_we_data,
+        addra => abus_addr(10 downto 1),
+        dina => abus_data_in,
+        douta => abus_data_out_data,
+        --axi port
+        clkb => FILESYS_AXI_ACLK,
+        enb => '1',
+        web => axi_we_data,
+        addrb => axi_addr(ADDR_LSB+9 downto ADDR_LSB),
+        dinb => FILESYS_AXI_WDATA,
+        doutb => axi_data_out_data
+      );
+
 
 end arch_imp;
