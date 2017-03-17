@@ -14,8 +14,8 @@ entity ABus2AXI4Lite is
 		C_MASTER_AXI_TARGET_SLAVE_BASE_ADDR	: std_logic_vector	:= x"00000000";
 		C_MASTER_AXI_ADDR_WIDTH	: integer	:= 32;
 		C_MASTER_AXI_DATA_WIDTH	: integer	:= 32;
-        C_SYSREGS_AXI_ADDR_WIDTH : integer	:= 32;
-        C_SYSREGS_AXI_DATA_WIDTH : integer    := 32;
+        C_SLAVE_AXI_ADDR_WIDTH : integer	:= 32;
+        C_SLAVE_AXI_DATA_WIDTH : integer    := 32;
         C_FILESYS_AXI_ADDR_WIDTH : integer	:= 32;
         C_FILESYS_AXI_DATA_WIDTH : integer    := 32
 	);
@@ -57,28 +57,28 @@ entity ABus2AXI4Lite is
 		master_axi_rvalid	: in std_logic;
 		master_axi_rready	: out std_logic;
 
-		-- Ports of Sysregs Bus Interface
-        sysregs_axi_aclk    : in std_logic;
-        sysregs_axi_aresetn    : in std_logic;
-        sysregs_axi_awaddr    : in std_logic_vector(C_SYSREGS_AXI_ADDR_WIDTH-1 downto 0);
-        sysregs_axi_awprot    : in std_logic_vector(2 downto 0);
-        sysregs_axi_awvalid    : in std_logic;
-        sysregs_axi_awready    : out std_logic;
-        sysregs_axi_wdata    : in std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH-1 downto 0);
-        sysregs_axi_wstrb    : in std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH/8-1 downto 0);
-        sysregs_axi_wvalid    : in std_logic;
-        sysregs_axi_wready    : out std_logic;
-        sysregs_axi_bresp    : out std_logic_vector(1 downto 0);
-        sysregs_axi_bvalid    : out std_logic;
-        sysregs_axi_bready    : in std_logic;
-        sysregs_axi_araddr    : in std_logic_vector(C_SYSREGS_AXI_ADDR_WIDTH-1 downto 0);
-        sysregs_axi_arprot    : in std_logic_vector(2 downto 0);
-        sysregs_axi_arvalid    : in std_logic;
-        sysregs_axi_arready    : out std_logic;
-        sysregs_axi_rdata    : out std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH-1 downto 0);
-        sysregs_axi_rresp    : out std_logic_vector(1 downto 0);
-        sysregs_axi_rvalid    : out std_logic;
-        sysregs_axi_rready    : in std_logic
+		-- Ports of Slave Bus Interface
+        slave_axi_aclk    : in std_logic;
+        slave_axi_aresetn    : in std_logic;
+        slave_axi_awaddr    : in std_logic_vector(C_SLAVE_AXI_ADDR_WIDTH-1 downto 0);
+        slave_axi_awprot    : in std_logic_vector(2 downto 0);
+        slave_axi_awvalid    : in std_logic;
+        slave_axi_awready    : out std_logic;
+        slave_axi_wdata    : in std_logic_vector(C_SLAVE_AXI_DATA_WIDTH-1 downto 0);
+        slave_axi_wstrb    : in std_logic_vector(C_SLAVE_AXI_DATA_WIDTH/8-1 downto 0);
+        slave_axi_wvalid    : in std_logic;
+        slave_axi_wready    : out std_logic;
+        slave_axi_bresp    : out std_logic_vector(1 downto 0);
+        slave_axi_bvalid    : out std_logic;
+        slave_axi_bready    : in std_logic;
+        slave_axi_araddr    : in std_logic_vector(C_SLAVE_AXI_ADDR_WIDTH-1 downto 0);
+        slave_axi_arprot    : in std_logic_vector(2 downto 0);
+        slave_axi_arvalid    : in std_logic;
+        slave_axi_arready    : out std_logic;
+        slave_axi_rdata    : out std_logic_vector(C_SLAVE_AXI_DATA_WIDTH-1 downto 0);
+        slave_axi_rresp    : out std_logic_vector(1 downto 0);
+        slave_axi_rvalid    : out std_logic;
+        slave_axi_rready    : in std_logic
 
 --		-- Ports of Filesys Bus Interface
 --        filesys_axi_aclk    : in std_logic;
@@ -152,10 +152,10 @@ architecture arch_imp of ABus2AXI4Lite is
 		);
 	end component ABus2AXI4Lite_Master_AXI;
 
-	component ABus2AXI4Lite_Sysregs_AXI is
+	component ABus2AXI4Lite_Slave_AXI is
 		generic (
-		C_SYSREGS_AXI_ADDR_WIDTH	: integer	:= 32;
-		C_SYSREGS_AXI_DATA_WIDTH	: integer	:= 32
+		C_SLAVE_AXI_ADDR_WIDTH	: integer	:= 32;
+		C_SLAVE_AXI_DATA_WIDTH	: integer	:= 32
 		);
 		port (
         PCNTR : out  std_logic_vector(15 downto 0);
@@ -163,27 +163,27 @@ architecture arch_imp of ABus2AXI4Lite is
         MODE : in  std_logic_vector(15 downto 0);
         HWVER : in  std_logic_vector(15 downto 0);
         SWVER : out  std_logic_vector(15 downto 0);
-		SYSREGS_AXI_ACLK	: in std_logic;
-		SYSREGS_AXI_ARESETN	: in std_logic;
-		SYSREGS_AXI_AWADDR	: in std_logic_vector(C_SYSREGS_AXI_ADDR_WIDTH-1 downto 0);
-		SYSREGS_AXI_AWPROT	: in std_logic_vector(2 downto 0);
-		SYSREGS_AXI_AWVALID	: in std_logic;
-		SYSREGS_AXI_AWREADY	: out std_logic;
-		SYSREGS_AXI_WDATA	: in std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH-1 downto 0);
-		SYSREGS_AXI_WSTRB	: in std_logic_vector((C_SYSREGS_AXI_DATA_WIDTH/8)-1 downto 0);
-		SYSREGS_AXI_WVALID	: in std_logic;
-		SYSREGS_AXI_WREADY	: out std_logic;
-		SYSREGS_AXI_BRESP	: out std_logic_vector(1 downto 0);
-		SYSREGS_AXI_BVALID	: out std_logic;
-		SYSREGS_AXI_BREADY	: in std_logic;
-		SYSREGS_AXI_ARADDR	: in std_logic_vector(C_SYSREGS_AXI_ADDR_WIDTH-1 downto 0);
-		SYSREGS_AXI_ARPROT	: in std_logic_vector(2 downto 0);
-		SYSREGS_AXI_ARVALID	: in std_logic;
-		SYSREGS_AXI_ARREADY	: out std_logic;
-		SYSREGS_AXI_RDATA	: out std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH-1 downto 0);
-		SYSREGS_AXI_RRESP	: out std_logic_vector(1 downto 0);
-		SYSREGS_AXI_RVALID	: out std_logic;
-		SYSREGS_AXI_RREADY	: in std_logic
+		SLAVE_AXI_ACLK	: in std_logic;
+		SLAVE_AXI_ARESETN	: in std_logic;
+		SLAVE_AXI_AWADDR	: in std_logic_vector(C_SLAVE_AXI_ADDR_WIDTH-1 downto 0);
+		SLAVE_AXI_AWPROT	: in std_logic_vector(2 downto 0);
+		SLAVE_AXI_AWVALID	: in std_logic;
+		SLAVE_AXI_AWREADY	: out std_logic;
+		SLAVE_AXI_WDATA	: in std_logic_vector(C_SLAVE_AXI_DATA_WIDTH-1 downto 0);
+		SLAVE_AXI_WSTRB	: in std_logic_vector((C_SLAVE_AXI_DATA_WIDTH/8)-1 downto 0);
+		SLAVE_AXI_WVALID	: in std_logic;
+		SLAVE_AXI_WREADY	: out std_logic;
+		SLAVE_AXI_BRESP	: out std_logic_vector(1 downto 0);
+		SLAVE_AXI_BVALID	: out std_logic;
+		SLAVE_AXI_BREADY	: in std_logic;
+		SLAVE_AXI_ARADDR	: in std_logic_vector(C_SLAVE_AXI_ADDR_WIDTH-1 downto 0);
+		SLAVE_AXI_ARPROT	: in std_logic_vector(2 downto 0);
+		SLAVE_AXI_ARVALID	: in std_logic;
+		SLAVE_AXI_ARREADY	: out std_logic;
+		SLAVE_AXI_RDATA	: out std_logic_vector(C_SLAVE_AXI_DATA_WIDTH-1 downto 0);
+		SLAVE_AXI_RRESP	: out std_logic_vector(1 downto 0);
+		SLAVE_AXI_RVALID	: out std_logic;
+		SLAVE_AXI_RREADY	: in std_logic
 	);
     end component;
 
@@ -247,7 +247,6 @@ ABus2AXI4Lite_Master_AXI_inst : ABus2AXI4Lite_Master_AXI
 		abus_irq	=> abus_irq,
 		abus_irq_direction	=> abus_irq_direction,
 		abus_reset => abus_reset,
-		MODE => MODE,
 		MASTER_AXI_ACLK	=> master_axi_aclk,
 		MASTER_AXI_ARESETN	=> master_axi_aresetn,
 		MASTER_AXI_AWADDR	=> master_axi_awaddr,
@@ -271,10 +270,10 @@ ABus2AXI4Lite_Master_AXI_inst : ABus2AXI4Lite_Master_AXI
 		MASTER_AXI_RREADY	=> master_axi_rready
 	);
 
-ABus2AXI4Lite_Sysreg_AXI_inst : ABus2AXI4Lite_Sysregs_AXI
+ABus2AXI4Lite_Slave_AXI_inst : ABus2AXI4Lite_Slave_AXI
 	generic map (
-		C_SYSREGS_AXI_ADDR_WIDTH	=> C_SYSREGS_AXI_ADDR_WIDTH,
-		C_SYSREGS_AXI_DATA_WIDTH	=> C_SYSREGS_AXI_DATA_WIDTH
+		C_SLAVE_AXI_ADDR_WIDTH	=> C_SLAVE_AXI_ADDR_WIDTH,
+		C_SLAVE_AXI_DATA_WIDTH	=> C_SLAVE_AXI_DATA_WIDTH
 		)
     port map(
         PCNTR => PCNTR,
@@ -282,27 +281,27 @@ ABus2AXI4Lite_Sysreg_AXI_inst : ABus2AXI4Lite_Sysregs_AXI
         MODE => MODE,
         HWVER => HWVER,
         SWVER => SWVER,
-		SYSREGS_AXI_ACLK => sysregs_axi_aclk,
-		SYSREGS_AXI_ARESETN => sysregs_axi_aresetn,
-		SYSREGS_AXI_AWADDR => sysregs_axi_awaddr,
-		SYSREGS_AXI_AWPROT => sysregs_axi_awprot,
-		SYSREGS_AXI_AWVALID => sysregs_axi_awvalid,
-		SYSREGS_AXI_AWREADY => sysregs_axi_awready,
-		SYSREGS_AXI_WDATA => sysregs_axi_wdata,
-		SYSREGS_AXI_WSTRB => sysregs_axi_wstrb,
-		SYSREGS_AXI_WVALID => sysregs_axi_wvalid,
-		SYSREGS_AXI_WREADY => sysregs_axi_wready,
-		SYSREGS_AXI_BRESP => sysregs_axi_bresp,
-		SYSREGS_AXI_BVALID => sysregs_axi_bvalid,
-		SYSREGS_AXI_BREADY => sysregs_axi_bready,
-		SYSREGS_AXI_ARADDR => sysregs_axi_araddr,
-		SYSREGS_AXI_ARPROT => sysregs_axi_arprot,
-		SYSREGS_AXI_ARVALID => sysregs_axi_arvalid,
-		SYSREGS_AXI_ARREADY => sysregs_axi_arready,
-		SYSREGS_AXI_RDATA => sysregs_axi_rdata,
-		SYSREGS_AXI_RRESP => sysregs_axi_rresp,
-		SYSREGS_AXI_RVALID => sysregs_axi_rvalid,
-		SYSREGS_AXI_RREADY => sysregs_axi_rready
+		SLAVE_AXI_ACLK => slave_axi_aclk,
+		SLAVE_AXI_ARESETN => slave_axi_aresetn,
+		SLAVE_AXI_AWADDR => slave_axi_awaddr,
+		SLAVE_AXI_AWPROT => slave_axi_awprot,
+		SLAVE_AXI_AWVALID => slave_axi_awvalid,
+		SLAVE_AXI_AWREADY => slave_axi_awready,
+		SLAVE_AXI_WDATA => slave_axi_wdata,
+		SLAVE_AXI_WSTRB => slave_axi_wstrb,
+		SLAVE_AXI_WVALID => slave_axi_wvalid,
+		SLAVE_AXI_WREADY => slave_axi_wready,
+		SLAVE_AXI_BRESP => slave_axi_bresp,
+		SLAVE_AXI_BVALID => slave_axi_bvalid,
+		SLAVE_AXI_BREADY => slave_axi_bready,
+		SLAVE_AXI_ARADDR => slave_axi_araddr,
+		SLAVE_AXI_ARPROT => slave_axi_arprot,
+		SLAVE_AXI_ARVALID => slave_axi_arvalid,
+		SLAVE_AXI_ARREADY => slave_axi_arready,
+		SLAVE_AXI_RDATA => slave_axi_rdata,
+		SLAVE_AXI_RRESP => slave_axi_rresp,
+		SLAVE_AXI_RVALID => slave_axi_rvalid,
+		SLAVE_AXI_RREADY => slave_axi_rready
 	);
 
 --ABus2AXI4Lite_Filesys_AXI_inst : ABus2AXI4Lite_Filesys_regs_AXI

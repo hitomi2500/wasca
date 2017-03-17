@@ -44,8 +44,8 @@ ENTITY a_tb IS
     C_MASTER_AXI_TARGET_SLAVE_BASE_ADDR    : std_logic_vector    := x"00000000";
     C_MASTER_AXI_ADDR_WIDTH    : integer    := 32;
     C_MASTER_AXI_DATA_WIDTH    : integer    := 32;
-    C_SYSREGS_AXI_ADDR_WIDTH : integer    := 32;
-    C_SYSREGS_AXI_DATA_WIDTH : integer    := 32;
+    C_SLAVE_AXI_ADDR_WIDTH : integer    := 32;
+    C_SLAVE_AXI_DATA_WIDTH : integer    := 32;
     C_FILESYS_AXI_ADDR_WIDTH : integer    := 32;
     C_FILESYS_AXI_DATA_WIDTH : integer    := 32
 );
@@ -94,28 +94,28 @@ ARCHITECTURE behavior OF a_tb IS
     master_axi_rvalid    : in std_logic;
     master_axi_rready    : out std_logic;
 
-    -- Ports of Sysregs Bus Interface
-    sysregs_axi_aclk    : in std_logic;
-    sysregs_axi_aresetn    : in std_logic;
-    sysregs_axi_awaddr    : in std_logic_vector(C_SYSREGS_AXI_ADDR_WIDTH-1 downto 0);
-    sysregs_axi_awprot    : in std_logic_vector(2 downto 0);
-    sysregs_axi_awvalid    : in std_logic;
-    sysregs_axi_awready    : out std_logic;
-    sysregs_axi_wdata    : in std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH-1 downto 0);
-    sysregs_axi_wstrb    : in std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH/8-1 downto 0);
-    sysregs_axi_wvalid    : in std_logic;
-    sysregs_axi_wready    : out std_logic;
-    sysregs_axi_bresp    : out std_logic_vector(1 downto 0);
-    sysregs_axi_bvalid    : out std_logic;
-    sysregs_axi_bready    : in std_logic;
-    sysregs_axi_araddr    : in std_logic_vector(C_SYSREGS_AXI_ADDR_WIDTH-1 downto 0);
-    sysregs_axi_arprot    : in std_logic_vector(2 downto 0);
-    sysregs_axi_arvalid    : in std_logic;
-    sysregs_axi_arready    : out std_logic;
-    sysregs_axi_rdata    : out std_logic_vector(C_SYSREGS_AXI_DATA_WIDTH-1 downto 0);
-    sysregs_axi_rresp    : out std_logic_vector(1 downto 0);
-    sysregs_axi_rvalid    : out std_logic;
-    sysregs_axi_rready    : in std_logic
+    -- Ports of Slave Bus Interface
+    slave_axi_aclk    : in std_logic;
+    slave_axi_aresetn    : in std_logic;
+    slave_axi_awaddr    : in std_logic_vector(C_SLAVE_AXI_ADDR_WIDTH-1 downto 0);
+    slave_axi_awprot    : in std_logic_vector(2 downto 0);
+    slave_axi_awvalid    : in std_logic;
+    slave_axi_awready    : out std_logic;
+    slave_axi_wdata    : in std_logic_vector(C_SLAVE_AXI_DATA_WIDTH-1 downto 0);
+    slave_axi_wstrb    : in std_logic_vector(C_SLAVE_AXI_DATA_WIDTH/8-1 downto 0);
+    slave_axi_wvalid    : in std_logic;
+    slave_axi_wready    : out std_logic;
+    slave_axi_bresp    : out std_logic_vector(1 downto 0);
+    slave_axi_bvalid    : out std_logic;
+    slave_axi_bready    : in std_logic;
+    slave_axi_araddr    : in std_logic_vector(C_SLAVE_AXI_ADDR_WIDTH-1 downto 0);
+    slave_axi_arprot    : in std_logic_vector(2 downto 0);
+    slave_axi_arvalid    : in std_logic;
+    slave_axi_arready    : out std_logic;
+    slave_axi_rdata    : out std_logic_vector(C_SLAVE_AXI_DATA_WIDTH-1 downto 0);
+    slave_axi_rresp    : out std_logic_vector(1 downto 0);
+    slave_axi_rvalid    : out std_logic;
+    slave_axi_rready    : in std_logic
 
         );
     END COMPONENT;
@@ -162,17 +162,17 @@ ARCHITECTURE behavior OF a_tb IS
    signal master_axi_rdata : std_logic_vector(31 downto 0) := (others => '0');
    signal master_axi_rresp : std_logic_vector(1 downto 0) := (others => '0');
    signal master_axi_rvalid : std_logic := '0';
-   signal sysregs_axi_awaddr : std_logic_vector(31 downto 0) := (others => '0');
-   signal sysregs_axi_awprot : std_logic_vector(2 downto 0) := (others => '0');
-   signal sysregs_axi_awvalid : std_logic := '0';
-   signal sysregs_axi_wdata : std_logic_vector(31 downto 0) := (others => '0');
-   signal sysregs_axi_wstrb : std_logic_vector(3 downto 0) := (others => '0');
-   signal sysregs_axi_wvalid : std_logic := '0';
-   signal sysregs_axi_bready : std_logic := '0';
-   signal sysregs_axi_araddr : std_logic_vector(31 downto 0) := (others => '0');
-   signal sysregs_axi_arprot : std_logic_vector(2 downto 0) := (others => '0');
-   signal sysregs_axi_arvalid : std_logic := '0';
-   signal sysregs_axi_rready : std_logic := '0';
+   signal slave_axi_awaddr : std_logic_vector(31 downto 0) := (others => '0');
+   signal slave_axi_awprot : std_logic_vector(2 downto 0) := (others => '0');
+   signal slave_axi_awvalid : std_logic := '0';
+   signal slave_axi_wdata : std_logic_vector(31 downto 0) := (others => '0');
+   signal slave_axi_wstrb : std_logic_vector(3 downto 0) := (others => '0');
+   signal slave_axi_wvalid : std_logic := '0';
+   signal slave_axi_bready : std_logic := '0';
+   signal slave_axi_araddr : std_logic_vector(31 downto 0) := (others => '0');
+   signal slave_axi_arprot : std_logic_vector(2 downto 0) := (others => '0');
+   signal slave_axi_arvalid : std_logic := '0';
+   signal slave_axi_rready : std_logic := '0';
 
  	--Outputs
    signal abus_data_out : std_logic_vector(15 downto 0);
@@ -194,16 +194,16 @@ ARCHITECTURE behavior OF a_tb IS
    signal master_axi_arprot : std_logic_vector(2 downto 0) := (others => '0');
    signal master_axi_arvalid : std_logic := '0';
    signal master_axi_rready : std_logic := '0';
-   signal sysregs_axi_aclk : std_logic := '0';
-   signal sysregs_axi_aresetn : std_logic := '0';
-   signal sysregs_axi_awready : std_logic := '0';
-   signal sysregs_axi_wready : std_logic := '0';
-   signal sysregs_axi_bresp : std_logic_vector(1 downto 0) := (others => '0');
-   signal sysregs_axi_bvalid : std_logic := '0';
-   signal sysregs_axi_arready : std_logic := '0';
-   signal sysregs_axi_rdata : std_logic_vector(31 downto 0) := (others => '0');
-   signal sysregs_axi_rresp : std_logic_vector(1 downto 0) := (others => '0');
-   signal sysregs_axi_rvalid : std_logic := '0';
+   signal slave_axi_aclk : std_logic := '0';
+   signal slave_axi_aresetn : std_logic := '0';
+   signal slave_axi_awready : std_logic := '0';
+   signal slave_axi_wready : std_logic := '0';
+   signal slave_axi_bresp : std_logic_vector(1 downto 0) := (others => '0');
+   signal slave_axi_bvalid : std_logic := '0';
+   signal slave_axi_arready : std_logic := '0';
+   signal slave_axi_rdata : std_logic_vector(31 downto 0) := (others => '0');
+   signal slave_axi_rresp : std_logic_vector(1 downto 0) := (others => '0');
+   signal slave_axi_rvalid : std_logic := '0';
 
    -- Clock period definitions
    constant master_axi_aclk_period : time := 10 ns;
@@ -290,27 +290,27 @@ BEGIN
           master_axi_rresp => master_axi_rresp,
           master_axi_rvalid => master_axi_rvalid,
           master_axi_rready => master_axi_rready,
-          sysregs_axi_aclk => sysregs_axi_aclk,
-          sysregs_axi_aresetn => sysregs_axi_aresetn,
-          sysregs_axi_awaddr => sysregs_axi_awaddr,
-          sysregs_axi_awprot => sysregs_axi_awprot,
-          sysregs_axi_awvalid => sysregs_axi_awvalid,
-          sysregs_axi_awready => sysregs_axi_awready,
-          sysregs_axi_wdata => sysregs_axi_wdata,
-          sysregs_axi_wstrb => sysregs_axi_wstrb,
-          sysregs_axi_wvalid => sysregs_axi_wvalid,
-          sysregs_axi_wready => sysregs_axi_wready,
-          sysregs_axi_bresp => sysregs_axi_bresp,
-          sysregs_axi_bvalid => sysregs_axi_bvalid,
-          sysregs_axi_bready => sysregs_axi_bready,
-          sysregs_axi_araddr => sysregs_axi_araddr,
-          sysregs_axi_arprot => sysregs_axi_arprot,
-          sysregs_axi_arvalid => sysregs_axi_arvalid,
-          sysregs_axi_arready => sysregs_axi_arready,
-          sysregs_axi_rdata => sysregs_axi_rdata,
-          sysregs_axi_rresp => sysregs_axi_rresp,
-          sysregs_axi_rvalid => sysregs_axi_rvalid,
-          sysregs_axi_rready => sysregs_axi_rready
+          slave_axi_aclk => slave_axi_aclk,
+          slave_axi_aresetn => slave_axi_aresetn,
+          slave_axi_awaddr => slave_axi_awaddr,
+          slave_axi_awprot => slave_axi_awprot,
+          slave_axi_awvalid => slave_axi_awvalid,
+          slave_axi_awready => slave_axi_awready,
+          slave_axi_wdata => slave_axi_wdata,
+          slave_axi_wstrb => slave_axi_wstrb,
+          slave_axi_wvalid => slave_axi_wvalid,
+          slave_axi_wready => slave_axi_wready,
+          slave_axi_bresp => slave_axi_bresp,
+          slave_axi_bvalid => slave_axi_bvalid,
+          slave_axi_bready => slave_axi_bready,
+          slave_axi_araddr => slave_axi_araddr,
+          slave_axi_arprot => slave_axi_arprot,
+          slave_axi_arvalid => slave_axi_arvalid,
+          slave_axi_arready => slave_axi_arready,
+          slave_axi_rdata => slave_axi_rdata,
+          slave_axi_rresp => slave_axi_rresp,
+          slave_axi_rvalid => slave_axi_rvalid,
+          slave_axi_rready => slave_axi_rready
         );
 
    das_mem: test_mem PORT MAP (

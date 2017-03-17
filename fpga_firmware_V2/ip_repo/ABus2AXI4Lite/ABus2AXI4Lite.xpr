@@ -3,19 +3,19 @@
 <!--                                                         -->
 <!-- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="14" Path="D:/Temp/Saturn/wasca/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.xpr">
+<Project Version="7" Minor="14" Path="D:/Temp/Saturn/wasca/vivado/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="b5cb195fca23484381d22c0a4d4fee37"/>
     <Option Name="Part" Val="xc7z010clg400-1"/>
     <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
     <Option Name="CompiledLibDirXSim" Val=""/>
-    <Option Name="CompiledLibDirModelSim" Val="D:/Temp/Saturn/wasca/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/modelsim"/>
-    <Option Name="CompiledLibDirQuesta" Val="D:/Temp/Saturn/wasca/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/questa"/>
-    <Option Name="CompiledLibDirIES" Val="D:/Temp/Saturn/wasca/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/ies"/>
-    <Option Name="CompiledLibDirVCS" Val="D:/Temp/Saturn/wasca/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/vcs"/>
-    <Option Name="CompiledLibDirRiviera" Val="D:/Temp/Saturn/wasca/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/riviera"/>
-    <Option Name="CompiledLibDirActivehdl" Val="D:/Temp/Saturn/wasca/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/activehdl"/>
+    <Option Name="CompiledLibDirModelSim" Val="C:/Users/sokolov/AppData/Roaming/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/modelsim"/>
+    <Option Name="CompiledLibDirQuesta" Val="C:/Users/sokolov/AppData/Roaming/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/questa"/>
+    <Option Name="CompiledLibDirIES" Val="C:/Users/sokolov/AppData/Roaming/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/ies"/>
+    <Option Name="CompiledLibDirVCS" Val="C:/Users/sokolov/AppData/Roaming/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/vcs"/>
+    <Option Name="CompiledLibDirRiviera" Val="C:/Users/sokolov/AppData/Roaming/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/riviera"/>
+    <Option Name="CompiledLibDirActivehdl" Val="C:/Users/sokolov/AppData/Roaming/vivado_clean2/ip_repo/ABus2AXI4Lite/ABus2AXI4Lite.cache/compile_simlib/activehdl"/>
     <Option Name="TargetLanguage" Val="VHDL"/>
     <Option Name="BoardPart" Val="krtkl.com:snickerdoodle:part0:1.0"/>
     <Option Name="ActiveSimSet" Val="sim_1"/>
@@ -34,24 +34,18 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="2"/>
-    <Option Name="WTModelSimExportSim" Val="2"/>
-    <Option Name="WTQuestaExportSim" Val="2"/>
-    <Option Name="WTIesExportSim" Val="2"/>
-    <Option Name="WTVcsExportSim" Val="2"/>
-    <Option Name="WTRivieraExportSim" Val="2"/>
-    <Option Name="WTActivehdlExportSim" Val="2"/>
+    <Option Name="WTXSimExportSim" Val="3"/>
+    <Option Name="WTModelSimExportSim" Val="3"/>
+    <Option Name="WTQuestaExportSim" Val="3"/>
+    <Option Name="WTIesExportSim" Val="3"/>
+    <Option Name="WTVcsExportSim" Val="3"/>
+    <Option Name="WTRivieraExportSim" Val="3"/>
+    <Option Name="WTActivehdlExportSim" Val="3"/>
   </Configuration>
   <FileSets Version="1" Minor="31">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
       <Filter Type="Srcs"/>
-      <File Path="$PPRDIR/hdl/ABus2AXI4Lite_Filesys_regs_AXI.vhd">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/hdl/ABus2AXI4Lite_Sysregs_AXI.vhd">
+      <File Path="$PPRDIR/hdl/ABus2AXI4Lite_Slave_AXI.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -69,10 +63,25 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/hdl/ABus2AXI4Lite_Filesys_regs_AXI.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PPRDIR/component.xml">
         <FileInfo SFType="IPXACT"/>
       </File>
       <File Path="$PPRDIR/ip/test_mem/test_mem.xci">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/ip/buffer_mem/buffer_mem.xci">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>

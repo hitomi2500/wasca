@@ -203,12 +203,12 @@ architecture implementation of ABus2AXI4Lite_Master_AXI is
 
 begin
 	--some magic - deciding mode from MODE rerister input
-	process(MASTER_AXI_ACLK)
-    begin
-       if (rising_edge (MASTER_AXI_ACLK)) then  
-       REG_MODE
-       end if;
-    end process;	
+--	process(MASTER_AXI_ACLK)
+--    begin
+--       if (rising_edge (MASTER_AXI_ACLK)) then  
+--       REG_MODE
+--       end if;
+--    end process;	
 	
 	--Adding the offset address to the base addr of the slave
 	MASTER_AXI_AWADDR	<= std_logic_vector (unsigned(C_MASTER_TARGET_SLAVE_BASE_ADDR) + unsigned(axi_awaddr));
