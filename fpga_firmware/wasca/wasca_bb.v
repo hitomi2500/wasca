@@ -3,6 +3,9 @@ module wasca (
 	altpll_0_areset_conduit_export,
 	altpll_0_locked_conduit_export,
 	altpll_0_phasedone_conduit_export,
+	audio_out_BCLK,
+	audio_out_DACDAT,
+	audio_out_DACLRCK,
 	clk_clk,
 	clock_116_mhz_clk,
 	external_sdram_controller_wire_addr,
@@ -29,19 +32,19 @@ module wasca (
 	spi_sd_card_MOSI,
 	spi_sd_card_SCLK,
 	spi_sd_card_SS_n,
-	uart_0_external_connection_rxd,
-	uart_0_external_connection_txd,
 	spi_stm32_MISO,
 	spi_stm32_MOSI,
 	spi_stm32_SCLK,
 	spi_stm32_SS_n,
-	audio_out_BCLK,
-	audio_out_DACDAT,
-	audio_out_DACLRCK);	
+	uart_0_external_connection_rxd,
+	uart_0_external_connection_txd);	
 
 	input		altpll_0_areset_conduit_export;
 	output		altpll_0_locked_conduit_export;
 	output		altpll_0_phasedone_conduit_export;
+	input		audio_out_BCLK;
+	output		audio_out_DACDAT;
+	input		audio_out_DACLRCK;
 	input		clk_clk;
 	output		clock_116_mhz_clk;
 	output	[12:0]	external_sdram_controller_wire_addr;
@@ -68,13 +71,10 @@ module wasca (
 	output		spi_sd_card_MOSI;
 	output		spi_sd_card_SCLK;
 	output		spi_sd_card_SS_n;
-	input		uart_0_external_connection_rxd;
-	output		uart_0_external_connection_txd;
 	output		spi_stm32_MISO;
 	input		spi_stm32_MOSI;
 	input		spi_stm32_SCLK;
 	input		spi_stm32_SS_n;
-	input		audio_out_BCLK;
-	output		audio_out_DACDAT;
-	input		audio_out_DACLRCK;
+	input		uart_0_external_connection_rxd;
+	output		uart_0_external_connection_txd;
 endmodule

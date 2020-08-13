@@ -2,9 +2,9 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>04.10.2015 23:48:11</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1443991691900</BspGeneratedUnixTimeStamp>
-        <BspGeneratedLocation>C:\Saturn\wasca\fpga_firmware\software\wasca_sdram_debug_bsp</BspGeneratedLocation>
+        <BspGeneratedTimeStamp>11.08.2020 12:33:21</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1597134801062</BspGeneratedUnixTimeStamp>
+        <BspGeneratedLocation>D:\Saturn\wasca\GIT\wasca\fpga_firmware\software\wasca_sdram_debug_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
@@ -937,8 +937,14 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>spi_0</slaveDescriptor>
+                <slaveDescriptor>spi_sd_card</slaveDescriptor>
                 <addressRange>0x00043000 - 0x0004301F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>spi_stm32</slaveDescriptor>
+                <addressRange>0x00044000 - 0x0004401F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes/>
         </MemoryMap>
@@ -946,6 +952,12 @@
                 <slaveDescriptor>sega_saturn_abus_slave_0</slaveDescriptor>
                 <addressRange>0x00045000 - 0x000451FF</addressRange>
                 <addressSpan>512</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>audio_0</slaveDescriptor>
+                <addressRange>0x00046000 - 0x0004600F</addressRange>
+                <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>

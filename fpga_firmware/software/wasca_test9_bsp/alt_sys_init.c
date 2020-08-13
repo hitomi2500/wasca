@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Thu Aug 13 20:19:19 MSK 2015
+ * Generated: Tue Aug 11 12:33:40 MSK 2020
  */
 
 /*
@@ -59,16 +59,19 @@
  */
 
 #include "altera_nios2_gen2_irq.h"
-#include "Altera_UP_SD_Card_Avalon_Interface.h"
+#include "altera_avalon_spi.h"
 #include "altera_avalon_uart.h"
+#include "altera_up_avalon_audio.h"
 
 /*
  * Allocate the device storage
  */
 
 ALTERA_NIOS2_GEN2_IRQ_INSTANCE ( NIOS2_GEN2_0, nios2_gen2_0);
+ALTERA_AVALON_SPI_INSTANCE ( SPI_SD_CARD, spi_sd_card);
+ALTERA_AVALON_SPI_INSTANCE ( SPI_STM32, spi_stm32);
 ALTERA_AVALON_UART_INSTANCE ( UART_0, uart_0);
-ALTERA_UP_SD_CARD_AVALON_INTERFACE_INSTANCE ( ALTERA_UP_SD_CARD_AVALON_INTERFACE_0, Altera_UP_SD_Card_Avalon_Interface_0);
+ALTERA_UP_AVALON_AUDIO_INSTANCE ( AUDIO_0, audio_0);
 
 /*
  * Initialize the interrupt controller devices
@@ -91,6 +94,8 @@ void alt_irq_init ( const void* base )
 
 void alt_sys_init( void )
 {
+    ALTERA_AVALON_SPI_INIT ( SPI_SD_CARD, spi_sd_card);
+    ALTERA_AVALON_SPI_INIT ( SPI_STM32, spi_stm32);
     ALTERA_AVALON_UART_INIT ( UART_0, uart_0);
-    ALTERA_UP_SD_CARD_AVALON_INTERFACE_INIT ( ALTERA_UP_SD_CARD_AVALON_INTERFACE_0, Altera_UP_SD_Card_Avalon_Interface_0);
+    ALTERA_UP_AVALON_AUDIO_INIT ( AUDIO_0, audio_0);
 }

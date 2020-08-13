@@ -1,0 +1,14 @@
+/fpga_firmware/software/wasca_test9_bsp/obj/HAL/src/*.o
+/fpga_firmware/db/
+/fpga_firmware/incremental_db/
+/fpga_firmware/output_files/
+/fpga_firmware/software/.metadata/
+/fpga_firmware/software/wasca_test9/mem_init/
+/fpga_firmware/software/wasca_test9_bsp/obj/
+/fpga_firmware/software/wasca_test9/obj/
+/fpga_firmware/software/wasca_test9/*.flash
+/fpga_firmware/software/wasca_test9/*.elf
+/fpga_firmware/software/wasca_test9/*.objdump
+/fpga_firmware/timing/stamp/
+/fpga_firmware/flash/*.flash
+/fpga_firmware/wasca/*.rpt

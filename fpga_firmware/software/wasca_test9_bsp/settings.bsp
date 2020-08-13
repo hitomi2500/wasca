@@ -2,9 +2,9 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>05.09.2015 23:45:48</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1441485948565</BspGeneratedUnixTimeStamp>
-        <BspGeneratedLocation>C:\Saturn\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
+        <BspGeneratedTimeStamp>13.08.2020 0:57:06</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1597265826019</BspGeneratedUnixTimeStamp>
+        <BspGeneratedLocation>D:\Saturn\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
@@ -905,15 +905,15 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>Altera_UP_SD_Card_Avalon_Interface_0</slaveDescriptor>
-                <addressRange>0x00043000 - 0x000433FF</addressRange>
-                <addressSpan>1024</addressSpan>
+                <slaveDescriptor>spi_sd_card</slaveDescriptor>
+                <addressRange>0x00043000 - 0x0004301F</addressRange>
+                <addressSpan>32</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>pio_0</slaveDescriptor>
-                <addressRange>0x00044000 - 0x0004400F</addressRange>
-                <addressSpan>16</addressSpan>
+                <slaveDescriptor>spi_stm32</slaveDescriptor>
+                <addressRange>0x00044000 - 0x0004401F</addressRange>
+                <addressSpan>32</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
@@ -923,9 +923,15 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>audio_0</slaveDescriptor>
+                <addressRange>0x00046000 - 0x0004600F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>onchip_memory2_0</slaveDescriptor>
-                <addressRange>0x00080000 - 0x000827FF</addressRange>
-                <addressSpan>10240</addressSpan>
+                <addressRange>0x00080000 - 0x00083FFF</addressRange>
+                <addressSpan>16384</addressSpan>
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>

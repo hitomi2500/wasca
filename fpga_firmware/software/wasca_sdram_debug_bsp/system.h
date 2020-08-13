@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sun Oct 04 23:48:12 FET 2015
+ * Generated: Tue Aug 11 12:33:22 MSK 2020
  */
 
 /*
@@ -139,6 +139,7 @@
 #define __ALTERA_AVALON_UART
 #define __ALTERA_NIOS2_GEN2
 #define __ALTERA_ONCHIP_FLASH
+#define __ALTERA_UP_AVALON_AUDIO
 #define __ALTPLL
 #define __SEGA_SATURN_ABUS_SLAVE
 
@@ -149,8 +150,8 @@
  */
 
 #define ALT_DEVICE_FAMILY "MAX 10"
-#define ALT_ENHANCED_INTERRUPT_API_PRESENT
 #define ALT_IRQ_BASE NULL
+#define ALT_LEGACY_INTERRUPT_API_PRESENT
 #define ALT_LOG_PORT "/dev/null"
 #define ALT_LOG_PORT_BASE 0x0
 #define ALT_LOG_PORT_DEV null
@@ -191,6 +192,20 @@
 #define ALTPLL_0_SPAN 16
 #define ALTPLL_0_TYPE "altpll"
 #define ALT_MODULE_CLASS_altpll_0 altpll
+
+
+/*
+ * audio_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_audio_0 altera_up_avalon_audio
+#define AUDIO_0_BASE 0x46000
+#define AUDIO_0_IRQ 3
+#define AUDIO_0_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define AUDIO_0_NAME "/dev/audio_0"
+#define AUDIO_0_SPAN 16
+#define AUDIO_0_TYPE "altera_up_avalon_audio"
 
 
 /*
@@ -318,34 +333,65 @@
 
 
 /*
- * spi_0 configuration
+ * spi_sd_card configuration
  *
  */
 
-#define ALT_MODULE_CLASS_spi_0 altera_avalon_spi
-#define SPI_0_BASE 0x43000
-#define SPI_0_CLOCKMULT 1
-#define SPI_0_CLOCKPHASE 0
-#define SPI_0_CLOCKPOLARITY 0
-#define SPI_0_CLOCKUNITS "Hz"
-#define SPI_0_DATABITS 8
-#define SPI_0_DATAWIDTH 16
-#define SPI_0_DELAYMULT "1.0E-9"
-#define SPI_0_DELAYUNITS "ns"
-#define SPI_0_EXTRADELAY 0
-#define SPI_0_INSERT_SYNC 0
-#define SPI_0_IRQ 1
-#define SPI_0_IRQ_INTERRUPT_CONTROLLER_ID 0
-#define SPI_0_ISMASTER 1
-#define SPI_0_LSBFIRST 0
-#define SPI_0_NAME "/dev/spi_0"
-#define SPI_0_NUMSLAVES 1
-#define SPI_0_PREFIX "spi_"
-#define SPI_0_SPAN 32
-#define SPI_0_SYNC_REG_DEPTH 2
-#define SPI_0_TARGETCLOCK 20000000u
-#define SPI_0_TARGETSSDELAY "0.0"
-#define SPI_0_TYPE "altera_avalon_spi"
+#define ALT_MODULE_CLASS_spi_sd_card altera_avalon_spi
+#define SPI_SD_CARD_BASE 0x43000
+#define SPI_SD_CARD_CLOCKMULT 1
+#define SPI_SD_CARD_CLOCKPHASE 0
+#define SPI_SD_CARD_CLOCKPOLARITY 0
+#define SPI_SD_CARD_CLOCKUNITS "Hz"
+#define SPI_SD_CARD_DATABITS 8
+#define SPI_SD_CARD_DATAWIDTH 16
+#define SPI_SD_CARD_DELAYMULT "1.0E-9"
+#define SPI_SD_CARD_DELAYUNITS "ns"
+#define SPI_SD_CARD_EXTRADELAY 0
+#define SPI_SD_CARD_INSERT_SYNC 0
+#define SPI_SD_CARD_IRQ 1
+#define SPI_SD_CARD_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define SPI_SD_CARD_ISMASTER 1
+#define SPI_SD_CARD_LSBFIRST 0
+#define SPI_SD_CARD_NAME "/dev/spi_sd_card"
+#define SPI_SD_CARD_NUMSLAVES 1
+#define SPI_SD_CARD_PREFIX "spi_"
+#define SPI_SD_CARD_SPAN 32
+#define SPI_SD_CARD_SYNC_REG_DEPTH 2
+#define SPI_SD_CARD_TARGETCLOCK 20000000u
+#define SPI_SD_CARD_TARGETSSDELAY "0.0"
+#define SPI_SD_CARD_TYPE "altera_avalon_spi"
+
+
+/*
+ * spi_stm32 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_spi_stm32 altera_avalon_spi
+#define SPI_STM32_BASE 0x44000
+#define SPI_STM32_CLOCKMULT 1
+#define SPI_STM32_CLOCKPHASE 0
+#define SPI_STM32_CLOCKPOLARITY 0
+#define SPI_STM32_CLOCKUNITS "Hz"
+#define SPI_STM32_DATABITS 8
+#define SPI_STM32_DATAWIDTH 16
+#define SPI_STM32_DELAYMULT "1.0E-9"
+#define SPI_STM32_DELAYUNITS "ns"
+#define SPI_STM32_EXTRADELAY 0
+#define SPI_STM32_INSERT_SYNC 0
+#define SPI_STM32_IRQ 2
+#define SPI_STM32_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define SPI_STM32_ISMASTER 0
+#define SPI_STM32_LSBFIRST 0
+#define SPI_STM32_NAME "/dev/spi_stm32"
+#define SPI_STM32_NUMSLAVES 1
+#define SPI_STM32_PREFIX "spi_"
+#define SPI_STM32_SPAN 32
+#define SPI_STM32_SYNC_REG_DEPTH 2
+#define SPI_STM32_TARGETCLOCK 128000u
+#define SPI_STM32_TARGETSSDELAY "0.0"
+#define SPI_STM32_TYPE "altera_avalon_spi"
 
 
 /*

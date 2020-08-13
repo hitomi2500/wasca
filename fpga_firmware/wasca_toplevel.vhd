@@ -149,6 +149,31 @@ architecture rtl of wasca_toplevel is
 			audio_out_DACDAT => audio_out_DACDAT,
 			audio_out_DACLRCK => audio_out_DACLRCK
 		);
+
+		--empty subsystem
+--		external_sdram_controller_wire_addr <= (others => 'Z');
+--		external_sdram_controller_wire_ba <= (others => 'Z');
+--		external_sdram_controller_wire_cas_n <= (others => 'Z');
+--		external_sdram_controller_wire_cke <= (others => 'Z');
+--		external_sdram_controller_wire_cs_n <= (others => 'Z');
+--		external_sdram_controller_wire_dq <= (others => 'Z');
+--		external_sdram_controller_wire_dqm <= (others => 'Z');
+--		external_sdram_controller_wire_ras_n <= (others => 'Z');
+--		external_sdram_controller_wire_we_n  <= (others => 'Z');
+--		external_sdram_controller_wire_clk <= (others => 'Z');
+--		sega_saturn_abus_slave_0_abus_addressdata <= (others => 'Z');
+--		sega_saturn_abus_slave_0_abus_waitrequest <= (others => 'Z');
+--		sega_saturn_abus_slave_0_abus_interrupt <= (others => 'Z');
+--		sega_saturn_abus_slave_0_abus_disableout <= '1';
+--		sega_saturn_abus_slave_0_abus_muxing <= "00";
+--		sega_saturn_abus_slave_0_abus_direction <= '0';
+--		spi_sd_card_MOSI <= 'Z';
+--		spi_sd_card_SCLK <= 'Z';
+--		spi_sd_card_SS_n <= 'Z';
+--		uart_0_external_connection_txd <= 'Z';
+--		spi_stm32_MISO <= 'Z';
+--		audio_out_DACDAT <= 'Z';
+
 		
 		audio_SSEL <= '0';
 		--sega_saturn_abus_slave_0_abus_waitrequest <= '1';

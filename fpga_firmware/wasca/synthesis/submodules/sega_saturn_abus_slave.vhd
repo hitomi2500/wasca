@@ -210,10 +210,14 @@ begin
 		if rising_edge(clock) then
 			if abus_anypulse = '1' then
 			--if abus_read_pulse = '1' or abus_write_pulse(0) = '1' or abus_write_pulse(1)='1' then
-				abus_address_latched <= abus_address & abus_addressdata_buf(0) & abus_addressdata_buf(12) & abus_addressdata_buf(2) & abus_addressdata_buf(1)
-																 & abus_addressdata_buf(9) & abus_addressdata_buf(10) & abus_addressdata_buf(8) & abus_addressdata_buf(3)
+				--abus_address_latched <= abus_address & abus_addressdata_buf(0) & abus_addressdata_buf(12) & abus_addressdata_buf(2) & abus_addressdata_buf(1)
+					--											 & abus_addressdata_buf(9) & abus_addressdata_buf(10) & abus_addressdata_buf(8) & abus_addressdata_buf(3)
+						--										 & abus_addressdata_buf(13) & abus_addressdata_buf(14) & abus_addressdata_buf(15) & abus_addressdata_buf(4)
+							--									 & abus_addressdata_buf(5) & abus_addressdata_buf(6) & abus_addressdata_buf(11) & abus_addressdata_buf(7);
+				abus_address_latched <= abus_address & abus_addressdata_buf(11) & abus_addressdata_buf(12) & abus_addressdata_buf(9) & abus_addressdata_buf(10)
+																 & abus_addressdata_buf(2) & abus_addressdata_buf(1) & abus_addressdata_buf(3) & abus_addressdata_buf(8)
 																 & abus_addressdata_buf(13) & abus_addressdata_buf(14) & abus_addressdata_buf(15) & abus_addressdata_buf(4)
-																 & abus_addressdata_buf(5) & abus_addressdata_buf(6) & abus_addressdata_buf(11) & abus_addressdata_buf(7);
+																 & abus_addressdata_buf(5) & abus_addressdata_buf(6) & abus_addressdata_buf(0) & abus_addressdata_buf(7);
 			end if;
 		end if;
 	end process;

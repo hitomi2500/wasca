@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Wed Sep 02 08:48:38 GMT+03:00 2015
+ * Generated: Tue Aug 11 12:33:40 MSK 2020
  */
 
 /*
@@ -56,20 +56,6 @@
 
 
 /*
- * Altera_UP_SD_Card_Avalon_Interface_0 configuration
- *
- */
-
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE 0x43000
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_IRQ -1
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME "/dev/Altera_UP_SD_Card_Avalon_Interface_0"
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_SPAN 1024
-#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_TYPE "Altera_UP_SD_Card_Avalon_Interface"
-#define ALT_MODULE_CLASS_Altera_UP_SD_Card_Avalon_Interface_0 Altera_UP_SD_Card_Avalon_Interface
-
-
-/*
  * CPU configuration
  *
  */
@@ -104,7 +90,7 @@
 #define ALT_CPU_INST_ADDR_WIDTH 0x1b
 #define ALT_CPU_NAME "nios2_gen2_0"
 #define ALT_CPU_OCI_VERSION 1
-#define ALT_CPU_RESET_ADDR 0x00000000
+#define ALT_CPU_RESET_ADDR 0x00080000
 
 
 /*
@@ -139,7 +125,7 @@
 #define NIOS2_ICACHE_SIZE 0
 #define NIOS2_INST_ADDR_WIDTH 0x1b
 #define NIOS2_OCI_VERSION 1
-#define NIOS2_RESET_ADDR 0x00000000
+#define NIOS2_RESET_ADDR 0x00080000
 
 
 /*
@@ -149,11 +135,11 @@
 
 #define __ALTERA_AVALON_NEW_SDRAM_CONTROLLER
 #define __ALTERA_AVALON_ONCHIP_MEMORY2
-#define __ALTERA_AVALON_PIO
+#define __ALTERA_AVALON_SPI
 #define __ALTERA_AVALON_UART
 #define __ALTERA_NIOS2_GEN2
 #define __ALTERA_ONCHIP_FLASH
-#define __ALTERA_UP_SD_CARD_AVALON_INTERFACE
+#define __ALTERA_UP_AVALON_AUDIO
 #define __ALTPLL
 #define __SEGA_SATURN_ABUS_SLAVE
 
@@ -164,8 +150,8 @@
  */
 
 #define ALT_DEVICE_FAMILY "MAX 10"
-#define ALT_ENHANCED_INTERRUPT_API_PRESENT
 #define ALT_IRQ_BASE NULL
+#define ALT_LEGACY_INTERRUPT_API_PRESENT
 #define ALT_LOG_PORT "/dev/null"
 #define ALT_LOG_PORT_BASE 0x0
 #define ALT_LOG_PORT_DEV null
@@ -206,6 +192,20 @@
 #define ALTPLL_0_SPAN 16
 #define ALTPLL_0_TYPE "altpll"
 #define ALT_MODULE_CLASS_altpll_0 altpll
+
+
+/*
+ * audio_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_audio_0 altera_up_avalon_audio
+#define AUDIO_0_BASE 0x46000
+#define AUDIO_0_IRQ 3
+#define AUDIO_0_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define AUDIO_0_NAME "/dev/audio_0"
+#define AUDIO_0_SPAN 16
+#define AUDIO_0_TYPE "altera_up_avalon_audio"
 
 
 /*
@@ -312,37 +312,10 @@
 #define ONCHIP_MEMORY2_0_READ_DURING_WRITE_MODE "DONT_CARE"
 #define ONCHIP_MEMORY2_0_SINGLE_CLOCK_OP 0
 #define ONCHIP_MEMORY2_0_SIZE_MULTIPLE 1
-#define ONCHIP_MEMORY2_0_SIZE_VALUE 10240
-#define ONCHIP_MEMORY2_0_SPAN 10240
+#define ONCHIP_MEMORY2_0_SIZE_VALUE 16384
+#define ONCHIP_MEMORY2_0_SPAN 16384
 #define ONCHIP_MEMORY2_0_TYPE "altera_avalon_onchip_memory2"
 #define ONCHIP_MEMORY2_0_WRITABLE 1
-
-
-/*
- * pio_0 configuration
- *
- */
-
-#define ALT_MODULE_CLASS_pio_0 altera_avalon_pio
-#define PIO_0_BASE 0x44000
-#define PIO_0_BIT_CLEARING_EDGE_REGISTER 0
-#define PIO_0_BIT_MODIFYING_OUTPUT_REGISTER 0
-#define PIO_0_CAPTURE 0
-#define PIO_0_DATA_WIDTH 4
-#define PIO_0_DO_TEST_BENCH_WIRING 0
-#define PIO_0_DRIVEN_SIM_VALUE 0
-#define PIO_0_EDGE_TYPE "NONE"
-#define PIO_0_FREQ 116000000
-#define PIO_0_HAS_IN 0
-#define PIO_0_HAS_OUT 0
-#define PIO_0_HAS_TRI 1
-#define PIO_0_IRQ -1
-#define PIO_0_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define PIO_0_IRQ_TYPE "NONE"
-#define PIO_0_NAME "/dev/pio_0"
-#define PIO_0_RESET_VALUE 0
-#define PIO_0_SPAN 16
-#define PIO_0_TYPE "altera_avalon_pio"
 
 
 /*
@@ -357,6 +330,68 @@
 #define SEGA_SATURN_ABUS_SLAVE_0_NAME "/dev/sega_saturn_abus_slave_0"
 #define SEGA_SATURN_ABUS_SLAVE_0_SPAN 512
 #define SEGA_SATURN_ABUS_SLAVE_0_TYPE "sega_saturn_abus_slave"
+
+
+/*
+ * spi_sd_card configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_spi_sd_card altera_avalon_spi
+#define SPI_SD_CARD_BASE 0x43000
+#define SPI_SD_CARD_CLOCKMULT 1
+#define SPI_SD_CARD_CLOCKPHASE 0
+#define SPI_SD_CARD_CLOCKPOLARITY 0
+#define SPI_SD_CARD_CLOCKUNITS "Hz"
+#define SPI_SD_CARD_DATABITS 8
+#define SPI_SD_CARD_DATAWIDTH 16
+#define SPI_SD_CARD_DELAYMULT "1.0E-9"
+#define SPI_SD_CARD_DELAYUNITS "ns"
+#define SPI_SD_CARD_EXTRADELAY 0
+#define SPI_SD_CARD_INSERT_SYNC 0
+#define SPI_SD_CARD_IRQ 1
+#define SPI_SD_CARD_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define SPI_SD_CARD_ISMASTER 1
+#define SPI_SD_CARD_LSBFIRST 0
+#define SPI_SD_CARD_NAME "/dev/spi_sd_card"
+#define SPI_SD_CARD_NUMSLAVES 1
+#define SPI_SD_CARD_PREFIX "spi_"
+#define SPI_SD_CARD_SPAN 32
+#define SPI_SD_CARD_SYNC_REG_DEPTH 2
+#define SPI_SD_CARD_TARGETCLOCK 20000000u
+#define SPI_SD_CARD_TARGETSSDELAY "0.0"
+#define SPI_SD_CARD_TYPE "altera_avalon_spi"
+
+
+/*
+ * spi_stm32 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_spi_stm32 altera_avalon_spi
+#define SPI_STM32_BASE 0x44000
+#define SPI_STM32_CLOCKMULT 1
+#define SPI_STM32_CLOCKPHASE 0
+#define SPI_STM32_CLOCKPOLARITY 0
+#define SPI_STM32_CLOCKUNITS "Hz"
+#define SPI_STM32_DATABITS 8
+#define SPI_STM32_DATAWIDTH 16
+#define SPI_STM32_DELAYMULT "1.0E-9"
+#define SPI_STM32_DELAYUNITS "ns"
+#define SPI_STM32_EXTRADELAY 0
+#define SPI_STM32_INSERT_SYNC 0
+#define SPI_STM32_IRQ 2
+#define SPI_STM32_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define SPI_STM32_ISMASTER 0
+#define SPI_STM32_LSBFIRST 0
+#define SPI_STM32_NAME "/dev/spi_stm32"
+#define SPI_STM32_NUMSLAVES 1
+#define SPI_STM32_PREFIX "spi_"
+#define SPI_STM32_SPAN 32
+#define SPI_STM32_SYNC_REG_DEPTH 2
+#define SPI_STM32_TARGETCLOCK 128000u
+#define SPI_STM32_TARGETSSDELAY "0.0"
+#define SPI_STM32_TYPE "altera_avalon_spi"
 
 
 /*

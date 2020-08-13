@@ -57,10 +57,24 @@ alt_exception_trap:
          *
          */
 
+#ifdef ALT_CPU_CPU_ARCH_NIOS2_R2
+        movhi r3,0xb41d              /* upper half of trap opcode */
+        ori   r3,r3,0x0020           /* lower half of trap opcode */
+        beq   r2,r3,.Lis_trap
+#ifdef NIOS2_CDX_PRESENT
+        mov   r3,r2
+        andhi r3,r3,0xffff
+        ori   r3,r3,0xd009           /* trap.n opcode */
+        beq   r2,r3,.Lis_trap
+#endif
+        br   .Lnot_trap
+#else
         movhi r3,0x003b              /* upper half of trap opcode */
         ori   r3,r3,0x683a           /* lower half of trap opcode */
         bne   r2,r3,.Lnot_trap
+#endif
 
+.Lis_trap:
         /*
          *  There is no trap handler defined here, and so executing a trap
          *  instruction causes a software break.  If you provide a trap handler,

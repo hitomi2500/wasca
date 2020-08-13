@@ -107,6 +107,10 @@ int main()
   volatile unsigned char * p;
   volatile unsigned short * p16;
   unsigned short sMode;
+  /*while (1)
+  {
+	  alt_putstr("Loading wasca...\n\r");
+  }*/
   //first things first - copy saturn bootcode into SDRAM
   p = (unsigned char *)EXTERNAL_SDRAM_CONTROLLER_BASE;
   for (i=0;i<60416;i++)

@@ -5,7 +5,7 @@
 *                                                                             *
 * License Agreement                                                           *
 *                                                                             *
-* Copyright (c) 2006 Altera Corporation, San Jose, California, USA.           *
+* Copyright (c) 2015 Altera Corporation, San Jose, California, USA.           *
 * All rights reserved.                                                        *
 *                                                                             *
 * Permission is hereby granted, free of charge, to any person obtaining a     *
@@ -54,7 +54,11 @@ int alt_getchar();
 int alt_putchar(int c);
 int alt_putstr(const char* str);
 void alt_printf(const char *fmt, ...);
-
+#ifdef ALT_SEMIHOSTING
+int alt_putcharbuf(int c);
+int alt_putstrbuf(const char* str);
+int alt_putbufflush();
+#endif
 #ifdef __cplusplus
 }
 #endif
