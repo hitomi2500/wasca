@@ -9,6 +9,12 @@
 /fpga_firmware/software/wasca_test9/*.flash
 /fpga_firmware/software/wasca_test9/*.elf
 /fpga_firmware/software/wasca_test9/*.objdump
+/fpga_firmware/software/wasca_sdram_debug/mem_init/
+/fpga_firmware/software/wasca_sdram_debug_bsp/obj/
+/fpga_firmware/software/wasca_sdram_debug/obj/
+/fpga_firmware/software/wasca_sdram_debug/*.flash
+/fpga_firmware/software/wasca_sdram_debug/*.elf
+/fpga_firmware/software/wasca_sdram_debug/*.objdump
 /fpga_firmware/timing/stamp/
 /fpga_firmware/flash/*.flash
 /fpga_firmware/wasca/*.rpt

@@ -208,7 +208,7 @@ LOAD c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-
  *(.jcr)
                 0x00000000000007f8                . = ALIGN (0x4)
 
-.rodata         0x00000000000007f8     0xed88
+.rodata         0x00000000000007f8    0x1e6d8
                 0x00000000000007f8                PROVIDE (__ram_rodata_start, ABSOLUTE (.))
                 0x00000000000007f8                . = ALIGN (0x4)
  *(.rodata .rodata.* .gnu.linkonce.r.*)
@@ -219,20 +219,20 @@ LOAD c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-
  .rodata        0x0000000000000914       0x50 obj/default/hello_world_small.o
                 0x0000000000000914                Wasca_Sysarea_Signature
                 0x0000000000000954                Power_Memory_Signature
- .rodata        0x0000000000000964     0xec00 obj/default/wasca_short.o
+ .rodata        0x0000000000000964    0x1e550 obj/default/wasca_short.o
                 0x0000000000000964                rawData
  .rodata.str1.4
-                0x000000000000f564        0xd ../wasca_test9_bsp/\libhal_bsp.a(alt_sys_init.o)
+                0x000000000001eeb4        0xd ../wasca_test9_bsp/\libhal_bsp.a(alt_sys_init.o)
                                          0x10 (size before relaxing)
- *fill*         0x000000000000f571        0x3 
+ *fill*         0x000000000001eec1        0x3 
  .rodata.str1.4
-                0x000000000000f574        0xc ../wasca_test9_bsp/\libhal_bsp.a(alt_dev.o)
+                0x000000000001eec4        0xc ../wasca_test9_bsp/\libhal_bsp.a(alt_dev.o)
  *(.rodata1)
-                0x000000000000f580                . = ALIGN (0x4)
-                0x000000000000f580                PROVIDE (__ram_rodata_end, ABSOLUTE (.))
+                0x000000000001eed0                . = ALIGN (0x4)
+                0x000000000001eed0                PROVIDE (__ram_rodata_end, ABSOLUTE (.))
                 0x00000000000007f8                PROVIDE (__flash_rodata_start, LOADADDR (.rodata))
 
-.rwdata         0x0000000000080020       0xa4 load address 0x000000000000f580
+.rwdata         0x0000000000080020       0xa4 load address 0x000000000001eed0
                 0x0000000000080020                PROVIDE (__ram_rwdata_start, ABSOLUTE (.))
                 0x0000000000080020                . = ALIGN (0x4)
  *(.got.plt)
@@ -276,9 +276,9 @@ LOAD c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-
                 0x00000000000800c4                _edata = ABSOLUTE (.)
                 0x00000000000800c4                PROVIDE (edata, ABSOLUTE (.))
                 0x00000000000800c4                PROVIDE (__ram_rwdata_end, ABSOLUTE (.))
-                0x000000000000f580                PROVIDE (__flash_rwdata_start, LOADADDR (.rwdata))
+                0x000000000001eed0                PROVIDE (__flash_rwdata_start, LOADADDR (.rwdata))
 
-.bss            0x00000000000800c4       0x10 load address 0x000000000000f624
+.bss            0x00000000000800c4       0x10 load address 0x000000000001ef74
                 0x00000000000800c4                __bss_start = ABSOLUTE (.)
                 0x00000000000800c4                PROVIDE (__sbss_start, ABSOLUTE (.))
                 0x00000000000800c4                PROVIDE (___sbss_start, ABSOLUTE (.))
@@ -319,15 +319,15 @@ LOAD c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-
                 0x00000000000800d4                __bss_end = ABSOLUTE (.)
 
 .onchip_flash_0
-                0x000000000000f624        0x0
-                0x000000000000f624                PROVIDE (_alt_partition_onchip_flash_0_start, ABSOLUTE (.))
+                0x000000000001ef74        0x0
+                0x000000000001ef74                PROVIDE (_alt_partition_onchip_flash_0_start, ABSOLUTE (.))
  *(.onchip_flash_0 .onchip_flash_0. onchip_flash_0.*)
-                0x000000000000f624                . = ALIGN (0x4)
-                0x000000000000f624                PROVIDE (_alt_partition_onchip_flash_0_end, ABSOLUTE (.))
-                0x000000000000f624                PROVIDE (_alt_partition_onchip_flash_0_load_addr, LOADADDR (.onchip_flash_0))
+                0x000000000001ef74                . = ALIGN (0x4)
+                0x000000000001ef74                PROVIDE (_alt_partition_onchip_flash_0_end, ABSOLUTE (.))
+                0x000000000001ef74                PROVIDE (_alt_partition_onchip_flash_0_load_addr, LOADADDR (.onchip_flash_0))
 
 .onchip_memory2_0
-                0x00000000000800d4        0x0 load address 0x000000000000f624
+                0x00000000000800d4        0x0 load address 0x000000000001ef74
                 0x00000000000800d4                PROVIDE (_alt_partition_onchip_memory2_0_start, ABSOLUTE (.))
  *(.onchip_memory2_0 .onchip_memory2_0. onchip_memory2_0.*)
                 0x00000000000800d4                . = ALIGN (0x4)
@@ -335,15 +335,15 @@ LOAD c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-
                 0x00000000000800d4                _end = ABSOLUTE (.)
                 0x00000000000800d4                end = ABSOLUTE (.)
                 0x00000000000800d4                __alt_stack_base = ABSOLUTE (.)
-                0x000000000000f624                PROVIDE (_alt_partition_onchip_memory2_0_load_addr, LOADADDR (.onchip_memory2_0))
+                0x000000000001ef74                PROVIDE (_alt_partition_onchip_memory2_0_load_addr, LOADADDR (.onchip_memory2_0))
 
 .external_sdram_controller
-                0x0000000004000000        0x0 load address 0x000000000000f624
+                0x0000000004000000        0x0 load address 0x000000000001ef74
                 0x0000000004000000                PROVIDE (_alt_partition_external_sdram_controller_start, ABSOLUTE (.))
  *(.external_sdram_controller .external_sdram_controller. external_sdram_controller.*)
                 0x0000000004000000                . = ALIGN (0x4)
                 0x0000000004000000                PROVIDE (_alt_partition_external_sdram_controller_end, ABSOLUTE (.))
-                0x000000000000f624                PROVIDE (_alt_partition_external_sdram_controller_load_addr, LOADADDR (.external_sdram_controller))
+                0x000000000001ef74                PROVIDE (_alt_partition_external_sdram_controller_load_addr, LOADADDR (.external_sdram_controller))
 
 .stab
  *(.stab)
@@ -438,26 +438,26 @@ LOAD c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x1af8
+.debug_info     0x0000000000000000     0x1afc
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000       0x75 ../wasca_test9_bsp//obj/HAL/src/crt0.o
- .debug_info    0x0000000000000075      0x2e0 obj/default/hello_world_small.o
- .debug_info    0x0000000000000355       0x53 obj/default/wasca_short.o
- .debug_info    0x00000000000003a8      0x1ba ../wasca_test9_bsp/\libhal_bsp.a(alt_load.o)
- .debug_info    0x0000000000000562      0x1a1 ../wasca_test9_bsp/\libhal_bsp.a(alt_main.o)
- .debug_info    0x0000000000000703      0x153 ../wasca_test9_bsp/\libhal_bsp.a(alt_printf.o)
- .debug_info    0x0000000000000856      0x138 ../wasca_test9_bsp/\libhal_bsp.a(alt_putchar.o)
- .debug_info    0x000000000000098e      0x15d ../wasca_test9_bsp/\libhal_bsp.a(alt_putstr.o)
- .debug_info    0x0000000000000aeb      0x443 ../wasca_test9_bsp/\libhal_bsp.a(alt_sys_init.o)
- .debug_info    0x0000000000000f2e      0x1e5 ../wasca_test9_bsp/\libhal_bsp.a(altera_avalon_uart_write.o)
- .debug_info    0x0000000000001113       0x8b ../wasca_test9_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
- .debug_info    0x000000000000119e      0x492 ../wasca_test9_bsp/\libhal_bsp.a(alt_dev.o)
- .debug_info    0x0000000000001630      0x1a8 ../wasca_test9_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
- .debug_info    0x00000000000017d8       0x9f ../wasca_test9_bsp/\libhal_bsp.a(alt_errno.o)
- .debug_info    0x0000000000001877       0x8b ../wasca_test9_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
- .debug_info    0x0000000000001902       0xb1 ../wasca_test9_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
- .debug_info    0x00000000000019b3       0x83 c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/4.9.2/../../../../../H-x86_64-mingw32/nios2-elf/lib/mno-hw-mul\libsmallc.a(lib_a-int_errno.o)
- .debug_info    0x0000000000001a36       0xc2 c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/4.9.2/../../../../../H-x86_64-mingw32/nios2-elf/lib/mno-hw-mul\libsmallc.a(lib_a-strlen.o)
+ .debug_info    0x0000000000000075      0x2e2 obj/default/hello_world_small.o
+ .debug_info    0x0000000000000357       0x55 obj/default/wasca_short.o
+ .debug_info    0x00000000000003ac      0x1ba ../wasca_test9_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_info    0x0000000000000566      0x1a1 ../wasca_test9_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_info    0x0000000000000707      0x153 ../wasca_test9_bsp/\libhal_bsp.a(alt_printf.o)
+ .debug_info    0x000000000000085a      0x138 ../wasca_test9_bsp/\libhal_bsp.a(alt_putchar.o)
+ .debug_info    0x0000000000000992      0x15d ../wasca_test9_bsp/\libhal_bsp.a(alt_putstr.o)
+ .debug_info    0x0000000000000aef      0x443 ../wasca_test9_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_info    0x0000000000000f32      0x1e5 ../wasca_test9_bsp/\libhal_bsp.a(altera_avalon_uart_write.o)
+ .debug_info    0x0000000000001117       0x8b ../wasca_test9_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_info    0x00000000000011a2      0x492 ../wasca_test9_bsp/\libhal_bsp.a(alt_dev.o)
+ .debug_info    0x0000000000001634      0x1a8 ../wasca_test9_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_info    0x00000000000017dc       0x9f ../wasca_test9_bsp/\libhal_bsp.a(alt_errno.o)
+ .debug_info    0x000000000000187b       0x8b ../wasca_test9_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_info    0x0000000000001906       0xb1 ../wasca_test9_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .debug_info    0x00000000000019b7       0x83 c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/4.9.2/../../../../../H-x86_64-mingw32/nios2-elf/lib/mno-hw-mul\libsmallc.a(lib_a-int_errno.o)
+ .debug_info    0x0000000000001a3a       0xc2 c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/4.9.2/../../../../../H-x86_64-mingw32/nios2-elf/lib/mno-hw-mul\libsmallc.a(lib_a-strlen.o)
 
 .debug_abbrev   0x0000000000000000      0xcb8
  *(.debug_abbrev)

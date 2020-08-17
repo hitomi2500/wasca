@@ -86,7 +86,7 @@
 #define PCNTR_REG_OFFSET 0xF0
 #define MODE_REG_OFFSET 0xF4
 #define SWVER_REG_OFFSET 0xF8
-extern const unsigned char rawData[60416];
+extern const unsigned char rawData[124240];
 
 const char Power_Memory_Signature[16] = "BackUpRam Format";
 const char Wasca_Sysarea_Signature[64] = {0x80, 0x00, 0x00, 0x00, 0x77, 0x61, 0x73, 0x63,
@@ -113,7 +113,7 @@ int main()
   }*/
   //first things first - copy saturn bootcode into SDRAM
   p = (unsigned char *)EXTERNAL_SDRAM_CONTROLLER_BASE;
-  for (i=0;i<60416;i++)
+  for (i=0;i<124240;i++)
 	  p[i] = rawData[i];
   alt_putstr("Bootloader copied! Dump :\n\r");
   for (i=0;i<256;i++)

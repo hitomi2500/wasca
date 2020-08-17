@@ -190,7 +190,7 @@ $(MEM_0)_CREATE_LANES := 0
 external_sdram_controller: check_elf_exists $(HDL_SIM_DIR)/$(MEM_0).dat $(HDL_SIM_DIR)/$(MEM_0).sym
 
 # Memory: onchip_flash_0
-MEM_1 := onchip_flash_0
+MEM_1 := wasca_onchip_flash_0
 $(MEM_1)_NAME := onchip_flash_0
 $(MEM_1)_MEM_INIT_FILE_PARAM_NAME := INIT_FILENAME
 HEX_FILES += $(MEM_INIT_DIR)/$(MEM_1).hex
