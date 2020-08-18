@@ -22,7 +22,7 @@ entity abus_avalon_sdram_bridge is
 		sdram_cke          : out   std_logic;                                        --                               .cke
 		sdram_cs_n         : out   std_logic;                                        --                               .cs_n
 		sdram_dq           : inout std_logic_vector(15 downto 0) := (others => '0'); --                               .dq
-		sdram_dqm          : out   std_logic_vector(1 downto 0);                     --                               .dqm
+		sdram_dqm          : out   std_logic_vector(1 downto 0) :=  (others => '1');                     --                               .dqm
 		sdram_ras_n        : out   std_logic;                                        --                               .ras_n
 		sdram_we_n         : out   std_logic;                                        --                               .we_n
 		sdram_clk          : out   std_logic;
@@ -123,7 +123,7 @@ signal REG_SWVER            : std_logic_vector(15 downto 0) := (others => '0');
 
 ------------------- sdram signals ---------------
 signal sdram_abus_pending      : std_logic := '0'; --abus request is detected and should be parsed
-signal sdram_abus_ack          : std_logic := '0'; --abus request is acknowledged and is being processed by sdram logic
+signal sdram_abus_complete          : std_logic := '0'; 
 signal sdram_wait_counter          : unsigned(3 downto 0) := (others => '0'); 
 --refresh interval should be no bigger than 7.8us = 906 clock cycles
 --to keep things simple, perfrorm autorefresh at 512 cycles
@@ -153,15 +153,12 @@ TYPE sdram_mode_type IS (
 						  SDRAM_INIT,
 						  SDRAM_IDLE,
 						  SDRAM_AUTOREFRESH,
-						  SDRAM_AUTOREFRESH_WAIT,
 						  SDRAM_ABUS_ACTIVATE,
-						  SDRAM_ABUS_ACTIVATE_WAIT,
 						  SDRAM_ABUS_READ_AND_PRECHARGE,
-						  SDRAM_ABUS_READ_AND_PRECHARGE_WAIT,
+						  --SDRAM_ABUS_READ_AND_PRECHARGE_WAIT,
 						  SDRAM_ABUS_WRITE_AND_PRECHARGE,
-						  SDRAM_ABUS_WRITE_AND_PRECHARGE_WAIT,
+						  --SDRAM_ABUS_WRITE_AND_PRECHARGE_WAIT,
 						  SDRAM_AVALON_ACTIVATE,
-						  SDRAM_AVALON_ACTIVATE_WAIT,
 						  SDRAM_AVALON_READ_AND_PRECHARGE,
 						  SDRAM_AVALON_READ_AND_PRECHARGE_WAIT,
 						  SDRAM_AVALON_WRITE_AND_PRECHARGE,
@@ -602,7 +599,7 @@ begin
 		if rising_edge(clock) then
 			if abus_anypulse = '1' then
 				sdram_abus_pending <= '1';
-			elsif sdram_abus_ack = '1' then
+			elsif sdram_abus_complete = '1' then
 				sdram_abus_pending <= '0';
 			end if;
 		end if;
@@ -626,29 +623,38 @@ begin
 					sdram_dq <= (others => 'Z');
 					sdram_ras_n <= '1';
 					sdram_we_n <= '1';
+					sdram_dqm <= "11";
 					sdram_autorefresh_counter <= sdram_autorefresh_counter + 1;
+					sdram_abus_complete <= '0';
 					-- in idle mode we should check if any of the events occured:
 					-- 1) abus transaction detected - priority 0
 					-- 2) avalon transaction detected - priority 1
 					-- 3) autorefresh counter exceeded threshold - priority 2
 					-- if none of these events occur, we keep staying in the idle mode
-					if sdram_abus_pending = '1' then
+					if sdram_abus_pending = '1' and sdram_abus_complete = '0' then
 						sdram_mode <= SDRAM_ABUS_ACTIVATE;
-					elsif avalon_sdram_read_pending = '1' or avalon_sdram_write_pending = '1' then
+						--something on abus, address should be stable already (is it???), so we activate row now
+                        sdram_ras_n <= '0';
+                        sdram_addr <= abus_address_latched(22 downto 10);
+                        sdram_ba <= abus_address_latched(24 downto 23);
+                        sdram_wait_counter <= to_unsigned(2,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
+                    elsif avalon_sdram_read_pending = '1' or avalon_sdram_write_pending = '1' then
 						sdram_mode <= SDRAM_AVALON_ACTIVATE;
-					elsif sdram_autorefresh_counter(9) = '1' then --512 cycles 
+						--something on avalon, activating!
+                        sdram_ras_n <= '0';
+                        sdram_addr <= avalon_sdram_pending_address(22 downto 10);
+                        sdram_ba <= avalon_sdram_pending_address(24 downto 23);
+                        sdram_wait_counter <= to_unsigned(2,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
+					elsif sdram_autorefresh_counter(9) = '1' then --512 cycles
 						sdram_mode <= SDRAM_AUTOREFRESH;
+					    -- for autorefresh we issue corresponding command and reset autorefresh counter 
+						sdram_cas_n <= '0';
+					    sdram_ras_n <= '0';
+					    sdram_autorefresh_counter <= (others => '0');
+					    sdram_wait_counter <= to_unsigned(7,4); -- tRC = 63ns min ;  8 cycles @ 116mhz = 67ns
 					end if;
 				
 				when SDRAM_AUTOREFRESH => 
-					-- for autorefresh we issue corresponding command and reset autorefresh counter
-					sdram_cas_n <= '0';
-					sdram_ras_n <= '0';
-					sdram_mode <= SDRAM_AUTOREFRESH_WAIT;
-					sdram_autorefresh_counter <= (others => '0');
-					sdram_wait_counter <= to_unsigned(7,4); -- tRC = 63ns min ;  8 cycles @ 116mhz = 67ns
-				
-				when SDRAM_AUTOREFRESH_WAIT => 
 					--here we wait for autorefresh to end and move on to idle state
 					sdram_cas_n <= '1';
 					sdram_ras_n <= '1';
@@ -658,39 +664,39 @@ begin
 					end if;
 				
 				when SDRAM_ABUS_ACTIVATE => 
-					--something on abus, address should be stable already (is it???), so we activate row now
-					sdram_ras_n <= '0';
-					sdram_addr <= abus_address_latched(22 downto 10);
-					sdram_ba <= abus_address_latched(24 downto 23);
-					sdram_wait_counter <= to_unsigned(2,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
-					sdram_mode <= SDRAM_ABUS_ACTIVATE_WAIT;
-					
-				when SDRAM_ABUS_ACTIVATE_WAIT => 
 					--while waiting for row to be activated, we choose where to switch to - read or write
+					sdram_addr <= (others => '0');
+					sdram_ba <= "00";
 					sdram_ras_n <= '1';
+					sdram_dqm <= abus_write_buf;
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
-						if my_little_transaction_dir = DIR_READ then
-							sdram_mode <= SDRAM_ABUS_READ_AND_PRECHARGE;
-						elsif my_little_transaction_dir = DIR_WRITE then
+						if my_little_transaction_dir = DIR_WRITE then
 							sdram_mode <= SDRAM_ABUS_WRITE_AND_PRECHARGE;
-						else 
+							sdram_cas_n <= '0';
+                            sdram_we_n <= '0';
+                            sdram_dq <= abus_data_in;
+                            sdram_addr <= "0010"&abus_address_latched(9 downto 1);
+                            sdram_ba <= abus_address_latched(24 downto 23);
+                            sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+						else --if my_little_transaction_dir = DIR_READ then
+							sdram_mode <= SDRAM_ABUS_READ_AND_PRECHARGE;
+							sdram_cas_n <= '0';
+							sdram_addr <= "0010"&abus_address_latched(9 downto 1);
+							sdram_ba <= abus_address_latched(24 downto 23);
+							sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+						--else 
 							-- this is an invalid transaction - either it's for CS2 or from an unmapped range
 							-- but the bank is already prepared, and we need to precharge it
 							-- we can issue a precharge command, but read&precharge command will have the same effect, so we use that one
-							sdram_mode <= SDRAM_ABUS_READ_AND_PRECHARGE;
 						end if;
 					end if;					
 					
 				when SDRAM_ABUS_READ_AND_PRECHARGE => 
 					--move on with reading, bus is a Z after idle
- 					sdram_cas_n <= '0';
-					sdram_addr <= "0010"&abus_address_latched(9 downto 1);
-					sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
-					sdram_mode <= SDRAM_ABUS_READ_AND_PRECHARGE_WAIT;
-					
-				when SDRAM_ABUS_READ_AND_PRECHARGE_WAIT => 
 					--data should be latched at 2nd or 3rd clock (cas=2 or cas=3)
+					sdram_addr <= (others => '0');
+					sdram_ba <= "00";
 					sdram_cas_n <= '1';
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 1 then
@@ -698,37 +704,25 @@ begin
 					end if;	
 					if sdram_wait_counter = 0 then
 						sdram_mode <= SDRAM_IDLE;
+						sdram_abus_complete <= '1';
+						sdram_dqm <= "11";
 					end if;	
 					
 				when SDRAM_ABUS_WRITE_AND_PRECHARGE => 
 					--move on with writing
- 					sdram_cas_n <= '0';
-					sdram_we_n <= '0';
-					sdram_dq <= abus_data_in;
-					sdram_dqm <= abus_write_buf;
-					sdram_addr <= "0010"&abus_address_latched(9 downto 1);
-					sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
-					sdram_mode <= SDRAM_ABUS_WRITE_AND_PRECHARGE_WAIT;
-					
-				when SDRAM_ABUS_WRITE_AND_PRECHARGE_WAIT => 
+					sdram_addr <= (others => '0');
+					sdram_ba <= "00";
 					sdram_cas_n <= '1';
 					sdram_we_n <= '1';
 					sdram_dq <= (others => 'Z');
-					sdram_dqm <= "11";
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
 						sdram_mode <= SDRAM_IDLE;
+						sdram_abus_complete <= '1';
+						sdram_dqm <= "11";
 					end if;
 					
 				when SDRAM_AVALON_ACTIVATE => 
-					--something on avalon, activating!
-					sdram_ras_n <= '0';
-					sdram_addr <= avalon_sdram_pending_address(22 downto 10);
-					sdram_ba <= avalon_sdram_pending_address(24 downto 23);
-					sdram_wait_counter <= to_unsigned(2,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
-					sdram_mode <= SDRAM_AVALON_ACTIVATE_WAIT;
-					
-				when SDRAM_AVALON_ACTIVATE_WAIT => 
 					--while waiting for row to be activated, we choose where to switch to - read or write
 					sdram_ras_n <= '1';
 					sdram_wait_counter <= sdram_wait_counter - 1;
@@ -766,7 +760,7 @@ begin
 					sdram_dqm <= "11"; --only 16 bit writing for avalon?
 					sdram_addr <= "0010"&avalon_sdram_pending_address(9 downto 1);
 					sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
-					sdram_mode <= SDRAM_ABUS_WRITE_AND_PRECHARGE_WAIT;
+					sdram_mode <= SDRAM_AVALON_WRITE_AND_PRECHARGE_WAIT;
 					
 				when SDRAM_AVALON_WRITE_AND_PRECHARGE_WAIT => 
 					sdram_cas_n <= '1';
@@ -782,5 +776,6 @@ begin
 		end if;
 	end process;
 	
+	sdram_clk <= clock;
 	
 end architecture rtl; -- of sega_saturn_abus_slave
