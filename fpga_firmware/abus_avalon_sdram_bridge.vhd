@@ -1,5 +1,3 @@
--- sega_saturn_abus_slave.vhd
-
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -48,9 +46,9 @@ entity abus_avalon_sdram_bridge is
 		saturn_reset         : in    std_logic                     := '0';             --         	  .saturn_reset
 		reset                : in    std_logic                     := '0'              --         reset.reset
 	);
-end entity sega_saturn_abus_slave;
+end entity abus_avalon_sdram_bridge;
 
-architecture rtl of sega_saturn_abus_slave is
+architecture rtl of abus_avalon_sdram_bridge is
 
 signal abus_address_ms         : std_logic_vector(9 downto 0) := (others => '0'); --          abus.address
 signal abus_address_buf         : std_logic_vector(9 downto 0) := (others => '0'); --          abus.address
@@ -130,8 +128,14 @@ signal sdram_wait_counter          : unsigned(3 downto 0) := (others => '0');
 --refresh interval should be no bigger than 7.8us = 906 clock cycles
 --to keep things simple, perfrorm autorefresh at 512 cycles
 signal sdram_autorefresh_counter : unsigned(9 downto 0) := (others => '0'); 
+signal sdram_datain_latched          : std_logic_vector(15 downto 0) := (others => '0'); 
 
-
+signal avalon_sdram_complete      : std_logic := '0';
+signal avalon_sdram_read_pending      : std_logic := '0';
+signal avalon_sdram_write_pending      : std_logic := '0';
+signal avalon_sdram_pending_address          : std_logic_vector(24 downto 0) := (others => '0'); 
+signal avalon_sdram_pending_data          : std_logic_vector(15 downto 0) := (others => '0'); 
+signal avalon_sdram_readdata_latched          : std_logic_vector(15 downto 0) := (others => '0'); 
 
 
 TYPE transaction_dir IS (DIR_NONE,DIR_WRITE,DIR_READ);
@@ -550,8 +554,9 @@ begin
 		if rising_edge(clock) then
 			if avalon_sdram_read = '1' then
 				avalon_sdram_waitrequest <= '1';
-			else if avalon_sdram_complete = '1' then
+			elsif avalon_sdram_complete = '1' then
 				avalon_sdram_waitrequest <= '0';
+			end if;
 		end if;
 	end process;	
 	
@@ -562,8 +567,9 @@ begin
 			if avalon_sdram_read = '1' then
 				avalon_sdram_read_pending <= '1';
 				avalon_sdram_pending_address <= avalon_sdram_address;
-			else if avalon_sdram_complete = '1' then
+			elsif avalon_sdram_complete = '1' then
 				avalon_sdram_read_pending <= '0';
+			end if;
 		end if;
 	end process;
 
@@ -574,8 +580,9 @@ begin
 				avalon_sdram_write_pending <= '1';
 				avalon_sdram_pending_address <= avalon_sdram_address;
 				avalon_sdram_pending_data<= avalon_sdram_writedata;
-			else if avalon_sdram_complete = '1' then
+			elsif avalon_sdram_complete = '1' then
 				avalon_sdram_write_pending <= '0';
+			end if;
 		end if;
 	end process;
 	
@@ -595,8 +602,9 @@ begin
 		if rising_edge(clock) then
 			if abus_anypulse = '1' then
 				sdram_abus_pending <= '1';
-			else if sdram_abus_ack = '1' then
+			elsif sdram_abus_ack = '1' then
 				sdram_abus_pending <= '0';
+			end if;
 		end if;
 	end process;
 
@@ -615,8 +623,7 @@ begin
 					sdram_cas_n <= '1';
 					sdram_cke <= '1';
 					sdram_cs_n <= '0';
-					sdram_dq <= X"ZZZZ";
-					sdram_dqm <= "11";
+					sdram_dq <= (others => 'Z');
 					sdram_ras_n <= '1';
 					sdram_we_n <= '1';
 					sdram_autorefresh_counter <= sdram_autorefresh_counter + 1;
@@ -631,6 +638,7 @@ begin
 						sdram_mode <= SDRAM_AVALON_ACTIVATE;
 					elsif sdram_autorefresh_counter(9) = '1' then --512 cycles 
 						sdram_mode <= SDRAM_AUTOREFRESH;
+					end if;
 				
 				when SDRAM_AUTOREFRESH => 
 					-- for autorefresh we issue corresponding command and reset autorefresh counter
@@ -705,7 +713,7 @@ begin
 				when SDRAM_ABUS_WRITE_AND_PRECHARGE_WAIT => 
 					sdram_cas_n <= '1';
 					sdram_we_n <= '1';
-					sdram_dq <= X"ZZZZ";
+					sdram_dq <= (others => 'Z');
 					sdram_dqm <= "11";
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
@@ -763,7 +771,7 @@ begin
 				when SDRAM_AVALON_WRITE_AND_PRECHARGE_WAIT => 
 					sdram_cas_n <= '1';
 					sdram_we_n <= '1';
-					sdram_dq <= X"ZZZZ";
+					sdram_dq <= (others => 'Z');
 					sdram_dqm <= "11";
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
