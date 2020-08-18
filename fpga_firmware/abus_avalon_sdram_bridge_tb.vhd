@@ -147,13 +147,13 @@ signal	abus_data_in    : std_logic_vector(15 downto 0) := (others => '0');
 
 ------------- reference controller
 
-signal	refer_wr_addr:    std_logic_vector(23 downto 0);                
-signal	refer_wr_data:    std_logic_vector(15 downto 0);             
+signal	refer_wr_addr:    std_logic_vector(23 downto 0) := (others => '0');                
+signal	refer_wr_data:    std_logic_vector(15 downto 0) := (others => '0');             
 signal	refer_wr_enable:    std_logic;             
-signal	refer_rd_addr:    std_logic_vector(23 downto 0);
-signal	refer_rd_data:   std_logic_vector(15 downto 0);
+signal	refer_rd_addr:    std_logic_vector(23 downto 0) := (others => '0');
+signal	refer_rd_data:   std_logic_vector(15 downto 0) := (others => '0');
 signal	refer_rd_ready:    std_logic;
-signal	refer_rd_enable:    std_logic;
+signal	refer_rd_enable:    std_logic := '0';
 signal	refer_busy:    std_logic;
 signal	refer_rst_n:   std_logic := '1';
 
@@ -196,21 +196,70 @@ procedure write_abus_16 (addry : in std_logic_vector(25 downto 0);
 	                        csy : in std_logic_vector(2 downto 0);
 						  signal Abus_Ad : out std_logic_vector(25 downto 0);
 						  signal Abus_CS : out std_logic_vector(2 downto 0);
-						  signal Abus_Re : out std_logic
+						  signal Abus_Re : out std_logic;
+						  signal Ref_Ad : out std_logic_vector(23 downto 0);
+						  signal Ref_Re : out std_logic
 	                        ) is
 	begin
 			Abus_Ad <= addry;
+			Ref_Ad <= addry(24 downto 1);
 			wait for 10ns;
 			Abus_CS <= csy;
 			wait for 10ns;
 			Abus_Re <= '0';
-			wait for 220ns;
+			wait for 10ns;
+			Ref_Re <= '1';
+			wait for 10ns;
+			Ref_Re <= '0';
+			wait for 200ns;
 			Abus_CS <= "111";
 			wait for 10ns;
 			Abus_Re <= '1';
 			wait for 10ns;
 	end read_abus_16;
+	
+	procedure write_avalon_16 (addry : in std_logic_vector(25 downto 0);
+                              datty : in std_logic_vector(15 downto 0);
+                              signal Ava_Ad : out std_logic_vector(24 downto 0);
+                              signal Ava_Da : out std_logic_vector(15 downto 0);
+                              signal Ava_Wri : out std_logic;
+                              signal Ref_Ad : out std_logic_vector(23 downto 0);
+                              signal Ref_Da : out std_logic_vector(15 downto 0);
+                              signal Ref_Wri : out std_logic
+                              ) is
+        begin
+                Ava_Ad <= addry(24 downto 0);
+                Ref_Ad <= addry(24 downto 1);
+                Ref_Da <= datty;
+                Ava_Da <= datty;
+                wait for 10ns;
+                Ava_Wri <= '1';
+                wait for 10ns;
+                Ref_Wri <= '1';
+                Ava_Wri <= '0';
+                wait for 10ns;
+                Ref_Wri <= '0';
+        end write_avalon_16;
 
+
+	procedure read_avalon_16 (addry : in std_logic_vector(25 downto 0);
+                              signal Ava_Ad : out std_logic_vector(24 downto 0);
+                              signal Ava_Re : out std_logic;
+                              signal Ref_Ad : out std_logic_vector(23 downto 0);
+                              signal Ref_Re : out std_logic
+                              ) is
+        begin
+                Ava_Ad <= addry(24 downto 0);
+                Ref_Ad <= addry(24 downto 1);
+                wait for 10ns;
+                Ava_Re <= '1';
+                wait for 10ns;
+                Ref_Re <= '1';
+                Ava_Re <= '0';
+                wait for 10ns;
+                Ref_Re <= '0';
+        end read_avalon_16;
+	
 begin
 
 clock <= not clock after 4310 ps; --116 MHz clock
@@ -300,17 +349,25 @@ begin
     wait for 100ns;
     refer_rst_n <= '1';
     wait for 800ns;
-    --abus normal read
-    read_abus_16("00"&X"EFAFAE","010",abus_full_address,abus_chipselect,abus_read);
-    --abus read while autorefresh
-    wait for 3150ns;
-    read_abus_16("00"&X"EFAFAE","010",abus_full_address,abus_chipselect,abus_read);
-    --abus normal write
-    wait for 1 us;
-    write_abus_16("00"&X"BABAFA",X"DADA","010","00",abus_full_address,abus_data_in,abus_chipselect,abus_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
-    --abus write while autorefresh
-    wait for 2900ns;
-    write_abus_16("00"&X"EEE312",X"DADA","010","00",abus_full_address,abus_data_in,abus_chipselect,abus_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
+--    --abus normal read
+--    read_abus_16("00"&X"EFAFAE","010",abus_full_address,abus_chipselect,abus_read,refer_rd_addr,refer_rd_enable);
+--    --abus read while autorefresh
+--    wait for 3150ns;
+--    read_abus_16("00"&X"EFAFAE","010",abus_full_address,abus_chipselect,abus_read,refer_rd_addr,refer_rd_enable);
+--    --abus normal write
+--    wait for 1 us;
+--    write_abus_16("00"&X"BABAFA",X"DADA","010","00",abus_full_address,abus_data_in,abus_chipselect,abus_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
+--    --abus write while autorefresh
+--    wait for 2900ns;
+
+    --avalon normal write
+    wait for 500ns;
+    write_avalon_16("00"&X"EEE312",X"DADA",avalon_sdram_address,avalon_sdram_writedata,avalon_sdram_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
+    wait for 500ns;
+    --avalon normal read
+    wait for 500ns;
+    read_avalon_16("00"&X"EEE312",avalon_sdram_address,avalon_sdram_read,refer_rd_addr,refer_rd_enable);
+    wait for 500ns;
     wait;
 end process;
 

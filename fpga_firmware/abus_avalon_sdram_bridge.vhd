@@ -155,14 +155,10 @@ TYPE sdram_mode_type IS (
 						  SDRAM_AUTOREFRESH,
 						  SDRAM_ABUS_ACTIVATE,
 						  SDRAM_ABUS_READ_AND_PRECHARGE,
-						  --SDRAM_ABUS_READ_AND_PRECHARGE_WAIT,
 						  SDRAM_ABUS_WRITE_AND_PRECHARGE,
-						  --SDRAM_ABUS_WRITE_AND_PRECHARGE_WAIT,
 						  SDRAM_AVALON_ACTIVATE,
 						  SDRAM_AVALON_READ_AND_PRECHARGE,
-						  SDRAM_AVALON_READ_AND_PRECHARGE_WAIT,
-						  SDRAM_AVALON_WRITE_AND_PRECHARGE,
-						  SDRAM_AVALON_WRITE_AND_PRECHARGE_WAIT
+						  SDRAM_AVALON_WRITE_AND_PRECHARGE
 						);
 SIGNAL sdram_mode : sdram_mode_type := SDRAM_INIT;
  
@@ -668,7 +664,11 @@ begin
 					sdram_addr <= (others => '0');
 					sdram_ba <= "00";
 					sdram_ras_n <= '1';
-					sdram_dqm <= abus_write_buf;
+					if abus_write_buf = "11" then
+					   sdram_dqm <= "00"; --it's a read
+					else
+					   sdram_dqm <= abus_write_buf; --it's a write
+					end if;
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
 						if my_little_transaction_dir = DIR_WRITE then
@@ -729,20 +729,25 @@ begin
 					if sdram_wait_counter = 0 then
 						if avalon_sdram_read_pending = '1' then
 							sdram_mode <= SDRAM_AVALON_READ_AND_PRECHARGE;
+							sdram_cas_n <= '0';
+                            sdram_addr <= "0010"&avalon_sdram_pending_address(9 downto 1);
+                            sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						else
 							sdram_mode <= SDRAM_AVALON_WRITE_AND_PRECHARGE;
+							sdram_cas_n <= '0';
+                            sdram_we_n <= '0';
+                            sdram_dq <= avalon_sdram_pending_data;
+                            sdram_dqm <= "11"; --only 16 bit writing for avalon?
+                            sdram_addr <= "0010"&avalon_sdram_pending_address(9 downto 1);
+                            sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						end if;
 					end if;	
 					
 				when SDRAM_AVALON_READ_AND_PRECHARGE => 
 					--move on with reading, bus is a Z after idle
- 					sdram_cas_n <= '0';
-					sdram_addr <= "0010"&avalon_sdram_pending_address(9 downto 1);
-					sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
-					sdram_mode <= SDRAM_AVALON_READ_AND_PRECHARGE_WAIT;
-					
-				when SDRAM_AVALON_READ_AND_PRECHARGE_WAIT => 
 					--data should be latched at 2nd or 3rd clock (cas=2 or cas=3)
+					sdram_addr <= (others => '0');
+					sdram_ba <= "00";
 					sdram_cas_n <= '1';
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 1 then
@@ -750,26 +755,22 @@ begin
 					end if;	
 					if sdram_wait_counter = 0 then
 						sdram_mode <= SDRAM_IDLE;
+						avalon_sdram_complete <= '1';
+						sdram_dqm <= "11";
 					end if;	
 					
 				when SDRAM_AVALON_WRITE_AND_PRECHARGE => 
 					--move on with writing
- 					sdram_cas_n <= '0';
-					sdram_we_n <= '0';
-					sdram_dq <= avalon_sdram_pending_data;
-					sdram_dqm <= "11"; --only 16 bit writing for avalon?
-					sdram_addr <= "0010"&avalon_sdram_pending_address(9 downto 1);
-					sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
-					sdram_mode <= SDRAM_AVALON_WRITE_AND_PRECHARGE_WAIT;
-					
-				when SDRAM_AVALON_WRITE_AND_PRECHARGE_WAIT => 
+					sdram_addr <= (others => '0');
+					sdram_ba <= "00";
 					sdram_cas_n <= '1';
 					sdram_we_n <= '1';
 					sdram_dq <= (others => 'Z');
-					sdram_dqm <= "11";
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
 						sdram_mode <= SDRAM_IDLE;
+						avalon_sdram_complete <= '1';
+						sdram_dqm <= "11";
 					end if;
 					
 			end case;
