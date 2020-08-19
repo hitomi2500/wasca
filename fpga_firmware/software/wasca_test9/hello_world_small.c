@@ -107,10 +107,32 @@ int main()
   volatile unsigned char * p;
   volatile unsigned short * p16;
   unsigned short sMode;
-  /*while (1)
+  int iteration = 0;
+  int ierrors = 0;
+  p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+  while (1)
   {
-	  alt_putstr("Loading wasca...\n\r");
-  }*/
+	  alt_printf("New SDRAM test, iteration %i\n\r",iteration);
+	  ierrors = 0;
+	  //write
+	  for (i=0;i<256;i++)
+		  p[i] = i;
+	  //read
+	  for (i=0;i<256;i++)
+	  {
+		  short readback = p[i];
+		  if (readback != i)
+		  {
+			  ierrors++;
+			  if (ierrors < 5)
+				  alt_printf("Error: ADDR %X WRITE %X READ %X\n\r",i,i,readback);
+		  }
+
+	  }
+	  alt_printf("Test done, %i errors\n\r",ierrors);
+	  iteration++;
+	  for (k=0;k<1000000;k++) ; //pause
+  }
   //first things first - copy saturn bootcode into SDRAM
   p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
   for (i=0;i<124240;i++)
