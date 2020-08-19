@@ -42,7 +42,6 @@ Name             Origin             Length             Attributes
 onchip_flash_0   0x0000000000000000 0x000000000002b000
 reset            0x0000000000080000 0x0000000000000020
 onchip_memory2_0 0x0000000000080020 0x0000000000003fe0
-external_sdram_controller 0x0000000004000000 0x0000000002000000
 *default*        0x0000000000000000 0xffffffffffffffff
 
 Linker script and memory map
@@ -62,7 +61,6 @@ END GROUP
 LOAD c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/4.9.2/mno-hw-mul\libgcc.a
                 0x0000000000000000                __alt_mem_onchip_flash_0 = 0x0
                 0x0000000000080000                __alt_mem_onchip_memory2_0 = 0x80000
-                0x0000000004000000                __alt_mem_external_sdram_controller = 0x4000000
 
 .entry          0x0000000000080000       0x20
  *(.entry)
@@ -336,14 +334,6 @@ LOAD c:/altera_lite/15.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-
                 0x00000000000800d4                end = ABSOLUTE (.)
                 0x00000000000800d4                __alt_stack_base = ABSOLUTE (.)
                 0x000000000001ef74                PROVIDE (_alt_partition_onchip_memory2_0_load_addr, LOADADDR (.onchip_memory2_0))
-
-.external_sdram_controller
-                0x0000000004000000        0x0 load address 0x000000000001ef74
-                0x0000000004000000                PROVIDE (_alt_partition_external_sdram_controller_start, ABSOLUTE (.))
- *(.external_sdram_controller .external_sdram_controller. external_sdram_controller.*)
-                0x0000000004000000                . = ALIGN (0x4)
-                0x0000000004000000                PROVIDE (_alt_partition_external_sdram_controller_end, ABSOLUTE (.))
-                0x000000000001ef74                PROVIDE (_alt_partition_external_sdram_controller_load_addr, LOADADDR (.external_sdram_controller))
 
 .stab
  *(.stab)

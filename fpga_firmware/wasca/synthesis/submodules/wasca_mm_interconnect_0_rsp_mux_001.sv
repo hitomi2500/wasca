@@ -39,12 +39,12 @@
 // ------------------------------------------
 // Generation parameters:
 //   output_name:         wasca_mm_interconnect_0_rsp_mux_001
-//   NUM_INPUTS:          10
-//   ARBITRATION_SHARES:  1 1 1 1 1 1 1 1 1 1
+//   NUM_INPUTS:          4
+//   ARBITRATION_SHARES:  1 1 1 1
 //   ARBITRATION_SCHEME   "no-arb"
 //   PIPELINE_ARB:        0
-//   PKT_TRANS_LOCK:      68 (arbitration locking enabled)
-//   ST_DATA_W:           109
+//   PKT_TRANS_LOCK:      67 (arbitration locking enabled)
+//   ST_DATA_W:           108
 //   ST_CHANNEL_W:        10
 // ------------------------------------------
 
@@ -54,81 +54,39 @@ module wasca_mm_interconnect_0_rsp_mux_001
     // Sinks
     // ----------------------
     input                       sink0_valid,
-    input [109-1   : 0]  sink0_data,
+    input [108-1   : 0]  sink0_data,
     input [10-1: 0]  sink0_channel,
     input                       sink0_startofpacket,
     input                       sink0_endofpacket,
     output                      sink0_ready,
 
     input                       sink1_valid,
-    input [109-1   : 0]  sink1_data,
+    input [108-1   : 0]  sink1_data,
     input [10-1: 0]  sink1_channel,
     input                       sink1_startofpacket,
     input                       sink1_endofpacket,
     output                      sink1_ready,
 
     input                       sink2_valid,
-    input [109-1   : 0]  sink2_data,
+    input [108-1   : 0]  sink2_data,
     input [10-1: 0]  sink2_channel,
     input                       sink2_startofpacket,
     input                       sink2_endofpacket,
     output                      sink2_ready,
 
     input                       sink3_valid,
-    input [109-1   : 0]  sink3_data,
+    input [108-1   : 0]  sink3_data,
     input [10-1: 0]  sink3_channel,
     input                       sink3_startofpacket,
     input                       sink3_endofpacket,
     output                      sink3_ready,
-
-    input                       sink4_valid,
-    input [109-1   : 0]  sink4_data,
-    input [10-1: 0]  sink4_channel,
-    input                       sink4_startofpacket,
-    input                       sink4_endofpacket,
-    output                      sink4_ready,
-
-    input                       sink5_valid,
-    input [109-1   : 0]  sink5_data,
-    input [10-1: 0]  sink5_channel,
-    input                       sink5_startofpacket,
-    input                       sink5_endofpacket,
-    output                      sink5_ready,
-
-    input                       sink6_valid,
-    input [109-1   : 0]  sink6_data,
-    input [10-1: 0]  sink6_channel,
-    input                       sink6_startofpacket,
-    input                       sink6_endofpacket,
-    output                      sink6_ready,
-
-    input                       sink7_valid,
-    input [109-1   : 0]  sink7_data,
-    input [10-1: 0]  sink7_channel,
-    input                       sink7_startofpacket,
-    input                       sink7_endofpacket,
-    output                      sink7_ready,
-
-    input                       sink8_valid,
-    input [109-1   : 0]  sink8_data,
-    input [10-1: 0]  sink8_channel,
-    input                       sink8_startofpacket,
-    input                       sink8_endofpacket,
-    output                      sink8_ready,
-
-    input                       sink9_valid,
-    input [109-1   : 0]  sink9_data,
-    input [10-1: 0]  sink9_channel,
-    input                       sink9_startofpacket,
-    input                       sink9_endofpacket,
-    output                      sink9_ready,
 
 
     // ----------------------
     // Source
     // ----------------------
     output                      src_valid,
-    output [109-1    : 0] src_data,
+    output [108-1    : 0] src_data,
     output [10-1 : 0] src_channel,
     output                      src_startofpacket,
     output                      src_endofpacket,
@@ -140,13 +98,13 @@ module wasca_mm_interconnect_0_rsp_mux_001
     input clk,
     input reset
 );
-    localparam PAYLOAD_W        = 109 + 10 + 2;
-    localparam NUM_INPUTS       = 10;
+    localparam PAYLOAD_W        = 108 + 10 + 2;
+    localparam NUM_INPUTS       = 4;
     localparam SHARE_COUNTER_W  = 1;
     localparam PIPELINE_ARB     = 0;
-    localparam ST_DATA_W        = 109;
+    localparam ST_DATA_W        = 108;
     localparam ST_CHANNEL_W     = 10;
-    localparam PKT_TRANS_LOCK   = 68;
+    localparam PKT_TRANS_LOCK   = 67;
 
     // ------------------------------------------
     // Signals
@@ -165,23 +123,11 @@ module wasca_mm_interconnect_0_rsp_mux_001
     wire [PAYLOAD_W - 1 : 0] sink1_payload;
     wire [PAYLOAD_W - 1 : 0] sink2_payload;
     wire [PAYLOAD_W - 1 : 0] sink3_payload;
-    wire [PAYLOAD_W - 1 : 0] sink4_payload;
-    wire [PAYLOAD_W - 1 : 0] sink5_payload;
-    wire [PAYLOAD_W - 1 : 0] sink6_payload;
-    wire [PAYLOAD_W - 1 : 0] sink7_payload;
-    wire [PAYLOAD_W - 1 : 0] sink8_payload;
-    wire [PAYLOAD_W - 1 : 0] sink9_payload;
 
     assign valid[0] = sink0_valid;
     assign valid[1] = sink1_valid;
     assign valid[2] = sink2_valid;
     assign valid[3] = sink3_valid;
-    assign valid[4] = sink4_valid;
-    assign valid[5] = sink5_valid;
-    assign valid[6] = sink6_valid;
-    assign valid[7] = sink7_valid;
-    assign valid[8] = sink8_valid;
-    assign valid[9] = sink9_valid;
 
 
     // ------------------------------------------
@@ -191,16 +137,10 @@ module wasca_mm_interconnect_0_rsp_mux_001
     // ------------------------------------------
     reg [NUM_INPUTS - 1 : 0] lock;
     always @* begin
-      lock[0] = sink0_data[68];
-      lock[1] = sink1_data[68];
-      lock[2] = sink2_data[68];
-      lock[3] = sink3_data[68];
-      lock[4] = sink4_data[68];
-      lock[5] = sink5_data[68];
-      lock[6] = sink6_data[68];
-      lock[7] = sink7_data[68];
-      lock[8] = sink8_data[68];
-      lock[9] = sink9_data[68];
+      lock[0] = sink0_data[67];
+      lock[1] = sink1_data[67];
+      lock[2] = sink2_data[67];
+      lock[3] = sink3_data[67];
     end
 
     assign last_cycle = src_valid & src_ready & src_endofpacket & ~(|(lock & grant));
@@ -235,22 +175,10 @@ module wasca_mm_interconnect_0_rsp_mux_001
     // 1      |      1       |  0
     // 2      |      1       |  0
     // 3      |      1       |  0
-    // 4      |      1       |  0
-    // 5      |      1       |  0
-    // 6      |      1       |  0
-    // 7      |      1       |  0
-    // 8      |      1       |  0
-    // 9      |      1       |  0
      wire [SHARE_COUNTER_W - 1 : 0] share_0 = 1'd0;
      wire [SHARE_COUNTER_W - 1 : 0] share_1 = 1'd0;
      wire [SHARE_COUNTER_W - 1 : 0] share_2 = 1'd0;
      wire [SHARE_COUNTER_W - 1 : 0] share_3 = 1'd0;
-     wire [SHARE_COUNTER_W - 1 : 0] share_4 = 1'd0;
-     wire [SHARE_COUNTER_W - 1 : 0] share_5 = 1'd0;
-     wire [SHARE_COUNTER_W - 1 : 0] share_6 = 1'd0;
-     wire [SHARE_COUNTER_W - 1 : 0] share_7 = 1'd0;
-     wire [SHARE_COUNTER_W - 1 : 0] share_8 = 1'd0;
-     wire [SHARE_COUNTER_W - 1 : 0] share_9 = 1'd0;
 
     // ------------------------------------------
     // Choose the share value corresponding to the grant.
@@ -261,13 +189,7 @@ module wasca_mm_interconnect_0_rsp_mux_001
     share_0 & { SHARE_COUNTER_W {next_grant[0]} } |
     share_1 & { SHARE_COUNTER_W {next_grant[1]} } |
     share_2 & { SHARE_COUNTER_W {next_grant[2]} } |
-    share_3 & { SHARE_COUNTER_W {next_grant[3]} } |
-    share_4 & { SHARE_COUNTER_W {next_grant[4]} } |
-    share_5 & { SHARE_COUNTER_W {next_grant[5]} } |
-    share_6 & { SHARE_COUNTER_W {next_grant[6]} } |
-    share_7 & { SHARE_COUNTER_W {next_grant[7]} } |
-    share_8 & { SHARE_COUNTER_W {next_grant[8]} } |
-    share_9 & { SHARE_COUNTER_W {next_grant[9]} };
+    share_3 & { SHARE_COUNTER_W {next_grant[3]} };
     end
 
     // ------------------------------------------
@@ -337,29 +259,11 @@ module wasca_mm_interconnect_0_rsp_mux_001
 
     wire final_packet_3 = 1'b1;
 
-    wire final_packet_4 = 1'b1;
-
-    wire final_packet_5 = 1'b1;
-
-    wire final_packet_6 = 1'b1;
-
-    wire final_packet_7 = 1'b1;
-
-    wire final_packet_8 = 1'b1;
-
-    wire final_packet_9 = 1'b1;
-
 
     // ------------------------------------------
     // Concatenate all final_packet signals (wire or reg) into a handy vector.
     // ------------------------------------------
     wire [NUM_INPUTS - 1 : 0] final_packet = {
-    final_packet_9,
-    final_packet_8,
-    final_packet_7,
-    final_packet_6,
-    final_packet_5,
-    final_packet_4,
     final_packet_3,
     final_packet_2,
     final_packet_1,
@@ -451,12 +355,6 @@ module wasca_mm_interconnect_0_rsp_mux_001
     assign sink1_ready = src_ready && grant[1];
     assign sink2_ready = src_ready && grant[2];
     assign sink3_ready = src_ready && grant[3];
-    assign sink4_ready = src_ready && grant[4];
-    assign sink5_ready = src_ready && grant[5];
-    assign sink6_ready = src_ready && grant[6];
-    assign sink7_ready = src_ready && grant[7];
-    assign sink8_ready = src_ready && grant[8];
-    assign sink9_ready = src_ready && grant[9];
 
     assign src_valid = |(grant & valid);
 
@@ -465,13 +363,7 @@ module wasca_mm_interconnect_0_rsp_mux_001
       sink0_payload & {PAYLOAD_W {grant[0]} } |
       sink1_payload & {PAYLOAD_W {grant[1]} } |
       sink2_payload & {PAYLOAD_W {grant[2]} } |
-      sink3_payload & {PAYLOAD_W {grant[3]} } |
-      sink4_payload & {PAYLOAD_W {grant[4]} } |
-      sink5_payload & {PAYLOAD_W {grant[5]} } |
-      sink6_payload & {PAYLOAD_W {grant[6]} } |
-      sink7_payload & {PAYLOAD_W {grant[7]} } |
-      sink8_payload & {PAYLOAD_W {grant[8]} } |
-      sink9_payload & {PAYLOAD_W {grant[9]} };
+      sink3_payload & {PAYLOAD_W {grant[3]} };
     end
 
     // ------------------------------------------
@@ -486,18 +378,6 @@ module wasca_mm_interconnect_0_rsp_mux_001
     sink2_startofpacket,sink2_endofpacket};
     assign sink3_payload = {sink3_channel,sink3_data,
     sink3_startofpacket,sink3_endofpacket};
-    assign sink4_payload = {sink4_channel,sink4_data,
-    sink4_startofpacket,sink4_endofpacket};
-    assign sink5_payload = {sink5_channel,sink5_data,
-    sink5_startofpacket,sink5_endofpacket};
-    assign sink6_payload = {sink6_channel,sink6_data,
-    sink6_startofpacket,sink6_endofpacket};
-    assign sink7_payload = {sink7_channel,sink7_data,
-    sink7_startofpacket,sink7_endofpacket};
-    assign sink8_payload = {sink8_channel,sink8_data,
-    sink8_startofpacket,sink8_endofpacket};
-    assign sink9_payload = {sink9_channel,sink9_data,
-    sink9_startofpacket,sink9_endofpacket};
 
     assign {src_channel,src_data,src_startofpacket,src_endofpacket} = src_payload;
 endmodule

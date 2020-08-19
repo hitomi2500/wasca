@@ -11,27 +11,27 @@ preplace inst wasca.spi_stm32 -pg 1 -lvl 5 -y 430
 preplace inst wasca -pg 1 -lvl 1 -y 40 -regy -20
 preplace inst wasca.uart_0 -pg 1 -lvl 5 -y 550
 preplace inst wasca.nios2_gen2_0.clock_bridge -pg 1
-preplace inst wasca.nios2_gen2_0 -pg 1 -lvl 2 -y 460
+preplace inst wasca.nios2_gen2_0 -pg 1 -lvl 2 -y 480
 preplace inst wasca.spi_sd_card -pg 1 -lvl 5 -y 310
 preplace inst wasca.onchip_flash_0 -pg 1 -lvl 5 -y 150
 preplace inst wasca.altpll_0 -pg 1 -lvl 4 -y 440
 preplace inst wasca.onchip_memory2_0 -pg 1 -lvl 5 -y 230
-preplace netloc FAN_OUT<net_container>wasca</net_container>(MASTER)nios2_gen2_0.irq,(SLAVE)spi_sd_card.irq,(SLAVE)spi_stm32.irq,(SLAVE)uart_0.irq,(SLAVE)audio_0.interrupt) 1 2 3 NJ 510 NJ 430 1670
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.spi_sd_card,(SLAVE)spi_sd_card.external) 1 0 5 NJ 340 NJ 340 NJ 340 NJ 340 NJ
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)uart_0.external_connection,(SLAVE)wasca.uart_0_external_connection) 1 0 5 NJ 620 NJ 620 NJ 620 NJ 630 NJ
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)spi_sd_card.external,(SLAVE)wasca.spi_sd_card) 1 0 5 NJ 320 NJ 320 NJ 320 NJ 320 NJ
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.altpll_0_locked_conduit,(SLAVE)altpll_0.locked_conduit) 1 0 4 NJ 380 NJ 380 NJ 380 NJ
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.altpll_0_areset_conduit,(SLAVE)altpll_0.areset_conduit) 1 0 4 NJ 360 NJ 360 NJ 360 NJ
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)sega_saturn_abus_slave_0.conduit_saturn_reset,(SLAVE)wasca.sega_saturn_abus_slave_0_conduit_saturn_reset) 1 0 1 NJ
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.audio_out,(SLAVE)audio_0.external_interface) 1 0 5 NJ 80 NJ 80 NJ 80 NJ 80 NJ
+preplace netloc FAN_OUT<net_container>wasca</net_container>(MASTER)altpll_0.c0,(SLAVE)nios2_gen2_0.clk,(SLAVE)audio_0.clk,(SLAVE)onchip_memory2_0.clk1,(SLAVE)uart_0.clk,(SLAVE)spi_stm32.clk,(SLAVE)sega_saturn_abus_slave_0.clock,(SLAVE)onchip_flash_0.clk,(SLAVE)clk_1.clk_in,(SLAVE)external_sdram_controller.clk,(SLAVE)spi_sd_card.clk) 1 0 5 230 700 470 300 NJ 300 NJ 300 1750
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.uart_0_external_connection,(SLAVE)uart_0.external_connection) 1 0 5 NJ 620 NJ 620 NJ 620 NJ 620 NJ
 preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.spi_stm32,(SLAVE)spi_stm32.external) 1 0 5 NJ 420 NJ 420 NJ 420 NJ 410 NJ
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)sega_saturn_abus_slave_0.abus,(SLAVE)wasca.sega_saturn_abus_slave_0_abus) 1 0 1 NJ
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.clk,(SLAVE)clk_0.clk_in) 1 0 3 NJ 660 NJ 660 NJ
-preplace netloc POINT_TO_POINT<net_container>wasca</net_container>(SLAVE)altpll_0.inclk_interface,(MASTER)clk_0.clk) 1 3 1 1430
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.sega_saturn_abus_slave_0_conduit_saturn_reset,(SLAVE)sega_saturn_abus_slave_0.conduit_saturn_reset) 1 0 1 NJ
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)altpll_0.locked_conduit,(SLAVE)wasca.altpll_0_locked_conduit) 1 0 4 NJ 380 NJ 380 NJ 380 NJ
-preplace netloc FAN_OUT<net_container>wasca</net_container>(SLAVE)audio_0.clk,(SLAVE)nios2_gen2_0.clk,(SLAVE)onchip_memory2_0.clk1,(SLAVE)clk_1.clk_in,(SLAVE)spi_stm32.clk,(SLAVE)spi_sd_card.clk,(SLAVE)external_sdram_controller.clk,(SLAVE)onchip_flash_0.clk,(SLAVE)uart_0.clk,(MASTER)altpll_0.c0,(SLAVE)sega_saturn_abus_slave_0.clock) 1 0 5 230 680 470 320 NJ 320 NJ 320 1690
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)external_sdram_controller.wire,(SLAVE)wasca.external_sdram_controller_wire) 1 0 5 NJ 640 NJ 640 NJ 640 NJ 740 NJ
-preplace netloc EXPORT<net_container>wasca</net_container>(MASTER)wasca.clock_116_mhz,(MASTER)clk_1.clk) 1 5 1 N
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)audio_0.external_interface,(SLAVE)wasca.audio_out) 1 0 5 NJ 80 NJ 80 NJ 80 NJ 80 NJ
+preplace netloc FAN_OUT<net_container>wasca</net_container>(SLAVE)spi_sd_card.reset,(SLAVE)onchip_memory2_0.reset1,(SLAVE)altpll_0.inclk_interface_reset,(MASTER)nios2_gen2_0.debug_reset_request,(SLAVE)uart_0.reset,(SLAVE)external_sdram_controller.reset,(SLAVE)nios2_gen2_0.reset,(SLAVE)spi_stm32.reset,(SLAVE)clk_1.clk_in_reset,(SLAVE)sega_saturn_abus_slave_0.reset,(SLAVE)onchip_flash_0.nreset,(SLAVE)clk_0.clk_in_reset,(SLAVE)audio_0.reset) 1 0 5 250 720 510 680 990 510 1310 370 1690
+preplace netloc POINT_TO_POINT<net_container>wasca</net_container>(SLAVE)altpll_0.inclk_interface,(MASTER)clk_0.clk) 1 3 1 1330
+preplace netloc INTERCONNECT<net_container>wasca</net_container>(SLAVE)audio_0.avalon_audio_slave,(SLAVE)spi_stm32.spi_control_port,(SLAVE)external_sdram_controller.s1,(SLAVE)nios2_gen2_0.debug_mem_slave,(SLAVE)uart_0.s1,(SLAVE)spi_sd_card.spi_control_port,(MASTER)nios2_gen2_0.data_master,(SLAVE)onchip_flash_0.data,(SLAVE)onchip_memory2_0.s1,(MASTER)sega_saturn_abus_slave_0.avalon_master,(SLAVE)sega_saturn_abus_slave_0.avalon_nios,(SLAVE)altpll_0.pll_slave,(MASTER)nios2_gen2_0.instruction_master) 1 0 5 270 860 490 440 950 550 1350 390 1670
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.external_sdram_controller_wire,(SLAVE)external_sdram_controller.wire) 1 0 5 NJ 640 NJ 640 NJ 640 NJ 740 NJ
+preplace netloc FAN_OUT<net_container>wasca</net_container>(SLAVE)spi_sd_card.irq,(SLAVE)audio_0.interrupt,(SLAVE)uart_0.irq,(SLAVE)spi_stm32.irq,(MASTER)nios2_gen2_0.irq) 1 2 3 970 340 NJ 340 1710
 preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)altpll_0.phasedone_conduit,(SLAVE)wasca.altpll_0_phasedone_conduit) 1 0 4 NJ 400 NJ 400 NJ 400 NJ
-preplace netloc INTERCONNECT<net_container>wasca</net_container>(SLAVE)nios2_gen2_0.debug_mem_slave,(SLAVE)spi_sd_card.spi_control_port,(MASTER)sega_saturn_abus_slave_0.avalon_master,(SLAVE)audio_0.avalon_audio_slave,(MASTER)nios2_gen2_0.instruction_master,(SLAVE)sega_saturn_abus_slave_0.avalon_nios,(MASTER)nios2_gen2_0.data_master,(SLAVE)onchip_memory2_0.s1,(SLAVE)external_sdram_controller.s1,(SLAVE)altpll_0.pll_slave,(SLAVE)onchip_flash_0.data,(SLAVE)spi_stm32.spi_control_port,(SLAVE)uart_0.s1) 1 0 5 270 720 490 600 950 470 1290 610 1750
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)altpll_0.areset_conduit,(SLAVE)wasca.altpll_0_areset_conduit) 1 0 4 NJ 360 NJ 360 NJ 360 NJ
-preplace netloc FAN_OUT<net_container>wasca</net_container>(SLAVE)onchip_flash_0.nreset,(MASTER)nios2_gen2_0.debug_reset_request,(SLAVE)uart_0.reset,(SLAVE)audio_0.reset,(SLAVE)onchip_memory2_0.reset1,(SLAVE)external_sdram_controller.reset,(SLAVE)clk_0.clk_in_reset,(SLAVE)sega_saturn_abus_slave_0.reset,(SLAVE)altpll_0.inclk_interface_reset,(SLAVE)nios2_gen2_0.reset,(SLAVE)clk_1.clk_in_reset,(SLAVE)spi_stm32.reset,(SLAVE)spi_sd_card.reset) 1 0 5 250 700 510 680 970 490 1410 390 1730
+preplace netloc EXPORT<net_container>wasca</net_container>(MASTER)clk_1.clk,(MASTER)wasca.clock_116_mhz) 1 5 1 N
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.sega_saturn_abus_slave_0_abus,(SLAVE)sega_saturn_abus_slave_0.abus) 1 0 1 NJ
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)clk_0.clk_in,(SLAVE)wasca.clk) 1 0 3 NJ 660 NJ 660 NJ
 levelinfo -pg 1 0 200 2100
 levelinfo -hier wasca 210 300 710 1080 1460 1820 1990

@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Tue Aug 11 12:33:40 MSK 2020
+ * Generated: Wed Aug 19 07:49:36 MSK 2020
  */
 
 /*
@@ -53,13 +53,11 @@ MEMORY
     onchip_flash_0 : ORIGIN = 0x0, LENGTH = 176128
     reset : ORIGIN = 0x80000, LENGTH = 32
     onchip_memory2_0 : ORIGIN = 0x80020, LENGTH = 16352
-    external_sdram_controller : ORIGIN = 0x4000000, LENGTH = 33554432
 }
 
 /* Define symbols for each memory base-address */
 __alt_mem_onchip_flash_0 = 0x0;
 __alt_mem_onchip_memory2_0 = 0x80000;
-__alt_mem_external_sdram_controller = 0x4000000;
 
 OUTPUT_FORMAT( "elf32-littlenios2",
                "elf32-littlenios2",
@@ -350,23 +348,6 @@ SECTIONS
     } > onchip_memory2_0
 
     PROVIDE (_alt_partition_onchip_memory2_0_load_addr = LOADADDR(.onchip_memory2_0));
-
-    /*
-     *
-     * This section's LMA is set to the .text region.
-     * crt0 will copy to this section's specified mapped region virtual memory address (VMA)
-     *
-     */
-
-    .external_sdram_controller : AT ( LOADADDR (.onchip_memory2_0) + SIZEOF (.onchip_memory2_0) )
-    {
-        PROVIDE (_alt_partition_external_sdram_controller_start = ABSOLUTE(.));
-        *(.external_sdram_controller .external_sdram_controller. external_sdram_controller.*)
-        . = ALIGN(4);
-        PROVIDE (_alt_partition_external_sdram_controller_end = ABSOLUTE(.));
-    } > external_sdram_controller
-
-    PROVIDE (_alt_partition_external_sdram_controller_load_addr = LOADADDR(.external_sdram_controller));
 
     /*
      * Stabs debugging sections.

@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Tue Aug 11 12:33:40 MSK 2020
+ * Generated: Wed Aug 19 07:49:36 MSK 2020
  */
 
 /*
@@ -133,7 +133,7 @@
  *
  */
 
-#define __ALTERA_AVALON_NEW_SDRAM_CONTROLLER
+#define __ABUS_AVALON_SDRAM_BRIDGE
 #define __ALTERA_AVALON_ONCHIP_MEMORY2
 #define __ALTERA_AVALON_SPI
 #define __ALTERA_AVALON_UART
@@ -141,7 +141,6 @@
 #define __ALTERA_ONCHIP_FLASH
 #define __ALTERA_UP_AVALON_AUDIO
 #define __ALTPLL
-#define __SEGA_SATURN_ABUS_SLAVE
 
 
 /*
@@ -181,6 +180,34 @@
 
 
 /*
+ * abus_avalon_sdram_bridge_0_avalon_regs configuration
+ *
+ */
+
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE 0x47000
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_IRQ -1
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_NAME "/dev/abus_avalon_sdram_bridge_0_avalon_regs"
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_SPAN 512
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_TYPE "abus_avalon_sdram_bridge"
+#define ALT_MODULE_CLASS_abus_avalon_sdram_bridge_0_avalon_regs abus_avalon_sdram_bridge
+
+
+/*
+ * abus_avalon_sdram_bridge_0_avalon_sdram configuration
+ *
+ */
+
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE 0x4000000
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_IRQ -1
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_NAME "/dev/abus_avalon_sdram_bridge_0_avalon_sdram"
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_SPAN 67108864
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_TYPE "abus_avalon_sdram_bridge"
+#define ALT_MODULE_CLASS_abus_avalon_sdram_bridge_0_avalon_sdram abus_avalon_sdram_bridge
+
+
+/*
  * altpll_0 configuration
  *
  */
@@ -206,45 +233,6 @@
 #define AUDIO_0_NAME "/dev/audio_0"
 #define AUDIO_0_SPAN 16
 #define AUDIO_0_TYPE "altera_up_avalon_audio"
-
-
-/*
- * external_sdram_controller configuration
- *
- */
-
-#define ALT_MODULE_CLASS_external_sdram_controller altera_avalon_new_sdram_controller
-#define EXTERNAL_SDRAM_CONTROLLER_BASE 0x4000000
-#define EXTERNAL_SDRAM_CONTROLLER_CAS_LATENCY 3
-#define EXTERNAL_SDRAM_CONTROLLER_CONTENTS_INFO
-#define EXTERNAL_SDRAM_CONTROLLER_INIT_NOP_DELAY 0.0
-#define EXTERNAL_SDRAM_CONTROLLER_INIT_REFRESH_COMMANDS 2
-#define EXTERNAL_SDRAM_CONTROLLER_IRQ -1
-#define EXTERNAL_SDRAM_CONTROLLER_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define EXTERNAL_SDRAM_CONTROLLER_IS_INITIALIZED 1
-#define EXTERNAL_SDRAM_CONTROLLER_NAME "/dev/external_sdram_controller"
-#define EXTERNAL_SDRAM_CONTROLLER_POWERUP_DELAY 100.0
-#define EXTERNAL_SDRAM_CONTROLLER_REFRESH_PERIOD 156.0
-#define EXTERNAL_SDRAM_CONTROLLER_REGISTER_DATA_IN 1
-#define EXTERNAL_SDRAM_CONTROLLER_SDRAM_ADDR_WIDTH 0x18
-#define EXTERNAL_SDRAM_CONTROLLER_SDRAM_BANK_WIDTH 2
-#define EXTERNAL_SDRAM_CONTROLLER_SDRAM_COL_WIDTH 9
-#define EXTERNAL_SDRAM_CONTROLLER_SDRAM_DATA_WIDTH 16
-#define EXTERNAL_SDRAM_CONTROLLER_SDRAM_NUM_BANKS 4
-#define EXTERNAL_SDRAM_CONTROLLER_SDRAM_NUM_CHIPSELECTS 1
-#define EXTERNAL_SDRAM_CONTROLLER_SDRAM_ROW_WIDTH 13
-#define EXTERNAL_SDRAM_CONTROLLER_SHARED_DATA 0
-#define EXTERNAL_SDRAM_CONTROLLER_SIM_MODEL_BASE 0
-#define EXTERNAL_SDRAM_CONTROLLER_SPAN 33554432
-#define EXTERNAL_SDRAM_CONTROLLER_STARVATION_INDICATOR 0
-#define EXTERNAL_SDRAM_CONTROLLER_TRISTATE_BRIDGE_SLAVE ""
-#define EXTERNAL_SDRAM_CONTROLLER_TYPE "altera_avalon_new_sdram_controller"
-#define EXTERNAL_SDRAM_CONTROLLER_T_AC 7.0
-#define EXTERNAL_SDRAM_CONTROLLER_T_MRD 3
-#define EXTERNAL_SDRAM_CONTROLLER_T_RCD 25.0
-#define EXTERNAL_SDRAM_CONTROLLER_T_RFC 70.0
-#define EXTERNAL_SDRAM_CONTROLLER_T_RP 25.0
-#define EXTERNAL_SDRAM_CONTROLLER_T_WR 14.0
 
 
 /*
@@ -316,20 +304,6 @@
 #define ONCHIP_MEMORY2_0_SPAN 16384
 #define ONCHIP_MEMORY2_0_TYPE "altera_avalon_onchip_memory2"
 #define ONCHIP_MEMORY2_0_WRITABLE 1
-
-
-/*
- * sega_saturn_abus_slave_0 configuration
- *
- */
-
-#define ALT_MODULE_CLASS_sega_saturn_abus_slave_0 sega_saturn_abus_slave
-#define SEGA_SATURN_ABUS_SLAVE_0_BASE 0x45000
-#define SEGA_SATURN_ABUS_SLAVE_0_IRQ -1
-#define SEGA_SATURN_ABUS_SLAVE_0_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define SEGA_SATURN_ABUS_SLAVE_0_NAME "/dev/sega_saturn_abus_slave_0"
-#define SEGA_SATURN_ABUS_SLAVE_0_SPAN 512
-#define SEGA_SATURN_ABUS_SLAVE_0_TYPE "sega_saturn_abus_slave"
 
 
 /*

@@ -127,7 +127,8 @@ signal sdram_abus_complete          : std_logic := '0';
 signal sdram_wait_counter          : unsigned(3 downto 0) := (others => '0'); 
 --refresh interval should be no bigger than 7.8us = 906 clock cycles
 --to keep things simple, perfrorm autorefresh at 512 cycles
-signal sdram_autorefresh_counter : unsigned(9 downto 0) := (others => '0'); 
+signal sdram_init_counter : unsigned(15 downto 0) := (others => '0'); 
+signal sdram_autorefresh_counter : unsigned(9 downto 0) := (others => '1'); 
 signal sdram_datain_latched          : std_logic_vector(15 downto 0) := (others => '0'); 
 
 signal avalon_sdram_complete      : std_logic := '0';
@@ -150,9 +151,15 @@ TYPE wasca_mode_type IS (MODE_INIT,
 SIGNAL wasca_mode : wasca_mode_type := MODE_INIT;
 
 TYPE sdram_mode_type IS (
-						  SDRAM_INIT,
+						  SDRAM_INIT0,
+						  SDRAM_INIT1,
+						  SDRAM_INIT2,
+						  SDRAM_INIT3,
+						  SDRAM_INIT4,
+						  SDRAM_INIT5,
 						  SDRAM_IDLE,
 						  SDRAM_AUTOREFRESH,
+						  SDRAM_AUTOREFRESH2,
 						  SDRAM_ABUS_ACTIVATE,
 						  SDRAM_ABUS_READ_AND_PRECHARGE,
 						  SDRAM_ABUS_WRITE_AND_PRECHARGE,
@@ -160,7 +167,7 @@ TYPE sdram_mode_type IS (
 						  SDRAM_AVALON_READ_AND_PRECHARGE,
 						  SDRAM_AVALON_WRITE_AND_PRECHARGE
 						);
-SIGNAL sdram_mode : sdram_mode_type := SDRAM_INIT;
+SIGNAL sdram_mode : sdram_mode_type := SDRAM_INIT0;
  
 
 begin
@@ -560,25 +567,17 @@ begin
 			if avalon_sdram_read = '1' then
 				avalon_sdram_read_pending <= '1';
 				avalon_sdram_pending_address <= avalon_sdram_address;
+			elsif avalon_sdram_write = '1' then
+				avalon_sdram_write_pending <= '1';
+                avalon_sdram_pending_address <= avalon_sdram_address;
+                avalon_sdram_pending_data<= avalon_sdram_writedata;		    
 			elsif avalon_sdram_complete = '1' then
 				avalon_sdram_read_pending <= '0';
-			end if;
-		end if;
-	end process;
-
-	process (clock)
-	begin
-		if rising_edge(clock) then
-			if avalon_sdram_write = '1' then
-				avalon_sdram_write_pending <= '1';
-				avalon_sdram_pending_address <= avalon_sdram_address;
-				avalon_sdram_pending_data<= avalon_sdram_writedata;
-			elsif avalon_sdram_complete = '1' then
 				avalon_sdram_write_pending <= '0';
 			end if;
 		end if;
 	end process;
-	
+
 	avalon_sdram_readdatavalid <= avalon_sdram_complete and avalon_sdram_read_pending;
 	
 	avalon_sdram_readdata <= avalon_sdram_readdata_latched;
@@ -606,9 +605,98 @@ begin
 		if rising_edge(clock) then
 			sdram_autorefresh_counter <= sdram_autorefresh_counter + 1;
 			case sdram_mode is 
-				when SDRAM_INIT => 
-					--will do some magic later
-					sdram_mode <= SDRAM_IDLE;
+				when SDRAM_INIT0 => 
+					--first stage init. cke off, dqm high,  others Z
+					sdram_addr <= (others => 'Z');
+                    sdram_ba <= "ZZ";
+                    sdram_cas_n <= 'Z';
+                    sdram_cke <= '0';
+                    sdram_cs_n <= 'Z';
+                    sdram_dq <= (others => 'Z');
+                    sdram_ras_n <= 'Z';
+                    sdram_we_n <= 'Z';
+                    sdram_dqm <= "11";
+                    sdram_init_counter <= sdram_init_counter + 1;
+                    if sdram_init_counter(15) = '1' then
+                        -- 282 us from the start elapsed, moving to next init
+                        sdram_init_counter <= (others => '0');
+                        sdram_mode <= SDRAM_INIT1;
+                    end if;
+
+				when SDRAM_INIT1 => 
+					--another stage init. cke on, dqm high, set other pin
+					sdram_addr <= (others => '0');
+                    sdram_ba <= "00";
+                    sdram_cas_n <= '1';
+                    sdram_cke <= '1';
+                    sdram_cs_n <= '0';
+                    sdram_dq <= (others => 'Z');
+                    sdram_ras_n <= '1';
+                    sdram_we_n <= '1';
+                    sdram_dqm <= "11";
+                    sdram_init_counter <= sdram_init_counter + 1;
+                    if sdram_init_counter(10) = '1' then
+                        -- some smaller time elapsed, moving to next init - issue "precharge all"
+                        sdram_mode <= SDRAM_INIT2;
+                        sdram_ras_n <= '0';
+                        sdram_we_n <= '0';
+                        sdram_addr(10) <= '1';
+                        sdram_wait_counter <= to_unsigned(1,4);
+                    end if;
+                    
+				when SDRAM_INIT2 => 
+                        --move on with init
+                        sdram_ras_n <= '1';
+                        sdram_we_n <= '1';
+                        sdram_addr(10) <= '0';
+                        sdram_wait_counter <= sdram_wait_counter - 1;
+                        if sdram_wait_counter = 0 then
+                            -- issue "auto refresh"
+                            sdram_mode <= SDRAM_INIT3;
+                            sdram_ras_n <= '0';
+                            sdram_cas_n <= '0';
+                            sdram_wait_counter <= to_unsigned(7,4);
+                        end if;                                    
+
+				when SDRAM_INIT3 => 
+                        --move on with init
+                        sdram_ras_n <= '1';
+                        sdram_cas_n <= '1';
+                        sdram_wait_counter <= sdram_wait_counter - 1;
+                        if sdram_wait_counter = 0 then
+                            -- issue "auto refresh"
+                            sdram_mode <= SDRAM_INIT4;
+                            sdram_ras_n <= '0';
+                            sdram_cas_n <= '0';
+                            sdram_wait_counter <= to_unsigned(7,4);
+                        end if;                                    
+
+				when SDRAM_INIT4 => 
+					--move on with init
+                    sdram_ras_n <= '1';
+                    sdram_cas_n <= '1';
+                    sdram_wait_counter <= sdram_wait_counter - 1;
+                    if sdram_wait_counter = 0 then
+                        -- issue "mode register set command"
+                        sdram_mode <= SDRAM_INIT5;
+                        sdram_ras_n <= '0';
+                        sdram_cas_n <= '0';
+                        sdram_we_n <= '0';
+                        sdram_addr <= "0001000110000"; --write single, no testmode, cas 3, burst seq, burst len 1
+                        sdram_wait_counter <= to_unsigned(10,4);
+                    end if;
+
+				when SDRAM_INIT5 => 
+					--move on with init
+                    sdram_ras_n <= '1';
+                    sdram_cas_n <= '1';
+                    sdram_we_n <= '1';
+                    sdram_addr <= (others => '0');
+                    sdram_wait_counter <= sdram_wait_counter - 1;
+                    if sdram_wait_counter = 0 then
+                        -- init done, switching to working mode
+                        sdram_mode <= SDRAM_IDLE;
+                    end if;
 
 				when SDRAM_IDLE => 
 					sdram_addr <= (others => '0');
@@ -620,8 +708,8 @@ begin
 					sdram_ras_n <= '1';
 					sdram_we_n <= '1';
 					sdram_dqm <= "11";
-					sdram_autorefresh_counter <= sdram_autorefresh_counter + 1;
 					sdram_abus_complete <= '0';
+					avalon_sdram_complete <= '0';
 					-- in idle mode we should check if any of the events occured:
 					-- 1) abus transaction detected - priority 0
 					-- 2) avalon transaction detected - priority 1
@@ -634,7 +722,7 @@ begin
                         sdram_addr <= abus_address_latched(22 downto 10);
                         sdram_ba <= abus_address_latched(24 downto 23);
                         sdram_wait_counter <= to_unsigned(2,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
-                    elsif avalon_sdram_read_pending = '1' or avalon_sdram_write_pending = '1' then
+                    elsif (avalon_sdram_read_pending = '1' or avalon_sdram_write_pending = '1')  and avalon_sdram_complete = '0'  then
 						sdram_mode <= SDRAM_AVALON_ACTIVATE;
 						--something on avalon, activating!
                         sdram_ras_n <= '0';
@@ -643,14 +731,28 @@ begin
                         sdram_wait_counter <= to_unsigned(2,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
 					elsif sdram_autorefresh_counter(9) = '1' then --512 cycles
 						sdram_mode <= SDRAM_AUTOREFRESH;
-					    -- for autorefresh we issue corresponding command and reset autorefresh counter 
-						sdram_cas_n <= '0';
+						--first stage of autorefresh issues "precharge all" command
 					    sdram_ras_n <= '0';
+						sdram_we_n <= '0';
+						sdram_addr(10) <= '1';
 					    sdram_autorefresh_counter <= (others => '0');
-					    sdram_wait_counter <= to_unsigned(7,4); -- tRC = 63ns min ;  8 cycles @ 116mhz = 67ns
+					    sdram_wait_counter <= to_unsigned(1,4); -- precharge all is fast
 					end if;
 				
 				when SDRAM_AUTOREFRESH => 
+				    sdram_ras_n <= '1';
+                    sdram_we_n <= '1';
+                    sdram_addr(10) <= '0';					
+					sdram_wait_counter <= sdram_wait_counter - 1;
+					if sdram_wait_counter = 0 then
+					    -- second autorefresh stage - autorefresh command 
+						sdram_cas_n <= '0';
+                        sdram_ras_n <= '0';
+                        sdram_wait_counter <= to_unsigned(7,4); -- tRC = 63ns min ;  8 cycles @ 116mhz = 67ns
+						sdram_mode <= SDRAM_AUTOREFRESH2;
+					end if;
+
+				when SDRAM_AUTOREFRESH2 => 
 					--here we wait for autorefresh to end and move on to idle state
 					sdram_cas_n <= '1';
 					sdram_ras_n <= '1';
@@ -658,7 +760,7 @@ begin
 					if sdram_wait_counter = 0 then
 						sdram_mode <= SDRAM_IDLE;
 					end if;
-				
+								
 				when SDRAM_ABUS_ACTIVATE => 
 					--while waiting for row to be activated, we choose where to switch to - read or write
 					sdram_addr <= (others => '0');
@@ -724,22 +826,26 @@ begin
 					
 				when SDRAM_AVALON_ACTIVATE => 
 					--while waiting for row to be activated, we choose where to switch to - read or write
-					sdram_ras_n <= '1';
+					sdram_addr <= (others => '0');
+                    sdram_ba <= "00";
+                    sdram_ras_n <= '1';
+                    sdram_dqm <= "00";--only 16 bit writing for avalon?
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
 						if avalon_sdram_read_pending = '1' then
 							sdram_mode <= SDRAM_AVALON_READ_AND_PRECHARGE;
+							sdram_ba <= avalon_sdram_pending_address(24 downto 23);
 							sdram_cas_n <= '0';
                             sdram_addr <= "0010"&avalon_sdram_pending_address(9 downto 1);
-                            sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+                            sdram_wait_counter <= to_unsigned(3,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						else
 							sdram_mode <= SDRAM_AVALON_WRITE_AND_PRECHARGE;
 							sdram_cas_n <= '0';
                             sdram_we_n <= '0';
+                            sdram_ba <= avalon_sdram_pending_address(24 downto 23);
                             sdram_dq <= avalon_sdram_pending_data;
-                            sdram_dqm <= "11"; --only 16 bit writing for avalon?
                             sdram_addr <= "0010"&avalon_sdram_pending_address(9 downto 1);
-                            sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+                            sdram_wait_counter <= to_unsigned(3,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						end if;
 					end if;	
 					
@@ -757,6 +863,7 @@ begin
 						sdram_mode <= SDRAM_IDLE;
 						avalon_sdram_complete <= '1';
 						sdram_dqm <= "11";
+						avalon_sdram_readdata_latched <= sdram_dq;
 					end if;	
 					
 				when SDRAM_AVALON_WRITE_AND_PRECHARGE => 

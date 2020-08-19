@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>17.08.2020 1:05:26</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1597611926643</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>19.08.2020 7:49:32</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1597808972594</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>D:\Saturn\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
@@ -917,15 +917,15 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>sega_saturn_abus_slave_0</slaveDescriptor>
-                <addressRange>0x00045000 - 0x000451FF</addressRange>
-                <addressSpan>512</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>audio_0</slaveDescriptor>
                 <addressRange>0x00046000 - 0x0004600F</addressRange>
                 <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>abus_avalon_sdram_bridge_0_avalon_regs</slaveDescriptor>
+                <addressRange>0x00047000 - 0x000471FF</addressRange>
+                <addressSpan>512</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
@@ -935,10 +935,10 @@
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>external_sdram_controller</slaveDescriptor>
-                <addressRange>0x04000000 - 0x05FFFFFF</addressRange>
-                <addressSpan>33554432</addressSpan>
-                <attributes>memory</attributes>
+                <slaveDescriptor>abus_avalon_sdram_bridge_0_avalon_sdram</slaveDescriptor>
+                <addressRange>0x04000000 - 0x07FFFFFF</addressRange>
+                <addressSpan>67108864</addressSpan>
+                <attributes/>
         </MemoryMap>
         <LinkerSection>
                 <sectionName>.text</sectionName>

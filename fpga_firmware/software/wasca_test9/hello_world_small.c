@@ -112,7 +112,7 @@ int main()
 	  alt_putstr("Loading wasca...\n\r");
   }*/
   //first things first - copy saturn bootcode into SDRAM
-  p = (unsigned char *)EXTERNAL_SDRAM_CONTROLLER_BASE;
+  p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
   for (i=0;i<124240;i++)
 	  p[i] = rawData[i];
   alt_putstr("Bootloader copied! Dump :\n\r");
@@ -124,7 +124,7 @@ int main()
   alt_putstr("Dump done\n\r");
 
   //write version
-  p16 = (unsigned short *)SEGA_SATURN_ABUS_SLAVE_0_BASE;
+  p16 = (unsigned short *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
   p16[SWVER_REG_OFFSET] = SOFTWARE_VERSION;
 
   //now wait until MODE register is non-zero, i.e. mode is set
@@ -145,7 +145,7 @@ int main()
 	  //lowest octet is active, it's a POWER MEMORY
 	  //we should copy relevant image from SD card
 	  //for now, we will only write header and emulate copying behavior
-	  p = (unsigned char *)EXTERNAL_SDRAM_CONTROLLER_BASE;
+	  p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
 	  switch (sMode & 0x000F )
 	  {
 	  case 0x1 : //0.5 MB
@@ -188,7 +188,7 @@ int main()
   {
 	  alt_printf("Octet 1, value %x\n\r",(sMode & 0x00F0));
 	  //RAM expansion cart, clear bootrom's signature just in case
-	  p = (unsigned char *)EXTERNAL_SDRAM_CONTROLLER_BASE;
+	  p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
 	  for (i=0;i<256;i++) p[i] = 0;
 	  //and that is all for RAM cart
 	  p16[PCNTR_REG_OFFSET]=100;
