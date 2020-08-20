@@ -21,15 +21,15 @@
 			abus_avalon_sdram_bridge_0_sdram_ras_n            : out   std_logic;                                        -- ras_n
 			abus_avalon_sdram_bridge_0_sdram_we_n             : out   std_logic;                                        -- we_n
 			abus_avalon_sdram_bridge_0_sdram_clk              : out   std_logic;                                        -- clk
-			altpll_0_areset_conduit_export                    : in    std_logic                     := 'X';             -- export
-			altpll_0_c1_conduit_export                        : out   std_logic;                                        -- export
-			altpll_0_locked_conduit_export                    : out   std_logic;                                        -- export
-			altpll_0_phasedone_conduit_export                 : out   std_logic;                                        -- export
+			altpll_1_areset_conduit_export                    : in    std_logic                     := 'X';             -- export
+			altpll_1_locked_conduit_export                    : out   std_logic;                                        -- export
+			altpll_1_phasedone_conduit_export                 : out   std_logic;                                        -- export
 			audio_out_BCLK                                    : in    std_logic                     := 'X';             -- BCLK
 			audio_out_DACDAT                                  : out   std_logic;                                        -- DACDAT
 			audio_out_DACLRCK                                 : in    std_logic                     := 'X';             -- DACLRCK
 			clk_clk                                           : in    std_logic                     := 'X';             -- clk
 			clock_116_mhz_clk                                 : out   std_logic;                                        -- clk
+			reset_reset_n                                     : in    std_logic                     := 'X';             -- reset_n
 			spi_sd_card_MISO                                  : in    std_logic                     := 'X';             -- MISO
 			spi_sd_card_MOSI                                  : out   std_logic;                                        -- MOSI
 			spi_sd_card_SCLK                                  : out   std_logic;                                        -- SCLK

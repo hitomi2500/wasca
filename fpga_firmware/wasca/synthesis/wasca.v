@@ -25,15 +25,15 @@ module wasca (
 		output wire        abus_avalon_sdram_bridge_0_sdram_ras_n,            //                                 .ras_n
 		output wire        abus_avalon_sdram_bridge_0_sdram_we_n,             //                                 .we_n
 		output wire        abus_avalon_sdram_bridge_0_sdram_clk,              //                                 .clk
-		input  wire        altpll_0_areset_conduit_export,                    //          altpll_0_areset_conduit.export
-		output wire        altpll_0_c1_conduit_export,                        //              altpll_0_c1_conduit.export
-		output wire        altpll_0_locked_conduit_export,                    //          altpll_0_locked_conduit.export
-		output wire        altpll_0_phasedone_conduit_export,                 //       altpll_0_phasedone_conduit.export
+		input  wire        altpll_1_areset_conduit_export,                    //          altpll_1_areset_conduit.export
+		output wire        altpll_1_locked_conduit_export,                    //          altpll_1_locked_conduit.export
+		output wire        altpll_1_phasedone_conduit_export,                 //       altpll_1_phasedone_conduit.export
 		input  wire        audio_out_BCLK,                                    //                        audio_out.BCLK
 		output wire        audio_out_DACDAT,                                  //                                 .DACDAT
 		input  wire        audio_out_DACLRCK,                                 //                                 .DACLRCK
 		input  wire        clk_clk,                                           //                              clk.clk
 		output wire        clock_116_mhz_clk,                                 //                    clock_116_mhz.clk
+		input  wire        reset_reset_n,                                     //                            reset.reset_n
 		input  wire        spi_sd_card_MISO,                                  //                      spi_sd_card.MISO
 		output wire        spi_sd_card_MOSI,                                  //                                 .MOSI
 		output wire        spi_sd_card_SCLK,                                  //                                 .SCLK
@@ -46,7 +46,6 @@ module wasca (
 		output wire        uart_0_external_connection_txd                     //                                 .txd
 	);
 
-	wire         nios2_gen2_0_debug_reset_request_reset;                                  // nios2_gen2_0:debug_reset_request -> [rst_controller:reset_in0, rst_controller_001:reset_in0, rst_controller_002:reset_in0]
 	wire  [31:0] nios2_gen2_0_data_master_readdata;                                       // mm_interconnect_0:nios2_gen2_0_data_master_readdata -> nios2_gen2_0:d_readdata
 	wire         nios2_gen2_0_data_master_waitrequest;                                    // mm_interconnect_0:nios2_gen2_0_data_master_waitrequest -> nios2_gen2_0:d_waitrequest
 	wire         nios2_gen2_0_data_master_debugaccess;                                    // nios2_gen2_0:debug_mem_slave_debugaccess_to_roms -> mm_interconnect_0:nios2_gen2_0_data_master_debugaccess
@@ -93,11 +92,11 @@ module wasca (
 	wire   [3:0] mm_interconnect_0_nios2_gen2_0_debug_mem_slave_byteenable;               // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_byteenable -> nios2_gen2_0:debug_mem_slave_byteenable
 	wire         mm_interconnect_0_nios2_gen2_0_debug_mem_slave_write;                    // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_write -> nios2_gen2_0:debug_mem_slave_write
 	wire  [31:0] mm_interconnect_0_nios2_gen2_0_debug_mem_slave_writedata;                // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_writedata -> nios2_gen2_0:debug_mem_slave_writedata
-	wire  [31:0] mm_interconnect_0_altpll_0_pll_slave_readdata;                           // altpll_0:readdata -> mm_interconnect_0:altpll_0_pll_slave_readdata
-	wire   [1:0] mm_interconnect_0_altpll_0_pll_slave_address;                            // mm_interconnect_0:altpll_0_pll_slave_address -> altpll_0:address
-	wire         mm_interconnect_0_altpll_0_pll_slave_read;                               // mm_interconnect_0:altpll_0_pll_slave_read -> altpll_0:read
-	wire         mm_interconnect_0_altpll_0_pll_slave_write;                              // mm_interconnect_0:altpll_0_pll_slave_write -> altpll_0:write
-	wire  [31:0] mm_interconnect_0_altpll_0_pll_slave_writedata;                          // mm_interconnect_0:altpll_0_pll_slave_writedata -> altpll_0:writedata
+	wire  [31:0] mm_interconnect_0_altpll_1_pll_slave_readdata;                           // altpll_1:readdata -> mm_interconnect_0:altpll_1_pll_slave_readdata
+	wire   [1:0] mm_interconnect_0_altpll_1_pll_slave_address;                            // mm_interconnect_0:altpll_1_pll_slave_address -> altpll_1:address
+	wire         mm_interconnect_0_altpll_1_pll_slave_read;                               // mm_interconnect_0:altpll_1_pll_slave_read -> altpll_1:read
+	wire         mm_interconnect_0_altpll_1_pll_slave_write;                              // mm_interconnect_0:altpll_1_pll_slave_write -> altpll_1:write
+	wire  [31:0] mm_interconnect_0_altpll_1_pll_slave_writedata;                          // mm_interconnect_0:altpll_1_pll_slave_writedata -> altpll_1:writedata
 	wire         mm_interconnect_0_onchip_memory2_0_s1_chipselect;                        // mm_interconnect_0:onchip_memory2_0_s1_chipselect -> onchip_memory2_0:chipselect
 	wire  [31:0] mm_interconnect_0_onchip_memory2_0_s1_readdata;                          // onchip_memory2_0:readdata -> mm_interconnect_0:onchip_memory2_0_s1_readdata
 	wire  [11:0] mm_interconnect_0_onchip_memory2_0_s1_address;                           // mm_interconnect_0:onchip_memory2_0_s1_address -> onchip_memory2_0:address
@@ -131,7 +130,8 @@ module wasca (
 	wire  [31:0] nios2_gen2_0_irq_irq;                                                    // irq_mapper:sender_irq -> nios2_gen2_0:irq
 	wire         rst_controller_reset_out_reset;                                          // rst_controller:reset_out -> [abus_avalon_sdram_bridge_0:reset, audio_0:reset, irq_mapper:reset, mm_interconnect_0:nios2_gen2_0_reset_reset_bridge_in_reset_reset, nios2_gen2_0:reset_n, onchip_flash_0:reset_n, onchip_memory2_0:reset, rst_translator:in_reset, spi_sd_card:reset_n, spi_stm32:reset_n, uart_0:reset_n]
 	wire         rst_controller_reset_out_reset_req;                                      // rst_controller:reset_req -> [onchip_memory2_0:reset_req, rst_translator:reset_req_in]
-	wire         rst_controller_001_reset_out_reset;                                      // rst_controller_001:reset_out -> [altpll_0:reset, mm_interconnect_0:altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset]
+	wire         nios2_gen2_0_debug_reset_request_reset;                                  // nios2_gen2_0:debug_reset_request -> [rst_controller:reset_in0, rst_controller_002:reset_in0]
+	wire         rst_controller_001_reset_out_reset;                                      // rst_controller_001:reset_out -> [altpll_1:reset, mm_interconnect_0:altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset]
 
 	abus_avalon_sdram_bridge abus_avalon_sdram_bridge_0 (
 		.abus_address               (abus_avalon_sdram_bridge_0_abus_address),                                 //         abus.address
@@ -173,19 +173,18 @@ module wasca (
 		.sdram_clk                  (abus_avalon_sdram_bridge_0_sdram_clk)                                     //             .clk
 	);
 
-	wasca_altpll_0 altpll_0 (
+	wasca_altpll_1 altpll_1 (
 		.clk       (clk_clk),                                        //       inclk_interface.clk
 		.reset     (rst_controller_001_reset_out_reset),             // inclk_interface_reset.reset
-		.read      (mm_interconnect_0_altpll_0_pll_slave_read),      //             pll_slave.read
-		.write     (mm_interconnect_0_altpll_0_pll_slave_write),     //                      .write
-		.address   (mm_interconnect_0_altpll_0_pll_slave_address),   //                      .address
-		.readdata  (mm_interconnect_0_altpll_0_pll_slave_readdata),  //                      .readdata
-		.writedata (mm_interconnect_0_altpll_0_pll_slave_writedata), //                      .writedata
+		.read      (mm_interconnect_0_altpll_1_pll_slave_read),      //             pll_slave.read
+		.write     (mm_interconnect_0_altpll_1_pll_slave_write),     //                      .write
+		.address   (mm_interconnect_0_altpll_1_pll_slave_address),   //                      .address
+		.readdata  (mm_interconnect_0_altpll_1_pll_slave_readdata),  //                      .readdata
+		.writedata (mm_interconnect_0_altpll_1_pll_slave_writedata), //                      .writedata
 		.c0        (clock_116_mhz_clk),                              //                    c0.clk
-		.areset    (altpll_0_areset_conduit_export),                 //        areset_conduit.export
-		.c1        (altpll_0_c1_conduit_export),                     //            c1_conduit.export
-		.locked    (altpll_0_locked_conduit_export),                 //        locked_conduit.export
-		.phasedone (altpll_0_phasedone_conduit_export)               //     phasedone_conduit.export
+		.areset    (altpll_1_areset_conduit_export),                 //        areset_conduit.export
+		.locked    (altpll_1_locked_conduit_export),                 //        locked_conduit.export
+		.phasedone (altpll_1_phasedone_conduit_export)               //     phasedone_conduit.export
 	);
 
 	wasca_audio_0 audio_0 (
@@ -232,8 +231,8 @@ module wasca (
 	);
 
 	altera_onchip_flash #(
-		.INIT_FILENAME                       ("D:/Saturn/wasca/GIT/wasca/fpga_firmware/software/wasca_test9/mem_init/wasca_onchip_flash_0.hex"),
-		.INIT_FILENAME_SIM                   ("altera_onchip_flash.dat"),
+		.INIT_FILENAME                       (""),
+		.INIT_FILENAME_SIM                   (""),
 		.DEVICE_FAMILY                       ("MAX 10"),
 		.PART_NAME                           ("10M08SAE144C8GES"),
 		.DEVICE_ID                           ("08"),
@@ -357,9 +356,9 @@ module wasca (
 	);
 
 	wasca_mm_interconnect_0 mm_interconnect_0 (
-		.altpll_0_c0_clk                                            (clock_116_mhz_clk),                                                       //                                          altpll_0_c0.clk
+		.altpll_1_c0_clk                                            (clock_116_mhz_clk),                                                       //                                          altpll_1_c0.clk
 		.clk_0_clk_clk                                              (clk_clk),                                                                 //                                            clk_0_clk.clk
-		.altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset (rst_controller_001_reset_out_reset),                                      // altpll_0_inclk_interface_reset_reset_bridge_in_reset.reset
+		.altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset (rst_controller_001_reset_out_reset),                                      // altpll_1_inclk_interface_reset_reset_bridge_in_reset.reset
 		.nios2_gen2_0_reset_reset_bridge_in_reset_reset             (rst_controller_reset_out_reset),                                          //             nios2_gen2_0_reset_reset_bridge_in_reset.reset
 		.nios2_gen2_0_data_master_address                           (nios2_gen2_0_data_master_address),                                        //                             nios2_gen2_0_data_master.address
 		.nios2_gen2_0_data_master_waitrequest                       (nios2_gen2_0_data_master_waitrequest),                                    //                                                     .waitrequest
@@ -387,11 +386,11 @@ module wasca (
 		.abus_avalon_sdram_bridge_0_avalon_sdram_writedata          (mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_sdram_writedata),     //                                                     .writedata
 		.abus_avalon_sdram_bridge_0_avalon_sdram_readdatavalid      (mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_sdram_readdatavalid), //                                                     .readdatavalid
 		.abus_avalon_sdram_bridge_0_avalon_sdram_waitrequest        (mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_sdram_waitrequest),   //                                                     .waitrequest
-		.altpll_0_pll_slave_address                                 (mm_interconnect_0_altpll_0_pll_slave_address),                            //                                   altpll_0_pll_slave.address
-		.altpll_0_pll_slave_write                                   (mm_interconnect_0_altpll_0_pll_slave_write),                              //                                                     .write
-		.altpll_0_pll_slave_read                                    (mm_interconnect_0_altpll_0_pll_slave_read),                               //                                                     .read
-		.altpll_0_pll_slave_readdata                                (mm_interconnect_0_altpll_0_pll_slave_readdata),                           //                                                     .readdata
-		.altpll_0_pll_slave_writedata                               (mm_interconnect_0_altpll_0_pll_slave_writedata),                          //                                                     .writedata
+		.altpll_1_pll_slave_address                                 (mm_interconnect_0_altpll_1_pll_slave_address),                            //                                   altpll_1_pll_slave.address
+		.altpll_1_pll_slave_write                                   (mm_interconnect_0_altpll_1_pll_slave_write),                              //                                                     .write
+		.altpll_1_pll_slave_read                                    (mm_interconnect_0_altpll_1_pll_slave_read),                               //                                                     .read
+		.altpll_1_pll_slave_readdata                                (mm_interconnect_0_altpll_1_pll_slave_readdata),                           //                                                     .readdata
+		.altpll_1_pll_slave_writedata                               (mm_interconnect_0_altpll_1_pll_slave_writedata),                          //                                                     .writedata
 		.audio_0_avalon_audio_slave_address                         (mm_interconnect_0_audio_0_avalon_audio_slave_address),                    //                           audio_0_avalon_audio_slave.address
 		.audio_0_avalon_audio_slave_write                           (mm_interconnect_0_audio_0_avalon_audio_slave_write),                      //                                                     .write
 		.audio_0_avalon_audio_slave_read                            (mm_interconnect_0_audio_0_avalon_audio_slave_read),                       //                                                     .read
@@ -539,41 +538,41 @@ module wasca (
 		.USE_RESET_REQUEST_IN15    (0),
 		.ADAPT_RESET_REQUEST       (0)
 	) rst_controller_001 (
-		.reset_in0      (nios2_gen2_0_debug_reset_request_reset), // reset_in0.reset
-		.clk            (clk_clk),                                //       clk.clk
-		.reset_out      (rst_controller_001_reset_out_reset),     // reset_out.reset
-		.reset_req      (),                                       // (terminated)
-		.reset_req_in0  (1'b0),                                   // (terminated)
-		.reset_in1      (1'b0),                                   // (terminated)
-		.reset_req_in1  (1'b0),                                   // (terminated)
-		.reset_in2      (1'b0),                                   // (terminated)
-		.reset_req_in2  (1'b0),                                   // (terminated)
-		.reset_in3      (1'b0),                                   // (terminated)
-		.reset_req_in3  (1'b0),                                   // (terminated)
-		.reset_in4      (1'b0),                                   // (terminated)
-		.reset_req_in4  (1'b0),                                   // (terminated)
-		.reset_in5      (1'b0),                                   // (terminated)
-		.reset_req_in5  (1'b0),                                   // (terminated)
-		.reset_in6      (1'b0),                                   // (terminated)
-		.reset_req_in6  (1'b0),                                   // (terminated)
-		.reset_in7      (1'b0),                                   // (terminated)
-		.reset_req_in7  (1'b0),                                   // (terminated)
-		.reset_in8      (1'b0),                                   // (terminated)
-		.reset_req_in8  (1'b0),                                   // (terminated)
-		.reset_in9      (1'b0),                                   // (terminated)
-		.reset_req_in9  (1'b0),                                   // (terminated)
-		.reset_in10     (1'b0),                                   // (terminated)
-		.reset_req_in10 (1'b0),                                   // (terminated)
-		.reset_in11     (1'b0),                                   // (terminated)
-		.reset_req_in11 (1'b0),                                   // (terminated)
-		.reset_in12     (1'b0),                                   // (terminated)
-		.reset_req_in12 (1'b0),                                   // (terminated)
-		.reset_in13     (1'b0),                                   // (terminated)
-		.reset_req_in13 (1'b0),                                   // (terminated)
-		.reset_in14     (1'b0),                                   // (terminated)
-		.reset_req_in14 (1'b0),                                   // (terminated)
-		.reset_in15     (1'b0),                                   // (terminated)
-		.reset_req_in15 (1'b0)                                    // (terminated)
+		.reset_in0      (~reset_reset_n),                     // reset_in0.reset
+		.clk            (clk_clk),                            //       clk.clk
+		.reset_out      (rst_controller_001_reset_out_reset), // reset_out.reset
+		.reset_req      (),                                   // (terminated)
+		.reset_req_in0  (1'b0),                               // (terminated)
+		.reset_in1      (1'b0),                               // (terminated)
+		.reset_req_in1  (1'b0),                               // (terminated)
+		.reset_in2      (1'b0),                               // (terminated)
+		.reset_req_in2  (1'b0),                               // (terminated)
+		.reset_in3      (1'b0),                               // (terminated)
+		.reset_req_in3  (1'b0),                               // (terminated)
+		.reset_in4      (1'b0),                               // (terminated)
+		.reset_req_in4  (1'b0),                               // (terminated)
+		.reset_in5      (1'b0),                               // (terminated)
+		.reset_req_in5  (1'b0),                               // (terminated)
+		.reset_in6      (1'b0),                               // (terminated)
+		.reset_req_in6  (1'b0),                               // (terminated)
+		.reset_in7      (1'b0),                               // (terminated)
+		.reset_req_in7  (1'b0),                               // (terminated)
+		.reset_in8      (1'b0),                               // (terminated)
+		.reset_req_in8  (1'b0),                               // (terminated)
+		.reset_in9      (1'b0),                               // (terminated)
+		.reset_req_in9  (1'b0),                               // (terminated)
+		.reset_in10     (1'b0),                               // (terminated)
+		.reset_req_in10 (1'b0),                               // (terminated)
+		.reset_in11     (1'b0),                               // (terminated)
+		.reset_req_in11 (1'b0),                               // (terminated)
+		.reset_in12     (1'b0),                               // (terminated)
+		.reset_req_in12 (1'b0),                               // (terminated)
+		.reset_in13     (1'b0),                               // (terminated)
+		.reset_req_in13 (1'b0),                               // (terminated)
+		.reset_in14     (1'b0),                               // (terminated)
+		.reset_req_in14 (1'b0),                               // (terminated)
+		.reset_in15     (1'b0),                               // (terminated)
+		.reset_req_in15 (1'b0)                                // (terminated)
 	);
 
 	altera_reset_controller #(

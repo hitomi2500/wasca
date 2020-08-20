@@ -31,8 +31,8 @@ entity abus_avalon_sdram_bridge is
 		avalon_sdram_write         : in   std_logic := '0';                                        --              .write
 		avalon_sdram_waitrequest   : out    std_logic                     := '0';             --              .waitrequest
 		avalon_sdram_address       : in   std_logic_vector(24 downto 0) := (others => '0');                    --              .address
-		avalon_sdram_writedata     : in   std_logic_vector(15 downto 0) := (others => '0');                    --              .writedata
-		avalon_sdram_readdata      : out    std_logic_vector(15 downto 0) := (others => '0'); --              .readdata
+		avalon_sdram_writedata     : in   std_logic_vector(7 downto 0) := (others => '0');                    --              .writedata
+		avalon_sdram_readdata      : out    std_logic_vector(7 downto 0) := (others => '0'); --              .readdata
 		avalon_sdram_readdatavalid : out    std_logic                     := '0';             --              .readdatavalid
 
 		avalon_regs_read          : in   std_logic := '0';                                        -- avalon_master.read
@@ -135,8 +135,8 @@ signal avalon_sdram_complete      : std_logic := '0';
 signal avalon_sdram_read_pending      : std_logic := '0';
 signal avalon_sdram_write_pending      : std_logic := '0';
 signal avalon_sdram_pending_address          : std_logic_vector(24 downto 0) := (others => '0'); 
-signal avalon_sdram_pending_data          : std_logic_vector(15 downto 0) := (others => '0'); 
-signal avalon_sdram_readdata_latched          : std_logic_vector(15 downto 0) := (others => '0'); 
+signal avalon_sdram_pending_data          : std_logic_vector(7 downto 0) := (others => '0'); 
+signal avalon_sdram_readdata_latched          : std_logic_vector(7 downto 0) := (others => '0'); 
 
 
 TYPE transaction_dir IS (DIR_NONE,DIR_WRITE,DIR_READ);
@@ -729,6 +729,8 @@ begin
                         sdram_addr <= avalon_sdram_pending_address(22 downto 10);
                         sdram_ba <= avalon_sdram_pending_address(24 downto 23);
                         sdram_wait_counter <= to_unsigned(2,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
+								sdram_dqm(0) <= avalon_sdram_pending_address(0);--only 8 bit writing for avalon
+								sdram_dqm(1) <= not avalon_sdram_pending_address(0);--only 8 bit writing for avalon
 					elsif sdram_autorefresh_counter(9) = '1' then --512 cycles
 						sdram_mode <= SDRAM_AUTOREFRESH;
 						--first stage of autorefresh issues "precharge all" command
@@ -829,7 +831,6 @@ begin
 					sdram_addr <= (others => '0');
                     sdram_ba <= "00";
                     sdram_ras_n <= '1';
-                    sdram_dqm <= "00";--only 16 bit writing for avalon?
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
 						if avalon_sdram_read_pending = '1' then
@@ -843,7 +844,7 @@ begin
 							sdram_cas_n <= '0';
                             sdram_we_n <= '0';
                             sdram_ba <= avalon_sdram_pending_address(24 downto 23);
-                            sdram_dq <= avalon_sdram_pending_data;
+                            sdram_dq <= avalon_sdram_pending_data&avalon_sdram_pending_data;
                             sdram_addr <= "0010"&avalon_sdram_pending_address(9 downto 1);
                             sdram_wait_counter <= to_unsigned(3,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						end if;
@@ -857,13 +858,21 @@ begin
 					sdram_cas_n <= '1';
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 1 then
-						avalon_sdram_readdata_latched <= sdram_dq;
+						if avalon_sdram_pending_address(0) = '0' then
+							avalon_sdram_readdata_latched <= sdram_dq(7 downto 0);
+						else
+							avalon_sdram_readdata_latched <= sdram_dq(15 downto 8);
+						end if;
 					end if;	
 					if sdram_wait_counter = 0 then
 						sdram_mode <= SDRAM_IDLE;
 						avalon_sdram_complete <= '1';
 						sdram_dqm <= "11";
-						avalon_sdram_readdata_latched <= sdram_dq;
+						if avalon_sdram_pending_address(0) = '0' then
+							avalon_sdram_readdata_latched <= sdram_dq(7 downto 0);
+						else
+							avalon_sdram_readdata_latched <= sdram_dq(15 downto 8);
+						end if;			
 					end if;	
 					
 				when SDRAM_AVALON_WRITE_AND_PRECHARGE => 

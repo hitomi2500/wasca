@@ -51,6 +51,27 @@ architecture rtl of wasca_toplevel is
 
 	component wasca is
 		port (
+			abus_avalon_sdram_bridge_0_abus_address           : in    std_logic_vector(9 downto 0)  := (others => 'X'); -- address
+			abus_avalon_sdram_bridge_0_abus_read              : in    std_logic                     := 'X';             -- read
+			abus_avalon_sdram_bridge_0_abus_waitrequest       : out   std_logic;                                        -- waitrequest
+			abus_avalon_sdram_bridge_0_abus_addressdata       : inout std_logic_vector(15 downto 0) := (others => 'X'); -- addressdata
+			abus_avalon_sdram_bridge_0_abus_chipselect        : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- chipselect
+			abus_avalon_sdram_bridge_0_abus_direction         : out   std_logic;                                        -- direction
+			abus_avalon_sdram_bridge_0_abus_disable_out       : out   std_logic;                                        -- disable_out
+			abus_avalon_sdram_bridge_0_abus_interrupt         : out   std_logic;                                        -- interrupt
+			abus_avalon_sdram_bridge_0_abus_muxing            : out   std_logic_vector(1 downto 0);                     -- muxing
+			abus_avalon_sdram_bridge_0_abus_writebyteenable_n : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- writebyteenable_n
+			abus_avalon_sdram_bridge_0_abus_reset             : in    std_logic                     := 'X';             -- reset
+			abus_avalon_sdram_bridge_0_sdram_addr             : out   std_logic_vector(12 downto 0);                    -- addr
+			abus_avalon_sdram_bridge_0_sdram_ba               : out   std_logic_vector(1 downto 0);                     -- ba
+			abus_avalon_sdram_bridge_0_sdram_cas_n            : out   std_logic;                                        -- cas_n
+			abus_avalon_sdram_bridge_0_sdram_cke              : out   std_logic;                                        -- cke
+			abus_avalon_sdram_bridge_0_sdram_cs_n             : out   std_logic;                                        -- cs_n
+			abus_avalon_sdram_bridge_0_sdram_dq               : inout std_logic_vector(15 downto 0) := (others => 'X'); -- dq
+			abus_avalon_sdram_bridge_0_sdram_dqm              : out   std_logic_vector(1 downto 0);                     -- dqm
+			abus_avalon_sdram_bridge_0_sdram_ras_n            : out   std_logic;                                        -- ras_n
+			abus_avalon_sdram_bridge_0_sdram_we_n             : out   std_logic;                                        -- we_n
+			abus_avalon_sdram_bridge_0_sdram_clk              : out   std_logic;                                        -- clk
 			audio_out_BCLK                                    : in    std_logic                     := 'X';             -- BCLK
 			audio_out_DACDAT                                  : out   std_logic;                                        -- DACDAT
 			audio_out_DACLRCK                                 : in    std_logic                     := 'X';             -- DACLRCK
@@ -66,38 +87,17 @@ architecture rtl of wasca_toplevel is
 			spi_stm32_SS_n                                    : in    std_logic                     := 'X';             -- SS_n
 			uart_0_external_connection_rxd                    : in    std_logic                     := 'X';             -- rxd
 			uart_0_external_connection_txd                    : out   std_logic;                                        -- txd
-			abus_avalon_sdram_bridge_0_sdram_addr             : out   std_logic_vector(12 downto 0);                    -- addr
-			abus_avalon_sdram_bridge_0_sdram_ba               : out   std_logic_vector(1 downto 0);                     -- ba
-			abus_avalon_sdram_bridge_0_sdram_cas_n            : out   std_logic;                                        -- cas_n
-			abus_avalon_sdram_bridge_0_sdram_cke              : out   std_logic;                                        -- cke
-			abus_avalon_sdram_bridge_0_sdram_cs_n             : out   std_logic;                                        -- cs_n
-			abus_avalon_sdram_bridge_0_sdram_dq               : inout std_logic_vector(15 downto 0) := (others => 'X'); -- dq
-			abus_avalon_sdram_bridge_0_sdram_dqm              : out   std_logic_vector(1 downto 0);                     -- dqm
-			abus_avalon_sdram_bridge_0_sdram_ras_n            : out   std_logic;                                        -- ras_n
-			abus_avalon_sdram_bridge_0_sdram_we_n             : out   std_logic;                                        -- we_n
-			abus_avalon_sdram_bridge_0_sdram_clk              : out   std_logic;                                        -- clk
-			abus_avalon_sdram_bridge_0_abus_address           : in    std_logic_vector(9 downto 0)  := (others => 'X'); -- address
-			abus_avalon_sdram_bridge_0_abus_read              : in    std_logic                     := 'X';             -- read
-			abus_avalon_sdram_bridge_0_abus_waitrequest       : out   std_logic;                                        -- waitrequest
-			abus_avalon_sdram_bridge_0_abus_addressdata       : inout std_logic_vector(15 downto 0) := (others => 'X'); -- addressdata
-			abus_avalon_sdram_bridge_0_abus_chipselect        : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- chipselect
-			abus_avalon_sdram_bridge_0_abus_direction         : out   std_logic;                                        -- direction
-			abus_avalon_sdram_bridge_0_abus_disable_out       : out   std_logic;                                        -- disable_out
-			abus_avalon_sdram_bridge_0_abus_interrupt         : out   std_logic;                                        -- interrupt
-			abus_avalon_sdram_bridge_0_abus_muxing            : out   std_logic_vector(1 downto 0);                     -- muxing
-			abus_avalon_sdram_bridge_0_abus_writebyteenable_n : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- writebyteenable_n
-			abus_avalon_sdram_bridge_0_abus_reset             : in    std_logic                     := 'X';             -- reset
-			altpll_0_locked_conduit_export                    : out   std_logic;                                        -- export
-			altpll_0_phasedone_conduit_export                 : out   std_logic;                                        -- export
-			altpll_0_areset_conduit_export                    : in    std_logic                     := 'X';             -- export
-			altpll_0_c1_conduit_export                        : out   std_logic                                         -- export
+			reset_reset_n                                     : in    std_logic                     := 'X';             -- reset_n
+			altpll_1_areset_conduit_export                    : in    std_logic                     := 'X';             -- export
+			altpll_1_locked_conduit_export                    : out   std_logic;                                        -- export
+			altpll_1_phasedone_conduit_export                 : out   std_logic                                         -- export
 		);
 	end component;
 
 
-	--signal altpll_0_areset_conduit_export : std_logic := '0';
-	signal altpll_0_locked_conduit_export : std_logic := '0';
-	--signal altpll_0_phasedone_conduit_export : std_logic := '0';
+	signal altpll_1_areset_conduit_export : std_logic := '0';
+	signal altpll_1_locked_conduit_export : std_logic := '0';
+	signal altpll_1_phasedone_conduit_export : std_logic := '0';
 	
 	--signal sega_saturn_abus_slave_0_abus_address_demuxed : std_logic_vector(25 downto 0) := (others => '0');
 	--signal sega_saturn_abus_slave_0_abus_data_demuxed : std_logic_vector(15 downto 0) := (others => '0');
@@ -108,7 +108,7 @@ architecture rtl of wasca_toplevel is
 	
 	--sega_saturn_abus_slave_0_abus_muxing (0) <= not sega_saturn_abus_slave_0_abus_muxing(1);
 	
-	external_sdram_controller_wire_clk <= clock_116_mhz;
+	external_sdram_controller_wire_clk <= not clock_116_mhz;
 	
 	my_little_wasca : component wasca
 		port map (
@@ -138,9 +138,9 @@ architecture rtl of wasca_toplevel is
 			spi_sd_card_MOSI => spi_sd_card_MOSI,
 			spi_sd_card_SCLK => spi_sd_card_SCLK,
 			spi_sd_card_SS_n => spi_sd_card_SS_n,
-			altpll_0_areset_conduit_export => open,
-			altpll_0_locked_conduit_export => altpll_0_locked_conduit_export,
-			altpll_0_phasedone_conduit_export => open,
+			altpll_1_areset_conduit_export => altpll_1_areset_conduit_export,
+			altpll_1_locked_conduit_export => altpll_1_locked_conduit_export,
+			altpll_1_phasedone_conduit_export => altpll_1_phasedone_conduit_export,
 			uart_0_external_connection_rxd => '0',
 			uart_0_external_connection_txd => uart_0_external_connection_txd,
 			spi_stm32_MISO => spi_stm32_MISO,
@@ -149,7 +149,8 @@ architecture rtl of wasca_toplevel is
 			spi_stm32_SS_n => spi_stm32_SS_n,
 			audio_out_BCLK => audio_out_BCLK,
 			audio_out_DACDAT => audio_out_DACDAT,
-			audio_out_DACLRCK => audio_out_DACLRCK
+			audio_out_DACLRCK => audio_out_DACLRCK,
+			reset_reset_n => '1'
 		);
 
 		--empty subsystem

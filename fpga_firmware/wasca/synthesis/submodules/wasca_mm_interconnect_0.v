@@ -7,9 +7,9 @@
 
 `timescale 1 ps / 1 ps
 module wasca_mm_interconnect_0 (
-		input  wire        altpll_0_c0_clk,                                            //                                          altpll_0_c0.clk
+		input  wire        altpll_1_c0_clk,                                            //                                          altpll_1_c0.clk
 		input  wire        clk_0_clk_clk,                                              //                                            clk_0_clk.clk
-		input  wire        altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset, // altpll_0_inclk_interface_reset_reset_bridge_in_reset.reset
+		input  wire        altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset, // altpll_1_inclk_interface_reset_reset_bridge_in_reset.reset
 		input  wire        nios2_gen2_0_reset_reset_bridge_in_reset_reset,             //             nios2_gen2_0_reset_reset_bridge_in_reset.reset
 		input  wire [26:0] nios2_gen2_0_data_master_address,                           //                             nios2_gen2_0_data_master.address
 		output wire        nios2_gen2_0_data_master_waitrequest,                       //                                                     .waitrequest
@@ -37,11 +37,11 @@ module wasca_mm_interconnect_0 (
 		output wire [15:0] abus_avalon_sdram_bridge_0_avalon_sdram_writedata,          //                                                     .writedata
 		input  wire        abus_avalon_sdram_bridge_0_avalon_sdram_readdatavalid,      //                                                     .readdatavalid
 		input  wire        abus_avalon_sdram_bridge_0_avalon_sdram_waitrequest,        //                                                     .waitrequest
-		output wire [1:0]  altpll_0_pll_slave_address,                                 //                                   altpll_0_pll_slave.address
-		output wire        altpll_0_pll_slave_write,                                   //                                                     .write
-		output wire        altpll_0_pll_slave_read,                                    //                                                     .read
-		input  wire [31:0] altpll_0_pll_slave_readdata,                                //                                                     .readdata
-		output wire [31:0] altpll_0_pll_slave_writedata,                               //                                                     .writedata
+		output wire [1:0]  altpll_1_pll_slave_address,                                 //                                   altpll_1_pll_slave.address
+		output wire        altpll_1_pll_slave_write,                                   //                                                     .write
+		output wire        altpll_1_pll_slave_read,                                    //                                                     .read
+		input  wire [31:0] altpll_1_pll_slave_readdata,                                //                                                     .readdata
+		output wire [31:0] altpll_1_pll_slave_writedata,                               //                                                     .writedata
 		output wire [1:0]  audio_0_avalon_audio_slave_address,                         //                           audio_0_avalon_audio_slave.address
 		output wire        audio_0_avalon_audio_slave_write,                           //                                                     .write
 		output wire        audio_0_avalon_audio_slave_read,                            //                                                     .read
@@ -247,36 +247,36 @@ module wasca_mm_interconnect_0 (
 	wire    [9:0] cmd_mux_004_src_channel;                                                            // cmd_mux_004:src_channel -> nios2_gen2_0_debug_mem_slave_agent:cp_channel
 	wire          cmd_mux_004_src_startofpacket;                                                      // cmd_mux_004:src_startofpacket -> nios2_gen2_0_debug_mem_slave_agent:cp_startofpacket
 	wire          cmd_mux_004_src_endofpacket;                                                        // cmd_mux_004:src_endofpacket -> nios2_gen2_0_debug_mem_slave_agent:cp_endofpacket
-	wire   [31:0] altpll_0_pll_slave_agent_m0_readdata;                                               // altpll_0_pll_slave_translator:uav_readdata -> altpll_0_pll_slave_agent:m0_readdata
-	wire          altpll_0_pll_slave_agent_m0_waitrequest;                                            // altpll_0_pll_slave_translator:uav_waitrequest -> altpll_0_pll_slave_agent:m0_waitrequest
-	wire          altpll_0_pll_slave_agent_m0_debugaccess;                                            // altpll_0_pll_slave_agent:m0_debugaccess -> altpll_0_pll_slave_translator:uav_debugaccess
-	wire   [26:0] altpll_0_pll_slave_agent_m0_address;                                                // altpll_0_pll_slave_agent:m0_address -> altpll_0_pll_slave_translator:uav_address
-	wire    [3:0] altpll_0_pll_slave_agent_m0_byteenable;                                             // altpll_0_pll_slave_agent:m0_byteenable -> altpll_0_pll_slave_translator:uav_byteenable
-	wire          altpll_0_pll_slave_agent_m0_read;                                                   // altpll_0_pll_slave_agent:m0_read -> altpll_0_pll_slave_translator:uav_read
-	wire          altpll_0_pll_slave_agent_m0_readdatavalid;                                          // altpll_0_pll_slave_translator:uav_readdatavalid -> altpll_0_pll_slave_agent:m0_readdatavalid
-	wire          altpll_0_pll_slave_agent_m0_lock;                                                   // altpll_0_pll_slave_agent:m0_lock -> altpll_0_pll_slave_translator:uav_lock
-	wire   [31:0] altpll_0_pll_slave_agent_m0_writedata;                                              // altpll_0_pll_slave_agent:m0_writedata -> altpll_0_pll_slave_translator:uav_writedata
-	wire          altpll_0_pll_slave_agent_m0_write;                                                  // altpll_0_pll_slave_agent:m0_write -> altpll_0_pll_slave_translator:uav_write
-	wire    [2:0] altpll_0_pll_slave_agent_m0_burstcount;                                             // altpll_0_pll_slave_agent:m0_burstcount -> altpll_0_pll_slave_translator:uav_burstcount
-	wire          altpll_0_pll_slave_agent_rf_source_valid;                                           // altpll_0_pll_slave_agent:rf_source_valid -> altpll_0_pll_slave_agent_rsp_fifo:in_valid
-	wire  [108:0] altpll_0_pll_slave_agent_rf_source_data;                                            // altpll_0_pll_slave_agent:rf_source_data -> altpll_0_pll_slave_agent_rsp_fifo:in_data
-	wire          altpll_0_pll_slave_agent_rf_source_ready;                                           // altpll_0_pll_slave_agent_rsp_fifo:in_ready -> altpll_0_pll_slave_agent:rf_source_ready
-	wire          altpll_0_pll_slave_agent_rf_source_startofpacket;                                   // altpll_0_pll_slave_agent:rf_source_startofpacket -> altpll_0_pll_slave_agent_rsp_fifo:in_startofpacket
-	wire          altpll_0_pll_slave_agent_rf_source_endofpacket;                                     // altpll_0_pll_slave_agent:rf_source_endofpacket -> altpll_0_pll_slave_agent_rsp_fifo:in_endofpacket
-	wire          altpll_0_pll_slave_agent_rsp_fifo_out_valid;                                        // altpll_0_pll_slave_agent_rsp_fifo:out_valid -> altpll_0_pll_slave_agent:rf_sink_valid
-	wire  [108:0] altpll_0_pll_slave_agent_rsp_fifo_out_data;                                         // altpll_0_pll_slave_agent_rsp_fifo:out_data -> altpll_0_pll_slave_agent:rf_sink_data
-	wire          altpll_0_pll_slave_agent_rsp_fifo_out_ready;                                        // altpll_0_pll_slave_agent:rf_sink_ready -> altpll_0_pll_slave_agent_rsp_fifo:out_ready
-	wire          altpll_0_pll_slave_agent_rsp_fifo_out_startofpacket;                                // altpll_0_pll_slave_agent_rsp_fifo:out_startofpacket -> altpll_0_pll_slave_agent:rf_sink_startofpacket
-	wire          altpll_0_pll_slave_agent_rsp_fifo_out_endofpacket;                                  // altpll_0_pll_slave_agent_rsp_fifo:out_endofpacket -> altpll_0_pll_slave_agent:rf_sink_endofpacket
-	wire          altpll_0_pll_slave_agent_rdata_fifo_src_valid;                                      // altpll_0_pll_slave_agent:rdata_fifo_src_valid -> altpll_0_pll_slave_agent_rdata_fifo:in_valid
-	wire   [33:0] altpll_0_pll_slave_agent_rdata_fifo_src_data;                                       // altpll_0_pll_slave_agent:rdata_fifo_src_data -> altpll_0_pll_slave_agent_rdata_fifo:in_data
-	wire          altpll_0_pll_slave_agent_rdata_fifo_src_ready;                                      // altpll_0_pll_slave_agent_rdata_fifo:in_ready -> altpll_0_pll_slave_agent:rdata_fifo_src_ready
-	wire          cmd_mux_005_src_valid;                                                              // cmd_mux_005:src_valid -> altpll_0_pll_slave_agent:cp_valid
-	wire  [107:0] cmd_mux_005_src_data;                                                               // cmd_mux_005:src_data -> altpll_0_pll_slave_agent:cp_data
-	wire          cmd_mux_005_src_ready;                                                              // altpll_0_pll_slave_agent:cp_ready -> cmd_mux_005:src_ready
-	wire    [9:0] cmd_mux_005_src_channel;                                                            // cmd_mux_005:src_channel -> altpll_0_pll_slave_agent:cp_channel
-	wire          cmd_mux_005_src_startofpacket;                                                      // cmd_mux_005:src_startofpacket -> altpll_0_pll_slave_agent:cp_startofpacket
-	wire          cmd_mux_005_src_endofpacket;                                                        // cmd_mux_005:src_endofpacket -> altpll_0_pll_slave_agent:cp_endofpacket
+	wire   [31:0] altpll_1_pll_slave_agent_m0_readdata;                                               // altpll_1_pll_slave_translator:uav_readdata -> altpll_1_pll_slave_agent:m0_readdata
+	wire          altpll_1_pll_slave_agent_m0_waitrequest;                                            // altpll_1_pll_slave_translator:uav_waitrequest -> altpll_1_pll_slave_agent:m0_waitrequest
+	wire          altpll_1_pll_slave_agent_m0_debugaccess;                                            // altpll_1_pll_slave_agent:m0_debugaccess -> altpll_1_pll_slave_translator:uav_debugaccess
+	wire   [26:0] altpll_1_pll_slave_agent_m0_address;                                                // altpll_1_pll_slave_agent:m0_address -> altpll_1_pll_slave_translator:uav_address
+	wire    [3:0] altpll_1_pll_slave_agent_m0_byteenable;                                             // altpll_1_pll_slave_agent:m0_byteenable -> altpll_1_pll_slave_translator:uav_byteenable
+	wire          altpll_1_pll_slave_agent_m0_read;                                                   // altpll_1_pll_slave_agent:m0_read -> altpll_1_pll_slave_translator:uav_read
+	wire          altpll_1_pll_slave_agent_m0_readdatavalid;                                          // altpll_1_pll_slave_translator:uav_readdatavalid -> altpll_1_pll_slave_agent:m0_readdatavalid
+	wire          altpll_1_pll_slave_agent_m0_lock;                                                   // altpll_1_pll_slave_agent:m0_lock -> altpll_1_pll_slave_translator:uav_lock
+	wire   [31:0] altpll_1_pll_slave_agent_m0_writedata;                                              // altpll_1_pll_slave_agent:m0_writedata -> altpll_1_pll_slave_translator:uav_writedata
+	wire          altpll_1_pll_slave_agent_m0_write;                                                  // altpll_1_pll_slave_agent:m0_write -> altpll_1_pll_slave_translator:uav_write
+	wire    [2:0] altpll_1_pll_slave_agent_m0_burstcount;                                             // altpll_1_pll_slave_agent:m0_burstcount -> altpll_1_pll_slave_translator:uav_burstcount
+	wire          altpll_1_pll_slave_agent_rf_source_valid;                                           // altpll_1_pll_slave_agent:rf_source_valid -> altpll_1_pll_slave_agent_rsp_fifo:in_valid
+	wire  [108:0] altpll_1_pll_slave_agent_rf_source_data;                                            // altpll_1_pll_slave_agent:rf_source_data -> altpll_1_pll_slave_agent_rsp_fifo:in_data
+	wire          altpll_1_pll_slave_agent_rf_source_ready;                                           // altpll_1_pll_slave_agent_rsp_fifo:in_ready -> altpll_1_pll_slave_agent:rf_source_ready
+	wire          altpll_1_pll_slave_agent_rf_source_startofpacket;                                   // altpll_1_pll_slave_agent:rf_source_startofpacket -> altpll_1_pll_slave_agent_rsp_fifo:in_startofpacket
+	wire          altpll_1_pll_slave_agent_rf_source_endofpacket;                                     // altpll_1_pll_slave_agent:rf_source_endofpacket -> altpll_1_pll_slave_agent_rsp_fifo:in_endofpacket
+	wire          altpll_1_pll_slave_agent_rsp_fifo_out_valid;                                        // altpll_1_pll_slave_agent_rsp_fifo:out_valid -> altpll_1_pll_slave_agent:rf_sink_valid
+	wire  [108:0] altpll_1_pll_slave_agent_rsp_fifo_out_data;                                         // altpll_1_pll_slave_agent_rsp_fifo:out_data -> altpll_1_pll_slave_agent:rf_sink_data
+	wire          altpll_1_pll_slave_agent_rsp_fifo_out_ready;                                        // altpll_1_pll_slave_agent:rf_sink_ready -> altpll_1_pll_slave_agent_rsp_fifo:out_ready
+	wire          altpll_1_pll_slave_agent_rsp_fifo_out_startofpacket;                                // altpll_1_pll_slave_agent_rsp_fifo:out_startofpacket -> altpll_1_pll_slave_agent:rf_sink_startofpacket
+	wire          altpll_1_pll_slave_agent_rsp_fifo_out_endofpacket;                                  // altpll_1_pll_slave_agent_rsp_fifo:out_endofpacket -> altpll_1_pll_slave_agent:rf_sink_endofpacket
+	wire          altpll_1_pll_slave_agent_rdata_fifo_src_valid;                                      // altpll_1_pll_slave_agent:rdata_fifo_src_valid -> altpll_1_pll_slave_agent_rdata_fifo:in_valid
+	wire   [33:0] altpll_1_pll_slave_agent_rdata_fifo_src_data;                                       // altpll_1_pll_slave_agent:rdata_fifo_src_data -> altpll_1_pll_slave_agent_rdata_fifo:in_data
+	wire          altpll_1_pll_slave_agent_rdata_fifo_src_ready;                                      // altpll_1_pll_slave_agent_rdata_fifo:in_ready -> altpll_1_pll_slave_agent:rdata_fifo_src_ready
+	wire          cmd_mux_005_src_valid;                                                              // cmd_mux_005:src_valid -> altpll_1_pll_slave_agent:cp_valid
+	wire  [107:0] cmd_mux_005_src_data;                                                               // cmd_mux_005:src_data -> altpll_1_pll_slave_agent:cp_data
+	wire          cmd_mux_005_src_ready;                                                              // altpll_1_pll_slave_agent:cp_ready -> cmd_mux_005:src_ready
+	wire    [9:0] cmd_mux_005_src_channel;                                                            // cmd_mux_005:src_channel -> altpll_1_pll_slave_agent:cp_channel
+	wire          cmd_mux_005_src_startofpacket;                                                      // cmd_mux_005:src_startofpacket -> altpll_1_pll_slave_agent:cp_startofpacket
+	wire          cmd_mux_005_src_endofpacket;                                                        // cmd_mux_005:src_endofpacket -> altpll_1_pll_slave_agent:cp_endofpacket
 	wire   [31:0] onchip_memory2_0_s1_agent_m0_readdata;                                              // onchip_memory2_0_s1_translator:uav_readdata -> onchip_memory2_0_s1_agent:m0_readdata
 	wire          onchip_memory2_0_s1_agent_m0_waitrequest;                                           // onchip_memory2_0_s1_translator:uav_waitrequest -> onchip_memory2_0_s1_agent:m0_waitrequest
 	wire          onchip_memory2_0_s1_agent_m0_debugaccess;                                           // onchip_memory2_0_s1_agent:m0_debugaccess -> onchip_memory2_0_s1_translator:uav_debugaccess
@@ -450,11 +450,11 @@ module wasca_mm_interconnect_0 (
 	wire    [9:0] router_006_src_channel;                                                             // router_006:src_channel -> rsp_demux_004:sink_channel
 	wire          router_006_src_startofpacket;                                                       // router_006:src_startofpacket -> rsp_demux_004:sink_startofpacket
 	wire          router_006_src_endofpacket;                                                         // router_006:src_endofpacket -> rsp_demux_004:sink_endofpacket
-	wire          altpll_0_pll_slave_agent_rp_valid;                                                  // altpll_0_pll_slave_agent:rp_valid -> router_007:sink_valid
-	wire  [107:0] altpll_0_pll_slave_agent_rp_data;                                                   // altpll_0_pll_slave_agent:rp_data -> router_007:sink_data
-	wire          altpll_0_pll_slave_agent_rp_ready;                                                  // router_007:sink_ready -> altpll_0_pll_slave_agent:rp_ready
-	wire          altpll_0_pll_slave_agent_rp_startofpacket;                                          // altpll_0_pll_slave_agent:rp_startofpacket -> router_007:sink_startofpacket
-	wire          altpll_0_pll_slave_agent_rp_endofpacket;                                            // altpll_0_pll_slave_agent:rp_endofpacket -> router_007:sink_endofpacket
+	wire          altpll_1_pll_slave_agent_rp_valid;                                                  // altpll_1_pll_slave_agent:rp_valid -> router_007:sink_valid
+	wire  [107:0] altpll_1_pll_slave_agent_rp_data;                                                   // altpll_1_pll_slave_agent:rp_data -> router_007:sink_data
+	wire          altpll_1_pll_slave_agent_rp_ready;                                                  // router_007:sink_ready -> altpll_1_pll_slave_agent:rp_ready
+	wire          altpll_1_pll_slave_agent_rp_startofpacket;                                          // altpll_1_pll_slave_agent:rp_startofpacket -> router_007:sink_startofpacket
+	wire          altpll_1_pll_slave_agent_rp_endofpacket;                                            // altpll_1_pll_slave_agent:rp_endofpacket -> router_007:sink_endofpacket
 	wire          router_007_src_valid;                                                               // router_007:src_valid -> rsp_demux_005:sink_valid
 	wire  [107:0] router_007_src_data;                                                                // router_007:src_data -> rsp_demux_005:sink_data
 	wire          router_007_src_ready;                                                               // rsp_demux_005:sink_ready -> router_007:src_ready
@@ -780,13 +780,13 @@ module wasca_mm_interconnect_0 (
 	wire   [33:0] avalon_st_adapter_004_out_0_data;                                                   // avalon_st_adapter_004:out_0_data -> nios2_gen2_0_debug_mem_slave_agent:rdata_fifo_sink_data
 	wire          avalon_st_adapter_004_out_0_ready;                                                  // nios2_gen2_0_debug_mem_slave_agent:rdata_fifo_sink_ready -> avalon_st_adapter_004:out_0_ready
 	wire    [0:0] avalon_st_adapter_004_out_0_error;                                                  // avalon_st_adapter_004:out_0_error -> nios2_gen2_0_debug_mem_slave_agent:rdata_fifo_sink_error
-	wire          altpll_0_pll_slave_agent_rdata_fifo_out_valid;                                      // altpll_0_pll_slave_agent_rdata_fifo:out_valid -> avalon_st_adapter_005:in_0_valid
-	wire   [33:0] altpll_0_pll_slave_agent_rdata_fifo_out_data;                                       // altpll_0_pll_slave_agent_rdata_fifo:out_data -> avalon_st_adapter_005:in_0_data
-	wire          altpll_0_pll_slave_agent_rdata_fifo_out_ready;                                      // avalon_st_adapter_005:in_0_ready -> altpll_0_pll_slave_agent_rdata_fifo:out_ready
-	wire          avalon_st_adapter_005_out_0_valid;                                                  // avalon_st_adapter_005:out_0_valid -> altpll_0_pll_slave_agent:rdata_fifo_sink_valid
-	wire   [33:0] avalon_st_adapter_005_out_0_data;                                                   // avalon_st_adapter_005:out_0_data -> altpll_0_pll_slave_agent:rdata_fifo_sink_data
-	wire          avalon_st_adapter_005_out_0_ready;                                                  // altpll_0_pll_slave_agent:rdata_fifo_sink_ready -> avalon_st_adapter_005:out_0_ready
-	wire    [0:0] avalon_st_adapter_005_out_0_error;                                                  // avalon_st_adapter_005:out_0_error -> altpll_0_pll_slave_agent:rdata_fifo_sink_error
+	wire          altpll_1_pll_slave_agent_rdata_fifo_out_valid;                                      // altpll_1_pll_slave_agent_rdata_fifo:out_valid -> avalon_st_adapter_005:in_0_valid
+	wire   [33:0] altpll_1_pll_slave_agent_rdata_fifo_out_data;                                       // altpll_1_pll_slave_agent_rdata_fifo:out_data -> avalon_st_adapter_005:in_0_data
+	wire          altpll_1_pll_slave_agent_rdata_fifo_out_ready;                                      // avalon_st_adapter_005:in_0_ready -> altpll_1_pll_slave_agent_rdata_fifo:out_ready
+	wire          avalon_st_adapter_005_out_0_valid;                                                  // avalon_st_adapter_005:out_0_valid -> altpll_1_pll_slave_agent:rdata_fifo_sink_valid
+	wire   [33:0] avalon_st_adapter_005_out_0_data;                                                   // avalon_st_adapter_005:out_0_data -> altpll_1_pll_slave_agent:rdata_fifo_sink_data
+	wire          avalon_st_adapter_005_out_0_ready;                                                  // altpll_1_pll_slave_agent:rdata_fifo_sink_ready -> avalon_st_adapter_005:out_0_ready
+	wire    [0:0] avalon_st_adapter_005_out_0_error;                                                  // avalon_st_adapter_005:out_0_error -> altpll_1_pll_slave_agent:rdata_fifo_sink_error
 	wire          onchip_memory2_0_s1_agent_rdata_fifo_src_valid;                                     // onchip_memory2_0_s1_agent:rdata_fifo_src_valid -> avalon_st_adapter_006:in_0_valid
 	wire   [33:0] onchip_memory2_0_s1_agent_rdata_fifo_src_data;                                      // onchip_memory2_0_s1_agent:rdata_fifo_src_data -> avalon_st_adapter_006:in_0_data
 	wire          onchip_memory2_0_s1_agent_rdata_fifo_src_ready;                                     // avalon_st_adapter_006:in_0_ready -> onchip_memory2_0_s1_agent:rdata_fifo_src_ready
@@ -841,7 +841,7 @@ module wasca_mm_interconnect_0 (
 		.AV_LINEWRAPBURSTS           (0),
 		.AV_REGISTERINCOMINGSIGNALS  (1)
 	) nios2_gen2_0_data_master_translator (
-		.clk                    (altpll_0_c0_clk),                                                             //                       clk.clk
+		.clk                    (altpll_1_c0_clk),                                                             //                       clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                              //                     reset.reset
 		.uav_address            (nios2_gen2_0_data_master_translator_avalon_universal_master_0_address),       // avalon_universal_master_0.address
 		.uav_burstcount         (nios2_gen2_0_data_master_translator_avalon_universal_master_0_burstcount),    //                          .burstcount
@@ -901,7 +901,7 @@ module wasca_mm_interconnect_0 (
 		.AV_LINEWRAPBURSTS           (1),
 		.AV_REGISTERINCOMINGSIGNALS  (0)
 	) nios2_gen2_0_instruction_master_translator (
-		.clk                    (altpll_0_c0_clk),                                                                    //                       clk.clk
+		.clk                    (altpll_1_c0_clk),                                                                    //                       clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                                     //                     reset.reset
 		.uav_address            (nios2_gen2_0_instruction_master_translator_avalon_universal_master_0_address),       // avalon_universal_master_0.address
 		.uav_burstcount         (nios2_gen2_0_instruction_master_translator_avalon_universal_master_0_burstcount),    //                          .burstcount
@@ -963,7 +963,7 @@ module wasca_mm_interconnect_0 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) audio_0_avalon_audio_slave_translator (
-		.clk                    (altpll_0_c0_clk),                                   //                      clk.clk
+		.clk                    (altpll_1_c0_clk),                                   //                      clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset),    //                    reset.reset
 		.uav_address            (audio_0_avalon_audio_slave_agent_m0_address),       // avalon_universal_slave_0.address
 		.uav_burstcount         (audio_0_avalon_audio_slave_agent_m0_burstcount),    //                         .burstcount
@@ -1027,7 +1027,7 @@ module wasca_mm_interconnect_0 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) abus_avalon_sdram_bridge_0_avalon_regs_translator (
-		.clk                    (altpll_0_c0_clk),                                               //                      clk.clk
+		.clk                    (altpll_1_c0_clk),                                               //                      clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                //                    reset.reset
 		.uav_address            (abus_avalon_sdram_bridge_0_avalon_regs_agent_m0_address),       // avalon_universal_slave_0.address
 		.uav_burstcount         (abus_avalon_sdram_bridge_0_avalon_regs_agent_m0_burstcount),    //                         .burstcount
@@ -1091,7 +1091,7 @@ module wasca_mm_interconnect_0 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) abus_avalon_sdram_bridge_0_avalon_sdram_translator (
-		.clk                    (altpll_0_c0_clk),                                                //                      clk.clk
+		.clk                    (altpll_1_c0_clk),                                                //                      clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                 //                    reset.reset
 		.uav_address            (abus_avalon_sdram_bridge_0_avalon_sdram_agent_m0_address),       // avalon_universal_slave_0.address
 		.uav_burstcount         (abus_avalon_sdram_bridge_0_avalon_sdram_agent_m0_burstcount),    //                         .burstcount
@@ -1155,7 +1155,7 @@ module wasca_mm_interconnect_0 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) onchip_flash_0_data_translator (
-		.clk                    (altpll_0_c0_clk),                                //                      clk.clk
+		.clk                    (altpll_1_c0_clk),                                //                      clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset), //                    reset.reset
 		.uav_address            (onchip_flash_0_data_agent_m0_address),           // avalon_universal_slave_0.address
 		.uav_burstcount         (onchip_flash_0_data_agent_m0_burstcount),        //                         .burstcount
@@ -1219,7 +1219,7 @@ module wasca_mm_interconnect_0 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) nios2_gen2_0_debug_mem_slave_translator (
-		.clk                    (altpll_0_c0_clk),                                     //                      clk.clk
+		.clk                    (altpll_1_c0_clk),                                     //                      clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset),      //                    reset.reset
 		.uav_address            (nios2_gen2_0_debug_mem_slave_agent_m0_address),       // avalon_universal_slave_0.address
 		.uav_burstcount         (nios2_gen2_0_debug_mem_slave_agent_m0_burstcount),    //                         .burstcount
@@ -1282,25 +1282,25 @@ module wasca_mm_interconnect_0 (
 		.AV_WRITE_WAIT_CYCLES           (0),
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
-	) altpll_0_pll_slave_translator (
+	) altpll_1_pll_slave_translator (
 		.clk                    (clk_0_clk_clk),                                              //                      clk.clk
-		.reset                  (altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset), //                    reset.reset
-		.uav_address            (altpll_0_pll_slave_agent_m0_address),                        // avalon_universal_slave_0.address
-		.uav_burstcount         (altpll_0_pll_slave_agent_m0_burstcount),                     //                         .burstcount
-		.uav_read               (altpll_0_pll_slave_agent_m0_read),                           //                         .read
-		.uav_write              (altpll_0_pll_slave_agent_m0_write),                          //                         .write
-		.uav_waitrequest        (altpll_0_pll_slave_agent_m0_waitrequest),                    //                         .waitrequest
-		.uav_readdatavalid      (altpll_0_pll_slave_agent_m0_readdatavalid),                  //                         .readdatavalid
-		.uav_byteenable         (altpll_0_pll_slave_agent_m0_byteenable),                     //                         .byteenable
-		.uav_readdata           (altpll_0_pll_slave_agent_m0_readdata),                       //                         .readdata
-		.uav_writedata          (altpll_0_pll_slave_agent_m0_writedata),                      //                         .writedata
-		.uav_lock               (altpll_0_pll_slave_agent_m0_lock),                           //                         .lock
-		.uav_debugaccess        (altpll_0_pll_slave_agent_m0_debugaccess),                    //                         .debugaccess
-		.av_address             (altpll_0_pll_slave_address),                                 //      avalon_anti_slave_0.address
-		.av_write               (altpll_0_pll_slave_write),                                   //                         .write
-		.av_read                (altpll_0_pll_slave_read),                                    //                         .read
-		.av_readdata            (altpll_0_pll_slave_readdata),                                //                         .readdata
-		.av_writedata           (altpll_0_pll_slave_writedata),                               //                         .writedata
+		.reset                  (altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset), //                    reset.reset
+		.uav_address            (altpll_1_pll_slave_agent_m0_address),                        // avalon_universal_slave_0.address
+		.uav_burstcount         (altpll_1_pll_slave_agent_m0_burstcount),                     //                         .burstcount
+		.uav_read               (altpll_1_pll_slave_agent_m0_read),                           //                         .read
+		.uav_write              (altpll_1_pll_slave_agent_m0_write),                          //                         .write
+		.uav_waitrequest        (altpll_1_pll_slave_agent_m0_waitrequest),                    //                         .waitrequest
+		.uav_readdatavalid      (altpll_1_pll_slave_agent_m0_readdatavalid),                  //                         .readdatavalid
+		.uav_byteenable         (altpll_1_pll_slave_agent_m0_byteenable),                     //                         .byteenable
+		.uav_readdata           (altpll_1_pll_slave_agent_m0_readdata),                       //                         .readdata
+		.uav_writedata          (altpll_1_pll_slave_agent_m0_writedata),                      //                         .writedata
+		.uav_lock               (altpll_1_pll_slave_agent_m0_lock),                           //                         .lock
+		.uav_debugaccess        (altpll_1_pll_slave_agent_m0_debugaccess),                    //                         .debugaccess
+		.av_address             (altpll_1_pll_slave_address),                                 //      avalon_anti_slave_0.address
+		.av_write               (altpll_1_pll_slave_write),                                   //                         .write
+		.av_read                (altpll_1_pll_slave_read),                                    //                         .read
+		.av_readdata            (altpll_1_pll_slave_readdata),                                //                         .readdata
+		.av_writedata           (altpll_1_pll_slave_writedata),                               //                         .writedata
 		.av_begintransfer       (),                                                           //              (terminated)
 		.av_beginbursttransfer  (),                                                           //              (terminated)
 		.av_burstcount          (),                                                           //              (terminated)
@@ -1347,7 +1347,7 @@ module wasca_mm_interconnect_0 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) onchip_memory2_0_s1_translator (
-		.clk                    (altpll_0_c0_clk),                                //                      clk.clk
+		.clk                    (altpll_1_c0_clk),                                //                      clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset), //                    reset.reset
 		.uav_address            (onchip_memory2_0_s1_agent_m0_address),           // avalon_universal_slave_0.address
 		.uav_burstcount         (onchip_memory2_0_s1_agent_m0_burstcount),        //                         .burstcount
@@ -1411,7 +1411,7 @@ module wasca_mm_interconnect_0 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) uart_0_s1_translator (
-		.clk                    (altpll_0_c0_clk),                                //                      clk.clk
+		.clk                    (altpll_1_c0_clk),                                //                      clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset), //                    reset.reset
 		.uav_address            (uart_0_s1_agent_m0_address),                     // avalon_universal_slave_0.address
 		.uav_burstcount         (uart_0_s1_agent_m0_burstcount),                  //                         .burstcount
@@ -1475,7 +1475,7 @@ module wasca_mm_interconnect_0 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) spi_sd_card_spi_control_port_translator (
-		.clk                    (altpll_0_c0_clk),                                     //                      clk.clk
+		.clk                    (altpll_1_c0_clk),                                     //                      clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset),      //                    reset.reset
 		.uav_address            (spi_sd_card_spi_control_port_agent_m0_address),       // avalon_universal_slave_0.address
 		.uav_burstcount         (spi_sd_card_spi_control_port_agent_m0_burstcount),    //                         .burstcount
@@ -1539,7 +1539,7 @@ module wasca_mm_interconnect_0 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) spi_stm32_spi_control_port_translator (
-		.clk                    (altpll_0_c0_clk),                                   //                      clk.clk
+		.clk                    (altpll_1_c0_clk),                                   //                      clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset),    //                    reset.reset
 		.uav_address            (spi_stm32_spi_control_port_agent_m0_address),       // avalon_universal_slave_0.address
 		.uav_burstcount         (spi_stm32_spi_control_port_agent_m0_burstcount),    //                         .burstcount
@@ -1629,7 +1629,7 @@ module wasca_mm_interconnect_0 (
 		.USE_READRESPONSE          (0),
 		.USE_WRITERESPONSE         (0)
 	) nios2_gen2_0_data_master_agent (
-		.clk                   (altpll_0_c0_clk),                                                             //       clk.clk
+		.clk                   (altpll_1_c0_clk),                                                             //       clk.clk
 		.reset                 (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                              // clk_reset.reset
 		.av_address            (nios2_gen2_0_data_master_translator_avalon_universal_master_0_address),       //        av.address
 		.av_write              (nios2_gen2_0_data_master_translator_avalon_universal_master_0_write),         //          .write
@@ -1710,7 +1710,7 @@ module wasca_mm_interconnect_0 (
 		.USE_READRESPONSE          (0),
 		.USE_WRITERESPONSE         (0)
 	) nios2_gen2_0_instruction_master_agent (
-		.clk                   (altpll_0_c0_clk),                                                                    //       clk.clk
+		.clk                   (altpll_1_c0_clk),                                                                    //       clk.clk
 		.reset                 (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                                     // clk_reset.reset
 		.av_address            (nios2_gen2_0_instruction_master_translator_avalon_universal_master_0_address),       //        av.address
 		.av_write              (nios2_gen2_0_instruction_master_translator_avalon_universal_master_0_write),         //          .write
@@ -1777,7 +1777,7 @@ module wasca_mm_interconnect_0 (
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
 	) audio_0_avalon_audio_slave_agent (
-		.clk                     (altpll_0_c0_clk),                                             //             clk.clk
+		.clk                     (altpll_1_c0_clk),                                             //             clk.clk
 		.reset                   (nios2_gen2_0_reset_reset_bridge_in_reset_reset),              //       clk_reset.reset
 		.m0_address              (audio_0_avalon_audio_slave_agent_m0_address),                 //              m0.address
 		.m0_burstcount           (audio_0_avalon_audio_slave_agent_m0_burstcount),              //                .burstcount
@@ -1836,7 +1836,7 @@ module wasca_mm_interconnect_0 (
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
 	) audio_0_avalon_audio_slave_agent_rsp_fifo (
-		.clk               (altpll_0_c0_clk),                                             //       clk.clk
+		.clk               (altpll_1_c0_clk),                                             //       clk.clk
 		.reset             (nios2_gen2_0_reset_reset_bridge_in_reset_reset),              // clk_reset.reset
 		.in_data           (audio_0_avalon_audio_slave_agent_rf_source_data),             //        in.data
 		.in_valid          (audio_0_avalon_audio_slave_agent_rf_source_valid),            //          .valid
@@ -1902,7 +1902,7 @@ module wasca_mm_interconnect_0 (
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
 	) abus_avalon_sdram_bridge_0_avalon_regs_agent (
-		.clk                     (altpll_0_c0_clk),                                                            //             clk.clk
+		.clk                     (altpll_1_c0_clk),                                                            //             clk.clk
 		.reset                   (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                             //       clk_reset.reset
 		.m0_address              (abus_avalon_sdram_bridge_0_avalon_regs_agent_m0_address),                    //              m0.address
 		.m0_burstcount           (abus_avalon_sdram_bridge_0_avalon_regs_agent_m0_burstcount),                 //                .burstcount
@@ -1961,7 +1961,7 @@ module wasca_mm_interconnect_0 (
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
 	) abus_avalon_sdram_bridge_0_avalon_regs_agent_rsp_fifo (
-		.clk               (altpll_0_c0_clk),                                                         //       clk.clk
+		.clk               (altpll_1_c0_clk),                                                         //       clk.clk
 		.reset             (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                          // clk_reset.reset
 		.in_data           (abus_avalon_sdram_bridge_0_avalon_regs_agent_rf_source_data),             //        in.data
 		.in_valid          (abus_avalon_sdram_bridge_0_avalon_regs_agent_rf_source_valid),            //          .valid
@@ -2027,7 +2027,7 @@ module wasca_mm_interconnect_0 (
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
 	) abus_avalon_sdram_bridge_0_avalon_sdram_agent (
-		.clk                     (altpll_0_c0_clk),                                                             //             clk.clk
+		.clk                     (altpll_1_c0_clk),                                                             //             clk.clk
 		.reset                   (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                              //       clk_reset.reset
 		.m0_address              (abus_avalon_sdram_bridge_0_avalon_sdram_agent_m0_address),                    //              m0.address
 		.m0_burstcount           (abus_avalon_sdram_bridge_0_avalon_sdram_agent_m0_burstcount),                 //                .burstcount
@@ -2086,7 +2086,7 @@ module wasca_mm_interconnect_0 (
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
 	) abus_avalon_sdram_bridge_0_avalon_sdram_agent_rsp_fifo (
-		.clk               (altpll_0_c0_clk),                                                          //       clk.clk
+		.clk               (altpll_1_c0_clk),                                                          //       clk.clk
 		.reset             (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                           // clk_reset.reset
 		.in_data           (abus_avalon_sdram_bridge_0_avalon_sdram_agent_rf_source_data),             //        in.data
 		.in_valid          (abus_avalon_sdram_bridge_0_avalon_sdram_agent_rf_source_valid),            //          .valid
@@ -2152,7 +2152,7 @@ module wasca_mm_interconnect_0 (
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
 	) onchip_flash_0_data_agent (
-		.clk                     (altpll_0_c0_clk),                                      //             clk.clk
+		.clk                     (altpll_1_c0_clk),                                      //             clk.clk
 		.reset                   (nios2_gen2_0_reset_reset_bridge_in_reset_reset),       //       clk_reset.reset
 		.m0_address              (onchip_flash_0_data_agent_m0_address),                 //              m0.address
 		.m0_burstcount           (onchip_flash_0_data_agent_m0_burstcount),              //                .burstcount
@@ -2211,7 +2211,7 @@ module wasca_mm_interconnect_0 (
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
 	) onchip_flash_0_data_agent_rsp_fifo (
-		.clk               (altpll_0_c0_clk),                                      //       clk.clk
+		.clk               (altpll_1_c0_clk),                                      //       clk.clk
 		.reset             (nios2_gen2_0_reset_reset_bridge_in_reset_reset),       // clk_reset.reset
 		.in_data           (onchip_flash_0_data_agent_rf_source_data),             //        in.data
 		.in_valid          (onchip_flash_0_data_agent_rf_source_valid),            //          .valid
@@ -2277,7 +2277,7 @@ module wasca_mm_interconnect_0 (
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
 	) nios2_gen2_0_debug_mem_slave_agent (
-		.clk                     (altpll_0_c0_clk),                                               //             clk.clk
+		.clk                     (altpll_1_c0_clk),                                               //             clk.clk
 		.reset                   (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                //       clk_reset.reset
 		.m0_address              (nios2_gen2_0_debug_mem_slave_agent_m0_address),                 //              m0.address
 		.m0_burstcount           (nios2_gen2_0_debug_mem_slave_agent_m0_burstcount),              //                .burstcount
@@ -2336,7 +2336,7 @@ module wasca_mm_interconnect_0 (
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
 	) nios2_gen2_0_debug_mem_slave_agent_rsp_fifo (
-		.clk               (altpll_0_c0_clk),                                               //       clk.clk
+		.clk               (altpll_1_c0_clk),                                               //       clk.clk
 		.reset             (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                // clk_reset.reset
 		.in_data           (nios2_gen2_0_debug_mem_slave_agent_rf_source_data),             //        in.data
 		.in_valid          (nios2_gen2_0_debug_mem_slave_agent_rf_source_valid),            //          .valid
@@ -2401,48 +2401,48 @@ module wasca_mm_interconnect_0 (
 		.USE_READRESPONSE          (0),
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
-	) altpll_0_pll_slave_agent (
+	) altpll_1_pll_slave_agent (
 		.clk                     (clk_0_clk_clk),                                              //             clk.clk
-		.reset                   (altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset), //       clk_reset.reset
-		.m0_address              (altpll_0_pll_slave_agent_m0_address),                        //              m0.address
-		.m0_burstcount           (altpll_0_pll_slave_agent_m0_burstcount),                     //                .burstcount
-		.m0_byteenable           (altpll_0_pll_slave_agent_m0_byteenable),                     //                .byteenable
-		.m0_debugaccess          (altpll_0_pll_slave_agent_m0_debugaccess),                    //                .debugaccess
-		.m0_lock                 (altpll_0_pll_slave_agent_m0_lock),                           //                .lock
-		.m0_readdata             (altpll_0_pll_slave_agent_m0_readdata),                       //                .readdata
-		.m0_readdatavalid        (altpll_0_pll_slave_agent_m0_readdatavalid),                  //                .readdatavalid
-		.m0_read                 (altpll_0_pll_slave_agent_m0_read),                           //                .read
-		.m0_waitrequest          (altpll_0_pll_slave_agent_m0_waitrequest),                    //                .waitrequest
-		.m0_writedata            (altpll_0_pll_slave_agent_m0_writedata),                      //                .writedata
-		.m0_write                (altpll_0_pll_slave_agent_m0_write),                          //                .write
-		.rp_endofpacket          (altpll_0_pll_slave_agent_rp_endofpacket),                    //              rp.endofpacket
-		.rp_ready                (altpll_0_pll_slave_agent_rp_ready),                          //                .ready
-		.rp_valid                (altpll_0_pll_slave_agent_rp_valid),                          //                .valid
-		.rp_data                 (altpll_0_pll_slave_agent_rp_data),                           //                .data
-		.rp_startofpacket        (altpll_0_pll_slave_agent_rp_startofpacket),                  //                .startofpacket
+		.reset                   (altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset), //       clk_reset.reset
+		.m0_address              (altpll_1_pll_slave_agent_m0_address),                        //              m0.address
+		.m0_burstcount           (altpll_1_pll_slave_agent_m0_burstcount),                     //                .burstcount
+		.m0_byteenable           (altpll_1_pll_slave_agent_m0_byteenable),                     //                .byteenable
+		.m0_debugaccess          (altpll_1_pll_slave_agent_m0_debugaccess),                    //                .debugaccess
+		.m0_lock                 (altpll_1_pll_slave_agent_m0_lock),                           //                .lock
+		.m0_readdata             (altpll_1_pll_slave_agent_m0_readdata),                       //                .readdata
+		.m0_readdatavalid        (altpll_1_pll_slave_agent_m0_readdatavalid),                  //                .readdatavalid
+		.m0_read                 (altpll_1_pll_slave_agent_m0_read),                           //                .read
+		.m0_waitrequest          (altpll_1_pll_slave_agent_m0_waitrequest),                    //                .waitrequest
+		.m0_writedata            (altpll_1_pll_slave_agent_m0_writedata),                      //                .writedata
+		.m0_write                (altpll_1_pll_slave_agent_m0_write),                          //                .write
+		.rp_endofpacket          (altpll_1_pll_slave_agent_rp_endofpacket),                    //              rp.endofpacket
+		.rp_ready                (altpll_1_pll_slave_agent_rp_ready),                          //                .ready
+		.rp_valid                (altpll_1_pll_slave_agent_rp_valid),                          //                .valid
+		.rp_data                 (altpll_1_pll_slave_agent_rp_data),                           //                .data
+		.rp_startofpacket        (altpll_1_pll_slave_agent_rp_startofpacket),                  //                .startofpacket
 		.cp_ready                (cmd_mux_005_src_ready),                                      //              cp.ready
 		.cp_valid                (cmd_mux_005_src_valid),                                      //                .valid
 		.cp_data                 (cmd_mux_005_src_data),                                       //                .data
 		.cp_startofpacket        (cmd_mux_005_src_startofpacket),                              //                .startofpacket
 		.cp_endofpacket          (cmd_mux_005_src_endofpacket),                                //                .endofpacket
 		.cp_channel              (cmd_mux_005_src_channel),                                    //                .channel
-		.rf_sink_ready           (altpll_0_pll_slave_agent_rsp_fifo_out_ready),                //         rf_sink.ready
-		.rf_sink_valid           (altpll_0_pll_slave_agent_rsp_fifo_out_valid),                //                .valid
-		.rf_sink_startofpacket   (altpll_0_pll_slave_agent_rsp_fifo_out_startofpacket),        //                .startofpacket
-		.rf_sink_endofpacket     (altpll_0_pll_slave_agent_rsp_fifo_out_endofpacket),          //                .endofpacket
-		.rf_sink_data            (altpll_0_pll_slave_agent_rsp_fifo_out_data),                 //                .data
-		.rf_source_ready         (altpll_0_pll_slave_agent_rf_source_ready),                   //       rf_source.ready
-		.rf_source_valid         (altpll_0_pll_slave_agent_rf_source_valid),                   //                .valid
-		.rf_source_startofpacket (altpll_0_pll_slave_agent_rf_source_startofpacket),           //                .startofpacket
-		.rf_source_endofpacket   (altpll_0_pll_slave_agent_rf_source_endofpacket),             //                .endofpacket
-		.rf_source_data          (altpll_0_pll_slave_agent_rf_source_data),                    //                .data
+		.rf_sink_ready           (altpll_1_pll_slave_agent_rsp_fifo_out_ready),                //         rf_sink.ready
+		.rf_sink_valid           (altpll_1_pll_slave_agent_rsp_fifo_out_valid),                //                .valid
+		.rf_sink_startofpacket   (altpll_1_pll_slave_agent_rsp_fifo_out_startofpacket),        //                .startofpacket
+		.rf_sink_endofpacket     (altpll_1_pll_slave_agent_rsp_fifo_out_endofpacket),          //                .endofpacket
+		.rf_sink_data            (altpll_1_pll_slave_agent_rsp_fifo_out_data),                 //                .data
+		.rf_source_ready         (altpll_1_pll_slave_agent_rf_source_ready),                   //       rf_source.ready
+		.rf_source_valid         (altpll_1_pll_slave_agent_rf_source_valid),                   //                .valid
+		.rf_source_startofpacket (altpll_1_pll_slave_agent_rf_source_startofpacket),           //                .startofpacket
+		.rf_source_endofpacket   (altpll_1_pll_slave_agent_rf_source_endofpacket),             //                .endofpacket
+		.rf_source_data          (altpll_1_pll_slave_agent_rf_source_data),                    //                .data
 		.rdata_fifo_sink_ready   (avalon_st_adapter_005_out_0_ready),                          // rdata_fifo_sink.ready
 		.rdata_fifo_sink_valid   (avalon_st_adapter_005_out_0_valid),                          //                .valid
 		.rdata_fifo_sink_data    (avalon_st_adapter_005_out_0_data),                           //                .data
 		.rdata_fifo_sink_error   (avalon_st_adapter_005_out_0_error),                          //                .error
-		.rdata_fifo_src_ready    (altpll_0_pll_slave_agent_rdata_fifo_src_ready),              //  rdata_fifo_src.ready
-		.rdata_fifo_src_valid    (altpll_0_pll_slave_agent_rdata_fifo_src_valid),              //                .valid
-		.rdata_fifo_src_data     (altpll_0_pll_slave_agent_rdata_fifo_src_data),               //                .data
+		.rdata_fifo_src_ready    (altpll_1_pll_slave_agent_rdata_fifo_src_ready),              //  rdata_fifo_src.ready
+		.rdata_fifo_src_valid    (altpll_1_pll_slave_agent_rdata_fifo_src_valid),              //                .valid
+		.rdata_fifo_src_data     (altpll_1_pll_slave_agent_rdata_fifo_src_data),               //                .data
 		.m0_response             (2'b00),                                                      //     (terminated)
 		.m0_writeresponsevalid   (1'b0)                                                        //     (terminated)
 	);
@@ -2460,19 +2460,19 @@ module wasca_mm_interconnect_0 (
 		.USE_STORE_FORWARD   (0),
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
-	) altpll_0_pll_slave_agent_rsp_fifo (
+	) altpll_1_pll_slave_agent_rsp_fifo (
 		.clk               (clk_0_clk_clk),                                              //       clk.clk
-		.reset             (altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset), // clk_reset.reset
-		.in_data           (altpll_0_pll_slave_agent_rf_source_data),                    //        in.data
-		.in_valid          (altpll_0_pll_slave_agent_rf_source_valid),                   //          .valid
-		.in_ready          (altpll_0_pll_slave_agent_rf_source_ready),                   //          .ready
-		.in_startofpacket  (altpll_0_pll_slave_agent_rf_source_startofpacket),           //          .startofpacket
-		.in_endofpacket    (altpll_0_pll_slave_agent_rf_source_endofpacket),             //          .endofpacket
-		.out_data          (altpll_0_pll_slave_agent_rsp_fifo_out_data),                 //       out.data
-		.out_valid         (altpll_0_pll_slave_agent_rsp_fifo_out_valid),                //          .valid
-		.out_ready         (altpll_0_pll_slave_agent_rsp_fifo_out_ready),                //          .ready
-		.out_startofpacket (altpll_0_pll_slave_agent_rsp_fifo_out_startofpacket),        //          .startofpacket
-		.out_endofpacket   (altpll_0_pll_slave_agent_rsp_fifo_out_endofpacket),          //          .endofpacket
+		.reset             (altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset), // clk_reset.reset
+		.in_data           (altpll_1_pll_slave_agent_rf_source_data),                    //        in.data
+		.in_valid          (altpll_1_pll_slave_agent_rf_source_valid),                   //          .valid
+		.in_ready          (altpll_1_pll_slave_agent_rf_source_ready),                   //          .ready
+		.in_startofpacket  (altpll_1_pll_slave_agent_rf_source_startofpacket),           //          .startofpacket
+		.in_endofpacket    (altpll_1_pll_slave_agent_rf_source_endofpacket),             //          .endofpacket
+		.out_data          (altpll_1_pll_slave_agent_rsp_fifo_out_data),                 //       out.data
+		.out_valid         (altpll_1_pll_slave_agent_rsp_fifo_out_valid),                //          .valid
+		.out_ready         (altpll_1_pll_slave_agent_rsp_fifo_out_ready),                //          .ready
+		.out_startofpacket (altpll_1_pll_slave_agent_rsp_fifo_out_startofpacket),        //          .startofpacket
+		.out_endofpacket   (altpll_1_pll_slave_agent_rsp_fifo_out_endofpacket),          //          .endofpacket
 		.csr_address       (2'b00),                                                      // (terminated)
 		.csr_read          (1'b0),                                                       // (terminated)
 		.csr_write         (1'b0),                                                       // (terminated)
@@ -2501,15 +2501,15 @@ module wasca_mm_interconnect_0 (
 		.USE_STORE_FORWARD   (0),
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
-	) altpll_0_pll_slave_agent_rdata_fifo (
+	) altpll_1_pll_slave_agent_rdata_fifo (
 		.clk               (clk_0_clk_clk),                                              //       clk.clk
-		.reset             (altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset), // clk_reset.reset
-		.in_data           (altpll_0_pll_slave_agent_rdata_fifo_src_data),               //        in.data
-		.in_valid          (altpll_0_pll_slave_agent_rdata_fifo_src_valid),              //          .valid
-		.in_ready          (altpll_0_pll_slave_agent_rdata_fifo_src_ready),              //          .ready
-		.out_data          (altpll_0_pll_slave_agent_rdata_fifo_out_data),               //       out.data
-		.out_valid         (altpll_0_pll_slave_agent_rdata_fifo_out_valid),              //          .valid
-		.out_ready         (altpll_0_pll_slave_agent_rdata_fifo_out_ready),              //          .ready
+		.reset             (altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset), // clk_reset.reset
+		.in_data           (altpll_1_pll_slave_agent_rdata_fifo_src_data),               //        in.data
+		.in_valid          (altpll_1_pll_slave_agent_rdata_fifo_src_valid),              //          .valid
+		.in_ready          (altpll_1_pll_slave_agent_rdata_fifo_src_ready),              //          .ready
+		.out_data          (altpll_1_pll_slave_agent_rdata_fifo_out_data),               //       out.data
+		.out_valid         (altpll_1_pll_slave_agent_rdata_fifo_out_valid),              //          .valid
+		.out_ready         (altpll_1_pll_slave_agent_rdata_fifo_out_ready),              //          .ready
 		.csr_address       (2'b00),                                                      // (terminated)
 		.csr_read          (1'b0),                                                       // (terminated)
 		.csr_write         (1'b0),                                                       // (terminated)
@@ -2568,7 +2568,7 @@ module wasca_mm_interconnect_0 (
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
 	) onchip_memory2_0_s1_agent (
-		.clk                     (altpll_0_c0_clk),                                      //             clk.clk
+		.clk                     (altpll_1_c0_clk),                                      //             clk.clk
 		.reset                   (nios2_gen2_0_reset_reset_bridge_in_reset_reset),       //       clk_reset.reset
 		.m0_address              (onchip_memory2_0_s1_agent_m0_address),                 //              m0.address
 		.m0_burstcount           (onchip_memory2_0_s1_agent_m0_burstcount),              //                .burstcount
@@ -2627,7 +2627,7 @@ module wasca_mm_interconnect_0 (
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
 	) onchip_memory2_0_s1_agent_rsp_fifo (
-		.clk               (altpll_0_c0_clk),                                      //       clk.clk
+		.clk               (altpll_1_c0_clk),                                      //       clk.clk
 		.reset             (nios2_gen2_0_reset_reset_bridge_in_reset_reset),       // clk_reset.reset
 		.in_data           (onchip_memory2_0_s1_agent_rf_source_data),             //        in.data
 		.in_valid          (onchip_memory2_0_s1_agent_rf_source_valid),            //          .valid
@@ -2693,7 +2693,7 @@ module wasca_mm_interconnect_0 (
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
 	) uart_0_s1_agent (
-		.clk                     (altpll_0_c0_clk),                                //             clk.clk
+		.clk                     (altpll_1_c0_clk),                                //             clk.clk
 		.reset                   (nios2_gen2_0_reset_reset_bridge_in_reset_reset), //       clk_reset.reset
 		.m0_address              (uart_0_s1_agent_m0_address),                     //              m0.address
 		.m0_burstcount           (uart_0_s1_agent_m0_burstcount),                  //                .burstcount
@@ -2752,7 +2752,7 @@ module wasca_mm_interconnect_0 (
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
 	) uart_0_s1_agent_rsp_fifo (
-		.clk               (altpll_0_c0_clk),                                //       clk.clk
+		.clk               (altpll_1_c0_clk),                                //       clk.clk
 		.reset             (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.in_data           (uart_0_s1_agent_rf_source_data),                 //        in.data
 		.in_valid          (uart_0_s1_agent_rf_source_valid),                //          .valid
@@ -2818,7 +2818,7 @@ module wasca_mm_interconnect_0 (
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
 	) spi_sd_card_spi_control_port_agent (
-		.clk                     (altpll_0_c0_clk),                                               //             clk.clk
+		.clk                     (altpll_1_c0_clk),                                               //             clk.clk
 		.reset                   (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                //       clk_reset.reset
 		.m0_address              (spi_sd_card_spi_control_port_agent_m0_address),                 //              m0.address
 		.m0_burstcount           (spi_sd_card_spi_control_port_agent_m0_burstcount),              //                .burstcount
@@ -2877,7 +2877,7 @@ module wasca_mm_interconnect_0 (
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
 	) spi_sd_card_spi_control_port_agent_rsp_fifo (
-		.clk               (altpll_0_c0_clk),                                               //       clk.clk
+		.clk               (altpll_1_c0_clk),                                               //       clk.clk
 		.reset             (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                // clk_reset.reset
 		.in_data           (spi_sd_card_spi_control_port_agent_rf_source_data),             //        in.data
 		.in_valid          (spi_sd_card_spi_control_port_agent_rf_source_valid),            //          .valid
@@ -2943,7 +2943,7 @@ module wasca_mm_interconnect_0 (
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
 	) spi_stm32_spi_control_port_agent (
-		.clk                     (altpll_0_c0_clk),                                             //             clk.clk
+		.clk                     (altpll_1_c0_clk),                                             //             clk.clk
 		.reset                   (nios2_gen2_0_reset_reset_bridge_in_reset_reset),              //       clk_reset.reset
 		.m0_address              (spi_stm32_spi_control_port_agent_m0_address),                 //              m0.address
 		.m0_burstcount           (spi_stm32_spi_control_port_agent_m0_burstcount),              //                .burstcount
@@ -3002,7 +3002,7 @@ module wasca_mm_interconnect_0 (
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
 	) spi_stm32_spi_control_port_agent_rsp_fifo (
-		.clk               (altpll_0_c0_clk),                                             //       clk.clk
+		.clk               (altpll_1_c0_clk),                                             //       clk.clk
 		.reset             (nios2_gen2_0_reset_reset_bridge_in_reset_reset),              // clk_reset.reset
 		.in_data           (spi_stm32_spi_control_port_agent_rf_source_data),             //        in.data
 		.in_valid          (spi_stm32_spi_control_port_agent_rf_source_valid),            //          .valid
@@ -3035,7 +3035,7 @@ module wasca_mm_interconnect_0 (
 		.sink_data          (nios2_gen2_0_data_master_agent_cp_data),          //          .data
 		.sink_startofpacket (nios2_gen2_0_data_master_agent_cp_startofpacket), //          .startofpacket
 		.sink_endofpacket   (nios2_gen2_0_data_master_agent_cp_endofpacket),   //          .endofpacket
-		.clk                (altpll_0_c0_clk),                                 //       clk.clk
+		.clk                (altpll_1_c0_clk),                                 //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),  // clk_reset.reset
 		.src_ready          (router_src_ready),                                //       src.ready
 		.src_valid          (router_src_valid),                                //          .valid
@@ -3051,7 +3051,7 @@ module wasca_mm_interconnect_0 (
 		.sink_data          (nios2_gen2_0_instruction_master_agent_cp_data),          //          .data
 		.sink_startofpacket (nios2_gen2_0_instruction_master_agent_cp_startofpacket), //          .startofpacket
 		.sink_endofpacket   (nios2_gen2_0_instruction_master_agent_cp_endofpacket),   //          .endofpacket
-		.clk                (altpll_0_c0_clk),                                        //       clk.clk
+		.clk                (altpll_1_c0_clk),                                        //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),         // clk_reset.reset
 		.src_ready          (router_001_src_ready),                                   //       src.ready
 		.src_valid          (router_001_src_valid),                                   //          .valid
@@ -3067,7 +3067,7 @@ module wasca_mm_interconnect_0 (
 		.sink_data          (audio_0_avalon_audio_slave_agent_rp_data),          //          .data
 		.sink_startofpacket (audio_0_avalon_audio_slave_agent_rp_startofpacket), //          .startofpacket
 		.sink_endofpacket   (audio_0_avalon_audio_slave_agent_rp_endofpacket),   //          .endofpacket
-		.clk                (altpll_0_c0_clk),                                   //       clk.clk
+		.clk                (altpll_1_c0_clk),                                   //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),    // clk_reset.reset
 		.src_ready          (router_002_src_ready),                              //       src.ready
 		.src_valid          (router_002_src_valid),                              //          .valid
@@ -3083,7 +3083,7 @@ module wasca_mm_interconnect_0 (
 		.sink_data          (abus_avalon_sdram_bridge_0_avalon_regs_agent_rp_data),          //          .data
 		.sink_startofpacket (abus_avalon_sdram_bridge_0_avalon_regs_agent_rp_startofpacket), //          .startofpacket
 		.sink_endofpacket   (abus_avalon_sdram_bridge_0_avalon_regs_agent_rp_endofpacket),   //          .endofpacket
-		.clk                (altpll_0_c0_clk),                                               //       clk.clk
+		.clk                (altpll_1_c0_clk),                                               //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                // clk_reset.reset
 		.src_ready          (router_003_src_ready),                                          //       src.ready
 		.src_valid          (router_003_src_valid),                                          //          .valid
@@ -3099,7 +3099,7 @@ module wasca_mm_interconnect_0 (
 		.sink_data          (abus_avalon_sdram_bridge_0_avalon_sdram_agent_rp_data),          //          .data
 		.sink_startofpacket (abus_avalon_sdram_bridge_0_avalon_sdram_agent_rp_startofpacket), //          .startofpacket
 		.sink_endofpacket   (abus_avalon_sdram_bridge_0_avalon_sdram_agent_rp_endofpacket),   //          .endofpacket
-		.clk                (altpll_0_c0_clk),                                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                 // clk_reset.reset
 		.src_ready          (router_004_src_ready),                                           //       src.ready
 		.src_valid          (router_004_src_valid),                                           //          .valid
@@ -3115,7 +3115,7 @@ module wasca_mm_interconnect_0 (
 		.sink_data          (onchip_flash_0_data_agent_rp_data),              //          .data
 		.sink_startofpacket (onchip_flash_0_data_agent_rp_startofpacket),     //          .startofpacket
 		.sink_endofpacket   (onchip_flash_0_data_agent_rp_endofpacket),       //          .endofpacket
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready          (router_005_src_ready),                           //       src.ready
 		.src_valid          (router_005_src_valid),                           //          .valid
@@ -3131,7 +3131,7 @@ module wasca_mm_interconnect_0 (
 		.sink_data          (nios2_gen2_0_debug_mem_slave_agent_rp_data),          //          .data
 		.sink_startofpacket (nios2_gen2_0_debug_mem_slave_agent_rp_startofpacket), //          .startofpacket
 		.sink_endofpacket   (nios2_gen2_0_debug_mem_slave_agent_rp_endofpacket),   //          .endofpacket
-		.clk                (altpll_0_c0_clk),                                     //       clk.clk
+		.clk                (altpll_1_c0_clk),                                     //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),      // clk_reset.reset
 		.src_ready          (router_006_src_ready),                                //       src.ready
 		.src_valid          (router_006_src_valid),                                //          .valid
@@ -3142,13 +3142,13 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_router_002 router_007 (
-		.sink_ready         (altpll_0_pll_slave_agent_rp_ready),                          //      sink.ready
-		.sink_valid         (altpll_0_pll_slave_agent_rp_valid),                          //          .valid
-		.sink_data          (altpll_0_pll_slave_agent_rp_data),                           //          .data
-		.sink_startofpacket (altpll_0_pll_slave_agent_rp_startofpacket),                  //          .startofpacket
-		.sink_endofpacket   (altpll_0_pll_slave_agent_rp_endofpacket),                    //          .endofpacket
+		.sink_ready         (altpll_1_pll_slave_agent_rp_ready),                          //      sink.ready
+		.sink_valid         (altpll_1_pll_slave_agent_rp_valid),                          //          .valid
+		.sink_data          (altpll_1_pll_slave_agent_rp_data),                           //          .data
+		.sink_startofpacket (altpll_1_pll_slave_agent_rp_startofpacket),                  //          .startofpacket
+		.sink_endofpacket   (altpll_1_pll_slave_agent_rp_endofpacket),                    //          .endofpacket
 		.clk                (clk_0_clk_clk),                                              //       clk.clk
-		.reset              (altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset), // clk_reset.reset
+		.reset              (altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready          (router_007_src_ready),                                       //       src.ready
 		.src_valid          (router_007_src_valid),                                       //          .valid
 		.src_data           (router_007_src_data),                                        //          .data
@@ -3163,7 +3163,7 @@ module wasca_mm_interconnect_0 (
 		.sink_data          (onchip_memory2_0_s1_agent_rp_data),              //          .data
 		.sink_startofpacket (onchip_memory2_0_s1_agent_rp_startofpacket),     //          .startofpacket
 		.sink_endofpacket   (onchip_memory2_0_s1_agent_rp_endofpacket),       //          .endofpacket
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready          (router_008_src_ready),                           //       src.ready
 		.src_valid          (router_008_src_valid),                           //          .valid
@@ -3179,7 +3179,7 @@ module wasca_mm_interconnect_0 (
 		.sink_data          (uart_0_s1_agent_rp_data),                        //          .data
 		.sink_startofpacket (uart_0_s1_agent_rp_startofpacket),               //          .startofpacket
 		.sink_endofpacket   (uart_0_s1_agent_rp_endofpacket),                 //          .endofpacket
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready          (router_009_src_ready),                           //       src.ready
 		.src_valid          (router_009_src_valid),                           //          .valid
@@ -3195,7 +3195,7 @@ module wasca_mm_interconnect_0 (
 		.sink_data          (spi_sd_card_spi_control_port_agent_rp_data),          //          .data
 		.sink_startofpacket (spi_sd_card_spi_control_port_agent_rp_startofpacket), //          .startofpacket
 		.sink_endofpacket   (spi_sd_card_spi_control_port_agent_rp_endofpacket),   //          .endofpacket
-		.clk                (altpll_0_c0_clk),                                     //       clk.clk
+		.clk                (altpll_1_c0_clk),                                     //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),      // clk_reset.reset
 		.src_ready          (router_010_src_ready),                                //       src.ready
 		.src_valid          (router_010_src_valid),                                //          .valid
@@ -3211,7 +3211,7 @@ module wasca_mm_interconnect_0 (
 		.sink_data          (spi_stm32_spi_control_port_agent_rp_data),          //          .data
 		.sink_startofpacket (spi_stm32_spi_control_port_agent_rp_startofpacket), //          .startofpacket
 		.sink_endofpacket   (spi_stm32_spi_control_port_agent_rp_endofpacket),   //          .endofpacket
-		.clk                (altpll_0_c0_clk),                                   //       clk.clk
+		.clk                (altpll_1_c0_clk),                                   //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),    // clk_reset.reset
 		.src_ready          (router_011_src_ready),                              //       src.ready
 		.src_valid          (router_011_src_valid),                              //          .valid
@@ -3255,7 +3255,7 @@ module wasca_mm_interconnect_0 (
 		.BURSTWRAP_CONST_VALUE     (7),
 		.ADAPTER_VERSION           ("13.1")
 	) abus_avalon_sdram_bridge_0_avalon_regs_burst_adapter (
-		.clk                   (altpll_0_c0_clk),                                                            //       cr0.clk
+		.clk                   (altpll_1_c0_clk),                                                            //       cr0.clk
 		.reset                 (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                             // cr0_reset.reset
 		.sink0_valid           (abus_avalon_sdram_bridge_0_avalon_regs_cmd_width_adapter_src_valid),         //     sink0.valid
 		.sink0_data            (abus_avalon_sdram_bridge_0_avalon_regs_cmd_width_adapter_src_data),          //          .data
@@ -3305,7 +3305,7 @@ module wasca_mm_interconnect_0 (
 		.BURSTWRAP_CONST_VALUE     (3),
 		.ADAPTER_VERSION           ("13.1")
 	) abus_avalon_sdram_bridge_0_avalon_sdram_burst_adapter (
-		.clk                   (altpll_0_c0_clk),                                                             //       cr0.clk
+		.clk                   (altpll_1_c0_clk),                                                             //       cr0.clk
 		.reset                 (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                              // cr0_reset.reset
 		.sink0_valid           (abus_avalon_sdram_bridge_0_avalon_sdram_cmd_width_adapter_src_valid),         //     sink0.valid
 		.sink0_data            (abus_avalon_sdram_bridge_0_avalon_sdram_cmd_width_adapter_src_data),          //          .data
@@ -3322,7 +3322,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_cmd_demux cmd_demux (
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_src_ready),                               //      sink.ready
 		.sink_channel       (router_src_channel),                             //          .channel
@@ -3393,7 +3393,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_cmd_demux_001 cmd_demux_001 (
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_001_src_ready),                           //      sink.ready
 		.sink_channel       (router_001_src_channel),                         //          .channel
@@ -3428,7 +3428,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_cmd_mux cmd_mux (
-		.clk                 (altpll_0_c0_clk),                                //       clk.clk
+		.clk                 (altpll_1_c0_clk),                                //       clk.clk
 		.reset               (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_src_ready),                              //       src.ready
 		.src_valid           (cmd_mux_src_valid),                              //          .valid
@@ -3445,7 +3445,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_cmd_mux cmd_mux_001 (
-		.clk                 (altpll_0_c0_clk),                                //       clk.clk
+		.clk                 (altpll_1_c0_clk),                                //       clk.clk
 		.reset               (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_001_src_ready),                          //       src.ready
 		.src_valid           (cmd_mux_001_src_valid),                          //          .valid
@@ -3462,7 +3462,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_cmd_mux_002 cmd_mux_002 (
-		.clk                 (altpll_0_c0_clk),                                //       clk.clk
+		.clk                 (altpll_1_c0_clk),                                //       clk.clk
 		.reset               (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_002_src_ready),                          //       src.ready
 		.src_valid           (cmd_mux_002_src_valid),                          //          .valid
@@ -3485,7 +3485,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_cmd_mux_002 cmd_mux_003 (
-		.clk                 (altpll_0_c0_clk),                                //       clk.clk
+		.clk                 (altpll_1_c0_clk),                                //       clk.clk
 		.reset               (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_003_src_ready),                          //       src.ready
 		.src_valid           (cmd_mux_003_src_valid),                          //          .valid
@@ -3508,7 +3508,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_cmd_mux_002 cmd_mux_004 (
-		.clk                 (altpll_0_c0_clk),                                //       clk.clk
+		.clk                 (altpll_1_c0_clk),                                //       clk.clk
 		.reset               (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_004_src_ready),                          //       src.ready
 		.src_valid           (cmd_mux_004_src_valid),                          //          .valid
@@ -3532,7 +3532,7 @@ module wasca_mm_interconnect_0 (
 
 	wasca_mm_interconnect_0_cmd_mux cmd_mux_005 (
 		.clk                 (clk_0_clk_clk),                                              //       clk.clk
-		.reset               (altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset), // clk_reset.reset
+		.reset               (altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_005_src_ready),                                      //       src.ready
 		.src_valid           (cmd_mux_005_src_valid),                                      //          .valid
 		.src_data            (cmd_mux_005_src_data),                                       //          .data
@@ -3548,7 +3548,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_cmd_mux_002 cmd_mux_006 (
-		.clk                 (altpll_0_c0_clk),                                //       clk.clk
+		.clk                 (altpll_1_c0_clk),                                //       clk.clk
 		.reset               (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_006_src_ready),                          //       src.ready
 		.src_valid           (cmd_mux_006_src_valid),                          //          .valid
@@ -3571,7 +3571,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_cmd_mux cmd_mux_007 (
-		.clk                 (altpll_0_c0_clk),                                //       clk.clk
+		.clk                 (altpll_1_c0_clk),                                //       clk.clk
 		.reset               (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_007_src_ready),                          //       src.ready
 		.src_valid           (cmd_mux_007_src_valid),                          //          .valid
@@ -3588,7 +3588,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_cmd_mux cmd_mux_008 (
-		.clk                 (altpll_0_c0_clk),                                //       clk.clk
+		.clk                 (altpll_1_c0_clk),                                //       clk.clk
 		.reset               (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_008_src_ready),                          //       src.ready
 		.src_valid           (cmd_mux_008_src_valid),                          //          .valid
@@ -3605,7 +3605,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_cmd_mux cmd_mux_009 (
-		.clk                 (altpll_0_c0_clk),                                //       clk.clk
+		.clk                 (altpll_1_c0_clk),                                //       clk.clk
 		.reset               (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_009_src_ready),                          //       src.ready
 		.src_valid           (cmd_mux_009_src_valid),                          //          .valid
@@ -3622,7 +3622,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_rsp_demux rsp_demux (
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_002_src_ready),                           //      sink.ready
 		.sink_channel       (router_002_src_channel),                         //          .channel
@@ -3639,7 +3639,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_rsp_demux rsp_demux_001 (
-		.clk                (altpll_0_c0_clk),                                                            //       clk.clk
+		.clk                (altpll_1_c0_clk),                                                            //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                             // clk_reset.reset
 		.sink_ready         (abus_avalon_sdram_bridge_0_avalon_regs_rsp_width_adapter_src_ready),         //      sink.ready
 		.sink_channel       (abus_avalon_sdram_bridge_0_avalon_regs_rsp_width_adapter_src_channel),       //          .channel
@@ -3656,7 +3656,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_rsp_demux_002 rsp_demux_002 (
-		.clk                (altpll_0_c0_clk),                                                             //       clk.clk
+		.clk                (altpll_1_c0_clk),                                                             //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                              // clk_reset.reset
 		.sink_ready         (abus_avalon_sdram_bridge_0_avalon_sdram_rsp_width_adapter_src_ready),         //      sink.ready
 		.sink_channel       (abus_avalon_sdram_bridge_0_avalon_sdram_rsp_width_adapter_src_channel),       //          .channel
@@ -3679,7 +3679,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_rsp_demux_002 rsp_demux_003 (
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_005_src_ready),                           //      sink.ready
 		.sink_channel       (router_005_src_channel),                         //          .channel
@@ -3702,7 +3702,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_rsp_demux_002 rsp_demux_004 (
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_006_src_ready),                           //      sink.ready
 		.sink_channel       (router_006_src_channel),                         //          .channel
@@ -3726,7 +3726,7 @@ module wasca_mm_interconnect_0 (
 
 	wasca_mm_interconnect_0_rsp_demux_005 rsp_demux_005 (
 		.clk                (clk_0_clk_clk),                                              //       clk.clk
-		.reset              (altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset), // clk_reset.reset
+		.reset              (altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_007_src_ready),                                       //      sink.ready
 		.sink_channel       (router_007_src_channel),                                     //          .channel
 		.sink_data          (router_007_src_data),                                        //          .data
@@ -3742,7 +3742,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_rsp_demux_002 rsp_demux_006 (
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_008_src_ready),                           //      sink.ready
 		.sink_channel       (router_008_src_channel),                         //          .channel
@@ -3765,7 +3765,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_rsp_demux rsp_demux_007 (
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_009_src_ready),                           //      sink.ready
 		.sink_channel       (router_009_src_channel),                         //          .channel
@@ -3782,7 +3782,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_rsp_demux rsp_demux_008 (
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_010_src_ready),                           //      sink.ready
 		.sink_channel       (router_010_src_channel),                         //          .channel
@@ -3799,7 +3799,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_rsp_demux rsp_demux_009 (
-		.clk                (altpll_0_c0_clk),                                //       clk.clk
+		.clk                (altpll_1_c0_clk),                                //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_011_src_ready),                           //      sink.ready
 		.sink_channel       (router_011_src_channel),                         //          .channel
@@ -3816,7 +3816,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_rsp_mux rsp_mux (
-		.clk                 (altpll_0_c0_clk),                                //       clk.clk
+		.clk                 (altpll_1_c0_clk),                                //       clk.clk
 		.reset               (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (rsp_mux_src_ready),                              //       src.ready
 		.src_valid           (rsp_mux_src_valid),                              //          .valid
@@ -3887,7 +3887,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	wasca_mm_interconnect_0_rsp_mux_001 rsp_mux_001 (
-		.clk                 (altpll_0_c0_clk),                                //       clk.clk
+		.clk                 (altpll_1_c0_clk),                                //       clk.clk
 		.reset               (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (rsp_mux_001_src_ready),                          //       src.ready
 		.src_valid           (rsp_mux_001_src_valid),                          //          .valid
@@ -3970,7 +3970,7 @@ module wasca_mm_interconnect_0 (
 		.PACKING                       (1),
 		.ENABLE_ADDRESS_ALIGNMENT      (0)
 	) abus_avalon_sdram_bridge_0_avalon_regs_rsp_width_adapter (
-		.clk                  (altpll_0_c0_clk),                                                            //       clk.clk
+		.clk                  (altpll_1_c0_clk),                                                            //       clk.clk
 		.reset                (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                             // clk_reset.reset
 		.in_valid             (router_003_src_valid),                                                       //      sink.valid
 		.in_channel           (router_003_src_channel),                                                     //          .channel
@@ -4036,7 +4036,7 @@ module wasca_mm_interconnect_0 (
 		.PACKING                       (1),
 		.ENABLE_ADDRESS_ALIGNMENT      (0)
 	) abus_avalon_sdram_bridge_0_avalon_sdram_rsp_width_adapter (
-		.clk                  (altpll_0_c0_clk),                                                             //       clk.clk
+		.clk                  (altpll_1_c0_clk),                                                             //       clk.clk
 		.reset                (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                              // clk_reset.reset
 		.in_valid             (router_004_src_valid),                                                        //      sink.valid
 		.in_channel           (router_004_src_channel),                                                      //          .channel
@@ -4102,7 +4102,7 @@ module wasca_mm_interconnect_0 (
 		.PACKING                       (1),
 		.ENABLE_ADDRESS_ALIGNMENT      (0)
 	) abus_avalon_sdram_bridge_0_avalon_regs_cmd_width_adapter (
-		.clk                  (altpll_0_c0_clk),                                                            //       clk.clk
+		.clk                  (altpll_1_c0_clk),                                                            //       clk.clk
 		.reset                (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                             // clk_reset.reset
 		.in_valid             (cmd_mux_001_src_valid),                                                      //      sink.valid
 		.in_channel           (cmd_mux_001_src_channel),                                                    //          .channel
@@ -4168,7 +4168,7 @@ module wasca_mm_interconnect_0 (
 		.PACKING                       (1),
 		.ENABLE_ADDRESS_ALIGNMENT      (0)
 	) abus_avalon_sdram_bridge_0_avalon_sdram_cmd_width_adapter (
-		.clk                  (altpll_0_c0_clk),                                                             //       clk.clk
+		.clk                  (altpll_1_c0_clk),                                                             //       clk.clk
 		.reset                (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                              // clk_reset.reset
 		.in_valid             (cmd_mux_002_src_valid),                                                       //      sink.valid
 		.in_channel           (cmd_mux_002_src_channel),                                                     //          .channel
@@ -4197,10 +4197,10 @@ module wasca_mm_interconnect_0 (
 		.READY_SYNC_DEPTH    (2),
 		.USE_OUTPUT_PIPELINE (0)
 	) crosser (
-		.in_clk            (altpll_0_c0_clk),                                            //        in_clk.clk
+		.in_clk            (altpll_1_c0_clk),                                            //        in_clk.clk
 		.in_reset          (nios2_gen2_0_reset_reset_bridge_in_reset_reset),             //  in_clk_reset.reset
 		.out_clk           (clk_0_clk_clk),                                              //       out_clk.clk
-		.out_reset         (altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset), // out_clk_reset.reset
+		.out_reset         (altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset), // out_clk_reset.reset
 		.in_ready          (cmd_demux_src5_ready),                                       //            in.ready
 		.in_valid          (cmd_demux_src5_valid),                                       //              .valid
 		.in_startofpacket  (cmd_demux_src5_startofpacket),                               //              .startofpacket
@@ -4232,8 +4232,8 @@ module wasca_mm_interconnect_0 (
 		.USE_OUTPUT_PIPELINE (0)
 	) crosser_001 (
 		.in_clk            (clk_0_clk_clk),                                              //        in_clk.clk
-		.in_reset          (altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset), //  in_clk_reset.reset
-		.out_clk           (altpll_0_c0_clk),                                            //       out_clk.clk
+		.in_reset          (altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset), //  in_clk_reset.reset
+		.out_clk           (altpll_1_c0_clk),                                            //       out_clk.clk
 		.out_reset         (nios2_gen2_0_reset_reset_bridge_in_reset_reset),             // out_clk_reset.reset
 		.in_ready          (rsp_demux_005_src0_ready),                                   //            in.ready
 		.in_valid          (rsp_demux_005_src0_valid),                                   //              .valid
@@ -4271,7 +4271,7 @@ module wasca_mm_interconnect_0 (
 		.outUseReady     (1),
 		.outReadyLatency (0)
 	) avalon_st_adapter (
-		.in_clk_0_clk   (altpll_0_c0_clk),                                       // in_clk_0.clk
+		.in_clk_0_clk   (altpll_1_c0_clk),                                       // in_clk_0.clk
 		.in_rst_0_reset (nios2_gen2_0_reset_reset_bridge_in_reset_reset),        // in_rst_0.reset
 		.in_0_data      (audio_0_avalon_audio_slave_agent_rdata_fifo_src_data),  //     in_0.data
 		.in_0_valid     (audio_0_avalon_audio_slave_agent_rdata_fifo_src_valid), //         .valid
@@ -4300,7 +4300,7 @@ module wasca_mm_interconnect_0 (
 		.outUseReady     (1),
 		.outReadyLatency (0)
 	) avalon_st_adapter_001 (
-		.in_clk_0_clk   (altpll_0_c0_clk),                                                   // in_clk_0.clk
+		.in_clk_0_clk   (altpll_1_c0_clk),                                                   // in_clk_0.clk
 		.in_rst_0_reset (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                    // in_rst_0.reset
 		.in_0_data      (abus_avalon_sdram_bridge_0_avalon_regs_agent_rdata_fifo_src_data),  //     in_0.data
 		.in_0_valid     (abus_avalon_sdram_bridge_0_avalon_regs_agent_rdata_fifo_src_valid), //         .valid
@@ -4329,7 +4329,7 @@ module wasca_mm_interconnect_0 (
 		.outUseReady     (1),
 		.outReadyLatency (0)
 	) avalon_st_adapter_002 (
-		.in_clk_0_clk   (altpll_0_c0_clk),                                                    // in_clk_0.clk
+		.in_clk_0_clk   (altpll_1_c0_clk),                                                    // in_clk_0.clk
 		.in_rst_0_reset (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                     // in_rst_0.reset
 		.in_0_data      (abus_avalon_sdram_bridge_0_avalon_sdram_agent_rdata_fifo_src_data),  //     in_0.data
 		.in_0_valid     (abus_avalon_sdram_bridge_0_avalon_sdram_agent_rdata_fifo_src_valid), //         .valid
@@ -4358,7 +4358,7 @@ module wasca_mm_interconnect_0 (
 		.outUseReady     (1),
 		.outReadyLatency (0)
 	) avalon_st_adapter_003 (
-		.in_clk_0_clk   (altpll_0_c0_clk),                                // in_clk_0.clk
+		.in_clk_0_clk   (altpll_1_c0_clk),                                // in_clk_0.clk
 		.in_rst_0_reset (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // in_rst_0.reset
 		.in_0_data      (onchip_flash_0_data_agent_rdata_fifo_src_data),  //     in_0.data
 		.in_0_valid     (onchip_flash_0_data_agent_rdata_fifo_src_valid), //         .valid
@@ -4387,7 +4387,7 @@ module wasca_mm_interconnect_0 (
 		.outUseReady     (1),
 		.outReadyLatency (0)
 	) avalon_st_adapter_004 (
-		.in_clk_0_clk   (altpll_0_c0_clk),                                         // in_clk_0.clk
+		.in_clk_0_clk   (altpll_1_c0_clk),                                         // in_clk_0.clk
 		.in_rst_0_reset (nios2_gen2_0_reset_reset_bridge_in_reset_reset),          // in_rst_0.reset
 		.in_0_data      (nios2_gen2_0_debug_mem_slave_agent_rdata_fifo_src_data),  //     in_0.data
 		.in_0_valid     (nios2_gen2_0_debug_mem_slave_agent_rdata_fifo_src_valid), //         .valid
@@ -4417,10 +4417,10 @@ module wasca_mm_interconnect_0 (
 		.outReadyLatency (0)
 	) avalon_st_adapter_005 (
 		.in_clk_0_clk   (clk_0_clk_clk),                                              // in_clk_0.clk
-		.in_rst_0_reset (altpll_0_inclk_interface_reset_reset_bridge_in_reset_reset), // in_rst_0.reset
-		.in_0_data      (altpll_0_pll_slave_agent_rdata_fifo_out_data),               //     in_0.data
-		.in_0_valid     (altpll_0_pll_slave_agent_rdata_fifo_out_valid),              //         .valid
-		.in_0_ready     (altpll_0_pll_slave_agent_rdata_fifo_out_ready),              //         .ready
+		.in_rst_0_reset (altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset), // in_rst_0.reset
+		.in_0_data      (altpll_1_pll_slave_agent_rdata_fifo_out_data),               //     in_0.data
+		.in_0_valid     (altpll_1_pll_slave_agent_rdata_fifo_out_valid),              //         .valid
+		.in_0_ready     (altpll_1_pll_slave_agent_rdata_fifo_out_ready),              //         .ready
 		.out_0_data     (avalon_st_adapter_005_out_0_data),                           //    out_0.data
 		.out_0_valid    (avalon_st_adapter_005_out_0_valid),                          //         .valid
 		.out_0_ready    (avalon_st_adapter_005_out_0_ready),                          //         .ready
@@ -4445,7 +4445,7 @@ module wasca_mm_interconnect_0 (
 		.outUseReady     (1),
 		.outReadyLatency (0)
 	) avalon_st_adapter_006 (
-		.in_clk_0_clk   (altpll_0_c0_clk),                                // in_clk_0.clk
+		.in_clk_0_clk   (altpll_1_c0_clk),                                // in_clk_0.clk
 		.in_rst_0_reset (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // in_rst_0.reset
 		.in_0_data      (onchip_memory2_0_s1_agent_rdata_fifo_src_data),  //     in_0.data
 		.in_0_valid     (onchip_memory2_0_s1_agent_rdata_fifo_src_valid), //         .valid
@@ -4474,7 +4474,7 @@ module wasca_mm_interconnect_0 (
 		.outUseReady     (1),
 		.outReadyLatency (0)
 	) avalon_st_adapter_007 (
-		.in_clk_0_clk   (altpll_0_c0_clk),                                // in_clk_0.clk
+		.in_clk_0_clk   (altpll_1_c0_clk),                                // in_clk_0.clk
 		.in_rst_0_reset (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // in_rst_0.reset
 		.in_0_data      (uart_0_s1_agent_rdata_fifo_src_data),            //     in_0.data
 		.in_0_valid     (uart_0_s1_agent_rdata_fifo_src_valid),           //         .valid
@@ -4503,7 +4503,7 @@ module wasca_mm_interconnect_0 (
 		.outUseReady     (1),
 		.outReadyLatency (0)
 	) avalon_st_adapter_008 (
-		.in_clk_0_clk   (altpll_0_c0_clk),                                         // in_clk_0.clk
+		.in_clk_0_clk   (altpll_1_c0_clk),                                         // in_clk_0.clk
 		.in_rst_0_reset (nios2_gen2_0_reset_reset_bridge_in_reset_reset),          // in_rst_0.reset
 		.in_0_data      (spi_sd_card_spi_control_port_agent_rdata_fifo_src_data),  //     in_0.data
 		.in_0_valid     (spi_sd_card_spi_control_port_agent_rdata_fifo_src_valid), //         .valid
@@ -4532,7 +4532,7 @@ module wasca_mm_interconnect_0 (
 		.outUseReady     (1),
 		.outReadyLatency (0)
 	) avalon_st_adapter_009 (
-		.in_clk_0_clk   (altpll_0_c0_clk),                                       // in_clk_0.clk
+		.in_clk_0_clk   (altpll_1_c0_clk),                                       // in_clk_0.clk
 		.in_rst_0_reset (nios2_gen2_0_reset_reset_bridge_in_reset_reset),        // in_rst_0.reset
 		.in_0_data      (spi_stm32_spi_control_port_agent_rdata_fifo_src_data),  //     in_0.data
 		.in_0_valid     (spi_stm32_spi_control_port_agent_rdata_fifo_src_valid), //         .valid
