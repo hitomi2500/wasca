@@ -34,7 +34,7 @@ entity abus_avalon_sdram_bridge is
 		avalon_sdram_writedata     : in   std_logic_vector(7 downto 0) := (others => '0');                    --              .writedata
 		avalon_sdram_readdata      : out    std_logic_vector(7 downto 0) := (others => '0'); --              .readdata
 		avalon_sdram_readdatavalid : out    std_logic                     := '0';             --              .readdatavalid
-		avalon_sdram_byteenable    : in    std_logic_vector(1 downto 0) := (others => '0'); --              .readdata
+		--avalon_sdram_byteenable    : in    std_logic_vector(1 downto 0) := (others => '0'); --              .readdata
 
 		avalon_regs_read          : in   std_logic := '0';                                        -- avalon_master.read
 		avalon_regs_write         : in   std_logic := '0';                                        --              .write
@@ -135,6 +135,7 @@ signal sdram_datain_latched          : std_logic_vector(15 downto 0) := (others 
 signal avalon_sdram_complete      : std_logic := '0';
 signal avalon_sdram_reset_pending      : std_logic := '0';
 signal avalon_sdram_read_pending      : std_logic := '0';
+signal avalon_sdram_read_pending_f1      : std_logic := '0';
 signal avalon_sdram_write_pending      : std_logic := '0';
 signal avalon_sdram_pending_address          : std_logic_vector(25 downto 0) := (others => '0'); 
 signal avalon_sdram_pending_data          : std_logic_vector(7 downto 0) := (others => '0'); 
@@ -248,7 +249,7 @@ begin
 	process (clock)
 	begin
 		if rising_edge(clock) then
-			if abus_anypulse = '1' then
+			if abus_cspulse = '1' then
 				abus_address_latched <= abus_address & abus_addressdata_buf(11) & abus_addressdata_buf(12) & abus_addressdata_buf(9) & abus_addressdata_buf(10)
 																 & abus_addressdata_buf(2) & abus_addressdata_buf(1) & abus_addressdata_buf(3) & abus_addressdata_buf(8)
 																 & abus_addressdata_buf(13) & abus_addressdata_buf(14) & abus_addressdata_buf(15) & abus_addressdata_buf(4)
@@ -568,12 +569,12 @@ begin
 		if rising_edge(clock) then
 			if avalon_sdram_read = '1' then
 				avalon_sdram_read_pending <= '1';
-				avalon_sdram_pending_address(25 downto 1) <= avalon_sdram_address;
-				avalon_sdram_pending_address(0) <= avalon_sdram_byteenable(0);
+				avalon_sdram_pending_address(24 downto 0) <= avalon_sdram_address;
+				--avalon_sdram_pending_address(0) <= avalon_sdram_byteenable(0);
 			elsif avalon_sdram_write = '1' then
 				avalon_sdram_write_pending <= '1';
-                avalon_sdram_pending_address(25 downto 1) <= avalon_sdram_address;
-					 avalon_sdram_pending_address(0) <= avalon_sdram_byteenable(0);
+                avalon_sdram_pending_address(24 downto 0) <= avalon_sdram_address;
+					 --avalon_sdram_pending_address(0) <= avalon_sdram_byteenable(0);
                 avalon_sdram_pending_data<= avalon_sdram_writedata;		    
 			elsif avalon_sdram_reset_pending = '1' then
 				avalon_sdram_read_pending <= '0';
@@ -581,8 +582,10 @@ begin
 			end if;
 		end if;
 	end process;
+	
+	avalon_sdram_read_pending_f1 <= avalon_sdram_read_pending when rising_edge(clock);
 
-	avalon_sdram_readdatavalid <= avalon_sdram_complete and avalon_sdram_read_pending;
+	avalon_sdram_readdatavalid <= avalon_sdram_complete and avalon_sdram_read_pending_f1;
 	
 	avalon_sdram_readdata <= avalon_sdram_readdata_latched;
 	
@@ -596,7 +599,7 @@ begin
 	process (clock)
 	begin
 		if rising_edge(clock) then
-			if abus_anypulse = '1' then
+			if abus_cspulse2 = '1' then
 				sdram_abus_pending <= '1';
 			elsif sdram_abus_complete = '1' then
 				sdram_abus_pending <= '0';
@@ -788,13 +791,13 @@ begin
                             sdram_dq <= abus_data_in;
                             sdram_addr <= "0010"&abus_address_latched(9 downto 1);
                             sdram_ba <= abus_address_latched(24 downto 23);
-                            sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+                            sdram_wait_counter <= to_unsigned(3,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						else --if my_little_transaction_dir = DIR_READ then
 							sdram_mode <= SDRAM_ABUS_READ_AND_PRECHARGE;
 							sdram_cas_n <= '0';
 							sdram_addr <= "0010"&abus_address_latched(9 downto 1);
 							sdram_ba <= abus_address_latched(24 downto 23);
-							sdram_wait_counter <= to_unsigned(2,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+							sdram_wait_counter <= to_unsigned(4,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						--else 
 							-- this is an invalid transaction - either it's for CS2 or from an unmapped range
 							-- but the bank is already prepared, and we need to precharge it
@@ -844,7 +847,7 @@ begin
 							sdram_ba <= avalon_sdram_pending_address(24 downto 23);
 							sdram_cas_n <= '0';
                             sdram_addr <= "0010"&avalon_sdram_pending_address(9 downto 1);
-                            sdram_wait_counter <= to_unsigned(3,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+                            sdram_wait_counter <= to_unsigned(4,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						else
 							sdram_mode <= SDRAM_AVALON_WRITE_AND_PRECHARGE;
 							sdram_cas_n <= '0';
@@ -864,11 +867,6 @@ begin
 					sdram_cas_n <= '1';
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 1 then
---						if avalon_sdram_pending_address(0) = '0' then
---							avalon_sdram_readdata_latched <= sdram_dq(7 downto 0);
---						else
---							avalon_sdram_readdata_latched <= sdram_dq(15 downto 8);
---						end if;
 						avalon_sdram_reset_pending <= '1';
 					end if;	
 					if sdram_wait_counter = 0 then

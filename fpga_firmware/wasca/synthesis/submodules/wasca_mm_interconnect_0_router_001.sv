@@ -137,13 +137,13 @@ module wasca_mm_interconnect_0_router_001
     localparam PAD0 = log2ceil(64'h40000 - 64'h0); 
     localparam PAD1 = log2ceil(64'h41800 - 64'h41000); 
     localparam PAD2 = log2ceil(64'h84000 - 64'h80000); 
-    localparam PAD3 = log2ceil(64'h8000000 - 64'h4000000); 
+    localparam PAD3 = log2ceil(64'h6000000 - 64'h4000000); 
     // -------------------------------------------------------
     // Work out which address bits are significant based on the
     // address range of the slaves. If the required width is too
     // large or too small, we use the address field width instead.
     // -------------------------------------------------------
-    localparam ADDR_RANGE = 64'h8000000;
+    localparam ADDR_RANGE = 64'h6000000;
     localparam RANGE_ADDR_WIDTH = log2ceil(ADDR_RANGE);
     localparam OPTIMIZED_ADDR_H = (RANGE_ADDR_WIDTH > PKT_ADDR_W) ||
                                   (RANGE_ADDR_WIDTH == 0) ?
@@ -214,7 +214,7 @@ module wasca_mm_interconnect_0_router_001
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 6;
     end
 
-    // ( 0x4000000 .. 0x8000000 )
+    // ( 0x4000000 .. 0x6000000 )
     if ( {address[RG:PAD3],{PAD3{1'b0}}} == 27'h4000000   ) begin
             src_channel = 10'b0001;
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 1;

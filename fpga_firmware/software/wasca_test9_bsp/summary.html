@@ -22,10 +22,10 @@
 <td width="20%" bgcolor="#77BBFF">BSP Version:</td><td>default</td>
 </tr>
 <tr mode="wrap">
-<td width="20%" bgcolor="#77BBFF">BSP Generated On:</td><td>21.08.2020 0:49:34</td>
+<td width="20%" bgcolor="#77BBFF">BSP Generated On:</td><td>22.08.2020 1:34:24</td>
 </tr>
 <tr mode="wrap">
-<td width="20%" bgcolor="#77BBFF">BSP Generated Timestamp:</td><td>1597956574281</td>
+<td width="20%" bgcolor="#77BBFF">BSP Generated Timestamp:</td><td>1598045664204</td>
 </tr>
 <tr mode="wrap">
 <td width="20%" bgcolor="#77BBFF">BSP Generated Location:</td><td>D:\Saturn\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</td>
@@ -38,7 +38,7 @@
 <th align="left" width="20%">Slave Descriptor</th><th align="left" width="40%">Address Range</th><th align="left" width="20%">Size</th><th align="left" width="20%">Attributes</th>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>abus_avalon_sdram_bridge_0_avalon_sdram</td><td>0x04000000 - 0x07FFFFFF</td><td>67108864</td><td class="listing">&nbsp;</td>
+<td>abus_avalon_sdram_bridge_0_avalon_sdram</td><td>0x04000000 - 0x05FFFFFF</td><td>33554432</td><td class="listing">&nbsp;</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
 <td>onchip_memory2_0</td><td>0x00080000 - 0x00083FFF</td><td>16384</td><td class="listing">memory</td>
@@ -81,10 +81,10 @@
 <th align="left" width="50%">Section</th><th align="left" width="50%">Region</th>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>.text</td><td>onchip_memory2_0</td>
+<td>.text</td><td>onchip_flash_0</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>.rodata</td><td>onchip_memory2_0</td>
+<td>.rodata</td><td>onchip_flash_0</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
 <td>.rwdata</td><td>onchip_memory2_0</td>
@@ -381,7 +381,7 @@
 <td width="20%">Default Value:</td><td>0</td>
 </tr>
 <tr>
-<td width="20%">Value:</td><td>0</td>
+<td width="20%">Value:</td><td>1</td>
 </tr>
 <tr>
 <td width="20%">Type:</td><td>Boolean</td>
@@ -570,7 +570,7 @@
 <td width="20%">Default Value:</td><td>0</td>
 </tr>
 <tr>
-<td width="20%">Value:</td><td>1</td>
+<td width="20%">Value:</td><td>0</td>
 </tr>
 <tr>
 <td width="20%">Type:</td><td>Boolean</td>

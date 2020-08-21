@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="wasca" kind="wasca" version="1.0" fabric="QSYS">
  <!-- Format version 15.1 185 (Future versions may contain additional information.) -->
- <!-- 2020.08.21.08:34:29 -->
+ <!-- 2020.08.22.01:30:43 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1597984469</value>
+  <value>1598045443</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -261,7 +261,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="addressSpan">
     <type>java.math.BigInteger</type>
-    <value>67108864</value>
+    <value>33554432</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -584,13 +584,13 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avalon_sdram_writedata</name>
     <direction>Input</direction>
-    <width>16</width>
+    <width>8</width>
     <role>writedata</role>
    </port>
    <port>
     <name>avalon_sdram_readdata</name>
     <direction>Output</direction>
-    <width>16</width>
+    <width>8</width>
     <role>readdata</role>
    </port>
    <port>
@@ -598,12 +598,6 @@ parameters are a RESULT of the module parameters. -->
     <direction>Output</direction>
     <width>1</width>
     <role>readdatavalid</role>
-   </port>
-   <port>
-    <name>avalon_sdram_byteenable</name>
-    <direction>Input</direction>
-    <width>2</width>
-    <role>byteenable</role>
    </port>
   </interface>
   <interface name="avalon_regs" kind="avalon_slave" version="15.1">
@@ -6114,7 +6108,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="instSlaveMapParam">
    <type>java.lang.String</type>
-   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x8000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></value>
+   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x6000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -6134,7 +6128,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="dataSlaveMapParam">
    <type>java.lang.String</type>
-   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /><slave name='uart_0.s1' start='0x40000' end='0x40020' type='altera_avalon_uart.s1' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='spi_sd_card.spi_control_port' start='0x43000' end='0x43020' type='altera_avalon_spi.spi_control_port' /><slave name='spi_stm32.spi_control_port' start='0x44000' end='0x44020' type='altera_avalon_spi.spi_control_port' /><slave name='audio_0.avalon_audio_slave' start='0x46000' end='0x46010' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x47000' end='0x47200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x8000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></value>
+   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /><slave name='uart_0.s1' start='0x40000' end='0x40020' type='altera_avalon_uart.s1' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='spi_sd_card.spi_control_port' start='0x43000' end='0x43020' type='altera_avalon_spi.spi_control_port' /><slave name='spi_stm32.spi_control_port' start='0x44000' end='0x44020' type='altera_avalon_spi.spi_control_port' /><slave name='audio_0.avalon_audio_slave' start='0x46000' end='0x46010' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x47000' end='0x47200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x6000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -6816,7 +6810,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>avalon_sdram</slaveName>
     <name>abus_avalon_sdram_bridge_0.avalon_sdram</name>
     <baseAddress>67108864</baseAddress>
-    <span>67108864</span>
+    <span>33554432</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -7167,7 +7161,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>avalon_sdram</slaveName>
     <name>abus_avalon_sdram_bridge_0.avalon_sdram</name>
     <baseAddress>67108864</baseAddress>
-    <span>67108864</span>
+    <span>33554432</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
