@@ -116,6 +116,7 @@ add_interface_port avalon_sdram avalon_sdram_address address Input 25
 add_interface_port avalon_sdram avalon_sdram_writedata writedata Input 16
 add_interface_port avalon_sdram avalon_sdram_readdata readdata Output 16
 add_interface_port avalon_sdram avalon_sdram_readdatavalid readdatavalid Output 1
+add_interface_port avalon_sdram avalon_sdram_byteenable byteenable Input 2
 set_interface_assignment avalon_sdram embeddedsw.configuration.isFlash 0
 set_interface_assignment avalon_sdram embeddedsw.configuration.isMemoryDevice 0
 set_interface_assignment avalon_sdram embeddedsw.configuration.isNonVolatileStorage 0

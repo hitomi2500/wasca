@@ -171,7 +171,7 @@ NIOS2_ELF_FORMAT ?= elf32-littlenios2
 #-------------------------------------
 
 # Memory: onchip_flash_0
-MEM_0 := wasca_onchip_flash_0
+MEM_0 := onchip_flash_0
 $(MEM_0)_NAME := onchip_flash_0
 $(MEM_0)_MEM_INIT_FILE_PARAM_NAME := INIT_FILENAME
 HEX_FILES += $(MEM_INIT_DIR)/$(MEM_0).hex

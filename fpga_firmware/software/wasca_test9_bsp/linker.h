@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Wed Aug 19 07:49:36 MSK 2020
+ * Generated: Thu Aug 20 21:53:19 MSK 2020
  */
 
 /*
@@ -80,9 +80,9 @@
 
 #define ALT_EXCEPTIONS_DEVICE ONCHIP_MEMORY2_0
 #define ALT_RESET_DEVICE ONCHIP_MEMORY2_0
-#define ALT_RODATA_DEVICE ONCHIP_FLASH_0
+#define ALT_RODATA_DEVICE ONCHIP_MEMORY2_0
 #define ALT_RWDATA_DEVICE ONCHIP_MEMORY2_0
-#define ALT_TEXT_DEVICE ONCHIP_FLASH_0
+#define ALT_TEXT_DEVICE ONCHIP_MEMORY2_0
 
 
 /*

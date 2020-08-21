@@ -110,17 +110,37 @@ int main()
   int iteration = 0;
   int ierrors = 0;
   p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+  p16 = (unsigned short *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+  volatile unsigned char c1,c2,c3,c4;
+  volatile unsigned short s1,s2;
   while (1)
+  {
+	  p[64] = 0x12;
+	  p[65] = 0x34;
+	  p[66] = 0x56;
+	  p[67] = 0x78;
+	  c1 = p[64];
+	  c2 = p[65];
+	  c3 = p[66];
+	  c4 = p[67];
+	  /*p16[32] = 0x1234;
+	  p16[33] = 0x5678;
+	  s1 = p16[32];
+	  s2 = p16[33];*/
+	  for (k=0;k<1000000;k++) ; //pause
+	  k++;
+  }
+  /*while (1)
   {
 	  alt_printf("New SDRAM test, iteration %i\n\r",iteration);
 	  ierrors = 0;
 	  //write
 	  for (i=0;i<256;i++)
-		  p[i] = i;
+		  p[i*2] = i;
 	  //read
 	  for (i=0;i<256;i++)
 	  {
-		  short readback = p[i];
+		  short readback = p[i*2];
 		  if (readback != i)
 		  {
 			  ierrors++;
@@ -132,12 +152,13 @@ int main()
 	  alt_printf("Test done, %i errors\n\r",ierrors);
 	  iteration++;
 	  for (k=0;k<1000000;k++) ; //pause
-  }
+  }*/
   //first things first - copy saturn bootcode into SDRAM
-  p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+  /*p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
   for (i=0;i<124240;i++)
-	  p[i] = rawData[i];
-  alt_putstr("Bootloader copied! Dump :\n\r");
+	  p[i*2] = rawData[i];
+  alt_putstr("Bootloader copied! Dump :\n\r");*/
+  while(1);
   for (i=0;i<256;i++)
   {
 	  alt_printf("%c ",p[i]);

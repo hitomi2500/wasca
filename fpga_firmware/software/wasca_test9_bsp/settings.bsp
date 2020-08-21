@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>19.08.2020 7:49:32</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1597808972594</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>21.08.2020 0:49:34</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1597956574281</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>D:\Saturn\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
@@ -899,7 +899,7 @@
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>altpll_0</slaveDescriptor>
+                <slaveDescriptor>altpll_1</slaveDescriptor>
                 <addressRange>0x00042000 - 0x0004200F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
@@ -942,11 +942,11 @@
         </MemoryMap>
         <LinkerSection>
                 <sectionName>.text</sectionName>
-                <regionName>onchip_flash_0</regionName>
+                <regionName>onchip_memory2_0</regionName>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.rodata</sectionName>
-                <regionName>onchip_flash_0</regionName>
+                <regionName>onchip_memory2_0</regionName>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.rwdata</sectionName>

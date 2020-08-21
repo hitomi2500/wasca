@@ -35,6 +35,7 @@ module wasca_mm_interconnect_0 (
 		output wire        abus_avalon_sdram_bridge_0_avalon_sdram_read,               //                                                     .read
 		input  wire [15:0] abus_avalon_sdram_bridge_0_avalon_sdram_readdata,           //                                                     .readdata
 		output wire [15:0] abus_avalon_sdram_bridge_0_avalon_sdram_writedata,          //                                                     .writedata
+		output wire [1:0]  abus_avalon_sdram_bridge_0_avalon_sdram_byteenable,         //                                                     .byteenable
 		input  wire        abus_avalon_sdram_bridge_0_avalon_sdram_readdatavalid,      //                                                     .readdatavalid
 		input  wire        abus_avalon_sdram_bridge_0_avalon_sdram_waitrequest,        //                                                     .waitrequest
 		output wire [1:0]  altpll_1_pll_slave_address,                                 //                                   altpll_1_pll_slave.address
@@ -1109,12 +1110,12 @@ module wasca_mm_interconnect_0 (
 		.av_read                (abus_avalon_sdram_bridge_0_avalon_sdram_read),                   //                         .read
 		.av_readdata            (abus_avalon_sdram_bridge_0_avalon_sdram_readdata),               //                         .readdata
 		.av_writedata           (abus_avalon_sdram_bridge_0_avalon_sdram_writedata),              //                         .writedata
+		.av_byteenable          (abus_avalon_sdram_bridge_0_avalon_sdram_byteenable),             //                         .byteenable
 		.av_readdatavalid       (abus_avalon_sdram_bridge_0_avalon_sdram_readdatavalid),          //                         .readdatavalid
 		.av_waitrequest         (abus_avalon_sdram_bridge_0_avalon_sdram_waitrequest),            //                         .waitrequest
 		.av_begintransfer       (),                                                               //              (terminated)
 		.av_beginbursttransfer  (),                                                               //              (terminated)
 		.av_burstcount          (),                                                               //              (terminated)
-		.av_byteenable          (),                                                               //              (terminated)
 		.av_writebyteenable     (),                                                               //              (terminated)
 		.av_lock                (),                                                               //              (terminated)
 		.av_chipselect          (),                                                               //              (terminated)

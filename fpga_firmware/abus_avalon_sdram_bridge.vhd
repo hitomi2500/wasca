@@ -34,6 +34,7 @@ entity abus_avalon_sdram_bridge is
 		avalon_sdram_writedata     : in   std_logic_vector(7 downto 0) := (others => '0');                    --              .writedata
 		avalon_sdram_readdata      : out    std_logic_vector(7 downto 0) := (others => '0'); --              .readdata
 		avalon_sdram_readdatavalid : out    std_logic                     := '0';             --              .readdatavalid
+		avalon_sdram_byteenable    : in    std_logic_vector(1 downto 0) := (others => '0'); --              .readdata
 
 		avalon_regs_read          : in   std_logic := '0';                                        -- avalon_master.read
 		avalon_regs_write         : in   std_logic := '0';                                        --              .write
@@ -132,9 +133,10 @@ signal sdram_autorefresh_counter : unsigned(9 downto 0) := (others => '1');
 signal sdram_datain_latched          : std_logic_vector(15 downto 0) := (others => '0'); 
 
 signal avalon_sdram_complete      : std_logic := '0';
+signal avalon_sdram_reset_pending      : std_logic := '0';
 signal avalon_sdram_read_pending      : std_logic := '0';
 signal avalon_sdram_write_pending      : std_logic := '0';
-signal avalon_sdram_pending_address          : std_logic_vector(24 downto 0) := (others => '0'); 
+signal avalon_sdram_pending_address          : std_logic_vector(25 downto 0) := (others => '0'); 
 signal avalon_sdram_pending_data          : std_logic_vector(7 downto 0) := (others => '0'); 
 signal avalon_sdram_readdata_latched          : std_logic_vector(7 downto 0) := (others => '0'); 
 
@@ -549,16 +551,16 @@ begin
 	
 	--waitrequest should be issued as long as we received some command from avalon
 	--keep it until the command is processed
-	process (clock)
-	begin
-		if rising_edge(clock) then
-			if avalon_sdram_read = '1' then
-				avalon_sdram_waitrequest <= '1';
-			elsif avalon_sdram_complete = '1' then
-				avalon_sdram_waitrequest <= '0';
-			end if;
-		end if;
-	end process;	
+--	process (clock)
+--	begin
+--		if rising_edge(clock) then
+--			if (avalon_sdram_read = '1' or avalon_sdram_write = '1') and avalon_sdram_read_pending = '0' and avalon_sdram_write_pending = '0' then
+--				avalon_sdram_waitrequest <= '1';
+--			elsif avalon_sdram_complete = '1' then
+--				avalon_sdram_waitrequest <= '0';
+--			end if;
+--		end if;
+--	end process;	
 	
 	--to talk to sdram interface, avalon requests are latched until sdram is ready to process them
 	process (clock)
@@ -566,12 +568,14 @@ begin
 		if rising_edge(clock) then
 			if avalon_sdram_read = '1' then
 				avalon_sdram_read_pending <= '1';
-				avalon_sdram_pending_address <= avalon_sdram_address;
+				avalon_sdram_pending_address(25 downto 1) <= avalon_sdram_address;
+				avalon_sdram_pending_address(0) <= avalon_sdram_byteenable(0);
 			elsif avalon_sdram_write = '1' then
 				avalon_sdram_write_pending <= '1';
-                avalon_sdram_pending_address <= avalon_sdram_address;
+                avalon_sdram_pending_address(25 downto 1) <= avalon_sdram_address;
+					 avalon_sdram_pending_address(0) <= avalon_sdram_byteenable(0);
                 avalon_sdram_pending_data<= avalon_sdram_writedata;		    
-			elsif avalon_sdram_complete = '1' then
+			elsif avalon_sdram_reset_pending = '1' then
 				avalon_sdram_read_pending <= '0';
 				avalon_sdram_write_pending <= '0';
 			end if;
@@ -710,6 +714,8 @@ begin
 					sdram_dqm <= "11";
 					sdram_abus_complete <= '0';
 					avalon_sdram_complete <= '0';
+					avalon_sdram_waitrequest <= '1';
+					avalon_sdram_reset_pending <= '0';
 					-- in idle mode we should check if any of the events occured:
 					-- 1) abus transaction detected - priority 0
 					-- 2) avalon transaction detected - priority 1
@@ -858,11 +864,12 @@ begin
 					sdram_cas_n <= '1';
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 1 then
-						if avalon_sdram_pending_address(0) = '0' then
-							avalon_sdram_readdata_latched <= sdram_dq(7 downto 0);
-						else
-							avalon_sdram_readdata_latched <= sdram_dq(15 downto 8);
-						end if;
+--						if avalon_sdram_pending_address(0) = '0' then
+--							avalon_sdram_readdata_latched <= sdram_dq(7 downto 0);
+--						else
+--							avalon_sdram_readdata_latched <= sdram_dq(15 downto 8);
+--						end if;
+						avalon_sdram_reset_pending <= '1';
 					end if;	
 					if sdram_wait_counter = 0 then
 						sdram_mode <= SDRAM_IDLE;
@@ -872,7 +879,9 @@ begin
 							avalon_sdram_readdata_latched <= sdram_dq(7 downto 0);
 						else
 							avalon_sdram_readdata_latched <= sdram_dq(15 downto 8);
-						end if;			
+						end if;	
+						avalon_sdram_waitrequest <= '0';
+						avalon_sdram_reset_pending <= '0';
 					end if;	
 					
 				when SDRAM_AVALON_WRITE_AND_PRECHARGE => 
@@ -883,10 +892,15 @@ begin
 					sdram_we_n <= '1';
 					sdram_dq <= (others => 'Z');
 					sdram_wait_counter <= sdram_wait_counter - 1;
+					if sdram_wait_counter = 1 then
+						avalon_sdram_reset_pending <= '1';
+					end if;	
 					if sdram_wait_counter = 0 then
 						sdram_mode <= SDRAM_IDLE;
 						avalon_sdram_complete <= '1';
 						sdram_dqm <= "11";
+						avalon_sdram_waitrequest <= '0';
+						avalon_sdram_reset_pending <= '0';
 					end if;
 					
 			end case;

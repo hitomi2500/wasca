@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Wed Aug 19 07:49:36 MSK 2020
+ * Generated: Wed Aug 19 23:19:48 MSK 2020
  */
 
 /*
@@ -208,17 +208,17 @@
 
 
 /*
- * altpll_0 configuration
+ * altpll_1 configuration
  *
  */
 
-#define ALTPLL_0_BASE 0x42000
-#define ALTPLL_0_IRQ -1
-#define ALTPLL_0_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define ALTPLL_0_NAME "/dev/altpll_0"
-#define ALTPLL_0_SPAN 16
-#define ALTPLL_0_TYPE "altpll"
-#define ALT_MODULE_CLASS_altpll_0 altpll
+#define ALTPLL_1_BASE 0x42000
+#define ALTPLL_1_IRQ -1
+#define ALTPLL_1_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define ALTPLL_1_NAME "/dev/altpll_1"
+#define ALTPLL_1_SPAN 16
+#define ALTPLL_1_TYPE "altpll"
+#define ALT_MODULE_CLASS_altpll_1 altpll
 
 
 /*
