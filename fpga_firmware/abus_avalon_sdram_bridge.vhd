@@ -1,4 +1,4 @@
-library IEEE;
+	library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
@@ -730,7 +730,7 @@ begin
                         sdram_ras_n <= '0';
                         sdram_addr <= abus_address_latched(22 downto 10);
                         sdram_ba <= abus_address_latched(24 downto 23);
-                        sdram_wait_counter <= to_unsigned(2,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
+                        sdram_wait_counter <= to_unsigned(3,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
                     elsif (avalon_sdram_read_pending = '1' or avalon_sdram_write_pending = '1')  and avalon_sdram_complete = '0'  then
 						sdram_mode <= SDRAM_AVALON_ACTIVATE;
 						--something on avalon, activating!
@@ -788,16 +788,16 @@ begin
 							sdram_mode <= SDRAM_ABUS_WRITE_AND_PRECHARGE;
 							sdram_cas_n <= '0';
                             sdram_we_n <= '0';
-                            sdram_dq <= abus_data_in;
+                            sdram_dq <= abus_data_in(7 downto 0)&abus_data_in(15 downto 8);
                             sdram_addr <= "0010"&abus_address_latched(9 downto 1);
                             sdram_ba <= abus_address_latched(24 downto 23);
-                            sdram_wait_counter <= to_unsigned(3,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+                            sdram_wait_counter <= to_unsigned(4,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						else --if my_little_transaction_dir = DIR_READ then
 							sdram_mode <= SDRAM_ABUS_READ_AND_PRECHARGE;
 							sdram_cas_n <= '0';
 							sdram_addr <= "0010"&abus_address_latched(9 downto 1);
 							sdram_ba <= abus_address_latched(24 downto 23);
-							sdram_wait_counter <= to_unsigned(4,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+							sdram_wait_counter <= to_unsigned(5,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						--else 
 							-- this is an invalid transaction - either it's for CS2 or from an unmapped range
 							-- but the bank is already prepared, and we need to precharge it
