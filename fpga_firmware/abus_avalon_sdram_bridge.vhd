@@ -727,19 +727,25 @@ begin
 					if sdram_abus_pending = '1' and sdram_abus_complete = '0' then
 						sdram_mode <= SDRAM_ABUS_ACTIVATE;
 						--something on abus, address should be stable already (is it???), so we activate row now
-                        sdram_ras_n <= '0';
-                        sdram_addr <= abus_address_latched(22 downto 10);
-                        sdram_ba <= abus_address_latched(24 downto 23);
-                        sdram_wait_counter <= to_unsigned(3,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
-                    elsif (avalon_sdram_read_pending = '1' or avalon_sdram_write_pending = '1')  and avalon_sdram_complete = '0'  then
+                  sdram_ras_n <= '0';
+                  sdram_addr <= abus_address_latched(22 downto 10);
+                  sdram_ba <= abus_address_latched(24 downto 23);
+                  sdram_wait_counter <= to_unsigned(3,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
+						if abus_write_buf = "11" then
+							sdram_dqm <= "00"; --it's a read
+						else
+							sdram_dqm(0) <= abus_write_buf(1); --it's a write
+							sdram_dqm(1) <= abus_write_buf(0); --it's a write
+						end if;
+               elsif (avalon_sdram_read_pending = '1' or avalon_sdram_write_pending = '1')  and avalon_sdram_complete = '0'  then
 						sdram_mode <= SDRAM_AVALON_ACTIVATE;
 						--something on avalon, activating!
-                        sdram_ras_n <= '0';
-                        sdram_addr <= avalon_sdram_pending_address(22 downto 10);
-                        sdram_ba <= avalon_sdram_pending_address(24 downto 23);
-                        sdram_wait_counter <= to_unsigned(2,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
-								sdram_dqm(0) <= avalon_sdram_pending_address(0);--only 8 bit writing for avalon
-								sdram_dqm(1) <= not avalon_sdram_pending_address(0);--only 8 bit writing for avalon
+                  sdram_ras_n <= '0';
+                  sdram_addr <= avalon_sdram_pending_address(22 downto 10);
+                  sdram_ba <= avalon_sdram_pending_address(24 downto 23);
+                  sdram_wait_counter <= to_unsigned(2,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
+						sdram_dqm(0) <= avalon_sdram_pending_address(0);--only 8 bit writing for avalon
+						sdram_dqm(1) <= not avalon_sdram_pending_address(0);--only 8 bit writing for avalon
 					elsif sdram_autorefresh_counter(9) = '1' then --512 cycles
 						sdram_mode <= SDRAM_AUTOREFRESH;
 						--first stage of autorefresh issues "precharge all" command
@@ -777,11 +783,11 @@ begin
 					sdram_addr <= (others => '0');
 					sdram_ba <= "00";
 					sdram_ras_n <= '1';
-					if abus_write_buf = "11" then
-					   sdram_dqm <= "00"; --it's a read
-					else
-					   sdram_dqm <= abus_write_buf; --it's a write
-					end if;
+--					if abus_write_buf = "11" then
+--					   sdram_dqm <= "00"; --it's a read
+--					else
+--					   sdram_dqm <= abus_write_buf; --it's a write
+--					end if;
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
 						if my_little_transaction_dir = DIR_WRITE then
