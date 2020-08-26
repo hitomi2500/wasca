@@ -797,7 +797,7 @@ begin
 					    -- second autorefresh stage - autorefresh command 
 						sdram_cas_n <= '0';
                         sdram_ras_n <= '0';
-                        sdram_wait_counter <= to_unsigned(7,4); -- tRC = 63ns min ;  8 cycles @ 116mhz = 67ns
+                        sdram_wait_counter <= to_unsigned(6,4); --7 cut to 6 -- tRC = 63ns min ;  8 cycles @ 116mhz = 67ns
 						sdram_mode <= SDRAM_AUTOREFRESH2;
 					end if;
 
@@ -836,7 +836,7 @@ begin
 							sdram_cas_n <= '0';
 							sdram_addr <= "0010"&abus_address_latched(9 downto 1);
 							sdram_ba <= abus_address_latched(24 downto 23);
-							sdram_wait_counter <= to_unsigned(5,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+							sdram_wait_counter <= to_unsigned(4,4); --5 cut to 4 -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						--else 
 							-- this is an invalid transaction - either it's for CS2 or from an unmapped range
 							-- but the bank is already prepared, and we need to precharge it
