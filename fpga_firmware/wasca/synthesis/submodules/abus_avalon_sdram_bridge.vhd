@@ -39,7 +39,7 @@ entity abus_avalon_sdram_bridge is
 		avalon_regs_read          : in   std_logic := '0';                                        -- avalon_master.read
 		avalon_regs_write         : in   std_logic := '0';                                        --              .write
 		avalon_regs_waitrequest   : out    std_logic                     := '0';             --              .waitrequest
-		avalon_regs_address       : in   std_logic_vector(7 downto 0) := (others => '0');                    --              .address
+		avalon_regs_address       : in   std_logic_vector(15 downto 0) := (others => '0');                    --              .address
 		avalon_regs_writedata     : in   std_logic_vector(15 downto 0) := (others => '0');                    --              .writedata
 		avalon_regs_readdata      : out    std_logic_vector(15 downto 0) := (others => '0'); --              .readdata
 		avalon_regs_readdatavalid : out    std_logic                     := '0';             --              .readdatavalid
@@ -50,6 +50,21 @@ entity abus_avalon_sdram_bridge is
 end entity abus_avalon_sdram_bridge;
 
 architecture rtl of abus_avalon_sdram_bridge is
+
+component sniffer_mem IS
+	PORT
+	(
+		address_a		: IN STD_LOGIC_VECTOR (14 DOWNTO 0);
+		address_b		: IN STD_LOGIC_VECTOR (14 DOWNTO 0);
+		clock		: IN STD_LOGIC  := '1';
+		data_a		: IN STD_LOGIC_VECTOR (0 DOWNTO 0);
+		data_b		: IN STD_LOGIC_VECTOR (0 DOWNTO 0);
+		wren_a		: IN STD_LOGIC  := '0';
+		wren_b		: IN STD_LOGIC  := '0';
+		q_a		: OUT STD_LOGIC_VECTOR (0 DOWNTO 0);
+		q_b		: OUT STD_LOGIC_VECTOR (0 DOWNTO 0)
+	);
+END component;
 
 signal abus_address_ms         : std_logic_vector(9 downto 0) := (others => '0'); --          abus.address
 signal abus_address_buf         : std_logic_vector(9 downto 0) := (others => '0'); --          abus.address
@@ -140,6 +155,13 @@ signal avalon_sdram_write_pending      : std_logic := '0';
 signal avalon_sdram_pending_address          : std_logic_vector(25 downto 0) := (others => '0'); 
 signal avalon_sdram_pending_data          : std_logic_vector(7 downto 0) := (others => '0'); 
 signal avalon_sdram_readdata_latched          : std_logic_vector(7 downto 0) := (others => '0'); 
+
+signal avalon_regs_address_latched          : std_logic_vector(15 downto 0) := (others => '0'); 
+
+signal sniffer_abus_write      : std_logic := '0';
+signal sniffer_nios_write      : std_logic := '0';
+signal sniffer_nios_readdata      : std_logic_vector(0 downto 0) := (others => '0'); 
+
 
 
 TYPE transaction_dir IS (DIR_NONE,DIR_WRITE,DIR_READ);
@@ -501,22 +523,26 @@ begin
 			avalon_regs_readdatavalid <= '0';
 			if avalon_regs_read = '1' then
 				avalon_regs_readdatavalid <= '1';
-				case avalon_regs_address is 
-					when X"F0" => 
-						avalon_regs_readdata <= REG_PCNTR;
-					when X"F2" =>
-						avalon_regs_readdata <= REG_STATUS;
-					when X"F4" =>
-						avalon_regs_readdata <= REG_MODE;
-					when X"F6" =>
-						avalon_regs_readdata <= REG_HWVER;
-					when X"F8" =>
-						avalon_regs_readdata <= REG_SWVER;
-					when X"FA" =>
-						avalon_regs_readdata <= X"ABCD"; --for debug, remove later
-					when others =>
-						avalon_regs_readdata <= REG_HWVER; --to simplify mux
-				end case;
+				if avalon_regs_address(15) = '0' then
+					case avalon_regs_address(7 downto 0) is 
+						when X"F0" => 
+							avalon_regs_readdata <= REG_PCNTR;
+						when X"F2" =>
+							avalon_regs_readdata <= REG_STATUS;
+						when X"F4" =>
+							avalon_regs_readdata <= REG_MODE;
+						when X"F6" =>
+							avalon_regs_readdata <= REG_HWVER;
+						when X"F8" =>
+							avalon_regs_readdata <= REG_SWVER;
+						when X"FA" =>
+							avalon_regs_readdata <= X"ABCD"; --for debug, remove later
+						when others =>
+							avalon_regs_readdata <= REG_HWVER; --to simplify mux
+					end case;
+				else
+					avalon_regs_readdata <= X"000"&"000"&sniffer_nios_readdata;
+				end if;
 			end if;
 		end if;
 	end process;
@@ -526,20 +552,24 @@ begin
 	begin
 		if rising_edge(clock) then
 			if avalon_regs_write= '1' then
-				case avalon_regs_address is 
-					when X"F0" => 
-						REG_PCNTR <= avalon_regs_writedata;
-					when X"F2" =>
-						REG_STATUS <= avalon_regs_writedata;
-					when X"F4" =>
-						null;
-					when X"F6" =>
-						null;
-					when X"F8" =>
-						REG_SWVER <= avalon_regs_writedata;
-					when others =>
-						null;
-				end case;
+				if avalon_regs_address(15) = '0' then
+					case avalon_regs_address(7 downto 0) is 
+						when X"F0" => 
+							REG_PCNTR <= avalon_regs_writedata;
+						when X"F2" =>
+							REG_STATUS <= avalon_regs_writedata;
+						when X"F4" =>
+							null;
+						when X"F6" =>
+							null;
+						when X"F8" =>
+							REG_SWVER <= avalon_regs_writedata;
+						when others =>
+							null;
+					end case;
+				else
+					null; --write to sniffer is done in sniffer code
+				end if;
 			end if;
 		end if;
 	end process;
@@ -719,6 +749,7 @@ begin
 					avalon_sdram_complete <= '0';
 					avalon_sdram_waitrequest <= '1';
 					avalon_sdram_reset_pending <= '0';
+					sniffer_abus_write <= '0';
 					-- in idle mode we should check if any of the events occured:
 					-- 1) abus transaction detected - priority 0
 					-- 2) avalon transaction detected - priority 1
@@ -736,6 +767,7 @@ begin
 						else
 							sdram_dqm(0) <= abus_write_buf(1); --it's a write
 							sdram_dqm(1) <= abus_write_buf(0); --it's a write
+							sniffer_abus_write <= '1';
 						end if;
                elsif (avalon_sdram_read_pending = '1' or avalon_sdram_write_pending = '1')  and avalon_sdram_complete = '0'  then
 						sdram_mode <= SDRAM_AVALON_ACTIVATE;
@@ -783,6 +815,7 @@ begin
 					sdram_addr <= (others => '0');
 					sdram_ba <= "00";
 					sdram_ras_n <= '1';
+					sniffer_abus_write <= '0';
 --					if abus_write_buf = "11" then
 --					   sdram_dqm <= "00"; --it's a read
 --					else
@@ -912,5 +945,27 @@ begin
 	end process;
 	
 	sdram_clk <= clock;
+	
+	------------------------------ Sniffer stuff ---------------------------------------
+	
+	--sniffer works with a 512-byte blocks
+	--sniffer writes '1' to a corresponding bit if the block was written by ABUS
+	--sniffer ram is available for reading and writing via avalon regs interface
+	
+	avalon_regs_address_latched <= avalon_regs_address when rising_edge(clock) and avalon_regs_write = '1';
+	sniffer_nios_write <= avalon_regs_write and avalon_regs_address_latched(15);
+	
+	sniffer_mem_inst : sniffer_mem PORT MAP (
+		address_a	 => abus_address_latched(23 downto 9),
+		address_b	 => avalon_regs_address_latched(14 downto 0),
+		clock	 => clock,
+		data_a	 => "1",
+		data_b	 => avalon_regs_writedata(0 downto 0),
+		wren_a	 => sniffer_abus_write,
+		wren_b	 => sniffer_nios_write,
+		q_a	 => open,
+		q_b	 => sniffer_nios_readdata
+	);
+
 	
 end architecture rtl; -- of sega_saturn_abus_slave

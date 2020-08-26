@@ -141,7 +141,7 @@ module wasca_mm_interconnect_0_router
     localparam PAD4 = log2ceil(64'h43020 - 64'h43000); 
     localparam PAD5 = log2ceil(64'h44020 - 64'h44000); 
     localparam PAD6 = log2ceil(64'h46010 - 64'h46000); 
-    localparam PAD7 = log2ceil(64'h47200 - 64'h47000); 
+    localparam PAD7 = log2ceil(64'h80000 - 64'h60000); 
     localparam PAD8 = log2ceil(64'h84000 - 64'h80000); 
     localparam PAD9 = log2ceil(64'h6000000 - 64'h4000000); 
     // -------------------------------------------------------
@@ -244,8 +244,8 @@ module wasca_mm_interconnect_0_router
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 3;
     end
 
-    // ( 0x47000 .. 0x47200 )
-    if ( {address[RG:PAD7],{PAD7{1'b0}}} == 27'h47000   ) begin
+    // ( 0x60000 .. 0x80000 )
+    if ( {address[RG:PAD7],{PAD7{1'b0}}} == 27'h60000   ) begin
             src_channel = 10'b0000000010;
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 0;
     end

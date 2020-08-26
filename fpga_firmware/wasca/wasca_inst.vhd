@@ -21,11 +21,15 @@
 			abus_avalon_sdram_bridge_0_sdram_ras_n            : out   std_logic;                                        -- ras_n
 			abus_avalon_sdram_bridge_0_sdram_we_n             : out   std_logic;                                        -- we_n
 			abus_avalon_sdram_bridge_0_sdram_clk              : out   std_logic;                                        -- clk
+			altpll_1_areset_conduit_export                    : in    std_logic                     := 'X';             -- export
+			altpll_1_locked_conduit_export                    : out   std_logic;                                        -- export
+			altpll_1_phasedone_conduit_export                 : out   std_logic;                                        -- export
 			audio_out_BCLK                                    : in    std_logic                     := 'X';             -- BCLK
 			audio_out_DACDAT                                  : out   std_logic;                                        -- DACDAT
 			audio_out_DACLRCK                                 : in    std_logic                     := 'X';             -- DACLRCK
 			clk_clk                                           : in    std_logic                     := 'X';             -- clk
 			clock_116_mhz_clk                                 : out   std_logic;                                        -- clk
+			reset_reset_n                                     : in    std_logic                     := 'X';             -- reset_n
 			spi_sd_card_MISO                                  : in    std_logic                     := 'X';             -- MISO
 			spi_sd_card_MOSI                                  : out   std_logic;                                        -- MOSI
 			spi_sd_card_SCLK                                  : out   std_logic;                                        -- SCLK
@@ -35,11 +39,7 @@
 			spi_stm32_SCLK                                    : in    std_logic                     := 'X';             -- SCLK
 			spi_stm32_SS_n                                    : in    std_logic                     := 'X';             -- SS_n
 			uart_0_external_connection_rxd                    : in    std_logic                     := 'X';             -- rxd
-			uart_0_external_connection_txd                    : out   std_logic;                                        -- txd
-			reset_reset_n                                     : in    std_logic                     := 'X';             -- reset_n
-			altpll_1_areset_conduit_export                    : in    std_logic                     := 'X';             -- export
-			altpll_1_locked_conduit_export                    : out   std_logic;                                        -- export
-			altpll_1_phasedone_conduit_export                 : out   std_logic                                         -- export
+			uart_0_external_connection_txd                    : out   std_logic                                         -- txd
 		);
 	end component wasca;
 
@@ -66,11 +66,15 @@
 			abus_avalon_sdram_bridge_0_sdram_ras_n            => CONNECTED_TO_abus_avalon_sdram_bridge_0_sdram_ras_n,            --                                 .ras_n
 			abus_avalon_sdram_bridge_0_sdram_we_n             => CONNECTED_TO_abus_avalon_sdram_bridge_0_sdram_we_n,             --                                 .we_n
 			abus_avalon_sdram_bridge_0_sdram_clk              => CONNECTED_TO_abus_avalon_sdram_bridge_0_sdram_clk,              --                                 .clk
+			altpll_1_areset_conduit_export                    => CONNECTED_TO_altpll_1_areset_conduit_export,                    --          altpll_1_areset_conduit.export
+			altpll_1_locked_conduit_export                    => CONNECTED_TO_altpll_1_locked_conduit_export,                    --          altpll_1_locked_conduit.export
+			altpll_1_phasedone_conduit_export                 => CONNECTED_TO_altpll_1_phasedone_conduit_export,                 --       altpll_1_phasedone_conduit.export
 			audio_out_BCLK                                    => CONNECTED_TO_audio_out_BCLK,                                    --                        audio_out.BCLK
 			audio_out_DACDAT                                  => CONNECTED_TO_audio_out_DACDAT,                                  --                                 .DACDAT
 			audio_out_DACLRCK                                 => CONNECTED_TO_audio_out_DACLRCK,                                 --                                 .DACLRCK
 			clk_clk                                           => CONNECTED_TO_clk_clk,                                           --                              clk.clk
 			clock_116_mhz_clk                                 => CONNECTED_TO_clock_116_mhz_clk,                                 --                    clock_116_mhz.clk
+			reset_reset_n                                     => CONNECTED_TO_reset_reset_n,                                     --                            reset.reset_n
 			spi_sd_card_MISO                                  => CONNECTED_TO_spi_sd_card_MISO,                                  --                      spi_sd_card.MISO
 			spi_sd_card_MOSI                                  => CONNECTED_TO_spi_sd_card_MOSI,                                  --                                 .MOSI
 			spi_sd_card_SCLK                                  => CONNECTED_TO_spi_sd_card_SCLK,                                  --                                 .SCLK
@@ -80,10 +84,6 @@
 			spi_stm32_SCLK                                    => CONNECTED_TO_spi_stm32_SCLK,                                    --                                 .SCLK
 			spi_stm32_SS_n                                    => CONNECTED_TO_spi_stm32_SS_n,                                    --                                 .SS_n
 			uart_0_external_connection_rxd                    => CONNECTED_TO_uart_0_external_connection_rxd,                    --       uart_0_external_connection.rxd
-			uart_0_external_connection_txd                    => CONNECTED_TO_uart_0_external_connection_txd,                    --                                 .txd
-			reset_reset_n                                     => CONNECTED_TO_reset_reset_n,                                     --                            reset.reset_n
-			altpll_1_areset_conduit_export                    => CONNECTED_TO_altpll_1_areset_conduit_export,                    --          altpll_1_areset_conduit.export
-			altpll_1_locked_conduit_export                    => CONNECTED_TO_altpll_1_locked_conduit_export,                    --          altpll_1_locked_conduit.export
-			altpll_1_phasedone_conduit_export                 => CONNECTED_TO_altpll_1_phasedone_conduit_export                  --       altpll_1_phasedone_conduit.export
+			uart_0_external_connection_txd                    => CONNECTED_TO_uart_0_external_connection_txd                     --                                 .txd
 		);
 

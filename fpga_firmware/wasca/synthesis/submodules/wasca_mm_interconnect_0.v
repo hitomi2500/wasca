@@ -23,7 +23,7 @@ module wasca_mm_interconnect_0 (
 		output wire        nios2_gen2_0_instruction_master_waitrequest,                //                                                     .waitrequest
 		input  wire        nios2_gen2_0_instruction_master_read,                       //                                                     .read
 		output wire [31:0] nios2_gen2_0_instruction_master_readdata,                   //                                                     .readdata
-		output wire [7:0]  abus_avalon_sdram_bridge_0_avalon_regs_address,             //               abus_avalon_sdram_bridge_0_avalon_regs.address
+		output wire [15:0] abus_avalon_sdram_bridge_0_avalon_regs_address,             //               abus_avalon_sdram_bridge_0_avalon_regs.address
 		output wire        abus_avalon_sdram_bridge_0_avalon_regs_write,               //                                                     .write
 		output wire        abus_avalon_sdram_bridge_0_avalon_regs_read,                //                                                     .read
 		input  wire [15:0] abus_avalon_sdram_bridge_0_avalon_regs_readdata,            //                                                     .readdata
@@ -1001,7 +1001,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	altera_merlin_slave_translator #(
-		.AV_ADDRESS_W                   (8),
+		.AV_ADDRESS_W                   (16),
 		.AV_DATA_W                      (16),
 		.UAV_DATA_W                     (16),
 		.AV_BURSTCOUNT_W                (1),
