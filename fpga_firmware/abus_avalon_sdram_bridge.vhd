@@ -283,7 +283,7 @@ begin
 	
 	--patching abus_address_latched : for RAM 1M mode A19 and A20 should be set to zero
 	--trying to do this asynchronously
-	abus_address_latched <= abus_address_latched_prepatch(25 downto 21)&"00"&abus_address_latched_prepatch(18 downto 0) when wasca_mode = MODE_RAM_1M
+	abus_address_latched <= abus_address_latched_prepatch(25 downto 21)&"00"&abus_address_latched_prepatch(18 downto 0) when wasca_mode = MODE_RAM_1M and abus_address_latched_prepatch(24 downto 21) = "0010"
 								else abus_address_latched_prepatch;
 	
 	

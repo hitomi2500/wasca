@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Fri Aug 21 23:54:05 MSK 2020
+ * Generated: Sat Aug 29 01:45:25 MSK 2020
  */
 
 /*
@@ -50,9 +50,9 @@
 
 MEMORY
 {
-    onchip_flash_0 : ORIGIN = 0x0, LENGTH = 176128
-    reset : ORIGIN = 0x80000, LENGTH = 32
-    onchip_memory2_0 : ORIGIN = 0x80020, LENGTH = 16352
+    reset : ORIGIN = 0x0, LENGTH = 32
+    onchip_flash_0 : ORIGIN = 0x20, LENGTH = 176096
+    onchip_memory2_0 : ORIGIN = 0x80000, LENGTH = 16384
 }
 
 /* Define symbols for each memory base-address */
@@ -113,7 +113,7 @@ SECTIONS
         KEEP (*(.exceptions.exit));
         KEEP (*(.exceptions));
         PROVIDE (__ram_exceptions_end = ABSOLUTE(.));
-    } > onchip_memory2_0
+    } > onchip_flash_0
 
     PROVIDE (__flash_exceptions_start = LOADADDR(.exceptions));
 

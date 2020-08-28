@@ -87,6 +87,7 @@
 #define MODE_REG_OFFSET 0xF4
 #define SWVER_REG_OFFSET 0xF8
 extern const unsigned char rawData[131072];
+extern const unsigned char minipseudo[15588];
 
 const char Power_Memory_Signature[16] = "BackUpRam Format";
 const char Wasca_Sysarea_Signature[64] = {0x80, 0x00, 0x00, 0x00, 0x77, 0x61, 0x73, 0x63,
@@ -158,6 +159,9 @@ int main()
   p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
   for (i=0;i<131072;i++)
 	  p[i] = rawData[i];
+  //now it's minipseudo's time
+  for (i=0;i<15588;i++)
+	  p[0x9C000 + i] = minipseudo[i];
   /*for (i=0;i<131072;i+=2)
   {
 	  p[i] = rawData[i];

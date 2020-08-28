@@ -51,44 +51,44 @@ architecture rtl of wasca_toplevel is
 
 	component wasca is
 		port (
-			abus_avalon_sdram_bridge_0_abus_address           : in    std_logic_vector(9 downto 0)  := (others => 'X'); -- address
-			abus_avalon_sdram_bridge_0_abus_read              : in    std_logic                     := 'X';             -- read
+			abus_avalon_sdram_bridge_0_abus_address           : in    std_logic_vector(9 downto 0)  := (others => 'Z'); -- address
+			abus_avalon_sdram_bridge_0_abus_read              : in    std_logic                     := 'Z';             -- read
 			abus_avalon_sdram_bridge_0_abus_waitrequest       : out   std_logic;                                        -- waitrequest
-			abus_avalon_sdram_bridge_0_abus_addressdata       : inout std_logic_vector(15 downto 0) := (others => 'X'); -- addressdata
-			abus_avalon_sdram_bridge_0_abus_chipselect        : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- chipselect
+			abus_avalon_sdram_bridge_0_abus_addressdata       : inout std_logic_vector(15 downto 0) := (others => 'Z'); -- addressdata
+			abus_avalon_sdram_bridge_0_abus_chipselect        : in    std_logic_vector(2 downto 0)  := (others => 'Z'); -- chipselect
 			abus_avalon_sdram_bridge_0_abus_direction         : out   std_logic;                                        -- direction
 			abus_avalon_sdram_bridge_0_abus_disable_out       : out   std_logic;                                        -- disable_out
 			abus_avalon_sdram_bridge_0_abus_interrupt         : out   std_logic;                                        -- interrupt
 			abus_avalon_sdram_bridge_0_abus_muxing            : out   std_logic_vector(1 downto 0);                     -- muxing
-			abus_avalon_sdram_bridge_0_abus_writebyteenable_n : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- writebyteenable_n
-			abus_avalon_sdram_bridge_0_abus_reset             : in    std_logic                     := 'X';             -- reset
+			abus_avalon_sdram_bridge_0_abus_writebyteenable_n : in    std_logic_vector(1 downto 0)  := (others => 'Z'); -- writebyteenable_n
+			abus_avalon_sdram_bridge_0_abus_reset             : in    std_logic                     := 'Z';             -- reset
 			abus_avalon_sdram_bridge_0_sdram_addr             : out   std_logic_vector(12 downto 0);                    -- addr
 			abus_avalon_sdram_bridge_0_sdram_ba               : out   std_logic_vector(1 downto 0);                     -- ba
 			abus_avalon_sdram_bridge_0_sdram_cas_n            : out   std_logic;                                        -- cas_n
 			abus_avalon_sdram_bridge_0_sdram_cke              : out   std_logic;                                        -- cke
 			abus_avalon_sdram_bridge_0_sdram_cs_n             : out   std_logic;                                        -- cs_n
-			abus_avalon_sdram_bridge_0_sdram_dq               : inout std_logic_vector(15 downto 0) := (others => 'X'); -- dq
+			abus_avalon_sdram_bridge_0_sdram_dq               : inout std_logic_vector(15 downto 0) := (others => 'Z'); -- dq
 			abus_avalon_sdram_bridge_0_sdram_dqm              : out   std_logic_vector(1 downto 0);                     -- dqm
 			abus_avalon_sdram_bridge_0_sdram_ras_n            : out   std_logic;                                        -- ras_n
 			abus_avalon_sdram_bridge_0_sdram_we_n             : out   std_logic;                                        -- we_n
 			abus_avalon_sdram_bridge_0_sdram_clk              : out   std_logic;                                        -- clk
-			audio_out_BCLK                                    : in    std_logic                     := 'X';             -- BCLK
+			audio_out_BCLK                                    : in    std_logic                     := 'Z';             -- BCLK
 			audio_out_DACDAT                                  : out   std_logic;                                        -- DACDAT
-			audio_out_DACLRCK                                 : in    std_logic                     := 'X';             -- DACLRCK
-			clk_clk                                           : in    std_logic                     := 'X';             -- clk
+			audio_out_DACLRCK                                 : in    std_logic                     := 'Z';             -- DACLRCK
+			clk_clk                                           : in    std_logic                     := 'Z';             -- clk
 			clock_116_mhz_clk                                 : out   std_logic;                                        -- clk
-			spi_sd_card_MISO                                  : in    std_logic                     := 'X';             -- MISO
+			spi_sd_card_MISO                                  : in    std_logic                     := 'Z';             -- MISO
 			spi_sd_card_MOSI                                  : out   std_logic;                                        -- MOSI
 			spi_sd_card_SCLK                                  : out   std_logic;                                        -- SCLK
 			spi_sd_card_SS_n                                  : out   std_logic;                                        -- SS_n
 			spi_stm32_MISO                                    : out   std_logic;                                        -- MISO
-			spi_stm32_MOSI                                    : in    std_logic                     := 'X';             -- MOSI
-			spi_stm32_SCLK                                    : in    std_logic                     := 'X';             -- SCLK
-			spi_stm32_SS_n                                    : in    std_logic                     := 'X';             -- SS_n
-			uart_0_external_connection_rxd                    : in    std_logic                     := 'X';             -- rxd
+			spi_stm32_MOSI                                    : in    std_logic                     := 'Z';             -- MOSI
+			spi_stm32_SCLK                                    : in    std_logic                     := 'Z';             -- SCLK
+			spi_stm32_SS_n                                    : in    std_logic                     := 'Z';             -- SS_n
+			uart_0_external_connection_rxd                    : in    std_logic                     := 'Z';             -- rxd
 			uart_0_external_connection_txd                    : out   std_logic;                                        -- txd
-			reset_reset_n                                     : in    std_logic                     := 'X';             -- reset_n
-			altpll_1_areset_conduit_export                    : in    std_logic                     := 'X';             -- export
+			reset_reset_n                                     : in    std_logic                     := 'Z';             -- reset_n
+			altpll_1_areset_conduit_export                    : in    std_logic                     := 'Z';             -- export
 			altpll_1_locked_conduit_export                    : out   std_logic;                                        -- export
 			altpll_1_phasedone_conduit_export                 : out   std_logic                                         -- export
 		);
@@ -178,7 +178,7 @@ architecture rtl of wasca_toplevel is
 --		audio_out_DACDAT <= 'Z';
 
 		
-		audio_SSEL <= '0';
+		audio_SSEL <= '1';
 		--sega_saturn_abus_slave_0_abus_waitrequest <= '1';
 		--sega_saturn_abus_slave_0_abus_direction <= '0';
 		--sega_saturn_abus_slave_0_abus_muxing <= "01";

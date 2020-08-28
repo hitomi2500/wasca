@@ -144,6 +144,7 @@ ELF := wasca_test9.elf
 # Paths to C, C++, and assembly source files.
 C_SRCS += hello_world_small.c
 C_SRCS += wasca_short.c
+C_SRCS += chibi_pseudo.c
 CXX_SRCS :=
 ASM_SRCS :=
 
