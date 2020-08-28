@@ -106,6 +106,7 @@ signal abus_cspulse6            : std_logic                     := '0';
 signal abus_cspulse7            : std_logic                     := '0'; 
 signal abus_cspulse_off            : std_logic                     := '0'; 
 
+signal abus_address_latched_prepatch : std_logic_vector(25 downto 0) := (others => '0'); --          abus.address prior to patching
 signal abus_address_latched         : std_logic_vector(25 downto 0) := (others => '0'); --          abus.address
 signal abus_chipselect_latched         : std_logic_vector(1 downto 0) := (others => '1'); --          abus.address
 signal abus_direction_internal            : std_logic                     := '0'; 
@@ -272,13 +273,19 @@ begin
 	begin
 		if rising_edge(clock) then
 			if abus_cspulse = '1' then
-				abus_address_latched <= abus_address & abus_addressdata_buf(11) & abus_addressdata_buf(12) & abus_addressdata_buf(9) & abus_addressdata_buf(10)
+				abus_address_latched_prepatch <= abus_address & abus_addressdata_buf(11) & abus_addressdata_buf(12) & abus_addressdata_buf(9) & abus_addressdata_buf(10)
 																 & abus_addressdata_buf(2) & abus_addressdata_buf(1) & abus_addressdata_buf(3) & abus_addressdata_buf(8)
 																 & abus_addressdata_buf(13) & abus_addressdata_buf(14) & abus_addressdata_buf(15) & abus_addressdata_buf(4)
 																 & abus_addressdata_buf(5) & abus_addressdata_buf(6) & abus_addressdata_buf(0) & abus_addressdata_buf(7);
 			end if;
 		end if;
 	end process;
+	
+	--patching abus_address_latched : for RAM 1M mode A19 and A20 should be set to zero
+	--trying to do this asynchronously
+	abus_address_latched <= abus_address_latched_prepatch(25 downto 21)&"00"&abus_address_latched_prepatch(18 downto 0) when wasca_mode = MODE_RAM_1M
+								else abus_address_latched_prepatch;
+	
 	
 	--latch transaction direction
 	process (clock)
