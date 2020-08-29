@@ -11,7 +11,7 @@ entity abus_avalon_sdram_bridge is
 		abus_read            : in    std_logic                     := '0';             --              .read
 		abus_write           : in    std_logic_vector(1 downto 0)  := (others => '0'); --              .write
 		abus_waitrequest     : out   std_logic							  := '1';                                        --              .waitrequest
-		abus_interrupt       : out   std_logic                     := '0';             --              .interrupt
+		abus_interrupt       : out   std_logic                     := '1';             --              .interrupt
 		abus_direction       : out   std_logic                     := '0';             --              .direction
 		abus_muxing	         : out   std_logic_vector(1 downto 0)  := "01";            --             .muxing
 		abus_disable_out  	: out   std_logic                     := '0';              --             .disableout
@@ -113,16 +113,16 @@ signal abus_direction_internal            : std_logic                     := '0'
 signal abus_muxing_internal         : std_logic_vector(1 downto 0) := (others => '0'); --          abus.address
 signal abus_data_out         : std_logic_vector(15 downto 0) := (others => '0');
 signal abus_data_in         : std_logic_vector(15 downto 0) := (others => '0');
-signal abus_waitrequest_read            : std_logic                     := '0'; 
-signal abus_waitrequest_write            : std_logic                     := '0'; 
-signal abus_waitrequest_read2            : std_logic                     := '0'; 
-signal abus_waitrequest_write2            : std_logic                     := '0'; 
+--signal abus_waitrequest_read            : std_logic                     := '0'; 
+--signal abus_waitrequest_write            : std_logic                     := '0'; 
+--signal abus_waitrequest_read2            : std_logic                     := '0'; 
+--signal abus_waitrequest_write2            : std_logic                     := '0'; 
 --signal abus_waitrequest_read3            : std_logic                     := '0'; 
 --signal abus_waitrequest_write3            : std_logic                     := '0'; 
 --signal abus_waitrequest_read4            : std_logic                     := '0'; 
 --signal abus_waitrequest_write4            : std_logic                     := '0'; 
-signal abus_waitrequest_read_off            : std_logic                     := '0'; 
-signal abus_waitrequest_write_off            : std_logic                     := '0'; 
+--signal abus_waitrequest_read_off            : std_logic                     := '0'; 
+--signal abus_waitrequest_write_off            : std_logic                     := '0'; 
 
 signal REG_PCNTR            : std_logic_vector(15 downto 0) := (others => '0');  
 signal REG_STATUS            : std_logic_vector(15 downto 0) := (others => '0'); 
@@ -200,6 +200,11 @@ begin
 	abus_direction <= abus_direction_internal;
 	abus_muxing <= not abus_muxing_internal;
 	
+	--we won't be aserting interrupt and waitrequest. because we can. can we?
+	abus_interrupt <= '1';
+	abus_waitrequest <= '1';	
+	abus_disable_out <= '0';  --dasbling waitrequest & int outputs, so they're tristate
+	
 	--ignoring functioncode, timing and addressstrobe for now
 	
 	--abus transactions are async, so first we must latch incoming signals
@@ -251,12 +256,17 @@ begin
 	end process;
 	
 	--abus write/read pulse is a falling edge since read and write signals are negative polarity
-	abus_write_pulse <= abus_write_buf2 and not abus_write_buf;
-	abus_read_pulse <= abus_read_buf2 and not abus_read_buf;
+	--abus_write_pulse <= abus_write_buf2 and not abus_write_buf;
+	abus_write_pulse <= abus_write_buf and not abus_write_ms;
+	--abus_read_pulse <= abus_read_buf2 and not abus_read_buf;
+	abus_read_pulse <= abus_read_buf and not abus_read_ms;
 	abus_chipselect_pulse <= abus_chipselect_buf and not abus_chipselect_ms;
-	abus_write_pulse_off <= abus_write_buf and not abus_write_buf2;
-	abus_read_pulse_off <= abus_read_buf and not abus_read_buf2;
-	abus_chipselect_pulse_off <= abus_chipselect_buf and not abus_chipselect_buf2;
+	--abus_write_pulse_off <= abus_write_buf and not abus_write_buf2;
+	abus_write_pulse_off <= abus_write_ms and not abus_write_buf;
+	--abus_read_pulse_off <= abus_read_buf and not abus_read_buf2;
+	abus_read_pulse_off <= abus_read_ms and not abus_read_buf;
+	--abus_chipselect_pulse_off <= abus_chipselect_buf and not abus_chipselect_buf2;
+	abus_chipselect_pulse_off <= abus_chipselect_ms and not abus_chipselect_buf;
 	
 	abus_anypulse <= abus_write_pulse(0) or abus_write_pulse(1) or abus_read_pulse or 
 				abus_chipselect_pulse(0) or abus_chipselect_pulse(1) or abus_chipselect_pulse(2);
@@ -342,8 +352,8 @@ begin
 		end if;
 	end process;
 	
-	abus_disable_out <= '1' when abus_chipselect_latched(1) = '1' else 
-							  '0';
+	--abus_disable_out <= '1' when abus_chipselect_latched(1) = '1' else 
+	--						  '0';
 	
 	--sync mux for abus read requests
 	process (clock)
@@ -432,16 +442,16 @@ begin
 	end process;
 
 	--if abus write access is detected, disable abus wait immediately
-	process (clock)
-	begin
-		if rising_edge(clock) then
-			if my_little_transaction_dir = DIR_WRITE and abus_chipselect_latched /= "11" and abus_cspulse7 = '1'  then
-				abus_waitrequest_write <= '1';
-			else
-				abus_waitrequest_write <= '0';
-			end if;
-		end if;
-	end process;
+--	process (clock)
+--	begin
+--		if rising_edge(clock) then
+--			if my_little_transaction_dir = DIR_WRITE and abus_chipselect_latched /= "11" and abus_cspulse7 = '1'  then
+--				abus_waitrequest_write <= '1';
+--			else
+--				abus_waitrequest_write <= '0';
+--			end if;
+--		end if;
+--	end process;
 	
 	--wasca mode register write
 	--reset
@@ -481,31 +491,31 @@ begin
 	abus_addressdata <= (others => 'Z') when abus_direction_internal='0' else
 								abus_data_out;
 
-	process (clock)
-	begin
-		if rising_edge(clock) then
-			abus_waitrequest_read2 <= abus_waitrequest_read;
-			--abus_waitrequest_read3 <= abus_waitrequest_read2;
-			--abus_waitrequest_read4 <= abus_waitrequest_read3;
-			abus_waitrequest_write2 <= abus_waitrequest_write;
-			--abus_waitrequest_write3 <= abus_waitrequest_write3;
-			--abus_waitrequest_write4 <= abus_waitrequest_write4;
-		end if;
-	end process;					
+--	process (clock)
+--	begin
+--		if rising_edge(clock) then
+--			abus_waitrequest_read2 <= abus_waitrequest_read;
+--			--abus_waitrequest_read3 <= abus_waitrequest_read2;
+--			--abus_waitrequest_read4 <= abus_waitrequest_read3;
+--			abus_waitrequest_write2 <= abus_waitrequest_write;
+--			--abus_waitrequest_write3 <= abus_waitrequest_write3;
+--			--abus_waitrequest_write4 <= abus_waitrequest_write4;
+--		end if;
+--	end process;					
 						
-	process (clock)
-	begin
-		if rising_edge(clock) then
-			abus_waitrequest_read_off <= '0';
-			abus_waitrequest_write_off <= '0';
-			if abus_waitrequest_read = '0' and abus_waitrequest_read2 = '1' then
-				abus_waitrequest_read_off <= '1';
-			end if;
-			if abus_waitrequest_write = '0' and abus_waitrequest_write2 = '1' then
-				abus_waitrequest_write_off <= '1';
-			end if;
-		end if;
-	end process;					
+--	process (clock)
+--	begin
+--		if rising_edge(clock) then
+--			abus_waitrequest_read_off <= '0';
+--			abus_waitrequest_write_off <= '0';
+--			if abus_waitrequest_read = '0' and abus_waitrequest_read2 = '1' then
+--				abus_waitrequest_read_off <= '1';
+--			end if;
+--			if abus_waitrequest_write = '0' and abus_waitrequest_write2 = '1' then
+--				abus_waitrequest_write_off <= '1';
+--			end if;
+--		end if;
+--	end process;					
 
 	--process (clock)
 	--begin
@@ -521,7 +531,7 @@ begin
 	--end process;
 
 	
-	abus_waitrequest <= not (abus_waitrequest_read or abus_waitrequest_write);
+	--abus_waitrequest <= not (abus_waitrequest_read or abus_waitrequest_write);
 	
 	--Avalon regs read interface
 	process (clock)
@@ -768,13 +778,14 @@ begin
                   sdram_ras_n <= '0';
                   sdram_addr <= abus_address_latched(22 downto 10);
                   sdram_ba <= abus_address_latched(24 downto 23);
-                  sdram_wait_counter <= to_unsigned(3,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
-						if abus_write_buf = "11" then
+                  if abus_write_buf = "11" then
 							sdram_dqm <= "00"; --it's a read
+							sdram_wait_counter <= to_unsigned(3,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
 						else
 							sdram_dqm(0) <= abus_write_buf(1); --it's a write
 							sdram_dqm(1) <= abus_write_buf(0); --it's a write
 							sniffer_abus_write <= '1';
+							sdram_wait_counter <= to_unsigned(5,4); -- for writing we use a little longer activate delay, so that the data at the a-bus will become ready
 						end if;
                elsif (avalon_sdram_read_pending = '1' or avalon_sdram_write_pending = '1')  and avalon_sdram_complete = '0'  then
 						sdram_mode <= SDRAM_AVALON_ACTIVATE;
@@ -801,11 +812,28 @@ begin
                     sdram_addr(10) <= '0';					
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
-					    -- second autorefresh stage - autorefresh command 
-						sdram_cas_n <= '0';
-                        sdram_ras_n <= '0';
-                        sdram_wait_counter <= to_unsigned(6,4); --7 cut to 6 -- tRC = 63ns min ;  8 cycles @ 116mhz = 67ns
-						sdram_mode <= SDRAM_AUTOREFRESH2;
+						--switching to ABUS in case of ABUS request caught us between refresh stages
+						if sdram_abus_pending = '1' then
+							sdram_mode <= SDRAM_ABUS_ACTIVATE;
+							--something on abus, address should be stable already (is it???), so we activate row now
+							sdram_ras_n <= '0';
+							sdram_addr <= abus_address_latched(22 downto 10);
+							sdram_ba <= abus_address_latched(24 downto 23);
+							sdram_wait_counter <= to_unsigned(3,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
+							if abus_write_buf = "11" then
+								sdram_dqm <= "00"; --it's a read
+							else
+								sdram_dqm(0) <= abus_write_buf(1); --it's a write
+								sdram_dqm(1) <= abus_write_buf(0); --it's a write
+								sniffer_abus_write <= '1';
+							end if;
+						else
+							 -- second autorefresh stage - autorefresh command 
+							sdram_cas_n <= '0';
+							sdram_ras_n <= '0';
+							sdram_wait_counter <= to_unsigned(7,4); --7 cut to 6 -- tRC = 63ns min ;  8 cycles @ 116mhz = 67ns
+							sdram_mode <= SDRAM_AUTOREFRESH2;
+						end if;
 					end if;
 
 				when SDRAM_AUTOREFRESH2 => 
@@ -823,11 +851,14 @@ begin
 					sdram_ba <= "00";
 					sdram_ras_n <= '1';
 					sniffer_abus_write <= '0';
---					if abus_write_buf = "11" then
---					   sdram_dqm <= "00"; --it's a read
---					else
---					   sdram_dqm <= abus_write_buf; --it's a write
---					end if;
+					--we keep updating dqm in activate stage, because it could change after abus pending
+					if abus_write_buf = "11" then
+						sdram_dqm <= "00"; --it's a read
+					else
+						sdram_dqm(0) <= abus_write_buf(1); --it's a write
+						sdram_dqm(1) <= abus_write_buf(0); --it's a write
+						sniffer_abus_write <= '1';
+					end if;
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
 						if my_little_transaction_dir = DIR_WRITE then
