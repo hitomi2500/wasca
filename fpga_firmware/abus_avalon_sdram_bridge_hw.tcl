@@ -151,7 +151,7 @@ set_interface_property avalon_regs SVD_ADDRESS_GROUP ""
 add_interface_port avalon_regs avalon_regs_read read Input 1
 add_interface_port avalon_regs avalon_regs_write write Input 1
 add_interface_port avalon_regs avalon_regs_waitrequest waitrequest Output 1
-add_interface_port avalon_regs avalon_regs_address address Input 16
+add_interface_port avalon_regs avalon_regs_address address Input 8
 add_interface_port avalon_regs avalon_regs_writedata writedata Input 16
 add_interface_port avalon_regs avalon_regs_readdata readdata Output 16
 add_interface_port avalon_regs avalon_regs_readdatavalid readdatavalid Output 1

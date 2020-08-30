@@ -66,7 +66,7 @@ module wasca (
 	wire  [31:0] mm_interconnect_0_audio_0_avalon_audio_slave_writedata;                  // mm_interconnect_0:audio_0_avalon_audio_slave_writedata -> audio_0:writedata
 	wire  [15:0] mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_regs_readdata;       // abus_avalon_sdram_bridge_0:avalon_regs_readdata -> mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_regs_readdata
 	wire         mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_regs_waitrequest;    // abus_avalon_sdram_bridge_0:avalon_regs_waitrequest -> mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_regs_waitrequest
-	wire  [15:0] mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_regs_address;        // mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_regs_address -> abus_avalon_sdram_bridge_0:avalon_regs_address
+	wire   [7:0] mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_regs_address;        // mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_regs_address -> abus_avalon_sdram_bridge_0:avalon_regs_address
 	wire         mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_regs_read;           // mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_regs_read -> abus_avalon_sdram_bridge_0:avalon_regs_read
 	wire         mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_regs_readdatavalid;  // abus_avalon_sdram_bridge_0:avalon_regs_readdatavalid -> mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_regs_readdatavalid
 	wire         mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_regs_write;          // mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_regs_write -> abus_avalon_sdram_bridge_0:avalon_regs_write
