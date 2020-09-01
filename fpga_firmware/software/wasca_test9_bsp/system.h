@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sat Aug 29 01:45:25 MSK 2020
+ * Generated: Mon Aug 31 01:08:35 MSK 2020
  */
 
 /*
@@ -188,7 +188,7 @@
 #define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_IRQ -1
 #define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_NAME "/dev/abus_avalon_sdram_bridge_0_avalon_regs"
-#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_SPAN 131072
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_SPAN 512
 #define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_TYPE "abus_avalon_sdram_bridge"
 #define ALT_MODULE_CLASS_abus_avalon_sdram_bridge_0_avalon_regs abus_avalon_sdram_bridge
 

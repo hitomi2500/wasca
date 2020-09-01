@@ -51,6 +51,20 @@ end entity abus_avalon_sdram_bridge;
 
 architecture rtl of abus_avalon_sdram_bridge is
 
+component sniff_fifo
+	PORT
+	(
+		clock		: IN STD_LOGIC ;
+		data		: IN STD_LOGIC_VECTOR (47 DOWNTO 0);
+		rdreq		: IN STD_LOGIC ;
+		wrreq		: IN STD_LOGIC ;
+		empty		: OUT STD_LOGIC ;
+		full		: OUT STD_LOGIC ;
+		q		: OUT STD_LOGIC_VECTOR (47 DOWNTO 0);
+		usedw		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
+	);
+end component;
+
 signal abus_address_ms         : std_logic_vector(9 downto 0) := (others => '0'); --          abus.address
 signal abus_address_buf         : std_logic_vector(9 downto 0) := (others => '0'); --          abus.address
 signal abus_addressdata_ms       : std_logic_vector(15 downto 0) := (others => '0'); --              .data
@@ -149,6 +163,12 @@ signal counter_reset     : std_logic := '0';
 signal counter_count_read     : std_logic := '0';
 signal counter_count_write    : std_logic := '0';
 signal counter_value     : unsigned(31 downto 0) := (others => '0'); 
+signal sniffer_filter_control      : std_logic_vector(7 downto 0) := (others => '0'); 
+signal sniffer_data_in     : std_logic_vector(47 downto 0) := (others => '0'); 
+signal sniffer_data_out     : std_logic_vector(47 downto 0) := (others => '0'); 
+signal sniffer_data_write    : std_logic := '0';
+signal sniffer_data_ack    : std_logic := '0';
+signal sniffer_fifo_content_size     : std_logic_vector(9 downto 0) := (others => '0'); 
 
 
 
@@ -525,17 +545,31 @@ begin
 	begin
 		if rising_edge(clock) then
 			avalon_regs_readdatavalid <= '0';
+			sniffer_data_ack <= '0';
 			if avalon_regs_read = '1' then
 				avalon_regs_readdatavalid <= '1';
 				case avalon_regs_address(7 downto 0) is 
-					when X"E0" => 
+					when X"D0" => 
 						avalon_regs_readdata <= std_logic_vector(counter_value(15 downto 0));
-					when X"E2" => 
+					when X"D2" => 
 						avalon_regs_readdata <= std_logic_vector(counter_value(31 downto 16));
-					when X"E4" => 
+					when X"D4" => 
 						avalon_regs_readdata <= X"00"&counter_filter_control;
-					--E6 is a reset, writeonly
-					--E8 to EE are reserved
+					--D6 is a reset, writeonly
+					--D8 to DE are reserved
+					when X"E0" => 
+						avalon_regs_readdata <= sniffer_data_out(15 downto 0);
+					when X"E2" => 
+						avalon_regs_readdata <= sniffer_data_out(31 downto 16);
+					when X"E4" => 
+						avalon_regs_readdata <= sniffer_data_out(47 downto 32);
+					when X"E6" => 
+						sniffer_data_ack <= '1';
+					when X"E8" => 
+						avalon_regs_readdata <= X"00"&sniffer_filter_control;						
+					when X"EA" => 
+						avalon_regs_readdata <= "000000"&sniffer_fifo_content_size;						
+					--EC to EE are reserved
 					when X"F0" => 
 						avalon_regs_readdata <= REG_PCNTR;
 					when X"F2" =>
@@ -562,15 +596,28 @@ begin
 			counter_reset <= '0';
 			if avalon_regs_write= '1' then
 				case avalon_regs_address(7 downto 0) is 
+					when X"D0" => 
+						null;
+					when X"D2" => 
+						null;
+					when X"D4" => 
+						counter_filter_control <= avalon_regs_writedata(7 downto 0);
+					when X"D6" => 
+						counter_reset <= '1';
+					--D8 to DE are reserved
 					when X"E0" => 
 						null;
 					when X"E2" => 
 						null;
 					when X"E4" => 
-						counter_filter_control <= avalon_regs_writedata(7 downto 0);
+						null;
 					when X"E6" => 
-						counter_reset <= '1';
-					--E8 to EE are reserved
+						null;
+					when X"E8" => 
+						sniffer_filter_control <= avalon_regs_writedata(7 downto 0);
+					when X"EA" => 
+						null;
+					--EC to EE are reserved
 					when X"F0" => 
 						REG_PCNTR <= avalon_regs_writedata;
 					when X"F2" =>
@@ -1030,6 +1077,56 @@ begin
 			end if;
 		end if;
 	end process;
+
+	------------------------------ A-bus sniffer ---------------------------------------
+	
+	process (clock)
+	begin
+		if rising_edge(clock) then
+			sniffer_data_write <= '0';
+			if counter_count_write='1' and sniffer_filter_control(1) = '1' then
+				--write detected, checking state 
+				if abus_chipselect_buf(0) = '1' and sniffer_filter_control(2) = '1' then
+					sniffer_data_write <= '1';
+				elsif abus_chipselect_buf(1) = '1' and sniffer_filter_control(3) = '1' then
+					sniffer_data_write <= '1';
+				elsif abus_chipselect_buf(2) = '1' and sniffer_filter_control(4) = '1' then
+					sniffer_data_write <= '1';	
+				end if;
+			elsif counter_count_read='1' and sniffer_filter_control(0) = '1' then
+				--read detected, checking state 
+				if abus_chipselect_buf(0) = '1' and sniffer_filter_control(2) = '1' then
+					sniffer_data_write <= '1';
+				elsif abus_chipselect_buf(1) = '1' and sniffer_filter_control(3) = '1' then
+					sniffer_data_write <= '1';
+				elsif abus_chipselect_buf(2) = '1' and sniffer_filter_control(4) = '1' then
+					sniffer_data_write <= '1';
+				end if;
+			end if;
+		end if;
+	end process;
+	
+	sniffer_data_in(15 downto 0) <= abus_data_in when abus_direction_internal='0' else
+								abus_data_out;
+	sniffer_data_in(40 downto 16) <= abus_address_latched(24 downto 0);							
+	sniffer_data_in(41)	<= not abus_chipselect_buf(0);
+	sniffer_data_in(42)	<= not abus_chipselect_buf(1);
+	sniffer_data_in(43)	<= not abus_chipselect_buf(2);
+	sniffer_data_in(44)	<= not abus_write_buf(0);
+	sniffer_data_in(45)	<= not abus_write_buf(1);
+	sniffer_data_in(46) <= not abus_read_buf;
+	sniffer_data_in(47) <= '0';--reserved
+	
+	sniff_fifo_inst : sniff_fifo PORT MAP (
+		clock	 => clock,
+		data	 => sniffer_data_in,
+		rdreq	 => sniffer_data_ack,
+		wrreq	 => sniffer_data_write,
+		empty	 => open,
+		full	 => open,
+		q	 => sniffer_data_out,
+		usedw	 => sniffer_fifo_content_size
+	);
 
 
 	
