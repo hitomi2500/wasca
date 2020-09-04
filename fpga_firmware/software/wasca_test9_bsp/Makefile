@@ -100,8 +100,8 @@ ACDS_VERSION := 15.1
 # used to generate this makefile. 
 # BUILD_NUMBER: 185
 
-SETTINGS_FILE := settings.bsp
-SOPC_FILE := ../../wasca.sopcinfo
+SETTINGS_FILE := ../../../../flashless/fpga_firmware/software/wasca_test9_bsp/settings.bsp
+SOPC_FILE := ../../../../flashless/fpga_firmware/wasca.sopcinfo
 
 #-------------------------------------------------------------------------------
 #                             TOOL & COMMAND DEFINITIONS

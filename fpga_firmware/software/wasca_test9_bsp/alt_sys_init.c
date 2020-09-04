@@ -2,9 +2,9 @@
  * alt_sys_init.c - HAL initialization source
  *
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
- * SOPC Builder design path: ../../wasca.sopcinfo
+ * SOPC Builder design path: ../../../../flashless/fpga_firmware/wasca.sopcinfo
  *
- * Generated: Tue Aug 11 12:33:40 MSK 2020
+ * Generated: Tue Sep 01 23:17:44 MSK 2020
  */
 
 /*

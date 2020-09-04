@@ -1,9 +1,9 @@
 # memory.gdb - GDB memory region definitions
 #
 # Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
-# SOPC Builder design path: ../../wasca.sopcinfo
+# SOPC Builder design path: ../../../../flashless/fpga_firmware/wasca.sopcinfo
 #
-# Generated: Wed Aug 19 07:49:36 MSK 2020
+# Generated: Fri Sep 04 23:25:55 MSK 2020
 
 # DO NOT MODIFY THIS FILE
 #
@@ -46,8 +46,8 @@
 # The cache attribute is specified which improves GDB performance
 # by allowing GDB to cache memory contents on the host.
 
-# onchip_flash_0
-memory 0x0 0x2b000 cache
-
 # onchip_memory2_0
 memory 0x80000 0x84000 cache
+
+# abus_avalon_sdram_bridge_0_avalon_sdram
+memory 0x4000000 0x6000000 cache

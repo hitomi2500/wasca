@@ -613,7 +613,7 @@ module wasca_nios2_gen2_0_cpu_nios2_oci_xbrk (
   output           xbrk_trigout;
   input            D_valid;
   input            E_valid;
-  input   [ 24: 0] F_pc;
+  input   [ 17: 0] F_pc;
   input            clk;
   input            reset_n;
   input            trigger_state_0;
@@ -630,7 +630,7 @@ module wasca_nios2_gen2_0_cpu_nios2_oci_xbrk (
   reg              E_xbrk_traceoff;
   reg              E_xbrk_traceon;
   reg              E_xbrk_trigout;
-  wire    [ 26: 0] cpu_i_address;
+  wire    [ 19: 0] cpu_i_address;
   wire             xbrk0_armed;
   wire             xbrk0_break_hit;
   wire             xbrk0_goto0_hit;
@@ -1145,7 +1145,7 @@ module wasca_nios2_gen2_0_cpu_nios2_oci_itrace (
                   else if (is_fast_tlb_miss_exception)
                       pending_exc_handler <= 32'h0;
                   else 
-                    pending_exc_handler <= 32'h20;
+                    pending_exc_handler <= 32'h80020;
                   pending_frametype <= 4'b0000;
                 end
               else if (is_idct)
@@ -2486,12 +2486,12 @@ defparam wasca_nios2_gen2_0_cpu_ociram_sp_ram.lpm_file = "wasca_nios2_gen2_0_cpu
 defparam wasca_nios2_gen2_0_cpu_ociram_sp_ram.lpm_file = "wasca_nios2_gen2_0_cpu_ociram_default_contents.hex";
 `endif
 //synthesis translate_on
-  assign cfgrom_readdata = (MonAReg[4 : 2] == 3'd0)? 32'h00000020 :
-    (MonAReg[4 : 2] == 3'd1)? 32'h00001b1b :
+  assign cfgrom_readdata = (MonAReg[4 : 2] == 3'd0)? 32'h00080020 :
+    (MonAReg[4 : 2] == 3'd1)? 32'h00001b14 :
     (MonAReg[4 : 2] == 3'd2)? 32'h00040000 :
     (MonAReg[4 : 2] == 3'd3)? 32'h00000100 :
     (MonAReg[4 : 2] == 3'd4)? 32'h20000000 :
-    (MonAReg[4 : 2] == 3'd5)? 32'h00000000 :
+    (MonAReg[4 : 2] == 3'd5)? 32'h00080000 :
     (MonAReg[4 : 2] == 3'd6)? 32'h00000000 :
     32'h00000000;
 
@@ -2551,7 +2551,7 @@ module wasca_nios2_gen2_0_cpu_nios2_oci (
   input            D_valid;
   input   [ 31: 0] E_st_data;
   input            E_valid;
-  input   [ 24: 0] F_pc;
+  input   [ 17: 0] F_pc;
   input   [  8: 0] address_nxt;
   input   [ 31: 0] av_ld_data_aligned_filtered;
   input   [  3: 0] byteenable_nxt;
@@ -3021,7 +3021,7 @@ module wasca_nios2_gen2_0_cpu (
   output           debug_mem_slave_waitrequest;
   output           debug_reset_request;
   output           dummy_ci_port;
-  output  [ 26: 0] i_address;
+  output  [ 19: 0] i_address;
   output           i_read;
   input            clk;
   input   [ 31: 0] d_readdata;
@@ -3104,7 +3104,7 @@ module wasca_nios2_gen2_0_cpu (
   wire    [  1: 0] D_iw_memsz;
   wire    [  5: 0] D_iw_op;
   wire    [  5: 0] D_iw_opx;
-  wire    [ 24: 0] D_jmp_direct_target_waddr;
+  wire    [ 17: 0] D_jmp_direct_target_waddr;
   wire    [  1: 0] D_logic_op;
   wire    [  1: 0] D_logic_op_raw;
   wire             D_mem16;
@@ -3446,15 +3446,15 @@ module wasca_nios2_gen2_0_cpu (
   wire             F_op_xor;
   wire             F_op_xorhi;
   wire             F_op_xori;
-  reg     [ 24: 0] F_pc /* synthesis ALTERA_IP_DEBUG_VISIBLE = 1 */;
+  reg     [ 17: 0] F_pc /* synthesis ALTERA_IP_DEBUG_VISIBLE = 1 */;
   wire             F_pc_en;
-  wire    [ 24: 0] F_pc_no_crst_nxt;
-  wire    [ 24: 0] F_pc_nxt;
-  wire    [ 24: 0] F_pc_plus_one;
+  wire    [ 17: 0] F_pc_no_crst_nxt;
+  wire    [ 17: 0] F_pc_nxt;
+  wire    [ 17: 0] F_pc_plus_one;
   wire    [  1: 0] F_pc_sel_nxt;
-  wire    [ 26: 0] F_pcb;
-  wire    [ 26: 0] F_pcb_nxt;
-  wire    [ 26: 0] F_pcb_plus_four;
+  wire    [ 19: 0] F_pcb;
+  wire    [ 19: 0] F_pcb_nxt;
+  wire    [ 19: 0] F_pcb_plus_four;
   wire             F_valid;
   wire    [ 71: 0] F_vinst;
   reg     [  1: 0] R_compare_op;
@@ -3645,7 +3645,7 @@ module wasca_nios2_gen2_0_cpu (
   reg              hbreak_pending;
   wire             hbreak_pending_nxt;
   wire             hbreak_req;
-  wire    [ 26: 0] i_address;
+  wire    [ 19: 0] i_address;
   reg              i_read;
   wire             i_read_nxt;
   wire    [ 31: 0] iactive;
@@ -4006,9 +4006,9 @@ module wasca_nios2_gen2_0_cpu (
     (W_br_taken | R_ctrl_uncond_cti_non_br)   ? 2'b10 :
     2'b11;
 
-  assign F_pc_no_crst_nxt = (F_pc_sel_nxt == 2'b00)? 8 :
+  assign F_pc_no_crst_nxt = (F_pc_sel_nxt == 2'b00)? 131080 :
     (F_pc_sel_nxt == 2'b01)? 66568 :
-    (F_pc_sel_nxt == 2'b10)? E_arith_result[26 : 2] :
+    (F_pc_sel_nxt == 2'b10)? E_arith_result[19 : 2] :
     F_pc_plus_one;
 
   assign F_pc_nxt = F_pc_no_crst_nxt;
@@ -4018,7 +4018,7 @@ module wasca_nios2_gen2_0_cpu (
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
-          F_pc <= 0;
+          F_pc <= 131072;
       else if (F_pc_en)
           F_pc <= F_pc_nxt;
     end

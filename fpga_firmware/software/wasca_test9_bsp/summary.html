@@ -16,16 +16,16 @@
 <td width="20%" bgcolor="#77BBFF">CPU:</td><td>nios2_gen2_0</td>
 </tr>
 <tr mode="wrap">
-<td width="20%" bgcolor="#77BBFF">BSP Settings File:</td><td>settings.bsp</td>
+<td width="20%" bgcolor="#77BBFF">BSP Settings File:</td><td>..\..\..\..\flashless\fpga_firmware\software\wasca_test9_bsp\settings.bsp</td>
 </tr>
 <tr mode="wrap">
 <td width="20%" bgcolor="#77BBFF">BSP Version:</td><td>default</td>
 </tr>
 <tr mode="wrap">
-<td width="20%" bgcolor="#77BBFF">BSP Generated On:</td><td>31.08.2020 1:08:29</td>
+<td width="20%" bgcolor="#77BBFF">BSP Generated On:</td><td>Sep 4, 2020 11:26:29 PM</td>
 </tr>
 <tr mode="wrap">
-<td width="20%" bgcolor="#77BBFF">BSP Generated Timestamp:</td><td>1598821709775</td>
+<td width="20%" bgcolor="#77BBFF">BSP Generated Timestamp:</td><td>1599247589217</td>
 </tr>
 <tr mode="wrap">
 <td width="20%" bgcolor="#77BBFF">BSP Generated Location:</td><td>D:\Saturn\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</td>
@@ -38,7 +38,7 @@
 <th align="left" width="20%">Slave Descriptor</th><th align="left" width="40%">Address Range</th><th align="left" width="20%">Size</th><th align="left" width="20%">Attributes</th>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>abus_avalon_sdram_bridge_0_avalon_sdram</td><td>0x04000000 - 0x05FFFFFF</td><td>33554432</td><td class="listing">&nbsp;</td>
+<td>abus_avalon_sdram_bridge_0_avalon_sdram</td><td>0x04000000 - 0x05FFFFFF</td><td>33554432</td><td class="listing">memory</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
 <td>onchip_memory2_0</td><td>0x00080000 - 0x00083FFF</td><td>16384</td><td class="listing">memory</td>
@@ -61,9 +61,6 @@
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
 <td>uart_0</td><td>0x00040000 - 0x0004001F</td><td>32</td><td class="listing">printable</td>
 </tr>
-<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>onchip_flash_0</td><td>0x00000000 - 0x0002AFFF</td><td>176128</td><td class="listing">flash, memory, non-volatile</td>
-</tr>
 </table>
 <br>
 <br>
@@ -71,6 +68,15 @@
 <table border="1" bgcolor="#FFFFCC" width="90%">
 <tr bgcolor="#77BBFF" mode="wrap">
 <th align="left" width="15%">Region</th><th align="left" width="40%">Address Range</th><th align="left" width="15%">Size</th><th align="left" width="15%">Memory</th><th align="left" width="15%">Offset</th>
+</tr>
+<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
+<td>onchip_memory2_0</td><td>0x00080020 - 0x00083FFF</td><td>16352</td><td>onchip_memory2_0</td><td>32</td>
+</tr>
+<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
+<td>reset</td><td>0x00080000 - 0x0008001F</td><td>32</td><td>onchip_memory2_0</td><td>0</td>
+</tr>
+<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
+<td>abus_avalon_sdram_bridge_0_avalon_sdram</td><td>0x05000000 - 0x0507FFFF</td><td>524288</td><td>abus_avalon_sdram_bridge_0_avalon_sdram</td><td>16777216</td>
 </tr>
 </table>
 <br>
@@ -81,22 +87,22 @@
 <th align="left" width="50%">Section</th><th align="left" width="50%">Region</th>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>.text</td><td>onchip_flash_0</td>
+<td>.text</td><td>onchip_memory2_0</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>.rodata</td><td>onchip_flash_0</td>
+<td>.rodata</td><td>abus_avalon_sdram_bridge_0_avalon_sdram</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
 <td>.rwdata</td><td>onchip_memory2_0</td>
-</tr>
-<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>.bss</td><td>onchip_memory2_0</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
 <td>.heap</td><td>onchip_memory2_0</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
 <td>.stack</td><td>onchip_memory2_0</td>
+</tr>
+<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
+<td>.bss</td><td>onchip_memory2_0</td>
 </tr>
 </table>
 <h3>Settings</h3>

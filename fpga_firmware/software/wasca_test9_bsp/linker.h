@@ -2,9 +2,9 @@
  * linker.h - Linker script mapping information
  *
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
- * SOPC Builder design path: ../../wasca.sopcinfo
+ * SOPC Builder design path: ../../../../flashless/fpga_firmware/wasca.sopcinfo
  *
- * Generated: Sat Aug 29 01:45:25 MSK 2020
+ * Generated: Fri Sep 04 23:25:55 MSK 2020
  */
 
 /*
@@ -65,11 +65,11 @@
  *
  */
 
-#define ONCHIP_FLASH_0_REGION_BASE 0x20
-#define ONCHIP_FLASH_0_REGION_SPAN 176096
-#define ONCHIP_MEMORY2_0_REGION_BASE 0x80000
-#define ONCHIP_MEMORY2_0_REGION_SPAN 16384
-#define RESET_REGION_BASE 0x0
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_REGION_BASE 0x5000000
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_REGION_SPAN 524288
+#define ONCHIP_MEMORY2_0_REGION_BASE 0x80020
+#define ONCHIP_MEMORY2_0_REGION_SPAN 16352
+#define RESET_REGION_BASE 0x80000
 #define RESET_REGION_SPAN 32
 
 
@@ -78,11 +78,11 @@
  *
  */
 
-#define ALT_EXCEPTIONS_DEVICE ONCHIP_FLASH_0
-#define ALT_RESET_DEVICE ONCHIP_FLASH_0
-#define ALT_RODATA_DEVICE ONCHIP_FLASH_0
+#define ALT_EXCEPTIONS_DEVICE ONCHIP_MEMORY2_0
+#define ALT_RESET_DEVICE ONCHIP_MEMORY2_0
+#define ALT_RODATA_DEVICE ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM
 #define ALT_RWDATA_DEVICE ONCHIP_MEMORY2_0
-#define ALT_TEXT_DEVICE ONCHIP_FLASH_0
+#define ALT_TEXT_DEVICE ONCHIP_MEMORY2_0
 
 
 /*

@@ -2,9 +2,9 @@
  * linker.x - Linker script
  *
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
- * SOPC Builder design path: ../../wasca.sopcinfo
+ * SOPC Builder design path: ../../../../flashless/fpga_firmware/wasca.sopcinfo
  *
- * Generated: Sat Aug 29 01:45:25 MSK 2020
+ * Generated: Fri Sep 04 23:25:55 MSK 2020
  */
 
 /*
@@ -50,14 +50,14 @@
 
 MEMORY
 {
-    reset : ORIGIN = 0x0, LENGTH = 32
-    onchip_flash_0 : ORIGIN = 0x20, LENGTH = 176096
-    onchip_memory2_0 : ORIGIN = 0x80000, LENGTH = 16384
+    reset : ORIGIN = 0x80000, LENGTH = 32
+    onchip_memory2_0 : ORIGIN = 0x80020, LENGTH = 16352
+    abus_avalon_sdram_bridge_0_avalon_sdram : ORIGIN = 0x5000000, LENGTH = 524288
 }
 
 /* Define symbols for each memory base-address */
-__alt_mem_onchip_flash_0 = 0x0;
 __alt_mem_onchip_memory2_0 = 0x80000;
+__alt_mem_abus_avalon_sdram_bridge_0_avalon_sdram = 0x4000000;
 
 OUTPUT_FORMAT( "elf32-littlenios2",
                "elf32-littlenios2",
@@ -113,7 +113,7 @@ SECTIONS
         KEEP (*(.exceptions.exit));
         KEEP (*(.exceptions));
         PROVIDE (__ram_exceptions_end = ABSOLUTE(.));
-    } > onchip_flash_0
+    } > onchip_memory2_0
 
     PROVIDE (__flash_exceptions_start = LOADADDR(.exceptions));
 
@@ -209,7 +209,7 @@ SECTIONS
         PROVIDE (__DTOR_END__ = ABSOLUTE(.));
         KEEP (*(.jcr))
         . = ALIGN(4);
-    } > onchip_flash_0 = 0x3a880100 /* NOP instruction (always in big-endian byte ordering) */
+    } > onchip_memory2_0 = 0x3a880100 /* NOP instruction (always in big-endian byte ordering) */
 
     .rodata :
     {
@@ -219,7 +219,7 @@ SECTIONS
         *(.rodata1)
         . = ALIGN(4);
         PROVIDE (__ram_rodata_end = ABSOLUTE(.));
-    } > onchip_flash_0
+    } > abus_avalon_sdram_bridge_0_avalon_sdram
 
     PROVIDE (__flash_rodata_start = LOADADDR(.rodata));
 
@@ -228,9 +228,13 @@ SECTIONS
      * This section's LMA is set to the .text region.
      * crt0 will copy to this section's specified mapped region virtual memory address (VMA)
      *
+     * .rwdata region equals the .text region, and is set to be loaded into .text region.
+     * This requires two copies of .rwdata in the .text region. One read writable at VMA.
+     * and one read-only at LMA. crt0 will copy from LMA to VMA on reset
+     *
      */
 
-    .rwdata : AT ( LOADADDR (.rodata) + SIZEOF (.rodata) )
+    .rwdata LOADADDR (.text) + SIZEOF (.text) : AT ( LOADADDR (.text) + SIZEOF (.text)+ SIZEOF (.rwdata) )
     {
         PROVIDE (__ram_rwdata_start = ABSOLUTE(.));
         . = ALIGN(4);
@@ -253,7 +257,14 @@ SECTIONS
 
     PROVIDE (__flash_rwdata_start = LOADADDR(.rwdata));
 
-    .bss :
+    /*
+     *
+     * This section's LMA is set to the .text region.
+     * crt0 will copy to this section's specified mapped region virtual memory address (VMA)
+     *
+     */
+
+    .bss LOADADDR (.rwdata) + SIZEOF (.rwdata) : AT ( LOADADDR (.rwdata) + SIZEOF (.rwdata) )
     {
         __bss_start = ABSOLUTE(.);
         PROVIDE (__sbss_start = ABSOLUTE(.));
@@ -298,24 +309,7 @@ SECTIONS
      *
      */
 
-    .onchip_flash_0 LOADADDR (.rwdata) + SIZEOF (.rwdata) : AT ( LOADADDR (.rwdata) + SIZEOF (.rwdata) )
-    {
-        PROVIDE (_alt_partition_onchip_flash_0_start = ABSOLUTE(.));
-        *(.onchip_flash_0 .onchip_flash_0. onchip_flash_0.*)
-        . = ALIGN(4);
-        PROVIDE (_alt_partition_onchip_flash_0_end = ABSOLUTE(.));
-    } > onchip_flash_0
-
-    PROVIDE (_alt_partition_onchip_flash_0_load_addr = LOADADDR(.onchip_flash_0));
-
-    /*
-     *
-     * This section's LMA is set to the .text region.
-     * crt0 will copy to this section's specified mapped region virtual memory address (VMA)
-     *
-     */
-
-    .onchip_memory2_0 : AT ( LOADADDR (.onchip_flash_0) + SIZEOF (.onchip_flash_0) )
+    .onchip_memory2_0 LOADADDR (.bss) + SIZEOF (.bss) : AT ( LOADADDR (.bss) + SIZEOF (.bss) )
     {
         PROVIDE (_alt_partition_onchip_memory2_0_start = ABSOLUTE(.));
         *(.onchip_memory2_0 .onchip_memory2_0. onchip_memory2_0.*)
@@ -327,6 +321,23 @@ SECTIONS
     } > onchip_memory2_0
 
     PROVIDE (_alt_partition_onchip_memory2_0_load_addr = LOADADDR(.onchip_memory2_0));
+
+    /*
+     *
+     * This section's LMA is set to the .text region.
+     * crt0 will copy to this section's specified mapped region virtual memory address (VMA)
+     *
+     */
+
+    .abus_avalon_sdram_bridge_0_avalon_sdram : AT ( LOADADDR (.onchip_memory2_0) + SIZEOF (.onchip_memory2_0) )
+    {
+        PROVIDE (_alt_partition_abus_avalon_sdram_bridge_0_avalon_sdram_start = ABSOLUTE(.));
+        *(.abus_avalon_sdram_bridge_0_avalon_sdram .abus_avalon_sdram_bridge_0_avalon_sdram. abus_avalon_sdram_bridge_0_avalon_sdram.*)
+        . = ALIGN(4);
+        PROVIDE (_alt_partition_abus_avalon_sdram_bridge_0_avalon_sdram_end = ABSOLUTE(.));
+    } > abus_avalon_sdram_bridge_0_avalon_sdram
+
+    PROVIDE (_alt_partition_abus_avalon_sdram_bridge_0_avalon_sdram_load_addr = LOADADDR(.abus_avalon_sdram_bridge_0_avalon_sdram));
 
     /*
      * Stabs debugging sections.
