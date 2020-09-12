@@ -2,9 +2,9 @@
  * system.h - SOPC Builder system and BSP software package information
  *
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
- * SOPC Builder design path: ../../../../flashless/fpga_firmware/wasca.sopcinfo
+ * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Fri Sep 04 23:25:55 MSK 2020
+ * Generated: Sat Sep 12 00:10:32 MSK 2020
  */
 
 /*
@@ -56,6 +56,20 @@
 
 
 /*
+ * Altera_UP_SD_Card_Avalon_Interface_0 configuration
+ *
+ */
+
+#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE 0x47000
+#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_IRQ -1
+#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME "/dev/Altera_UP_SD_Card_Avalon_Interface_0"
+#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_SPAN 1024
+#define ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_TYPE "Altera_UP_SD_Card_Avalon_Interface"
+#define ALT_MODULE_CLASS_Altera_UP_SD_Card_Avalon_Interface_0 Altera_UP_SD_Card_Avalon_Interface
+
+
+/*
  * CPU configuration
  *
  */
@@ -72,7 +86,7 @@
 #define ALT_CPU_DCACHE_LINE_SIZE 0
 #define ALT_CPU_DCACHE_LINE_SIZE_LOG2 0
 #define ALT_CPU_DCACHE_SIZE 0
-#define ALT_CPU_EXCEPTION_ADDR 0x00080020
+#define ALT_CPU_EXCEPTION_ADDR 0x00003fe0
 #define ALT_CPU_FLASH_ACCELERATOR_LINES 0
 #define ALT_CPU_FLASH_ACCELERATOR_LINE_SIZE 0
 #define ALT_CPU_FLUSHDA_SUPPORTED
@@ -90,7 +104,7 @@
 #define ALT_CPU_INST_ADDR_WIDTH 0x14
 #define ALT_CPU_NAME "nios2_gen2_0"
 #define ALT_CPU_OCI_VERSION 1
-#define ALT_CPU_RESET_ADDR 0x00080000
+#define ALT_CPU_RESET_ADDR 0x00000000
 
 
 /*
@@ -109,7 +123,7 @@
 #define NIOS2_DCACHE_LINE_SIZE 0
 #define NIOS2_DCACHE_LINE_SIZE_LOG2 0
 #define NIOS2_DCACHE_SIZE 0
-#define NIOS2_EXCEPTION_ADDR 0x00080020
+#define NIOS2_EXCEPTION_ADDR 0x00003fe0
 #define NIOS2_FLASH_ACCELERATOR_LINES 0
 #define NIOS2_FLASH_ACCELERATOR_LINE_SIZE 0
 #define NIOS2_FLUSHDA_SUPPORTED
@@ -125,7 +139,7 @@
 #define NIOS2_ICACHE_SIZE 0
 #define NIOS2_INST_ADDR_WIDTH 0x14
 #define NIOS2_OCI_VERSION 1
-#define NIOS2_RESET_ADDR 0x00080000
+#define NIOS2_RESET_ADDR 0x00000000
 
 
 /*
@@ -138,7 +152,9 @@
 #define __ALTERA_AVALON_SPI
 #define __ALTERA_AVALON_UART
 #define __ALTERA_NIOS2_GEN2
+#define __ALTERA_ONCHIP_FLASH
 #define __ALTERA_UP_AVALON_AUDIO
+#define __ALTERA_UP_SD_CARD_AVALON_INTERFACE
 #define __ALTPLL
 
 
@@ -246,6 +262,37 @@
 
 
 /*
+ * onchip_flash_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_onchip_flash_0 altera_onchip_flash
+#define ONCHIP_FLASH_0_BASE 0x0
+#define ONCHIP_FLASH_0_BYTES_PER_PAGE 2048
+#define ONCHIP_FLASH_0_IRQ -1
+#define ONCHIP_FLASH_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define ONCHIP_FLASH_0_NAME "/dev/onchip_flash_0"
+#define ONCHIP_FLASH_0_READ_ONLY_MODE 1
+#define ONCHIP_FLASH_0_SECTOR1_ENABLED 1
+#define ONCHIP_FLASH_0_SECTOR1_END_ADDR 0x3fff
+#define ONCHIP_FLASH_0_SECTOR1_START_ADDR 0
+#define ONCHIP_FLASH_0_SECTOR2_ENABLED 1
+#define ONCHIP_FLASH_0_SECTOR2_END_ADDR 0x7fff
+#define ONCHIP_FLASH_0_SECTOR2_START_ADDR 0x4000
+#define ONCHIP_FLASH_0_SECTOR3_ENABLED 1
+#define ONCHIP_FLASH_0_SECTOR3_END_ADDR 0x1c7ff
+#define ONCHIP_FLASH_0_SECTOR3_START_ADDR 0x8000
+#define ONCHIP_FLASH_0_SECTOR4_ENABLED 1
+#define ONCHIP_FLASH_0_SECTOR4_END_ADDR 0x2afff
+#define ONCHIP_FLASH_0_SECTOR4_START_ADDR 0x1c800
+#define ONCHIP_FLASH_0_SECTOR5_ENABLED 0
+#define ONCHIP_FLASH_0_SECTOR5_END_ADDR 0xffffffff
+#define ONCHIP_FLASH_0_SECTOR5_START_ADDR 0xffffffff
+#define ONCHIP_FLASH_0_SPAN 176128
+#define ONCHIP_FLASH_0_TYPE "altera_onchip_flash"
+
+
+/*
  * onchip_memory2_0 configuration
  *
  */
@@ -272,37 +319,6 @@
 #define ONCHIP_MEMORY2_0_SPAN 16384
 #define ONCHIP_MEMORY2_0_TYPE "altera_avalon_onchip_memory2"
 #define ONCHIP_MEMORY2_0_WRITABLE 1
-
-
-/*
- * spi_sd_card configuration
- *
- */
-
-#define ALT_MODULE_CLASS_spi_sd_card altera_avalon_spi
-#define SPI_SD_CARD_BASE 0x43000
-#define SPI_SD_CARD_CLOCKMULT 1
-#define SPI_SD_CARD_CLOCKPHASE 0
-#define SPI_SD_CARD_CLOCKPOLARITY 0
-#define SPI_SD_CARD_CLOCKUNITS "Hz"
-#define SPI_SD_CARD_DATABITS 8
-#define SPI_SD_CARD_DATAWIDTH 16
-#define SPI_SD_CARD_DELAYMULT "1.0E-9"
-#define SPI_SD_CARD_DELAYUNITS "ns"
-#define SPI_SD_CARD_EXTRADELAY 0
-#define SPI_SD_CARD_INSERT_SYNC 0
-#define SPI_SD_CARD_IRQ 1
-#define SPI_SD_CARD_IRQ_INTERRUPT_CONTROLLER_ID 0
-#define SPI_SD_CARD_ISMASTER 1
-#define SPI_SD_CARD_LSBFIRST 0
-#define SPI_SD_CARD_NAME "/dev/spi_sd_card"
-#define SPI_SD_CARD_NUMSLAVES 1
-#define SPI_SD_CARD_PREFIX "spi_"
-#define SPI_SD_CARD_SPAN 32
-#define SPI_SD_CARD_SYNC_REG_DEPTH 2
-#define SPI_SD_CARD_TARGETCLOCK 20000000u
-#define SPI_SD_CARD_TARGETSSDELAY "0.0"
-#define SPI_SD_CARD_TYPE "altera_avalon_spi"
 
 
 /*

@@ -284,10 +284,6 @@ set_global_assignment -name POR_SCHEME "INSTANT ON"
 set_global_assignment -name EN_USER_IO_WEAK_PULLUP ON
 set_global_assignment -name EN_SPI_IO_WEAK_PULLUP ON
 set_location_assignment PIN_38 -to uart_0_external_connection_txd
-set_location_assignment PIN_22 -to spi_sd_card_SCLK
-set_location_assignment PIN_25 -to spi_sd_card_SS_n
-set_location_assignment PIN_24 -to spi_sd_card_MISO
-set_location_assignment PIN_26 -to spi_sd_card_MOSI
 set_location_assignment PIN_28 -to clk_clk
 set_location_assignment PIN_29 -to spi_stm32_MOSI
 set_location_assignment PIN_32 -to spi_stm32_SCLK
@@ -509,5 +505,9 @@ set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
 set_global_assignment -name QIP_FILE sniff_fifo.qip
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_location_assignment PIN_26 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd
+set_location_assignment PIN_22 -to altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock
+set_location_assignment PIN_25 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3
+set_location_assignment PIN_24 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat
 set_global_assignment -name SLD_FILE db/wasca_signaltap_auto_stripped.stp
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

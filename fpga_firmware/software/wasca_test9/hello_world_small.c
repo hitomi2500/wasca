@@ -80,14 +80,17 @@
 
 #include "sys/alt_stdio.h"
 #include "system.h"
+#include "Altera_UP_SD_Card_Avalon_Interface.h"
 
 #define SOFTWARE_VERSION 0x0002
 
 #define PCNTR_REG_OFFSET 0xF0
 #define MODE_REG_OFFSET 0xF4
 #define SWVER_REG_OFFSET 0xF8
-extern const unsigned char rawData[131072];
-extern const unsigned char minipseudo[15588];
+//extern const unsigned char rawData[131072];
+//extern const unsigned char minipseudo[15588];
+//extern const unsigned char minipseudo_nowait[15588];
+
 
 const char Power_Memory_Signature[16] = "BackUpRam Format";
 const char Wasca_Sysarea_Signature[64] = {0x80, 0x00, 0x00, 0x00, 0x77, 0x61, 0x73, 0x63,
@@ -100,12 +103,15 @@ const char Wasca_Sysarea_Signature[64] = {0x80, 0x00, 0x00, 0x00, 0x77, 0x61, 0x
 										  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 										};
 
+extern alt_up_sd_card_dev	*device_pointer;
+
 int main()
 {
 
   int i,j;
   volatile int k,v;
   volatile unsigned char * p;
+  volatile unsigned char * p2;
   volatile unsigned short * p16;
   unsigned short sMode;
   int iteration = 0;
@@ -156,12 +162,29 @@ int main()
 	  for (k=0;k<1000000;k++) ; //pause
   }*/
   //first things first - copy saturn bootcode into SDRAM
+  alt_up_sd_card_open_dev("/dev/Altera_UP_SD_Card_Avalon_Interface_0");
+  for (i=0;i<256;i++)
+  {
+	  Read_Sector_Data(15362+i,561);
+	  p2 = device_pointer->base;
+	  for (j=0;j<512;j++)
+		  p[i*512+j] =  p2[j];
+  }
+  //now it's minipseudo's time
+  for (i=0;i<32;i++)
+  {
+	  Read_Sector_Data(17410+i,561);
+	  p2 = device_pointer->base;
+	  for (j=0;j<512;j++)
+		  p[0x9C000 + i*512+j] =  p2[j];
+  }
+
   p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
-  for (i=0;i<131072;i++)
+  /*for (i=0;i<131072;i++)
 	  p[i] = rawData[i];
   //now it's minipseudo's time
   for (i=0;i<15588;i++)
-	  p[0x9C000 + i] = minipseudo[i];
+	  p[0x9C000 + i] = minipseudo_nowait[i];*/
   /*for (i=0;i<131072;i+=2)
   {
 	  p[i] = rawData[i];

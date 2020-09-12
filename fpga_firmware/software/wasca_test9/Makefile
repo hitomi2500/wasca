@@ -145,6 +145,7 @@ ELF := wasca_test9.elf
 C_SRCS += hello_world_small.c
 C_SRCS += wasca_short.c
 C_SRCS += chibi_pseudo.c
+C_SRCS += chibi_pseudo_nowait.c
 CXX_SRCS :=
 ASM_SRCS :=
 

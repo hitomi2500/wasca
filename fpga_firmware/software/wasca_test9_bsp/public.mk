@@ -86,7 +86,7 @@ ACDS_VERSION := 15.1
 
 # Qsys--generated SOPCINFO file. Required for resolving node instance ID's with 
 # design component names. 
-SOPCINFO_FILE := $(ABS_BSP_ROOT_DIR)/../../../../flashless/fpga_firmware/wasca.sopcinfo
+SOPCINFO_FILE := $(ABS_BSP_ROOT_DIR)/../../wasca.sopcinfo
 
 # Big-Endian operation. 
 # setting BIG_ENDIAN is false

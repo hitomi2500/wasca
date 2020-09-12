@@ -30,10 +30,14 @@ entity wasca_toplevel is
 		sega_saturn_abus_slave_0_abus_disableout   : out   std_logic                     := '0';              --                               .muxing
 		sega_saturn_abus_slave_0_abus_muxing	     : out   std_logic_vector(1	 downto 0)  := (others => '0'); --                               .muxing
 		sega_saturn_abus_slave_0_abus_direction	  : out   std_logic                     := '0';              --                               .direction
-		spi_sd_card_MISO                                           : in    std_logic                     := '0';             -- MISO
-		spi_sd_card_MOSI                                           : out   std_logic;                                        -- MOSI
-		spi_sd_card_SCLK                                           : out   std_logic;                                        -- SCLK
-		spi_sd_card_SS_n                                           : out   std_logic;                                        -- SS_n
+		--spi_sd_card_MISO                                           : inout    std_logic                     := '0';             -- MISO
+		--spi_sd_card_MOSI                                           : inout   std_logic;                                        -- MOSI
+		--spi_sd_card_SCLK                                           : out   std_logic;                                        -- SCLK
+		--spi_sd_card_SS_n                                           : inout   std_logic;                                        -- SS_n
+		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd   : inout std_logic                     := 'X';             -- b_SD_cmd
+		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat   : inout std_logic                     := 'X';             -- b_SD_dat
+		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3  : inout std_logic                     := 'X';             -- b_SD_dat3
+		altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock : out   std_logic  ;                                       -- o_SD_clock
 		uart_0_external_connection_txd : out   std_logic                     := '0'   ;
 		spi_stm32_MISO                              : out   std_logic;                                        -- MISO
 		spi_stm32_MOSI                              : in    std_logic                     := '0';             -- MOSI
@@ -77,10 +81,14 @@ architecture rtl of wasca_toplevel is
 			audio_out_DACLRCK                                 : in    std_logic                     := 'Z';             -- DACLRCK
 			clk_clk                                           : in    std_logic                     := 'Z';             -- clk
 			clock_116_mhz_clk                                 : out   std_logic;                                        -- clk
-			spi_sd_card_MISO                                  : in    std_logic                     := 'Z';             -- MISO
-			spi_sd_card_MOSI                                  : out   std_logic;                                        -- MOSI
-			spi_sd_card_SCLK                                  : out   std_logic;                                        -- SCLK
-			spi_sd_card_SS_n                                  : out   std_logic;                                        -- SS_n
+			--spi_sd_card_MISO                                  : in    std_logic                     := 'Z';             -- MISO
+			--spi_sd_card_MOSI                                  : out   std_logic;                                        -- MOSI
+			--spi_sd_card_SCLK                                  : out   std_logic;                                        -- SCLK
+			--spi_sd_card_SS_n                                  : out   std_logic;                                        -- SS_n
+			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd   : inout std_logic                     := 'Z';             -- b_SD_cmd
+			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat   : inout std_logic                     := 'Z';             -- b_SD_dat
+			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3  : inout std_logic                     := 'Z';             -- b_SD_dat3
+			altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock : out   std_logic      ;                                   -- o_SD_clock
 			spi_stm32_MISO                                    : out   std_logic;                                        -- MISO
 			spi_stm32_MOSI                                    : in    std_logic                     := 'Z';             -- MOSI
 			spi_stm32_SCLK                                    : in    std_logic                     := 'Z';             -- SCLK
@@ -88,6 +96,7 @@ architecture rtl of wasca_toplevel is
 			uart_0_external_connection_rxd                    : in    std_logic                     := 'Z';             -- rxd
 			uart_0_external_connection_txd                    : out   std_logic;                                        -- txd
 			reset_reset_n                                     : in    std_logic                     := 'Z';             -- reset_n
+			reset_controller_0_reset_in1_reset                : in    std_logic                     := 'Z' ;             -- reset
 			altpll_1_areset_conduit_export                    : in    std_logic                     := 'Z';             -- export
 			altpll_1_locked_conduit_export                    : out   std_logic;                                        -- export
 			altpll_1_phasedone_conduit_export                 : out   std_logic                                         -- export
@@ -103,6 +112,10 @@ architecture rtl of wasca_toplevel is
 	--signal sega_saturn_abus_slave_0_abus_data_demuxed : std_logic_vector(15 downto 0) := (others => '0');
 		
 	signal clock_116_mhz : std_logic := '0';
+	
+	signal por_counter : unsigned(31 downto 0) := (others => '0');
+	signal por_reset_n : std_logic := '0';
+
 	
 	begin
 	
@@ -134,10 +147,10 @@ architecture rtl of wasca_toplevel is
 			abus_avalon_sdram_bridge_0_abus_muxing => sega_saturn_abus_slave_0_abus_muxing,
 			abus_avalon_sdram_bridge_0_abus_disable_out => sega_saturn_abus_slave_0_abus_disableout,
 			abus_avalon_sdram_bridge_0_abus_reset => reset_reset_n,
-			spi_sd_card_MISO => spi_sd_card_MISO,
-			spi_sd_card_MOSI => spi_sd_card_MOSI,
-			spi_sd_card_SCLK => spi_sd_card_SCLK,
-			spi_sd_card_SS_n => spi_sd_card_SS_n,
+			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3 => altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3,
+			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat => altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat,
+			altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock => altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock,
+			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd => altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd,
 			altpll_1_areset_conduit_export => altpll_1_areset_conduit_export,
 			altpll_1_locked_conduit_export => altpll_1_locked_conduit_export,
 			altpll_1_phasedone_conduit_export => altpll_1_phasedone_conduit_export,
@@ -150,7 +163,8 @@ architecture rtl of wasca_toplevel is
 			audio_out_BCLK => audio_out_BCLK,
 			audio_out_DACDAT => audio_out_DACDAT,
 			audio_out_DACLRCK => audio_out_DACLRCK,
-			reset_reset_n => '1'
+			reset_reset_n => '1',
+			reset_controller_0_reset_in1_reset => por_reset_n
 		);
 
 		--empty subsystem
@@ -182,5 +196,16 @@ architecture rtl of wasca_toplevel is
 		--sega_saturn_abus_slave_0_abus_waitrequest <= '1';
 		--sega_saturn_abus_slave_0_abus_direction <= '0';
 		--sega_saturn_abus_slave_0_abus_muxing <= "01";
-
+		
+		--por
+		process (clock_116_mhz)
+		begin
+			if std_logic(por_counter(24)) = '0' then
+				por_counter <= por_counter + 1;
+			end if;
+		end process;
+		
+		por_reset_n <= not (std_logic(por_counter(22)));
+		
+		
 end architecture rtl; -- of wasca_toplevel

@@ -21,6 +21,10 @@ module wasca (
 	abus_avalon_sdram_bridge_0_sdram_ras_n,
 	abus_avalon_sdram_bridge_0_sdram_we_n,
 	abus_avalon_sdram_bridge_0_sdram_clk,
+	altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd,
+	altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat,
+	altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3,
+	altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock,
 	altpll_1_areset_conduit_export,
 	altpll_1_locked_conduit_export,
 	altpll_1_phasedone_conduit_export,
@@ -30,16 +34,13 @@ module wasca (
 	clk_clk,
 	clock_116_mhz_clk,
 	reset_reset_n,
-	spi_sd_card_MISO,
-	spi_sd_card_MOSI,
-	spi_sd_card_SCLK,
-	spi_sd_card_SS_n,
 	spi_stm32_MISO,
 	spi_stm32_MOSI,
 	spi_stm32_SCLK,
 	spi_stm32_SS_n,
 	uart_0_external_connection_rxd,
-	uart_0_external_connection_txd);	
+	uart_0_external_connection_txd,
+	reset_controller_0_reset_in1_reset);	
 
 	input	[9:0]	abus_avalon_sdram_bridge_0_abus_address;
 	input		abus_avalon_sdram_bridge_0_abus_read;
@@ -62,6 +63,10 @@ module wasca (
 	output		abus_avalon_sdram_bridge_0_sdram_ras_n;
 	output		abus_avalon_sdram_bridge_0_sdram_we_n;
 	output		abus_avalon_sdram_bridge_0_sdram_clk;
+	inout		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd;
+	inout		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat;
+	inout		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3;
+	output		altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock;
 	input		altpll_1_areset_conduit_export;
 	output		altpll_1_locked_conduit_export;
 	output		altpll_1_phasedone_conduit_export;
@@ -71,14 +76,11 @@ module wasca (
 	input		clk_clk;
 	output		clock_116_mhz_clk;
 	input		reset_reset_n;
-	input		spi_sd_card_MISO;
-	output		spi_sd_card_MOSI;
-	output		spi_sd_card_SCLK;
-	output		spi_sd_card_SS_n;
 	output		spi_stm32_MISO;
 	input		spi_stm32_MOSI;
 	input		spi_stm32_SCLK;
 	input		spi_stm32_SS_n;
 	input		uart_0_external_connection_rxd;
 	output		uart_0_external_connection_txd;
+	input		reset_controller_0_reset_in1_reset;
 endmodule

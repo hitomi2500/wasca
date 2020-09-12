@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>31.08.2020 1:08:29</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1598821709775</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>12.09.2020 2:45:23</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1599864323311</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>D:\Saturn\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
@@ -886,6 +886,46 @@
                 <Enabled>false</Enabled>
                 <Group xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
         </Setting>
+        <LinkerRegion>
+                <regionName>reset</regionName>
+                <memoryName>onchip_flash_0</memoryName>
+                <offset>0</offset>
+                <size>32</size>
+                <baseAddress>0x0</baseAddress>
+                <addressRange>0x00000000 - 0x0000001F</addressRange>
+        </LinkerRegion>
+        <LinkerRegion>
+                <regionName>onchip_flash_0</regionName>
+                <memoryName>onchip_flash_0</memoryName>
+                <offset>32</offset>
+                <size>16320</size>
+                <baseAddress>0x20</baseAddress>
+                <addressRange>0x00000020 - 0x00003FDF</addressRange>
+        </LinkerRegion>
+        <LinkerRegion>
+                <regionName>exceptions</regionName>
+                <memoryName>onchip_flash_0</memoryName>
+                <offset>16352</offset>
+                <size>32</size>
+                <baseAddress>0x3fe0</baseAddress>
+                <addressRange>0x00003FE0 - 0x00003FFF</addressRange>
+        </LinkerRegion>
+        <LinkerRegion>
+                <regionName>onchip_memory2_0</regionName>
+                <memoryName>onchip_memory2_0</memoryName>
+                <offset>32</offset>
+                <size>16352</size>
+                <baseAddress>0x80020</baseAddress>
+                <addressRange>0x00080020 - 0x00083FFF</addressRange>
+        </LinkerRegion>
+        <LinkerRegion>
+                <regionName>abus_avalon_sdram_bridge_0_avalon_sdram</regionName>
+                <memoryName>abus_avalon_sdram_bridge_0_avalon_sdram</memoryName>
+                <offset>524288</offset>
+                <size>524288</size>
+                <baseAddress>0x4080000</baseAddress>
+                <addressRange>0x04080000 - 0x040FFFFF</addressRange>
+        </LinkerRegion>
         <MemoryMap>
                 <slaveDescriptor>onchip_flash_0</slaveDescriptor>
                 <addressRange>0x00000000 - 0x0002AFFF</addressRange>
@@ -905,12 +945,6 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>spi_sd_card</slaveDescriptor>
-                <addressRange>0x00043000 - 0x0004301F</addressRange>
-                <addressSpan>32</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>spi_stm32</slaveDescriptor>
                 <addressRange>0x00044000 - 0x0004401F</addressRange>
                 <addressSpan>32</addressSpan>
@@ -920,6 +954,12 @@
                 <slaveDescriptor>audio_0</slaveDescriptor>
                 <addressRange>0x00046000 - 0x0004600F</addressRange>
                 <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>Altera_UP_SD_Card_Avalon_Interface_0</slaveDescriptor>
+                <addressRange>0x00047000 - 0x000473FF</addressRange>
+                <addressSpan>1024</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
@@ -938,7 +978,7 @@
                 <slaveDescriptor>abus_avalon_sdram_bridge_0_avalon_sdram</slaveDescriptor>
                 <addressRange>0x04000000 - 0x05FFFFFF</addressRange>
                 <addressSpan>33554432</addressSpan>
-                <attributes/>
+                <attributes>memory</attributes>
         </MemoryMap>
         <LinkerSection>
                 <sectionName>.text</sectionName>
@@ -963,5 +1003,9 @@
         <LinkerSection>
                 <sectionName>.stack</sectionName>
                 <regionName>onchip_memory2_0</regionName>
+        </LinkerSection>
+        <LinkerSection>
+                <sectionName>.exceptions</sectionName>
+                <regionName>exceptions</regionName>
         </LinkerSection>
 </sch:Settings>

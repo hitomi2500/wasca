@@ -27,7 +27,7 @@
 		<verify_protect>1</verify_protect>
 		<epof>0</epof>
 		<ufm_source>2</ufm_source>
-		<ufm_filepath>mem_init/onchip_flash_0.hex</ufm_filepath>
+		<ufm_filepath>mem_init/wasca_onchip_flash_0.hex</ufm_filepath>
 	</MAX10_device_options>
 	<advanced_options>
 		<ignore_epcs_id_check>2</ignore_epcs_id_check>

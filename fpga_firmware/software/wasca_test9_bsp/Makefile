@@ -100,8 +100,8 @@ ACDS_VERSION := 15.1
 # used to generate this makefile. 
 # BUILD_NUMBER: 185
 
-SETTINGS_FILE := ../../../../flashless/fpga_firmware/software/wasca_test9_bsp/settings.bsp
-SOPC_FILE := ../../../../flashless/fpga_firmware/wasca.sopcinfo
+SETTINGS_FILE := settings.bsp
+SOPC_FILE := ../../wasca.sopcinfo
 
 #-------------------------------------------------------------------------------
 #                             TOOL & COMMAND DEFINITIONS
@@ -207,6 +207,13 @@ GENERATED_C_LIB_SRCS += alt_sys_init.c
 # to construct a list of objects. Pattern rules to build each object are then
 # used to build each file.
 #-------------------------------------------------------------------------------
+
+# altera_up_sd_card_avalon_interface_driver sources root 
+Altera_UP_SD_Card_Avalon_Interface_driver_SRCS_ROOT := drivers
+
+# altera_up_sd_card_avalon_interface_driver sources 
+Altera_UP_SD_Card_Avalon_Interface_driver_C_LIB_SRCS := \
+	$(Altera_UP_SD_Card_Avalon_Interface_driver_SRCS_ROOT)/src/Altera_UP_SD_Card_Avalon_Interface.c
 
 # avalon_audio_driver sources root 
 Avalon_Audio_driver_SRCS_ROOT := drivers
@@ -332,6 +339,7 @@ hal_C_LIB_SRCS := \
 
 # Assemble all component C source files 
 COMPONENT_C_LIB_SRCS += \
+	$(Altera_UP_SD_Card_Avalon_Interface_driver_C_LIB_SRCS) \
 	$(Avalon_Audio_driver_C_LIB_SRCS) \
 	$(altera_avalon_spi_driver_C_LIB_SRCS) \
 	$(altera_avalon_uart_driver_C_LIB_SRCS) \
