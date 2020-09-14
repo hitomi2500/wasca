@@ -162,6 +162,8 @@ int main()
 	  for (k=0;k<1000000;k++) ; //pause
   }*/
   //first things first - copy saturn bootcode into SDRAM
+  for (i=0;i<100;i++)
+	  alt_printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\r");
   alt_up_sd_card_open_dev("/dev/Altera_UP_SD_Card_Avalon_Interface_0");
   for (i=0;i<256;i++)
   {

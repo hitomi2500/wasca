@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sat Sep 12 00:10:32 MSK 2020
+ * Generated: Tue Sep 15 00:42:22 MSK 2020
  */
 
 /*
@@ -173,18 +173,14 @@
 #define ALT_NUM_EXTERNAL_INTERRUPT_CONTROLLERS 0
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
-#define ALT_STDERR "/dev/uart_0"
-#define ALT_STDERR_BASE 0x40000
-#define ALT_STDERR_DEV uart_0
-#define ALT_STDERR_IS_UART
-#define ALT_STDERR_PRESENT
-#define ALT_STDERR_TYPE "altera_avalon_uart"
-#define ALT_STDIN "/dev/uart_0"
-#define ALT_STDIN_BASE 0x40000
-#define ALT_STDIN_DEV uart_0
-#define ALT_STDIN_IS_UART
-#define ALT_STDIN_PRESENT
-#define ALT_STDIN_TYPE "altera_avalon_uart"
+#define ALT_STDERR "/dev/null"
+#define ALT_STDERR_BASE 0x0
+#define ALT_STDERR_DEV null
+#define ALT_STDERR_TYPE ""
+#define ALT_STDIN "/dev/null"
+#define ALT_STDIN_BASE 0x0
+#define ALT_STDIN_DEV null
+#define ALT_STDIN_TYPE ""
 #define ALT_STDOUT "/dev/uart_0"
 #define ALT_STDOUT_BASE 0x40000
 #define ALT_STDOUT_DEV uart_0

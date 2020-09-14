@@ -114,6 +114,7 @@ architecture rtl of wasca_toplevel is
 	signal clock_116_mhz : std_logic := '0';
 	
 	signal por_counter : unsigned(31 downto 0) := (others => '0');
+	signal por_reset : std_logic := '0';
 	signal por_reset_n : std_logic := '0';
 
 	
@@ -163,8 +164,8 @@ architecture rtl of wasca_toplevel is
 			audio_out_BCLK => audio_out_BCLK,
 			audio_out_DACDAT => audio_out_DACDAT,
 			audio_out_DACLRCK => audio_out_DACLRCK,
-			reset_reset_n => '1',
-			reset_controller_0_reset_in1_reset => por_reset_n
+			reset_reset_n => por_reset_n,
+			reset_controller_0_reset_in1_reset => por_reset
 		);
 
 		--empty subsystem
@@ -205,6 +206,7 @@ architecture rtl of wasca_toplevel is
 			end if;
 		end process;
 		
+		por_reset <= (std_logic(por_counter(22)));
 		por_reset_n <= not (std_logic(por_counter(22)));
 		
 		

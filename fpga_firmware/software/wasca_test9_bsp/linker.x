@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sat Sep 12 01:35:43 MSK 2020
+ * Generated: Tue Sep 15 00:46:43 MSK 2020
  */
 
 /*
@@ -50,10 +50,10 @@
 
 MEMORY
 {
-    reset : ORIGIN = 0x0, LENGTH = 32
+    entry : ORIGIN = 0x0, LENGTH = 32
     onchip_flash_0 : ORIGIN = 0x20, LENGTH = 16320
     exceptions : ORIGIN = 0x3fe0, LENGTH = 32
-    onchip_memory2_0 : ORIGIN = 0x80020, LENGTH = 16352
+    onchip_memory2_0 : ORIGIN = 0x80000, LENGTH = 16384
     abus_avalon_sdram_bridge_0_avalon_sdram : ORIGIN = 0x4080000, LENGTH = 524288
 }
 
@@ -87,7 +87,7 @@ SECTIONS
     .entry :
     {
         KEEP (*(.entry))
-    } > reset
+    } > entry
 
     .exceptions :
     {
@@ -214,7 +214,14 @@ SECTIONS
         . = ALIGN(4);
     } > onchip_flash_0 = 0x3a880100 /* NOP instruction (always in big-endian byte ordering) */
 
-    .rodata :
+    /*
+     *
+     * This section's LMA is set to the .text region.
+     * crt0 will copy to this section's specified mapped region virtual memory address (VMA)
+     *
+     */
+
+    .rodata : AT ( LOADADDR (.text) + SIZEOF (.text) )
     {
         PROVIDE (__ram_rodata_start = ABSOLUTE(.));
         . = ALIGN(4);
@@ -222,7 +229,7 @@ SECTIONS
         *(.rodata1)
         . = ALIGN(4);
         PROVIDE (__ram_rodata_end = ABSOLUTE(.));
-    } > onchip_flash_0
+    } > onchip_memory2_0
 
     PROVIDE (__flash_rodata_start = LOADADDR(.rodata));
 
