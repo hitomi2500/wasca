@@ -22,3 +22,7 @@
 /fpga_firmware/wasca/*.rpt
 /fpga_firmware/wasca_signaltap.stp
 /fpga_firmware/simulation/
+/fpga_firmware/software/wasca_test9/.force_rebuild
+/fpga_firmware/software/wasca_test9/.force_relink
+/fpga_firmware/software/wasca_test9_bsp/.force_rebuild_all
+/fpga_firmware/software/wasca_test9/.settings/org.eclipse.cdt.codan.core.prefs
