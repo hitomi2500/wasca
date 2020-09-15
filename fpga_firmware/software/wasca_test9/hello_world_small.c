@@ -84,6 +84,12 @@
 
 #define SOFTWARE_VERSION 0x0002
 
+#define SNIFF_DATA0_REG_OFFSET 0xE0
+#define SNIFF_DATA1_REG_OFFSET 0xE2
+#define SNIFF_DATA2_REG_OFFSET 0xE4
+#define SNIFF_ACK_REG_OFFSET 0xE6
+#define SNIFF_FILTER_CONTROL_REG_OFFSET 0xE8
+#define SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET 0xEA
 #define PCNTR_REG_OFFSET 0xF0
 #define MODE_REG_OFFSET 0xF4
 #define SWVER_REG_OFFSET 0xF8
@@ -105,6 +111,128 @@ const char Wasca_Sysarea_Signature[64] = {0x80, 0x00, 0x00, 0x00, 0x77, 0x61, 0x
 
 extern alt_up_sd_card_dev	*device_pointer;
 
+//----------------------------------------- AUX SD stuff -------------------------------------------
+#define MAX_FILES_OPENED				20
+typedef struct s_FAT_12_16_boot_sector {
+	unsigned char jump_instruction[3];
+	char OEM_name[8];
+	unsigned short int sector_size_in_bytes;
+	unsigned char sectors_per_cluster;
+	unsigned short int reserved_sectors;
+	unsigned char number_of_FATs;
+	unsigned short int max_number_of_dir_entires;
+	unsigned short int number_of_sectors_in_partition;
+	unsigned char media_descriptor;
+	unsigned short int number_of_sectors_per_table;
+	unsigned short int number_of_sectors_per_track;
+	unsigned short int number_of_heads;
+	unsigned int number_of_hidden_sectors;
+	unsigned int total_sector_count_if_above_32MB;
+	unsigned char drive_number;
+	unsigned char current_head;
+	unsigned char boot_signature;
+	unsigned char volume_id[4];
+	char volume_label[11];
+	unsigned char file_system_type[8];
+	unsigned char bits_for_cluster_index;
+	unsigned int first_fat_sector_offset;
+	unsigned int second_fat_sector_offset;
+	unsigned int root_directory_sector_offset;
+	unsigned int data_sector_offset;
+} t_FAT_12_16_boot_sector;
+typedef struct s_file_record {
+	unsigned char name[8];
+	unsigned char extension[3];
+	unsigned char attributes;
+	unsigned short int create_time;
+	unsigned short int create_date;
+	unsigned short int last_access_date;
+	unsigned short int last_modified_time;
+	unsigned short int last_modified_date;
+	unsigned short int start_cluster_index;
+	unsigned int file_size_in_bytes;
+	/* The following fields are only used when a file has been created or opened. */
+	unsigned int current_cluster_index;
+    unsigned int current_sector_in_cluster;
+	unsigned int current_byte_position;
+    // Absolute location of the file record on the SD Card.
+    unsigned int file_record_cluster;
+    unsigned int file_record_sector_in_cluster;
+    short int    file_record_offset;
+    // Is this record in use and has the file been modified.
+    unsigned int home_directory_cluster;
+    bool         modified;
+	bool		 in_use;
+} t_file_record;
+extern t_file_record active_files[MAX_FILES_OPENED];
+extern t_FAT_12_16_boot_sector boot_sector_data;
+extern int			fat_partition_offset_in_512_byte_sectors;
+//UP SD only supports byte access, and no seek, this is sick!
+//Let's patch their write/read funcs, so that they write/read entire 512 bytes block within a file
+
+int alt_up_sd_card_read_512b(short int file_handle, char * buf, int sector_num)
+/* Read a 512 bytes sector from a given file. Return -1 if at the end of a file. Any other negative number
+ * means that the file could not be read.  */
+{
+    short int ch = -1;
+    int j;
+
+    if ((file_handle >= 0) && (file_handle < MAX_FILES_OPENED))
+    {
+        if (active_files[file_handle].in_use)
+        {
+        	if (sector_num*512 < active_files[file_handle].file_size_in_bytes)
+            {
+        		int data_sector = boot_sector_data.data_sector_offset + (active_files[file_handle].start_cluster_index - 2)*boot_sector_data.sectors_per_cluster + sector_num;
+                if (!Read_Sector_Data(data_sector, fat_partition_offset_in_512_byte_sectors))
+                {
+					return -2;
+                }
+                else
+                {
+                	char * p2 = (char*)device_pointer->base;
+                	for (j=0;j<512;j++)
+                		buf[j] =  p2[j];
+                	return 512;
+                }
+            }
+        }
+    }
+    return ch;
+}
+
+
+bool alt_up_sd_card_write_512b(short int file_handle, char * buf, int sector_num)
+/* Write a 512 bytes sector to a given file. Return true if successful, and false otherwise. */
+{
+    bool result = false;
+    int j;
+
+    if ((file_handle >= 0) && (file_handle < MAX_FILES_OPENED))
+    {
+        if (active_files[file_handle].in_use)
+        {
+            int data_sector = boot_sector_data.data_sector_offset + (active_files[file_handle].start_cluster_index - 2)*boot_sector_data.sectors_per_cluster + sector_num;
+
+        	char * p2 = (char*)device_pointer->base;
+        	for (j=0;j<512;j++)
+        		p2[j] = buf[j];
+
+            if (!Write_Sector_Data(data_sector,fat_partition_offset_in_512_byte_sectors))
+            {
+				return false;
+            }
+			result = true;
+		}
+    }
+
+    return result;
+}
+
+
+//----------------------------------------- AUX SD stuff end-------------------------------------------
+
+
 int main()
 {
 
@@ -121,6 +249,8 @@ int main()
   volatile unsigned char c1,c2,c3,c4;
   volatile unsigned short s1,s2;
   volatile unsigned char readback[256];
+  int iCurrentBlock;
+  unsigned char BlockBuffer[512];
   /*while (1)
   {
 	  p[64] = 0x12;
@@ -162,6 +292,7 @@ int main()
 	  for (k=0;k<1000000;k++) ; //pause
   }*/
   //first things first - copy saturn bootcode into SDRAM
+  //wait for SD card
   alt_printf("Waiting for SD ");
   while (false == alt_up_sd_card_is_Present())
   {
@@ -169,25 +300,32 @@ int main()
 	  alt_up_sd_card_open_dev("/dev/Altera_UP_SD_Card_Avalon_Interface_0");
   }
   alt_printf("done!\n\r");
-  //alt_up_sd_card_open_dev("/dev/Altera_UP_SD_Card_Avalon_Interface_0");
+  if (false == alt_up_sd_card_is_FAT16())
+  {
+	  for (i=0;i<10000;i++)
+		  alt_printf("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+  }
+  //open bootloader file
+  int _file_handler = alt_up_sd_card_fopen("WASCALDR.BIN",false);
   for (i=0;i<256;i++)
   {
-	  Read_Sector_Data(15362+i,561);
-	  p2 = device_pointer->base;
-	  for (j=0;j<512;j++)
-		  p[i*512+j] =  p2[j];
+	  /*for (j=0;j<512;j++)
+		  p[i*512+j] = alt_up_sd_card_read(_file_handler);//; p2[j];*/
+	  alt_up_sd_card_read_512b(_file_handler,&(p[i*512+j]),i);
   }
+  alt_up_sd_card_fclose(_file_handler);
   //now it's minipseudo's time
+  _file_handler = alt_up_sd_card_fopen("PSEUDO.BIN",false);
   for (i=0;i<32;i++)
   {
-	  Read_Sector_Data(17410+i,561);
-	  p2 = device_pointer->base;
-	  for (j=0;j<512;j++)
-		  p[0x9C000 + i*512+j] =  p2[j];
+	  //for (j=0;j<512;j++)
+		 // p[0x9C000 + i*512+j] =  alt_up_sd_card_read(_file_handler);// p2[j];
+	  alt_up_sd_card_read_512b(_file_handler,&(p[0x9C000 + i*512+j]),i);
   }
+  alt_up_sd_card_fclose(_file_handler);
 
-  p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
-  /*for (i=0;i<131072;i++)
+  /*p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+  for (i=0;i<131072;i++)
 	  p[i] = rawData[i];
   //now it's minipseudo's time
   for (i=0;i<15588;i++)
@@ -232,40 +370,107 @@ int main()
 	  switch (sMode & 0x000F )
 	  {
 	  case 0x1 : //0.5 MB
+		  alt_putstr("Preparing 0.5M backup RAM");
+		  _file_handler = alt_up_sd_card_fopen("BACKUP05.BIN",false);
+		  for (i=0;i<1024;i++)
+		  {
+			  p16[PCNTR_REG_OFFSET]=i/11;
+			  alt_putstr(".");
+			  for (j=0;j<512;j++)
+				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+		  }
+		  p16[PCNTR_REG_OFFSET] = 100;
+		  //alt_up_sd_card_fclose(_file_handler);
+		  alt_putstr("Done\n\r");
+		  break;
 	  case 0x2 : //1 MB
+		  alt_putstr("Preparing 1M backup RAM");
+		  _file_handler = alt_up_sd_card_fopen("BACKUP1.BIN",false);
+		  for (i=0;i<2048;i++)
+		  {
+			  p16[PCNTR_REG_OFFSET]=i/21;
+			  alt_putstr(".");
+			  for (j=0;j<512;j++)
+				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+		  }
+		  p16[PCNTR_REG_OFFSET] = 100;
+		  //alt_up_sd_card_fclose(_file_handler);
+		  alt_putstr("Done\n\r");
+		  break;
 	  case 0x3 : //2 MB
-		  alt_putstr("Header 0-3 copy start\n\r");
-		  for (j=0;j<16;j++)
-			  for (i=0;i<16;i++)
-			  {
-				  p[j*16+i] = Power_Memory_Signature[i];
-				  p[256+j*16+i] = 0;
-			  }
-		  alt_putstr("Header copied\n\r");
+		  alt_putstr("Preparing 2M backup RAM");
+		  _file_handler = alt_up_sd_card_fopen("BACKUP2.BIN",false);
+		  for (i=0;i<4096;i++)
+		  {
+			  p16[PCNTR_REG_OFFSET]=i/41;
+			  alt_putstr(".");
+			  for (j=0;j<512;j++)
+				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+		  }
+		  p16[PCNTR_REG_OFFSET] = 100;
+		  //alt_up_sd_card_fclose(_file_handler);
+		  alt_putstr("Done\n\r");
 		  break;
 	  case 0x04 : //4 MB
-		  alt_putstr("Header 4 copy start\n\r");
-		  for (j=0;j<32;j++)
-			  for (i=0;i<16;i++)
-			  {
-				  p[j*16+i] = Power_Memory_Signature[i];
-				  p[512+j*16+i] = 0;
-			  }
-		  alt_putstr("Header copied\n\r");
-		  for (i=0;i<64;i++)
-		  	  {
-		  	  p[0x1FFF000 + i] = Wasca_Sysarea_Signature[i];
-		  	  }
-		  alt_putstr("Sysarea stub copied\n\r");
+		  alt_putstr("Preparing 4M backup RAM");
+		  _file_handler = alt_up_sd_card_fopen("BACKUP4.BIN",false);
+		  for (i=0;i<8192;i++)
+		  {
+			  p16[PCNTR_REG_OFFSET]=i/82;
+			  alt_putstr(".");
+			  for (j=0;j<512;j++)
+				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+		  }
+		  p16[PCNTR_REG_OFFSET] = 100;
+		  //alt_up_sd_card_fclose(_file_handler);
+		  alt_putstr("Done\n\r");
 		  break;
 	  }
-	  //now emulate slow copy
-	  for (v=2;v<101;v++)
-	  {
-		  for (k=0;k<100000;k++) ;
-		  //alt_printf("Setting progress to %x\n\r",v);
-		  p16[PCNTR_REG_OFFSET]=v;
-	  }
+	  //if we're in backup mode, we should keep syncing forever
+	  p16[SNIFF_FILTER_CONTROL_REG_OFFSET] = 0x0A; //only writes on CS1
+	  while (p16[SNIFF_FILTER_CONTROL_REG_OFFSET] > 0)
+		  p16[SNIFF_ACK_REG_OFFSET] = 0; //flush fifo
+	  iCurrentBlock = -1;
+	  while (1)
+	  {//backup sync start
+		  // sync is done using a 512-byte buffer. when a transaction occurs within a 512-b sector different to current one,
+		  // the buffer is flused to SD, the new one is loaded from SD, and only then the processing continues
+		  // if the fifo is overfilled ( > 1024 samples), issue an error message
+		  if (p16[SNIFF_FILTER_CONTROL_REG_OFFSET] > 0)
+		  {
+			  //access data in fifo, checking address
+			  k = p16[SNIFF_DATA1_REG_OFFSET] >> 9;
+			  k |=  ((p16[SNIFF_DATA2_REG_OFFSET] & 0x3F)<<7);
+			  if (iCurrentBlock != k)
+			  {
+				  //new sector! flushing old to flash
+				  if (iCurrentBlock >= 0)
+				  {
+					  //write current block to file
+					  alt_up_sd_card_write_512b(_file_handler,BlockBuffer,iCurrentBlock);
+				  }
+				  //reading new one
+				  iCurrentBlock = k;
+				  alt_up_sd_card_read_512b(_file_handler,BlockBuffer,iCurrentBlock);
+			  }
+			  //parsing access
+			  k = p16[SNIFF_DATA1_REG_OFFSET] & 0x01FE;
+			  if (p16[SNIFF_DATA2_REG_OFFSET] & 0x1000)
+			  {
+				  //writing lower byte
+				  BlockBuffer[k+1] = p16[SNIFF_DATA0_REG_OFFSET];
+			  }
+			  if (p16[SNIFF_DATA2_REG_OFFSET] & 0x1000)
+			  {
+				  //writing upper byte
+				  BlockBuffer[k] = p16[SNIFF_DATA0_REG_OFFSET]>>8;
+			  }
+			  //flushing fifo data
+			  p16[SNIFF_ACK_REG_OFFSET] = 0; //flush fifo
+			  //blinking led
+			  alt_putstr("BLINK");
+		  }
+	  }//backup sync end
   }
   else if ((sMode & 0x00F0) != 0)
   {
@@ -288,9 +493,6 @@ int main()
 	  alt_printf("UNKNOWN MODE %x\n\r",sMode);
 	  p16[PCNTR_REG_OFFSET]=100;
   }
-
-
-  //there should be a sync process, valid only for power memory
 
   //stop
   while (1);

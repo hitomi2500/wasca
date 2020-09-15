@@ -545,7 +545,6 @@ begin
 	begin
 		if rising_edge(clock) then
 			avalon_regs_readdatavalid <= '0';
-			sniffer_data_ack <= '0';
 			if avalon_regs_read = '1' then
 				avalon_regs_readdatavalid <= '1';
 				case avalon_regs_address(7 downto 0) is 
@@ -564,7 +563,7 @@ begin
 					when X"E4" => 
 						avalon_regs_readdata <= sniffer_data_out(47 downto 32);
 					when X"E6" => 
-						sniffer_data_ack <= '1';
+						avalon_regs_readdata <= REG_HWVER; --to simplify mux
 					when X"E8" => 
 						avalon_regs_readdata <= X"00"&sniffer_filter_control;						
 					when X"EA" => 
@@ -593,6 +592,7 @@ begin
 	process (clock)
 	begin
 		if rising_edge(clock) then
+			sniffer_data_ack <= '0';
 			counter_reset <= '0';
 			if avalon_regs_write= '1' then
 				case avalon_regs_address(7 downto 0) is 
@@ -612,7 +612,7 @@ begin
 					when X"E4" => 
 						null;
 					when X"E6" => 
-						null;
+						sniffer_data_ack <= '1';
 					when X"E8" => 
 						sniffer_filter_control <= avalon_regs_writedata(7 downto 0);
 					when X"EA" => 
