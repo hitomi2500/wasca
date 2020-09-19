@@ -34,13 +34,13 @@
 			clk_clk                                                     : in    std_logic                     := 'X';             -- clk
 			clock_116_mhz_clk                                           : out   std_logic;                                        -- clk
 			reset_reset_n                                               : in    std_logic                     := 'X';             -- reset_n
+			reset_controller_0_reset_in1_reset                          : in    std_logic                     := 'X';             -- reset
 			spi_stm32_MISO                                              : out   std_logic;                                        -- MISO
 			spi_stm32_MOSI                                              : in    std_logic                     := 'X';             -- MOSI
 			spi_stm32_SCLK                                              : in    std_logic                     := 'X';             -- SCLK
 			spi_stm32_SS_n                                              : in    std_logic                     := 'X';             -- SS_n
 			uart_0_external_connection_rxd                              : in    std_logic                     := 'X';             -- rxd
-			uart_0_external_connection_txd                              : out   std_logic;                                        -- txd
-			reset_controller_0_reset_in1_reset                          : in    std_logic                     := 'X'              -- reset
+			uart_0_external_connection_txd                              : out   std_logic                                         -- txd
 		);
 	end component wasca;
 
@@ -80,12 +80,12 @@
 			clk_clk                                                     => CONNECTED_TO_clk_clk,                                                     --                                              clk.clk
 			clock_116_mhz_clk                                           => CONNECTED_TO_clock_116_mhz_clk,                                           --                                    clock_116_mhz.clk
 			reset_reset_n                                               => CONNECTED_TO_reset_reset_n,                                               --                                            reset.reset_n
+			reset_controller_0_reset_in1_reset                          => CONNECTED_TO_reset_controller_0_reset_in1_reset,                          --                     reset_controller_0_reset_in1.reset
 			spi_stm32_MISO                                              => CONNECTED_TO_spi_stm32_MISO,                                              --                                        spi_stm32.MISO
 			spi_stm32_MOSI                                              => CONNECTED_TO_spi_stm32_MOSI,                                              --                                                 .MOSI
 			spi_stm32_SCLK                                              => CONNECTED_TO_spi_stm32_SCLK,                                              --                                                 .SCLK
 			spi_stm32_SS_n                                              => CONNECTED_TO_spi_stm32_SS_n,                                              --                                                 .SS_n
 			uart_0_external_connection_rxd                              => CONNECTED_TO_uart_0_external_connection_rxd,                              --                       uart_0_external_connection.rxd
-			uart_0_external_connection_txd                              => CONNECTED_TO_uart_0_external_connection_txd,                              --                                                 .txd
-			reset_controller_0_reset_in1_reset                          => CONNECTED_TO_reset_controller_0_reset_in1_reset                           --                     reset_controller_0_reset_in1.reset
+			uart_0_external_connection_txd                              => CONNECTED_TO_uart_0_external_connection_txd                               --                                                 .txd
 		);
 

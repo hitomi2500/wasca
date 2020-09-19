@@ -33,12 +33,12 @@
 		.clk_clk                                                     (<connected-to-clk_clk>),                                                     //                                              clk.clk
 		.clock_116_mhz_clk                                           (<connected-to-clock_116_mhz_clk>),                                           //                                    clock_116_mhz.clk
 		.reset_reset_n                                               (<connected-to-reset_reset_n>),                                               //                                            reset.reset_n
+		.reset_controller_0_reset_in1_reset                          (<connected-to-reset_controller_0_reset_in1_reset>),                          //                     reset_controller_0_reset_in1.reset
 		.spi_stm32_MISO                                              (<connected-to-spi_stm32_MISO>),                                              //                                        spi_stm32.MISO
 		.spi_stm32_MOSI                                              (<connected-to-spi_stm32_MOSI>),                                              //                                                 .MOSI
 		.spi_stm32_SCLK                                              (<connected-to-spi_stm32_SCLK>),                                              //                                                 .SCLK
 		.spi_stm32_SS_n                                              (<connected-to-spi_stm32_SS_n>),                                              //                                                 .SS_n
 		.uart_0_external_connection_rxd                              (<connected-to-uart_0_external_connection_rxd>),                              //                       uart_0_external_connection.rxd
-		.uart_0_external_connection_txd                              (<connected-to-uart_0_external_connection_txd>),                              //                                                 .txd
-		.reset_controller_0_reset_in1_reset                          (<connected-to-reset_controller_0_reset_in1_reset>)                           //                     reset_controller_0_reset_in1.reset
+		.uart_0_external_connection_txd                              (<connected-to-uart_0_external_connection_txd>)                               //                                                 .txd
 	);
 

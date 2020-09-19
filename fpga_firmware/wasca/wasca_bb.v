@@ -34,13 +34,13 @@ module wasca (
 	clk_clk,
 	clock_116_mhz_clk,
 	reset_reset_n,
+	reset_controller_0_reset_in1_reset,
 	spi_stm32_MISO,
 	spi_stm32_MOSI,
 	spi_stm32_SCLK,
 	spi_stm32_SS_n,
 	uart_0_external_connection_rxd,
-	uart_0_external_connection_txd,
-	reset_controller_0_reset_in1_reset);	
+	uart_0_external_connection_txd);	
 
 	input	[9:0]	abus_avalon_sdram_bridge_0_abus_address;
 	input		abus_avalon_sdram_bridge_0_abus_read;
@@ -76,11 +76,11 @@ module wasca (
 	input		clk_clk;
 	output		clock_116_mhz_clk;
 	input		reset_reset_n;
+	input		reset_controller_0_reset_in1_reset;
 	output		spi_stm32_MISO;
 	input		spi_stm32_MOSI;
 	input		spi_stm32_SCLK;
 	input		spi_stm32_SS_n;
 	input		uart_0_external_connection_rxd;
 	output		uart_0_external_connection_txd;
-	input		reset_controller_0_reset_in1_reset;
 endmodule

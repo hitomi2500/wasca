@@ -250,7 +250,7 @@ int main()
   volatile unsigned short s1,s2;
   volatile unsigned char readback[256];
   int iCurrentBlock;
-  unsigned char BlockBuffer[512];
+  //unsigned char BlockBuffer[512];
   /*while (1)
   {
 	  p[64] = 0x12;
@@ -428,7 +428,7 @@ int main()
 	  }
 	  //if we're in backup mode, we should keep syncing forever
 	  p16[SNIFF_FILTER_CONTROL_REG_OFFSET] = 0x0A; //only writes on CS1
-	  while (p16[SNIFF_FILTER_CONTROL_REG_OFFSET] > 0)
+	  while (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
 		  p16[SNIFF_ACK_REG_OFFSET] = 0; //flush fifo
 	  iCurrentBlock = -1;
 	  while (1)
@@ -436,7 +436,7 @@ int main()
 		  // sync is done using a 512-byte buffer. when a transaction occurs within a 512-b sector different to current one,
 		  // the buffer is flused to SD, the new one is loaded from SD, and only then the processing continues
 		  // if the fifo is overfilled ( > 1024 samples), issue an error message
-		  if (p16[SNIFF_FILTER_CONTROL_REG_OFFSET] > 0)
+		  if (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
 		  {
 			  //access data in fifo, checking address
 			  k = p16[SNIFF_DATA1_REG_OFFSET] >> 9;
@@ -447,13 +447,16 @@ int main()
 				  if (iCurrentBlock >= 0)
 				  {
 					  //write current block to file
-					  alt_up_sd_card_write_512b(_file_handler,BlockBuffer,iCurrentBlock);
+					  //alt_up_sd_card_write_512b(_file_handler,BlockBuffer,iCurrentBlock);
+					  alt_up_sd_card_write_512b(_file_handler,&(p[iCurrentBlock>>8]),iCurrentBlock);
 				  }
 				  //reading new one
 				  iCurrentBlock = k;
-				  alt_up_sd_card_read_512b(_file_handler,BlockBuffer,iCurrentBlock);
+				  //alt_up_sd_card_read_512b(_file_handler,BlockBuffer,iCurrentBlock);
+				  //blinking led
+				  alt_putstr("BLINK");
 			  }
-			  //parsing access
+			  /*//parsing access
 			  k = p16[SNIFF_DATA1_REG_OFFSET] & 0x01FE;
 			  if (p16[SNIFF_DATA2_REG_OFFSET] & 0x1000)
 			  {
@@ -464,11 +467,10 @@ int main()
 			  {
 				  //writing upper byte
 				  BlockBuffer[k] = p16[SNIFF_DATA0_REG_OFFSET]>>8;
-			  }
+			  }*/
 			  //flushing fifo data
 			  p16[SNIFF_ACK_REG_OFFSET] = 0; //flush fifo
-			  //blinking led
-			  alt_putstr("BLINK");
+
 		  }
 	  }//backup sync end
   }

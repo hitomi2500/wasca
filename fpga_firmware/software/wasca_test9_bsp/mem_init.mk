@@ -161,7 +161,7 @@ ACDS_VERSION := 15.1
 SIM_OPTIMIZE ?= 0
 
 # The CPU reset address as needed by elf2flash
-RESET_ADDRESS ?= 0x00000000
+RESET_ADDRESS ?= 0x00080000
 
 # The specific Nios II ELF file format to use.
 NIOS2_ELF_FORMAT ?= elf32-littlenios2

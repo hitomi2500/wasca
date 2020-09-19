@@ -169,6 +169,8 @@ signal sniffer_data_out     : std_logic_vector(47 downto 0) := (others => '0');
 signal sniffer_data_write    : std_logic := '0';
 signal sniffer_data_ack    : std_logic := '0';
 signal sniffer_fifo_content_size     : std_logic_vector(9 downto 0) := (others => '0'); 
+signal sniffer_fifo_empty    : std_logic := '0';
+signal sniffer_fifo_full   : std_logic := '0';
 
 
 
@@ -567,7 +569,7 @@ begin
 					when X"E8" => 
 						avalon_regs_readdata <= X"00"&sniffer_filter_control;						
 					when X"EA" => 
-						avalon_regs_readdata <= "000000"&sniffer_fifo_content_size;						
+						avalon_regs_readdata <= "00000"&sniffer_fifo_full&sniffer_fifo_content_size;						
 					--EC to EE are reserved
 					when X"F0" => 
 						avalon_regs_readdata <= REG_PCNTR;
@@ -1056,19 +1058,19 @@ begin
 				counter_value <= (others =>'0');
 			elsif counter_count_write='1' and counter_filter_control(1) = '1' then
 				--write detected, checking state 
-				if abus_chipselect_buf(0) = '1' and counter_filter_control(2) = '1' then
+				if abus_chipselect_buf(0) = '0' and counter_filter_control(2) = '1' then
 					if abus_write_buf="00" then
 						counter_value <= counter_value + 2;
 					else
 						counter_value <= counter_value + 1;
 					end if;
-				elsif abus_chipselect_buf(1) = '1' and counter_filter_control(3) = '1' then
+				elsif abus_chipselect_buf(1) = '0' and counter_filter_control(3) = '1' then
 					if abus_write_buf="00" then
 						counter_value <= counter_value + 2;
 					else
 						counter_value <= counter_value + 1;
 					end if;
-				elsif abus_chipselect_buf(2) = '1' and counter_filter_control(4) = '1' then
+				elsif abus_chipselect_buf(2) = '0' and counter_filter_control(4) = '1' then
 					if abus_write_buf="00" then
 						counter_value <= counter_value + 2;
 					else
@@ -1077,11 +1079,11 @@ begin
 				end if;
 			elsif counter_count_read='1' and counter_filter_control(0) = '1' then
 				--read detected, checking state 
-				if abus_chipselect_buf(0) = '1' and counter_filter_control(2) = '1' then
+				if abus_chipselect_buf(0) = '0' and counter_filter_control(2) = '1' then
 					counter_value <= counter_value + 2;
-				elsif abus_chipselect_buf(1) = '1' and counter_filter_control(3) = '1' then
+				elsif abus_chipselect_buf(1) = '0' and counter_filter_control(3) = '1' then
 					counter_value <= counter_value + 2;
-				elsif abus_chipselect_buf(2) = '1' and counter_filter_control(4) = '1' then
+				elsif abus_chipselect_buf(2) = '0' and counter_filter_control(4) = '1' then
 					counter_value <= counter_value + 2;
 				end if;
 			end if;
@@ -1096,20 +1098,20 @@ begin
 			sniffer_data_write <= '0';
 			if counter_count_write='1' and sniffer_filter_control(1) = '1' then
 				--write detected, checking state 
-				if abus_chipselect_buf(0) = '1' and sniffer_filter_control(2) = '1' then
+				if abus_chipselect_buf(0) = '0' and sniffer_filter_control(2) = '1' then
 					sniffer_data_write <= '1';
-				elsif abus_chipselect_buf(1) = '1' and sniffer_filter_control(3) = '1' then
+				elsif abus_chipselect_buf(1) = '0' and sniffer_filter_control(3) = '1' then
 					sniffer_data_write <= '1';
-				elsif abus_chipselect_buf(2) = '1' and sniffer_filter_control(4) = '1' then
+				elsif abus_chipselect_buf(2) = '0' and sniffer_filter_control(4) = '1' then
 					sniffer_data_write <= '1';	
 				end if;
 			elsif counter_count_read='1' and sniffer_filter_control(0) = '1' then
 				--read detected, checking state 
-				if abus_chipselect_buf(0) = '1' and sniffer_filter_control(2) = '1' then
+				if abus_chipselect_buf(0) = '0' and sniffer_filter_control(2) = '1' then
 					sniffer_data_write <= '1';
-				elsif abus_chipselect_buf(1) = '1' and sniffer_filter_control(3) = '1' then
+				elsif abus_chipselect_buf(1) = '0' and sniffer_filter_control(3) = '1' then
 					sniffer_data_write <= '1';
-				elsif abus_chipselect_buf(2) = '1' and sniffer_filter_control(4) = '1' then
+				elsif abus_chipselect_buf(2) = '0' and sniffer_filter_control(4) = '1' then
 					sniffer_data_write <= '1';
 				end if;
 			end if;
@@ -1132,8 +1134,8 @@ begin
 		data	 => sniffer_data_in,
 		rdreq	 => sniffer_data_ack,
 		wrreq	 => sniffer_data_write,
-		empty	 => open,
-		full	 => open,
+		empty	 => sniffer_fifo_empty,
+		full	 => sniffer_fifo_full,
 		q	 => sniffer_data_out,
 		usedw	 => sniffer_fifo_content_size
 	);
