@@ -448,7 +448,7 @@ int main()
 				  {
 					  //write current block to file
 					  //alt_up_sd_card_write_512b(_file_handler,BlockBuffer,iCurrentBlock);
-					  alt_up_sd_card_write_512b(_file_handler,&(p[iCurrentBlock>>8]),iCurrentBlock);
+					  alt_up_sd_card_write_512b(_file_handler,&(p[iCurrentBlock<<9]),iCurrentBlock);
 				  }
 				  //reading new one
 				  iCurrentBlock = k;
