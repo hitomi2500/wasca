@@ -41,6 +41,14 @@
          type = "int";
       }
    }
+   element buffered_spi_0
+   {
+      datum _sortIndex
+      {
+         value = "13";
+         type = "int";
+      }
+   }
    element clk_0
    {
       datum _sortIndex
@@ -209,6 +217,9 @@
    internal="audio_0.external_interface"
    type="conduit"
    dir="end" />
+ <interface
+   name="buffered_spi_0_conduit_end"
+   internal="buffered_spi_0.conduit_end" />
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
  <interface name="clock_116_mhz" internal="clk_1.clk" type="clock" dir="start" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
@@ -420,6 +431,7 @@
   <parameter name="avalon_bus_type" value="Memory Mapped" />
   <parameter name="dw" value="16" />
  </module>
+ <module name="buffered_spi_0" kind="buffered_spi" version="1.0" enabled="0" />
  <module name="clk_0" kind="clock_source" version="15.1" enabled="1">
   <parameter name="clockFrequency" value="22579200" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -748,6 +760,15 @@
    kind="avalon"
    version="15.1"
    start="nios2_gen2_0.data_master"
+   end="buffered_spi_0.avalon">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.1"
+   start="nios2_gen2_0.data_master"
    end="audio_0.avalon_audio_slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00046000" />
@@ -908,6 +929,11 @@
  <connection
    kind="clock"
    version="15.1"
+   start="altpll_1.c0"
+   end="buffered_spi_0.clock" />
+ <connection
+   kind="clock"
+   version="15.1"
    start="clk_0.clk"
    end="altpll_1.inclk_interface" />
  <connection
@@ -948,6 +974,11 @@
    version="15.1"
    start="nios2_gen2_0.debug_reset_request"
    end="spi_sd_card.reset" />
+ <connection
+   kind="reset"
+   version="15.1"
+   start="nios2_gen2_0.debug_reset_request"
+   end="buffered_spi_0.reset" />
  <connection
    kind="reset"
    version="15.1"
