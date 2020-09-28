@@ -1,24 +1,3 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 20.09.2020 01:23:48
--- Design Name: 
--- Module Name: buffered_spi - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -82,24 +61,30 @@ signal avalon_readdata_writebuf1 : std_logic_vector (15 downto 0);
 signal avalon_readdata_readbuf2 : std_logic_vector (15 downto 0);
 signal avalon_readdata_writebuf2 : std_logic_vector (15 downto 0);
 
---signal avalon_address_lo : std_logic_vector (9 downto 0);
---signal avalon_address_hi : std_logic_vector (9 downto 0);
+--inferred ram, quartus fails to recognize'em like bram
+--type spi_buf_type is array(0 to 511) of std_logic_vector(15 downto 0);
+--signal write_buffer1 : spi_buf_type;
+--signal read_buffer1 : spi_buf_type;
+--signal write_buffer2 : spi_buf_type;
+--signal read_buffer2 : spi_buf_type;
 
-
-type spi_buf_type is array(0 to 511) of std_logic_vector(15 downto 0);
-signal write_buffer1 : spi_buf_type;
-signal read_buffer1 : spi_buf_type;
-signal write_buffer2 : spi_buf_type;
-signal read_buffer2 : spi_buf_type;
+--using core-generated bram instead
+component buff_spi_ram IS
+	PORT
+	(
+		address_a		: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+		address_b		: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+		clock		: IN STD_LOGIC  := '1';
+		data_a		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		data_b		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		wren_a		: IN STD_LOGIC  := '0';
+		wren_b		: IN STD_LOGIC  := '0';
+		q_a		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
+		q_b		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0)
+	);
+end component;
 
 begin
-
-    -- 0x0000 thru 0x0FFF is a write buffer
-    -- 0x1000 thru 0x1FFF is a read buffer
-    -- 0x2000 start reg
-    -- 0x2002 length register (1...1k valid values)
-    -- 0x2004 cs mode register (0 - keep cs active for entire transfer, 1 - toggle CS every 8 bits
-    -- 0x2006 delay register, delay from 0 to 565 us (for 116 MHz) every 8 bits
 
 	--Avalon regs read interface
 	process (clock)
@@ -118,7 +103,7 @@ begin
 					when "011" => 
 						avalon_readdata <= avalon_readdata_readbuf2;
 					when "100" => 
-					   	case avalon_address(2 downto 0) is 
+					   	case avalon_address(3 downto 1) is 
                            when "000" => 
                                  avalon_readdata <= X"000"&"000"&transaction_active;
                            when "001" => 
@@ -161,7 +146,7 @@ begin
                 when "011" => 
                     readbuffer_write2 <= '1';
                 when "100" => 
-                       case avalon_address(2 downto 0) is 
+                       case avalon_address(3 downto 1) is 
                        when "000" => 
                              transaction_prestart_1 <= avalon_writedata(0);
                        when "001" => 
@@ -183,9 +168,6 @@ begin
 			end if;
 		end if;
 	end process;
-	
-	--avalon_address_lo <= avalon_address(8 downto 0)&"0";
-	--avalon_address_hi <= avalon_address(8 downto 0)&"1";
 	
 	--delaying transaction_start cor a clock cycle to wait for cs
 	process (clock)
@@ -210,55 +192,110 @@ begin
     
     transaction_byte_counter_p1 <= transaction_byte_counter when rising_edge(clock);
 
-	--read buffer1, should be inferred as 1.5-port block ram
-	process (clock)
-    begin
-       if rising_edge(clock) then
-          if (readbuffer_write1 = '1') then
-             read_buffer1(to_integer(unsigned(avalon_address(8 downto 0)))) <= avalon_writedata;
-          end if;
-          avalon_readdata_readbuf1 <= read_buffer1(to_integer(unsigned(avalon_address(8 downto 0))));
-          if (readbuffer_transaction_write1 = '1') then
-             read_buffer1(to_integer(unsigned(transaction_byte_counter_p1(8 downto 0)))) <= transaction_data_read;
-          end if;
-       end if;
-    end process;
-    --read buffer2
-	process (clock)
-    begin
-       if rising_edge(clock) then
-          if (readbuffer_write2 = '1') then
-              read_buffer2(to_integer(unsigned(avalon_address(8 downto 0)))) <= avalon_writedata;
-          end if;
-          avalon_readdata_readbuf2 <= read_buffer2(to_integer(unsigned(avalon_address(8 downto 0))));
-          if (readbuffer_transaction_write2 = '1') then
-             read_buffer2(to_integer(unsigned(transaction_byte_counter_p1(8 downto 0)))) <= transaction_data_read;
-          end if;
-       end if;
-    end process;
+--	--read buffer1, should be inferred as 1.5-port block ram
+--	process (clock)
+--    begin
+--       if rising_edge(clock) then
+--          if (readbuffer_write1 = '1') then
+--             read_buffer1(to_integer(unsigned(avalon_address(8 downto 0)))) <= avalon_writedata;
+--          end if;
+--          avalon_readdata_readbuf1 <= read_buffer1(to_integer(unsigned(avalon_address(8 downto 0))));
+--          if (readbuffer_transaction_write1 = '1') then
+--             read_buffer1(to_integer(unsigned(transaction_byte_counter_p1(8 downto 0)))) <= transaction_data_read;
+--          end if;
+--       end if;
+--    end process;
+--    --read buffer2
+--	process (clock)
+--    begin
+--       if rising_edge(clock) then
+--          if (readbuffer_write2 = '1') then
+--              read_buffer2(to_integer(unsigned(avalon_address(8 downto 0)))) <= avalon_writedata;
+--          end if;
+--          avalon_readdata_readbuf2 <= read_buffer2(to_integer(unsigned(avalon_address(8 downto 0))));
+--          if (readbuffer_transaction_write2 = '1') then
+--             read_buffer2(to_integer(unsigned(transaction_byte_counter_p1(8 downto 0)))) <= transaction_data_read;
+--          end if;
+--       end if;
+--    end process;
 
-    --write buffer1
-    process (clock)
-    begin
-       if rising_edge(clock) then
-          if (writebuffer_write1 = '1') then
-             write_buffer1(to_integer(unsigned(avalon_address(8 downto 0)))) <= avalon_writedata;
-          end if;
-          transaction_data_write1 <= write_buffer1(to_integer(unsigned(transaction_byte_counter(8 downto 0))));
-          avalon_readdata_writebuf1 <= write_buffer1(to_integer(unsigned(avalon_address(8 downto 0))));
-       end if;
-    end process;
-    --write buffer2
-    process (clock)
-    begin
-       if rising_edge(clock) then
-          if (writebuffer_write2 = '1') then
-             write_buffer2(to_integer(unsigned(avalon_address(8 downto 0)))) <= avalon_writedata;
-          end if;
-          transaction_data_write2 <= write_buffer2(to_integer(unsigned(transaction_byte_counter(8 downto 0))));
-          avalon_readdata_writebuf2 <= write_buffer2(to_integer(unsigned(avalon_address(8 downto 0))));
-       end if;
-    end process;
+--    --write buffer1
+--    process (clock)
+--    begin
+--       if rising_edge(clock) then
+--          if (writebuffer_write1 = '1') then
+--             write_buffer1(to_integer(unsigned(avalon_address(8 downto 0)))) <= avalon_writedata;
+--          end if;
+--          transaction_data_write1 <= write_buffer1(to_integer(unsigned(transaction_byte_counter(8 downto 0))));
+--          avalon_readdata_writebuf1 <= write_buffer1(to_integer(unsigned(avalon_address(8 downto 0))));
+--       end if;
+--    end process;
+--    --write buffer2
+--    process (clock)
+--    begin
+--       if rising_edge(clock) then
+--          if (writebuffer_write2 = '1') then
+--             write_buffer2(to_integer(unsigned(avalon_address(8 downto 0)))) <= avalon_writedata;
+--          end if;
+--          transaction_data_write2 <= write_buffer2(to_integer(unsigned(transaction_byte_counter(8 downto 0))));
+--          avalon_readdata_writebuf2 <= write_buffer2(to_integer(unsigned(avalon_address(8 downto 0))));
+--       end if;
+--    end process;
+
+--using bram cores instead
+read1_buf: buff_spi_ram 
+	port map
+	(
+		address_a => avalon_address(8 downto 0),
+		address_b => std_logic_vector(transaction_byte_counter_p1(8 downto 0)),
+		clock	 => clock,
+		data_a => avalon_writedata,
+		data_b => transaction_data_read,
+		wren_a => readbuffer_write1,
+		wren_b => readbuffer_transaction_write1,
+		q_a    => avalon_readdata_readbuf1,
+		q_b	 => open --write-only port
+	);
+read2_buf: buff_spi_ram 
+	port map
+	(
+		address_a => avalon_address(8 downto 0),
+		address_b => std_logic_vector(transaction_byte_counter_p1(8 downto 0)),
+		clock	 => clock,
+		data_a => avalon_writedata,
+		data_b => transaction_data_read,
+		wren_a => readbuffer_write2,
+		wren_b => readbuffer_transaction_write2,
+		q_a    => avalon_readdata_readbuf2,
+		q_b	 => open --write-only port
+	);	
+write1_buf: buff_spi_ram 
+	port map
+	(
+		address_a => avalon_address(8 downto 0),
+		address_b => std_logic_vector(transaction_byte_counter(8 downto 0)),
+		clock	 => clock,
+		data_a => avalon_writedata,
+		data_b => X"0000",
+		wren_a => writebuffer_write1,
+		wren_b => '0', --read-only port
+		q_a    => avalon_readdata_writebuf1,
+		q_b	 => transaction_data_write1
+	);
+write2_buf: buff_spi_ram 
+	port map
+	(
+		address_a => avalon_address(8 downto 0),
+		address_b => std_logic_vector(transaction_byte_counter(8 downto 0)),
+		clock	 => clock,
+		data_a => avalon_writedata,
+		data_b => X"0000",
+		wren_a => writebuffer_write2,
+		wren_b => '0', --read-only port
+		q_a    => avalon_readdata_writebuf2,
+		q_b	 => transaction_data_write2
+	);
+
 
 	--Avalon interface is only regs, so always ready to write.
 	avalon_waitrequest <= '0';	
