@@ -7,16 +7,16 @@
 
 `timescale 1 ps / 1 ps
 module wasca_mm_interconnect_0_avalon_st_adapter_001 #(
-		parameter inBitsPerSymbol = 18,
+		parameter inBitsPerSymbol = 34,
 		parameter inUsePackets    = 0,
-		parameter inDataWidth     = 18,
+		parameter inDataWidth     = 34,
 		parameter inChannelWidth  = 0,
 		parameter inErrorWidth    = 0,
 		parameter inUseEmptyPort  = 0,
 		parameter inUseValid      = 1,
 		parameter inUseReady      = 1,
 		parameter inReadyLatency  = 0,
-		parameter outDataWidth    = 18,
+		parameter outDataWidth    = 34,
 		parameter outChannelWidth = 0,
 		parameter outErrorWidth   = 1,
 		parameter outUseEmptyPort = 0,
@@ -26,10 +26,10 @@ module wasca_mm_interconnect_0_avalon_st_adapter_001 #(
 	) (
 		input  wire        in_clk_0_clk,   // in_clk_0.clk
 		input  wire        in_rst_0_reset, // in_rst_0.reset
-		input  wire [17:0] in_0_data,      //     in_0.data
+		input  wire [33:0] in_0_data,      //     in_0.data
 		input  wire        in_0_valid,     //         .valid
 		output wire        in_0_ready,     //         .ready
-		output wire [17:0] out_0_data,     //    out_0.data
+		output wire [33:0] out_0_data,     //    out_0.data
 		output wire        out_0_valid,    //         .valid
 		input  wire        out_0_ready,    //         .ready
 		output wire [0:0]  out_0_error     //         .error
@@ -41,7 +41,7 @@ module wasca_mm_interconnect_0_avalon_st_adapter_001 #(
 		// has been instantiated this module with a set of parameters different
 		// from those it was generated for.  This will usually result in a
 		// non-functioning system.
-		if (inBitsPerSymbol != 18)
+		if (inBitsPerSymbol != 34)
 		begin
 			initial begin
 				$display("Generated module instantiated with wrong parameters");
@@ -59,7 +59,7 @@ module wasca_mm_interconnect_0_avalon_st_adapter_001 #(
 			instantiated_with_wrong_parameters_error_see_comment_above
 					inusepackets_check ( .error(1'b1) );
 		end
-		if (inDataWidth != 18)
+		if (inDataWidth != 34)
 		begin
 			initial begin
 				$display("Generated module instantiated with wrong parameters");
@@ -122,7 +122,7 @@ module wasca_mm_interconnect_0_avalon_st_adapter_001 #(
 			instantiated_with_wrong_parameters_error_see_comment_above
 					inreadylatency_check ( .error(1'b1) );
 		end
-		if (outDataWidth != 18)
+		if (outDataWidth != 34)
 		begin
 			initial begin
 				$display("Generated module instantiated with wrong parameters");

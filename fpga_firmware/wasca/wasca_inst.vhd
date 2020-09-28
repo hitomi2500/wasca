@@ -31,14 +31,14 @@
 			audio_out_BCLK                                              : in    std_logic                     := 'X';             -- BCLK
 			audio_out_DACDAT                                            : out   std_logic;                                        -- DACDAT
 			audio_out_DACLRCK                                           : in    std_logic                     := 'X';             -- DACLRCK
+			buffered_spi_mosi                                           : out   std_logic;                                        -- mosi
+			buffered_spi_clk                                            : out   std_logic;                                        -- clk
+			buffered_spi_miso                                           : in    std_logic                     := 'X';             -- miso
+			buffered_spi_cs                                             : out   std_logic;                                        -- cs
 			clk_clk                                                     : in    std_logic                     := 'X';             -- clk
 			clock_116_mhz_clk                                           : out   std_logic;                                        -- clk
 			reset_reset_n                                               : in    std_logic                     := 'X';             -- reset_n
 			reset_controller_0_reset_in1_reset                          : in    std_logic                     := 'X';             -- reset
-			spi_stm32_MISO                                              : out   std_logic;                                        -- MISO
-			spi_stm32_MOSI                                              : in    std_logic                     := 'X';             -- MOSI
-			spi_stm32_SCLK                                              : in    std_logic                     := 'X';             -- SCLK
-			spi_stm32_SS_n                                              : in    std_logic                     := 'X';             -- SS_n
 			uart_0_external_connection_rxd                              : in    std_logic                     := 'X';             -- rxd
 			uart_0_external_connection_txd                              : out   std_logic                                         -- txd
 		);
@@ -77,14 +77,14 @@
 			audio_out_BCLK                                              => CONNECTED_TO_audio_out_BCLK,                                              --                                        audio_out.BCLK
 			audio_out_DACDAT                                            => CONNECTED_TO_audio_out_DACDAT,                                            --                                                 .DACDAT
 			audio_out_DACLRCK                                           => CONNECTED_TO_audio_out_DACLRCK,                                           --                                                 .DACLRCK
+			buffered_spi_mosi                                           => CONNECTED_TO_buffered_spi_mosi,                                           --                                     buffered_spi.mosi
+			buffered_spi_clk                                            => CONNECTED_TO_buffered_spi_clk,                                            --                                                 .clk
+			buffered_spi_miso                                           => CONNECTED_TO_buffered_spi_miso,                                           --                                                 .miso
+			buffered_spi_cs                                             => CONNECTED_TO_buffered_spi_cs,                                             --                                                 .cs
 			clk_clk                                                     => CONNECTED_TO_clk_clk,                                                     --                                              clk.clk
 			clock_116_mhz_clk                                           => CONNECTED_TO_clock_116_mhz_clk,                                           --                                    clock_116_mhz.clk
 			reset_reset_n                                               => CONNECTED_TO_reset_reset_n,                                               --                                            reset.reset_n
 			reset_controller_0_reset_in1_reset                          => CONNECTED_TO_reset_controller_0_reset_in1_reset,                          --                     reset_controller_0_reset_in1.reset
-			spi_stm32_MISO                                              => CONNECTED_TO_spi_stm32_MISO,                                              --                                        spi_stm32.MISO
-			spi_stm32_MOSI                                              => CONNECTED_TO_spi_stm32_MOSI,                                              --                                                 .MOSI
-			spi_stm32_SCLK                                              => CONNECTED_TO_spi_stm32_SCLK,                                              --                                                 .SCLK
-			spi_stm32_SS_n                                              => CONNECTED_TO_spi_stm32_SS_n,                                              --                                                 .SS_n
 			uart_0_external_connection_rxd                              => CONNECTED_TO_uart_0_external_connection_rxd,                              --                       uart_0_external_connection.rxd
 			uart_0_external_connection_txd                              => CONNECTED_TO_uart_0_external_connection_txd                               --                                                 .txd
 		);

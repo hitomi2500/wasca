@@ -35,19 +35,19 @@ module wasca (
 		input  wire        audio_out_BCLK,                                              //                                        audio_out.BCLK
 		output wire        audio_out_DACDAT,                                            //                                                 .DACDAT
 		input  wire        audio_out_DACLRCK,                                           //                                                 .DACLRCK
+		output wire        buffered_spi_mosi,                                           //                                     buffered_spi.mosi
+		output wire        buffered_spi_clk,                                            //                                                 .clk
+		input  wire        buffered_spi_miso,                                           //                                                 .miso
+		output wire        buffered_spi_cs,                                             //                                                 .cs
 		input  wire        clk_clk,                                                     //                                              clk.clk
 		output wire        clock_116_mhz_clk,                                           //                                    clock_116_mhz.clk
 		input  wire        reset_reset_n,                                               //                                            reset.reset_n
 		input  wire        reset_controller_0_reset_in1_reset,                          //                     reset_controller_0_reset_in1.reset
-		output wire        spi_stm32_MISO,                                              //                                        spi_stm32.MISO
-		input  wire        spi_stm32_MOSI,                                              //                                                 .MOSI
-		input  wire        spi_stm32_SCLK,                                              //                                                 .SCLK
-		input  wire        spi_stm32_SS_n,                                              //                                                 .SS_n
 		input  wire        uart_0_external_connection_rxd,                              //                       uart_0_external_connection.rxd
 		output wire        uart_0_external_connection_txd                               //                                                 .txd
 	);
 
-	wire         nios2_gen2_0_debug_reset_request_reset;                                                 // nios2_gen2_0:debug_reset_request -> reset_controller_0:reset_in0
+	wire         nios2_gen2_0_debug_reset_request_reset;                                                 // nios2_gen2_0:debug_reset_request -> [buffered_spi_0:reset, mm_interconnect_0:buffered_spi_0_reset_reset_bridge_in_reset_reset, reset_controller_0:reset_in0]
 	wire  [31:0] nios2_gen2_0_data_master_readdata;                                                      // mm_interconnect_0:nios2_gen2_0_data_master_readdata -> nios2_gen2_0:d_readdata
 	wire         nios2_gen2_0_data_master_waitrequest;                                                   // mm_interconnect_0:nios2_gen2_0_data_master_waitrequest -> nios2_gen2_0:d_waitrequest
 	wire         nios2_gen2_0_data_master_debugaccess;                                                   // nios2_gen2_0:debug_mem_slave_debugaccess_to_roms -> mm_interconnect_0:nios2_gen2_0_data_master_debugaccess
@@ -60,6 +60,13 @@ module wasca (
 	wire         nios2_gen2_0_instruction_master_waitrequest;                                            // mm_interconnect_0:nios2_gen2_0_instruction_master_waitrequest -> nios2_gen2_0:i_waitrequest
 	wire  [19:0] nios2_gen2_0_instruction_master_address;                                                // nios2_gen2_0:i_address -> mm_interconnect_0:nios2_gen2_0_instruction_master_address
 	wire         nios2_gen2_0_instruction_master_read;                                                   // nios2_gen2_0:i_read -> mm_interconnect_0:nios2_gen2_0_instruction_master_read
+	wire  [15:0] mm_interconnect_0_buffered_spi_0_avalon_readdata;                                       // buffered_spi_0:avalon_readdata -> mm_interconnect_0:buffered_spi_0_avalon_readdata
+	wire         mm_interconnect_0_buffered_spi_0_avalon_waitrequest;                                    // buffered_spi_0:avalon_waitrequest -> mm_interconnect_0:buffered_spi_0_avalon_waitrequest
+	wire  [13:0] mm_interconnect_0_buffered_spi_0_avalon_address;                                        // mm_interconnect_0:buffered_spi_0_avalon_address -> buffered_spi_0:avalon_address
+	wire         mm_interconnect_0_buffered_spi_0_avalon_read;                                           // mm_interconnect_0:buffered_spi_0_avalon_read -> buffered_spi_0:avalon_read
+	wire         mm_interconnect_0_buffered_spi_0_avalon_readdatavalid;                                  // buffered_spi_0:avalon_readdatavalid -> mm_interconnect_0:buffered_spi_0_avalon_readdatavalid
+	wire         mm_interconnect_0_buffered_spi_0_avalon_write;                                          // mm_interconnect_0:buffered_spi_0_avalon_write -> buffered_spi_0:avalon_write
+	wire  [15:0] mm_interconnect_0_buffered_spi_0_avalon_writedata;                                      // mm_interconnect_0:buffered_spi_0_avalon_writedata -> buffered_spi_0:avalon_writedata
 	wire         mm_interconnect_0_audio_0_avalon_audio_slave_chipselect;                                // mm_interconnect_0:audio_0_avalon_audio_slave_chipselect -> audio_0:chipselect
 	wire  [31:0] mm_interconnect_0_audio_0_avalon_audio_slave_readdata;                                  // audio_0:readdata -> mm_interconnect_0:audio_0_avalon_audio_slave_readdata
 	wire   [1:0] mm_interconnect_0_audio_0_avalon_audio_slave_address;                                   // mm_interconnect_0:audio_0_avalon_audio_slave_address -> audio_0:address
@@ -122,17 +129,10 @@ module wasca (
 	wire         mm_interconnect_0_uart_0_s1_begintransfer;                                              // mm_interconnect_0:uart_0_s1_begintransfer -> uart_0:begintransfer
 	wire         mm_interconnect_0_uart_0_s1_write;                                                      // mm_interconnect_0:uart_0_s1_write -> uart_0:write_n
 	wire  [15:0] mm_interconnect_0_uart_0_s1_writedata;                                                  // mm_interconnect_0:uart_0_s1_writedata -> uart_0:writedata
-	wire         mm_interconnect_0_spi_stm32_spi_control_port_chipselect;                                // mm_interconnect_0:spi_stm32_spi_control_port_chipselect -> spi_stm32:spi_select
-	wire  [15:0] mm_interconnect_0_spi_stm32_spi_control_port_readdata;                                  // spi_stm32:data_to_cpu -> mm_interconnect_0:spi_stm32_spi_control_port_readdata
-	wire   [2:0] mm_interconnect_0_spi_stm32_spi_control_port_address;                                   // mm_interconnect_0:spi_stm32_spi_control_port_address -> spi_stm32:mem_addr
-	wire         mm_interconnect_0_spi_stm32_spi_control_port_read;                                      // mm_interconnect_0:spi_stm32_spi_control_port_read -> spi_stm32:read_n
-	wire         mm_interconnect_0_spi_stm32_spi_control_port_write;                                     // mm_interconnect_0:spi_stm32_spi_control_port_write -> spi_stm32:write_n
-	wire  [15:0] mm_interconnect_0_spi_stm32_spi_control_port_writedata;                                 // mm_interconnect_0:spi_stm32_spi_control_port_writedata -> spi_stm32:data_from_cpu
 	wire         irq_mapper_receiver0_irq;                                                               // audio_0:irq -> irq_mapper:receiver0_irq
 	wire         irq_mapper_receiver1_irq;                                                               // uart_0:irq -> irq_mapper:receiver1_irq
-	wire         irq_mapper_receiver2_irq;                                                               // spi_stm32:irq -> irq_mapper:receiver2_irq
 	wire  [31:0] nios2_gen2_0_irq_irq;                                                                   // irq_mapper:sender_irq -> nios2_gen2_0:irq
-	wire         rst_controller_reset_out_reset;                                                         // rst_controller:reset_out -> [Altera_UP_SD_Card_Avalon_Interface_0:i_reset_n, abus_avalon_sdram_bridge_0:reset, audio_0:reset, irq_mapper:reset, mm_interconnect_0:nios2_gen2_0_reset_reset_bridge_in_reset_reset, nios2_gen2_0:reset_n, onchip_flash_0:reset_n, onchip_memory2_0:reset, rst_translator:in_reset, spi_stm32:reset_n, uart_0:reset_n]
+	wire         rst_controller_reset_out_reset;                                                         // rst_controller:reset_out -> [Altera_UP_SD_Card_Avalon_Interface_0:i_reset_n, abus_avalon_sdram_bridge_0:reset, audio_0:reset, irq_mapper:reset, mm_interconnect_0:nios2_gen2_0_reset_reset_bridge_in_reset_reset, nios2_gen2_0:reset_n, onchip_flash_0:reset_n, onchip_memory2_0:reset, rst_translator:in_reset, uart_0:reset_n]
 	wire         rst_controller_reset_out_reset_req;                                                     // rst_controller:reset_req -> [onchip_memory2_0:reset_req, rst_translator:reset_req_in]
 	wire         reset_controller_0_reset_out_reset;                                                     // reset_controller_0:reset_out -> [rst_controller:reset_in0, rst_controller_002:reset_in0]
 	wire         rst_controller_001_reset_out_reset;                                                     // rst_controller_001:reset_out -> [altpll_1:reset, mm_interconnect_0:altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset]
@@ -222,6 +222,22 @@ module wasca (
 		.AUD_BCLK    (audio_out_BCLK),                                          // external_interface.export
 		.AUD_DACDAT  (audio_out_DACDAT),                                        //                   .export
 		.AUD_DACLRCK (audio_out_DACLRCK)                                        //                   .export
+	);
+
+	buffered_spi buffered_spi_0 (
+		.reset                (nios2_gen2_0_debug_reset_request_reset),                //       reset.reset
+		.avalon_read          (mm_interconnect_0_buffered_spi_0_avalon_read),          //      avalon.read
+		.avalon_write         (mm_interconnect_0_buffered_spi_0_avalon_write),         //            .write
+		.avalon_address       (mm_interconnect_0_buffered_spi_0_avalon_address),       //            .address
+		.avalon_waitrequest   (mm_interconnect_0_buffered_spi_0_avalon_waitrequest),   //            .waitrequest
+		.avalon_writedata     (mm_interconnect_0_buffered_spi_0_avalon_writedata),     //            .writedata
+		.avalon_readdata      (mm_interconnect_0_buffered_spi_0_avalon_readdata),      //            .readdata
+		.avalon_readdatavalid (mm_interconnect_0_buffered_spi_0_avalon_readdatavalid), //            .readdatavalid
+		.spi_mosi             (buffered_spi_mosi),                                     // conduit_end.mosi
+		.spi_clk              (buffered_spi_clk),                                      //            .clk
+		.spi_miso             (buffered_spi_miso),                                     //            .miso
+		.spi_cs               (buffered_spi_cs),                                       //            .cs
+		.clock                (clock_116_mhz_clk)                                      //       clock.clk
 	);
 
 	wasca_nios2_gen2_0 nios2_gen2_0 (
@@ -391,22 +407,6 @@ module wasca (
 		.reset_req_in15 (1'b0)                                    // (terminated)
 	);
 
-	wasca_spi_stm32 spi_stm32 (
-		.clk           (clock_116_mhz_clk),                                       //              clk.clk
-		.reset_n       (~rst_controller_reset_out_reset),                         //            reset.reset_n
-		.data_from_cpu (mm_interconnect_0_spi_stm32_spi_control_port_writedata),  // spi_control_port.writedata
-		.data_to_cpu   (mm_interconnect_0_spi_stm32_spi_control_port_readdata),   //                 .readdata
-		.mem_addr      (mm_interconnect_0_spi_stm32_spi_control_port_address),    //                 .address
-		.read_n        (~mm_interconnect_0_spi_stm32_spi_control_port_read),      //                 .read_n
-		.spi_select    (mm_interconnect_0_spi_stm32_spi_control_port_chipselect), //                 .chipselect
-		.write_n       (~mm_interconnect_0_spi_stm32_spi_control_port_write),     //                 .write_n
-		.irq           (irq_mapper_receiver2_irq),                                //              irq.irq
-		.MISO          (spi_stm32_MISO),                                          //         external.export
-		.MOSI          (spi_stm32_MOSI),                                          //                 .export
-		.SCLK          (spi_stm32_SCLK),                                          //                 .export
-		.SS_n          (spi_stm32_SS_n)                                           //                 .export
-	);
-
 	wasca_uart_0 uart_0 (
 		.clk           (clock_116_mhz_clk),                         //                 clk.clk
 		.reset_n       (~rst_controller_reset_out_reset),           //               reset.reset_n
@@ -428,6 +428,7 @@ module wasca (
 		.altpll_1_c0_clk                                                      (clock_116_mhz_clk),                                                                      //                                              altpll_1_c0.clk
 		.clk_0_clk_clk                                                        (clk_clk),                                                                                //                                                clk_0_clk.clk
 		.altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset           (rst_controller_001_reset_out_reset),                                                     //     altpll_1_inclk_interface_reset_reset_bridge_in_reset.reset
+		.buffered_spi_0_reset_reset_bridge_in_reset_reset                     (nios2_gen2_0_debug_reset_request_reset),                                                 //               buffered_spi_0_reset_reset_bridge_in_reset.reset
 		.nios2_gen2_0_reset_reset_bridge_in_reset_reset                       (rst_controller_reset_out_reset),                                                         //                 nios2_gen2_0_reset_reset_bridge_in_reset.reset
 		.nios2_gen2_0_data_master_address                                     (nios2_gen2_0_data_master_address),                                                       //                                 nios2_gen2_0_data_master.address
 		.nios2_gen2_0_data_master_waitrequest                                 (nios2_gen2_0_data_master_waitrequest),                                                   //                                                         .waitrequest
@@ -475,6 +476,13 @@ module wasca (
 		.audio_0_avalon_audio_slave_readdata                                  (mm_interconnect_0_audio_0_avalon_audio_slave_readdata),                                  //                                                         .readdata
 		.audio_0_avalon_audio_slave_writedata                                 (mm_interconnect_0_audio_0_avalon_audio_slave_writedata),                                 //                                                         .writedata
 		.audio_0_avalon_audio_slave_chipselect                                (mm_interconnect_0_audio_0_avalon_audio_slave_chipselect),                                //                                                         .chipselect
+		.buffered_spi_0_avalon_address                                        (mm_interconnect_0_buffered_spi_0_avalon_address),                                        //                                    buffered_spi_0_avalon.address
+		.buffered_spi_0_avalon_write                                          (mm_interconnect_0_buffered_spi_0_avalon_write),                                          //                                                         .write
+		.buffered_spi_0_avalon_read                                           (mm_interconnect_0_buffered_spi_0_avalon_read),                                           //                                                         .read
+		.buffered_spi_0_avalon_readdata                                       (mm_interconnect_0_buffered_spi_0_avalon_readdata),                                       //                                                         .readdata
+		.buffered_spi_0_avalon_writedata                                      (mm_interconnect_0_buffered_spi_0_avalon_writedata),                                      //                                                         .writedata
+		.buffered_spi_0_avalon_readdatavalid                                  (mm_interconnect_0_buffered_spi_0_avalon_readdatavalid),                                  //                                                         .readdatavalid
+		.buffered_spi_0_avalon_waitrequest                                    (mm_interconnect_0_buffered_spi_0_avalon_waitrequest),                                    //                                                         .waitrequest
 		.nios2_gen2_0_debug_mem_slave_address                                 (mm_interconnect_0_nios2_gen2_0_debug_mem_slave_address),                                 //                             nios2_gen2_0_debug_mem_slave.address
 		.nios2_gen2_0_debug_mem_slave_write                                   (mm_interconnect_0_nios2_gen2_0_debug_mem_slave_write),                                   //                                                         .write
 		.nios2_gen2_0_debug_mem_slave_read                                    (mm_interconnect_0_nios2_gen2_0_debug_mem_slave_read),                                    //                                                         .read
@@ -496,12 +504,6 @@ module wasca (
 		.onchip_memory2_0_s1_byteenable                                       (mm_interconnect_0_onchip_memory2_0_s1_byteenable),                                       //                                                         .byteenable
 		.onchip_memory2_0_s1_chipselect                                       (mm_interconnect_0_onchip_memory2_0_s1_chipselect),                                       //                                                         .chipselect
 		.onchip_memory2_0_s1_clken                                            (mm_interconnect_0_onchip_memory2_0_s1_clken),                                            //                                                         .clken
-		.spi_stm32_spi_control_port_address                                   (mm_interconnect_0_spi_stm32_spi_control_port_address),                                   //                               spi_stm32_spi_control_port.address
-		.spi_stm32_spi_control_port_write                                     (mm_interconnect_0_spi_stm32_spi_control_port_write),                                     //                                                         .write
-		.spi_stm32_spi_control_port_read                                      (mm_interconnect_0_spi_stm32_spi_control_port_read),                                      //                                                         .read
-		.spi_stm32_spi_control_port_readdata                                  (mm_interconnect_0_spi_stm32_spi_control_port_readdata),                                  //                                                         .readdata
-		.spi_stm32_spi_control_port_writedata                                 (mm_interconnect_0_spi_stm32_spi_control_port_writedata),                                 //                                                         .writedata
-		.spi_stm32_spi_control_port_chipselect                                (mm_interconnect_0_spi_stm32_spi_control_port_chipselect),                                //                                                         .chipselect
 		.uart_0_s1_address                                                    (mm_interconnect_0_uart_0_s1_address),                                                    //                                                uart_0_s1.address
 		.uart_0_s1_write                                                      (mm_interconnect_0_uart_0_s1_write),                                                      //                                                         .write
 		.uart_0_s1_read                                                       (mm_interconnect_0_uart_0_s1_read),                                                       //                                                         .read
@@ -516,7 +518,6 @@ module wasca (
 		.reset         (rst_controller_reset_out_reset), // clk_reset.reset
 		.receiver0_irq (irq_mapper_receiver0_irq),       // receiver0.irq
 		.receiver1_irq (irq_mapper_receiver1_irq),       // receiver1.irq
-		.receiver2_irq (irq_mapper_receiver2_irq),       // receiver2.irq
 		.sender_irq    (nios2_gen2_0_irq_irq)            //    sender.irq
 	);
 

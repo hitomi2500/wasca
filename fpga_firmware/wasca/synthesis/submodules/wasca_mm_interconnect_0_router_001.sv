@@ -47,7 +47,7 @@ module wasca_mm_interconnect_0_router_001_default_decode
      parameter DEFAULT_CHANNEL = 0,
                DEFAULT_WR_CHANNEL = -1,
                DEFAULT_RD_CHANNEL = -1,
-               DEFAULT_DESTID = 6 
+               DEFAULT_DESTID = 7 
    )
   (output [94 - 91 : 0] default_destination_id,
    output [10-1 : 0] default_wr_channel,
@@ -198,19 +198,19 @@ module wasca_mm_interconnect_0_router_001
     // ( 0x0 .. 0x40000 )
     if ( {address[RG:PAD0],{PAD0{1'b0}}} == 20'h0  && read_transaction  ) begin
             src_channel = 10'b001;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 6;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 7;
     end
 
     // ( 0x41000 .. 0x41800 )
     if ( {address[RG:PAD1],{PAD1{1'b0}}} == 20'h41000   ) begin
             src_channel = 10'b010;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 5;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 6;
     end
 
     // ( 0x80000 .. 0x84000 )
     if ( {address[RG:PAD2],{PAD2{1'b0}}} == 20'h80000   ) begin
             src_channel = 10'b100;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 7;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 8;
     end
 
 end

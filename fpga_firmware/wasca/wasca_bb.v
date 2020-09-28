@@ -31,14 +31,14 @@ module wasca (
 	audio_out_BCLK,
 	audio_out_DACDAT,
 	audio_out_DACLRCK,
+	buffered_spi_mosi,
+	buffered_spi_clk,
+	buffered_spi_miso,
+	buffered_spi_cs,
 	clk_clk,
 	clock_116_mhz_clk,
 	reset_reset_n,
 	reset_controller_0_reset_in1_reset,
-	spi_stm32_MISO,
-	spi_stm32_MOSI,
-	spi_stm32_SCLK,
-	spi_stm32_SS_n,
 	uart_0_external_connection_rxd,
 	uart_0_external_connection_txd);	
 
@@ -73,14 +73,14 @@ module wasca (
 	input		audio_out_BCLK;
 	output		audio_out_DACDAT;
 	input		audio_out_DACLRCK;
+	output		buffered_spi_mosi;
+	output		buffered_spi_clk;
+	input		buffered_spi_miso;
+	output		buffered_spi_cs;
 	input		clk_clk;
 	output		clock_116_mhz_clk;
 	input		reset_reset_n;
 	input		reset_controller_0_reset_in1_reset;
-	output		spi_stm32_MISO;
-	input		spi_stm32_MOSI;
-	input		spi_stm32_SCLK;
-	input		spi_stm32_SS_n;
 	input		uart_0_external_connection_rxd;
 	output		uart_0_external_connection_txd;
 endmodule
