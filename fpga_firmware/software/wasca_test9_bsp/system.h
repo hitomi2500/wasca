@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sat Sep 19 16:53:13 MSK 2020
+ * Generated: Tue Sep 29 22:54:59 MSK 2020
  */
 
 /*
@@ -149,13 +149,13 @@
 
 #define __ABUS_AVALON_SDRAM_BRIDGE
 #define __ALTERA_AVALON_ONCHIP_MEMORY2
-#define __ALTERA_AVALON_SPI
 #define __ALTERA_AVALON_UART
 #define __ALTERA_NIOS2_GEN2
 #define __ALTERA_ONCHIP_FLASH
 #define __ALTERA_UP_AVALON_AUDIO
 #define __ALTERA_UP_SD_CARD_AVALON_INTERFACE
 #define __ALTPLL
+#define __BUFFERED_SPI
 
 
 /*
@@ -247,6 +247,20 @@
 
 
 /*
+ * buffered_spi_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_buffered_spi_0 buffered_spi
+#define BUFFERED_SPI_0_BASE 0x50000
+#define BUFFERED_SPI_0_IRQ -1
+#define BUFFERED_SPI_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define BUFFERED_SPI_0_NAME "/dev/buffered_spi_0"
+#define BUFFERED_SPI_0_SPAN 32768
+#define BUFFERED_SPI_0_TYPE "buffered_spi"
+
+
+/*
  * hal configuration
  *
  */
@@ -315,37 +329,6 @@
 #define ONCHIP_MEMORY2_0_SPAN 16384
 #define ONCHIP_MEMORY2_0_TYPE "altera_avalon_onchip_memory2"
 #define ONCHIP_MEMORY2_0_WRITABLE 1
-
-
-/*
- * spi_stm32 configuration
- *
- */
-
-#define ALT_MODULE_CLASS_spi_stm32 altera_avalon_spi
-#define SPI_STM32_BASE 0x44000
-#define SPI_STM32_CLOCKMULT 1
-#define SPI_STM32_CLOCKPHASE 0
-#define SPI_STM32_CLOCKPOLARITY 0
-#define SPI_STM32_CLOCKUNITS "Hz"
-#define SPI_STM32_DATABITS 8
-#define SPI_STM32_DATAWIDTH 16
-#define SPI_STM32_DELAYMULT "1.0E-9"
-#define SPI_STM32_DELAYUNITS "ns"
-#define SPI_STM32_EXTRADELAY 0
-#define SPI_STM32_INSERT_SYNC 0
-#define SPI_STM32_IRQ 2
-#define SPI_STM32_IRQ_INTERRUPT_CONTROLLER_ID 0
-#define SPI_STM32_ISMASTER 0
-#define SPI_STM32_LSBFIRST 0
-#define SPI_STM32_NAME "/dev/spi_stm32"
-#define SPI_STM32_NUMSLAVES 1
-#define SPI_STM32_PREFIX "spi_"
-#define SPI_STM32_SPAN 32
-#define SPI_STM32_SYNC_REG_DEPTH 2
-#define SPI_STM32_TARGETCLOCK 128000u
-#define SPI_STM32_TARGETSSDELAY "0.0"
-#define SPI_STM32_TYPE "altera_avalon_spi"
 
 
 /*

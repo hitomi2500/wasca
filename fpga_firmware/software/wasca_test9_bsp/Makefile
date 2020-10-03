@@ -222,13 +222,6 @@ Avalon_Audio_driver_SRCS_ROOT := drivers
 Avalon_Audio_driver_C_LIB_SRCS := \
 	$(Avalon_Audio_driver_SRCS_ROOT)/src/altera_up_avalon_audio.c
 
-# altera_avalon_spi_driver sources root 
-altera_avalon_spi_driver_SRCS_ROOT := drivers
-
-# altera_avalon_spi_driver sources 
-altera_avalon_spi_driver_C_LIB_SRCS := \
-	$(altera_avalon_spi_driver_SRCS_ROOT)/src/altera_avalon_spi.c
-
 # altera_avalon_uart_driver sources root 
 altera_avalon_uart_driver_SRCS_ROOT := drivers
 
@@ -341,7 +334,6 @@ hal_C_LIB_SRCS := \
 COMPONENT_C_LIB_SRCS += \
 	$(Altera_UP_SD_Card_Avalon_Interface_driver_C_LIB_SRCS) \
 	$(Avalon_Audio_driver_C_LIB_SRCS) \
-	$(altera_avalon_spi_driver_C_LIB_SRCS) \
 	$(altera_avalon_uart_driver_C_LIB_SRCS) \
 	$(altera_nios2_gen2_hal_driver_C_LIB_SRCS) \
 	$(hal_C_LIB_SRCS)

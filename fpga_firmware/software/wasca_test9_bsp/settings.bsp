@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Sep 19, 2020 4:54:22 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1600520062344</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>03.10.2020 21:28:47</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1601746127392</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>D:\Saturn\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
@@ -945,12 +945,6 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>spi_stm32</slaveDescriptor>
-                <addressRange>0x00044000 - 0x0004401F</addressRange>
-                <addressSpan>32</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>audio_0</slaveDescriptor>
                 <addressRange>0x00046000 - 0x0004600F</addressRange>
                 <addressSpan>16</addressSpan>
@@ -960,6 +954,12 @@
                 <slaveDescriptor>Altera_UP_SD_Card_Avalon_Interface_0</slaveDescriptor>
                 <addressRange>0x00047000 - 0x000473FF</addressRange>
                 <addressSpan>1024</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>buffered_spi_0</slaveDescriptor>
+                <addressRange>0x00050000 - 0x00057FFF</addressRange>
+                <addressSpan>32768</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>

@@ -291,6 +291,44 @@ int main()
 	  iteration++;
 	  for (k=0;k<1000000;k++) ; //pause
   }*/
+
+  //buffered spi test
+  volatile unsigned short * p16_spi;
+  p16_spi = (unsigned short *)BUFFERED_SPI_0_BASE;
+  volatile unsigned short b16;
+#define BUFFSPI_BUFFER0_WRITE 0x0000
+#define BUFFSPI_BUFFER1_WRITE 0x0800
+#define BUFFSPI_BUFFER0_READ 0x1000
+#define BUFFSPI_BUFFER1_READ 0x1800
+#define BUFFSPI_REG_START 0x2000
+#define BUFFSPI_REG_LENGTH 0x2001
+#define BUFFSPI_REG_COUNTER 0x2002
+#define BUFFSPI_REG_CS_MODE 0x2003
+#define BUFFSPI_REG_DELAY 0x2004
+#define BUFFSPI_REG_BUFFER_SELECT 0x2005
+#define BUFFSPI_REG_MAGIC_DEAF 0x2006
+#define BUFFSPI_REG_MAGIC_FACE 0x2007
+  //setting up the core
+  p16_spi[BUFFSPI_REG_LENGTH] = 256; //256 words 16 bit each
+  p16_spi[BUFFSPI_REG_CS_MODE] = 1; //cs blinking
+  p16_spi[BUFFSPI_REG_DELAY] = 70; //70 clocks @ 116 Mhz between each 16 bit
+  p16_spi[BUFFSPI_REG_BUFFER_SELECT] = 0; // using buffer 0
+
+  //fill buffer with test data
+  for (i=0;i<256;i++)
+  {
+	  p16_spi[BUFFSPI_BUFFER0_WRITE+i] = i*0x0101;
+  }
+  //fire spi transaction
+  p16_spi[BUFFSPI_REG_START] = 1; //go go go!
+  //wait until complete
+  while (p16_spi[BUFFSPI_REG_START] != 0)
+	  ;
+  //read data from read buffer into dummy variable
+  for (i=0;i<256;i++)
+	  b16 = p16_spi[BUFFSPI_BUFFER0_READ + i];
+
+
   //first things first - copy saturn bootcode into SDRAM
   //wait for SD card
   alt_printf("Waiting for SD ");
@@ -344,6 +382,15 @@ int main()
   }
   alt_putstr("Dump done\n\r");
 
+  //buffered spi test
+  //volatile unsigned short * p16_spi;
+  /*p16_spi = (unsigned short *)BUFFERED_SPI_0_BASE;
+  volatile unsigned short b16;
+  //fill buffer
+  for (i=0;i<4;i++)
+	  p16_spi[i] = i;
+  for (i=0;i<4;i++)
+	  b16 = p16_spi[i];*/
   //write version
   p16 = (unsigned short *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
   p16[SWVER_REG_OFFSET] = SOFTWARE_VERSION;

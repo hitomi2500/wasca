@@ -25,6 +25,7 @@ architecture Behavioral of buffered_spi is
 
 signal transaction_active           : std_logic := '0';
 signal transaction_active_p1           : std_logic := '0';
+signal transaction_active_readreg           : std_logic := '0';
 signal writebuffer_write1           : std_logic := '0';
 signal writebuffer_write2          : std_logic := '0';
 signal readbuffer_write1           : std_logic := '0';
@@ -61,6 +62,15 @@ signal avalon_readdata_writebuf1 : std_logic_vector (15 downto 0);
 signal avalon_readdata_readbuf2 : std_logic_vector (15 downto 0);
 signal avalon_readdata_writebuf2 : std_logic_vector (15 downto 0);
 
+--signal avalon_address_f1 : std_logic_vector (13 downto 0);
+signal avalon_readdata_p1 : std_logic_vector (15 downto 0);
+signal avalon_read_f1 : STD_LOGIC;
+signal avalon_read_f2 : STD_LOGIC;
+signal avalon_address_latched : std_logic_vector (13 downto 0);
+
+signal avalon_readdatavalid_p1 : STD_LOGIC;
+
+
 --inferred ram, quartus fails to recognize'em like bram
 --type spi_buf_type is array(0 to 511) of std_logic_vector(15 downto 0);
 --signal write_buffer1 : spi_buf_type;
@@ -86,38 +96,46 @@ end component;
 
 begin
 
+	avalon_address_latched <= avalon_address when rising_edge(clock) and (avalon_read = '1' or avalon_write = '1');
+	avalon_read_f1 <=  avalon_read when rising_edge(clock);
+	avalon_read_f2 <=  avalon_read_f1 when rising_edge(clock);
+
 	--Avalon regs read interface
 	process (clock)
 	begin
 		if rising_edge(clock) then
-			avalon_readdatavalid <= '0';
-			if avalon_read = '1' then
-				avalon_readdatavalid <= '1';
-				case avalon_address(13 downto 11) is 
+			avalon_readdatavalid_p1 <= '0';
+			if avalon_read_f2 = '1' then
+				avalon_readdatavalid_p1 <= '1';
+				case avalon_address_latched(13 downto 11) is 
 					when "000" => 
-						avalon_readdata <= avalon_readdata_writebuf1;
+						avalon_readdata_p1 <= avalon_readdata_writebuf1;
 					when "001" => 
-                        avalon_readdata <= avalon_readdata_writebuf2;
+                  avalon_readdata_p1 <= avalon_readdata_writebuf2;
 					when "010" => 
-						avalon_readdata <= avalon_readdata_readbuf1;
+						avalon_readdata_p1 <= avalon_readdata_readbuf1;
 					when "011" => 
-						avalon_readdata <= avalon_readdata_readbuf2;
+						avalon_readdata_p1 <= avalon_readdata_readbuf2;
 					when "100" => 
-					   	case avalon_address(3 downto 1) is 
+					   	case avalon_address_latched(2 downto 0) is 
                            when "000" => 
-                                 avalon_readdata <= X"000"&"000"&transaction_active;
+                                 avalon_readdata_p1 <= X"000"&"000"&transaction_active_readreg;
                            when "001" => 
-                                 avalon_readdata <= X"0"&"0"&length_register;
+                                 avalon_readdata_p1 <= X"0"&"0"&length_register;
                            when "010" => 
-                                 avalon_readdata <= X"0"&std_logic_vector(transaction_byte_counter);
+                                 avalon_readdata_p1 <= X"0"&std_logic_vector(transaction_byte_counter);
                            when "011" => 
-                                 avalon_readdata <= X"000"&"000"&cs_mode_register;
+                                 avalon_readdata_p1 <= X"000"&"000"&cs_mode_register;
                            when "100" => 
-                                 avalon_readdata <= delay_register;
+                                 avalon_readdata_p1 <= delay_register;
                            when "101" =>
-                                 avalon_readdata <= X"000"&"000"&buffer_select_register;
+                                 avalon_readdata_p1 <= X"000"&"000"&buffer_select_register;
+                           when "110" =>
+                                 avalon_readdata_p1 <= X"DEAF";
+                           when "111" =>
+                                 avalon_readdata_p1 <= X"FACE";
                            when others =>
-                                 avalon_readdata <= X"DEAF";
+                                 avalon_readdata_p1 <= X"ABBA";
 					  	end case;
 					when others => 
                         null;
@@ -125,6 +143,9 @@ begin
 			end if;
 		end if;
 	end process;
+	
+	avalon_readdata <= avalon_readdata_p1 when rising_edge(clock);
+	avalon_readdatavalid <= avalon_readdatavalid_p1 when rising_edge(clock);
 	
 	--Avalon regs write interface
 	process (clock)
@@ -146,7 +167,7 @@ begin
                 when "011" => 
                     readbuffer_write2 <= '1';
                 when "100" => 
-                       case avalon_address(3 downto 1) is 
+                       case avalon_address(2 downto 0) is 
                        when "000" => 
                              transaction_prestart_1 <= avalon_writedata(0);
                        when "001" => 
@@ -168,6 +189,12 @@ begin
 			end if;
 		end if;
 	end process;
+	
+	--async avalon write decoders
+	--writebuffer_write1 <= avalon_write when avalon_address(13 downto 11) = "000" else '0';
+	--writebuffer_write2 <= avalon_write when avalon_address(13 downto 11) = "001" else '0';
+	--readbuffer_write1 <= avalon_write when avalon_address(13 downto 11) = "010" else '0';
+	--readbuffer_write2 <= avalon_write when avalon_address(13 downto 11) = "011" else '0';
 	
 	--delaying transaction_start cor a clock cycle to wait for cs
 	process (clock)
@@ -246,7 +273,7 @@ begin
 read1_buf: buff_spi_ram 
 	port map
 	(
-		address_a => avalon_address(8 downto 0),
+		address_a => avalon_address_latched(8 downto 0),
 		address_b => std_logic_vector(transaction_byte_counter_p1(8 downto 0)),
 		clock	 => clock,
 		data_a => avalon_writedata,
@@ -259,7 +286,7 @@ read1_buf: buff_spi_ram
 read2_buf: buff_spi_ram 
 	port map
 	(
-		address_a => avalon_address(8 downto 0),
+		address_a => avalon_address_latched(8 downto 0),
 		address_b => std_logic_vector(transaction_byte_counter_p1(8 downto 0)),
 		clock	 => clock,
 		data_a => avalon_writedata,
@@ -272,7 +299,7 @@ read2_buf: buff_spi_ram
 write1_buf: buff_spi_ram 
 	port map
 	(
-		address_a => avalon_address(8 downto 0),
+		address_a => avalon_address_latched(8 downto 0),
 		address_b => std_logic_vector(transaction_byte_counter(8 downto 0)),
 		clock	 => clock,
 		data_a => avalon_writedata,
@@ -285,7 +312,7 @@ write1_buf: buff_spi_ram
 write2_buf: buff_spi_ram 
 	port map
 	(
-		address_a => avalon_address(8 downto 0),
+		address_a => avalon_address_latched(8 downto 0),
 		address_b => std_logic_vector(transaction_byte_counter(8 downto 0)),
 		clock	 => clock,
 		data_a => avalon_writedata,
@@ -343,6 +370,18 @@ write2_buf: buff_spi_ram
           end if;
        end if;
     end process;
+	 
+	 --transaction active flag for nios to read
+	 process (clock)
+    begin
+       if rising_edge(clock) then
+          if (transaction_prestart_1 = '1') then
+             transaction_active_readreg <= '1';
+          elsif transaction_byte_counter = unsigned(length_register) then
+             transaction_active_readreg <= '0';
+          end if;
+       end if;
+    end process;
     
     --transaction clock divider (test clockspeed is 1/16, 7.25 Mhz for 116Mhz base clock)
     process (clock)
@@ -361,7 +400,7 @@ write2_buf: buff_spi_ram
     begin
        if rising_edge(clock) then
           if (transaction_active = '1') and  transaction_bit_counter <= to_unsigned(15,16) then
-              if (transaction_clkdiv_counter = "0001") then
+              if (transaction_clkdiv_counter = "0001") and (transaction_start = '0') then
                  spi_clk <= '1';
               elsif (transaction_clkdiv_counter = "1001") then
                  spi_clk <= '0';
