@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="wasca" kind="wasca" version="1.0" fabric="QSYS">
  <!-- Format version 15.1 185 (Future versions may contain additional information.) -->
- <!-- 2020.10.03.16:39:17 -->
+ <!-- 2020.10.05.23:19:40 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1601728757</value>
+  <value>1601925580</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -5748,7 +5748,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.EXCEPTION_ADDR</name>
-   <value>0x00080020</value>
+   <value>0x00003fe0</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.FLASH_ACCELERATOR_LINES</name>
@@ -5812,7 +5812,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.RESET_ADDR</name>
-   <value>0x00080000</value>
+   <value>0x00000000</value>
   </assignment>
   <assignment>
    <name>embeddedsw.configuration.DataCacheVictimBufImpl</name>
@@ -5836,11 +5836,11 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.configuration.exceptionOffset</name>
-   <value>32</value>
+   <value>16352</value>
   </assignment>
   <assignment>
    <name>embeddedsw.configuration.exceptionSlave</name>
-   <value>onchip_memory2_0.s1</value>
+   <value>onchip_flash_0.data</value>
   </assignment>
   <assignment>
    <name>embeddedsw.configuration.resetOffset</name>
@@ -5848,7 +5848,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.configuration.resetSlave</name>
-   <value>onchip_memory2_0.s1</value>
+   <value>onchip_flash_0.data</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.compatible</name>
@@ -5864,7 +5864,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.altr,exception-addr</name>
-   <value>0x00080020</value>
+   <value>0x00003fe0</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.altr,implementation</name>
@@ -5872,7 +5872,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.altr,reset-addr</name>
-   <value>0x00080000</value>
+   <value>0x00000000</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.clock-frequency</name>
@@ -6252,7 +6252,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="exceptionOffset">
    <type>int</type>
-   <value>32</value>
+   <value>16352</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -6292,7 +6292,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="resetSlave">
    <type>java.lang.String</type>
-   <value>onchip_memory2_0.s1</value>
+   <value>onchip_flash_0.data</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -6308,7 +6308,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="exceptionSlave">
    <type>java.lang.String</type>
-   <value>onchip_memory2_0.s1</value>
+   <value>onchip_flash_0.data</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -7012,7 +7012,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="resetAbsoluteAddr">
    <type>int</type>
-   <value>524288</value>
+   <value>0</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -7020,7 +7020,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="exceptionAbsoluteAddr">
    <type>int</type>
-   <value>524320</value>
+   <value>16352</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -7290,7 +7290,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="dataSlaveMapParam">
    <type>java.lang.String</type>
-   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /><slave name='uart_0.s1' start='0x40000' end='0x40020' type='altera_avalon_uart.s1' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='audio_0.avalon_audio_slave' start='0x46000' end='0x46010' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x47000' end='0x47400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x6000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></value>
+   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /><slave name='uart_0.s1' start='0x40000' end='0x40020' type='altera_avalon_uart.s1' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='audio_0.avalon_audio_slave' start='0x46000' end='0x46010' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x47000' end='0x47400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x6000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7997,14 +7997,6 @@ parameters are a RESULT of the module parameters. -->
     <name>onchip_flash_0.data</name>
     <baseAddress>0</baseAddress>
     <span>176128</span>
-   </memoryBlock>
-   <memoryBlock>
-    <isBridge>false</isBridge>
-    <moduleName>nios2_gen2_0</moduleName>
-    <slaveName>debug_mem_slave</slaveName>
-    <name>nios2_gen2_0.debug_mem_slave</name>
-    <baseAddress>266240</baseAddress>
-    <span>2048</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -12452,57 +12444,6 @@ parameters are a RESULT of the module parameters. -->
   <endConnectionPoint>data</endConnectionPoint>
  </connection>
  <connection
-   name="nios2_gen2_0.data_master/nios2_gen2_0.debug_mem_slave"
-   kind="avalon"
-   version="15.1"
-   start="nios2_gen2_0.data_master"
-   end="nios2_gen2_0.debug_mem_slave">
-  <parameter name="arbitrationPriority">
-   <type>int</type>
-   <value>1</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="baseAddress">
-   <type>java.math.BigInteger</type>
-   <value>0x00041000</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="defaultConnection">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="deviceFamily">
-   <type>java.lang.String</type>
-   <value>UNKNOWN</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <parameter name="generateLegacySim">
-   <type>boolean</type>
-   <value>false</value>
-   <derived>false</derived>
-   <enabled>true</enabled>
-   <visible>true</visible>
-   <valid>true</valid>
-  </parameter>
-  <startModule>nios2_gen2_0</startModule>
-  <startConnectionPoint>data_master</startConnectionPoint>
-  <endModule>nios2_gen2_0</endModule>
-  <endConnectionPoint>debug_mem_slave</endConnectionPoint>
- </connection>
- <connection
    name="nios2_gen2_0.data_master/altpll_1.pll_slave"
    kind="avalon"
    version="15.1"
@@ -13673,7 +13614,7 @@ parameters are a RESULT of the module parameters. -->
   <version>15.1</version>
  </plugin>
  <plugin>
-  <instanceCount>13</instanceCount>
+  <instanceCount>12</instanceCount>
   <name>avalon</name>
   <type>com.altera.entityinterfaces.IElementClass</type>
   <subtype>com.altera.entityinterfaces.IConnection</subtype>

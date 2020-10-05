@@ -67,7 +67,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
   </table>
   <table class="blueBar">
    <tr>
-    <td class="l">2020.10.03.16:36:40</td>
+    <td class="l">2020.10.05.23:18:19</td>
     <td class="r">Datasheet</td>
    </tr>
   </table>
@@ -219,7 +219,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
    </tr>
    <tr>
     <td class="slaveb">debug_mem_slave&#160;</td>
-    <td class="addr"><span style="color:#989898">0x</span>00041000</td>
+    <td class="empty"></td>
     <td class="addr"><span style="color:#989898">0x</span>00041000</td>
    </tr>
    <tr>
@@ -1993,7 +1993,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
        </tr>
        <tr>
         <td class="parametername">exceptionOffset</td>
-        <td class="parametervalue">32</td>
+        <td class="parametervalue">16352</td>
        </tr>
        <tr>
         <td class="parametername">cpuID</td>
@@ -2013,7 +2013,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
        </tr>
        <tr>
         <td class="parametername">resetSlave</td>
-        <td class="parametervalue">onchip_memory2_0.s1</td>
+        <td class="parametervalue">onchip_flash_0.data</td>
        </tr>
        <tr>
         <td class="parametername">mmu_TLBMissExcSlave</td>
@@ -2021,7 +2021,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
        </tr>
        <tr>
         <td class="parametername">exceptionSlave</td>
-        <td class="parametervalue">onchip_memory2_0.s1</td>
+        <td class="parametervalue">onchip_flash_0.data</td>
        </tr>
        <tr>
         <td class="parametername">breakSlave</td>
@@ -2373,11 +2373,11 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
        </tr>
        <tr>
         <td class="parametername">resetAbsoluteAddr</td>
-        <td class="parametervalue">524288</td>
+        <td class="parametervalue">0</td>
        </tr>
        <tr>
         <td class="parametername">exceptionAbsoluteAddr</td>
-        <td class="parametervalue">524320</td>
+        <td class="parametervalue">16352</td>
        </tr>
        <tr>
         <td class="parametername">breakAbsoluteAddr</td>
@@ -2497,7 +2497,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
        </tr>
        <tr>
         <td class="parametername">dataSlaveMapParam</td>
-        <td class="parametervalue">&lt;address-map&gt;&lt;slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /&gt;&lt;slave name='uart_0.s1' start='0x40000' end='0x40020' type='altera_avalon_uart.s1' /&gt;&lt;slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' type='altera_nios2_gen2.debug_mem_slave' /&gt;&lt;slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /&gt;&lt;slave name='audio_0.avalon_audio_slave' start='0x46000' end='0x46010' type='altera_up_avalon_audio.avalon_audio_slave' /&gt;&lt;slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x47000' end='0x47400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /&gt;&lt;slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /&gt;&lt;slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /&gt;&lt;slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /&gt;&lt;slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x6000000' type='abus_avalon_sdram_bridge.avalon_sdram' /&gt;&lt;/address-map&gt;</td>
+        <td class="parametervalue">&lt;address-map&gt;&lt;slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /&gt;&lt;slave name='uart_0.s1' start='0x40000' end='0x40020' type='altera_avalon_uart.s1' /&gt;&lt;slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /&gt;&lt;slave name='audio_0.avalon_audio_slave' start='0x46000' end='0x46010' type='altera_up_avalon_audio.avalon_audio_slave' /&gt;&lt;slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x47000' end='0x47400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /&gt;&lt;slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /&gt;&lt;slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /&gt;&lt;slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /&gt;&lt;slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x6000000' type='abus_avalon_sdram_bridge.avalon_sdram' /&gt;&lt;/address-map&gt;</td>
        </tr>
        <tr>
         <td class="parametername">tightlyCoupledDataMaster0MapParam</td>
@@ -2650,7 +2650,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
        </tr>
        <tr>
         <td class="parametername">EXCEPTION_ADDR</td>
-        <td class="parametervalue">0x00080020</td>
+        <td class="parametervalue">0x00003fe0</td>
        </tr>
        <tr>
         <td class="parametername">FLASH_ACCELERATOR_LINES</td>
@@ -2714,7 +2714,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
        </tr>
        <tr>
         <td class="parametername">RESET_ADDR</td>
-        <td class="parametervalue">0x00080000</td>
+        <td class="parametervalue">0x00000000</td>
        </tr>
       </table>
      </td>
@@ -3824,7 +3824,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
   <table class="blueBar">
    <tr>
     <td class="l">generation took 0,01 seconds</td>
-    <td class="r">rendering took 0,09 seconds</td>
+    <td class="r">rendering took 0,07 seconds</td>
    </tr>
   </table>
  </body>

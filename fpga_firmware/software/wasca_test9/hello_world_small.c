@@ -293,7 +293,7 @@ int main()
   }*/
 
   //buffered spi test
-  volatile unsigned short * p16_spi;
+ /* volatile unsigned short * p16_spi;
   p16_spi = (unsigned short *)BUFFERED_SPI_0_BASE;
   volatile unsigned short b16;
 #define BUFFSPI_BUFFER0_WRITE 0x0000
@@ -327,7 +327,7 @@ int main()
   //read data from read buffer into dummy variable
   for (i=0;i<256;i++)
 	  b16 = p16_spi[BUFFSPI_BUFFER0_READ + i];
-
+*/
 
   //first things first - copy saturn bootcode into SDRAM
   //wait for SD card
@@ -345,20 +345,32 @@ int main()
   }
   //open bootloader file
   int _file_handler = alt_up_sd_card_fopen("WASCALDR.BIN",false);
+  if (-1 == _file_handler)
+  {
+	  for (i=0;i<10000;i++)
+		  alt_printf("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+  }
   for (i=0;i<256;i++)
   {
 	  /*for (j=0;j<512;j++)
 		  p[i*512+j] = alt_up_sd_card_read(_file_handler);//; p2[j];*/
 	  alt_up_sd_card_read_512b(_file_handler,&(p[i*512+j]),i);
+	  alt_printf(".");
   }
   alt_up_sd_card_fclose(_file_handler);
   //now it's minipseudo's time
   _file_handler = alt_up_sd_card_fopen("PSEUDO.BIN",false);
+  if (-1 == _file_handler)
+  {
+	  for (i=0;i<10000;i++)
+		  alt_printf("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+  }
   for (i=0;i<32;i++)
   {
 	  //for (j=0;j<512;j++)
 		 // p[0x9C000 + i*512+j] =  alt_up_sd_card_read(_file_handler);// p2[j];
 	  alt_up_sd_card_read_512b(_file_handler,&(p[0x9C000 + i*512+j]),i);
+	  alt_printf(".");
   }
   alt_up_sd_card_fclose(_file_handler);
 

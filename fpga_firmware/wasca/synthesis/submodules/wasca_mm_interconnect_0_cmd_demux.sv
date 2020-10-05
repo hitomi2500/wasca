@@ -30,7 +30,7 @@
 //   output_name:         wasca_mm_interconnect_0_cmd_demux
 //   ST_DATA_W:           108
 //   ST_CHANNEL_W:        10
-//   NUM_OUTPUTS:         10
+//   NUM_OUTPUTS:         9
 //   VALID_WIDTH:         1
 // ------------------------------------------
 
@@ -118,13 +118,6 @@ module wasca_mm_interconnect_0_cmd_demux
     output reg                      src8_endofpacket,
     input                           src8_ready,
 
-    output reg                      src9_valid,
-    output reg [108-1    : 0] src9_data, // ST_DATA_W=108
-    output reg [10-1 : 0] src9_channel, // ST_CHANNEL_W=10
-    output reg                      src9_startofpacket,
-    output reg                      src9_endofpacket,
-    input                           src9_ready,
-
 
     // -------------------
     // Clock & Reset
@@ -136,7 +129,7 @@ module wasca_mm_interconnect_0_cmd_demux
 
 );
 
-    localparam NUM_OUTPUTS = 10;
+    localparam NUM_OUTPUTS = 9;
     wire [NUM_OUTPUTS - 1 : 0] ready_vector;
 
     // -------------------
@@ -206,13 +199,6 @@ module wasca_mm_interconnect_0_cmd_demux
 
         src8_valid         = sink_channel[8] && sink_valid;
 
-        src9_data          = sink_data;
-        src9_startofpacket = sink_startofpacket;
-        src9_endofpacket   = sink_endofpacket;
-        src9_channel       = sink_channel >> NUM_OUTPUTS;
-
-        src9_valid         = sink_channel[9] && sink_valid;
-
     end
 
     // -------------------
@@ -227,9 +213,8 @@ module wasca_mm_interconnect_0_cmd_demux
     assign ready_vector[6] = src6_ready;
     assign ready_vector[7] = src7_ready;
     assign ready_vector[8] = src8_ready;
-    assign ready_vector[9] = src9_ready;
 
-    assign sink_ready = |(sink_channel & ready_vector);
+    assign sink_ready = |(sink_channel & {{1{1'b0}},{ready_vector[NUM_OUTPUTS - 1 : 0]}});
 
 endmodule
 

@@ -1145,7 +1145,7 @@ module wasca_nios2_gen2_0_cpu_nios2_oci_itrace (
                   else if (is_fast_tlb_miss_exception)
                       pending_exc_handler <= 32'h0;
                   else 
-                    pending_exc_handler <= 32'h80020;
+                    pending_exc_handler <= 32'h3fe0;
                   pending_frametype <= 4'b0000;
                 end
               else if (is_idct)
@@ -2486,12 +2486,12 @@ defparam wasca_nios2_gen2_0_cpu_ociram_sp_ram.lpm_file = "wasca_nios2_gen2_0_cpu
 defparam wasca_nios2_gen2_0_cpu_ociram_sp_ram.lpm_file = "wasca_nios2_gen2_0_cpu_ociram_default_contents.hex";
 `endif
 //synthesis translate_on
-  assign cfgrom_readdata = (MonAReg[4 : 2] == 3'd0)? 32'h00080020 :
+  assign cfgrom_readdata = (MonAReg[4 : 2] == 3'd0)? 32'h00003fe0 :
     (MonAReg[4 : 2] == 3'd1)? 32'h00001b14 :
     (MonAReg[4 : 2] == 3'd2)? 32'h00040000 :
     (MonAReg[4 : 2] == 3'd3)? 32'h00000100 :
     (MonAReg[4 : 2] == 3'd4)? 32'h20000000 :
-    (MonAReg[4 : 2] == 3'd5)? 32'h00080000 :
+    (MonAReg[4 : 2] == 3'd5)? 32'h00000000 :
     (MonAReg[4 : 2] == 3'd6)? 32'h00000000 :
     32'h00000000;
 
@@ -4006,7 +4006,7 @@ module wasca_nios2_gen2_0_cpu (
     (W_br_taken | R_ctrl_uncond_cti_non_br)   ? 2'b10 :
     2'b11;
 
-  assign F_pc_no_crst_nxt = (F_pc_sel_nxt == 2'b00)? 131080 :
+  assign F_pc_no_crst_nxt = (F_pc_sel_nxt == 2'b00)? 4088 :
     (F_pc_sel_nxt == 2'b01)? 66568 :
     (F_pc_sel_nxt == 2'b10)? E_arith_result[19 : 2] :
     F_pc_plus_one;
@@ -4018,7 +4018,7 @@ module wasca_nios2_gen2_0_cpu (
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
-          F_pc <= 131072;
+          F_pc <= 0;
       else if (F_pc_en)
           F_pc <= F_pc_nxt;
     end
