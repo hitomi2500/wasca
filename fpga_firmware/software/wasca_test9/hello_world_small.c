@@ -84,10 +84,7 @@
 
 #define SOFTWARE_VERSION 0x0002
 
-#define SNIFF_DATA0_REG_OFFSET 0xE0
-#define SNIFF_DATA1_REG_OFFSET 0xE2
-#define SNIFF_DATA2_REG_OFFSET 0xE4
-#define SNIFF_ACK_REG_OFFSET 0xE6
+#define SNIFF_DATA_REG_OFFSET 0xE0
 #define SNIFF_FILTER_CONTROL_REG_OFFSET 0xE8
 #define SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET 0xEA
 #define PCNTR_REG_OFFSET 0xF0
@@ -249,7 +246,7 @@ int main()
   volatile unsigned char c1,c2,c3,c4;
   volatile unsigned short s1,s2;
   volatile unsigned char readback[256];
-  int iCurrentBlock;
+  volatile unsigned int iCurrentBlock;
   //unsigned char BlockBuffer[512];
   /*while (1)
   {
@@ -488,48 +485,27 @@ int main()
 	  //if we're in backup mode, we should keep syncing forever
 	  p16[SNIFF_FILTER_CONTROL_REG_OFFSET] = 0x0A; //only writes on CS1
 	  while (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
-		  p16[SNIFF_ACK_REG_OFFSET] = 0; //flush fifo
-	  iCurrentBlock = -1;
+		  iCurrentBlock = p16[SNIFF_DATA_REG_OFFSET]; //flush previous fifo content
 	  while (1)
 	  {//backup sync start
-		  // sync is done using a 512-byte buffer. when a transaction occurs within a 512-b sector different to current one,
+		  // sync is done using a 1024 entry deep fifo. when a transaction occurs within a 512-b sector different to current one,
 		  // the buffer is flused to SD, the new one is loaded from SD, and only then the processing continues
 		  // if the fifo is overfilled ( > 1024 samples), issue an error message
-		  if (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
+		  while (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
 		  {
-			  //access data in fifo, checking address
-			  k = p16[SNIFF_DATA1_REG_OFFSET] >> 9;
-			  k |=  ((p16[SNIFF_DATA2_REG_OFFSET] & 0x3F)<<7);
-			  if (iCurrentBlock != k)
+			  //check if close to overfill
+			  /*if (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 1020)
 			  {
-				  //new sector! flushing old to flash
-				  if (iCurrentBlock >= 0)
-				  {
-					  //write current block to file
-					  //alt_up_sd_card_write_512b(_file_handler,BlockBuffer,iCurrentBlock);
-					  alt_up_sd_card_write_512b(_file_handler,&(p[iCurrentBlock<<9]),iCurrentBlock);
-				  }
-				  //reading new one
-				  iCurrentBlock = k;
-				  //alt_up_sd_card_read_512b(_file_handler,BlockBuffer,iCurrentBlock);
-				  //blinking led
-				  alt_putstr("BLINK");
-			  }
-			  /*//parsing access
-			  k = p16[SNIFF_DATA1_REG_OFFSET] & 0x01FE;
-			  if (p16[SNIFF_DATA2_REG_OFFSET] & 0x1000)
-			  {
-				  //writing lower byte
-				  BlockBuffer[k+1] = p16[SNIFF_DATA0_REG_OFFSET];
-			  }
-			  if (p16[SNIFF_DATA2_REG_OFFSET] & 0x1000)
-			  {
-				  //writing upper byte
-				  BlockBuffer[k] = p16[SNIFF_DATA0_REG_OFFSET]>>8;
+				  //fifo almost overfilled, let's panic!
+				  for (i=0;i<10000;i++)
+					  alt_printf("FFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 			  }*/
-			  //flushing fifo data
-			  p16[SNIFF_ACK_REG_OFFSET] = 0; //flush fifo
-
+			  //access data in fifo, checking address
+			  iCurrentBlock = p16[SNIFF_DATA_REG_OFFSET];
+			  //flushing block to file
+			  alt_up_sd_card_write_512b(_file_handler,&(p[iCurrentBlock<<9]),iCurrentBlock);
+			  //blinking led
+			  alt_putstr("BLINK");
 		  }
 	  }//backup sync end
   }

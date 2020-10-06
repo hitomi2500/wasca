@@ -61,7 +61,7 @@ component sniff_fifo
 		empty		: OUT STD_LOGIC ;
 		full		: OUT STD_LOGIC ;
 		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
-		usedw		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
+		usedw		: OUT STD_LOGIC_VECTOR (10 DOWNTO 0)
 	);
 end component;
 --xilinx mode
@@ -183,7 +183,7 @@ signal sniffer_data_in     : std_logic_vector(15 downto 0) := (others => '0');
 signal sniffer_data_out     : std_logic_vector(15 downto 0) := (others => '0'); 
 signal sniffer_data_write    : std_logic := '0';
 signal sniffer_data_ack    : std_logic := '0';
-signal sniffer_fifo_content_size     : std_logic_vector(9 downto 0) := (others => '0'); 
+signal sniffer_fifo_content_size     : std_logic_vector(10 downto 0) := (others => '0'); 
 signal sniffer_fifo_empty    : std_logic := '0';
 signal sniffer_fifo_full   : std_logic := '0';
 signal sniffer_last_active_block     : std_logic_vector(15 downto 0) := (others => '1'); 
@@ -578,7 +578,8 @@ begin
 					when X"D2" => 
 						avalon_regs_readdata <= std_logic_vector(counter_value(31 downto 16));
 					when X"D4" => 
-						avalon_regs_readdata <= X"00"&counter_filter_control;
+						avalon_regs_readdata(15 downto 8) <= X"00";						
+						avalon_regs_readdata(7 downto 0) <= counter_filter_control;						
 					--D6 is a reset, writeonly
 					--D8 to DE are reserved
 					when X"E0" => 
@@ -586,9 +587,12 @@ begin
 						sniffer_data_ack <= '1';
 					--E2 to E6 are reserved
 					when X"E8" => 
-						avalon_regs_readdata <= X"00"&sniffer_filter_control;						
+						avalon_regs_readdata(15 downto 8) <= X"00";						
+						avalon_regs_readdata(7 downto 0) <= sniffer_filter_control;						
 					when X"EA" => 
-						avalon_regs_readdata <= "00000"&sniffer_fifo_full&sniffer_fifo_content_size;						
+						avalon_regs_readdata(15 downto 12) <= "0000";
+						avalon_regs_readdata(11) <= sniffer_fifo_full;
+						avalon_regs_readdata(10 downto 0) <= sniffer_fifo_content_size;						
 					--EC to EE are reserved
 					when X"F0" => 
 						avalon_regs_readdata <= REG_PCNTR;
@@ -1143,8 +1147,8 @@ begin
 	           sniffer_pending_flag <= '1';
 	           sniffer_pending_block <= abus_address_latched(24 downto 9);
 	       elsif sniffer_pending_reset = '1' then
-	           sniffer_pending_flag <= '1';
-           end if;
+	           sniffer_pending_flag <= '0';
+          end if;
         end if;
     end process;
 

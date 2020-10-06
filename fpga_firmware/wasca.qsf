@@ -303,4 +303,166 @@ set_location_assignment PIN_22 -to altera_up_sd_card_avalon_interface_0_conduit_
 set_location_assignment PIN_25 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3
 set_location_assignment PIN_24 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat
 set_global_assignment -name QIP_FILE buff_spi_ram.qip
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "wasca:my_little_wasca|wasca_altpll_1:altpll_1|wasca_altpll_1_altpll_pfa2:sd1|wire_pll7_clk[0]" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_BLOCK_TYPE=AUTO" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334528" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=1024" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=1024" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|empty" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|full" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|rdreq" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[39] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[40] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[41] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[42] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[43] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|wrreq" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_data_ack" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_data_write" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_pending_flag" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_pending_reset" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_pending_set" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_pending_timeout" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|data[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|empty" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|full" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[14]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[15]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|q[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|rdreq" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[39] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[40] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[41] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[42] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[43] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|usedw[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniff_fifo:sniff_fifo_inst|wrreq" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_data_ack" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_data_write" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_pending_flag" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_pending_reset" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_pending_set" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "wasca:my_little_wasca|abus_avalon_sdram_bridge:abus_avalon_sdram_bridge_0|sniffer_pending_timeout" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=52" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=52" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=52" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=180" -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_global_assignment -name SLD_FILE db/wasca_signaltap_auto_stripped.stp
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

@@ -24,6 +24,6 @@ component sniff_fifo
 		empty		: OUT STD_LOGIC ;
 		full		: OUT STD_LOGIC ;
 		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
-		usedw		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
+		usedw		: OUT STD_LOGIC_VECTOR (10 DOWNTO 0)
 	);
 end component;

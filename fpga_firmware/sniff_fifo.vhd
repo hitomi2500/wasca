@@ -50,7 +50,7 @@ ENTITY sniff_fifo IS
 		empty		: OUT STD_LOGIC ;
 		full		: OUT STD_LOGIC ;
 		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
-		usedw		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
+		usedw		: OUT STD_LOGIC_VECTOR (10 DOWNTO 0)
 	);
 END sniff_fifo;
 
@@ -60,7 +60,7 @@ ARCHITECTURE SYN OF sniff_fifo IS
 	SIGNAL sub_wire0	: STD_LOGIC ;
 	SIGNAL sub_wire1	: STD_LOGIC ;
 	SIGNAL sub_wire2	: STD_LOGIC_VECTOR (15 DOWNTO 0);
-	SIGNAL sub_wire3	: STD_LOGIC_VECTOR (9 DOWNTO 0);
+	SIGNAL sub_wire3	: STD_LOGIC_VECTOR (10 DOWNTO 0);
 
 
 
@@ -85,7 +85,7 @@ ARCHITECTURE SYN OF sniff_fifo IS
 			empty	: OUT STD_LOGIC ;
 			full	: OUT STD_LOGIC ;
 			q	: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
-			usedw	: OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
+			usedw	: OUT STD_LOGIC_VECTOR (10 DOWNTO 0)
 	);
 	END COMPONENT;
 
@@ -93,17 +93,17 @@ BEGIN
 	empty    <= sub_wire0;
 	full    <= sub_wire1;
 	q    <= sub_wire2(15 DOWNTO 0);
-	usedw    <= sub_wire3(9 DOWNTO 0);
+	usedw    <= sub_wire3(10 DOWNTO 0);
 
 	scfifo_component : scfifo
 	GENERIC MAP (
 		add_ram_output_register => "OFF",
 		intended_device_family => "MAX 10",
-		lpm_numwords => 1024,
+		lpm_numwords => 2048,
 		lpm_showahead => "ON",
 		lpm_type => "scfifo",
 		lpm_width => 16,
-		lpm_widthu => 10,
+		lpm_widthu => 11,
 		overflow_checking => "ON",
 		underflow_checking => "ON",
 		use_eab => "ON"
@@ -132,7 +132,7 @@ END SYN;
 -- Retrieval info: PRIVATE: AlmostFullThr NUMERIC "-1"
 -- Retrieval info: PRIVATE: CLOCKS_ARE_SYNCHRONIZED NUMERIC "1"
 -- Retrieval info: PRIVATE: Clock NUMERIC "0"
--- Retrieval info: PRIVATE: Depth NUMERIC "1024"
+-- Retrieval info: PRIVATE: Depth NUMERIC "2048"
 -- Retrieval info: PRIVATE: Empty NUMERIC "1"
 -- Retrieval info: PRIVATE: Full NUMERIC "1"
 -- Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "MAX 10"
@@ -161,11 +161,11 @@ END SYN;
 -- Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
 -- Retrieval info: CONSTANT: ADD_RAM_OUTPUT_REGISTER STRING "OFF"
 -- Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "MAX 10"
--- Retrieval info: CONSTANT: LPM_NUMWORDS NUMERIC "1024"
+-- Retrieval info: CONSTANT: LPM_NUMWORDS NUMERIC "2048"
 -- Retrieval info: CONSTANT: LPM_SHOWAHEAD STRING "ON"
 -- Retrieval info: CONSTANT: LPM_TYPE STRING "scfifo"
 -- Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "16"
--- Retrieval info: CONSTANT: LPM_WIDTHU NUMERIC "10"
+-- Retrieval info: CONSTANT: LPM_WIDTHU NUMERIC "11"
 -- Retrieval info: CONSTANT: OVERFLOW_CHECKING STRING "ON"
 -- Retrieval info: CONSTANT: UNDERFLOW_CHECKING STRING "ON"
 -- Retrieval info: CONSTANT: USE_EAB STRING "ON"
@@ -175,7 +175,7 @@ END SYN;
 -- Retrieval info: USED_PORT: full 0 0 0 0 OUTPUT NODEFVAL "full"
 -- Retrieval info: USED_PORT: q 0 0 16 0 OUTPUT NODEFVAL "q[15..0]"
 -- Retrieval info: USED_PORT: rdreq 0 0 0 0 INPUT NODEFVAL "rdreq"
--- Retrieval info: USED_PORT: usedw 0 0 10 0 OUTPUT NODEFVAL "usedw[9..0]"
+-- Retrieval info: USED_PORT: usedw 0 0 11 0 OUTPUT NODEFVAL "usedw[10..0]"
 -- Retrieval info: USED_PORT: wrreq 0 0 0 0 INPUT NODEFVAL "wrreq"
 -- Retrieval info: CONNECT: @clock 0 0 0 0 clock 0 0 0 0
 -- Retrieval info: CONNECT: @data 0 0 16 0 data 0 0 16 0
@@ -184,7 +184,7 @@ END SYN;
 -- Retrieval info: CONNECT: empty 0 0 0 0 @empty 0 0 0 0
 -- Retrieval info: CONNECT: full 0 0 0 0 @full 0 0 0 0
 -- Retrieval info: CONNECT: q 0 0 16 0 @q 0 0 16 0
--- Retrieval info: CONNECT: usedw 0 0 10 0 @usedw 0 0 10 0
+-- Retrieval info: CONNECT: usedw 0 0 11 0 @usedw 0 0 11 0
 -- Retrieval info: GEN_FILE: TYPE_NORMAL sniff_fifo.vhd TRUE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL sniff_fifo.inc FALSE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL sniff_fifo.cmp TRUE
