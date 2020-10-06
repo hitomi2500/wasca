@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -175,21 +175,21 @@ procedure write_abus_16 (addry : in std_logic_vector(25 downto 0);
 			Abus_Ad <= addry;
 			Ref_Ad <= addry(24 downto 1);
 			Ref_Da <= datty;
-			wait for 10ns;
+			wait for 8620 ps;
 			Abus_Da <= datty;
-			wait for 10ns;
+			wait for 8620 ps;
 			Abus_CS <= csy;
-			wait for 10ns;
+			wait for 8620 ps;
 			Abus_Wri <= wry;
-			wait for 5ns;
+			wait for 4310 ps;
 			Ref_Wri <= '1';
-			wait for 10ns;
+			wait for 8620 ps;
 			Ref_Wri <= '0';
-			wait for 185ns;
+			wait for 159470 ps;
 			Abus_CS <= "111";
-			wait for 10ns;
+			wait for 8620 ps;
 			Abus_Wri <= "11";
-			wait for 10ns;
+			wait for 8620 ps;
 	end write_abus_16;
 	
 	procedure read_abus_16 (addry : in std_logic_vector(25 downto 0);
@@ -203,19 +203,19 @@ procedure write_abus_16 (addry : in std_logic_vector(25 downto 0);
 	begin
 			Abus_Ad <= addry;
 			Ref_Ad <= addry(24 downto 1);
-			wait for 10ns;
+			wait for 8620 ps;
 			Abus_CS <= csy;
-			wait for 10ns;
+			wait for 8620 ps;
 			Abus_Re <= '0';
-			wait for 10ns;
+			wait for 8620 ps;
 			Ref_Re <= '1';
-			wait for 10ns;
+			wait for 8620 ps;
 			Ref_Re <= '0';
-			wait for 200ns;
+			wait for 172400 ps;
 			Abus_CS <= "111";
-			wait for 10ns;
+			wait for 8620 ps;
 			Abus_Re <= '1';
-			wait for 10ns;
+			wait for 8620 ps;
 	end read_abus_16;
 	
 	procedure write_avalon_16 (addry : in std_logic_vector(25 downto 0);
@@ -232,14 +232,30 @@ procedure write_abus_16 (addry : in std_logic_vector(25 downto 0);
                 Ref_Ad <= addry(24 downto 1);
                 Ref_Da <= datty;
                 Ava_Da <= datty;
-                wait for 10ns;
+                wait for 8620 ps;
                 Ava_Wri <= '1';
-                wait for 10ns;
+                wait for 8620 ps;
                 Ref_Wri <= '1';
                 Ava_Wri <= '0';
-                wait for 10ns;
+                wait for 8620 ps;
                 Ref_Wri <= '0';
         end write_avalon_16;
+
+	procedure write_avalon_16_regs (addry : in std_logic_vector(7 downto 0);
+                              datty : in std_logic_vector(15 downto 0);
+                              signal Ava_Ad : out std_logic_vector(7 downto 0);
+                              signal Ava_Da : out std_logic_vector(15 downto 0);
+                              signal Ava_Wri : out std_logic
+                              ) is
+        begin
+                Ava_Ad <= addry;
+                Ava_Da <= datty;
+                wait for 8620 ps;
+                Ava_Wri <= '1';
+                wait for 8620 ps;
+                Ava_Wri <= '0';
+                wait for 8620 ps;
+        end write_avalon_16_regs;
 
 
 	procedure read_avalon_16 (addry : in std_logic_vector(25 downto 0);
@@ -251,14 +267,27 @@ procedure write_abus_16 (addry : in std_logic_vector(25 downto 0);
         begin
                 Ava_Ad <= addry(24 downto 0);
                 Ref_Ad <= addry(24 downto 1);
-                wait for 10ns;
+                wait for 8620 ps;
                 Ava_Re <= '1';
-                wait for 10ns;
+                wait for 8620 ps;
                 Ref_Re <= '1';
                 Ava_Re <= '0';
-                wait for 10ns;
+                wait for 8620 ps;
                 Ref_Re <= '0';
         end read_avalon_16;
+
+	procedure read_avalon_16_regs (addry : in std_logic_vector(7 downto 0);
+                              signal Ava_Ad : out std_logic_vector(7 downto 0);
+                              signal Ava_Re : out std_logic
+                              ) is
+        begin
+                Ava_Ad <= addry;
+                wait for 8620 ps;
+                Ava_Re <= '1';
+                wait for 8620 ps;
+                Ava_Re <= '0';
+                wait for 8620 ps;
+        end read_avalon_16_regs;
 	
 begin
 
@@ -349,25 +378,56 @@ begin
     wait for 100ns;
     refer_rst_n <= '1';
     wait for 800ns;
---    --abus normal read
---    read_abus_16("00"&X"EFAFAE","010",abus_full_address,abus_chipselect,abus_read,refer_rd_addr,refer_rd_enable);
---    --abus read while autorefresh
---    wait for 3150ns;
---    read_abus_16("00"&X"EFAFAE","010",abus_full_address,abus_chipselect,abus_read,refer_rd_addr,refer_rd_enable);
---    --abus normal write
---    wait for 1 us;
---    write_abus_16("00"&X"BABAFA",X"DADA","010","00",abus_full_address,abus_data_in,abus_chipselect,abus_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
---    --abus write while autorefresh
---    wait for 2900ns;
+    wait for 300us; --sdram init time
+    --setup sniff fifo - only writes on cs1
+    write_avalon_16_regs(X"E8",X"000A",avalon_regs_address,avalon_regs_writedata,avalon_regs_write); --filter - only write on cs1 
+    
+    --abus normal read
+    read_abus_16("00"&X"EFAFAE","101",abus_full_address,abus_chipselect,abus_read,refer_rd_addr,refer_rd_enable);
+    --abus read while autorefresh
+    wait for 3150ns;
+    read_abus_16("00"&X"EFAFAE","101",abus_full_address,abus_chipselect,abus_read,refer_rd_addr,refer_rd_enable);
+    --abus pack write
+    for w in 0 to 1025 loop
+        wait for 1 us;
+        write_abus_16(std_logic_vector(to_unsigned(w*2,26)),X"DADA","101","00",abus_full_address,abus_data_in,abus_chipselect,abus_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
+    end loop;
 
-    --avalon normal write
-    wait for 500ns;
-    write_avalon_16("00"&X"EEE312",X"DADA",avalon_sdram_address,avalon_sdram_writedata,avalon_sdram_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
-    wait for 500ns;
-    --avalon normal read
-    wait for 500ns;
-    read_avalon_16("00"&X"EEE312",avalon_sdram_address,avalon_sdram_read,refer_rd_addr,refer_rd_enable);
-    wait for 500ns;
+    wait for 100 us;
+    
+    --pack read fifo
+    for w in 0 to 1025 loop
+        wait for 1 us;
+        read_avalon_16_regs(X"E0",avalon_regs_address,avalon_regs_read);
+        --write_avalon_16_regs(X"E6",X"0000",avalon_regs_address,avalon_regs_writedata,avalon_regs_write); --filter - only write on cs1 
+    end loop;
+    
+    wait for 10ms;
+    
+    --abus pack write
+    for w in 0 to 1025 loop
+        wait for 1 us;
+        write_abus_16(std_logic_vector(to_unsigned(w*512,26)),X"DADA","101","00",abus_full_address,abus_data_in,abus_chipselect,abus_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
+    end loop;
+
+    wait for 100 us;
+    
+    --pack read fifo
+    for w in 0 to 1025 loop
+        wait for 1 us;
+        read_avalon_16_regs(X"E0",avalon_regs_address,avalon_regs_read);
+        --write_avalon_16_regs(X"E6",X"0000",avalon_regs_address,avalon_regs_writedata,avalon_regs_write); --filter - only write on cs1 
+    end loop;
+    
+
+--    --avalon normal write
+--    wait for 500ns;
+--    write_avalon_16("00"&X"EEE312",X"DADA",avalon_sdram_address,avalon_sdram_writedata,avalon_sdram_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
+--    wait for 500ns;
+--    --avalon normal read
+--    wait for 500ns;
+--    read_avalon_16("00"&X"EEE312",avalon_sdram_address,avalon_sdram_read,refer_rd_addr,refer_rd_enable);
+--    wait for 500ns;
     wait;
 end process;
 

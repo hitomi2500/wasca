@@ -44,12 +44,12 @@ ENTITY sniff_fifo IS
 	PORT
 	(
 		clock		: IN STD_LOGIC ;
-		data		: IN STD_LOGIC_VECTOR (47 DOWNTO 0);
+		data		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
 		rdreq		: IN STD_LOGIC ;
 		wrreq		: IN STD_LOGIC ;
 		empty		: OUT STD_LOGIC ;
 		full		: OUT STD_LOGIC ;
-		q		: OUT STD_LOGIC_VECTOR (47 DOWNTO 0);
+		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
 		usedw		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
 	);
 END sniff_fifo;
@@ -59,7 +59,7 @@ ARCHITECTURE SYN OF sniff_fifo IS
 
 	SIGNAL sub_wire0	: STD_LOGIC ;
 	SIGNAL sub_wire1	: STD_LOGIC ;
-	SIGNAL sub_wire2	: STD_LOGIC_VECTOR (47 DOWNTO 0);
+	SIGNAL sub_wire2	: STD_LOGIC_VECTOR (15 DOWNTO 0);
 	SIGNAL sub_wire3	: STD_LOGIC_VECTOR (9 DOWNTO 0);
 
 
@@ -79,12 +79,12 @@ ARCHITECTURE SYN OF sniff_fifo IS
 	);
 	PORT (
 			clock	: IN STD_LOGIC ;
-			data	: IN STD_LOGIC_VECTOR (47 DOWNTO 0);
+			data	: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
 			rdreq	: IN STD_LOGIC ;
 			wrreq	: IN STD_LOGIC ;
 			empty	: OUT STD_LOGIC ;
 			full	: OUT STD_LOGIC ;
-			q	: OUT STD_LOGIC_VECTOR (47 DOWNTO 0);
+			q	: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
 			usedw	: OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
 	);
 	END COMPONENT;
@@ -92,7 +92,7 @@ ARCHITECTURE SYN OF sniff_fifo IS
 BEGIN
 	empty    <= sub_wire0;
 	full    <= sub_wire1;
-	q    <= sub_wire2(47 DOWNTO 0);
+	q    <= sub_wire2(15 DOWNTO 0);
 	usedw    <= sub_wire3(9 DOWNTO 0);
 
 	scfifo_component : scfifo
@@ -102,7 +102,7 @@ BEGIN
 		lpm_numwords => 1024,
 		lpm_showahead => "ON",
 		lpm_type => "scfifo",
-		lpm_width => 48,
+		lpm_width => 16,
 		lpm_widthu => 10,
 		overflow_checking => "ON",
 		underflow_checking => "ON",
@@ -130,7 +130,7 @@ END SYN;
 -- Retrieval info: PRIVATE: AlmostEmptyThr NUMERIC "-1"
 -- Retrieval info: PRIVATE: AlmostFull NUMERIC "0"
 -- Retrieval info: PRIVATE: AlmostFullThr NUMERIC "-1"
--- Retrieval info: PRIVATE: CLOCKS_ARE_SYNCHRONIZED NUMERIC "0"
+-- Retrieval info: PRIVATE: CLOCKS_ARE_SYNCHRONIZED NUMERIC "1"
 -- Retrieval info: PRIVATE: Clock NUMERIC "0"
 -- Retrieval info: PRIVATE: Depth NUMERIC "1024"
 -- Retrieval info: PRIVATE: Empty NUMERIC "1"
@@ -145,11 +145,11 @@ END SYN;
 -- Retrieval info: PRIVATE: SYNTH_WRAPPER_GEN_POSTFIX STRING "0"
 -- Retrieval info: PRIVATE: UNDERFLOW_CHECKING NUMERIC "0"
 -- Retrieval info: PRIVATE: UsedW NUMERIC "1"
--- Retrieval info: PRIVATE: Width NUMERIC "48"
+-- Retrieval info: PRIVATE: Width NUMERIC "16"
 -- Retrieval info: PRIVATE: dc_aclr NUMERIC "0"
 -- Retrieval info: PRIVATE: diff_widths NUMERIC "0"
 -- Retrieval info: PRIVATE: msb_usedw NUMERIC "0"
--- Retrieval info: PRIVATE: output_width NUMERIC "48"
+-- Retrieval info: PRIVATE: output_width NUMERIC "16"
 -- Retrieval info: PRIVATE: rsEmpty NUMERIC "1"
 -- Retrieval info: PRIVATE: rsFull NUMERIC "0"
 -- Retrieval info: PRIVATE: rsUsedW NUMERIC "0"
@@ -164,26 +164,26 @@ END SYN;
 -- Retrieval info: CONSTANT: LPM_NUMWORDS NUMERIC "1024"
 -- Retrieval info: CONSTANT: LPM_SHOWAHEAD STRING "ON"
 -- Retrieval info: CONSTANT: LPM_TYPE STRING "scfifo"
--- Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "48"
+-- Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "16"
 -- Retrieval info: CONSTANT: LPM_WIDTHU NUMERIC "10"
 -- Retrieval info: CONSTANT: OVERFLOW_CHECKING STRING "ON"
 -- Retrieval info: CONSTANT: UNDERFLOW_CHECKING STRING "ON"
 -- Retrieval info: CONSTANT: USE_EAB STRING "ON"
 -- Retrieval info: USED_PORT: clock 0 0 0 0 INPUT NODEFVAL "clock"
--- Retrieval info: USED_PORT: data 0 0 48 0 INPUT NODEFVAL "data[47..0]"
+-- Retrieval info: USED_PORT: data 0 0 16 0 INPUT NODEFVAL "data[15..0]"
 -- Retrieval info: USED_PORT: empty 0 0 0 0 OUTPUT NODEFVAL "empty"
 -- Retrieval info: USED_PORT: full 0 0 0 0 OUTPUT NODEFVAL "full"
--- Retrieval info: USED_PORT: q 0 0 48 0 OUTPUT NODEFVAL "q[47..0]"
+-- Retrieval info: USED_PORT: q 0 0 16 0 OUTPUT NODEFVAL "q[15..0]"
 -- Retrieval info: USED_PORT: rdreq 0 0 0 0 INPUT NODEFVAL "rdreq"
 -- Retrieval info: USED_PORT: usedw 0 0 10 0 OUTPUT NODEFVAL "usedw[9..0]"
 -- Retrieval info: USED_PORT: wrreq 0 0 0 0 INPUT NODEFVAL "wrreq"
 -- Retrieval info: CONNECT: @clock 0 0 0 0 clock 0 0 0 0
--- Retrieval info: CONNECT: @data 0 0 48 0 data 0 0 48 0
+-- Retrieval info: CONNECT: @data 0 0 16 0 data 0 0 16 0
 -- Retrieval info: CONNECT: @rdreq 0 0 0 0 rdreq 0 0 0 0
 -- Retrieval info: CONNECT: @wrreq 0 0 0 0 wrreq 0 0 0 0
 -- Retrieval info: CONNECT: empty 0 0 0 0 @empty 0 0 0 0
 -- Retrieval info: CONNECT: full 0 0 0 0 @full 0 0 0 0
--- Retrieval info: CONNECT: q 0 0 48 0 @q 0 0 48 0
+-- Retrieval info: CONNECT: q 0 0 16 0 @q 0 0 16 0
 -- Retrieval info: CONNECT: usedw 0 0 10 0 @usedw 0 0 10 0
 -- Retrieval info: GEN_FILE: TYPE_NORMAL sniff_fifo.vhd TRUE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL sniff_fifo.inc FALSE

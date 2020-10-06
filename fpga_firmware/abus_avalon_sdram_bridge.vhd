@@ -55,15 +55,30 @@ component sniff_fifo
 	PORT
 	(
 		clock		: IN STD_LOGIC ;
-		data		: IN STD_LOGIC_VECTOR (47 DOWNTO 0);
+		data		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
 		rdreq		: IN STD_LOGIC ;
 		wrreq		: IN STD_LOGIC ;
 		empty		: OUT STD_LOGIC ;
 		full		: OUT STD_LOGIC ;
-		q		: OUT STD_LOGIC_VECTOR (47 DOWNTO 0);
+		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
 		usedw		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
 	);
 end component;
+--xilinx mode
+--component sniff_fifo
+--	PORT
+--	(
+--    clk : IN STD_LOGIC;
+--    srst : IN STD_LOGIC;
+--    din : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+--    wr_en : IN STD_LOGIC;
+--    rd_en : IN STD_LOGIC;
+--    dout : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+--    full : OUT STD_LOGIC;
+--    empty : OUT STD_LOGIC;
+--    data_count : OUT STD_LOGIC_VECTOR(9 DOWNTO 0)
+--	);
+--end component;
 
 signal abus_address_ms         : std_logic_vector(9 downto 0) := (others => '0'); --          abus.address
 signal abus_address_buf         : std_logic_vector(9 downto 0) := (others => '0'); --          abus.address
@@ -164,13 +179,20 @@ signal counter_count_read     : std_logic := '0';
 signal counter_count_write    : std_logic := '0';
 signal counter_value     : unsigned(31 downto 0) := (others => '0'); 
 signal sniffer_filter_control      : std_logic_vector(7 downto 0) := (others => '0'); 
-signal sniffer_data_in     : std_logic_vector(47 downto 0) := (others => '0'); 
-signal sniffer_data_out     : std_logic_vector(47 downto 0) := (others => '0'); 
+signal sniffer_data_in     : std_logic_vector(15 downto 0) := (others => '0'); 
+signal sniffer_data_out     : std_logic_vector(15 downto 0) := (others => '0'); 
 signal sniffer_data_write    : std_logic := '0';
 signal sniffer_data_ack    : std_logic := '0';
 signal sniffer_fifo_content_size     : std_logic_vector(9 downto 0) := (others => '0'); 
 signal sniffer_fifo_empty    : std_logic := '0';
 signal sniffer_fifo_full   : std_logic := '0';
+signal sniffer_last_active_block     : std_logic_vector(15 downto 0) := (others => '1'); 
+signal sniffer_pending_set  : std_logic := '0'; 
+signal sniffer_pending_reset  : std_logic := '0'; 
+signal sniffer_pending_flag  : std_logic := '0'; 
+signal sniffer_pending_block  : std_logic_vector(15 downto 0) := (others => '0'); 
+signal sniffer_pending_timeout  : std_logic := '0'; 
+signal sniffer_pending_timeout_counter  : std_logic_vector(31 downto 0) := (others => '0'); 
 
 
 
@@ -547,6 +569,7 @@ begin
 	begin
 		if rising_edge(clock) then
 			avalon_regs_readdatavalid <= '0';
+			sniffer_data_ack <= '0';
 			if avalon_regs_read = '1' then
 				avalon_regs_readdatavalid <= '1';
 				case avalon_regs_address(7 downto 0) is 
@@ -559,13 +582,9 @@ begin
 					--D6 is a reset, writeonly
 					--D8 to DE are reserved
 					when X"E0" => 
-						avalon_regs_readdata <= sniffer_data_out(15 downto 0);
-					when X"E2" => 
-						avalon_regs_readdata <= sniffer_data_out(31 downto 16);
-					when X"E4" => 
-						avalon_regs_readdata <= sniffer_data_out(47 downto 32);
-					when X"E6" => 
-						avalon_regs_readdata <= REG_HWVER; --to simplify mux
+						avalon_regs_readdata <= sniffer_data_out;
+						sniffer_data_ack <= '1';
+					--E2 to E6 are reserved
 					when X"E8" => 
 						avalon_regs_readdata <= X"00"&sniffer_filter_control;						
 					when X"EA" => 
@@ -594,7 +613,6 @@ begin
 	process (clock)
 	begin
 		if rising_edge(clock) then
-			sniffer_data_ack <= '0';
 			counter_reset <= '0';
 			if avalon_regs_write= '1' then
 				case avalon_regs_address(7 downto 0) is 
@@ -609,12 +627,7 @@ begin
 					--D8 to DE are reserved
 					when X"E0" => 
 						null;
-					when X"E2" => 
-						null;
-					when X"E4" => 
-						null;
-					when X"E6" => 
-						sniffer_data_ack <= '1';
+					--E2 to E6 are reserved
 					when X"E8" => 
 						sniffer_filter_control <= avalon_regs_writedata(7 downto 0);
 					when X"EA" => 
@@ -1092,42 +1105,92 @@ begin
 
 	------------------------------ A-bus sniffer ---------------------------------------
 	
+	--fifo should be written in 2 cases
+	-- 1) write was done to a different block
+	-- 2) no write within 10 ms 
+	
 	process (clock)
 	begin
 		if rising_edge(clock) then
-			sniffer_data_write <= '0';
+			sniffer_pending_set <= '0';
 			if counter_count_write='1' and sniffer_filter_control(1) = '1' then
 				--write detected, checking state 
 				if abus_chipselect_buf(0) = '0' and sniffer_filter_control(2) = '1' then
-					sniffer_data_write <= '1';
+					sniffer_pending_set <= '1';
 				elsif abus_chipselect_buf(1) = '0' and sniffer_filter_control(3) = '1' then
-					sniffer_data_write <= '1';
+					sniffer_pending_set <= '1';
 				elsif abus_chipselect_buf(2) = '0' and sniffer_filter_control(4) = '1' then
-					sniffer_data_write <= '1';	
+					sniffer_pending_set <= '1';	
 				end if;
 			elsif counter_count_read='1' and sniffer_filter_control(0) = '1' then
 				--read detected, checking state 
 				if abus_chipselect_buf(0) = '0' and sniffer_filter_control(2) = '1' then
-					sniffer_data_write <= '1';
+					sniffer_pending_set <= '1';
 				elsif abus_chipselect_buf(1) = '0' and sniffer_filter_control(3) = '1' then
-					sniffer_data_write <= '1';
+					sniffer_pending_set <= '1';
 				elsif abus_chipselect_buf(2) = '0' and sniffer_filter_control(4) = '1' then
-					sniffer_data_write <= '1';
+					sniffer_pending_set <= '1';
 				end if;
 			end if;
 		end if;
 	end process;
 	
-	sniffer_data_in(15 downto 0) <= abus_data_in when abus_direction_internal='0' else
-								abus_data_out;
-	sniffer_data_in(40 downto 16) <= abus_address_latched(24 downto 0);							
-	sniffer_data_in(41)	<= not abus_chipselect_buf(0);
-	sniffer_data_in(42)	<= not abus_chipselect_buf(1);
-	sniffer_data_in(43)	<= not abus_chipselect_buf(2);
-	sniffer_data_in(44)	<= not abus_write_buf(0);
-	sniffer_data_in(45)	<= not abus_write_buf(1);
-	sniffer_data_in(46) <= not abus_read_buf;
-	sniffer_data_in(47) <= '0';--reserved
+	--if an access passed thru filter, set the request as pending
+    process (clock)
+    begin
+        if rising_edge(clock) then
+	       if sniffer_pending_set = '1' then
+	           sniffer_pending_flag <= '1';
+	           sniffer_pending_block <= abus_address_latched(24 downto 9);
+	       elsif sniffer_pending_reset = '1' then
+	           sniffer_pending_flag <= '1';
+           end if;
+        end if;
+    end process;
+
+    --if we have a pending request, and it's for a different block, issue write
+    --if we don't have eny requests, but the timeout fired, issue write as well
+    process (clock)
+    begin
+        if rising_edge(clock) then
+           sniffer_pending_reset <= '0';
+           sniffer_data_write <= '0';
+           if sniffer_pending_flag = '1' and sniffer_pending_block /= sniffer_last_active_block then
+               sniffer_data_write <= '1';
+               sniffer_last_active_block <= sniffer_pending_block;
+               sniffer_pending_reset <= '1';
+           elsif sniffer_pending_timeout = '1' then
+               sniffer_data_write <= '1';
+               sniffer_last_active_block <= sniffer_pending_block;
+               sniffer_pending_reset <= '1';
+           end if;
+        end if;
+    end process;   	
+    
+    --timeout counter. resets when another pending is set
+    process (clock)
+    begin
+        if rising_edge(clock) then
+           if sniffer_pending_set = '1' then
+               sniffer_pending_timeout_counter <= (others => '0');
+           elsif sniffer_pending_timeout_counter < std_logic_vector(to_unsigned(134217728,32)) then
+               sniffer_pending_timeout_counter <= std_logic_vector(unsigned(sniffer_pending_timeout_counter) + 1);
+           end if;
+        end if;
+    end process;
+    
+    --timeout comparator @ 10ms = 1160000
+    process (clock)
+    begin
+        if rising_edge(clock) then
+           sniffer_pending_timeout <= '0';
+           if sniffer_pending_timeout_counter = std_logic_vector(to_unsigned(1160000,32)) then
+                sniffer_pending_timeout <= '1';
+           end if;
+        end if;
+    end process;    
+
+	sniffer_data_in(15 downto 0) <= sniffer_last_active_block when rising_edge(clock); --abus_address_latched(24 downto 9);
 	
 	sniff_fifo_inst : sniff_fifo PORT MAP (
 		clock	 => clock,
@@ -1139,7 +1202,17 @@ begin
 		q	 => sniffer_data_out,
 		usedw	 => sniffer_fifo_content_size
 	);
-
-
+--	--xilinx mode
+--	sniff_fifo_inst : sniff_fifo PORT MAP (
+--        clk     => clock,
+--        srst => '0',
+--        din     => sniffer_data_in,
+--        rd_en     => sniffer_data_ack,
+--        wr_en     => sniffer_data_write,
+--        empty     => sniffer_fifo_empty,
+--        full     => sniffer_fifo_full,
+--        dout     => sniffer_data_out,
+--        data_count     => sniffer_fifo_content_size
+--    );
 	
 end architecture rtl; -- of sega_saturn_abus_slave
