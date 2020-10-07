@@ -505,7 +505,7 @@ int main()
 			  //flushing block to file
 			  alt_up_sd_card_write_512b(_file_handler,&(p[iCurrentBlock<<9]),iCurrentBlock);
 			  //blinking led
-			  alt_putstr("BLINK");
+			  alt_printf("SYNC %x(%x) ",iCurrentBlock,iCurrentBlock);
 		  }
 	  }//backup sync end
   }

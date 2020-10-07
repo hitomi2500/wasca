@@ -180,7 +180,9 @@ signal counter_count_write    : std_logic := '0';
 signal counter_value     : unsigned(31 downto 0) := (others => '0'); 
 signal sniffer_filter_control      : std_logic_vector(7 downto 0) := (others => '0'); 
 signal sniffer_data_in     : std_logic_vector(15 downto 0) := (others => '0'); 
+signal sniffer_data_in_p1     : std_logic_vector(15 downto 0) := (others => '0'); 
 signal sniffer_data_out     : std_logic_vector(15 downto 0) := (others => '0'); 
+--signal sniffer_data_write_p1    : std_logic := '0';
 signal sniffer_data_write    : std_logic := '0';
 signal sniffer_data_ack    : std_logic := '0';
 signal sniffer_fifo_content_size     : std_logic_vector(10 downto 0) := (others => '0'); 
@@ -1194,7 +1196,9 @@ begin
         end if;
     end process;    
 
-	sniffer_data_in(15 downto 0) <= sniffer_last_active_block when rising_edge(clock); --abus_address_latched(24 downto 9);
+	sniffer_data_in_p1(15 downto 0) <= sniffer_last_active_block when rising_edge(clock); --abus_address_latched(24 downto 9);
+	sniffer_data_in <= sniffer_data_in_p1 when rising_edge(clock); --abus_address_latched(24 downto 9);
+	--sniffer_data_write <= sniffer_data_write_p1 when rising_edge(clock);
 	
 	sniff_fifo_inst : sniff_fifo PORT MAP (
 		clock	 => clock,
