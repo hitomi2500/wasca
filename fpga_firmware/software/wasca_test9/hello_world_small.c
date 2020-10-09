@@ -247,6 +247,10 @@ int main()
   volatile unsigned short s1,s2;
   volatile unsigned char readback[256];
   volatile unsigned int iCurrentBlock;
+  char backup_filename[16];
+  /*unsigned char UpdateArray[2048];
+  for (i=0;i<2048;i++)
+	  UpdateArray[i] = 0;*/
   //unsigned char BlockBuffer[512];
   /*while (1)
   {
@@ -427,21 +431,8 @@ int main()
 	  {
 	  case 0x1 : //0.5 MB
 		  alt_putstr("Preparing 0.5M backup RAM");
-		  _file_handler = alt_up_sd_card_fopen("BACKUP05.BIN",false);
-		  for (i=0;i<1024;i++)
-		  {
-			  p16[PCNTR_REG_OFFSET]=i/11;
-			  alt_putstr(".");
-			  for (j=0;j<512;j++)
-				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
-		  }
-		  p16[PCNTR_REG_OFFSET] = 100;
-		  //alt_up_sd_card_fclose(_file_handler);
-		  alt_putstr("Done\n\r");
-		  break;
-	  case 0x2 : //1 MB
-		  alt_putstr("Preparing 1M backup RAM");
-		  _file_handler = alt_up_sd_card_fopen("BACKUP1.BIN",false);
+		  strcpy(backup_filename,"BACKUP05.BIN");
+		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<2048;i++)
 		  {
 			  p16[PCNTR_REG_OFFSET]=i/21;
@@ -450,12 +441,13 @@ int main()
 				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
 		  }
 		  p16[PCNTR_REG_OFFSET] = 100;
-		  //alt_up_sd_card_fclose(_file_handler);
+		  alt_up_sd_card_fclose(_file_handler);
 		  alt_putstr("Done\n\r");
 		  break;
-	  case 0x3 : //2 MB
-		  alt_putstr("Preparing 2M backup RAM");
-		  _file_handler = alt_up_sd_card_fopen("BACKUP2.BIN",false);
+	  case 0x2 : //1 MB
+		  alt_putstr("Preparing 1M backup RAM");
+		  strcpy(backup_filename,"BACKUP1.BIN");
+		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<4096;i++)
 		  {
 			  p16[PCNTR_REG_OFFSET]=i/41;
@@ -464,12 +456,13 @@ int main()
 				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
 		  }
 		  p16[PCNTR_REG_OFFSET] = 100;
-		  //alt_up_sd_card_fclose(_file_handler);
+		  alt_up_sd_card_fclose(_file_handler);
 		  alt_putstr("Done\n\r");
 		  break;
-	  case 0x04 : //4 MB
-		  alt_putstr("Preparing 4M backup RAM");
-		  _file_handler = alt_up_sd_card_fopen("BACKUP4.BIN",false);
+	  case 0x3 : //2 MB
+		  alt_putstr("Preparing 2M backup RAM");
+		  strcpy(backup_filename,"BACKUP2.BIN");
+		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<8192;i++)
 		  {
 			  p16[PCNTR_REG_OFFSET]=i/82;
@@ -478,7 +471,22 @@ int main()
 				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
 		  }
 		  p16[PCNTR_REG_OFFSET] = 100;
-		  //alt_up_sd_card_fclose(_file_handler);
+		  alt_up_sd_card_fclose(_file_handler);
+		  alt_putstr("Done\n\r");
+		  break;
+	  case 0x04 : //4 MB
+		  alt_putstr("Preparing 4M backup RAM");
+		  strcpy(backup_filename,"BACKUP4.BIN");
+		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
+		  for (i=0;i<16384;i++)
+		  {
+			  p16[PCNTR_REG_OFFSET]=i/164;
+			  alt_putstr(".");
+			  for (j=0;j<512;j++)
+				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+		  }
+		  p16[PCNTR_REG_OFFSET] = 100;
+		  alt_up_sd_card_fclose(_file_handler);
 		  alt_putstr("Done\n\r");
 		  break;
 	  }
@@ -491,6 +499,7 @@ int main()
 		  // sync is done using a 1024 entry deep fifo. when a transaction occurs within a 512-b sector different to current one,
 		  // the buffer is flused to SD, the new one is loaded from SD, and only then the processing continues
 		  // if the fifo is overfilled ( > 1024 samples), issue an error message
+		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 		  while (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
 		  {
 			  //check if close to overfill
@@ -503,10 +512,22 @@ int main()
 			  //access data in fifo, checking address
 			  iCurrentBlock = p16[SNIFF_DATA_REG_OFFSET];
 			  //flushing block to file
-			  alt_up_sd_card_write_512b(_file_handler,&(p[iCurrentBlock<<9]),iCurrentBlock);
+			  p2 = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE+512*iCurrentBlock);
+			  alt_up_sd_card_write_512b(_file_handler,p2,iCurrentBlock);
 			  //blinking led
-			  alt_printf("SYNC %x(%x) ",iCurrentBlock,iCurrentBlock);
+			  alt_printf("SYNC %x(%x)[%x %x]",p2,p2,p2[0],p2[1]);
+			  /*UpdateArray[iCurrentBlock] = 1;
+			  if (3 == iCurrentBlock)
+			  {
+				  alt_printf("\r\n REPORT:\r\n");
+				  for (i=0;i<2048;i++)
+				  {
+					  if (UpdateArray[i] != 1)
+						alt_printf("NOT SYNCED:  %x(%x)%x \r\n",iCurrentBlock,iCurrentBlock,iCurrentBlock);
+				  }
+			  }*/
 		  }
+		  alt_up_sd_card_fclose(_file_handler);
 	  }//backup sync end
   }
   else if ((sMode & 0x00F0) != 0)
