@@ -543,8 +543,39 @@ int main()
   {
 	  alt_printf("Octet 2, value %x\n\r",(sMode & 0x0F00));
 	  //ROM
-	  //TODO : load corresponding rom from SD card
-	  p16[PCNTR_REG_OFFSET]=100;
+	  switch (sMode & 0x0F00 )
+	  {
+	  case 0x100 : //kof95
+		  alt_putstr("Preparing KoF'95 ROM");
+		  strcpy(backup_filename,"KOF95.BIN");
+		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
+		  for (i=0;i<4096;i++)
+		  {
+			  p16[PCNTR_REG_OFFSET]=i/41;
+			  alt_putstr(".");
+			  for (j=0;j<512;j++)
+				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+		  }
+		  p16[PCNTR_REG_OFFSET] = 100;
+		  alt_up_sd_card_fclose(_file_handler);
+		  alt_putstr("Done\n\r");
+		  break;
+	  case 0x200 : //Ultraman
+		  alt_putstr("Preparing Ultraman ROM");
+		  strcpy(backup_filename,"ULTRAMAN.BIN");
+		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
+		  for (i=0;i<4096;i++)
+		  {
+			  p16[PCNTR_REG_OFFSET]=i/41;
+			  alt_putstr(".");
+			  for (j=0;j<512;j++)
+				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+		  }
+		  p16[PCNTR_REG_OFFSET] = 100;
+		  alt_up_sd_card_fclose(_file_handler);
+		  alt_putstr("Done\n\r");
+		  break;
+	  }
   }
   else
   {
