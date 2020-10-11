@@ -143,6 +143,8 @@ signal REG_STATUS            : std_logic_vector(15 downto 0) := (others => '0');
 signal REG_MODE            : std_logic_vector(15 downto 0) := (others => '0'); 
 signal REG_HWVER            : std_logic_vector(15 downto 0) := X"0002";
 signal REG_SWVER            : std_logic_vector(15 downto 0) := (others => '0'); 
+signal REG_MAPPER_READ            : std_logic_vector(63 downto 0) := (others => '1'); 
+signal REG_MAPPER_WRITE            : std_logic_vector(63 downto 0) := (others => '1'); 
 
 --signal sdram_read          : std_logic;
 --signal sdram_write         : std_logic;
@@ -575,6 +577,22 @@ begin
 			if avalon_regs_read = '1' then
 				avalon_regs_readdatavalid <= '1';
 				case avalon_regs_address(7 downto 0) is 
+					when X"C0" => 
+						avalon_regs_readdata <= REG_MAPPER_READ(15 downto 0);					
+					when X"C2" => 
+						avalon_regs_readdata <= REG_MAPPER_READ(31 downto 16);					
+					when X"C4" => 
+						avalon_regs_readdata <= REG_MAPPER_READ(47 downto 32);					
+					when X"C6" => 
+						avalon_regs_readdata <= REG_MAPPER_READ(63 downto 48);					
+					when X"C8" => 
+						avalon_regs_readdata <= REG_MAPPER_WRITE(15 downto 0);					
+					when X"CA" => 
+						avalon_regs_readdata <= REG_MAPPER_WRITE(31 downto 16);					
+					when X"CC" => 
+						avalon_regs_readdata <= REG_MAPPER_WRITE(47 downto 32);					
+					when X"CE" => 
+						avalon_regs_readdata <= REG_MAPPER_WRITE(63 downto 48);					
 					when X"D0" => 
 						avalon_regs_readdata <= std_logic_vector(counter_value(15 downto 0));
 					when X"D2" => 
@@ -622,6 +640,22 @@ begin
 			counter_reset <= '0';
 			if avalon_regs_write= '1' then
 				case avalon_regs_address(7 downto 0) is 
+					when X"C0" => 
+						REG_MAPPER_READ(15 downto 0) <= avalon_regs_writedata;
+					when X"C2" => 
+						REG_MAPPER_READ(31 downto 16) <= avalon_regs_writedata;
+					when X"C4" => 
+						REG_MAPPER_READ(47 downto 32) <= avalon_regs_writedata;
+					when X"C6" => 
+						REG_MAPPER_READ(63 downto 48) <= avalon_regs_writedata;
+					when X"C8" => 
+						REG_MAPPER_WRITE(15 downto 0) <= avalon_regs_writedata;
+					when X"CA" => 
+						REG_MAPPER_WRITE(31 downto 16) <= avalon_regs_writedata;
+					when X"CC" => 
+						REG_MAPPER_WRITE(47 downto 32) <= avalon_regs_writedata;
+					when X"CE" => 
+						REG_MAPPER_WRITE(63 downto 48) <= avalon_regs_writedata;
 					when X"D0" => 
 						null;
 					when X"D2" => 
