@@ -198,6 +198,8 @@ signal sniffer_pending_block  : std_logic_vector(15 downto 0) := (others => '0')
 signal sniffer_pending_timeout  : std_logic := '0'; 
 signal sniffer_pending_timeout_counter  : std_logic_vector(31 downto 0) := (others => '0'); 
 
+signal mapper_write_enable    : std_logic := '0';
+signal mapper_read_enable    : std_logic := '0';
 
 
 TYPE transaction_dir IS (DIR_NONE,DIR_WRITE,DIR_READ);
@@ -238,7 +240,7 @@ begin
 	--we won't be aserting interrupt and waitrequest. because we can. can we?
 	abus_interrupt <= '1';
 	abus_waitrequest <= '1';	
-	abus_disable_out <= '0';  --dasbling waitrequest & int outputs, so they're tristate
+	abus_disable_out <= '1';  --dasbling waitrequest & int outputs, so they're tristate
 	
 	--ignoring functioncode, timing and addressstrobe for now
 	
@@ -330,6 +332,34 @@ begin
 	--trying to do this asynchronously
 	abus_address_latched <= abus_address_latched_prepatch(25 downto 21)&"00"&abus_address_latched_prepatch(18 downto 0) when wasca_mode = MODE_RAM_1M and abus_address_latched_prepatch(24 downto 21) = "0010"
 								else abus_address_latched_prepatch;
+								
+	--mapper write enable decode
+	process (clock)
+	begin
+		if rising_edge(clock) then
+			if abus_chipselect_buf(0) = '0' then
+				mapper_write_enable <= REG_MAPPER_WRITE(to_integer(unsigned(abus_address_latched(24 downto 20))));
+			elsif abus_chipselect_buf(1) = '0' then
+				mapper_write_enable <= REG_MAPPER_WRITE(32+to_integer(unsigned(abus_address_latched(23 downto 20))));
+			elsif abus_chipselect_buf(2) = '0' then
+				mapper_write_enable <= REG_MAPPER_WRITE(48);
+			end if;
+		end if;
+	end process;	
+
+	--mapper read enable decode
+	process (clock)
+	begin
+		if rising_edge(clock) then
+			if abus_chipselect_buf(0) = '0' then
+				mapper_read_enable <= REG_MAPPER_READ(to_integer(unsigned(abus_address_latched(24 downto 20))));
+			elsif abus_chipselect_buf(1) = '0' then
+				mapper_read_enable <= REG_MAPPER_READ(32+to_integer(unsigned(abus_address_latched(23 downto 20))));
+			elsif abus_chipselect_buf(2) = '0' then
+				mapper_read_enable <= REG_MAPPER_READ(48);
+			end if;
+		end if;
+	end process;	
 	
 	
 	--latch transaction direction
@@ -377,7 +407,7 @@ begin
 						abus_direction_internal <= '0'; --high-z
 						abus_muxing_internal <= "10"; --data
 					when DIR_READ =>
-						abus_direction_internal <= '1'; --active
+						abus_direction_internal <= mapper_read_enable;--'1'; --active
 						abus_muxing_internal <= "10"; --data
 					when DIR_WRITE =>
 						abus_direction_internal <= '0'; --high-z
@@ -961,15 +991,15 @@ begin
 					end if;
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 0 then
-						if my_little_transaction_dir = DIR_WRITE then
+						if my_little_transaction_dir = DIR_WRITE and mapper_write_enable = '1' then --if mapper write is not enabled, doing read instead
 							sdram_mode <= SDRAM_ABUS_WRITE_AND_PRECHARGE;
 							counter_count_write <= '1';
 							sdram_cas_n <= '0';
-                            sdram_we_n <= '0';
-                            sdram_dq <= abus_data_in(7 downto 0)&abus_data_in(15 downto 8);
-                            sdram_addr <= "0010"&abus_address_latched(9 downto 1);
-                            sdram_ba <= abus_address_latched(24 downto 23);
-                            sdram_wait_counter <= to_unsigned(4,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+                     sdram_we_n <= '0';
+                     sdram_dq <= abus_data_in(7 downto 0)&abus_data_in(15 downto 8);
+                     sdram_addr <= "0010"&abus_address_latched(9 downto 1);
+                     sdram_ba <= abus_address_latched(24 downto 23);
+                     sdram_wait_counter <= to_unsigned(4,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						else --if my_little_transaction_dir = DIR_READ then
 							sdram_mode <= SDRAM_ABUS_READ_AND_PRECHARGE;
 							counter_count_read <= '1';

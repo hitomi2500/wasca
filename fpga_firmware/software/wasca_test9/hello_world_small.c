@@ -84,6 +84,14 @@
 
 #define SOFTWARE_VERSION 0x0002
 
+#define MAPPER_READ_0 0xC0
+#define MAPPER_READ_1 0xC2
+#define MAPPER_READ_2 0xC4
+#define MAPPER_READ_3 0xC6
+#define MAPPER_WRITE_0 0xC8
+#define MAPPER_WRITE_1 0xCA
+#define MAPPER_WRITE_2 0xCC
+#define MAPPER_WRITE_3 0xCE
 #define SNIFF_DATA_REG_OFFSET 0xE0
 #define SNIFF_FILTER_CONTROL_REG_OFFSET 0xE8
 #define SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET 0xEA
@@ -294,7 +302,7 @@ int main()
   }*/
 
   //buffered spi test
- /* volatile unsigned short * p16_spi;
+/*  volatile unsigned short * p16_spi;
   p16_spi = (unsigned short *)BUFFERED_SPI_0_BASE;
   volatile unsigned short b16;
 #define BUFFSPI_BUFFER0_WRITE 0x0000
@@ -312,23 +320,28 @@ int main()
   //setting up the core
   p16_spi[BUFFSPI_REG_LENGTH] = 256; //256 words 16 bit each
   p16_spi[BUFFSPI_REG_CS_MODE] = 1; //cs blinking
-  p16_spi[BUFFSPI_REG_DELAY] = 70; //70 clocks @ 116 Mhz between each 16 bit
+  p16_spi[BUFFSPI_REG_DELAY] = 65519; //70 clocks @ 116 Mhz between each 16 bit
   p16_spi[BUFFSPI_REG_BUFFER_SELECT] = 0; // using buffer 0
+
+  alt_printf("SPI TEST START\n\r");
 
   //fill buffer with test data
   for (i=0;i<256;i++)
   {
 	  p16_spi[BUFFSPI_BUFFER0_WRITE+i] = i*0x0101;
+	  p16_spi[BUFFSPI_BUFFER0_READ+i] = 0xFACE;
   }
   //fire spi transaction
   p16_spi[BUFFSPI_REG_START] = 1; //go go go!
-  //wait until complete
-  while (p16_spi[BUFFSPI_REG_START] != 0)
-	  ;
-  //read data from read buffer into dummy variable
-  for (i=0;i<256;i++)
-	  b16 = p16_spi[BUFFSPI_BUFFER0_READ + i];
-*/
+
+  for (i=0;i<1000;i++)
+  {
+	  alt_printf("S=%x C=%x  0=%x 128=%x 250=%x\n\r",p16_spi[BUFFSPI_REG_START],p16_spi[BUFFSPI_REG_COUNTER],
+			  p16_spi[BUFFSPI_BUFFER0_READ],
+			  p16_spi[BUFFSPI_BUFFER0_READ+128],p16_spi[BUFFSPI_BUFFER0_READ+250]);
+  }
+  alt_printf("SPI TEST END\n\r");*/
+
 
   //first things first - copy saturn bootcode into SDRAM
   //wait for SD card
@@ -370,7 +383,8 @@ int main()
   {
 	  //for (j=0;j<512;j++)
 		 // p[0x9C000 + i*512+j] =  alt_up_sd_card_read(_file_handler);// p2[j];
-	  alt_up_sd_card_read_512b(_file_handler,&(p[0x9C000 + i*512+j]),i);
+	  //alt_up_sd_card_read_512b(_file_handler,&(p[0x9C000 + i*512+j]),i);
+	  alt_up_sd_card_read_512b(_file_handler,&(p[0x1800000 + i*512+j]),i);
 	  alt_printf(".");
   }
   alt_up_sd_card_fclose(_file_handler);
@@ -558,6 +572,15 @@ int main()
 		  }
 		  p16[PCNTR_REG_OFFSET] = 100;
 		  alt_up_sd_card_fclose(_file_handler);
+		  //lock
+		  p16[MAPPER_WRITE_0] = 0;//lock cs0 writes
+		  p16[MAPPER_WRITE_1] = 0;//lock cs0 writes
+		  p16[MAPPER_WRITE_2] = 0;//lock cs1 writes
+		  p16[MAPPER_WRITE_3] = 0;//lock cs2 writes
+		  p16[MAPPER_READ_0] = 3;//unmap cs0, leave first 2 megs
+		  p16[MAPPER_READ_1] = 0x8100;//unmap cs0, leave regs and minipseudo areas
+		  p16[MAPPER_READ_2] = 0;//unmap cs1
+		  p16[MAPPER_READ_3] = 0;//unmap cs2
 		  alt_putstr("Done\n\r");
 		  break;
 	  case 0x200 : //Ultraman
