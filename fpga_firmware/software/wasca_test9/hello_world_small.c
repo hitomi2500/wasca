@@ -572,7 +572,7 @@ int main()
 		  }
 		  p16[PCNTR_REG_OFFSET] = 100;
 		  alt_up_sd_card_fclose(_file_handler);
-		  //lock
+		  //mapper stuff
 		  p16[MAPPER_WRITE_0] = 0;//lock cs0 writes
 		  p16[MAPPER_WRITE_1] = 0;//lock cs0 writes
 		  p16[MAPPER_WRITE_2] = 0;//lock cs1 writes
@@ -596,6 +596,15 @@ int main()
 		  }
 		  p16[PCNTR_REG_OFFSET] = 100;
 		  alt_up_sd_card_fclose(_file_handler);
+		  //mapper stuff
+		  p16[MAPPER_WRITE_0] = 0;//lock cs0 writes
+		  p16[MAPPER_WRITE_1] = 0;//lock cs0 writes
+		  p16[MAPPER_WRITE_2] = 0;//lock cs1 writes
+		  p16[MAPPER_WRITE_3] = 0;//lock cs2 writes
+		  p16[MAPPER_READ_0] = 3;//unmap cs0, leave first 2 megs
+		  p16[MAPPER_READ_1] = 0x8100;//unmap cs0, leave regs and minipseudo areas
+		  p16[MAPPER_READ_2] = 0;//unmap cs1
+		  p16[MAPPER_READ_3] = 0;//unmap cs2
 		  alt_putstr("Done\n\r");
 		  break;
 	  }
