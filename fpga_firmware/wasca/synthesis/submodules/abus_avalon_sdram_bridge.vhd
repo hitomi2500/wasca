@@ -198,8 +198,8 @@ signal sniffer_pending_block  : std_logic_vector(15 downto 0) := (others => '0')
 signal sniffer_pending_timeout  : std_logic := '0'; 
 signal sniffer_pending_timeout_counter  : std_logic_vector(31 downto 0) := (others => '0'); 
 
-signal mapper_write_enable    : std_logic := '0';
-signal mapper_read_enable    : std_logic := '0';
+signal mapper_write_enable    : std_logic := '1';
+signal mapper_read_enable    : std_logic := '1';
 
 
 TYPE transaction_dir IS (DIR_NONE,DIR_WRITE,DIR_READ);

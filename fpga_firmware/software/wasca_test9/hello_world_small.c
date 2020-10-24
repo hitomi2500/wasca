@@ -320,7 +320,7 @@ int main()
   //setting up the core
   p16_spi[BUFFSPI_REG_LENGTH] = 256; //256 words 16 bit each
   p16_spi[BUFFSPI_REG_CS_MODE] = 1; //cs blinking
-  p16_spi[BUFFSPI_REG_DELAY] = 65519; //70 clocks @ 116 Mhz between each 16 bit
+  p16_spi[BUFFSPI_REG_DELAY] = 70; //70 clocks @ 116 Mhz between each 16 bit
   p16_spi[BUFFSPI_REG_BUFFER_SELECT] = 0; // using buffer 0
 
   alt_printf("SPI TEST START\n\r");
@@ -529,7 +529,7 @@ int main()
 			  p2 = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE+512*iCurrentBlock);
 			  alt_up_sd_card_write_512b(_file_handler,p2,iCurrentBlock);
 			  //blinking led
-			  alt_printf("SYNC %x(%x)[%x %x]",p2,p2,p2[0],p2[1]);
+			  alt_printf("SYNC %x(%x)[%x %x] <%x>",p2,p2,p2[0],p2[1],p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET]);
 			  /*UpdateArray[iCurrentBlock] = 1;
 			  if (3 == iCurrentBlock)
 			  {
