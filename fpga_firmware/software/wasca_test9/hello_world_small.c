@@ -256,6 +256,7 @@ int main()
   volatile unsigned char readback[256];
   volatile unsigned int iCurrentBlock;
   char backup_filename[16];
+  unsigned char LazyBuf[512];
   /*unsigned char UpdateArray[2048];
   for (i=0;i<2048;i++)
 	  UpdateArray[i] = 0;*/
@@ -508,14 +509,15 @@ int main()
 	  p16[SNIFF_FILTER_CONTROL_REG_OFFSET] = 0x0A; //only writes on CS1
 	  while (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
 		  iCurrentBlock = p16[SNIFF_DATA_REG_OFFSET]; //flush previous fifo content
+	  int iLazyCheckCounter = 0;
 	  while (1)
 	  {//backup sync start
 		  // sync is done using a 1024 entry deep fifo. when a transaction occurs within a 512-b sector different to current one,
 		  // the buffer is flused to SD, the new one is loaded from SD, and only then the processing continues
 		  // if the fifo is overfilled ( > 1024 samples), issue an error message
-		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 		  while (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
 		  {
+			  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 			  //check if close to overfill
 			  /*if (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 1020)
 			  {
@@ -529,7 +531,7 @@ int main()
 			  p2 = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE+512*iCurrentBlock);
 			  alt_up_sd_card_write_512b(_file_handler,p2,iCurrentBlock);
 			  //blinking led
-			  alt_printf("SYNC %x(%x)[%x %x] <%x>",p2,p2,p2[0],p2[1],p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET]);
+			  alt_printf("SYNC %x(%x) <%x %x> ",iCurrentBlock,iCurrentBlock,p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET]);
 			  /*UpdateArray[iCurrentBlock] = 1;
 			  if (3 == iCurrentBlock)
 			  {
@@ -540,8 +542,31 @@ int main()
 						alt_printf("NOT SYNCED:  %x(%x)%x \r\n",iCurrentBlock,iCurrentBlock,iCurrentBlock);
 				  }
 			  }*/
+			  alt_up_sd_card_fclose(_file_handler);
+		  }
+		  //doing a lazy sync check
+		  /*_file_handler = alt_up_sd_card_fopen(backup_filename,false);
+		  alt_up_sd_card_read_512b(_file_handler, LazyBuf, iLazyCheckCounter);
+		  bool bLazyFound = false;
+		  for (j=0;j<512;j++)
+		  {
+			  if (LazyBuf[j] != p[iLazyCheckCounter*512+j])
+				  bLazyFound = true;
+		  }
+		  if (bLazyFound)
+		  {
+			  p2 = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE+512*iLazyCheckCounter);
+			  //alt_up_sd_card_write_512b(_file_handler,p2,iLazyCheckCounter);
+			  alt_printf(" LAZY %x(%x) ",iLazyCheckCounter,iLazyCheckCounter);
 		  }
 		  alt_up_sd_card_fclose(_file_handler);
+		  iLazyCheckCounter++;
+		  if (iLazyCheckCounter > 1023)
+		  {
+			  iLazyCheckCounter = 0;
+			  alt_printf(" LAZY OVERLAP ");
+		  }*/
+
 	  }//backup sync end
   }
   else if ((sMode & 0x00F0) != 0)
