@@ -243,14 +243,18 @@ int main()
 
   int i,j;
   volatile int k,v;
-  volatile unsigned char * p;
-  volatile unsigned char * p2;
-  volatile unsigned short * p16;
+  volatile unsigned char * pCS0;
+  volatile unsigned char * pCS1;
+  volatile unsigned char * pCS1_a;
+  volatile unsigned short * pCS0_16;
+  volatile unsigned short * pRegs_16;
   unsigned short sMode;
   int iteration = 0;
   int ierrors = 0;
-  p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
-  p16 = (unsigned short *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+  pCS0 = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+  pCS1 = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x2000000);
+  pCS0_16 = (unsigned short *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+  pRegs_16 = (unsigned short *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
   volatile unsigned char c1,c2,c3,c4;
   volatile unsigned short s1,s2;
   volatile unsigned char readback[256];
@@ -369,7 +373,7 @@ int main()
   {
 	  /*for (j=0;j<512;j++)
 		  p[i*512+j] = alt_up_sd_card_read(_file_handler);//; p2[j];*/
-	  alt_up_sd_card_read_512b(_file_handler,&(p[i*512+j]),i);
+	  alt_up_sd_card_read_512b(_file_handler,&(pCS0[i*512+j]),i);
 	  alt_printf(".");
   }
   alt_up_sd_card_fclose(_file_handler);
@@ -385,7 +389,7 @@ int main()
 	  //for (j=0;j<512;j++)
 		 // p[0x9C000 + i*512+j] =  alt_up_sd_card_read(_file_handler);// p2[j];
 	  //alt_up_sd_card_read_512b(_file_handler,&(p[0x9C000 + i*512+j]),i);
-	  alt_up_sd_card_read_512b(_file_handler,&(p[0x1800000 + i*512+j]),i);
+	  alt_up_sd_card_read_512b(_file_handler,&(pCS0[0x1800000 + i*512+j]),i);
 	  alt_printf(".");
   }
   alt_up_sd_card_fclose(_file_handler);
@@ -405,7 +409,7 @@ int main()
   //while(1);
   for (i=0;i<256;i++)
   {
-	  alt_printf("%c ",p[i]);
+	  alt_printf("%c ",pCS0[i]);
 	  if (i%16 == 15) alt_putstr("\n\r");
   }
   alt_putstr("Dump done\n\r");
@@ -420,19 +424,18 @@ int main()
   for (i=0;i<4;i++)
 	  b16 = p16_spi[i];*/
   //write version
-  p16 = (unsigned short *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
-  p16[SWVER_REG_OFFSET] = SOFTWARE_VERSION;
+
+  pRegs_16[SWVER_REG_OFFSET] = SOFTWARE_VERSION;
 
   //now wait until MODE register is non-zero, i.e. mode is set
   alt_putstr("Waiting for MODE register to be set...\n\r");
-  while (p16[MODE_REG_OFFSET] == 0)
+  while (pRegs_16[MODE_REG_OFFSET] == 0)
 	  {
 	  for (k=0;k<1000000;k++);
 	  alt_putstr(".");;
 	  }
-  sMode = p16[MODE_REG_OFFSET];
+  sMode = pRegs_16[MODE_REG_OFFSET];
   alt_printf("Mode set to %x\n\r",sMode);
-
   //okay, now start a MODE-dependent preparation routine
   //lower octets have higher priority
   if ((sMode & 0x000F) != 0)
@@ -441,7 +444,6 @@ int main()
 	  //lowest octet is active, it's a POWER MEMORY
 	  //we should copy relevant image from SD card
 	  //for now, we will only write header and emulate copying behavior
-	  p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
 	  switch (sMode & 0x000F )
 	  {
 	  case 0x1 : //0.5 MB
@@ -450,12 +452,12 @@ int main()
 		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<2048;i++)
 		  {
-			  p16[PCNTR_REG_OFFSET]=i/21;
+			  pRegs_16[PCNTR_REG_OFFSET]=i/21;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS1[i*512+j] =  alt_up_sd_card_read(_file_handler);
 		  }
-		  p16[PCNTR_REG_OFFSET] = 100;
+		  pRegs_16[PCNTR_REG_OFFSET] = 100;
 		  alt_up_sd_card_fclose(_file_handler);
 		  alt_putstr("Done\n\r");
 		  break;
@@ -465,12 +467,12 @@ int main()
 		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<4096;i++)
 		  {
-			  p16[PCNTR_REG_OFFSET]=i/41;
+			  pRegs_16[PCNTR_REG_OFFSET]=i/41;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS1[i*512+j] =  alt_up_sd_card_read(_file_handler);
 		  }
-		  p16[PCNTR_REG_OFFSET] = 100;
+		  pRegs_16[PCNTR_REG_OFFSET] = 100;
 		  alt_up_sd_card_fclose(_file_handler);
 		  alt_putstr("Done\n\r");
 		  break;
@@ -480,12 +482,12 @@ int main()
 		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<8192;i++)
 		  {
-			  p16[PCNTR_REG_OFFSET]=i/82;
+			  pRegs_16[PCNTR_REG_OFFSET]=i/82;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS1[i*512+j] =  alt_up_sd_card_read(_file_handler);
 		  }
-		  p16[PCNTR_REG_OFFSET] = 100;
+		  pRegs_16[PCNTR_REG_OFFSET] = 100;
 		  alt_up_sd_card_fclose(_file_handler);
 		  alt_putstr("Done\n\r");
 		  break;
@@ -495,27 +497,36 @@ int main()
 		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<16384;i++)
 		  {
-			  p16[PCNTR_REG_OFFSET]=i/164;
+			  pRegs_16[PCNTR_REG_OFFSET]=i/164;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS1[i*512+j] =  alt_up_sd_card_read(_file_handler);
 		  }
-		  p16[PCNTR_REG_OFFSET] = 100;
+		  pRegs_16[PCNTR_REG_OFFSET] = 100;
 		  alt_up_sd_card_fclose(_file_handler);
 		  alt_putstr("Done\n\r");
 		  break;
 	  }
+	  //mapper stuff
+	  pRegs_16[MAPPER_WRITE_0] = 0;//lock cs0 writes
+	  pRegs_16[MAPPER_WRITE_1] = 0;//lock cs0 writes
+	  pRegs_16[MAPPER_WRITE_2] = 0xFFFF;//keep all cs1 writes unlocked
+	  pRegs_16[MAPPER_WRITE_3] = 0;//lock cs2 writes
+	  pRegs_16[MAPPER_READ_0] = 0;//unmap cs0
+	  pRegs_16[MAPPER_READ_1] = 0x8100;//unmap cs0, leave regs and minipseudo areas
+	  pRegs_16[MAPPER_READ_2] = 0xFFFF;//keep cs1 mapped
+	  pRegs_16[MAPPER_READ_3] = 0;//unmap cs2
 	  //if we're in backup mode, we should keep syncing forever
-	  p16[SNIFF_FILTER_CONTROL_REG_OFFSET] = 0x0A; //only writes on CS1
-	  while (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
-		  iCurrentBlock = p16[SNIFF_DATA_REG_OFFSET]; //flush previous fifo content
+	  pRegs_16[SNIFF_FILTER_CONTROL_REG_OFFSET] = 0x0A; //only writes on CS1
+	  while (pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
+		  iCurrentBlock = pRegs_16[SNIFF_DATA_REG_OFFSET]; //flush previous fifo content
 	  int iLazyCheckCounter = 0;
 	  while (1)
 	  {//backup sync start
 		  // sync is done using a 1024 entry deep fifo. when a transaction occurs within a 512-b sector different to current one,
 		  // the buffer is flused to SD, the new one is loaded from SD, and only then the processing continues
 		  // if the fifo is overfilled ( > 1024 samples), issue an error message
-		  while (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
+		  while (pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
 		  {
 			  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 			  //check if close to overfill
@@ -526,12 +537,12 @@ int main()
 					  alt_printf("FFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 			  }*/
 			  //access data in fifo, checking address
-			  iCurrentBlock = p16[SNIFF_DATA_REG_OFFSET];
+			  iCurrentBlock = pRegs_16[SNIFF_DATA_REG_OFFSET];
 			  //flushing block to file
-			  p2 = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE+512*iCurrentBlock);
-			  alt_up_sd_card_write_512b(_file_handler,p2,iCurrentBlock);
+			  pCS1_a = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE+0x2000000+512*iCurrentBlock);
+			  alt_up_sd_card_write_512b(_file_handler,pCS1_a,iCurrentBlock);
 			  //blinking led
-			  alt_printf("SYNC %x(%x) <%x %x> ",iCurrentBlock,iCurrentBlock,p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET]);
+			  alt_printf("SYNC %x(%x) <%x %x> ",iCurrentBlock,iCurrentBlock,pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET]);
 			  /*UpdateArray[iCurrentBlock] = 1;
 			  if (3 == iCurrentBlock)
 			  {
@@ -573,10 +584,9 @@ int main()
   {
 	  alt_printf("Octet 1, value %x\n\r",(sMode & 0x00F0));
 	  //RAM expansion cart, clear bootrom's signature just in case
-	  p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
-	  for (i=0;i<256;i++) p[i] = 0;
+	  for (i=0;i<256;i++) pCS0[i] = 0;
 	  //and that is all for RAM cart
-	  p16[PCNTR_REG_OFFSET]=100;
+	  pRegs_16[PCNTR_REG_OFFSET]=100;
   }
   else if ((sMode & 0x0F00) != 0)
   {
@@ -590,22 +600,22 @@ int main()
 		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<4096;i++)
 		  {
-			  p16[PCNTR_REG_OFFSET]=i/41;
+			  pRegs_16[PCNTR_REG_OFFSET]=i/41;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS0[i*512+j] =  alt_up_sd_card_read(_file_handler);
 		  }
-		  p16[PCNTR_REG_OFFSET] = 100;
+		  pRegs_16[PCNTR_REG_OFFSET] = 100;
 		  alt_up_sd_card_fclose(_file_handler);
 		  //mapper stuff
-		  p16[MAPPER_WRITE_0] = 0;//lock cs0 writes
-		  p16[MAPPER_WRITE_1] = 0;//lock cs0 writes
-		  p16[MAPPER_WRITE_2] = 0;//lock cs1 writes
-		  p16[MAPPER_WRITE_3] = 0;//lock cs2 writes
-		  p16[MAPPER_READ_0] = 3;//unmap cs0, leave first 2 megs
-		  p16[MAPPER_READ_1] = 0x8100;//unmap cs0, leave regs and minipseudo areas
-		  p16[MAPPER_READ_2] = 0;//unmap cs1
-		  p16[MAPPER_READ_3] = 0;//unmap cs2
+		  pRegs_16[MAPPER_WRITE_0] = 0;//lock cs0 writes
+		  pRegs_16[MAPPER_WRITE_1] = 0;//lock cs0 writes
+		  pRegs_16[MAPPER_WRITE_2] = 0;//lock cs1 writes
+		  pRegs_16[MAPPER_WRITE_3] = 0;//lock cs2 writes
+		  pRegs_16[MAPPER_READ_0] = 3;//unmap cs0, leave first 2 megs
+		  pRegs_16[MAPPER_READ_1] = 0x8100;//unmap cs0, leave regs and minipseudo areas
+		  pRegs_16[MAPPER_READ_2] = 0;//unmap cs1
+		  pRegs_16[MAPPER_READ_3] = 0;//unmap cs2
 		  alt_putstr("Done\n\r");
 		  break;
 	  case 0x200 : //Ultraman
@@ -614,22 +624,22 @@ int main()
 		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<4096;i++)
 		  {
-			  p16[PCNTR_REG_OFFSET]=i/41;
+			  pRegs_16[PCNTR_REG_OFFSET]=i/41;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  p[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS0[i*512+j] =  alt_up_sd_card_read(_file_handler);
 		  }
-		  p16[PCNTR_REG_OFFSET] = 100;
+		  pRegs_16[PCNTR_REG_OFFSET] = 100;
 		  alt_up_sd_card_fclose(_file_handler);
 		  //mapper stuff
-		  p16[MAPPER_WRITE_0] = 0;//lock cs0 writes
-		  p16[MAPPER_WRITE_1] = 0;//lock cs0 writes
-		  p16[MAPPER_WRITE_2] = 0;//lock cs1 writes
-		  p16[MAPPER_WRITE_3] = 0;//lock cs2 writes
-		  p16[MAPPER_READ_0] = 3;//unmap cs0, leave first 2 megs
-		  p16[MAPPER_READ_1] = 0x8100;//unmap cs0, leave regs and minipseudo areas
-		  p16[MAPPER_READ_2] = 0;//unmap cs1
-		  p16[MAPPER_READ_3] = 0;//unmap cs2
+		  pRegs_16[MAPPER_WRITE_0] = 0;//lock cs0 writes
+		  pRegs_16[MAPPER_WRITE_1] = 0;//lock cs0 writes
+		  pRegs_16[MAPPER_WRITE_2] = 0;//lock cs1 writes
+		  pRegs_16[MAPPER_WRITE_3] = 0;//lock cs2 writes
+		  pRegs_16[MAPPER_READ_0] = 3;//unmap cs0, leave first 2 megs
+		  pRegs_16[MAPPER_READ_1] = 0x8100;//unmap cs0, leave regs and minipseudo areas
+		  pRegs_16[MAPPER_READ_2] = 0;//unmap cs1
+		  pRegs_16[MAPPER_READ_3] = 0;//unmap cs2
 		  alt_putstr("Done\n\r");
 		  break;
 	  }
@@ -637,7 +647,7 @@ int main()
   else
   {
 	  alt_printf("UNKNOWN MODE %x\n\r",sMode);
-	  p16[PCNTR_REG_OFFSET]=100;
+	  pRegs_16[PCNTR_REG_OFFSET]=100;
   }
 
   //stop

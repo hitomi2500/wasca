@@ -30,7 +30,7 @@ entity abus_avalon_sdram_bridge is
 		avalon_sdram_read          : in   std_logic := '0';                                        -- avalon_master.read
 		avalon_sdram_write         : in   std_logic := '0';                                        --              .write
 		avalon_sdram_waitrequest   : out    std_logic                     := '0';             --              .waitrequest
-		avalon_sdram_address       : in   std_logic_vector(24 downto 0) := (others => '0');                    --              .address
+		avalon_sdram_address       : in   std_logic_vector(25 downto 0) := (others => '0');                    --              .address
 		avalon_sdram_writedata     : in   std_logic_vector(15 downto 0) := (others => '0');                    --              .writedata
 		avalon_sdram_readdata      : out    std_logic_vector(15 downto 0) := (others => '0'); --              .readdata
 		avalon_sdram_readdatavalid : out    std_logic                     := '0';             --              .readdatavalid
@@ -457,10 +457,10 @@ begin
 					--normal CS0 read access
 					case wasca_mode is
 						when MODE_INIT => abus_data_out <= sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
-						when MODE_POWER_MEMORY_05M => abus_data_out <= X"FFFF";
-						when MODE_POWER_MEMORY_1M => abus_data_out <= X"FFFF";
-						when MODE_POWER_MEMORY_2M => abus_data_out <= X"FFFF";
-						when MODE_POWER_MEMORY_4M => abus_data_out <= X"FFFF";
+						when MODE_POWER_MEMORY_05M => abus_data_out <= sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
+						when MODE_POWER_MEMORY_1M => abus_data_out <= sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
+						when MODE_POWER_MEMORY_2M => abus_data_out <= sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
+						when MODE_POWER_MEMORY_4M => abus_data_out <= sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
 						when MODE_RAM_1M => abus_data_out <= sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
 						when MODE_RAM_4M => abus_data_out <= sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
 						when MODE_ROM_KOF95 => abus_data_out <= sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
@@ -492,11 +492,11 @@ begin
 						when MODE_POWER_MEMORY_1M => abus_data_out <=  sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
 						when MODE_POWER_MEMORY_2M => abus_data_out <=  sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
 						when MODE_POWER_MEMORY_4M => abus_data_out <=  sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
-						when MODE_RAM_1M => abus_data_out <= X"FFFF";
-						when MODE_RAM_4M => abus_data_out <= X"FFFF";
-						when MODE_ROM_KOF95 => abus_data_out <= X"FFFF";
-						when MODE_ROM_ULTRAMAN => abus_data_out <= X"FFFF";
-						when MODE_BOOT => abus_data_out <= X"FFFF";
+						when MODE_RAM_1M => abus_data_out <=  sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
+						when MODE_RAM_4M => abus_data_out <=  sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
+						when MODE_ROM_KOF95 => abus_data_out <=  sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
+						when MODE_ROM_ULTRAMAN => abus_data_out <=  sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
+						when MODE_BOOT => abus_data_out <=  sdram_datain_latched(7 downto 0) & sdram_datain_latched (15 downto 8) ;
 					end case;					
 				end if;
 			else
@@ -748,12 +748,10 @@ begin
 				avalon_sdram_write_pending <= '0';
 			elsif avalon_sdram_read = '1' then
 				avalon_sdram_read_pending <= '1';
-				avalon_sdram_pending_address(24 downto 0) <= avalon_sdram_address;
-				--avalon_sdram_pending_address(0) <= avalon_sdram_byteenable(0);
+				avalon_sdram_pending_address <= avalon_sdram_address;
 			elsif avalon_sdram_write = '1' then
 				avalon_sdram_write_pending <= '1';
-                avalon_sdram_pending_address(24 downto 0) <= avalon_sdram_address;
-					 --avalon_sdram_pending_address(0) <= avalon_sdram_byteenable(0);
+                avalon_sdram_pending_address <= avalon_sdram_address;
                 avalon_sdram_pending_data<= avalon_sdram_writedata;		    
 			end if;
 		end if;
@@ -906,8 +904,9 @@ begin
 						sdram_mode <= SDRAM_ABUS_ACTIVATE;
 						--something on abus, address should be stable already (is it???), so we activate row now
                   sdram_ras_n <= '0';
-                  sdram_addr <= abus_address_latched(22 downto 10);
-                  sdram_ba <= abus_address_latched(24 downto 23);
+                  sdram_addr <= abus_address_latched(23 downto 11);
+                  sdram_ba(0) <= abus_address_latched(24);
+                  sdram_ba(1) <= abus_chipselect_buf(0); --if CS0 is active, it's 0, else it's 1
                   if abus_write_buf = "11" then
 							sdram_dqm <= "00"; --it's a read
 							sdram_wait_counter <= to_unsigned(3,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
@@ -920,14 +919,14 @@ begin
 						sdram_mode <= SDRAM_AVALON_ACTIVATE;
 						--something on avalon, activating!
                   sdram_ras_n <= '0';
-                  sdram_addr <= avalon_sdram_pending_address(22 downto 10);
-                  sdram_ba <= avalon_sdram_pending_address(24 downto 23);
+                  sdram_addr <= avalon_sdram_pending_address(23 downto 11);
+                  sdram_ba <= avalon_sdram_pending_address(25 downto 24);
                   sdram_wait_counter <= to_unsigned(2,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
 						if avalon_sdram_read_pending = '1' then
 							sdram_dqm <= "00";
 						else
-							sdram_dqm(0) <= not avalon_sdram_byteenable(0);--avalon_sdram_pending_address(0);--only 8 bit writing for avalon
-							sdram_dqm(1) <= not avalon_sdram_byteenable(1);--not avalon_sdram_pending_address(0);--only 8 bit writing for avalon
+							sdram_dqm(0) <= not avalon_sdram_byteenable(0);
+							sdram_dqm(1) <= not avalon_sdram_byteenable(1);
 						end if;
 					elsif sdram_autorefresh_counter(9) = '1' then --512 cycles
 						sdram_mode <= SDRAM_AUTOREFRESH;
@@ -950,8 +949,9 @@ begin
 							sdram_mode <= SDRAM_ABUS_ACTIVATE;
 							--something on abus, address should be stable already (is it???), so we activate row now
 							sdram_ras_n <= '0';
-							sdram_addr <= abus_address_latched(22 downto 10);
-							sdram_ba <= abus_address_latched(24 downto 23);
+							sdram_addr <= abus_address_latched(23 downto 11);
+							sdram_ba(0) <= abus_address_latched(24);
+							sdram_ba(1) <= abus_chipselect_buf(0); --if CS0 is active, it's 0, else it's 1
 							sdram_wait_counter <= to_unsigned(3,4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
 							if abus_write_buf = "11" then
 								sdram_dqm <= "00"; --it's a read
@@ -997,16 +997,18 @@ begin
 							sdram_cas_n <= '0';
                      sdram_we_n <= '0';
                      sdram_dq <= abus_data_in(7 downto 0)&abus_data_in(15 downto 8);
-                     sdram_addr <= "0010"&abus_address_latched(9 downto 1);
-                     sdram_ba <= abus_address_latched(24 downto 23);
+                     sdram_addr <= "001"&abus_address_latched(10 downto 1);
+							sdram_ba(0) <= abus_address_latched(24);
+							sdram_ba(1) <= abus_chipselect_buf(0); --if CS0 is active, it's 0, else it's 1
                      sdram_wait_counter <= to_unsigned(4,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						else --if my_little_transaction_dir = DIR_READ then
 							sdram_mode <= SDRAM_ABUS_READ_AND_PRECHARGE;
 							counter_count_read <= '1';
 							sdram_cas_n <= '0';
-							sdram_addr <= "0010"&abus_address_latched(9 downto 1);
-							sdram_ba <= abus_address_latched(24 downto 23);
-							sdram_wait_counter <= to_unsigned(4,4); --5 cut to 4 -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+							sdram_addr <= "001"&abus_address_latched(10 downto 1);
+							sdram_ba(0) <= abus_address_latched(24);
+							sdram_ba(1) <= abus_chipselect_buf(0); --if CS0 is active, it's 0, else it's 1
+                     sdram_wait_counter <= to_unsigned(4,4); --5 cut to 4 -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						--else 
 							-- this is an invalid transaction - either it's for CS2 or from an unmapped range
 							-- but the bank is already prepared, and we need to precharge it
@@ -1055,17 +1057,17 @@ begin
 					if sdram_wait_counter = 0 then
 						if avalon_sdram_read_pending = '1' then
 							sdram_mode <= SDRAM_AVALON_READ_AND_PRECHARGE;
-							sdram_ba <= avalon_sdram_pending_address(24 downto 23);
+							sdram_ba <= avalon_sdram_pending_address(25 downto 24);
 							sdram_cas_n <= '0';
-                            sdram_addr <= "0010"&avalon_sdram_pending_address(9 downto 1);
+                            sdram_addr <= "001"&avalon_sdram_pending_address(10 downto 1);
                             sdram_wait_counter <= to_unsigned(4,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						else
 							sdram_mode <= SDRAM_AVALON_WRITE_AND_PRECHARGE;
 							sdram_cas_n <= '0';
                             sdram_we_n <= '0';
-                            sdram_ba <= avalon_sdram_pending_address(24 downto 23);
-                            sdram_dq <= avalon_sdram_pending_data; --(7 downto 0) & avalon_sdram_pending_data(15 downto 8) ;--&avalon_sdram_pending_data;
-                            sdram_addr <= "0010"&avalon_sdram_pending_address(9 downto 1);
+                            sdram_ba <= avalon_sdram_pending_address(25 downto 24);
+                            sdram_dq <= avalon_sdram_pending_data; 
+                            sdram_addr <= "001"&avalon_sdram_pending_address(10 downto 1);
                             sdram_wait_counter <= to_unsigned(4,4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						end if;
 					end if;	
@@ -1078,13 +1080,7 @@ begin
 					sdram_cas_n <= '1';
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					if sdram_wait_counter = 1 then
-						--avalon_sdram_reset_pending <= '1';
-						--if avalon_sdram_pending_address(0) = '0' then
-							avalon_sdram_readdata_latched <= sdram_dq;--(7 downto 0);
-						--else
-							--avalon_sdram_readdata_latched <= sdram_dq(15 downto 8);
-						--end if;
-						--avalon_sdram_readdatavalid <= '1';
+						avalon_sdram_readdata_latched <= sdram_dq;
 						avalon_sdram_waitrequest <= '0';
 					end if;	
 					if sdram_wait_counter = 0 then
@@ -1260,8 +1256,8 @@ begin
         end if;
     end process;    
 
-	sniffer_data_in_p1(15 downto 0) <= sniffer_last_active_block when rising_edge(clock); --abus_address_latched(24 downto 9);
-	sniffer_data_in <= sniffer_data_in_p1 when rising_edge(clock); --abus_address_latched(24 downto 9);
+	sniffer_data_in_p1(15 downto 0) <= sniffer_last_active_block when rising_edge(clock);
+	sniffer_data_in <= sniffer_data_in_p1 when rising_edge(clock);
 	--sniffer_data_write <= sniffer_data_write_p1 when rising_edge(clock);
 	
 	sniff_fifo_inst : sniff_fifo PORT MAP (

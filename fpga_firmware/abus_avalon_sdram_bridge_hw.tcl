@@ -114,7 +114,7 @@ set_interface_property avalon_sdram SVD_ADDRESS_GROUP ""
 add_interface_port avalon_sdram avalon_sdram_read read Input 1
 add_interface_port avalon_sdram avalon_sdram_write write Input 1
 add_interface_port avalon_sdram avalon_sdram_waitrequest waitrequest Output 1
-add_interface_port avalon_sdram avalon_sdram_address address Input 25
+add_interface_port avalon_sdram avalon_sdram_address address Input 26
 add_interface_port avalon_sdram avalon_sdram_writedata writedata Input 16
 add_interface_port avalon_sdram avalon_sdram_readdata readdata Output 16
 add_interface_port avalon_sdram avalon_sdram_readdatavalid readdatavalid Output 1

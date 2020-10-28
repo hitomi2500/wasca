@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>24.10.2020 20:50:58</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1603558258133</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>29.10.2020 0:20:21</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1603916421962</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>D:\Saturn\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
@@ -976,8 +976,8 @@
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>abus_avalon_sdram_bridge_0_avalon_sdram</slaveDescriptor>
-                <addressRange>0x04000000 - 0x05FFFFFF</addressRange>
-                <addressSpan>33554432</addressSpan>
+                <addressRange>0x04000000 - 0x07FFFFFF</addressRange>
+                <addressSpan>67108864</addressSpan>
                 <attributes>memory</attributes>
         </MemoryMap>
         <LinkerSection>

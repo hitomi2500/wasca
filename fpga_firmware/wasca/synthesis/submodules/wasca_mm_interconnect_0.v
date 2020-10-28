@@ -31,7 +31,7 @@ module wasca_mm_interconnect_0 (
 		output wire [15:0] abus_avalon_sdram_bridge_0_avalon_regs_writedata,                     //                                                         .writedata
 		input  wire        abus_avalon_sdram_bridge_0_avalon_regs_readdatavalid,                 //                                                         .readdatavalid
 		input  wire        abus_avalon_sdram_bridge_0_avalon_regs_waitrequest,                   //                                                         .waitrequest
-		output wire [24:0] abus_avalon_sdram_bridge_0_avalon_sdram_address,                      //                  abus_avalon_sdram_bridge_0_avalon_sdram.address
+		output wire [25:0] abus_avalon_sdram_bridge_0_avalon_sdram_address,                      //                  abus_avalon_sdram_bridge_0_avalon_sdram.address
 		output wire        abus_avalon_sdram_bridge_0_avalon_sdram_write,                        //                                                         .write
 		output wire        abus_avalon_sdram_bridge_0_avalon_sdram_read,                         //                                                         .read
 		input  wire [15:0] abus_avalon_sdram_bridge_0_avalon_sdram_readdata,                     //                                                         .readdata
@@ -1192,7 +1192,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	altera_merlin_slave_translator #(
-		.AV_ADDRESS_W                   (25),
+		.AV_ADDRESS_W                   (26),
 		.AV_DATA_W                      (16),
 		.UAV_DATA_W                     (16),
 		.AV_BURSTCOUNT_W                (1),

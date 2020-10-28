@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="wasca" kind="wasca" version="1.0" fabric="QSYS">
  <!-- Format version 15.1 185 (Future versions may contain additional information.) -->
- <!-- 2020.10.24.17:49:10 -->
+ <!-- 2020.10.29.00:17:14 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1603547349</value>
+  <value>1603916234</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -857,7 +857,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="addressSpan">
     <type>java.math.BigInteger</type>
-    <value>33554432</value>
+    <value>67108864</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -1174,7 +1174,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avalon_sdram_address</name>
     <direction>Input</direction>
-    <width>25</width>
+    <width>26</width>
     <role>address</role>
    </port>
    <port>
@@ -7290,7 +7290,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="dataSlaveMapParam">
    <type>java.lang.String</type>
-   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /><slave name='uart_0.s1' start='0x40000' end='0x40020' type='altera_avalon_uart.s1' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='audio_0.avalon_audio_slave' start='0x46000' end='0x46010' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x47000' end='0x47400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x6000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></value>
+   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /><slave name='uart_0.s1' start='0x40000' end='0x40020' type='altera_avalon_uart.s1' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='audio_0.avalon_audio_slave' start='0x46000' end='0x46010' type='altera_up_avalon_audio.avalon_audio_slave' /><slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x47000' end='0x47400' type='Altera_UP_SD_Card_Avalon_Interface.avalon_sdcard_slave' /><slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x8000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7988,7 +7988,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>avalon_sdram</slaveName>
     <name>abus_avalon_sdram_bridge_0.avalon_sdram</name>
     <baseAddress>67108864</baseAddress>
-    <span>33554432</span>
+    <span>67108864</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
