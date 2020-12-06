@@ -70,15 +70,13 @@ set_interface_property abus PORT_NAME_MAP ""
 set_interface_property abus CMSIS_SVD_VARIABLES ""
 set_interface_property abus SVD_ADDRESS_GROUP ""
 
-add_interface_port abus abus_address address Input 10
+add_interface_port abus abus_address address Input 25
 add_interface_port abus abus_read read Input 1
-add_interface_port abus abus_waitrequest waitrequest Output 1
-add_interface_port abus abus_addressdata addressdata Bidir 16
+add_interface_port abus abus_data data Bidir 16
 add_interface_port abus abus_chipselect chipselect Input 3
 add_interface_port abus abus_direction direction Output 1
-add_interface_port abus abus_disable_out disable_out Output 1
+add_interface_port abus abus_interrupt_disable_out interrupt_disable_out Output 1
 add_interface_port abus abus_interrupt interrupt Output 1
-add_interface_port abus abus_muxing muxing Output 2
 add_interface_port abus abus_write writebyteenable_n Input 2
 add_interface_port abus saturn_reset reset Input 1
 

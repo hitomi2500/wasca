@@ -9,39 +9,30 @@ use IEEE.numeric_std.all;
 entity wasca_toplevel is
 	port (
 		clk_clk                                     : in    std_logic                     := '0';             --                            clk.clk
-		external_sdram_controller_wire_addr         : out   std_logic_vector(12 downto 0);                    -- external_sdram_controller_wire.addr
-		external_sdram_controller_wire_ba           : out   std_logic_vector(1 downto 0);                                        --                               .ba
-		external_sdram_controller_wire_cas_n        : out   std_logic;                                        --                               .cas_n
-		external_sdram_controller_wire_cke          : out   std_logic;                                        --                               .cke
-		external_sdram_controller_wire_cs_n         : out   std_logic;                                        --                               .cs_n
-		external_sdram_controller_wire_dq           : inout std_logic_vector(15 downto 0) := (others => '0'); --                               .dq
-		external_sdram_controller_wire_dqm          : out   std_logic_vector(1 downto 0);                     --                               .dqm
-		external_sdram_controller_wire_ras_n        : out   std_logic;                                        --                               .ras_n
-		external_sdram_controller_wire_we_n         : out   std_logic;                                        --                               .we_n
-		external_sdram_controller_wire_clk          : out   std_logic;                                        --                               .clk
+		sdram_addr         : out   std_logic_vector(12 downto 0);                    -- external_sdram_controller_wire.addr
+		sdram_ba           : out   std_logic_vector(1 downto 0);                                        --                               .ba
+		sdram_cas_n        : out   std_logic;                                        --                               .cas_n
+		sdram_cke          : out   std_logic;                                        --                               .cke
+		sdram_cs_n         : out   std_logic;                                        --                               .cs_n
+		sdram_dq           : inout std_logic_vector(15 downto 0) := (others => '0'); --                               .dq
+		sdram_dqm          : out   std_logic_vector(1 downto 0);                     --                               .dqm
+		sdram_ras_n        : out   std_logic;                                        --                               .ras_n
+		sdram_we_n         : out   std_logic;                                        --                               .we_n
+		sdram_clk          : out   std_logic;                                        --                               .clk
 		reset_reset_n                               : in    std_logic                     := '0';             --                          reset.reset_n
-		sega_saturn_abus_slave_0_abus_address       : in    std_logic_vector(25 downto 16) := (others => '0'); --  sega_saturn_abus_slave_0_abus.address
-		sega_saturn_abus_slave_0_abus_addressdata   : inout std_logic_vector(15 downto 0) := (others => '0'); --                               .data
-		sega_saturn_abus_slave_0_abus_chipselect    : in    std_logic_vector(2 downto 0)  := (others => '0'); --                               .chipselect
-		sega_saturn_abus_slave_0_abus_read          : in    std_logic                     := '0';             --                               .read
-		sega_saturn_abus_slave_0_abus_write         : in    std_logic_vector(1 downto 0)  := (others => '0'); --                               .write
-		sega_saturn_abus_slave_0_abus_waitrequest   : out   std_logic;                                        --                               .waitrequest
-		sega_saturn_abus_slave_0_abus_interrupt     : out    std_logic                     := '0';              --                               .interrupt
-		sega_saturn_abus_slave_0_abus_disableout   : out   std_logic                     := '0';              --                               .muxing
-		sega_saturn_abus_slave_0_abus_muxing	     : out   std_logic_vector(1	 downto 0)  := (others => '0'); --                               .muxing
-		sega_saturn_abus_slave_0_abus_direction	  : out   std_logic                     := '0';              --                               .direction
-		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd   : inout std_logic                     := 'X';             -- b_SD_cmd
-		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat   : inout std_logic                     := 'X';             -- b_SD_dat
-		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3  : inout std_logic                     := 'X';             -- b_SD_dat3
-		altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock : out   std_logic  ;                                       -- o_SD_clock
+		abus_address       : in    std_logic_vector(24 downto 1) := (others => '0'); --  sega_saturn_abus_slave_0_abus.address
+		abus_data   : inout std_logic_vector(15 downto 0) := (others => '0'); --                               .data
+		abus_chipselect    : in    std_logic_vector(2 downto 0)  := (others => '0'); --                               .chipselect
+		abus_read          : in    std_logic                     := '0';             --                               .read
+		abus_write         : in    std_logic_vector(1 downto 0)  := (others => '0'); --                               .write
+		abus_interrupt     : out    std_logic                     := '0';              --                               .interrupt
+		abus_interrupt_disable_out   : out   std_logic                     := '0';              --                       
+		abus_direction	  : out   std_logic                     := '0';              --                               .direction
 		uart_0_external_connection_txd : out   std_logic                     := '0'   ;
 		spi_stm32_MISO                              : in   std_logic;                                        -- MISO
 		spi_stm32_MOSI                              : out    std_logic                     := '0';             -- MOSI
 		spi_stm32_SCLK                              : out    std_logic                     := '0';             -- SCLK
 		spi_stm32_SS_n                              : out    std_logic                     := '0';             -- SS_n
-		audio_out_BCLK                              : in    std_logic                     := '0';             -- BCLK
-		audio_out_DACDAT                            : out   std_logic;                                        -- DACDAT
-		audio_out_DACLRCK                           : in    std_logic                     := '0';              -- DACLRCK
 		audio_SSEL                           		  : out    std_logic                     := '0'
 	);
 end entity wasca_toplevel;
@@ -49,56 +40,39 @@ end entity wasca_toplevel;
 architecture rtl of wasca_toplevel is
 
 
-	component wasca is
-		port (
-			abus_avalon_sdram_bridge_0_abus_address           : in    std_logic_vector(9 downto 0)  := (others => 'Z'); -- address
-			abus_avalon_sdram_bridge_0_abus_read              : in    std_logic                     := 'Z';             -- read
-			abus_avalon_sdram_bridge_0_abus_waitrequest       : out   std_logic;                                        -- waitrequest
-			abus_avalon_sdram_bridge_0_abus_addressdata       : inout std_logic_vector(15 downto 0) := (others => 'Z'); -- addressdata
-			abus_avalon_sdram_bridge_0_abus_chipselect        : in    std_logic_vector(2 downto 0)  := (others => 'Z'); -- chipselect
-			abus_avalon_sdram_bridge_0_abus_direction         : out   std_logic;                                        -- direction
-			abus_avalon_sdram_bridge_0_abus_disable_out       : out   std_logic;                                        -- disable_out
-			abus_avalon_sdram_bridge_0_abus_interrupt         : out   std_logic;                                        -- interrupt
-			abus_avalon_sdram_bridge_0_abus_muxing            : out   std_logic_vector(1 downto 0);                     -- muxing
-			abus_avalon_sdram_bridge_0_abus_writebyteenable_n : in    std_logic_vector(1 downto 0)  := (others => 'Z'); -- writebyteenable_n
-			abus_avalon_sdram_bridge_0_abus_reset             : in    std_logic                     := 'Z';             -- reset
-			abus_avalon_sdram_bridge_0_sdram_addr             : out   std_logic_vector(12 downto 0);                    -- addr
-			abus_avalon_sdram_bridge_0_sdram_ba               : out   std_logic_vector(1 downto 0);                     -- ba
-			abus_avalon_sdram_bridge_0_sdram_cas_n            : out   std_logic;                                        -- cas_n
-			abus_avalon_sdram_bridge_0_sdram_cke              : out   std_logic;                                        -- cke
-			abus_avalon_sdram_bridge_0_sdram_cs_n             : out   std_logic;                                        -- cs_n
-			abus_avalon_sdram_bridge_0_sdram_dq               : inout std_logic_vector(15 downto 0) := (others => 'Z'); -- dq
-			abus_avalon_sdram_bridge_0_sdram_dqm              : out   std_logic_vector(1 downto 0);                     -- dqm
-			abus_avalon_sdram_bridge_0_sdram_ras_n            : out   std_logic;                                        -- ras_n
-			abus_avalon_sdram_bridge_0_sdram_we_n             : out   std_logic;                                        -- we_n
-			abus_avalon_sdram_bridge_0_sdram_clk              : out   std_logic;                                        -- clk
-			audio_out_BCLK                                    : in    std_logic                     := 'Z';             -- BCLK
-			audio_out_DACDAT                                  : out   std_logic;                                        -- DACDAT
-			audio_out_DACLRCK                                 : in    std_logic                     := 'Z';             -- DACLRCK
-			clk_clk                                           : in    std_logic                     := 'Z';             -- clk
-			clock_116_mhz_clk                                 : out   std_logic;                                        -- clk
-			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd   : inout std_logic                     := 'Z';             -- b_SD_cmd
-			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat   : inout std_logic                     := 'Z';             -- b_SD_dat
-			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3  : inout std_logic                     := 'Z';             -- b_SD_dat3
-			altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock : out   std_logic      ;                                   -- o_SD_clock
-			buffered_spi_miso                                    : in   std_logic;                                        -- MISO
-			buffered_spi_mosi                                    : out    std_logic                     := 'Z';             -- MOSI
-			buffered_spi_clk                                    : out    std_logic                     := 'Z';             -- SCLK
-			buffered_spi_cs                                    : out    std_logic                     := 'Z';             -- SS_n
-			uart_0_external_connection_rxd                    : in    std_logic                     := 'Z';             -- rxd
-			uart_0_external_connection_txd                    : out   std_logic;                                        -- txd
-			reset_reset_n                                     : in    std_logic                     := 'Z';             -- reset_n
-			reset_controller_0_reset_in1_reset                : in    std_logic                     := 'Z' ;             -- reset
-			altpll_1_areset_conduit_export                    : in    std_logic                     := 'Z';             -- export
-			altpll_1_locked_conduit_export                    : out   std_logic;                                        -- export
-			altpll_1_phasedone_conduit_export                 : out   std_logic                                         -- export
-		);
-	end component;
-
-
-	signal altpll_1_areset_conduit_export : std_logic := '0';
-	signal altpll_1_locked_conduit_export : std_logic := '0';
-	signal altpll_1_phasedone_conduit_export : std_logic := '0';
+ component wasca is
+        port (
+            abus_avalon_sdram_bridge_0_abus_address                     : in    std_logic_vector(24 downto 0) := (others => 'X'); -- address
+            abus_avalon_sdram_bridge_0_abus_read                        : in    std_logic                     := 'X';             -- read
+            abus_avalon_sdram_bridge_0_abus_data                        : inout std_logic_vector(15 downto 0) := (others => 'X'); -- data
+            abus_avalon_sdram_bridge_0_abus_chipselect                  : in    std_logic_vector(2 downto 0)  := (others => 'X'); -- chipselect
+            abus_avalon_sdram_bridge_0_abus_direction                   : out   std_logic;                                        -- direction
+            abus_avalon_sdram_bridge_0_abus_interrupt_disable_out       : out   std_logic;                                        -- interrupt_disable_out
+            abus_avalon_sdram_bridge_0_abus_interrupt                   : out   std_logic;                                        -- interrupt
+            abus_avalon_sdram_bridge_0_abus_writebyteenable_n           : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- writebyteenable_n
+            abus_avalon_sdram_bridge_0_abus_reset                       : in    std_logic                     := 'X';             -- reset
+            abus_avalon_sdram_bridge_0_sdram_addr                       : out   std_logic_vector(12 downto 0);                    -- addr
+            abus_avalon_sdram_bridge_0_sdram_ba                         : out   std_logic_vector(1 downto 0);                     -- ba
+            abus_avalon_sdram_bridge_0_sdram_cas_n                      : out   std_logic;                                        -- cas_n
+            abus_avalon_sdram_bridge_0_sdram_cke                        : out   std_logic;                                        -- cke
+            abus_avalon_sdram_bridge_0_sdram_cs_n                       : out   std_logic;                                        -- cs_n
+            abus_avalon_sdram_bridge_0_sdram_dq                         : inout std_logic_vector(15 downto 0) := (others => 'X'); -- dq
+            abus_avalon_sdram_bridge_0_sdram_dqm                        : out   std_logic_vector(1 downto 0);                     -- dqm
+            abus_avalon_sdram_bridge_0_sdram_ras_n                      : out   std_logic;                                        -- ras_n
+            abus_avalon_sdram_bridge_0_sdram_we_n                       : out   std_logic;                                        -- we_n
+            abus_avalon_sdram_bridge_0_sdram_clk                        : out   std_logic;                                        -- clk
+            buffered_spi_mosi                                           : out   std_logic;                                        -- mosi
+            buffered_spi_clk                                            : out   std_logic;                                        -- clk
+            buffered_spi_miso                                           : in    std_logic                     := 'X';             -- miso
+            buffered_spi_cs                                             : out   std_logic;                                        -- cs
+            clk_clk                                                     : in    std_logic                     := 'X';             -- clk
+            clock_116_mhz_clk                                           : out   std_logic;                                        -- clk
+            reset_reset_n                                               : in    std_logic                     := 'X';             -- reset_n
+            reset_controller_0_reset_in1_reset                          : in    std_logic                     := 'X';             -- reset
+            uart_0_external_connection_rxd                              : in    std_logic                     := 'X';             -- rxd
+            uart_0_external_connection_txd                              : out   std_logic                                         -- txd
+        );
+    end component wasca;
 	
 	--signal sega_saturn_abus_slave_0_abus_address_demuxed : std_logic_vector(25 downto 0) := (others => '0');
 	--signal sega_saturn_abus_slave_0_abus_data_demuxed : std_logic_vector(15 downto 0) := (others => '0');
@@ -109,53 +83,42 @@ architecture rtl of wasca_toplevel is
 	signal por_reset : std_logic := '0';
 	signal por_reset_n : std_logic := '0';
 
+	signal abus_address_with_a0 : std_logic_vector(24 downto 0) := (others => '0'); 
 	
 	begin
+		
+	sdram_clk <= not clock_116_mhz;
 	
-	--sega_saturn_abus_slave_0_abus_muxing (0) <= not sega_saturn_abus_slave_0_abus_muxing(1);
-	
-	external_sdram_controller_wire_clk <= not clock_116_mhz;
+	abus_address_with_a0 <= abus_address&"0";
 	
 	my_little_wasca : component wasca
 		port map (
 			clk_clk => clk_clk,
 			clock_116_mhz_clk => clock_116_mhz,
-			abus_avalon_sdram_bridge_0_sdram_addr => external_sdram_controller_wire_addr,
-			abus_avalon_sdram_bridge_0_sdram_ba => external_sdram_controller_wire_ba,
-			abus_avalon_sdram_bridge_0_sdram_cas_n => external_sdram_controller_wire_cas_n,
-			abus_avalon_sdram_bridge_0_sdram_cke => external_sdram_controller_wire_cke,
-			abus_avalon_sdram_bridge_0_sdram_cs_n => external_sdram_controller_wire_cs_n,
-			abus_avalon_sdram_bridge_0_sdram_dq => external_sdram_controller_wire_dq,
-			abus_avalon_sdram_bridge_0_sdram_dqm => external_sdram_controller_wire_dqm,
-			abus_avalon_sdram_bridge_0_sdram_ras_n => external_sdram_controller_wire_ras_n,
-			abus_avalon_sdram_bridge_0_sdram_we_n => external_sdram_controller_wire_we_n,
-			abus_avalon_sdram_bridge_0_abus_address => sega_saturn_abus_slave_0_abus_address,
-			abus_avalon_sdram_bridge_0_abus_chipselect => "1"&sega_saturn_abus_slave_0_abus_chipselect(1 downto 0),--work only with CS1 and CS0 for now
-			abus_avalon_sdram_bridge_0_abus_read => sega_saturn_abus_slave_0_abus_read,
-			abus_avalon_sdram_bridge_0_abus_writebyteenable_n => sega_saturn_abus_slave_0_abus_write,
-			abus_avalon_sdram_bridge_0_abus_waitrequest => sega_saturn_abus_slave_0_abus_waitrequest,
-			abus_avalon_sdram_bridge_0_abus_interrupt => sega_saturn_abus_slave_0_abus_interrupt,
-			abus_avalon_sdram_bridge_0_abus_addressdata => sega_saturn_abus_slave_0_abus_addressdata,
-			abus_avalon_sdram_bridge_0_abus_direction => sega_saturn_abus_slave_0_abus_direction,
-			abus_avalon_sdram_bridge_0_abus_muxing => sega_saturn_abus_slave_0_abus_muxing,
-			abus_avalon_sdram_bridge_0_abus_disable_out => sega_saturn_abus_slave_0_abus_disableout,
+			abus_avalon_sdram_bridge_0_sdram_addr => sdram_addr,
+			abus_avalon_sdram_bridge_0_sdram_ba => sdram_ba,
+			abus_avalon_sdram_bridge_0_sdram_cas_n => sdram_cas_n,
+			abus_avalon_sdram_bridge_0_sdram_cke => sdram_cke,
+			abus_avalon_sdram_bridge_0_sdram_cs_n => sdram_cs_n,
+			abus_avalon_sdram_bridge_0_sdram_dq => sdram_dq,
+			abus_avalon_sdram_bridge_0_sdram_dqm => sdram_dqm,
+			abus_avalon_sdram_bridge_0_sdram_ras_n => sdram_ras_n,
+			abus_avalon_sdram_bridge_0_sdram_we_n => sdram_we_n,
+			abus_avalon_sdram_bridge_0_abus_address => abus_address_with_a0,
+			abus_avalon_sdram_bridge_0_abus_chipselect => "1"&abus_chipselect(1 downto 0),--work only with CS1 and CS0 for now
+			abus_avalon_sdram_bridge_0_abus_read => abus_read,
+			abus_avalon_sdram_bridge_0_abus_writebyteenable_n => abus_write,
+			abus_avalon_sdram_bridge_0_abus_interrupt => abus_interrupt,
+			abus_avalon_sdram_bridge_0_abus_data => abus_data,
+			abus_avalon_sdram_bridge_0_abus_direction => abus_direction,
+			abus_avalon_sdram_bridge_0_abus_interrupt_disable_out => abus_interrupt_disable_out,
 			abus_avalon_sdram_bridge_0_abus_reset => reset_reset_n,
-			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3 => altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3,
-			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat => altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat,
-			altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock => altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock,
-			altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd => altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd,
-			altpll_1_areset_conduit_export => altpll_1_areset_conduit_export,
-			altpll_1_locked_conduit_export => altpll_1_locked_conduit_export,
-			altpll_1_phasedone_conduit_export => altpll_1_phasedone_conduit_export,
 			uart_0_external_connection_rxd => '0',
 			uart_0_external_connection_txd => uart_0_external_connection_txd,
 			buffered_spi_miso => spi_stm32_MISO,
 			buffered_spi_mosi => spi_stm32_MOSI,
 			buffered_spi_clk => spi_stm32_SCLK,
 			buffered_spi_cs => spi_stm32_SS_n,
-			audio_out_BCLK => audio_out_BCLK,
-			audio_out_DACDAT => audio_out_DACDAT,
-			audio_out_DACLRCK => audio_out_DACLRCK,
 			reset_reset_n => por_reset_n,
 			reset_controller_0_reset_in1_reset => por_reset
 		);
@@ -171,11 +134,9 @@ architecture rtl of wasca_toplevel is
 --		external_sdram_controller_wire_ras_n <= (others => 'Z');
 --		external_sdram_controller_wire_we_n  <= (others => 'Z');
 --		external_sdram_controller_wire_clk <= (others => 'Z');
---		sega_saturn_abus_slave_0_abus_addressdata <= (others => 'Z');
---		sega_saturn_abus_slave_0_abus_waitrequest <= (others => 'Z');
+--		sega_saturn_abus_slave_0_abus_data <= (others => 'Z');
 --		sega_saturn_abus_slave_0_abus_interrupt <= (others => 'Z');
 --		sega_saturn_abus_slave_0_abus_disableout <= '1';
---		sega_saturn_abus_slave_0_abus_muxing <= "00";
 --		sega_saturn_abus_slave_0_abus_direction <= '0';
 --		spi_sd_card_MOSI <= 'Z';
 --		spi_sd_card_SCLK <= 'Z';
@@ -186,9 +147,8 @@ architecture rtl of wasca_toplevel is
 
 		
 		audio_SSEL <= '1';
-		--sega_saturn_abus_slave_0_abus_waitrequest <= '1';
 		--sega_saturn_abus_slave_0_abus_direction <= '0';
-		--sega_saturn_abus_slave_0_abus_muxing <= "01";
+
 		
 		--por
 		process (clock_116_mhz)

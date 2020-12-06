@@ -1,34 +1,33 @@
-//altpll_avalon avalon_use_separate_sysclk="NO" CBX_SINGLE_OUTPUT_FILE="ON" CBX_SUBMODULE_USED_PORTS="altpll:areset,clk,locked,inclk" address areset c0 clk locked phasedone read readdata reset write writedata bandwidth_type="AUTO" clk0_divide_by=22579 clk0_duty_cycle=50 clk0_multiply_by=116000 clk0_phase_shift="0" compensate_clock="CLK0" device_family="MAX10" inclk0_input_frequency=44288 intended_device_family="MAX 10" operation_mode="normal" pll_type="AUTO" port_clk0="PORT_USED" port_clk1="PORT_UNUSED" port_clk2="PORT_UNUSED" port_clk3="PORT_UNUSED" port_clk4="PORT_UNUSED" port_clk5="PORT_UNUSED" port_extclk0="PORT_UNUSED" port_extclk1="PORT_UNUSED" port_extclk2="PORT_UNUSED" port_extclk3="PORT_UNUSED" port_inclk1="PORT_UNUSED" port_phasecounterselect="PORT_UNUSED" port_phasedone="PORT_UNUSED" port_scandata="PORT_UNUSED" port_scandataout="PORT_UNUSED" width_clock=5
-//VERSION_BEGIN 15.1 cbx_altclkbuf 2015:10:21:18:09:22:SJ cbx_altiobuf_bidir 2015:10:21:18:09:22:SJ cbx_altiobuf_in 2015:10:21:18:09:22:SJ cbx_altiobuf_out 2015:10:21:18:09:22:SJ cbx_altpll 2015:10:21:18:09:23:SJ cbx_altpll_avalon 2015:10:21:18:09:22:SJ cbx_cycloneii 2015:10:21:18:09:23:SJ cbx_lpm_add_sub 2015:10:21:18:09:23:SJ cbx_lpm_compare 2015:10:21:18:09:23:SJ cbx_lpm_counter 2015:10:21:18:09:23:SJ cbx_lpm_decode 2015:10:21:18:09:23:SJ cbx_lpm_mux 2015:10:21:18:09:23:SJ cbx_lpm_shiftreg 2015:10:21:18:09:23:SJ cbx_mgl 2015:10:21:18:12:49:SJ cbx_nadder 2015:10:21:18:09:23:SJ cbx_stratix 2015:10:21:18:09:23:SJ cbx_stratixii 2015:10:21:18:09:23:SJ cbx_stratixiii 2015:10:21:18:09:23:SJ cbx_stratixv 2015:10:21:18:09:23:SJ cbx_util_mgl 2015:10:21:18:09:23:SJ  VERSION_END
+//altpll_avalon avalon_use_separate_sysclk="NO" CBX_SINGLE_OUTPUT_FILE="ON" CBX_SUBMODULE_USED_PORTS="altpll:areset,clk,locked,inclk" address areset c0 c1 c2 c3 c4 clk configupdate locked phasecounterselect phasedone phasestep phaseupdown read readdata reset scanclk scanclkena scandata scandataout scandone write writedata bandwidth_type="AUTO" clk0_divide_by=22579 clk0_duty_cycle=50 clk0_multiply_by=116000 clk0_phase_shift="0" compensate_clock="CLK0" device_family="MAX10" inclk0_input_frequency=44288 intended_device_family="MAX 10" operation_mode="normal" pll_type="AUTO" port_clk0="PORT_USED" port_clk1="PORT_UNUSED" port_clk2="PORT_UNUSED" port_clk3="PORT_UNUSED" port_clk4="PORT_UNUSED" port_clk5="PORT_UNUSED" port_extclk0="PORT_UNUSED" port_extclk1="PORT_UNUSED" port_extclk2="PORT_UNUSED" port_extclk3="PORT_UNUSED" port_inclk1="PORT_UNUSED" port_phasecounterselect="PORT_UNUSED" port_phasedone="PORT_UNUSED" port_scandata="PORT_UNUSED" port_scandataout="PORT_UNUSED" width_clock=5
+//VERSION_BEGIN 18.1 cbx_altclkbuf 2018:09:12:13:04:24:SJ cbx_altiobuf_bidir 2018:09:12:13:04:24:SJ cbx_altiobuf_in 2018:09:12:13:04:24:SJ cbx_altiobuf_out 2018:09:12:13:04:24:SJ cbx_altpll 2018:09:12:13:04:24:SJ cbx_cycloneii 2018:09:12:13:04:24:SJ cbx_lpm_add_sub 2018:09:12:13:04:24:SJ cbx_lpm_compare 2018:09:12:13:04:24:SJ cbx_lpm_counter 2018:09:12:13:04:24:SJ cbx_lpm_decode 2018:09:12:13:04:24:SJ cbx_lpm_mux 2018:09:12:13:04:24:SJ cbx_lpm_shiftreg 2018:09:12:13:04:24:SJ cbx_max10_altpll_avalon 2018:09:12:13:04:24:SJ cbx_mgl 2018:09:12:13:10:36:SJ cbx_nadder 2018:09:12:13:04:24:SJ cbx_stratix 2018:09:12:13:04:24:SJ cbx_stratixii 2018:09:12:13:04:24:SJ cbx_stratixiii 2018:09:12:13:04:24:SJ cbx_stratixv 2018:09:12:13:04:24:SJ cbx_util_mgl 2018:09:12:13:04:24:SJ  VERSION_END
 // synthesis VERILOG_INPUT_VERSION VERILOG_2001
 // altera message_off 10463
 
 
 
-// Copyright (C) 1991-2015 Altera Corporation. All rights reserved.
-//  Your use of Altera Corporation's design tools, logic functions 
+// Copyright (C) 2018  Intel Corporation. All rights reserved.
+//  Your use of Intel Corporation's design tools, logic functions 
 //  and other software and tools, and its AMPP partner logic 
 //  functions, and any output files from any of the foregoing 
 //  (including device programming or simulation files), and any 
 //  associated documentation or information are expressly subject 
-//  to the terms and conditions of the Altera Program License 
-//  Subscription Agreement, the Altera Quartus Prime License Agreement,
-//  the Altera MegaCore Function License Agreement, or other 
-//  applicable license agreement, including, without limitation, 
-//  that your use is for the sole purpose of programming logic 
-//  devices manufactured by Altera and sold by Altera or its 
-//  authorized distributors.  Please refer to the applicable 
-//  agreement for further details.
+//  to the terms and conditions of the Intel Program License 
+//  Subscription Agreement, the Intel Quartus Prime License Agreement,
+//  the Intel FPGA IP License Agreement, or other applicable license
+//  agreement, including, without limitation, that your use is for
+//  the sole purpose of programming logic devices manufactured by
+//  Intel and sold by Intel or its authorized distributors.  Please
+//  refer to the applicable agreement for further details.
 
 
 
 
 //altera_std_synchronizer CBX_SINGLE_OUTPUT_FILE="ON" clk din dout reset_n
-//VERSION_BEGIN 15.1 cbx_mgl 2015:10:21:18:12:49:SJ cbx_stratixii 2015:10:21:18:09:23:SJ cbx_util_mgl 2015:10:21:18:09:23:SJ  VERSION_END
+//VERSION_BEGIN 18.1 cbx_mgl 2018:09:12:13:10:36:SJ cbx_stratixii 2018:09:12:13:04:24:SJ cbx_util_mgl 2018:09:12:13:04:24:SJ  VERSION_END
 
 
 //dffpipe CBX_SINGLE_OUTPUT_FILE="ON" DELAY=3 WIDTH=1 clock clrn d q ALTERA_INTERNAL_OPTIONS=AUTO_SHIFT_REGISTER_RECOGNITION=OFF
-//VERSION_BEGIN 15.1 cbx_mgl 2015:10:21:18:12:49:SJ cbx_stratixii 2015:10:21:18:09:23:SJ cbx_util_mgl 2015:10:21:18:09:23:SJ  VERSION_END
+//VERSION_BEGIN 18.1 cbx_mgl 2018:09:12:13:10:36:SJ cbx_stratixii 2018:09:12:13:04:24:SJ cbx_util_mgl 2018:09:12:13:04:24:SJ  VERSION_END
 
 //synthesis_resources = reg 3 
 //synopsys translate_off
@@ -121,7 +120,7 @@ endmodule //wasca_altpll_1_stdsync_sv6
 
 
 //altpll bandwidth_type="AUTO" CBX_SINGLE_OUTPUT_FILE="ON" clk0_divide_by=22579 clk0_duty_cycle=50 clk0_multiply_by=116000 clk0_phase_shift="0" compensate_clock="CLK0" device_family="MAX10" inclk0_input_frequency=44288 intended_device_family="MAX 10" operation_mode="normal" pll_type="AUTO" port_clk0="PORT_USED" port_clk1="PORT_UNUSED" port_clk2="PORT_UNUSED" port_clk3="PORT_UNUSED" port_clk4="PORT_UNUSED" port_clk5="PORT_UNUSED" port_extclk0="PORT_UNUSED" port_extclk1="PORT_UNUSED" port_extclk2="PORT_UNUSED" port_extclk3="PORT_UNUSED" port_inclk1="PORT_UNUSED" port_phasecounterselect="PORT_UNUSED" port_phasedone="PORT_UNUSED" port_scandata="PORT_UNUSED" port_scandataout="PORT_UNUSED" width_clock=5 areset clk inclk locked
-//VERSION_BEGIN 15.1 cbx_altclkbuf 2015:10:21:18:09:22:SJ cbx_altiobuf_bidir 2015:10:21:18:09:22:SJ cbx_altiobuf_in 2015:10:21:18:09:22:SJ cbx_altiobuf_out 2015:10:21:18:09:22:SJ cbx_altpll 2015:10:21:18:09:23:SJ cbx_cycloneii 2015:10:21:18:09:23:SJ cbx_lpm_add_sub 2015:10:21:18:09:23:SJ cbx_lpm_compare 2015:10:21:18:09:23:SJ cbx_lpm_counter 2015:10:21:18:09:23:SJ cbx_lpm_decode 2015:10:21:18:09:23:SJ cbx_lpm_mux 2015:10:21:18:09:23:SJ cbx_mgl 2015:10:21:18:12:49:SJ cbx_nadder 2015:10:21:18:09:23:SJ cbx_stratix 2015:10:21:18:09:23:SJ cbx_stratixii 2015:10:21:18:09:23:SJ cbx_stratixiii 2015:10:21:18:09:23:SJ cbx_stratixv 2015:10:21:18:09:23:SJ cbx_util_mgl 2015:10:21:18:09:23:SJ  VERSION_END
+//VERSION_BEGIN 18.1 cbx_altclkbuf 2018:09:12:13:04:24:SJ cbx_altiobuf_bidir 2018:09:12:13:04:24:SJ cbx_altiobuf_in 2018:09:12:13:04:24:SJ cbx_altiobuf_out 2018:09:12:13:04:24:SJ cbx_altpll 2018:09:12:13:04:24:SJ cbx_cycloneii 2018:09:12:13:04:24:SJ cbx_lpm_add_sub 2018:09:12:13:04:24:SJ cbx_lpm_compare 2018:09:12:13:04:24:SJ cbx_lpm_counter 2018:09:12:13:04:24:SJ cbx_lpm_decode 2018:09:12:13:04:24:SJ cbx_lpm_mux 2018:09:12:13:04:24:SJ cbx_mgl 2018:09:12:13:10:36:SJ cbx_nadder 2018:09:12:13:04:24:SJ cbx_stratix 2018:09:12:13:04:24:SJ cbx_stratixii 2018:09:12:13:04:24:SJ cbx_stratixiii 2018:09:12:13:04:24:SJ cbx_stratixv 2018:09:12:13:04:24:SJ cbx_util_mgl 2018:09:12:13:04:24:SJ  VERSION_END
 
 //synthesis_resources = fiftyfivenm_pll 1 reg 1 
 //synopsys translate_off
@@ -216,23 +215,49 @@ module  wasca_altpll_1
 	address,
 	areset,
 	c0,
+	c1,
+	c2,
+	c3,
+	c4,
 	clk,
+	configupdate,
 	locked,
+	phasecounterselect,
 	phasedone,
+	phasestep,
+	phaseupdown,
 	read,
 	readdata,
 	reset,
+	scanclk,
+	scanclkena,
+	scandata,
+	scandataout,
+	scandone,
 	write,
 	writedata) /* synthesis synthesis_clearbox=1 */;
 	input   [1:0]  address;
 	input   areset;
 	output   c0;
+	output   c1;
+	output   c2;
+	output   c3;
+	output   c4;
 	input   clk;
+	input   configupdate;
 	output   locked;
+	input   [2:0]  phasecounterselect;
 	output   phasedone;
+	input   phasestep;
+	input   phaseupdown;
 	input   read;
 	output   [31:0]  readdata;
 	input   reset;
+	input   scanclk;
+	input   scanclkena;
+	input   scandata;
+	output   scandataout;
+	output   scandone;
 	input   write;
 	input   [31:0]  writedata;
 
@@ -281,9 +306,15 @@ module  wasca_altpll_1
 		else  prev_reset <= w_reset;
 	assign
 		c0 = wire_sd1_clk[0],
+		c1 = wire_sd1_clk[1],
+		c2 = wire_sd1_clk[2],
+		c3 = wire_sd1_clk[3],
+		c4 = wire_sd1_clk[4],
 		locked = wire_sd1_locked,
 		phasedone = 1'b0,
 		readdata = {{30{1'b0}}, (read & ((w_select_control & w_pfdena) | (w_select_status & w_phasedone))), (read & ((w_select_control & w_pll_areset_in) | (w_select_status & w_locked)))},
+		scandataout = 1'b0,
+		scandone = 1'b0,
 		w_locked = wire_stdsync2_dout,
 		w_pfdena = pfdena_reg,
 		w_phasedone = 1'b1,
