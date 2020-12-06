@@ -21,7 +21,7 @@
   <components>
     <comp ref="CN1">
       <value>CARTRIDGE_EDGE_CONNECTOR</value>
-      <footprint>Wasca:CARTRIDGE_EDGE_CONNECTOR2</footprint>
+      <footprint>wasca:CARTRIDGE_EDGE_CONNECTOR2</footprint>
       <libsource lib="wasca" part="CARTRIDGE_EDGE_CONNECTOR"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>5530C876</tstamp>
@@ -385,7 +385,7 @@
     </comp>
     <comp ref="CON1">
       <value>USB_OTG</value>
-      <footprint>Wasca:MicroUSB</footprint>
+      <footprint>wasca:MicroUSB</footprint>
       <libsource lib="conn" part="USB_OTG"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>5549E3D1</tstamp>
@@ -406,14 +406,14 @@
     </comp>
     <comp ref="U8">
       <value>10M04SFE144C8G</value>
-      <footprint>Wasca:TQFP144_ALTERA_HANDSOLDERING</footprint>
+      <footprint>wasca:TQFP144_ALTERA_HANDSOLDERING</footprint>
       <libsource lib="wasca" part="10M04SFE144C8G"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>55F1BD14</tstamp>
     </comp>
     <comp ref="U7">
       <value>DDR_SDRAM_MT46_x16</value>
-      <footprint>Wasca:TSOP66_JEDEC_DDR_SDRAM</footprint>
+      <footprint>wasca:TSOP66_JEDEC_DDR_SDRAM</footprint>
       <libsource lib="wasca" part="DDR_SDRAM_MT46_x16"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>55F1E77B</tstamp>
@@ -434,7 +434,7 @@
     </comp>
     <comp ref="U9">
       <value>SDRAM_MT48_x16</value>
-      <footprint>Wasca:TSOPII54_SDRAM_MT48</footprint>
+      <footprint>wasca:TSOPII54_SDRAM_MT48</footprint>
       <libsource lib="wasca" part="SDRAM_MT48_x16"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>55F2E48B</tstamp>
@@ -588,7 +588,7 @@
     </comp>
     <comp ref="Y1">
       <value>24MHz</value>
-      <footprint>Wasca:Crystal_5x3.2mm</footprint>
+      <footprint>wasca:Crystal_5x3.2mm</footprint>
       <libsource lib="device" part="Crystal"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>560AE932</tstamp>
@@ -609,7 +609,7 @@
     </comp>
     <comp ref="A1">
       <value>ANT</value>
-      <footprint>Wasca:PCB_IF_ANT_2.4G</footprint>
+      <footprint>wasca:PCB_IF_ANT_2.4G</footprint>
       <libsource lib="wasca" part="ANT"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>560C6907</tstamp>
@@ -637,14 +637,14 @@
     </comp>
     <comp ref="U12">
       <value>CY8C4127LQI-BL473</value>
-      <footprint>Wasca:QFN56_EXP</footprint>
+      <footprint>wasca:QFN56_EXP</footprint>
       <libsource lib="wasca" part="CY8C4127LQI-BL473"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>56142710</tstamp>
     </comp>
     <comp ref="Y2">
       <value>32678Hz</value>
-      <footprint>Wasca:Crystal_5x3.2mm</footprint>
+      <footprint>wasca:Crystal_5x3.2mm</footprint>
       <libsource lib="device" part="Crystal"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>561492B8</tstamp>
