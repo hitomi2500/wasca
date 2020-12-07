@@ -1449,28 +1449,6 @@ F 3 "" H 22850 3500 60  0000 C CNN
 $EndComp
 Text Label 26950 3000 0    40   ~ 0
 +3_3V
-$Comp
-L wasca-rescue:AVR-JTAG-10 JTAG1
-U 1 1 55F0D622
-P 20900 5100
-F 0 "JTAG1" H 20730 5430 50  0000 C CNN
-F 1 "AVR-JTAG-10" H 20560 4770 50  0000 L BNN
-F 2 "wasca:Multicomp_MC9A22-1034_2x05_P2.54mm_Horizontal" V 20330 5120 50  0001 C CNN
-F 3 "" H 20900 5100 60  0000 C CNN
-	1    20900 5100
-	-1   0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR024
-U 1 1 55F0EB52
-P 20550 5400
-F 0 "#PWR024" H 20550 5150 50  0001 C CNN
-F 1 "GND" H 20550 5250 50  0001 C CNN
-F 2 "" H 20550 5400 60  0000 C CNN
-F 3 "" H 20550 5400 60  0000 C CNN
-	1    20550 5400
-	-1   0    0    -1  
-$EndComp
 Text Label 27950 4200 0    40   ~ 0
 IRQ_OUT_ENABLE
 $Comp
@@ -1654,17 +1632,6 @@ NoConn ~ 18550 14650
 NoConn ~ 5350 7800
 NoConn ~ 4000 7900
 $Comp
-L wasca-rescue:CONN_02X02 CN3
-U 1 1 576AC359
-P 13200 12200
-F 0 "CN3" H 13200 12350 50  0000 C CNN
-F 1 "CONN_02X02" H 13200 12050 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_2x02" H 13200 11000 50  0001 C CNN
-F 3 "" H 13200 11000 50  0000 C CNN
-	1    13200 12200
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:R R10
 U 1 1 576EADD5
 P 24150 15800
@@ -1772,20 +1739,9 @@ Text Notes 17850 10300 0    39   ~ 0
 SDRAM : shares 3V3 with MAX10\nDDR : requires 2V5 power supply
 Text Notes 28450 21400 0    60   ~ 0
 --- Changelog ---\nV1.0 hitomi2500 :\n - Initial version with 10M04SFE, SDRAM, FT201XS\nV1.1 hitomi2500 :\n - Both DDR/SDRAM support\n - Added USB and bluetooth support\n - Sound I/O mapped to MAX10\nV1.2 cafe-alpha :\n - Changed PCB shape and ICs position in order to fit Action Replay case\n - Changed MAX10 chip from 10M04SFE to 10M08SCE\n - Changed SD card footprint to the one used in Gamer's Cartridge\n - Removed DDR and bluetooth support\n - Removed USB and bluetooth modules\n - Added USB dev cart support via separate (optional) mezzanine board\n
-NoConn ~ 20850 5100
-NoConn ~ 20850 5200
+NoConn ~ 20550 5100
+NoConn ~ 20550 5200
 NoConn ~ 21100 5200
-$Comp
-L wasca-rescue:CONN_02X02 CN5
-U 1 1 577FA301
-P 28750 14950
-F 0 "CN5" H 28750 15100 50  0000 C CNN
-F 1 "CONN_02X02" H 28750 14800 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_2x02" H 28750 14950 50  0001 C CNN
-F 3 "" H 28750 13750 50  0000 C CNN
-	1    28750 14950
-	1    0    0    -1  
-$EndComp
 $Comp
 L power:GND #PWR065
 U 1 1 577FA6A0
@@ -1796,17 +1752,6 @@ F 2 "" H 29400 15150 60  0000 C CNN
 F 3 "" H 29400 15150 60  0000 C CNN
 	1    29400 15150
 	1    0    0    -1  
-$EndComp
-$Comp
-L FT245RL:USB-MB-S CN6
-U 1 1 5B87C8F0
-P 11900 17650
-F 0 "CN6" H 11950 18050 50  0000 C CNN
-F 1 "USB-MB-S" H 12000 17550 50  0000 C CNN
-F 2 "con-usb-USB-MB-S" H 12000 17750 50  0001 C CNN
-F 3 "" H 11900 17650 60  0000 C CNN
-	1    11900 17650
-	-1   0    0    1   
 $EndComp
 $Comp
 L Device:C_Small C53
@@ -1916,10 +1861,6 @@ Wire Wire Line
 Wire Wire Line
 	22000 4250 22000 4350
 Wire Wire Line
-	20450 4250 20450 5000
-Wire Wire Line
-	20450 5000 20850 5000
-Wire Wire Line
 	21600 5100 21100 5100
 Wire Wire Line
 	21600 5000 21600 5100
@@ -2016,13 +1957,6 @@ Wire Wire Line
 	22450 2900 23750 2900
 Wire Wire Line
 	22450 2900 22450 2400
-Connection ~ 20550 5300
-Wire Wire Line
-	20850 4900 20550 4900
-Wire Wire Line
-	20550 4900 20550 5300
-Wire Wire Line
-	20850 5300 20550 5300
 Wire Wire Line
 	28200 8000 27800 8000
 Connection ~ 18050 9400
@@ -2926,25 +2860,14 @@ Wire Wire Line
 Wire Wire Line
 	12000 17650 12100 17650
 $Comp
-L wasca-rescue:SWITCH_INV SW1
-U 1 1 5B88C089
-P 23350 12200
-F 0 "SW1" H 23150 12350 50  0000 C CNN
-F 1 "SWITCH_INV" H 23200 12050 50  0000 C CNN
-F 2 "wasca:NINJA_SW" H 23350 12200 50  0001 C CNN
-F 3 "" H 23350 12200 50  0000 C CNN
-	1    23350 12200
-	-1   0    0    -1  
-$EndComp
-$Comp
 L power:GND #PWR053
 U 1 1 5B88D334
-P 22850 12300
-F 0 "#PWR053" H 22850 12050 50  0001 C CNN
-F 1 "GND" H 22850 12150 50  0001 C CNN
-F 2 "" H 22850 12300 60  0000 C CNN
-F 3 "" H 22850 12300 60  0000 C CNN
-	1    22850 12300
+P 23450 12300
+F 0 "#PWR053" H 23450 12050 50  0001 C CNN
+F 1 "GND" H 23450 12150 50  0001 C CNN
+F 2 "" H 23450 12300 60  0000 C CNN
+F 3 "" H 23450 12300 60  0000 C CNN
+	1    23450 12300
 	1    0    0    -1  
 $EndComp
 Text Notes 17050 -500 0    296  ~ 0
@@ -2957,8 +2880,6 @@ Wire Wire Line
 	21800 5000 23200 5000
 Wire Wire Line
 	21800 4250 22000 4250
-Wire Wire Line
-	20450 4250 21800 4250
 Wire Wire Line
 	24450 3000 24550 3000
 Wire Wire Line
@@ -2981,8 +2902,6 @@ Wire Wire Line
 	10250 3000 10850 3000
 Wire Wire Line
 	16150 12050 16550 12050
-Wire Wire Line
-	20550 5300 20550 5400
 Wire Wire Line
 	18050 9400 18250 9400
 Wire Wire Line
@@ -3261,9 +3180,6 @@ F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/da
 	1    25500 13500
 	1    0    0    -1  
 $EndComp
-Connection ~ 20450 4250
-Wire Wire Line
-	20100 4250 20450 4250
 Wire Bus Line
 	6850 5350 6300 5350
 Wire Wire Line
@@ -4101,9 +4017,9 @@ Wire Wire Line
 Connection ~ 5550 2650
 Wire Wire Line
 	12950 17300 13750 17300
-Text Label 14050 17950 2    40   ~ 0
+Text Label 13650 17850 2    40   ~ 0
 USB_DM
-Text Label 14050 17850 2    40   ~ 0
+Text Label 13650 17950 2    40   ~ 0
 USB_DP
 Wire Wire Line
 	26200 13100 27200 13100
@@ -4249,12 +4165,10 @@ Text Label 24500 14100 2    40   ~ 0
 SD_DET_A
 Text Label 24500 14200 2    40   ~ 0
 SD_DET_B
-Wire Wire Line
-	24800 12200 23850 12200
-Text Label 22400 12100 0    40   ~ 0
+Text Label 23050 11750 0    40   ~ 0
 +3_3V
 Wire Wire Line
-	22400 12100 22850 12100
+	23050 11750 23500 11750
 Text Label 24800 11550 0    40   ~ 0
 +3_3V
 Wire Wire Line
@@ -8044,17 +7958,6 @@ F 3 "" H 16700 3100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L wasca:VACHE_LOGO VACHE1
-U 1 1 5FF20EDB
-P 16550 6500
-F 0 "VACHE1" H 16978 6521 50  0000 L CNN
-F 1 "VACHE_LOGO" H 16978 6430 50  0000 L CNN
-F 2 "wasca:LOGO_VACHE_SIM" H 16500 6400 50  0001 C CNN
-F 3 "" H 16500 6400 50  0001 C CNN
-	1    16550 6500
-	1    0    0    -1  
-$EndComp
-$Comp
 L wasca:KICAD_LOGO KICAD1
 U 1 1 5FF2449A
 P 16650 7200
@@ -8063,17 +7966,6 @@ F 1 "KICAD_LOGO" H 16978 7155 50  0000 L CNN
 F 2 "wasca:DESIGNED_WITH_KICAD_10X05" H 16650 7200 50  0001 C CNN
 F 3 "" H 16650 7200 50  0001 C CNN
 	1    16650 7200
-	1    0    0    -1  
-$EndComp
-$Comp
-L wasca-rescue:CONN_02X02 CN4
-U 1 1 5FF2718E
-P 28100 13350
-F 0 "CN4" H 28100 13500 50  0000 C CNN
-F 1 "CONN_02X02" H 28100 13200 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_2x02" H 28100 12150 50  0001 C CNN
-F 3 "" H 28100 12150 50  0000 C CNN
-	1    28100 13350
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -8176,6 +8068,109 @@ Wire Wire Line
 	21850 7100 23200 7100
 Text Label 22050 7100 0    40   ~ 0
 HEARTBEAT
+$Comp
+L USB-MB-S:USB-MB-S CN6
+U 1 1 5FF197D0
+P 11900 17650
+F 0 "CN6" H 12005 17435 50  0000 C CNN
+F 1 "USB-MB-S" H 12005 17526 50  0000 C CNN
+F 2 "con-usb-USB-MB-S" H 12000 17750 50  0001 C CNN
+F 3 "" H 11900 17650 60  0000 C CNN
+	1    11900 17650
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector_Generic:Conn_02x02_Odd_Even CN3
+U 1 1 6001F517
+P 13150 12150
+F 0 "CN3" H 13200 12367 50  0000 C CNN
+F 1 "Conn_02x02_Odd_Even" H 13200 12276 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical" H 13150 12150 50  0001 C CNN
+F 3 "~" H 13150 12150 50  0001 C CNN
+	1    13150 12150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_02x02_Odd_Even CN5
+U 1 1 60035D83
+P 28700 14900
+F 0 "CN5" H 28750 15117 50  0000 C CNN
+F 1 "Conn_02x02_Odd_Even" H 28750 15026 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical" H 28700 14900 50  0001 C CNN
+F 3 "~" H 28700 14900 50  0001 C CNN
+	1    28700 14900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_02x02_Odd_Even CN4
+U 1 1 60065238
+P 28050 13300
+F 0 "CN4" H 28100 13517 50  0000 C CNN
+F 1 "Conn_02x02_Odd_Even" H 28100 13426 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical" H 28050 13300 50  0001 C CNN
+F 3 "~" H 28050 13300 50  0001 C CNN
+	1    28050 13300
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_02x05_Odd_Even CN7
+U 1 1 6006C6E2
+P 20900 5100
+F 0 "CN7" H 20950 5517 50  0000 C CNN
+F 1 "Conn_02x05_Odd_Even" H 20950 5426 50  0000 C CNN
+F 2 "wasca:Multicomp_MC9A22-1034_2x05_P2.54mm_Horizontal" H 20900 5100 50  0001 C CNN
+F 3 "~" H 20900 5100 50  0001 C CNN
+	1    20900 5100
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	20300 5300 20300 5400
+Wire Wire Line
+	20600 5300 20300 5300
+Wire Wire Line
+	20300 4900 20300 5300
+Wire Wire Line
+	20600 4900 20300 4900
+Connection ~ 20300 5300
+Wire Wire Line
+	20200 5000 20600 5000
+Wire Wire Line
+	20200 4250 20200 5000
+$Comp
+L power:GND #PWR024
+U 1 1 55F0EB52
+P 20300 5400
+F 0 "#PWR024" H 20300 5150 50  0001 C CNN
+F 1 "GND" H 20300 5250 50  0001 C CNN
+F 2 "" H 20300 5400 60  0000 C CNN
+F 3 "" H 20300 5400 60  0000 C CNN
+	1    20300 5400
+	-1   0    0    -1  
+$EndComp
+Connection ~ 20200 4250
+Wire Wire Line
+	20200 4250 21800 4250
+Wire Wire Line
+	20100 4250 20200 4250
+$Comp
+L Connector:Conn_01x03_Male SW1
+U 1 1 6042FBE9
+P 23150 12200
+F 0 "SW1" H 23258 12481 50  0000 C CNN
+F 1 "Conn_01x03_Male" H 23258 12390 50  0000 C CNN
+F 2 "wasca:NINJA_SW" H 23150 12200 50  0001 C CNN
+F 3 "~" H 23150 12200 50  0001 C CNN
+	1    23150 12200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	23350 12200 24800 12200
+Wire Wire Line
+	23350 12300 23450 12300
+Wire Wire Line
+	23500 11750 23500 12100
+Wire Wire Line
+	23500 12100 23350 12100
 Wire Bus Line
 	2150 1400 2150 5850
 Wire Bus Line
@@ -8192,4 +8187,15 @@ Wire Bus Line
 	2950 5850 2950 7700
 Wire Bus Line
 	7800 1400 7800 3800
+$Comp
+L vache:LOGO VACHE1
+U 1 1 60BA9417
+P 16800 6150
+F 0 "VACHE1" H 16800 5814 60  0001 C CNN
+F 1 "LOGO" H 16800 6486 60  0001 C CNN
+F 2 "wasca:LOGO_VACHE_SIM" H 16800 6150 50  0001 C CNN
+F 3 "" H 16800 6150 50  0001 C CNN
+	1    16800 6150
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
