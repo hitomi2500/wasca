@@ -2844,17 +2844,6 @@ Wire Wire Line
 	12100 17650 12100 18100
 Wire Wire Line
 	12000 17650 12100 17650
-$Comp
-L power:GND #PWR053
-U 1 1 5B88D334
-P 23450 12300
-F 0 "#PWR053" H 23450 12050 50  0001 C CNN
-F 1 "GND" H 23450 12150 50  0001 C CNN
-F 2 "" H 23450 12300 60  0000 C CNN
-F 3 "" H 23450 12300 60  0000 C CNN
-	1    23450 12300
-	1    0    0    -1  
-$EndComp
 Text Notes 17050 -500 0    296  ~ 0
 TODO: add footprint to help orientation for 3V3 buffers\nTODO: pin B45 isn't A0 and consequently all address pins must be shifted and re-routed.\nTODO: restrict address lines count to A0-A23 (no plan to use A24)\nTODO: Use PLL output pin (32 or 33) for SDRAM clock. Probably requires to change SDRAM chip orientation.\nTODO: Change JTAG connector orientation, in order to support pokayoke connector.\nTODO: Change last footprints of decoupling capas still set as "handsoldering" around MAX 10.\nTODO: Add chanfering indication (金手指要做倒角) on PCB, if possible on both sides.\nDONE: Fix 4K7 resistor value near FT232RL, wrongly indicated as 10K\nTODO: Adjust footprint for ninja switch\nTODO: Add orientation help on each SMD LEDs\nTODO: Add indication of PCB revision number and mfg date near edge connector.\nTODO: Add soldered date and CPLD version indication frame, as in SGC.
 Wire Wire Line
@@ -4150,10 +4139,6 @@ Text Label 24500 14100 2    40   ~ 0
 SD_DET_A
 Text Label 24500 14200 2    40   ~ 0
 SD_DET_B
-Text Label 23050 11750 0    40   ~ 0
-+3_3V
-Wire Wire Line
-	23050 11750 23500 11750
 Text Label 24800 11550 0    40   ~ 0
 +3_3V
 Wire Wire Line
@@ -8098,25 +8083,8 @@ Wire Wire Line
 	20200 4250 21800 4250
 Wire Wire Line
 	20100 4250 20200 4250
-$Comp
-L Connector:Conn_01x03_Male SW1
-U 1 1 6042FBE9
-P 23150 12200
-F 0 "SW1" H 23258 12481 50  0000 C CNN
-F 1 "Conn_01x03_Male" H 23258 12390 50  0000 C CNN
-F 2 "wasca:NINJA_SW" H 23150 12200 50  0001 C CNN
-F 3 "~" H 23150 12200 50  0001 C CNN
-	1    23150 12200
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	23350 12200 24800 12200
-Wire Wire Line
-	23350 12300 23450 12300
-Wire Wire Line
-	23500 11750 23500 12100
-Wire Wire Line
-	23500 12100 23350 12100
 $Comp
 L vache:LOGO VACHE1
 U 1 1 60BA9417
@@ -8257,23 +8225,55 @@ Wire Wire Line
 	24150 15400 23050 15400
 Wire Wire Line
 	23050 15400 23050 15650
+Connection ~ 24150 15400
+Text Notes 22900 16400 0    60   ~ 0
+ONLY 1 OF THE RGB LEDS SHOULD BE PLACED
+$Comp
+L power:GND #PWR053
+U 1 1 5B88D334
+P 23450 12300
+F 0 "#PWR053" H 23450 12050 50  0001 C CNN
+F 1 "GND" H 23450 12150 50  0001 C CNN
+F 2 "" H 23450 12300 60  0000 C CNN
+F 3 "" H 23450 12300 60  0000 C CNN
+	1    23450 12300
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	2150 1400 2150 5850
 Wire Bus Line
-	6200 8300 6200 10600
+	7800 1400 7800 3800
 Wire Bus Line
-	3150 8300 3150 10600
-Wire Bus Line
-	6850 10600 6850 12900
+	2950 5850 2950 7700
 Wire Bus Line
 	6850 5350 6850 7750
 Wire Bus Line
 	6200 5450 6200 7500
 Wire Bus Line
-	2950 5850 2950 7700
+	6850 10600 6850 12900
 Wire Bus Line
-	7800 1400 7800 3800
-Connection ~ 24150 15400
-Text Notes 22900 16400 0    60   ~ 0
-ONLY 1 OF THE RGB LEDS SHOULD BE PLACED
+	6200 8300 6200 10600
+Wire Bus Line
+	3150 8300 3150 10600
+Wire Wire Line
+	23050 11750 23500 11750
+Text Label 23050 11750 0    40   ~ 0
++3_3V
+Wire Wire Line
+	23500 11750 23500 12100
+Wire Wire Line
+	23500 12100 23350 12100
+Wire Wire Line
+	23350 12300 23450 12300
+$Comp
+L Connector:Conn_01x03_Male SW1
+U 1 1 6042FBE9
+P 23150 12200
+F 0 "SW1" H 23258 12481 50  0000 C CNN
+F 1 "Conn_01x03_Male" H 23258 12390 50  0000 C CNN
+F 2 "wasca:NINJA_SW" H 23150 12200 50  0001 C CNN
+F 3 "~" H 23150 12200 50  0001 C CNN
+	1    23150 12200
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
