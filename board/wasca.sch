@@ -5,8 +5,8 @@ $Descr A1 33110 23386
 encoding utf-8
 Sheet 1 1
 Title "Wasca"
-Date "2018-08-31"
-Rev "1.3"
+Date "2020-12-12"
+Rev "1.4"
 Comp "cafe-alpha & hitomi2500"
 Comment1 ""
 Comment2 "Distributed under GNU GENERAL PUBLIC LICENSE Version 2"
@@ -1726,8 +1726,8 @@ Text Label 26350 15100 0    40   ~ 0
 SPARE2
 Text Notes 17850 10300 0    39   ~ 0
 SDRAM : shares 3V3 with MAX10\nDDR : requires 2V5 power supply
-Text Notes 28450 21400 0    60   ~ 0
---- Changelog ---\nV1.0 hitomi2500 :\n - Initial version with 10M04SFE, SDRAM, FT201XS\nV1.1 hitomi2500 :\n - Both DDR/SDRAM support\n - Added USB and bluetooth support\n - Sound I/O mapped to MAX10\nV1.2 cafe-alpha :\n - Changed PCB shape and ICs position in order to fit Action Replay case\n - Changed MAX10 chip from 10M04SFE to 10M08SCE\n - Changed SD card footprint to the one used in Gamer's Cartridge\n - Removed DDR and bluetooth support\n - Removed USB and bluetooth modules\n - Added USB dev cart support via separate (optional) mezzanine board\n
+Text Notes 28650 21350 0    60   ~ 0
+--- Changelog ---\nV1.0 hitomi2500 :\n - Initial version with 10M04SFE, SDRAM, FT201XS\nV1.1 hitomi2500 :\n - Both DDR/SDRAM support\n - Added USB and bluetooth support\n - Sound I/O mapped to MAX10\nV1.2 cafe-alpha :\n - Changed PCB shape and ICs position in order to fit Action Replay case\n - Changed MAX10 chip from 10M04SFE to 10M08SCE\n - Changed SD card footprint to the one used in Gamer's Cartridge\n - Removed DDR and bluetooth support\n - Removed USB and bluetooth modules\n - Added USB dev cart support via separate (optional) mezzanine board\nV1.4 hitomi2500 @ cafe-alpha :\n - Removed unused signals\n - Changed to non-multiplexed mode\n - STM32F446 added as a companion MCU\n - SD card moved to STM32\n - Added ESM32-CAM module for future WiFi connectivity\n - SD to Micro-SD and Mini-B to Type-C connectors change\n
 NoConn ~ 20550 5100
 NoConn ~ 20550 5200
 NoConn ~ 21100 5200
@@ -1789,34 +1789,34 @@ $EndComp
 $Comp
 L Device:R R13
 U 1 1 5B887F56
-P 12800 17300
-F 0 "R13" V 12880 17300 50  0000 C CNN
-F 1 "4K7" V 12800 17300 50  0000 C CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 12730 17300 30  0001 C CNN
-F 3 "" H 12800 17300 30  0000 C CNN
-	1    12800 17300
+P 12800 17250
+F 0 "R13" V 12880 17250 50  0000 C CNN
+F 1 "4K7" V 12800 17250 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 12730 17250 30  0001 C CNN
+F 3 "" H 12800 17250 30  0000 C CNN
+	1    12800 17250
 	0    1    -1   0   
 $EndComp
 $Comp
 L Device:R R14
 U 1 1 5B887F5C
-P 13900 17300
-F 0 "R14" V 14000 17300 50  0000 C CNN
-F 1 "10K" V 13900 17300 50  0000 C CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 13830 17300 30  0001 C CNN
-F 3 "" H 13900 17300 30  0000 C CNN
-	1    13900 17300
+P 13900 17250
+F 0 "R14" V 14000 17250 50  0000 C CNN
+F 1 "10K" V 13900 17250 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 13830 17250 30  0001 C CNN
+F 3 "" H 13900 17250 30  0000 C CNN
+	1    13900 17250
 	0    1    -1   0   
 $EndComp
 $Comp
 L power:GND #PWR079
 U 1 1 5B88930B
-P 14300 17350
-F 0 "#PWR079" H 14300 17100 50  0001 C CNN
-F 1 "GND" H 14300 17200 50  0001 C CNN
-F 2 "" H 14300 17350 60  0000 C CNN
-F 3 "" H 14300 17350 60  0000 C CNN
-	1    14300 17350
+P 14300 17300
+F 0 "#PWR079" H 14300 17050 50  0001 C CNN
+F 1 "GND" H 14300 17150 50  0001 C CNN
+F 2 "" H 14300 17300 60  0000 C CNN
+F 3 "" H 14300 17300 60  0000 C CNN
+	1    14300 17300
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -2822,30 +2822,22 @@ Wire Wire Line
 	15900 18000 15900 17800
 Connection ~ 15600 18000
 Wire Wire Line
-	12350 17300 12650 17300
+	14050 17250 14300 17250
 Wire Wire Line
-	14050 17300 14300 17300
+	11300 17950 11400 17950
 Wire Wire Line
-	12000 17950 14350 17950
-Wire Wire Line
-	14300 17300 14300 17350
+	14300 17250 14300 17300
 $Comp
 L power:GND #PWR083
 U 1 1 5B883F2F
-P 12100 18100
-F 0 "#PWR083" H 12100 17850 50  0001 C CNN
-F 1 "GND" H 12100 17950 50  0001 C CNN
-F 2 "" H 12100 18100 60  0000 C CNN
-F 3 "" H 12100 18100 60  0000 C CNN
-	1    12100 18100
+P 10700 18900
+F 0 "#PWR083" H 10700 18650 50  0001 C CNN
+F 1 "GND" H 10700 18750 50  0001 C CNN
+F 2 "" H 10700 18900 60  0000 C CNN
+F 3 "" H 10700 18900 60  0000 C CNN
+	1    10700 18900
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	12100 17650 12100 18100
-Wire Wire Line
-	12000 17650 12100 17650
-Text Notes 17050 -500 0    296  ~ 0
-TODO: add footprint to help orientation for 3V3 buffers\nTODO: pin B45 isn't A0 and consequently all address pins must be shifted and re-routed.\nTODO: restrict address lines count to A0-A23 (no plan to use A24)\nTODO: Use PLL output pin (32 or 33) for SDRAM clock. Probably requires to change SDRAM chip orientation.\nTODO: Change JTAG connector orientation, in order to support pokayoke connector.\nTODO: Change last footprints of decoupling capas still set as "handsoldering" around MAX 10.\nTODO: Add chanfering indication (金手指要做倒角) on PCB, if possible on both sides.\nDONE: Fix 4K7 resistor value near FT232RL, wrongly indicated as 10K\nTODO: Adjust footprint for ninja switch\nTODO: Add orientation help on each SMD LEDs\nTODO: Add indication of PCB revision number and mfg date near edge connector.\nTODO: Add soldered date and CPLD version indication frame, as in SGC.
 Wire Wire Line
 	21500 5200 21500 5600
 Wire Wire Line
@@ -3990,10 +3982,10 @@ Wire Wire Line
 	8100 17300 8550 17300
 Connection ~ 5550 2650
 Wire Wire Line
-	12950 17300 13750 17300
-Text Label 13650 17850 2    40   ~ 0
+	12950 17250 13750 17250
+Text Label 12950 17850 2    40   ~ 0
 USB_DM
-Text Label 13650 17950 2    40   ~ 0
+Text Label 12950 17950 2    40   ~ 0
 USB_DP
 Wire Wire Line
 	26200 13100 27200 13100
@@ -4004,11 +3996,7 @@ USB_DM
 Text Label 26900 13200 2    40   ~ 0
 USB_DP
 Wire Wire Line
-	12000 17750 12350 17750
-Wire Wire Line
-	12350 17750 12350 17300
-Wire Wire Line
-	12000 17850 14350 17850
+	11300 17850 11400 17850
 Text Label 24250 13700 0    40   ~ 0
 ISD_3V
 Text Label 24250 14600 0    40   ~ 0
@@ -6069,17 +6057,6 @@ B8 62 0D 39 68 8E 0A E2 70 DA AC D7 EB 95 BF 48 BD 2E 37 A7 C3 5E DB 87 9B 47 21
 03 60 72 3B 00 00 00 00 49 45 4E 44 AE 42 60 82 
 EndData
 $EndBitmap
-$Comp
-L esp32-devkitc:ESP32_CAM U13
-U 1 1 6082EBCA
-P 22950 19000
-F 0 "U13" H 22950 19617 50  0000 C CNN
-F 1 "ESP32_CAM" H 22950 19526 50  0000 C CNN
-F 2 "wasca:MODULE_ESP32-CAM" H 22900 18450 50  0001 C CNN
-F 3 "" H 22900 18450 50  0001 C CNN
-	1    22950 19000
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	22150 18750 22050 18750
 Wire Wire Line
@@ -6139,9 +6116,9 @@ Text Label 15300 17300 2    40   ~ 0
 +5V_USB
 Text Label 20350 18650 2    40   ~ 0
 +5V_SYS
-Text Label 12650 17300 2    40   ~ 0
+Text Label 12650 17250 2    40   ~ 0
 +5V_USB
-Text Label 13500 17300 2    40   ~ 0
+Text Label 13500 17250 2    40   ~ 0
 VBUS_SENSE
 Wire Wire Line
 	24000 14000 24800 14000
@@ -6433,17 +6410,6 @@ Wire Wire Line
 Text Label 22050 7100 0    40   ~ 0
 HEARTBEAT
 $Comp
-L USB-MB-S:USB-MB-S CN6
-U 1 1 5FF197D0
-P 11900 17650
-F 0 "CN6" H 12005 17435 50  0000 C CNN
-F 1 "USB-MB-S" H 12005 17526 50  0000 C CNN
-F 2 "con-usb-USB-MB-S" H 12000 17750 50  0001 C CNN
-F 3 "" H 11900 17650 60  0000 C CNN
-	1    11900 17650
-	-1   0    0    1   
-$EndComp
-$Comp
 L Connector_Generic:Conn_02x02_Odd_Even CN3
 U 1 1 6001F517
 P 13150 12150
@@ -6682,22 +6648,6 @@ F 3 "~" H 23150 12200 50  0001 C CNN
 	1    23150 12200
 	1    0    0    -1  
 $EndComp
-Wire Bus Line
-	2150 1400 2150 5850
-Wire Bus Line
-	6200 8300 6200 10600
-Wire Bus Line
-	3150 8300 3150 10600
-Wire Bus Line
-	6850 10600 6850 12900
-Wire Bus Line
-	6850 5350 6850 7750
-Wire Bus Line
-	6200 5450 6200 7500
-Wire Bus Line
-	2950 5850 2950 7700
-Wire Bus Line
-	7800 1400 7800 3800
 $Bitmap
 Pos 21750 14500
 Scale 1.000000
@@ -8789,4 +8739,154 @@ B0 61 83 4E A7 13 76 AF 00 80 33 F4 95 01 4C 73 CC 60 36 F3 AC 6E CC 24 07 90 BA
 34 EE 2C 5F E9 00 00 00 00 49 45 4E 44 AE 42 60 82 
 EndData
 $EndBitmap
+$Comp
+L Connector:USB_C_Receptacle_USB2.0 CN6
+U 1 1 600FABF6
+P 10700 17850
+F 0 "CN6" H 10807 18717 50  0000 C CNN
+F 1 "USB_C_Receptacle_USB2.0" H 10807 18626 50  0000 C CNN
+F 2 "wasca:DX07S016JA1R1500" H 10850 17850 50  0001 C CNN
+F 3 "https://www.usb.org/sites/default/files/documents/usb_type-c.zip" H 10850 17850 50  0001 C CNN
+	1    10700 17850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11300 17250 12650 17250
+Wire Wire Line
+	10400 18750 10400 18800
+Wire Wire Line
+	10400 18800 10700 18800
+Wire Wire Line
+	10700 18800 10700 18750
+Wire Wire Line
+	10700 18900 10700 18800
+Connection ~ 10700 18800
+Wire Wire Line
+	11400 17750 11400 17850
+Connection ~ 11400 17850
+Wire Wire Line
+	11400 17850 13650 17850
+Wire Wire Line
+	11300 17750 11400 17750
+Wire Wire Line
+	11400 18050 11400 17950
+Connection ~ 11400 17950
+Wire Wire Line
+	11400 17950 13650 17950
+Wire Wire Line
+	11300 18050 11400 18050
+$Comp
+L Device:R R20
+U 1 1 609A0C4E
+P 11700 17450
+F 0 "R20" V 11780 17450 50  0000 C CNN
+F 1 "5K1" V 11700 17450 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" V 11630 17450 30  0001 C CNN
+F 3 "" H 11700 17450 30  0000 C CNN
+	1    11700 17450
+	0    1    -1   0   
+$EndComp
+$Comp
+L power:GND #PWR0105
+U 1 1 60A97828
+P 12050 17500
+F 0 "#PWR0105" H 12050 17250 50  0001 C CNN
+F 1 "GND" H 12050 17350 50  0001 C CNN
+F 2 "" H 12050 17500 60  0000 C CNN
+F 3 "" H 12050 17500 60  0000 C CNN
+	1    12050 17500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	12050 17450 12050 17500
+Wire Wire Line
+	11850 17450 12050 17450
+Wire Wire Line
+	11550 17450 11400 17450
+Wire Wire Line
+	11300 17550 11400 17550
+Wire Wire Line
+	11400 17550 11400 17450
+Connection ~ 11400 17450
+Wire Wire Line
+	11400 17450 11300 17450
+Text Notes 10300 16700 0    39   ~ 0
+Compatible connectors:\nJAE DX07S016JA1R1500\nJAE DX07S016JA3R1500\nHROPARTS TYPE-C-31-M-12\nHROPARTS TYPE-C-31-M-14\nXKB U262-161N-4BVC11\nJing Ext. C167321
+Wire Notes Line
+	10200 16200 10200 16750
+Wire Notes Line
+	10200 16750 11300 16750
+Wire Notes Line
+	11300 16750 11300 16200
+Wire Notes Line
+	11300 16200 10200 16200
+$Comp
+L esp32-devkitc:ESP32_CAM_HALF U13
+U 1 1 612CF960
+P 22950 19000
+F 0 "U13" H 23580 19021 50  0000 L CNN
+F 1 "ESP32_CAM_HALF" H 23580 18930 50  0000 L CNN
+F 2 "wasca:MODULE_ESP32-CAM-HALF" H 22900 18450 50  0001 C CNN
+F 3 "" H 22900 18450 50  0001 C CNN
+	1    22950 19000
+	1    0    0    -1  
+$EndComp
+Text Notes 29500 16500 0    39   ~ 0
+Compatible connectors:\nHroparts TF-01A\nSOFNG TF-15x15\nSOFNG TF-015\nXUNPU TF-115K\nXUNPU TF-109\nHOAUC HYC77-TF09-200
+Wire Notes Line
+	29400 16000 29400 16550
+Wire Notes Line
+	29400 16550 30500 16550
+Wire Notes Line
+	30500 16550 30500 16000
+Wire Notes Line
+	30500 16000 29400 16000
+Text Notes 30750 16450 0    39   ~ 0
+Partially compatible\n(signals only)\n\nHirose DM3AT-SF-PEJM5\nKyocera 045138008100858+\nYamaichi PJS008-4100-0-VE
+Wire Notes Line
+	30650 16000 30650 16550
+Wire Notes Line
+	30650 16550 31750 16550
+Wire Notes Line
+	31750 16550 31750 16000
+Wire Notes Line
+	31750 16000 30650 16000
+$Comp
+L wasca:CHAMFER_WARNING CHAMFER_WARN1
+U 1 1 617D53EE
+P 15800 7700
+F 0 "CHAMFER_WARN1" H 16228 7721 50  0000 L CNN
+F 1 "CHAMFER_WARNING" H 16228 7630 50  0000 L CNN
+F 2 "wasca:CHAMFER_WARNING" H 15750 7600 50  0001 C CNN
+F 3 "" H 15750 7600 50  0001 C CNN
+	1    15800 7700
+	1    0    0    -1  
+$EndComp
+$Comp
+L wasca:CHAMFER_WARNING CHAMFER_WARN2
+U 1 1 618E2958
+P 17600 7750
+F 0 "CHAMFER_WARN2" H 18028 7771 50  0000 L CNN
+F 1 "CHAMFER_WARNING" H 18028 7680 50  0000 L CNN
+F 2 "wasca:CHAMFER_WARNING" H 17550 7650 50  0001 C CNN
+F 3 "" H 17550 7650 50  0001 C CNN
+	1    17600 7750
+	1    0    0    -1  
+$EndComp
+Wire Bus Line
+	2150 1400 2150 5850
+Wire Bus Line
+	6200 8300 6200 10600
+Wire Bus Line
+	3150 8300 3150 10600
+Wire Bus Line
+	6850 10600 6850 12900
+Wire Bus Line
+	6850 5350 6850 7750
+Wire Bus Line
+	6200 5450 6200 7500
+Wire Bus Line
+	2950 5850 2950 7700
+Wire Bus Line
+	7800 1400 7800 3800
 $EndSCHEMATC
