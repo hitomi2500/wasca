@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="wasca" kind="wasca" version="1.0" fabric="QSYS">
  <!-- Format version 18.1 625 (Future versions may contain additional information.) -->
- <!-- 2020.12.06.16:17:40 -->
+ <!-- 2020.12.13.14:24:59 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1607257059</value>
+  <value>1607855098</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -32,7 +32,7 @@
  </parameter>
  <parameter name="AUTO_DEVICE">
   <type>java.lang.String</type>
-  <value>10M08SAE144C8GES</value>
+  <value>10M08SCE144C8G</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -5840,7 +5840,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="instSlaveMapParam">
    <type>java.lang.String</type>
-   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /></address-map>]]></value>
+   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x16800' type='altera_onchip_flash.data' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x41000' end='0x41800' type='altera_nios2_gen2.debug_mem_slave' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /></address-map>]]></value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -5860,7 +5860,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="dataSlaveMapParam">
    <type>java.lang.String</type>
-   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x2B000' type='altera_onchip_flash.data' /><slave name='uart_0.s1' start='0x40000' end='0x40020' type='altera_avalon_uart.s1' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x8000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></value>
+   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x16800' type='altera_onchip_flash.data' /><slave name='uart_0.s1' start='0x40000' end='0x40020' type='altera_avalon_uart.s1' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x84000' type='altera_avalon_onchip_memory2.s1' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x8000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -6048,7 +6048,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="AUTO_DEVICE">
    <type>java.lang.String</type>
-   <value>10M08SAE144C8GES</value>
+   <value>10M08SCE144C8G</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -6550,7 +6550,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>data</slaveName>
     <name>onchip_flash_0.data</name>
     <baseAddress>0</baseAddress>
-    <span>176128</span>
+    <span>92160</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -6869,7 +6869,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>data</slaveName>
     <name>onchip_flash_0.data</name>
     <baseAddress>0</baseAddress>
-    <span>176128</span>
+    <span>92160</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -7534,7 +7534,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SECTOR3_END_ADDR</name>
-   <value>116735</value>
+   <value>92159</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SECTOR3_START_ADDR</name>
@@ -7542,15 +7542,15 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SECTOR4_ENABLED</name>
-   <value>1</value>
+   <value>0</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SECTOR4_END_ADDR</name>
-   <value>176127</value>
+   <value>-1</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SECTOR4_START_ADDR</name>
-   <value>116736</value>
+   <value>-1</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SECTOR5_ENABLED</name>
@@ -7666,7 +7666,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SECTOR_ID">
    <type>[Ljava.lang.String;</type>
-   <value>1,2,3,4,NA</value>
+   <value>1,2,NA,3,NA</value>
    <derived>true</derived>
    <enabled>false</enabled>
    <visible>true</visible>
@@ -7682,7 +7682,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SECTOR_ADDRESS_MAPPING">
    <type>[Ljava.lang.String;</type>
-   <value>0x00000 - 0x03fff,0x04000 - 0x07fff,0x08000 - 0x1c7ff,0x1c800 - 0x2afff,NA</value>
+   <value>0x00000 - 0x03fff,0x04000 - 0x07fff,NA,0x08000 - 0x167ff,NA</value>
    <derived>true</derived>
    <enabled>false</enabled>
    <visible>true</visible>
@@ -7690,7 +7690,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SECTOR_STORAGE_TYPE">
    <type>[Ljava.lang.String;</type>
-   <value>UFM,UFM,UFM,UFM,CFM</value>
+   <value>UFM,UFM,NA,UFM,CFM</value>
    <derived>true</derived>
    <enabled>false</enabled>
    <visible>true</visible>
@@ -7764,7 +7764,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="PART_NAME">
    <type>java.lang.String</type>
-   <value>10M08SAE144C8GES</value>
+   <value>10M08SCE144C8G</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7831,7 +7831,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SECTOR3_END_ADDR">
    <type>int</type>
-   <value>29183</value>
+   <value>23039</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7841,7 +7841,7 @@ the requested settings for a module instance. -->
    <type>int</type>
    <value>29184</value>
    <derived>true</derived>
-   <enabled>true</enabled>
+   <enabled>false</enabled>
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
@@ -7849,7 +7849,7 @@ the requested settings for a module instance. -->
    <type>int</type>
    <value>44031</value>
    <derived>true</derived>
-   <enabled>true</enabled>
+   <enabled>false</enabled>
    <visible>false</visible>
    <valid>true</valid>
   </parameter>
@@ -7879,7 +7879,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="MAX_VALID_ADDR">
    <type>int</type>
-   <value>44031</value>
+   <value>23039</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7895,7 +7895,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="MAX_UFM_VALID_ADDR">
    <type>int</type>
-   <value>44031</value>
+   <value>23039</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7919,7 +7919,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SECTOR3_MAP">
    <type>int</type>
-   <value>3</value>
+   <value>4</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7927,7 +7927,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SECTOR4_MAP">
    <type>int</type>
-   <value>4</value>
+   <value>0</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7943,7 +7943,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="ADDR_RANGE1_END_ADDR">
    <type>int</type>
-   <value>44031</value>
+   <value>8191</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7951,7 +7951,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="ADDR_RANGE2_END_ADDR">
    <type>int</type>
-   <value>44031</value>
+   <value>23039</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7967,7 +7967,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="ADDR_RANGE2_OFFSET">
    <type>int</type>
-   <value>0</value>
+   <value>21504</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7983,7 +7983,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="AVMM_DATA_ADDR_WIDTH">
    <type>int</type>
-   <value>16</value>
+   <value>15</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -8277,7 +8277,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="addressSpan">
     <type>java.math.BigInteger</type>
-    <value>176128</value>
+    <value>92160</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -8365,7 +8365,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="explicitAddressSpan">
     <type>java.math.BigInteger</type>
-    <value>176128</value>
+    <value>92160</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -8576,7 +8576,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avmm_data_addr</name>
     <direction>Input</direction>
-    <width>16</width>
+    <width>15</width>
     <role>address</role>
    </port>
    <port>

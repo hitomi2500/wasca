@@ -134,7 +134,7 @@ module wasca_mm_interconnect_0_router
     // Figure out the number of bits to mask off for each slave span
     // during address decoding
     // -------------------------------------------------------
-    localparam PAD0 = log2ceil(64'h40000 - 64'h0); 
+    localparam PAD0 = log2ceil(64'h20000 - 64'h0); 
     localparam PAD1 = log2ceil(64'h40020 - 64'h40000); 
     localparam PAD2 = log2ceil(64'h42010 - 64'h42000); 
     localparam PAD3 = log2ceil(64'h58000 - 64'h50000); 
@@ -199,7 +199,7 @@ module wasca_mm_interconnect_0_router
         // Sets the channel and destination ID based on the address
         // --------------------------------------------------
 
-    // ( 0x0 .. 0x40000 )
+    // ( 0x0 .. 0x20000 )
     if ( {address[RG:PAD0],{PAD0{1'b0}}} == 27'h0  && read_transaction  ) begin
             src_channel = 8'b0001000;
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 5;

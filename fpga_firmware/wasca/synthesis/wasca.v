@@ -72,7 +72,7 @@ module wasca (
 	wire  [15:0] mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_sdram_writedata;     // mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_sdram_writedata -> abus_avalon_sdram_bridge_0:avalon_sdram_writedata
 	wire  [31:0] mm_interconnect_0_onchip_flash_0_data_readdata;                          // onchip_flash_0:avmm_data_readdata -> mm_interconnect_0:onchip_flash_0_data_readdata
 	wire         mm_interconnect_0_onchip_flash_0_data_waitrequest;                       // onchip_flash_0:avmm_data_waitrequest -> mm_interconnect_0:onchip_flash_0_data_waitrequest
-	wire  [15:0] mm_interconnect_0_onchip_flash_0_data_address;                           // mm_interconnect_0:onchip_flash_0_data_address -> onchip_flash_0:avmm_data_addr
+	wire  [14:0] mm_interconnect_0_onchip_flash_0_data_address;                           // mm_interconnect_0:onchip_flash_0_data_address -> onchip_flash_0:avmm_data_addr
 	wire         mm_interconnect_0_onchip_flash_0_data_read;                              // mm_interconnect_0:onchip_flash_0_data_read -> onchip_flash_0:avmm_data_read
 	wire         mm_interconnect_0_onchip_flash_0_data_readdatavalid;                     // onchip_flash_0:avmm_data_readdatavalid -> mm_interconnect_0:onchip_flash_0_data_readdatavalid
 	wire   [3:0] mm_interconnect_0_onchip_flash_0_data_burstcount;                        // mm_interconnect_0:onchip_flash_0_data_burstcount -> onchip_flash_0:avmm_data_burstcount
@@ -224,33 +224,33 @@ module wasca (
 		.INIT_FILENAME                       ("wasca_onchip_flash_0.hex"),
 		.INIT_FILENAME_SIM                   ("wasca_onchip_flash_0.dat"),
 		.DEVICE_FAMILY                       ("MAX 10"),
-		.PART_NAME                           ("10M08SAE144C8GES"),
+		.PART_NAME                           ("10M08SCE144C8G"),
 		.DEVICE_ID                           ("08"),
 		.SECTOR1_START_ADDR                  (0),
 		.SECTOR1_END_ADDR                    (4095),
 		.SECTOR2_START_ADDR                  (4096),
 		.SECTOR2_END_ADDR                    (8191),
 		.SECTOR3_START_ADDR                  (8192),
-		.SECTOR3_END_ADDR                    (29183),
+		.SECTOR3_END_ADDR                    (23039),
 		.SECTOR4_START_ADDR                  (29184),
 		.SECTOR4_END_ADDR                    (44031),
 		.SECTOR5_START_ADDR                  (0),
 		.SECTOR5_END_ADDR                    (0),
 		.MIN_VALID_ADDR                      (0),
-		.MAX_VALID_ADDR                      (44031),
+		.MAX_VALID_ADDR                      (23039),
 		.MIN_UFM_VALID_ADDR                  (0),
-		.MAX_UFM_VALID_ADDR                  (44031),
+		.MAX_UFM_VALID_ADDR                  (23039),
 		.SECTOR1_MAP                         (1),
 		.SECTOR2_MAP                         (2),
-		.SECTOR3_MAP                         (3),
-		.SECTOR4_MAP                         (4),
+		.SECTOR3_MAP                         (4),
+		.SECTOR4_MAP                         (0),
 		.SECTOR5_MAP                         (0),
-		.ADDR_RANGE1_END_ADDR                (44031),
-		.ADDR_RANGE2_END_ADDR                (44031),
+		.ADDR_RANGE1_END_ADDR                (8191),
+		.ADDR_RANGE2_END_ADDR                (23039),
 		.ADDR_RANGE1_OFFSET                  (512),
-		.ADDR_RANGE2_OFFSET                  (0),
+		.ADDR_RANGE2_OFFSET                  (21504),
 		.ADDR_RANGE3_OFFSET                  (0),
-		.AVMM_DATA_ADDR_WIDTH                (16),
+		.AVMM_DATA_ADDR_WIDTH                (15),
 		.AVMM_DATA_DATA_WIDTH                (32),
 		.AVMM_DATA_BURSTCOUNT_WIDTH          (4),
 		.SECTOR_READ_PROTECTION_MODE         (31),
