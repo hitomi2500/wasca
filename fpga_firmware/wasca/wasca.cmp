@@ -23,8 +23,10 @@
 			buffered_spi_clk                                      : out   std_logic;                                        -- clk
 			buffered_spi_miso                                     : in    std_logic                     := 'X';             -- miso
 			buffered_spi_cs                                       : out   std_logic;                                        -- cs
+			buffered_spi_sync                                     : out   std_logic;                                        -- sync
 			clk_clk                                               : in    std_logic                     := 'X';             -- clk
 			clock_116_mhz_clk                                     : out   std_logic;                                        -- clk
+			heartbeat_heartbeat_out                               : out   std_logic;                                        -- heartbeat_out
 			reset_reset_n                                         : in    std_logic                     := 'X';             -- reset_n
 			reset_controller_0_reset_in1_reset                    : in    std_logic                     := 'X';             -- reset
 			uart_0_external_connection_rxd                        : in    std_logic                     := 'X';             -- rxd

@@ -23,8 +23,10 @@ module wasca (
 	buffered_spi_clk,
 	buffered_spi_miso,
 	buffered_spi_cs,
+	buffered_spi_sync,
 	clk_clk,
 	clock_116_mhz_clk,
+	heartbeat_heartbeat_out,
 	reset_reset_n,
 	reset_controller_0_reset_in1_reset,
 	uart_0_external_connection_rxd,
@@ -53,8 +55,10 @@ module wasca (
 	output		buffered_spi_clk;
 	input		buffered_spi_miso;
 	output		buffered_spi_cs;
+	output		buffered_spi_sync;
 	input		clk_clk;
 	output		clock_116_mhz_clk;
+	output		heartbeat_heartbeat_out;
 	input		reset_reset_n;
 	input		reset_controller_0_reset_in1_reset;
 	input		uart_0_external_connection_rxd;

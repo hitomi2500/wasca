@@ -27,8 +27,10 @@ module wasca (
 		output wire        buffered_spi_clk,                                      //                                 .clk
 		input  wire        buffered_spi_miso,                                     //                                 .miso
 		output wire        buffered_spi_cs,                                       //                                 .cs
+		output wire        buffered_spi_sync,                                     //                                 .sync
 		input  wire        clk_clk,                                               //                              clk.clk
 		output wire        clock_116_mhz_clk,                                     //                    clock_116_mhz.clk
+		output wire        heartbeat_heartbeat_out,                               //                        heartbeat.heartbeat_out
 		input  wire        reset_reset_n,                                         //                            reset.reset_n
 		input  wire        reset_controller_0_reset_in1_reset,                    //     reset_controller_0_reset_in1.reset
 		input  wire        uart_0_external_connection_rxd,                        //       uart_0_external_connection.rxd
@@ -46,7 +48,7 @@ module wasca (
 	wire  [31:0] nios2_gen2_0_data_master_writedata;                                      // nios2_gen2_0:d_writedata -> mm_interconnect_0:nios2_gen2_0_data_master_writedata
 	wire  [31:0] nios2_gen2_0_instruction_master_readdata;                                // mm_interconnect_0:nios2_gen2_0_instruction_master_readdata -> nios2_gen2_0:i_readdata
 	wire         nios2_gen2_0_instruction_master_waitrequest;                             // mm_interconnect_0:nios2_gen2_0_instruction_master_waitrequest -> nios2_gen2_0:i_waitrequest
-	wire  [19:0] nios2_gen2_0_instruction_master_address;                                 // nios2_gen2_0:i_address -> mm_interconnect_0:nios2_gen2_0_instruction_master_address
+	wire  [24:0] nios2_gen2_0_instruction_master_address;                                 // nios2_gen2_0:i_address -> mm_interconnect_0:nios2_gen2_0_instruction_master_address
 	wire         nios2_gen2_0_instruction_master_read;                                    // nios2_gen2_0:i_read -> mm_interconnect_0:nios2_gen2_0_instruction_master_read
 	wire  [15:0] mm_interconnect_0_buffered_spi_0_avalon_readdata;                        // buffered_spi_0:avalon_readdata -> mm_interconnect_0:buffered_spi_0_avalon_readdata
 	wire         mm_interconnect_0_buffered_spi_0_avalon_waitrequest;                     // buffered_spi_0:avalon_waitrequest -> mm_interconnect_0:buffered_spi_0_avalon_waitrequest
@@ -62,6 +64,13 @@ module wasca (
 	wire         mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_regs_readdatavalid;  // abus_avalon_sdram_bridge_0:avalon_regs_readdatavalid -> mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_regs_readdatavalid
 	wire         mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_regs_write;          // mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_regs_write -> abus_avalon_sdram_bridge_0:avalon_regs_write
 	wire  [15:0] mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_regs_writedata;      // mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_regs_writedata -> abus_avalon_sdram_bridge_0:avalon_regs_writedata
+	wire  [15:0] mm_interconnect_0_heartbeat_0_avalon_regs_readdata;                      // heartbeat_0:avalon_regs_readdata -> mm_interconnect_0:heartbeat_0_avalon_regs_readdata
+	wire         mm_interconnect_0_heartbeat_0_avalon_regs_waitrequest;                   // heartbeat_0:avalon_regs_waitrequest -> mm_interconnect_0:heartbeat_0_avalon_regs_waitrequest
+	wire   [7:0] mm_interconnect_0_heartbeat_0_avalon_regs_address;                       // mm_interconnect_0:heartbeat_0_avalon_regs_address -> heartbeat_0:avalon_regs_address
+	wire         mm_interconnect_0_heartbeat_0_avalon_regs_read;                          // mm_interconnect_0:heartbeat_0_avalon_regs_read -> heartbeat_0:avalon_regs_read
+	wire         mm_interconnect_0_heartbeat_0_avalon_regs_readdatavalid;                 // heartbeat_0:avalon_regs_readdatavalid -> mm_interconnect_0:heartbeat_0_avalon_regs_readdatavalid
+	wire         mm_interconnect_0_heartbeat_0_avalon_regs_write;                         // mm_interconnect_0:heartbeat_0_avalon_regs_write -> heartbeat_0:avalon_regs_write
+	wire  [15:0] mm_interconnect_0_heartbeat_0_avalon_regs_writedata;                     // mm_interconnect_0:heartbeat_0_avalon_regs_writedata -> heartbeat_0:avalon_regs_writedata
 	wire  [15:0] mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_sdram_readdata;      // abus_avalon_sdram_bridge_0:avalon_sdram_readdata -> mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_sdram_readdata
 	wire         mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_sdram_waitrequest;   // abus_avalon_sdram_bridge_0:avalon_sdram_waitrequest -> mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_sdram_waitrequest
 	wire  [25:0] mm_interconnect_0_abus_avalon_sdram_bridge_0_avalon_sdram_address;       // mm_interconnect_0:abus_avalon_sdram_bridge_0_avalon_sdram_address -> abus_avalon_sdram_bridge_0:avalon_sdram_address
@@ -76,6 +85,14 @@ module wasca (
 	wire         mm_interconnect_0_onchip_flash_0_data_read;                              // mm_interconnect_0:onchip_flash_0_data_read -> onchip_flash_0:avmm_data_read
 	wire         mm_interconnect_0_onchip_flash_0_data_readdatavalid;                     // onchip_flash_0:avmm_data_readdatavalid -> mm_interconnect_0:onchip_flash_0_data_readdatavalid
 	wire   [3:0] mm_interconnect_0_onchip_flash_0_data_burstcount;                        // mm_interconnect_0:onchip_flash_0_data_burstcount -> onchip_flash_0:avmm_data_burstcount
+	wire  [31:0] mm_interconnect_0_nios2_gen2_0_debug_mem_slave_readdata;                 // nios2_gen2_0:debug_mem_slave_readdata -> mm_interconnect_0:nios2_gen2_0_debug_mem_slave_readdata
+	wire         mm_interconnect_0_nios2_gen2_0_debug_mem_slave_waitrequest;              // nios2_gen2_0:debug_mem_slave_waitrequest -> mm_interconnect_0:nios2_gen2_0_debug_mem_slave_waitrequest
+	wire         mm_interconnect_0_nios2_gen2_0_debug_mem_slave_debugaccess;              // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_debugaccess -> nios2_gen2_0:debug_mem_slave_debugaccess
+	wire   [8:0] mm_interconnect_0_nios2_gen2_0_debug_mem_slave_address;                  // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_address -> nios2_gen2_0:debug_mem_slave_address
+	wire         mm_interconnect_0_nios2_gen2_0_debug_mem_slave_read;                     // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_read -> nios2_gen2_0:debug_mem_slave_read
+	wire   [3:0] mm_interconnect_0_nios2_gen2_0_debug_mem_slave_byteenable;               // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_byteenable -> nios2_gen2_0:debug_mem_slave_byteenable
+	wire         mm_interconnect_0_nios2_gen2_0_debug_mem_slave_write;                    // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_write -> nios2_gen2_0:debug_mem_slave_write
+	wire  [31:0] mm_interconnect_0_nios2_gen2_0_debug_mem_slave_writedata;                // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_writedata -> nios2_gen2_0:debug_mem_slave_writedata
 	wire  [31:0] mm_interconnect_0_altpll_1_pll_slave_readdata;                           // altpll_1:readdata -> mm_interconnect_0:altpll_1_pll_slave_readdata
 	wire   [1:0] mm_interconnect_0_altpll_1_pll_slave_address;                            // mm_interconnect_0:altpll_1_pll_slave_address -> altpll_1:address
 	wire         mm_interconnect_0_altpll_1_pll_slave_read;                               // mm_interconnect_0:altpll_1_pll_slave_read -> altpll_1:read
@@ -95,17 +112,9 @@ module wasca (
 	wire         mm_interconnect_0_uart_0_s1_begintransfer;                               // mm_interconnect_0:uart_0_s1_begintransfer -> uart_0:begintransfer
 	wire         mm_interconnect_0_uart_0_s1_write;                                       // mm_interconnect_0:uart_0_s1_write -> uart_0:write_n
 	wire  [15:0] mm_interconnect_0_uart_0_s1_writedata;                                   // mm_interconnect_0:uart_0_s1_writedata -> uart_0:writedata
-	wire  [31:0] mm_interconnect_0_nios2_gen2_0_debug_mem_slave_readdata;                 // nios2_gen2_0:debug_mem_slave_readdata -> mm_interconnect_0:nios2_gen2_0_debug_mem_slave_readdata
-	wire         mm_interconnect_0_nios2_gen2_0_debug_mem_slave_waitrequest;              // nios2_gen2_0:debug_mem_slave_waitrequest -> mm_interconnect_0:nios2_gen2_0_debug_mem_slave_waitrequest
-	wire         mm_interconnect_0_nios2_gen2_0_debug_mem_slave_debugaccess;              // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_debugaccess -> nios2_gen2_0:debug_mem_slave_debugaccess
-	wire   [8:0] mm_interconnect_0_nios2_gen2_0_debug_mem_slave_address;                  // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_address -> nios2_gen2_0:debug_mem_slave_address
-	wire         mm_interconnect_0_nios2_gen2_0_debug_mem_slave_read;                     // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_read -> nios2_gen2_0:debug_mem_slave_read
-	wire   [3:0] mm_interconnect_0_nios2_gen2_0_debug_mem_slave_byteenable;               // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_byteenable -> nios2_gen2_0:debug_mem_slave_byteenable
-	wire         mm_interconnect_0_nios2_gen2_0_debug_mem_slave_write;                    // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_write -> nios2_gen2_0:debug_mem_slave_write
-	wire  [31:0] mm_interconnect_0_nios2_gen2_0_debug_mem_slave_writedata;                // mm_interconnect_0:nios2_gen2_0_debug_mem_slave_writedata -> nios2_gen2_0:debug_mem_slave_writedata
 	wire         irq_mapper_receiver0_irq;                                                // uart_0:irq -> irq_mapper:receiver0_irq
 	wire  [31:0] nios2_gen2_0_irq_irq;                                                    // irq_mapper:sender_irq -> nios2_gen2_0:irq
-	wire         rst_controller_reset_out_reset;                                          // rst_controller:reset_out -> [abus_avalon_sdram_bridge_0:reset, irq_mapper:reset, mm_interconnect_0:nios2_gen2_0_reset_reset_bridge_in_reset_reset, nios2_gen2_0:reset_n, onchip_flash_0:reset_n, onchip_memory2_0:reset, rst_translator:in_reset, uart_0:reset_n]
+	wire         rst_controller_reset_out_reset;                                          // rst_controller:reset_out -> [abus_avalon_sdram_bridge_0:reset, heartbeat_0:reset, irq_mapper:reset, mm_interconnect_0:nios2_gen2_0_reset_reset_bridge_in_reset_reset, nios2_gen2_0:reset_n, onchip_flash_0:reset_n, onchip_memory2_0:reset, rst_translator:in_reset, uart_0:reset_n]
 	wire         rst_controller_reset_out_reset_req;                                      // rst_controller:reset_req -> [onchip_memory2_0:reset_req, rst_translator:reset_req_in]
 	wire         reset_controller_0_reset_out_reset;                                      // reset_controller_0:reset_out -> [rst_controller:reset_in0, rst_controller_002:reset_in0]
 	wire         rst_controller_001_reset_out_reset;                                      // rst_controller_001:reset_out -> [altpll_1:reset, mm_interconnect_0:altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset]
@@ -189,7 +198,21 @@ module wasca (
 		.spi_clk              (buffered_spi_clk),                                      //            .clk
 		.spi_miso             (buffered_spi_miso),                                     //            .miso
 		.spi_cs               (buffered_spi_cs),                                       //            .cs
+		.spi_sync             (buffered_spi_sync),                                     //            .sync
 		.clock                (clock_116_mhz_clk)                                      //       clock.clk
+	);
+
+	heartbeat heartbeat_0 (
+		.reset                     (rst_controller_reset_out_reset),                          //       reset.reset
+		.avalon_regs_read          (mm_interconnect_0_heartbeat_0_avalon_regs_read),          // avalon_regs.read
+		.avalon_regs_write         (mm_interconnect_0_heartbeat_0_avalon_regs_write),         //            .write
+		.avalon_regs_waitrequest   (mm_interconnect_0_heartbeat_0_avalon_regs_waitrequest),   //            .waitrequest
+		.avalon_regs_address       (mm_interconnect_0_heartbeat_0_avalon_regs_address),       //            .address
+		.avalon_regs_writedata     (mm_interconnect_0_heartbeat_0_avalon_regs_writedata),     //            .writedata
+		.avalon_regs_readdata      (mm_interconnect_0_heartbeat_0_avalon_regs_readdata),      //            .readdata
+		.avalon_regs_readdatavalid (mm_interconnect_0_heartbeat_0_avalon_regs_readdatavalid), //            .readdatavalid
+		.clock                     (clock_116_mhz_clk),                                       //       clock.clk
+		.heartbeat_out             (heartbeat_heartbeat_out)                                  //   heartbeat.heartbeat_out
 	);
 
 	wasca_nios2_gen2_0 nios2_gen2_0 (
@@ -232,8 +255,8 @@ module wasca (
 		.SECTOR2_END_ADDR                    (8191),
 		.SECTOR3_START_ADDR                  (8192),
 		.SECTOR3_END_ADDR                    (23039),
-		.SECTOR4_START_ADDR                  (29184),
-		.SECTOR4_END_ADDR                    (44031),
+		.SECTOR4_START_ADDR                  (0),
+		.SECTOR4_END_ADDR                    (0),
 		.SECTOR5_START_ADDR                  (0),
 		.SECTOR5_END_ADDR                    (0),
 		.MIN_VALID_ADDR                      (0),
@@ -422,6 +445,13 @@ module wasca (
 		.buffered_spi_0_avalon_writedata                            (mm_interconnect_0_buffered_spi_0_avalon_writedata),                       //                                                     .writedata
 		.buffered_spi_0_avalon_readdatavalid                        (mm_interconnect_0_buffered_spi_0_avalon_readdatavalid),                   //                                                     .readdatavalid
 		.buffered_spi_0_avalon_waitrequest                          (mm_interconnect_0_buffered_spi_0_avalon_waitrequest),                     //                                                     .waitrequest
+		.heartbeat_0_avalon_regs_address                            (mm_interconnect_0_heartbeat_0_avalon_regs_address),                       //                              heartbeat_0_avalon_regs.address
+		.heartbeat_0_avalon_regs_write                              (mm_interconnect_0_heartbeat_0_avalon_regs_write),                         //                                                     .write
+		.heartbeat_0_avalon_regs_read                               (mm_interconnect_0_heartbeat_0_avalon_regs_read),                          //                                                     .read
+		.heartbeat_0_avalon_regs_readdata                           (mm_interconnect_0_heartbeat_0_avalon_regs_readdata),                      //                                                     .readdata
+		.heartbeat_0_avalon_regs_writedata                          (mm_interconnect_0_heartbeat_0_avalon_regs_writedata),                     //                                                     .writedata
+		.heartbeat_0_avalon_regs_readdatavalid                      (mm_interconnect_0_heartbeat_0_avalon_regs_readdatavalid),                 //                                                     .readdatavalid
+		.heartbeat_0_avalon_regs_waitrequest                        (mm_interconnect_0_heartbeat_0_avalon_regs_waitrequest),                   //                                                     .waitrequest
 		.nios2_gen2_0_debug_mem_slave_address                       (mm_interconnect_0_nios2_gen2_0_debug_mem_slave_address),                  //                         nios2_gen2_0_debug_mem_slave.address
 		.nios2_gen2_0_debug_mem_slave_write                         (mm_interconnect_0_nios2_gen2_0_debug_mem_slave_write),                    //                                                     .write
 		.nios2_gen2_0_debug_mem_slave_read                          (mm_interconnect_0_nios2_gen2_0_debug_mem_slave_read),                     //                                                     .read

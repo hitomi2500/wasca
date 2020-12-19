@@ -1,37 +1,35 @@
 # # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
 # 
+preplace inst wasca.heartbeat_0 -pg 1 -lvl 9 -y 170
 preplace inst wasca.clk_0 -pg 1 -lvl 11 -y 880
-preplace inst wasca.Altera_UP_SD_Card_Avalon_Interface_0 -pg 1 -lvl 11 -y 670
 preplace inst wasca.nios2_gen2_0.reset_bridge -pg 1
 preplace inst wasca.clk_1 -pg 1 -lvl 13 -y 910
 preplace inst wasca.nios2_gen2_0.cpu -pg 1
-preplace inst wasca.audio_0 -pg 1 -lvl 13 -y 170
 preplace inst wasca.reset_controller_0 -pg 1 -lvl 7 -y 470
 preplace inst wasca.abus_avalon_sdram_bridge_0 -pg 1 -lvl 13 -y 30
 preplace inst wasca.buffered_spi_0 -pg 1 -lvl 9 -y 480
 preplace inst wasca -pg 1 -lvl 1 -y 40 -regy -20
-preplace inst wasca.uart_0 -pg 1 -lvl 13 -y 690
+preplace inst wasca.uart_0 -pg 1 -lvl 9 -y 310
 preplace inst wasca.nios2_gen2_0.clock_bridge -pg 1
 preplace inst wasca.nios2_gen2_0 -pg 1 -lvl 8 -y 340
 preplace inst wasca.onchip_flash_0 -pg 1 -lvl 11 -y 940
 preplace inst wasca.altpll_1 -pg 1 -lvl 4 -y 470
 preplace inst wasca.onchip_memory2_0 -pg 1 -lvl 13 -y 370
-preplace netloc POINT_TO_POINT<net_container>wasca</net_container>(MASTER)clk_0.clk,(SLAVE)altpll_1.inclk_interface) 1 3 9 1050 830 NJ 830 NJ 830 NJ 830 NJ 830 NJ 830 NJ 830 NJ 830 3770
+preplace netloc FAN_OUT<net_container>wasca</net_container>(MASTER)nios2_gen2_0.debug_reset_request,(SLAVE)reset_controller_0.reset_in0,(SLAVE)buffered_spi_0.reset) 1 6 3 2320 400 NJ 480 3130
 preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.abus_avalon_sdram_bridge_0_abus,(SLAVE)abus_avalon_sdram_bridge_0.abus) 1 0 13 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ 40 NJ
-preplace netloc FAN_OUT<net_container>wasca</net_container>(SLAVE)onchip_flash_0.clk,(MASTER)altpll_1.c0,(SLAVE)onchip_memory2_0.clk1,(SLAVE)abus_avalon_sdram_bridge_0.clock,(SLAVE)buffered_spi_0.clock,(SLAVE)uart_0.clk,(SLAVE)Altera_UP_SD_Card_Avalon_Interface_0.clk,(SLAVE)audio_0.clk,(SLAVE)nios2_gen2_0.clk,(SLAVE)clk_1.clk_in,(SLAVE)reset_controller_0.clk) 1 4 9 NJ 500 NJ 500 2280 440 2630 520 3190 470 NJ 470 3440 450 NJ 450 3850
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.uart_0_external_connection,(SLAVE)uart_0.external_connection) 1 0 13 NJ 780 NJ 780 NJ 780 NJ 780 NJ 780 NJ 780 NJ 780 NJ 780 NJ 780 NJ 780 NJ 780 NJ 720 NJ
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)uart_0.external_connection,(SLAVE)wasca.uart_0_external_connection) 1 0 9 NJ 300 NJ 300 NJ 300 NJ 300 NJ 300 NJ 300 NJ 300 NJ 300 NJ
+preplace netloc POINT_TO_POINT<net_container>wasca</net_container>(MASTER)nios2_gen2_0.irq,(SLAVE)uart_0.irq) 1 8 1 3190
 preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.clk,(SLAVE)clk_0.clk_in) 1 0 11 NJ 890 NJ 890 NJ 890 NJ 890 NJ 890 NJ 890 NJ 890 NJ 890 NJ 890 NJ 890 NJ
-preplace netloc FAN_OUT<net_container>wasca</net_container>(MASTER)nios2_gen2_0.irq,(SLAVE)audio_0.interrupt,(SLAVE)uart_0.irq) 1 8 5 NJ 430 NJ 430 NJ 430 NJ 430 3810
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.reset,(SLAVE)clk_0.clk_in_reset) 1 0 11 NJ 910 NJ 910 NJ 910 NJ 910 NJ 910 NJ 910 NJ 910 NJ 910 NJ 910 NJ 910 NJ
-preplace netloc FAN_OUT<net_container>wasca</net_container>(SLAVE)reset_controller_0.reset_in0,(SLAVE)buffered_spi_0.reset,(MASTER)nios2_gen2_0.debug_reset_request) 1 6 3 2300 460 NJ 550 3130
+preplace netloc POINT_TO_POINT<net_container>wasca</net_container>(SLAVE)altpll_1.inclk_interface,(MASTER)clk_0.clk) 1 3 9 1030 870 NJ 870 NJ 870 NJ 870 NJ 870 NJ 870 NJ 870 NJ 870 3750
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)reset_controller_0.reset_in1,(SLAVE)wasca.reset_controller_0_reset_in1) 1 0 7 NJ 440 NJ 440 NJ 440 NJ 440 NJ 440 NJ 440 NJ
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)clk_0.clk_in_reset,(SLAVE)wasca.reset) 1 0 11 NJ 850 NJ 850 NJ 850 NJ 850 NJ 850 NJ 850 NJ 850 NJ 850 NJ 850 NJ 850 NJ
 preplace netloc EXPORT<net_container>wasca</net_container>(MASTER)wasca.clock_116_mhz,(MASTER)clk_1.clk) 1 13 1 N
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)audio_0.external_interface,(SLAVE)wasca.audio_out) 1 0 13 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)Altera_UP_SD_Card_Avalon_Interface_0.conduit_end,(SLAVE)wasca.altera_up_sd_card_avalon_interface_0_conduit_end) 1 0 11 NJ 720 NJ 720 NJ 720 NJ 720 NJ 720 NJ 720 NJ 720 NJ 720 NJ 720 NJ 720 NJ
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.buffered_spi,(SLAVE)buffered_spi_0.conduit_end) 1 0 9 NJ 300 NJ 300 NJ 300 NJ 300 NJ 300 NJ 300 NJ 300 NJ 300 NJ
-preplace netloc FAN_OUT<net_container>wasca</net_container>(SLAVE)onchip_flash_0.nreset,(SLAVE)Altera_UP_SD_Card_Avalon_Interface_0.reset,(SLAVE)uart_0.reset,(MASTER)reset_controller_0.reset_out,(SLAVE)clk_1.clk_in_reset,(SLAVE)onchip_memory2_0.reset1,(SLAVE)abus_avalon_sdram_bridge_0.reset,(SLAVE)nios2_gen2_0.reset,(SLAVE)audio_0.reset) 1 7 6 2670 500 NJ 450 NJ 450 3400 470 NJ 470 3870
+preplace netloc FAN_OUT<net_container>wasca</net_container>(SLAVE)uart_0.clk,(SLAVE)reset_controller_0.clk,(SLAVE)onchip_memory2_0.clk1,(SLAVE)abus_avalon_sdram_bridge_0.clock,(SLAVE)onchip_flash_0.clk,(SLAVE)heartbeat_0.clock,(SLAVE)clk_1.clk_in,(SLAVE)nios2_gen2_0.clk,(SLAVE)buffered_spi_0.clock,(MASTER)altpll_1.c0) 1 4 9 NJ 500 NJ 500 2260 380 2630 570 3210 280 NJ 280 3510 100 NJ 100 3850
+preplace netloc INTERCONNECT<net_container>wasca</net_container>(SLAVE)nios2_gen2_0.debug_mem_slave,(SLAVE)onchip_memory2_0.s1,(SLAVE)abus_avalon_sdram_bridge_0.avalon_regs,(SLAVE)heartbeat_0.avalon_regs,(SLAVE)altpll_1.pll_slave,(MASTER)nios2_gen2_0.data_master,(SLAVE)onchip_flash_0.data,(SLAVE)uart_0.s1,(SLAVE)abus_avalon_sdram_bridge_0.avalon_sdram,(MASTER)nios2_gen2_0.instruction_master,(SLAVE)buffered_spi_0.avalon) 1 3 10 1070 560 NJ 560 NJ 560 NJ 460 2690 550 3150 300 NJ 300 3450 80 NJ 80 3870
 preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)abus_avalon_sdram_bridge_0.sdram,(SLAVE)wasca.abus_avalon_sdram_bridge_0_sdram) 1 0 13 NJ 140 NJ 140 NJ 140 NJ 140 NJ 140 NJ 140 NJ 140 NJ 140 NJ 140 NJ 140 NJ 140 NJ 140 NJ
-preplace netloc POINT_TO_POINT<net_container>wasca</net_container>(MASTER)clk_0.clk_reset,(SLAVE)altpll_1.inclk_interface_reset) 1 3 9 1070 850 NJ 850 NJ 850 NJ 850 NJ 850 NJ 850 NJ 850 NJ 850 3750
-preplace netloc INTERCONNECT<net_container>wasca</net_container>(MASTER)nios2_gen2_0.data_master,(SLAVE)Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave,(SLAVE)audio_0.avalon_audio_slave,(MASTER)nios2_gen2_0.instruction_master,(SLAVE)onchip_flash_0.data,(SLAVE)altpll_1.pll_slave,(SLAVE)onchip_memory2_0.s1,(SLAVE)nios2_gen2_0.debug_mem_slave,(SLAVE)abus_avalon_sdram_bridge_0.avalon_regs,(SLAVE)abus_avalon_sdram_bridge_0.avalon_sdram,(SLAVE)buffered_spi_0.avalon,(SLAVE)uart_0.s1) 1 3 10 1030 420 NJ 420 NJ 420 NJ 420 2650 480 3170 590 NJ 590 3420 590 NJ 590 3830
-preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)wasca.reset_controller_0_reset_in1,(SLAVE)reset_controller_0.reset_in1) 1 0 7 NJ 440 NJ 440 NJ 440 NJ 440 NJ 440 NJ 440 NJ
-levelinfo -pg 1 0 200 4200
-levelinfo -hier wasca 210 230 640 1010 1390 1820 2240 2450 2890 3260 3380 3580 3790 3920 4090
+preplace netloc FAN_OUT<net_container>wasca</net_container>(SLAVE)abus_avalon_sdram_bridge_0.reset,(SLAVE)heartbeat_0.reset,(SLAVE)nios2_gen2_0.reset,(SLAVE)onchip_memory2_0.reset1,(SLAVE)onchip_flash_0.nreset,(SLAVE)clk_1.clk_in_reset,(SLAVE)uart_0.reset,(MASTER)reset_controller_0.reset_out) 1 7 6 2670 500 3170 470 NJ 470 3490 120 NJ 120 3830
+preplace netloc POINT_TO_POINT<net_container>wasca</net_container>(MASTER)clk_0.clk_reset,(SLAVE)altpll_1.inclk_interface_reset) 1 3 9 1050 830 NJ 830 NJ 830 NJ 830 NJ 830 NJ 830 NJ 830 NJ 830 3770
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)heartbeat_0.heartbeat,(SLAVE)wasca.heartbeat) 1 0 9 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ 220 NJ
+preplace netloc EXPORT<net_container>wasca</net_container>(SLAVE)buffered_spi_0.conduit_end,(SLAVE)wasca.buffered_spi) 1 0 9 NJ 420 NJ 420 NJ 420 NJ 420 NJ 420 NJ 420 NJ 420 NJ 530 NJ
+levelinfo -pg 1 0 200 4220
+levelinfo -hier wasca 210 230 640 1010 1390 1820 2240 2450 2890 3280 3430 3580 3810 3940 4110

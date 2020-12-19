@@ -22,8 +22,10 @@
 		.buffered_spi_clk                                      (<connected-to-buffered_spi_clk>),                                      //                                 .clk
 		.buffered_spi_miso                                     (<connected-to-buffered_spi_miso>),                                     //                                 .miso
 		.buffered_spi_cs                                       (<connected-to-buffered_spi_cs>),                                       //                                 .cs
+		.buffered_spi_sync                                     (<connected-to-buffered_spi_sync>),                                     //                                 .sync
 		.clk_clk                                               (<connected-to-clk_clk>),                                               //                              clk.clk
 		.clock_116_mhz_clk                                     (<connected-to-clock_116_mhz_clk>),                                     //                    clock_116_mhz.clk
+		.heartbeat_heartbeat_out                               (<connected-to-heartbeat_heartbeat_out>),                               //                        heartbeat.heartbeat_out
 		.reset_reset_n                                         (<connected-to-reset_reset_n>),                                         //                            reset.reset_n
 		.reset_controller_0_reset_in1_reset                    (<connected-to-reset_controller_0_reset_in1_reset>),                    //     reset_controller_0_reset_in1.reset
 		.uart_0_external_connection_rxd                        (<connected-to-uart_0_external_connection_rxd>),                        //       uart_0_external_connection.rxd
