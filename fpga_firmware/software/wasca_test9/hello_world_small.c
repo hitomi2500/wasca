@@ -182,7 +182,7 @@ int alt_up_sd_card_read_512b(short int file_handle, char * buf, int sector_num)
     short int ch = -1;
     int j;
 
-    if ((file_handle >= 0) && (file_handle < MAX_FILES_OPENED))
+    /*if ((file_handle >= 0) && (file_handle < MAX_FILES_OPENED))
     {
         if (active_files[file_handle].in_use)
         {
@@ -203,14 +203,15 @@ int alt_up_sd_card_read_512b(short int file_handle, char * buf, int sector_num)
             }
         }
     }
-    return ch;
+    return ch;*/
+    return 0;
 }
 
 
 bool alt_up_sd_card_write_512b(short int file_handle, char * buf, int sector_num)
 /* Write a 512 bytes sector to a given file. Return true if successful, and false otherwise. */
 {
-    bool result = false;
+    /*bool result = false;
     int j;
 
     if ((file_handle >= 0) && (file_handle < MAX_FILES_OPENED))
@@ -231,7 +232,8 @@ bool alt_up_sd_card_write_512b(short int file_handle, char * buf, int sector_num
 		}
     }
 
-    return result;
+    return result;*/
+	return true;
 }
 
 
@@ -351,23 +353,23 @@ int main()
   //first things first - copy saturn bootcode into SDRAM
   //wait for SD card
   alt_printf("Waiting for SD ");
-  while (false == alt_up_sd_card_is_Present())
+  while (0)//(false == alt_up_sd_card_is_Present())
   {
 	  alt_printf(".");
-	  alt_up_sd_card_open_dev("/dev/Altera_UP_SD_Card_Avalon_Interface_0");
+	  //alt_up_sd_card_open_dev("/dev/Altera_UP_SD_Card_Avalon_Interface_0");
   }
   alt_printf("done!\n\r");
-  if (false == alt_up_sd_card_is_FAT16())
+  if (0)//(false == alt_up_sd_card_is_FAT16())
   {
 	  for (i=0;i<10000;i++)
-		  alt_printf("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+		  ;//alt_printf("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
   }
   //open bootloader file
-  int _file_handler = alt_up_sd_card_fopen("WASCALDR.BIN",false);
+  int _file_handler = 0;//alt_up_sd_card_fopen("WASCALDR.BIN",false);
   if (-1 == _file_handler)
   {
 	  for (i=0;i<10000;i++)
-		  alt_printf("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+		  ;//alt_printf("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
   }
   for (i=0;i<256;i++)
   {
@@ -376,9 +378,9 @@ int main()
 	  alt_up_sd_card_read_512b(_file_handler,&(pCS0[i*512+j]),i);
 	  alt_printf(".");
   }
-  alt_up_sd_card_fclose(_file_handler);
+  //alt_up_sd_card_fclose(_file_handler);
   //now it's minipseudo's time
-  _file_handler = alt_up_sd_card_fopen("PSEUDO.BIN",false);
+  _file_handler = 0;//alt_up_sd_card_fopen("PSEUDO.BIN",false);
   if (-1 == _file_handler)
   {
 	  for (i=0;i<10000;i++)
@@ -392,7 +394,7 @@ int main()
 	  alt_up_sd_card_read_512b(_file_handler,&(pCS0[0x1800000 + i*512+j]),i);
 	  alt_printf(".");
   }
-  alt_up_sd_card_fclose(_file_handler);
+  //alt_up_sd_card_fclose(_file_handler);
 
   /*p = (unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
   for (i=0;i<131072;i++)
@@ -449,61 +451,61 @@ int main()
 	  case 0x1 : //0.5 MB
 		  alt_putstr("Preparing 0.5M backup RAM");
 		  strcpy(backup_filename,"BACKUP05.BIN");
-		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
+		  _file_handler = 0;//alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<2048;i++)
 		  {
 			  pRegs_16[PCNTR_REG_OFFSET]=i/21;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  pCS1[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS1[i*512+j] =  0;//alt_up_sd_card_read(_file_handler);
 		  }
 		  pRegs_16[PCNTR_REG_OFFSET] = 100;
-		  alt_up_sd_card_fclose(_file_handler);
+		  //alt_up_sd_card_fclose(_file_handler);
 		  alt_putstr("Done\n\r");
 		  break;
 	  case 0x2 : //1 MB
 		  alt_putstr("Preparing 1M backup RAM");
 		  strcpy(backup_filename,"BACKUP1.BIN");
-		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
+		  _file_handler = 0;//alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<4096;i++)
 		  {
 			  pRegs_16[PCNTR_REG_OFFSET]=i/41;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  pCS1[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS1[i*512+j] =  0;//alt_up_sd_card_read(_file_handler);
 		  }
 		  pRegs_16[PCNTR_REG_OFFSET] = 100;
-		  alt_up_sd_card_fclose(_file_handler);
+		  //alt_up_sd_card_fclose(_file_handler);
 		  alt_putstr("Done\n\r");
 		  break;
 	  case 0x3 : //2 MB
 		  alt_putstr("Preparing 2M backup RAM");
 		  strcpy(backup_filename,"BACKUP2.BIN");
-		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
+		  _file_handler = 0;//alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<8192;i++)
 		  {
 			  pRegs_16[PCNTR_REG_OFFSET]=i/82;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  pCS1[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS1[i*512+j] =  0;//alt_up_sd_card_read(_file_handler);
 		  }
 		  pRegs_16[PCNTR_REG_OFFSET] = 100;
-		  alt_up_sd_card_fclose(_file_handler);
+		  //alt_up_sd_card_fclose(_file_handler);
 		  alt_putstr("Done\n\r");
 		  break;
 	  case 0x04 : //4 MB
 		  alt_putstr("Preparing 4M backup RAM");
 		  strcpy(backup_filename,"BACKUP4.BIN");
-		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
+		  _file_handler = 0;//alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<16384;i++)
 		  {
 			  pRegs_16[PCNTR_REG_OFFSET]=i/164;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  pCS1[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS1[i*512+j] =  0;//alt_up_sd_card_read(_file_handler);
 		  }
 		  pRegs_16[PCNTR_REG_OFFSET] = 100;
-		  alt_up_sd_card_fclose(_file_handler);
+		  //alt_up_sd_card_fclose(_file_handler);
 		  alt_putstr("Done\n\r");
 		  break;
 	  }
@@ -528,7 +530,7 @@ int main()
 		  // if the fifo is overfilled ( > 1024 samples), issue an error message
 		  while (pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
 		  {
-			  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
+			  _file_handler = 0;//alt_up_sd_card_fopen(backup_filename,false);
 			  //check if close to overfill
 			  /*if (p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 1020)
 			  {
@@ -553,7 +555,7 @@ int main()
 						alt_printf("NOT SYNCED:  %x(%x)%x \r\n",iCurrentBlock,iCurrentBlock,iCurrentBlock);
 				  }
 			  }*/
-			  alt_up_sd_card_fclose(_file_handler);
+			  //alt_up_sd_card_fclose(_file_handler);
 		  }
 		  //doing a lazy sync check
 		  /*_file_handler = alt_up_sd_card_fopen(backup_filename,false);
@@ -597,16 +599,16 @@ int main()
 	  case 0x100 : //kof95
 		  alt_putstr("Preparing KoF'95 ROM");
 		  strcpy(backup_filename,"KOF95.BIN");
-		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
+		  _file_handler = 0;//alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<4096;i++)
 		  {
 			  pRegs_16[PCNTR_REG_OFFSET]=i/41;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  pCS0[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS0[i*512+j] =  0;//alt_up_sd_card_read(_file_handler);
 		  }
 		  pRegs_16[PCNTR_REG_OFFSET] = 100;
-		  alt_up_sd_card_fclose(_file_handler);
+		  //alt_up_sd_card_fclose(_file_handler);
 		  //mapper stuff
 		  pRegs_16[MAPPER_WRITE_0] = 0;//lock cs0 writes
 		  pRegs_16[MAPPER_WRITE_1] = 0;//lock cs0 writes
@@ -621,16 +623,16 @@ int main()
 	  case 0x200 : //Ultraman
 		  alt_putstr("Preparing Ultraman ROM");
 		  strcpy(backup_filename,"ULTRAMAN.BIN");
-		  _file_handler = alt_up_sd_card_fopen(backup_filename,false);
+		  _file_handler = 0;//alt_up_sd_card_fopen(backup_filename,false);
 		  for (i=0;i<4096;i++)
 		  {
 			  pRegs_16[PCNTR_REG_OFFSET]=i/41;
 			  alt_putstr(".");
 			  for (j=0;j<512;j++)
-				  pCS0[i*512+j] =  alt_up_sd_card_read(_file_handler);
+				  pCS0[i*512+j] =  0;//alt_up_sd_card_read(_file_handler);
 		  }
 		  pRegs_16[PCNTR_REG_OFFSET] = 100;
-		  alt_up_sd_card_fclose(_file_handler);
+		  //alt_up_sd_card_fclose(_file_handler);
 		  //mapper stuff
 		  pRegs_16[MAPPER_WRITE_0] = 0;//lock cs0 writes
 		  pRegs_16[MAPPER_WRITE_1] = 0;//lock cs0 writes
