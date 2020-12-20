@@ -3,7 +3,7 @@
 # Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
 # SOPC Builder design path: ../../wasca.sopcinfo
 #
-# Generated: Wed Oct 28 23:38:37 MSK 2020
+# Generated: Sat Dec 19 20:56:26 MSK 2020
 
 # DO NOT MODIFY THIS FILE
 #
@@ -47,10 +47,10 @@
 # by allowing GDB to cache memory contents on the host.
 
 # onchip_flash_0
-memory 0x0 0x2b000 cache
+memory 0x0 0x16800 cache
 
 # onchip_memory2_0
-memory 0x80000 0x84000 cache
+memory 0x800000 0x804000 cache
 
 # abus_avalon_sdram_bridge_0_avalon_sdram
 memory 0x4000000 0x8000000 cache

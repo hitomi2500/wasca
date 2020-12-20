@@ -2,9 +2,9 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>29.10.2020 0:20:21</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1603916421962</BspGeneratedUnixTimeStamp>
-        <BspGeneratedLocation>D:\Saturn\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
+        <BspGeneratedTimeStamp>Dec 19, 2020 9:48:31 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1608400111009</BspGeneratedUnixTimeStamp>
+        <BspGeneratedLocation>C:\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
@@ -77,7 +77,7 @@
                 <Value>1</Value>
                 <DefaultValue>0</DefaultValue>
                 <DestinationFile>none</DestinationFile>
-                <Description>Enables the alt_load() facility. The alt_load() facility copies sections from the .text memory into RAM. If true, this setting sets up the VMA/LMA of sections in linker.x to allow them to be loaded into the .text memory.</Description>
+                <Description>Enables the alt_load() facility. The alt_load() facility copies data sections (.rodata, .rwdata, or .exceptions) from boot memory to RAM. If true, this setting sets up the VMA/LMA of sections in linker.x to allow them to be loaded into the .text memory.</Description>
                 <Restrictions>This setting is typically false if an external bootloader (e.g. flash bootloader) is present.</Restrictions>
                 <Enabled>false</Enabled>
                 <Group xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
@@ -539,6 +539,18 @@
                 <Group>none</Group>
         </Setting>
         <Setting>
+                <SettingName>hal.make.cflags_mgpopt</SettingName>
+                <Identifier>CFLAGS_MGPOPT</Identifier>
+                <Type>UnquotedString</Type>
+                <Value>-mgpopt=global</Value>
+                <DefaultValue>-mgpopt=global</DefaultValue>
+                <DestinationFile>public_mk_define</DestinationFile>
+                <Description>C/C++ compiler to generate (do not generate) GP-relative accesses. 'none' tells the compilter not to generate GP-relative accesses. 'local' will generate GP-relative accesses for small data objects that are not external, weak, or uninitialized common symbols. Also use GP-relative addressing for objects that have been explicitly placed in a small data section via a section attribute. provides the default set of debug symbols typically required to debug a typical application. 'global' is same as 'local' but also generate GP-relative accesses for small data objects that are external, weak, or common.</Description>
+                <Restrictions>none</Restrictions>
+                <Enabled>false</Enabled>
+                <Group>common</Group>
+        </Setting>
+        <Setting>
                 <SettingName>hal.make.ignore_system_derived.sopc_system_id</SettingName>
                 <Identifier>none</Identifier>
                 <Type>Boolean</Type>
@@ -866,7 +878,7 @@
                 <SettingName>altera_avalon_uart_driver.enable_small_driver</SettingName>
                 <Identifier>ALTERA_AVALON_UART_SMALL</Identifier>
                 <Type>BooleanDefineOnly</Type>
-                <Value>true</Value>
+                <Value>false</Value>
                 <DefaultValue>false</DefaultValue>
                 <DestinationFile>public_mk_define</DestinationFile>
                 <Description>Small-footprint (polled mode) driver</Description>
@@ -898,25 +910,25 @@
                 <regionName>onchip_flash_0</regionName>
                 <memoryName>onchip_flash_0</memoryName>
                 <offset>32</offset>
-                <size>16320</size>
+                <size>15840</size>
                 <baseAddress>0x20</baseAddress>
-                <addressRange>0x00000020 - 0x00003FDF</addressRange>
+                <addressRange>0x00000020 - 0x00003DFF</addressRange>
         </LinkerRegion>
         <LinkerRegion>
                 <regionName>exceptions</regionName>
                 <memoryName>onchip_flash_0</memoryName>
-                <offset>16352</offset>
-                <size>32</size>
-                <baseAddress>0x3fe0</baseAddress>
-                <addressRange>0x00003FE0 - 0x00003FFF</addressRange>
+                <offset>15872</offset>
+                <size>512</size>
+                <baseAddress>0x3e00</baseAddress>
+                <addressRange>0x00003E00 - 0x00003FFF</addressRange>
         </LinkerRegion>
         <LinkerRegion>
                 <regionName>onchip_memory2_0</regionName>
                 <memoryName>onchip_memory2_0</memoryName>
                 <offset>0</offset>
                 <size>16384</size>
-                <baseAddress>0x80000</baseAddress>
-                <addressRange>0x00080000 - 0x00083FFF</addressRange>
+                <baseAddress>0x800000</baseAddress>
+                <addressRange>0x00800000 - 0x00803FFF</addressRange>
         </LinkerRegion>
         <LinkerRegion>
                 <regionName>abus_avalon_sdram_bridge_0_avalon_sdram</regionName>
@@ -928,51 +940,45 @@
         </LinkerRegion>
         <MemoryMap>
                 <slaveDescriptor>onchip_flash_0</slaveDescriptor>
-                <addressRange>0x00000000 - 0x0002AFFF</addressRange>
-                <addressSpan>176128</addressSpan>
+                <addressRange>0x00000000 - 0x000167FF</addressRange>
+                <addressSpan>92160</addressSpan>
                 <attributes>flash, memory, non-volatile</attributes>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>altpll_1</slaveDescriptor>
+                <addressRange>0x00400000 - 0x0040000F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>uart_0</slaveDescriptor>
-                <addressRange>0x00040000 - 0x0004001F</addressRange>
+                <addressRange>0x00410000 - 0x0041001F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>altpll_1</slaveDescriptor>
-                <addressRange>0x00042000 - 0x0004200F</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>audio_0</slaveDescriptor>
-                <addressRange>0x00046000 - 0x0004600F</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>Altera_UP_SD_Card_Avalon_Interface_0</slaveDescriptor>
-                <addressRange>0x00047000 - 0x000473FF</addressRange>
-                <addressSpan>1024</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>buffered_spi_0</slaveDescriptor>
-                <addressRange>0x00050000 - 0x00057FFF</addressRange>
+                <addressRange>0x00600000 - 0x00607FFF</addressRange>
                 <addressSpan>32768</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>abus_avalon_sdram_bridge_0_avalon_regs</slaveDescriptor>
-                <addressRange>0x00060000 - 0x000601FF</addressRange>
+                <slaveDescriptor>heartbeat_0</slaveDescriptor>
+                <addressRange>0x00700000 - 0x007001FF</addressRange>
                 <addressSpan>512</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>onchip_memory2_0</slaveDescriptor>
-                <addressRange>0x00080000 - 0x00083FFF</addressRange>
+                <addressRange>0x00800000 - 0x00803FFF</addressRange>
                 <addressSpan>16384</addressSpan>
                 <attributes>memory</attributes>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>abus_avalon_sdram_bridge_0_avalon_regs</slaveDescriptor>
+                <addressRange>0x02000000 - 0x020001FF</addressRange>
+                <addressSpan>512</addressSpan>
+                <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>abus_avalon_sdram_bridge_0_avalon_sdram</slaveDescriptor>

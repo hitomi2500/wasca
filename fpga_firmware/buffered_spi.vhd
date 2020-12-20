@@ -15,6 +15,7 @@ entity buffered_spi is
            avalon_writedata : in STD_LOGIC_VECTOR (15 downto 0);
            avalon_readdata : out STD_LOGIC_VECTOR (15 downto 0);
            avalon_readdatavalid : out std_logic := '0';
+           spi_sync : out STD_LOGIC := '0';
            spi_mosi : out STD_LOGIC := '0';
            spi_clk : out STD_LOGIC := '0';
            spi_miso : in STD_LOGIC;
@@ -70,6 +71,7 @@ signal avalon_address_latched : std_logic_vector (13 downto 0);
 
 signal avalon_readdatavalid_p1 : STD_LOGIC;
 
+signal spi_sync_register         : std_logic  := '0';
 
 --inferred ram, quartus fails to recognize'em like bram
 --type spi_buf_type is array(0 to 511) of std_logic_vector(15 downto 0);
@@ -99,6 +101,8 @@ begin
 	avalon_address_latched <= avalon_address when rising_edge(clock) and (avalon_read = '1' or avalon_write = '1');
 	avalon_read_f1 <=  avalon_read when rising_edge(clock);
 	avalon_read_f2 <=  avalon_read_f1 when rising_edge(clock);
+	
+	spi_sync <= spi_sync_register;
 
 	--Avalon regs read interface
 	process (clock)
@@ -131,7 +135,7 @@ begin
                            when "101" =>
                                  avalon_readdata_p1 <= X"000"&"000"&buffer_select_register;
                            when "110" =>
-                                 avalon_readdata_p1 <= X"DEAF";
+                                 avalon_readdata_p1 <= X"000"&"000"&spi_sync_register;
                            when "111" =>
                                  avalon_readdata_p1 <= X"FACE";
                            when others =>
@@ -180,6 +184,8 @@ begin
                              delay_register <= avalon_writedata;
                        when "101" => 
                              buffer_select_register <= avalon_writedata(0);
+                       when "110" => 
+                             spi_sync_register <= avalon_writedata(0);
                        when others =>
                              null; 
                        end case;

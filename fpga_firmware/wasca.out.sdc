@@ -1,29 +1,28 @@
 ## Generated SDC file "wasca.out.sdc"
 
-## Copyright (C) 1991-2015 Altera Corporation. All rights reserved.
-## Your use of Altera Corporation's design tools, logic functions 
+## Copyright (C) 2018  Intel Corporation. All rights reserved.
+## Your use of Intel Corporation's design tools, logic functions 
 ## and other software and tools, and its AMPP partner logic 
 ## functions, and any output files from any of the foregoing 
 ## (including device programming or simulation files), and any 
 ## associated documentation or information are expressly subject 
-## to the terms and conditions of the Altera Program License 
-## Subscription Agreement, the Altera Quartus Prime License Agreement,
-## the Altera MegaCore Function License Agreement, or other 
-## applicable license agreement, including, without limitation, 
-## that your use is for the sole purpose of programming logic 
-## devices manufactured by Altera and sold by Altera or its 
-## authorized distributors.  Please refer to the applicable 
-## agreement for further details.
+## to the terms and conditions of the Intel Program License 
+## Subscription Agreement, the Intel Quartus Prime License Agreement,
+## the Intel FPGA IP License Agreement, or other applicable license
+## agreement, including, without limitation, that your use is for
+## the sole purpose of programming logic devices manufactured by
+## Intel and sold by Intel or its authorized distributors.  Please
+## refer to the applicable agreement for further details.
 
 
 ## VENDOR  "Altera"
 ## PROGRAM "Quartus Prime"
-## VERSION "Version 15.1.0 Build 185 10/21/2015 SJ Lite Edition"
+## VERSION "Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition"
 
-## DATE    "Sat Oct 24 19:48:44 2020"
+## DATE    "Fri Dec 18 17:54:48 2020"
 
 ##
-## DEVICE  "10M08SAE144C8GES"
+## DEVICE  "10M08SCE144C8G"
 ##
 
 
@@ -60,6 +59,26 @@ create_clock -name {system_clk} -period 8.627 -waveform { 0.000 4.313 } [get_net
 # Set Clock Uncertainty
 #**************************************************************
 
+set_clock_uncertainty -rise_from [get_clocks {altera_reserved_tck}] -rise_to [get_clocks {altera_reserved_tck}]  0.070  
+set_clock_uncertainty -rise_from [get_clocks {altera_reserved_tck}] -fall_to [get_clocks {altera_reserved_tck}]  0.070  
+set_clock_uncertainty -fall_from [get_clocks {altera_reserved_tck}] -rise_to [get_clocks {altera_reserved_tck}]  0.070  
+set_clock_uncertainty -fall_from [get_clocks {altera_reserved_tck}] -fall_to [get_clocks {altera_reserved_tck}]  0.070  
+set_clock_uncertainty -rise_from [get_clocks {system_clk}] -rise_to [get_clocks {system_clk}]  0.070  
+set_clock_uncertainty -rise_from [get_clocks {system_clk}] -fall_to [get_clocks {system_clk}]  0.070  
+set_clock_uncertainty -rise_from [get_clocks {system_clk}] -rise_to [get_clocks {smpc_clk}]  0.070  
+set_clock_uncertainty -rise_from [get_clocks {system_clk}] -fall_to [get_clocks {smpc_clk}]  0.070  
+set_clock_uncertainty -fall_from [get_clocks {system_clk}] -rise_to [get_clocks {system_clk}]  0.070  
+set_clock_uncertainty -fall_from [get_clocks {system_clk}] -fall_to [get_clocks {system_clk}]  0.070  
+set_clock_uncertainty -fall_from [get_clocks {system_clk}] -rise_to [get_clocks {smpc_clk}]  0.070  
+set_clock_uncertainty -fall_from [get_clocks {system_clk}] -fall_to [get_clocks {smpc_clk}]  0.070  
+set_clock_uncertainty -rise_from [get_clocks {smpc_clk}] -rise_to [get_clocks {system_clk}]  0.070  
+set_clock_uncertainty -rise_from [get_clocks {smpc_clk}] -fall_to [get_clocks {system_clk}]  0.070  
+set_clock_uncertainty -rise_from [get_clocks {smpc_clk}] -rise_to [get_clocks {smpc_clk}]  0.070  
+set_clock_uncertainty -rise_from [get_clocks {smpc_clk}] -fall_to [get_clocks {smpc_clk}]  0.070  
+set_clock_uncertainty -fall_from [get_clocks {smpc_clk}] -rise_to [get_clocks {system_clk}]  0.070  
+set_clock_uncertainty -fall_from [get_clocks {smpc_clk}] -fall_to [get_clocks {system_clk}]  0.070  
+set_clock_uncertainty -fall_from [get_clocks {smpc_clk}] -rise_to [get_clocks {smpc_clk}]  0.070  
+set_clock_uncertainty -fall_from [get_clocks {smpc_clk}] -fall_to [get_clocks {smpc_clk}]  0.070  
 
 
 #**************************************************************
@@ -78,6 +97,7 @@ create_clock -name {system_clk} -period 8.627 -waveform { 0.000 4.313 } [get_net
 # Set Clock Groups
 #**************************************************************
 
+set_clock_groups -asynchronous -group [get_clocks {altera_reserved_tck}] 
 set_clock_groups -asynchronous -group [get_clocks {altera_reserved_tck}] 
 set_clock_groups -asynchronous -group [get_clocks {altera_reserved_tck}] 
 set_clock_groups -asynchronous -group [get_clocks {altera_reserved_tck}] 

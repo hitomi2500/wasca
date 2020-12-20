@@ -1,0 +1,379 @@
+86339677830662
+wasca
+2450BM14E0003
+Johanson integrated balun+filter for nRF24
+
+0
+6
+6
+wasca
+CARTRIDGE_EDGE_CONNECTOR2
+
+
+0
+134
+134
+wasca
+CHAMFER_WARNING
+
+
+0
+0
+0
+wasca
+Crystal_5x3.2mm
+
+
+0
+2
+2
+wasca
+DESIGNED_WITH_KICAD_10X05
+
+
+0
+0
+0
+wasca
+DX07S016JA1R1500
+USB Type-C receptacle for USB 2.0 and PD, http://www.krhro.com/uploads/soft/180320/1-1P320120243.pdf
+usb usb-c 2.0 pd
+0
+20
+17
+wasca
+FRAME
+
+
+0
+0
+0
+wasca
+JTAG_Header
+
+
+0
+10
+10
+wasca
+LED-3MM
+LED 3mm round vertical
+LED  3mm round vertical
+0
+2
+2
+wasca
+LED_0805
+LED 0805 smd package
+LED led 0805 SMD smd SMT smt smdled SMDLED smtled SMTLED
+0
+2
+2
+wasca
+LED_MEMO
+
+
+0
+0
+0
+wasca
+LOGO_VACHE
+
+
+0
+0
+0
+wasca
+LOGO_VACHE_SILKSCREEN
+
+
+0
+0
+0
+wasca
+LOGO_VACHE_SIM
+
+
+0
+0
+0
+wasca
+L_4.2X4.2_LARGE
+
+
+0
+2
+2
+wasca
+MODULE_ESP32-CAM
+
+
+0
+16
+16
+wasca
+MODULE_ESP32-CAM-HALF
+
+
+0
+8
+8
+wasca
+MODULE_ESP32-DEVKITC-32D
+
+
+0
+38
+38
+wasca
+MicroUSB
+Molex 47642-0001 : Micro USB B connector, mid mount w/ through hole solder tab
+
+0
+9
+6
+wasca
+Multicomp_MC9A22-1034_2x05_P2.54mm_Horizontal
+http://www.farnell.com/cad/360651.pdf
+connector multicomp MC9A MC9A22
+0
+10
+10
+wasca
+NINJA_SW
+Ninja Switch
+pin header
+0
+3
+3
+wasca
+PCB_IF_ANT_2.4G
+PCB trace antenna for 2.4GHz applications (based on TI DN0007 Inverted F antenna reference design)
+
+0
+2
+2
+wasca
+Pin_Header_Straight_2x02
+Through hole pin header
+pin header
+0
+4
+4
+wasca
+Pin_Header_Straight_2x04
+Through hole straight pin header, 2x04, 2.54mm pitch, double rows
+Through hole pin header THT 2x04 2.54mm double row
+0
+8
+8
+wasca
+Pin_Header_Straight_2x05
+Through hole straight pin header, 2x05, 2.54mm pitch, double rows
+Through hole pin header THT 2x05 2.54mm double row
+0
+10
+10
+wasca
+Pinhead_2x3_SMD
+
+
+0
+6
+6
+wasca
+Pinhead_2x5_SMD
+
+
+0
+10
+10
+wasca
+QFN40_0.5mmPitch_6x6mm
+
+
+0
+49
+41
+wasca
+QFN48_EXP
+
+
+0
+49
+49
+wasca
+QFN56_EXP
+
+
+0
+57
+57
+wasca
+SM0603
+
+
+0
+2
+2
+wasca
+SM0805
+
+
+0
+2
+2
+wasca
+SMD_SW
+Light Touch Switch, https://www.mouser.jp/datasheet/2/15/SKQG-1155865.pdf
+
+0
+4
+2
+wasca
+SOT23-5_LARGEPADS
+SOT23-5
+
+0
+5
+5
+wasca
+SSOP28
+SSOP 28 pins
+CMS SSOP SMD
+0
+28
+28
+wasca
+SeHa_Saturn
+
+
+0
+0
+0
+wasca
+SeHa_Saturn_Copper
+
+
+0
+0
+0
+wasca
+SeHa_Saturn_Silk
+
+
+0
+0
+0
+wasca
+Segata_Sanshiro
+
+
+0
+0
+0
+wasca
+TEST_PAD
+Test Pad - SMD
+CONN DEV
+0
+1
+1
+wasca
+TFP09212B
+TFP09-2-12B-2
+Connector
+0
+13
+13
+wasca
+TQFP44
+
+
+0
+44
+44
+wasca
+TQFP144_ALTERA_HANDSOLDERING
+
+
+0
+145
+145
+wasca
+TSOP-II-54_22.2x10.16mm_P0.8mm
+54-lead TSOP typ II package
+TSOPII TSOP2
+0
+54
+54
+wasca
+TSOP66_JEDEC_DDR_SDRAM
+
+TSOP66 JEDEC DDR SDRAM Opendous
+0
+66
+66
+wasca
+TSOPII54_SDRAM_MT48
+
+TSOPII54 JEDEC SDRAM Opendous
+0
+54
+54
+wasca
+TSOP_II_54
+TSOP II 54
+
+0
+54
+54
+wasca
+TSSOP-48_6.1x12.5mm_Pitch0.5mm
+TSSOP48: plastic thin shrink small outline package; 48 leads; body width 6.1 mm (see NXP SSOP-TSSOP-VSO-REFLOW.pdf and sot362-1_po.pdf)
+SSOP 0.5
+0
+48
+48
+wasca
+Termal_Quad
+
+
+0
+1
+1
+wasca
+WIRE_PAD
+
+
+0
+1
+1
+wasca
+con-usb-USB-A-H
+USB SERIES A HOLE MOUNTED
+USB SERIES A HOLE MOUNTED
+0
+6
+6
+wasca
+con-usb-USB-MB-S
+USB SERIES MINI-B SURFACE MOUNTED
+USB SERIES MINI-B SURFACE MOUNTED
+0
+11
+11
+wasca
+microSD_HC_Hirose_DM3AT-SF-PEJM5
+Micro SD, SMD, right-angle, push-pull (https://www.hirose.com/product/en/download_file/key_name/DM3AT-SF-PEJM5/category/Drawing%20(2D)/doc_file_id/44099/?file_category_id=6&item_id=06090031000&is_series=)
+Micro SD
+0
+14
+11
+wasca
+sd_socket
+SD Card socket, 4UCON P/N 19607
+
+0
+19
+17

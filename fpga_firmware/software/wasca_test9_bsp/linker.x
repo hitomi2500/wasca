@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Tue Oct 06 21:39:26 MSK 2020
+ * Generated: Sat Dec 19 21:48:31 MSK 2020
  */
 
 /*
@@ -51,15 +51,15 @@
 MEMORY
 {
     entry : ORIGIN = 0x0, LENGTH = 32
-    onchip_flash_0 : ORIGIN = 0x20, LENGTH = 16320
-    exceptions : ORIGIN = 0x3fe0, LENGTH = 32
-    onchip_memory2_0 : ORIGIN = 0x80000, LENGTH = 16384
+    onchip_flash_0 : ORIGIN = 0x20, LENGTH = 15840
+    exceptions : ORIGIN = 0x3e00, LENGTH = 512
+    onchip_memory2_0 : ORIGIN = 0x800000, LENGTH = 16384
     abus_avalon_sdram_bridge_0_avalon_sdram : ORIGIN = 0x4000000, LENGTH = 33554432
 }
 
 /* Define symbols for each memory base-address */
 __alt_mem_onchip_flash_0 = 0x0;
-__alt_mem_onchip_memory2_0 = 0x80000;
+__alt_mem_onchip_memory2_0 = 0x800000;
 __alt_mem_abus_avalon_sdram_bridge_0_avalon_sdram = 0x4000000;
 
 OUTPUT_FORMAT( "elf32-littlenios2",
@@ -402,7 +402,7 @@ SECTIONS
 /*
  * Don't override this, override the __alt_stack_* symbols instead.
  */
-__alt_data_end = 0x84000;
+__alt_data_end = 0x804000;
 
 /*
  * The next two symbols define the location of the default stack.  You can
@@ -418,4 +418,4 @@ PROVIDE( __alt_stack_limit   = __alt_stack_base );
  * Override this symbol to put the heap in a different memory.
  */
 PROVIDE( __alt_heap_start    = end );
-PROVIDE( __alt_heap_limit    = 0x84000 );
+PROVIDE( __alt_heap_limit    = 0x804000 );

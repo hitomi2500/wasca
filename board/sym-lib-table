@@ -1,0 +1,10 @@
+(sym_lib_table
+  (lib (name 10M08SCE144I7G)(type Legacy)(uri ${KIPRJMOD}/libraries/10M08SCE144I7G.lib)(options "")(descr ""))
+  (lib (name SD_CARD)(type Legacy)(uri ${KIPRJMOD}/libraries/SD_CARD.lib)(options "")(descr "")(disabled))
+  (lib (name USB-MB-S)(type Legacy)(uri ${KIPRJMOD}/libraries/USB-MB-S.lib)(options "")(descr ""))
+  (lib (name TP)(type Legacy)(uri ${KIPRJMOD}/libraries/TP.lib)(options "")(descr ""))
+  (lib (name wasca)(type Legacy)(uri ${KIPRJMOD}/wasca.lib)(options "")(descr ""))
+  (lib (name esp32-devkitc)(type Legacy)(uri ${KIPRJMOD}/libraries/ESP32-DEVKITC-32D.lib)(options "")(descr ""))
+  (lib (name segata)(type Legacy)(uri ${KIPRJMOD}/segata.lib)(options "")(descr ""))
+  (lib (name vache)(type Legacy)(uri ${KIPRJMOD}/vache.lib)(options "")(descr ""))
+)

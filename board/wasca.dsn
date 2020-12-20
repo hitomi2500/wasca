@@ -95,7 +95,7 @@
     (component "Housings_SOT-23_SOT-143_TSOT-6:SOT-23_Handsoldering"
       (place D1 161798 -44831 front 0 (PN D_Schottky_x2_KCom_AAK))
     )
-    (component Wasca:TSOP_II_54
+    (component wasca:TSOP_II_54
       (place IC1 36195 -95885 front 270 (PN MT48LC32M16A2TG))
     )
     (component Resistors_SMD:R_0603_HandSoldering
@@ -214,7 +214,7 @@
       (pin Rect[T]Pad_800.1x1800.86_um 2 950 -1501.14)
       (pin Rect[T]Pad_800.1x1800.86_um 3 0 1501.14)
     )
-    (image Wasca:TSOP_II_54
+    (image wasca:TSOP_II_54
       (outline (path signal 150  21463 9398  21463 889))
       (outline (path signal 150  21463 889  -762 889))
       (outline (path signal 150  -762 889  -762 9398))

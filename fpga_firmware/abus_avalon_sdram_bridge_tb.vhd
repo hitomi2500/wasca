@@ -18,16 +18,14 @@ architecture Behavioral of abus_avalon_sdram_bridge_tb is
 component abus_avalon_sdram_bridge is
 	port (
 		clock                : in    std_logic                     := '0';             --         clock.clk
-		abus_address         : in    std_logic_vector(9 downto 0) := (others => '0'); --          abus.address
-		abus_addressdata     : inout std_logic_vector(15 downto 0) := (others => '0'); --          abus.addressdata
+		abus_address         : in    std_logic_vector(24 downto 0) := (others => '0'); --          abus.address
+		abus_data     : inout std_logic_vector(15 downto 0) := (others => '0'); --          abus.data
 		abus_chipselect      : in    std_logic_vector(2 downto 0)  := (others => '0'); --              .chipselect
 		abus_read            : in    std_logic                     := '0';             --              .read
 		abus_write           : in    std_logic_vector(1 downto 0)  := (others => '0'); --              .write
-		abus_waitrequest     : out   std_logic							  := '1';                                        --              .waitrequest
 		abus_interrupt       : out   std_logic                     := '0';             --              .interrupt
 		abus_direction       : out   std_logic                     := '0';             --              .direction
-		abus_muxing	         : out   std_logic_vector(1 downto 0)  := "01";            --             .muxing
-		abus_disable_out  	: out   std_logic                     := '0';              --             .disableout
+		abus_interrupt_disable_out  	: out   std_logic                     := '0';              --             .disableout
 
 		sdram_addr         : out   std_logic_vector(12 downto 0);                    -- external_sdram_controller_wire.addr
 		sdram_ba           : out   std_logic_vector(1 downto 0);                                        --                               .ba
@@ -114,8 +112,7 @@ signal	reset                :     std_logic                     := '0';         
 signal	abus_waitrequest     :    std_logic							  := '1';                                        --              .waitrequest
 signal	abus_interrupt       :    std_logic                     := '0';             --              .interrupt
 signal	abus_direction       :    std_logic                     := '0';             --              .direction
-signal	abus_muxing	         :    std_logic_vector(1 downto 0)  := "01";            --             .muxing
-signal	abus_disable_out  	:    std_logic                     := '0';              --             .disableout
+signal	abus_interrupt_disable_out  	:    std_logic                     := '0';              --             .disableout
 
 signal	sdram_addr         :    std_logic_vector(12 downto 0);                    -- external_sdram_controller_wire.addr
 signal	sdram_ba           :    std_logic_vector(1 downto 0);                                        --                               .ba
@@ -138,7 +135,7 @@ signal	avalon_regs_readdatavalid :     std_logic                     := '0';    
 
 ----------------------inouts
 
-signal	abus_addressdata     : std_logic_vector(15 downto 0) := (others => '0'); --          abus.addressdata
+signal	abus_data     : std_logic_vector(15 downto 0) := (others => '0'); --          abus.data
 signal	sdram_dq           : std_logic_vector(15 downto 0) := (others => '0'); --                               .dq
 
 signal	abus_full_address     : std_logic_vector(25 downto 0) := (others => '0'); 
@@ -294,12 +291,7 @@ begin
 clock <= not clock after 4310 ps; --116 MHz clock
 
 --address/data mux
-abus_addressdata <= abus_full_address(5) & abus_full_address(6) & abus_full_address(7) & abus_full_address(14) &  
-                    abus_full_address(15) & abus_full_address(12) & abus_full_address(13) & abus_full_address(8) &   
-                    abus_full_address(0) & abus_full_address(2) & abus_full_address(3) & abus_full_address(4) &   
-                    abus_full_address(9) & abus_full_address(11) & abus_full_address(10) & abus_full_address(1)   
-                            when abus_muxing = "10" else
-                    abus_data_in when abus_direction = '0' else
+abus_data <= abus_data_in when abus_direction = '0' else
                     (others => 'Z');
 
 abus_address <= abus_full_address(25 downto 16);
@@ -308,15 +300,14 @@ UUT: abus_avalon_sdram_bridge
 	port map(
 		clock => clock,
 		abus_address => abus_address,
-		abus_addressdata => abus_addressdata,
+		abus_data => abus_data,
 		abus_chipselect => abus_chipselect,
 		abus_read => abus_read,
 		abus_write => abus_write,
 		abus_waitrequest => abus_waitrequest,
 		abus_interrupt => abus_interrupt,
 		abus_direction => abus_direction,
-		abus_muxing => abus_muxing,
-		abus_disable_out => abus_disable_out,
+		abus_interrupt_disable_out => abus_interrupt_disable_out,
 		sdram_addr => sdram_addr,
 		sdram_ba => sdram_ba,
 		sdram_cas_n => sdram_cas_n,
