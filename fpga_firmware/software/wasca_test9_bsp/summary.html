@@ -22,13 +22,13 @@
 <td width="20%" bgcolor="#77BBFF">BSP Version:</td><td>default</td>
 </tr>
 <tr mode="wrap">
-<td width="20%" bgcolor="#77BBFF">BSP Generated On:</td><td>05.09.2015 23:45:48</td>
+<td width="20%" bgcolor="#77BBFF">BSP Generated On:</td><td>29.10.2020 0:20:21</td>
 </tr>
 <tr mode="wrap">
-<td width="20%" bgcolor="#77BBFF">BSP Generated Timestamp:</td><td>1441485948565</td>
+<td width="20%" bgcolor="#77BBFF">BSP Generated Timestamp:</td><td>1603916421962</td>
 </tr>
 <tr mode="wrap">
-<td width="20%" bgcolor="#77BBFF">BSP Generated Location:</td><td>C:\Saturn\wasca\fpga_firmware\software\wasca_test9_bsp</td>
+<td width="20%" bgcolor="#77BBFF">BSP Generated Location:</td><td>D:\Saturn\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</td>
 </tr>
 </table>
 <br>
@@ -38,22 +38,25 @@
 <th align="left" width="20%">Slave Descriptor</th><th align="left" width="40%">Address Range</th><th align="left" width="20%">Size</th><th align="left" width="20%">Attributes</th>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>external_sdram_controller</td><td>0x04000000 - 0x05FFFFFF</td><td>33554432</td><td class="listing">memory</td>
+<td>abus_avalon_sdram_bridge_0_avalon_sdram</td><td>0x04000000 - 0x07FFFFFF</td><td>67108864</td><td class="listing">memory</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>onchip_memory2_0</td><td>0x00080000 - 0x000827FF</td><td>10240</td><td class="listing">memory</td>
+<td>onchip_memory2_0</td><td>0x00080000 - 0x00083FFF</td><td>16384</td><td class="listing">memory</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>sega_saturn_abus_slave_0</td><td>0x00045000 - 0x000451FF</td><td>512</td><td class="listing">&nbsp;</td>
+<td>abus_avalon_sdram_bridge_0_avalon_regs</td><td>0x00060000 - 0x000601FF</td><td>512</td><td class="listing">&nbsp;</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>pio_0</td><td>0x00044000 - 0x0004400F</td><td>16</td><td class="listing">&nbsp;</td>
+<td>buffered_spi_0</td><td>0x00050000 - 0x00057FFF</td><td>32768</td><td class="listing">&nbsp;</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>Altera_UP_SD_Card_Avalon_Interface_0</td><td>0x00043000 - 0x000433FF</td><td>1024</td><td class="listing">&nbsp;</td>
+<td>Altera_UP_SD_Card_Avalon_Interface_0</td><td>0x00047000 - 0x000473FF</td><td>1024</td><td class="listing">&nbsp;</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>altpll_0</td><td>0x00042000 - 0x0004200F</td><td>16</td><td class="listing">&nbsp;</td>
+<td>audio_0</td><td>0x00046000 - 0x0004600F</td><td>16</td><td class="listing">&nbsp;</td>
+</tr>
+<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
+<td>altpll_1</td><td>0x00042000 - 0x0004200F</td><td>16</td><td class="listing">&nbsp;</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
 <td>uart_0</td><td>0x00040000 - 0x0004001F</td><td>32</td><td class="listing">printable</td>
@@ -69,6 +72,21 @@
 <tr bgcolor="#77BBFF" mode="wrap">
 <th align="left" width="15%">Region</th><th align="left" width="40%">Address Range</th><th align="left" width="15%">Size</th><th align="left" width="15%">Memory</th><th align="left" width="15%">Offset</th>
 </tr>
+<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
+<td>onchip_memory2_0</td><td>0x00080000 - 0x00083FFF</td><td>16384</td><td>onchip_memory2_0</td><td>0</td>
+</tr>
+<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
+<td>abus_avalon_sdram_bridge_0_avalon_sdram</td><td>0x04000000 - 0x05FFFFFF</td><td>33554432</td><td>abus_avalon_sdram_bridge_0_avalon_sdram</td><td>0</td>
+</tr>
+<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
+<td>exceptions</td><td>0x00003FE0 - 0x00003FFF</td><td>32</td><td>onchip_flash_0</td><td>16352</td>
+</tr>
+<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
+<td>onchip_flash_0</td><td>0x00000020 - 0x00003FDF</td><td>16320</td><td>onchip_flash_0</td><td>32</td>
+</tr>
+<tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
+<td>entry</td><td>0x00000000 - 0x0000001F</td><td>32</td><td>onchip_flash_0</td><td>0</td>
+</tr>
 </table>
 <br>
 <br>
@@ -81,7 +99,7 @@
 <td>.text</td><td>onchip_flash_0</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
-<td>.rodata</td><td>onchip_flash_0</td>
+<td>.rodata</td><td>onchip_memory2_0</td>
 </tr>
 <tr mode="wrap" STYLE="display: 'block'; font-family: 'courier'; color: '#000000'; font-weight: '500'; font-size: '14'; margin-top: '10pt'; text-align: 'left'">
 <td>.rwdata</td><td>onchip_memory2_0</td>
@@ -459,7 +477,7 @@
 <td width="20%">Default Value:</td><td>0</td>
 </tr>
 <tr>
-<td width="20%">Value:</td><td>1</td>
+<td width="20%">Value:</td><td>0</td>
 </tr>
 <tr>
 <td width="20%">Type:</td><td>Boolean</td>
@@ -567,7 +585,7 @@
 <td width="20%">Default Value:</td><td>0</td>
 </tr>
 <tr>
-<td width="20%">Value:</td><td>1</td>
+<td width="20%">Value:</td><td>0</td>
 </tr>
 <tr>
 <td width="20%">Type:</td><td>Boolean</td>
@@ -594,7 +612,7 @@
 <td width="20%">Default Value:</td><td>0</td>
 </tr>
 <tr>
-<td width="20%">Value:</td><td>0</td>
+<td width="20%">Value:</td><td>1</td>
 </tr>
 <tr>
 <td width="20%">Type:</td><td>Boolean</td>
@@ -1944,7 +1962,7 @@
 <td width="20%">Default Value:</td><td>none</td>
 </tr>
 <tr>
-<td width="20%">Value:</td><td>uart_0</td>
+<td width="20%">Value:</td><td>none</td>
 </tr>
 <tr>
 <td width="20%">Type:</td><td>UnquotedString</td>
@@ -1971,7 +1989,7 @@
 <td width="20%">Default Value:</td><td>none</td>
 </tr>
 <tr>
-<td width="20%">Value:</td><td>uart_0</td>
+<td width="20%">Value:</td><td>none</td>
 </tr>
 <tr>
 <td width="20%">Type:</td><td>UnquotedString</td>

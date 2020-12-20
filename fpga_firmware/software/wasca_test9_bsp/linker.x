@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Thu Aug 13 20:19:19 MSK 2015
+ * Generated: Tue Oct 06 21:39:26 MSK 2020
  */
 
 /*
@@ -50,17 +50,17 @@
 
 MEMORY
 {
-    reset : ORIGIN = 0x0, LENGTH = 32
-    onchip_flash_0 : ORIGIN = 0x20, LENGTH = 176096
-    onchip_memory2_0_BEFORE_EXCEPTION : ORIGIN = 0x80000, LENGTH = 32
-    onchip_memory2_0 : ORIGIN = 0x80020, LENGTH = 10208
-    external_sdram_controller : ORIGIN = 0x4000000, LENGTH = 33554432
+    entry : ORIGIN = 0x0, LENGTH = 32
+    onchip_flash_0 : ORIGIN = 0x20, LENGTH = 16320
+    exceptions : ORIGIN = 0x3fe0, LENGTH = 32
+    onchip_memory2_0 : ORIGIN = 0x80000, LENGTH = 16384
+    abus_avalon_sdram_bridge_0_avalon_sdram : ORIGIN = 0x4000000, LENGTH = 33554432
 }
 
 /* Define symbols for each memory base-address */
 __alt_mem_onchip_flash_0 = 0x0;
 __alt_mem_onchip_memory2_0 = 0x80000;
-__alt_mem_external_sdram_controller = 0x4000000;
+__alt_mem_abus_avalon_sdram_bridge_0_avalon_sdram = 0x4000000;
 
 OUTPUT_FORMAT( "elf32-littlenios2",
                "elf32-littlenios2",
@@ -87,16 +87,9 @@ SECTIONS
     .entry :
     {
         KEEP (*(.entry))
-    } > reset
+    } > entry
 
-    /*
-     *
-     * This section's LMA is set to the .text region.
-     * crt0 will copy to this section's specified mapped region virtual memory address (VMA)
-     *
-     */
-
-    .exceptions : AT ( 0x20 )
+    .exceptions :
     {
         PROVIDE (__ram_exceptions_start = ABSOLUTE(.));
         . = ALIGN(0x20);
@@ -123,18 +116,11 @@ SECTIONS
         KEEP (*(.exceptions.exit));
         KEEP (*(.exceptions));
         PROVIDE (__ram_exceptions_end = ABSOLUTE(.));
-    } > onchip_memory2_0
+    } > exceptions
 
     PROVIDE (__flash_exceptions_start = LOADADDR(.exceptions));
 
-    /*
-     *
-     * This section's LMA is set to the .text region.
-     * crt0 will copy to this section's specified mapped region virtual memory address (VMA)
-     *
-     */
-
-    .text LOADADDR (.exceptions) + SIZEOF (.exceptions) : AT ( LOADADDR (.exceptions) + SIZEOF (.exceptions) )
+    .text :
     {
         /*
          * All code sections are merged into the text output section, along with
@@ -235,7 +221,7 @@ SECTIONS
      *
      */
 
-    .rodata LOADADDR (.text) + SIZEOF (.text) : AT ( LOADADDR (.text) + SIZEOF (.text) )
+    .rodata : AT ( LOADADDR (.text) + SIZEOF (.text) )
     {
         PROVIDE (__ram_rodata_start = ABSOLUTE(.));
         . = ALIGN(4);
@@ -243,7 +229,7 @@ SECTIONS
         *(.rodata1)
         . = ALIGN(4);
         PROVIDE (__ram_rodata_end = ABSOLUTE(.));
-    } > onchip_flash_0
+    } > onchip_memory2_0
 
     PROVIDE (__flash_rodata_start = LOADADDR(.rodata));
 
@@ -359,15 +345,15 @@ SECTIONS
      *
      */
 
-    .external_sdram_controller : AT ( LOADADDR (.onchip_memory2_0) + SIZEOF (.onchip_memory2_0) )
+    .abus_avalon_sdram_bridge_0_avalon_sdram : AT ( LOADADDR (.onchip_memory2_0) + SIZEOF (.onchip_memory2_0) )
     {
-        PROVIDE (_alt_partition_external_sdram_controller_start = ABSOLUTE(.));
-        *(.external_sdram_controller .external_sdram_controller. external_sdram_controller.*)
+        PROVIDE (_alt_partition_abus_avalon_sdram_bridge_0_avalon_sdram_start = ABSOLUTE(.));
+        *(.abus_avalon_sdram_bridge_0_avalon_sdram .abus_avalon_sdram_bridge_0_avalon_sdram. abus_avalon_sdram_bridge_0_avalon_sdram.*)
         . = ALIGN(4);
-        PROVIDE (_alt_partition_external_sdram_controller_end = ABSOLUTE(.));
-    } > external_sdram_controller
+        PROVIDE (_alt_partition_abus_avalon_sdram_bridge_0_avalon_sdram_end = ABSOLUTE(.));
+    } > abus_avalon_sdram_bridge_0_avalon_sdram
 
-    PROVIDE (_alt_partition_external_sdram_controller_load_addr = LOADADDR(.external_sdram_controller));
+    PROVIDE (_alt_partition_abus_avalon_sdram_bridge_0_avalon_sdram_load_addr = LOADADDR(.abus_avalon_sdram_bridge_0_avalon_sdram));
 
     /*
      * Stabs debugging sections.
@@ -416,7 +402,7 @@ SECTIONS
 /*
  * Don't override this, override the __alt_stack_* symbols instead.
  */
-__alt_data_end = 0x82800;
+__alt_data_end = 0x84000;
 
 /*
  * The next two symbols define the location of the default stack.  You can
@@ -432,4 +418,4 @@ PROVIDE( __alt_stack_limit   = __alt_stack_base );
  * Override this symbol to put the heap in a different memory.
  */
 PROVIDE( __alt_heap_start    = end );
-PROVIDE( __alt_heap_limit    = 0x82800 );
+PROVIDE( __alt_heap_limit    = 0x84000 );

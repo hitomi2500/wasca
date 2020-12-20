@@ -24,9 +24,9 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/15.0/ip/merlin/altera_merlin_router/altera_merlin_router.sv.terp#1 $
+// $Id: //acds/rel/15.1/ip/merlin/altera_merlin_router/altera_merlin_router.sv.terp#1 $
 // $Revision: #1 $
-// $Date: 2015/02/08 $
+// $Date: 2015/08/09 $
 // $Author: swbranch $
 
 // -------------------------------------------------------
@@ -49,14 +49,14 @@ module wasca_mm_interconnect_0_router_007_default_decode
                DEFAULT_RD_CHANNEL = -1,
                DEFAULT_DESTID = 0 
    )
-  (output [95 - 92 : 0] default_destination_id,
+  (output [94 - 91 : 0] default_destination_id,
    output [10-1 : 0] default_wr_channel,
    output [10-1 : 0] default_rd_channel,
    output [10-1 : 0] default_src_channel
   );
 
   assign default_destination_id = 
-    DEFAULT_DESTID[95 - 92 : 0];
+    DEFAULT_DESTID[94 - 91 : 0];
 
   generate
     if (DEFAULT_CHANNEL == -1) begin : no_default_channel_assignment
@@ -93,7 +93,7 @@ module wasca_mm_interconnect_0_router_007
     // Command Sink (Input)
     // -------------------
     input                       sink_valid,
-    input  [109-1 : 0]    sink_data,
+    input  [108-1 : 0]    sink_data,
     input                       sink_startofpacket,
     input                       sink_endofpacket,
     output                      sink_ready,
@@ -102,7 +102,7 @@ module wasca_mm_interconnect_0_router_007
     // Command Source (Output)
     // -------------------
     output                          src_valid,
-    output reg [109-1    : 0] src_data,
+    output reg [108-1    : 0] src_data,
     output reg [10-1 : 0] src_channel,
     output                          src_startofpacket,
     output                          src_endofpacket,
@@ -112,18 +112,18 @@ module wasca_mm_interconnect_0_router_007
     // -------------------------------------------------------
     // Local parameters and variables
     // -------------------------------------------------------
-    localparam PKT_ADDR_H = 63;
+    localparam PKT_ADDR_H = 62;
     localparam PKT_ADDR_L = 36;
-    localparam PKT_DEST_ID_H = 95;
-    localparam PKT_DEST_ID_L = 92;
-    localparam PKT_PROTECTION_H = 99;
-    localparam PKT_PROTECTION_L = 97;
-    localparam ST_DATA_W = 109;
+    localparam PKT_DEST_ID_H = 94;
+    localparam PKT_DEST_ID_L = 91;
+    localparam PKT_PROTECTION_H = 98;
+    localparam PKT_PROTECTION_L = 96;
+    localparam ST_DATA_W = 108;
     localparam ST_CHANNEL_W = 10;
     localparam DECODER_TYPE = 1;
 
-    localparam PKT_TRANS_WRITE = 66;
-    localparam PKT_TRANS_READ  = 67;
+    localparam PKT_TRANS_WRITE = 65;
+    localparam PKT_TRANS_READ  = 66;
 
     localparam PKT_ADDR_W = PKT_ADDR_H-PKT_ADDR_L + 1;
     localparam PKT_DEST_ID_W = PKT_DEST_ID_H-PKT_DEST_ID_L + 1;
@@ -163,6 +163,11 @@ module wasca_mm_interconnect_0_router_007
 
 
 
+    // -------------------------------------------------------
+    // Write and read transaction signals
+    // -------------------------------------------------------
+    wire read_transaction;
+    assign read_transaction  = sink_data[PKT_TRANS_READ];
 
 
     wasca_mm_interconnect_0_router_007_default_decode the_default_decode(
@@ -185,7 +190,11 @@ module wasca_mm_interconnect_0_router_007
 
 
         if (destid == 0 ) begin
-            src_channel = 10'b1;
+            src_channel = 10'b01;
+        end
+
+        if (destid == 1  && read_transaction) begin
+            src_channel = 10'b10;
         end
 
 

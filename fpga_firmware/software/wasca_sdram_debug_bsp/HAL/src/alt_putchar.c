@@ -2,7 +2,7 @@
 *                                                                             *
 * License Agreement                                                           *
 *                                                                             *
-* Copyright (c) 2006 Altera Corporation, San Jose, California, USA.           *
+* Copyright (c) 2015 Altera Corporation, San Jose, California, USA.           *
 * All rights reserved.                                                        *
 *                                                                             *
 * Permission is hereby granted, free of charge, to any person obtaining a     *
@@ -37,6 +37,10 @@
 #include "sys/alt_driver.h"
 #include "sys/alt_stdio.h"
 #endif
+#ifdef ALT_SEMIHOSTING
+#include "sys/alt_stdio.h"
+#include "unistd.h"
+#endif
 
 /*
  * Uses the ALT_DRIVER_WRITE() macro to call directly to driver if available.
@@ -45,6 +49,10 @@
 int 
 alt_putchar(int c)
 {
+#ifdef ALT_SEMIHOSTING
+	char        c1 = (char)(c & 0xff);
+    return write(STDOUT_FILENO,&c1,1);
+#else
 #ifdef ALT_USE_DIRECT_DRIVERS
     ALT_DRIVER_WRITE_EXTERNS(ALT_STDOUT_DEV);
     char        c1 = (char)(c & 0xff);
@@ -55,5 +63,6 @@ alt_putchar(int c)
     return c;
 #else
     return putchar(c);
+#endif
 #endif
 }

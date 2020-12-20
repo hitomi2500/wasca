@@ -2,7 +2,7 @@
 *                                                                             *
 * License Agreement                                                           *
 *                                                                             *
-* Copyright (c) 2006 Altera Corporation, San Jose, California, USA.           *
+* Copyright (c) 2015 Altera Corporation, San Jose, California, USA.           *
 * All rights reserved.                                                        *
 *                                                                             *
 * Permission is hereby granted, free of charge, to any person obtaining a     *
@@ -39,7 +39,10 @@
 #include "priv/alt_file.h"
 #include "unistd.h"
 #endif
-
+#ifdef ALT_SEMIHOSTING
+#include "sys/alt_stdio.h"
+#include "unistd.h"
+#endif
 /*
  * Uses the ALT_DRIVER_READ() macro to call directly to driver if available.
  * Otherwise, uses newlib provided getchar() routine.
@@ -47,6 +50,11 @@
 int 
 alt_getchar(void)
 {
+#ifdef ALT_SEMIHOSTING
+    char c;
+    read(STDIN_FILENO,&c,1);
+    return c;
+#else
 #ifdef ALT_USE_DIRECT_DRIVERS
     ALT_DRIVER_READ_EXTERNS(ALT_STDIN_DEV);
     char c;
@@ -57,5 +65,6 @@ alt_getchar(void)
     return c;
 #else
     return getchar();
+#endif
 #endif
 }

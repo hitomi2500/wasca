@@ -144,6 +144,8 @@ ELF := wasca_test9.elf
 # Paths to C, C++, and assembly source files.
 C_SRCS += hello_world_small.c
 C_SRCS += wasca_short.c
+C_SRCS += chibi_pseudo.c
+C_SRCS += chibi_pseudo_nowait.c
 CXX_SRCS :=
 ASM_SRCS :=
 
@@ -161,7 +163,7 @@ CREATE_ELF_DERIVED_FILES := 0
 CREATE_LINKER_MAP := 1
 
 # Common arguments for ALT_CFLAGSs
-APP_CFLAGS_DEFINED_SYMBOLS :=
+APP_CFLAGS_DEFINED_SYMBOLS := -DALT_NO_BOOTLOADER
 APP_CFLAGS_UNDEFINED_SYMBOLS :=
 APP_CFLAGS_OPTIMIZATION := -Os
 APP_CFLAGS_DEBUG_LEVEL := -g

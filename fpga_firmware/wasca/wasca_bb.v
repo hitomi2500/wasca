@@ -1,80 +1,86 @@
 
 module wasca (
-	altpll_0_areset_conduit_export,
-	altpll_0_locked_conduit_export,
-	altpll_0_phasedone_conduit_export,
-	clk_clk,
-	clock_116_mhz_clk,
-	external_sdram_controller_wire_addr,
-	external_sdram_controller_wire_ba,
-	external_sdram_controller_wire_cas_n,
-	external_sdram_controller_wire_cke,
-	external_sdram_controller_wire_cs_n,
-	external_sdram_controller_wire_dq,
-	external_sdram_controller_wire_dqm,
-	external_sdram_controller_wire_ras_n,
-	external_sdram_controller_wire_we_n,
-	sega_saturn_abus_slave_0_abus_address,
-	sega_saturn_abus_slave_0_abus_chipselect,
-	sega_saturn_abus_slave_0_abus_read,
-	sega_saturn_abus_slave_0_abus_write,
-	sega_saturn_abus_slave_0_abus_waitrequest,
-	sega_saturn_abus_slave_0_abus_interrupt,
-	sega_saturn_abus_slave_0_abus_addressdata,
-	sega_saturn_abus_slave_0_abus_direction,
-	sega_saturn_abus_slave_0_abus_muxing,
-	sega_saturn_abus_slave_0_abus_disableout,
-	sega_saturn_abus_slave_0_conduit_saturn_reset_saturn_reset,
-	spi_sd_card_MISO,
-	spi_sd_card_MOSI,
-	spi_sd_card_SCLK,
-	spi_sd_card_SS_n,
-	uart_0_external_connection_rxd,
-	uart_0_external_connection_txd,
-	spi_stm32_MISO,
-	spi_stm32_MOSI,
-	spi_stm32_SCLK,
-	spi_stm32_SS_n,
+	abus_avalon_sdram_bridge_0_abus_address,
+	abus_avalon_sdram_bridge_0_abus_read,
+	abus_avalon_sdram_bridge_0_abus_waitrequest,
+	abus_avalon_sdram_bridge_0_abus_addressdata,
+	abus_avalon_sdram_bridge_0_abus_chipselect,
+	abus_avalon_sdram_bridge_0_abus_direction,
+	abus_avalon_sdram_bridge_0_abus_disable_out,
+	abus_avalon_sdram_bridge_0_abus_interrupt,
+	abus_avalon_sdram_bridge_0_abus_muxing,
+	abus_avalon_sdram_bridge_0_abus_writebyteenable_n,
+	abus_avalon_sdram_bridge_0_abus_reset,
+	abus_avalon_sdram_bridge_0_sdram_addr,
+	abus_avalon_sdram_bridge_0_sdram_ba,
+	abus_avalon_sdram_bridge_0_sdram_cas_n,
+	abus_avalon_sdram_bridge_0_sdram_cke,
+	abus_avalon_sdram_bridge_0_sdram_cs_n,
+	abus_avalon_sdram_bridge_0_sdram_dq,
+	abus_avalon_sdram_bridge_0_sdram_dqm,
+	abus_avalon_sdram_bridge_0_sdram_ras_n,
+	abus_avalon_sdram_bridge_0_sdram_we_n,
+	abus_avalon_sdram_bridge_0_sdram_clk,
+	altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd,
+	altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat,
+	altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3,
+	altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock,
+	altpll_1_areset_conduit_export,
+	altpll_1_locked_conduit_export,
+	altpll_1_phasedone_conduit_export,
 	audio_out_BCLK,
 	audio_out_DACDAT,
-	audio_out_DACLRCK);	
+	audio_out_DACLRCK,
+	buffered_spi_mosi,
+	buffered_spi_clk,
+	buffered_spi_miso,
+	buffered_spi_cs,
+	clk_clk,
+	clock_116_mhz_clk,
+	reset_reset_n,
+	reset_controller_0_reset_in1_reset,
+	uart_0_external_connection_rxd,
+	uart_0_external_connection_txd);	
 
-	input		altpll_0_areset_conduit_export;
-	output		altpll_0_locked_conduit_export;
-	output		altpll_0_phasedone_conduit_export;
-	input		clk_clk;
-	output		clock_116_mhz_clk;
-	output	[12:0]	external_sdram_controller_wire_addr;
-	output	[1:0]	external_sdram_controller_wire_ba;
-	output		external_sdram_controller_wire_cas_n;
-	output		external_sdram_controller_wire_cke;
-	output		external_sdram_controller_wire_cs_n;
-	inout	[15:0]	external_sdram_controller_wire_dq;
-	output	[1:0]	external_sdram_controller_wire_dqm;
-	output		external_sdram_controller_wire_ras_n;
-	output		external_sdram_controller_wire_we_n;
-	input	[9:0]	sega_saturn_abus_slave_0_abus_address;
-	input	[2:0]	sega_saturn_abus_slave_0_abus_chipselect;
-	input		sega_saturn_abus_slave_0_abus_read;
-	input	[1:0]	sega_saturn_abus_slave_0_abus_write;
-	output		sega_saturn_abus_slave_0_abus_waitrequest;
-	output		sega_saturn_abus_slave_0_abus_interrupt;
-	inout	[15:0]	sega_saturn_abus_slave_0_abus_addressdata;
-	output		sega_saturn_abus_slave_0_abus_direction;
-	output	[1:0]	sega_saturn_abus_slave_0_abus_muxing;
-	output		sega_saturn_abus_slave_0_abus_disableout;
-	input		sega_saturn_abus_slave_0_conduit_saturn_reset_saturn_reset;
-	input		spi_sd_card_MISO;
-	output		spi_sd_card_MOSI;
-	output		spi_sd_card_SCLK;
-	output		spi_sd_card_SS_n;
-	input		uart_0_external_connection_rxd;
-	output		uart_0_external_connection_txd;
-	output		spi_stm32_MISO;
-	input		spi_stm32_MOSI;
-	input		spi_stm32_SCLK;
-	input		spi_stm32_SS_n;
+	input	[9:0]	abus_avalon_sdram_bridge_0_abus_address;
+	input		abus_avalon_sdram_bridge_0_abus_read;
+	output		abus_avalon_sdram_bridge_0_abus_waitrequest;
+	inout	[15:0]	abus_avalon_sdram_bridge_0_abus_addressdata;
+	input	[2:0]	abus_avalon_sdram_bridge_0_abus_chipselect;
+	output		abus_avalon_sdram_bridge_0_abus_direction;
+	output		abus_avalon_sdram_bridge_0_abus_disable_out;
+	output		abus_avalon_sdram_bridge_0_abus_interrupt;
+	output	[1:0]	abus_avalon_sdram_bridge_0_abus_muxing;
+	input	[1:0]	abus_avalon_sdram_bridge_0_abus_writebyteenable_n;
+	input		abus_avalon_sdram_bridge_0_abus_reset;
+	output	[12:0]	abus_avalon_sdram_bridge_0_sdram_addr;
+	output	[1:0]	abus_avalon_sdram_bridge_0_sdram_ba;
+	output		abus_avalon_sdram_bridge_0_sdram_cas_n;
+	output		abus_avalon_sdram_bridge_0_sdram_cke;
+	output		abus_avalon_sdram_bridge_0_sdram_cs_n;
+	inout	[15:0]	abus_avalon_sdram_bridge_0_sdram_dq;
+	output	[1:0]	abus_avalon_sdram_bridge_0_sdram_dqm;
+	output		abus_avalon_sdram_bridge_0_sdram_ras_n;
+	output		abus_avalon_sdram_bridge_0_sdram_we_n;
+	output		abus_avalon_sdram_bridge_0_sdram_clk;
+	inout		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd;
+	inout		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat;
+	inout		altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3;
+	output		altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock;
+	input		altpll_1_areset_conduit_export;
+	output		altpll_1_locked_conduit_export;
+	output		altpll_1_phasedone_conduit_export;
 	input		audio_out_BCLK;
 	output		audio_out_DACDAT;
 	input		audio_out_DACLRCK;
+	output		buffered_spi_mosi;
+	output		buffered_spi_clk;
+	input		buffered_spi_miso;
+	output		buffered_spi_cs;
+	input		clk_clk;
+	output		clock_116_mhz_clk;
+	input		reset_reset_n;
+	input		reset_controller_0_reset_in1_reset;
+	input		uart_0_external_connection_rxd;
+	output		uart_0_external_connection_txd;
 endmodule

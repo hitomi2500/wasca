@@ -93,12 +93,12 @@ OBJ_DIR := ./obj
 
 # This following VERSION comment indicates the version of the tool used to 
 # generate this makefile. A makefile variable is provided for VERSION as well. 
-# ACDS_VERSION: 15.0
-ACDS_VERSION := 15.0
+# ACDS_VERSION: 15.1
+ACDS_VERSION := 15.1
 
 # This following BUILD_NUMBER comment indicates the build number of the tool 
 # used to generate this makefile. 
-# BUILD_NUMBER: 145
+# BUILD_NUMBER: 185
 
 SETTINGS_FILE := settings.bsp
 SOPC_FILE := ../../wasca.sopcinfo
@@ -215,10 +215,13 @@ Altera_UP_SD_Card_Avalon_Interface_driver_SRCS_ROOT := drivers
 Altera_UP_SD_Card_Avalon_Interface_driver_C_LIB_SRCS := \
 	$(Altera_UP_SD_Card_Avalon_Interface_driver_SRCS_ROOT)/src/Altera_UP_SD_Card_Avalon_Interface.c
 
-# altera_avalon_pio_driver sources root 
-altera_avalon_pio_driver_SRCS_ROOT := drivers
+# avalon_audio_driver sources root 
+Avalon_Audio_driver_SRCS_ROOT := drivers
 
-# altera_avalon_pio_driver sources 
+# avalon_audio_driver sources 
+Avalon_Audio_driver_C_LIB_SRCS := \
+	$(Avalon_Audio_driver_SRCS_ROOT)/src/altera_up_avalon_audio.c
+
 # altera_avalon_uart_driver sources root 
 altera_avalon_uart_driver_SRCS_ROOT := drivers
 
@@ -312,6 +315,7 @@ hal_C_LIB_SRCS := \
 	$(hal_SRCS_ROOT)/src/alt_open.c \
 	$(hal_SRCS_ROOT)/src/alt_printf.c \
 	$(hal_SRCS_ROOT)/src/alt_putchar.c \
+	$(hal_SRCS_ROOT)/src/alt_putcharbuf.c \
 	$(hal_SRCS_ROOT)/src/alt_putstr.c \
 	$(hal_SRCS_ROOT)/src/alt_read.c \
 	$(hal_SRCS_ROOT)/src/alt_release_fd.c \
@@ -329,6 +333,7 @@ hal_C_LIB_SRCS := \
 # Assemble all component C source files 
 COMPONENT_C_LIB_SRCS += \
 	$(Altera_UP_SD_Card_Avalon_Interface_driver_C_LIB_SRCS) \
+	$(Avalon_Audio_driver_C_LIB_SRCS) \
 	$(altera_avalon_uart_driver_C_LIB_SRCS) \
 	$(altera_nios2_gen2_hal_driver_C_LIB_SRCS) \
 	$(hal_C_LIB_SRCS)

@@ -11,9 +11,9 @@
 // agreement for further details.
 
 
-// $File: //acds/rel/15.0/ip/avalon_st/altera_avalon_st_handshake_clock_crosser/altera_avalon_st_handshake_clock_crosser.v $
+// $File: //acds/rel/15.1/ip/avalon_st/altera_avalon_st_handshake_clock_crosser/altera_avalon_st_handshake_clock_crosser.v $
 // $Revision: #1 $
-// $Date: 2015/02/08 $
+// $Date: 2015/08/09 $
 // $Author: swbranch $
 //------------------------------------------------------------------------------
 // Clock crosser module with handshaking mechanism

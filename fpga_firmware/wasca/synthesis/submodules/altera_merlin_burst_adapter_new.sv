@@ -11,9 +11,9 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/15.0/ip/merlin/altera_merlin_burst_adapter/new_source/altera_merlin_burst_adapter_new.sv#1 $
+// $Id: //acds/rel/15.1/ip/merlin/altera_merlin_burst_adapter/new_source/altera_merlin_burst_adapter_new.sv#1 $
 // $Revision: #1 $
-// $Date: 2015/02/08 $
+// $Date: 2015/08/09 $
 // $Author: swbranch $
 
 `timescale 1 ns / 1 ns
