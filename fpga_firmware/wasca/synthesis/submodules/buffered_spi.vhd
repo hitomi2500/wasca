@@ -15,7 +15,7 @@ entity buffered_spi is
            avalon_writedata : in STD_LOGIC_VECTOR (15 downto 0);
            avalon_readdata : out STD_LOGIC_VECTOR (15 downto 0);
            avalon_readdatavalid : out std_logic := '0';
-           spi_sync : out STD_LOGIC := '0';
+           spi_sync :  in STD_LOGIC := '0';
            spi_mosi : out STD_LOGIC := '0';
            spi_clk : out STD_LOGIC := '0';
            spi_miso : in STD_LOGIC;
@@ -102,7 +102,7 @@ begin
 	avalon_read_f1 <=  avalon_read when rising_edge(clock);
 	avalon_read_f2 <=  avalon_read_f1 when rising_edge(clock);
 	
-	spi_sync <= spi_sync_register;
+	spi_sync_register <= spi_sync;
 
 	--Avalon regs read interface
 	process (clock)
@@ -184,8 +184,8 @@ begin
                              delay_register <= avalon_writedata;
                        when "101" => 
                              buffer_select_register <= avalon_writedata(0);
-                       when "110" => 
-                             spi_sync_register <= avalon_writedata(0);
+                       -- when "110" => 
+                       --       spi_sync_register <= avalon_writedata(0);
                        when others =>
                              null; 
                        end case;

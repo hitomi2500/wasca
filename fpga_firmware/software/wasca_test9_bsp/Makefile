@@ -98,7 +98,7 @@ ACDS_VERSION := 18.1
 
 # This following BUILD_NUMBER comment indicates the build number of the tool 
 # used to generate this makefile. 
-# BUILD_NUMBER: 625
+# BUILD_NUMBER: 646
 
 SETTINGS_FILE := settings.bsp
 SOPC_FILE := ../../wasca.sopcinfo
@@ -207,6 +207,14 @@ GENERATED_C_LIB_SRCS += alt_sys_init.c
 # to construct a list of objects. Pattern rules to build each object are then
 # used to build each file.
 #-------------------------------------------------------------------------------
+
+# altera_avalon_performance_counter_driver sources root 
+altera_avalon_performance_counter_driver_SRCS_ROOT := drivers
+
+# altera_avalon_performance_counter_driver sources 
+altera_avalon_performance_counter_driver_C_LIB_SRCS := \
+	$(altera_avalon_performance_counter_driver_SRCS_ROOT)/src/altera_avalon_performance_counter.c \
+	$(altera_avalon_performance_counter_driver_SRCS_ROOT)/src/perf_print_formatted_report.c
 
 # altera_avalon_uart_driver sources root 
 altera_avalon_uart_driver_SRCS_ROOT := drivers
@@ -318,6 +326,7 @@ hal_C_LIB_SRCS := \
 
 # Assemble all component C source files 
 COMPONENT_C_LIB_SRCS += \
+	$(altera_avalon_performance_counter_driver_C_LIB_SRCS) \
 	$(altera_avalon_uart_driver_C_LIB_SRCS) \
 	$(altera_nios2_gen2_hal_driver_C_LIB_SRCS) \
 	$(hal_C_LIB_SRCS)

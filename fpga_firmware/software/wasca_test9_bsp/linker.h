@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sat Dec 19 21:48:31 MSK 2020
+ * Generated: Sun Dec 13 13:46:39 JST 2020
  */
 
 /*
@@ -66,15 +66,15 @@
  */
 
 #define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_REGION_BASE 0x4000000
-#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_REGION_SPAN 33554432
-#define ENTRY_REGION_BASE 0x0
-#define ENTRY_REGION_SPAN 32
-#define EXCEPTIONS_REGION_BASE 0x3e00
-#define EXCEPTIONS_REGION_SPAN 512
-#define ONCHIP_FLASH_0_REGION_BASE 0x20
-#define ONCHIP_FLASH_0_REGION_SPAN 15840
-#define ONCHIP_MEMORY2_0_REGION_BASE 0x800000
-#define ONCHIP_MEMORY2_0_REGION_SPAN 16384
+#define ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_REGION_SPAN 67108864
+#define ONCHIP_FLASH_0_BEFORE_EXCEPTION_REGION_BASE 0x20
+#define ONCHIP_FLASH_0_BEFORE_EXCEPTION_REGION_SPAN 16320
+#define ONCHIP_FLASH_0_REGION_BASE 0x3fe0
+#define ONCHIP_FLASH_0_REGION_SPAN 75808
+#define ONCHIP_MEMORY2_0_REGION_BASE 0x80000
+#define ONCHIP_MEMORY2_0_REGION_SPAN 24576
+#define RESET_REGION_BASE 0x0
+#define RESET_REGION_SPAN 32
 
 
 /*
@@ -86,23 +86,6 @@
 #define ALT_RESET_DEVICE ONCHIP_FLASH_0
 #define ALT_RODATA_DEVICE ONCHIP_MEMORY2_0
 #define ALT_RWDATA_DEVICE ONCHIP_MEMORY2_0
-#define ALT_TEXT_DEVICE ONCHIP_FLASH_0
-
-
-/*
- * Initialization code at the reset address is allowed (e.g. no external bootloader).
- *
- */
-
-#define ALT_ALLOW_CODE_AT_RESET
-
-
-/*
- * The alt_load() facility is called from crt0 to copy sections into RAM.
- *
- */
-
-#define ALT_LOAD_COPY_RODATA
-#define ALT_LOAD_COPY_RWDATA
+#define ALT_TEXT_DEVICE ONCHIP_MEMORY2_0
 
 #endif /* __LINKER_H_ */

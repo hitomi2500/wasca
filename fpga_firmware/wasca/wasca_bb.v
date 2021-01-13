@@ -55,7 +55,7 @@ module wasca (
 	output		buffered_spi_clk;
 	input		buffered_spi_miso;
 	output		buffered_spi_cs;
-	output		buffered_spi_sync;
+	input		buffered_spi_sync;
 	input		clk_clk;
 	output		clock_116_mhz_clk;
 	output		heartbeat_heartbeat_out;

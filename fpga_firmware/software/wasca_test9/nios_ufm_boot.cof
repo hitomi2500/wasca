@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
 <cof>
-	<output_filename>../../output_files/wasca.pof</output_filename>
+	<output_filename>../../output_files/nios2_ufm_boot_test9.pof</output_filename>
 	<n_pages>1</n_pages>
 	<width>1</width>
 	<mode>14</mode>
@@ -14,7 +14,7 @@
 	<version>9</version>
 	<create_cvp_file>0</create_cvp_file>
 	<create_hps_iocsr>0</create_hps_iocsr>
-	<auto_create_rpd>0</auto_create_rpd>
+	<auto_create_rpd>1</auto_create_rpd>
 	<create_fif_file>0</create_fif_file>
 	<options>
 		<map_file>1</map_file>
