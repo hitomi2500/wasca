@@ -9,7 +9,7 @@
 module wasca_nios2_gen2_0 (
 		input  wire        clk,                                 //                       clk.clk
 		input  wire        reset_n,                             //                     reset.reset_n
-		output wire [28:0] d_address,                           //               data_master.address
+		output wire [26:0] d_address,                           //               data_master.address
 		output wire [3:0]  d_byteenable,                        //                          .byteenable
 		output wire        d_read,                              //                          .read
 		input  wire [31:0] d_readdata,                          //                          .readdata

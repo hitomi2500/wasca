@@ -2,8 +2,17 @@
 
 REM Path to Quartus folder. Adapt this to your Quartus setup.
 set quartus_path=D:\altera\18.1
+
+REM Note to hitomi2500 : please set below the path to your Quartus setup :
 if not exist %quartus_path%\nios2eds\version.txt set quartus_path=D:\altera\15.1
 set path=%path%;%quartus_path%\quartus\bin64
+
+REM Verify that compiler environment is available.
+if exist %quartus_path%\nios2eds\version.txt goto compiler_available
+echo Error : NIOS compilation environment not found !
+pause
+exit
+:compiler_available
 
 REM REM Path to NIOS2 tools. Adapt this to your Quartus setup.
 REM set path=%path%;%quartus_path%\nios2eds\bin
@@ -24,6 +33,13 @@ set pj_basedir="%cd%"
 for %%a in ("%cd%") do set pj_design_name=%%~na
 cd %pj_workdir%
 for %%a in ("%cd%") do set pj_software_name=%%~na
+
+REM Avoid project name set to "fpga_firmware", because it is always set to that when compiling from github repo.
+if not "%pj_design_name%" == "fpga_firmware" goto skip_name_correct
+for /f "delims=" %%x in (pj_design_name.txt) do set pj_design_name=%%x
+:skip_name_correct
+echo %pj_design_name%> pj_design_name.txt
+
 
 @REM Silent build by default
 set verbse=@
@@ -51,8 +67,8 @@ echo  Type `s' to upload sof to SRAM.
 echo  Type `e' to upload elf to OCRAM.
 echo  Type `u' to upload both sof and elf.
 echo  Type `flash' to flash CPLD.
-echo  Type `rdm' to open readme file.
-echo  Type `arc' to archive everything.
+if exist ..\..\readme.txt echo  Type `rdm' to open readme file.
+if exist ..\..\readme.txt echo  Type `arc' to archive everything.
 echo  Other: exec dos command.
 set /P cm="Command: "
 

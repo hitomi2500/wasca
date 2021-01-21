@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="wasca" kind="wasca" version="1.0" fabric="QSYS">
  <!-- Format version 18.1 646 (Future versions may contain additional information.) -->
- <!-- 2021.01.14.04:37:50 -->
+ <!-- 2021.01.22.05:12:47 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1610566669</value>
+  <value>1611259966</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -4836,7 +4836,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.DATA_ADDR_WIDTH</name>
-   <value>29</value>
+   <value>27</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.DCACHE_LINE_SIZE</name>
@@ -6280,7 +6280,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="dataAddrWidth">
    <type>int</type>
-   <value>29</value>
+   <value>27</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -6410,7 +6410,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="dataSlaveMapParam">
    <type>java.lang.String</type>
-   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x16800' type='altera_onchip_flash.data' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x86000' type='altera_avalon_onchip_memory2.s1' /><slave name='uart_0.s1' start='0x410000' end='0x410020' type='altera_avalon_uart.s1' /><slave name='performance_counter_0.control_slave' start='0x520000' end='0x520020' type='altera_avalon_performance_counter.control_slave' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x8000000' type='abus_avalon_sdram_bridge.avalon_sdram' /><slave name='heartbeat_0.avalon_regs' start='0x10000000' end='0x10000200' type='heartbeat.avalon_regs' /></address-map>]]></value>
+   <value><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x16800' type='altera_onchip_flash.data' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x86000' type='altera_avalon_onchip_memory2.s1' /><slave name='uart_0.s1' start='0x410000' end='0x410020' type='altera_avalon_uart.s1' /><slave name='heartbeat_0.avalon_regs' start='0x511000' end='0x511200' type='heartbeat.avalon_regs' /><slave name='performance_counter_0.control_slave' start='0x520000' end='0x520020' type='altera_avalon_performance_counter.control_slave' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x8000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7025,7 +7025,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>d_address</name>
     <direction>Output</direction>
-    <width>29</width>
+    <width>27</width>
     <role>address</role>
    </port>
    <port>
@@ -7091,7 +7091,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>heartbeat_0</moduleName>
     <slaveName>avalon_regs</slaveName>
     <name>heartbeat_0.avalon_regs</name>
-    <baseAddress>268435456</baseAddress>
+    <baseAddress>5312512</baseAddress>
     <span>512</span>
    </memoryBlock>
    <memoryBlock>
@@ -11911,7 +11911,7 @@ parameters are a RESULT of the module parameters. -->
   </parameter>
   <parameter name="baseAddress">
    <type>java.math.BigInteger</type>
-   <value>0x10000000</value>
+   <value>0x00511000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>

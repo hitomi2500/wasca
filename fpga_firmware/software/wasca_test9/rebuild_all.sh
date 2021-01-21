@@ -3,10 +3,11 @@
 # Rebuild everything.
 
 # If available, update wasca link definition header from SatCom sources
-WL_FILE=/cygdrive/d/dev/Saturn/SatCom/satlink/wasca/wasca_link.h
+WL_FOLDER=/cygdrive/d/dev/Saturn/SatCom/satlink/wasca
+WL_FILE=$WL_FOLDER/wasca_link.h
 if test -f "$WL_FILE"; then
-rm -f satcom_lib/wasca_link.h
-    cp -p "$WL_FILE" satcom_lib/wasca_link.h
+    rm -f satcom_lib/wasca_link*.h
+    cp -p $WL_FOLDER/wasca_link*.h satcom_lib
 fi
 
 # Rebuild BSP

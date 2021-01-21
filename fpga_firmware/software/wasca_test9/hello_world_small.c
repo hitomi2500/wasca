@@ -177,7 +177,7 @@ void load_boot_rom(unsigned char rom_id)
     char full_path[WL_MAX_PATH] = { '\0' };
     spi_boot_getinfo(rom_id, &info, full_path);
 
-    logout(WL_LOG_DEBUGNORMAL, "[Boot ROM]Size=%u KB, status:%u, path:\"%s\"", info.size>>10, info.status, full_path);
+    log_to_uart("[Boot ROM]Size=%u KB, status:%u, path:\"%s\"", info.size>>10, info.status, full_path);
 
     /* Read ROM data. */
     unsigned long rom_size = info.size;
@@ -196,7 +196,7 @@ void load_boot_rom(unsigned char rom_id)
             block_len = rom_size - offset;
         }
 
-        logout(WL_LOG_DEBUGNORMAL, "[Boot ROM]Reading from offset=%u ...", offset);
+        log_to_uart("[Boot ROM]Reading from offset=%u ...", offset);
         // logflush();
 
         int read_status = spi_boot_readdata(rom_id, offset, block_len, boot_rom+offset);
@@ -210,7 +210,7 @@ void load_boot_rom(unsigned char rom_id)
     /* Mark read status as terminated. */
     pRegs_16[PCNTR_REG_OFFSET] = 100;
 
-    logout(WL_LOG_DEBUGNORMAL, "[Boot ROM]Read ended. Offset=%u KB", offset>>10);
+    log_to_uart("[Boot ROM]Read ended. Offset=%u KB", offset>>10);
 }
 
 
@@ -228,18 +228,29 @@ int main(void)
 //blink_the_leds();
     HEARTBEAT_FAST();
 
-    /*----------------------------------------*/
-    /* Initialize block SPI module internals. */
-    spi_init();
-
-
     /*--------------------------------------------*/
     /* Initialize log internals. */
     log_init();
 
 
-    /*-------------------------------------------*/
-    /* Load Pseudo Saturn from SD card to SDRAM. */
+    /*--------------------------------------------*/
+    /* Initialize block SPI module internals.     */
+    spi_init();
+
+    /*--------------------------------------------*/
+    /* Exchange version information with STM32.   */
+    {
+        /* TODO : should store version information somewhere in SDRAM
+         *        so that SH-2 can access to it.
+         */
+        wl_verinfo_ext_t*     max_ver = NULL;
+        wl_spicomm_version_t* arm_ver = NULL;
+        spi_exc_version(max_ver, arm_ver);
+    }
+
+
+    /*--------------------------------------------*/
+    /* Load Pseudo Saturn from SD card to SDRAM.  */
 // HEARTBEAT_FORCE(1);
     load_boot_rom(0x00/*ROM ID*/);
 // HEARTBEAT_FORCE(0);
@@ -257,6 +268,7 @@ int main(void)
     unsigned short prev_mode_reg = 0;
     int bram_mode = 0;
 
+    int loop_counter = 0;
     while(1)
     {
         volatile unsigned short current_block;
@@ -265,7 +277,7 @@ int main(void)
         /* Re-init internals in the case MODE register changed. */
         if(mode_reg != prev_mode_reg)
         {
-            logout(WL_LOG_DEBUGNORMAL, "Mode set to %x\n\r",mode_reg);
+            log_to_uart("Mode set to %x",mode_reg);
 
             /* If we were emulating backup memory until now, 
              * close its file before starting a new mode initialization.
@@ -281,7 +293,7 @@ int main(void)
              */
             if((mode_reg & 0x000F) != 0)
             {
-                logout(WL_LOG_DEBUGNORMAL, "Octet 0, value %x\n\r", (mode_reg & 0x000F));
+                log_to_uart("Octet 0, value %x", (mode_reg & 0x000F));
 
                 /* Lowest nibble is active, it's a backup memory.
                  * Bit 0-4 values :
@@ -297,7 +309,7 @@ int main(void)
                 }
 
                 /* Initialize SDRAM with backup memory file from SD card. */
-                logout(WL_LOG_DEBUGNORMAL, "Preparing backup RAM");
+                log_to_uart("Preparing backup RAM");
                 spi_bup_open(size_kb);
                 unsigned long count = size_kb * 4;
                 for(i=0; i<count; i++)
@@ -306,12 +318,12 @@ int main(void)
                     status = status / count;
                     pRegs_16[PCNTR_REG_OFFSET] = (unsigned short)status;
 
-                    logout(WL_LOG_DEBUGNORMAL, ".");
+                    log_to_uart(".");
 
                     spi_bup_read(i/*ID*/, 512/*size*/, (unsigned char*)(pCS1 + (i*512)));
                 }
                 pRegs_16[PCNTR_REG_OFFSET] = 100;
-                logout(WL_LOG_DEBUGNORMAL, "Done\n\r");
+                log_to_uart("Done");
 
                 /* Setup mapper stuff. */
                 pRegs_16[MAPPER_WRITE_0] =      0; /* Lock cs0 writes.                            */
@@ -337,7 +349,7 @@ int main(void)
             }
             else if((mode_reg & 0x00F0) != 0)
             {
-                logout(WL_LOG_DEBUGNORMAL, "Octet 1, value %x\n\r",(mode_reg & 0x00F0));
+                log_to_uart("Octet 1, value %x",(mode_reg & 0x00F0));
 
                 /* RAM expansion cart, clear bootrom's signature just in case. */
                 for(i=0;i<256;i++)
@@ -350,14 +362,14 @@ int main(void)
             }
             else if((mode_reg & 0x0F00) != 0)
             {
-              logout(WL_LOG_DEBUGNORMAL, "Octet 2, value %x\n\r",(mode_reg & 0x0F00));
+              log_to_uart("Octet 2, value %x",(mode_reg & 0x0F00));
               /* KOF95/Ultraman boot ROM :
                *  - 0x01 : KOF95
                *  - 0x02 : Ultraman
                */
               unsigned char rom_id = (unsigned char)((mode_reg & 0x0F00) >> 8);
 
-              logout(WL_LOG_DEBUGNORMAL, "Preparing KoF'95 / Ultraman ROM");
+              log_to_uart("Preparing KoF'95 / Ultraman ROM");
               load_boot_rom(rom_id);
 
               /* Mapper stuff. */
@@ -370,11 +382,11 @@ int main(void)
               pRegs_16[MAPPER_READ_2 ] =      0; /* Unmap cs1.                                  */
               pRegs_16[MAPPER_READ_3 ] =      0; /* Unmap cs2.                                  */
 
-              logout(WL_LOG_DEBUGNORMAL, "Done\n\r");
+              log_to_uart("Done");
             }
             else
             {
-                logout(WL_LOG_DEBUGNORMAL, "UNKNOWN MODE %x\n\r", mode_reg);
+                log_to_uart("UNKNOWN MODE %x", mode_reg);
                 pRegs_16[PCNTR_REG_OFFSET] = 100;
             }
 
@@ -401,7 +413,7 @@ int main(void)
                 // {
                 //     //fifo almost overfilled, let's panic!
                 //     for(i=0;i<10000;i++)
-                //     logout(WL_LOG_DEBUGNORMAL, "FFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+                //     log_to_uart("FFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
                 // }
 
                 /* Access data in fifo, checking address. */
@@ -412,9 +424,19 @@ int main(void)
                 spi_bup_read(current_block/*ID*/, 512/*size*/, pCS1_a);
 
                 /* Blinking led. */
-                logout(WL_LOG_DEBUGNORMAL, "SYNC %x(%x) <%x %x> ",current_block,current_block,pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET]);
+                log_to_uart("SYNC %x(%x) <%x> ", current_block, current_block, pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET]);
             }
         }
+
+        /* Check from time to time logs messages remaining in buffer, 
+         * and send them to STM32 if necessary.
+         */
+        if((loop_counter % 16) == 0)
+        {
+            logflush();
+        }
+
+        loop_counter++;
     }
 
     /* Never reached. */

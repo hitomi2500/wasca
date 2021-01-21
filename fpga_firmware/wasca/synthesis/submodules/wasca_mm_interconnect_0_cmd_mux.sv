@@ -43,8 +43,8 @@
 //   ARBITRATION_SHARES:  1
 //   ARBITRATION_SCHEME   "round-robin"
 //   PIPELINE_ARB:        1
-//   PKT_TRANS_LOCK:      69 (arbitration locking enabled)
-//   ST_DATA_W:           110
+//   PKT_TRANS_LOCK:      67 (arbitration locking enabled)
+//   ST_DATA_W:           108
 //   ST_CHANNEL_W:        10
 // ------------------------------------------
 
@@ -54,7 +54,7 @@ module wasca_mm_interconnect_0_cmd_mux
     // Sinks
     // ----------------------
     input                       sink0_valid,
-    input [110-1   : 0]  sink0_data,
+    input [108-1   : 0]  sink0_data,
     input [10-1: 0]  sink0_channel,
     input                       sink0_startofpacket,
     input                       sink0_endofpacket,
@@ -65,7 +65,7 @@ module wasca_mm_interconnect_0_cmd_mux
     // Source
     // ----------------------
     output                      src_valid,
-    output [110-1    : 0] src_data,
+    output [108-1    : 0] src_data,
     output [10-1 : 0] src_channel,
     output                      src_startofpacket,
     output                      src_endofpacket,
@@ -77,13 +77,13 @@ module wasca_mm_interconnect_0_cmd_mux
     input clk,
     input reset
 );
-    localparam PAYLOAD_W        = 110 + 10 + 2;
+    localparam PAYLOAD_W        = 108 + 10 + 2;
     localparam NUM_INPUTS       = 1;
     localparam SHARE_COUNTER_W  = 1;
     localparam PIPELINE_ARB     = 1;
-    localparam ST_DATA_W        = 110;
+    localparam ST_DATA_W        = 108;
     localparam ST_CHANNEL_W     = 10;
-    localparam PKT_TRANS_LOCK   = 69;
+    localparam PKT_TRANS_LOCK   = 67;
 
     assign	src_valid			=  sink0_valid;
     assign	src_data			=  sink0_data;

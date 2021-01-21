@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>2021/01/14 4:41:41</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1610566901635</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>2021/01/22 5:16:31</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1611260191965</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>D:\github\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
         <BspSettingsFile>.\settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
@@ -935,6 +935,12 @@
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>heartbeat_0</slaveDescriptor>
+                <addressRange>0x00511000 - 0x005111FF</addressRange>
+                <addressSpan>512</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>performance_counter_0</slaveDescriptor>
                 <addressRange>0x00520000 - 0x0052001F</addressRange>
                 <addressSpan>32</addressSpan>
@@ -945,12 +951,6 @@
                 <addressRange>0x04000000 - 0x07FFFFFF</addressRange>
                 <addressSpan>67108864</addressSpan>
                 <attributes>memory</attributes>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>heartbeat_0</slaveDescriptor>
-                <addressRange>0x10000000 - 0x100001FF</addressRange>
-                <addressSpan>512</addressSpan>
-                <attributes/>
         </MemoryMap>
         <LinkerSection>
                 <sectionName>.text</sectionName>

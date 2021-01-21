@@ -30,11 +30,29 @@ void spi_init(void);
 
 
 /**
- * spi_get_version
+ * spi_exc_version
  * 
- * Retrieve STM32 firmware version.
+ * Send MAX 10 firmmware version, and receive STM32's.
+ *
+ * About each parameters :
+ *  - wl_verinfo_ext_t* max_ver   : MAX 10 firmware version     [OUT]
+ *      It is set in this function, and can be copied to specified pointer if it is not NULL.
+ *  - wl_spicomm_version_t* arm_ver : STM32 firmware version    [OUT]
+ *      Returned after calling this function.
 **/
-void spi_get_version(wl_spicomm_version_t* ver);
+void spi_exc_version(wl_verinfo_ext_t* max_ver, wl_spicomm_version_t* arm_ver);
+
+
+/**
+ * spi_send_logs
+ * 
+ * Send log message(s) to STM32.
+ *
+ * About each parameters :
+ *  - logset  : misc. log informations.
+ *  - logdata : log messages themselves.
+**/
+void spi_send_logs(wl_spicomm_logs_t* logset, unsigned char* logdata);
 
 
 /**

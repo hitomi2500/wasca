@@ -17,14 +17,9 @@
  *  - 0 : disable all logs
  *  - 1 : enable logging
  *
- * Note : this is automatically enabled when
- *        UART is instanced on Qsys.
+ * (Disabling logs saves few KBs of memory usage)
  */
-#ifdef __ALTERA_AVALON_UART
 #   define LOG_ENABLE 1
-#else
-#   define LOG_ENABLE 0
-#endif
 
 
 #endif // _WASCA_DEFS_H_

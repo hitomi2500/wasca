@@ -61,7 +61,7 @@
    {
       datum baseAddress
       {
-         value = "268435456";
+         value = "5312512";
          type = "String";
       }
    }
@@ -435,10 +435,10 @@
   <parameter name="customInstSlavesSystemInfo_nios_a" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_b" value="&lt;info/&gt;" />
   <parameter name="customInstSlavesSystemInfo_nios_c" value="&lt;info/&gt;" />
-  <parameter name="dataAddrWidth" value="29" />
+  <parameter name="dataAddrWidth" value="27" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x16800' type='altera_onchip_flash.data' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x86000' type='altera_avalon_onchip_memory2.s1' /><slave name='uart_0.s1' start='0x410000' end='0x410020' type='altera_avalon_uart.s1' /><slave name='performance_counter_0.control_slave' start='0x520000' end='0x520020' type='altera_avalon_performance_counter.control_slave' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x8000000' type='abus_avalon_sdram_bridge.avalon_sdram' /><slave name='heartbeat_0.avalon_regs' start='0x10000000' end='0x10000200' type='heartbeat.avalon_regs' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_flash_0.data' start='0x0' end='0x16800' type='altera_onchip_flash.data' /><slave name='altpll_1.pll_slave' start='0x42000' end='0x42010' type='altpll.pll_slave' /><slave name='buffered_spi_0.avalon' start='0x50000' end='0x58000' type='buffered_spi.avalon' /><slave name='abus_avalon_sdram_bridge_0.avalon_regs' start='0x60000' end='0x60200' type='abus_avalon_sdram_bridge.avalon_regs' /><slave name='onchip_memory2_0.s1' start='0x80000' end='0x86000' type='altera_avalon_onchip_memory2.s1' /><slave name='uart_0.s1' start='0x410000' end='0x410020' type='altera_avalon_uart.s1' /><slave name='heartbeat_0.avalon_regs' start='0x511000' end='0x511200' type='heartbeat.avalon_regs' /><slave name='performance_counter_0.control_slave' start='0x520000' end='0x520020' type='altera_avalon_performance_counter.control_slave' /><slave name='abus_avalon_sdram_bridge_0.avalon_sdram' start='0x4000000' end='0x8000000' type='abus_avalon_sdram_bridge.avalon_sdram' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -726,7 +726,7 @@
    start="nios2_gen2_0.data_master"
    end="heartbeat_0.avalon_regs">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x10000000" />
+  <parameter name="baseAddress" value="0x00511000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection

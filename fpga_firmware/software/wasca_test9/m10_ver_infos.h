@@ -1,9 +1,9 @@
-// Generated: 2021/01/14,  4:41
+// Generated: 2021/01/22,  5:16
 #ifndef M10_VER_INFOS_H
 #define M10_VER_INFOS_H
-#define MAX10_FWDT_STR  "202101140441"
-#define MAX10_FWDT_VAL  20210114
-#define MAX10_FWTM_VAL  10441
+#define MAX10_FWDT_STR  "202101220516"
+#define MAX10_FWDT_VAL  20210122
+#define MAX10_FWTM_VAL  10516
 #define MAX10_DEV_TYPE  "10M08SCE144C8G"
-#define MAX10_PROJ_NAME "fpga_firmware"
+#define MAX10_PROJ_NAME "r07e_wasca_20210121"
 #endif // M10_VER_INFOS_H
