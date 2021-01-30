@@ -26,7 +26,7 @@ entity wasca_toplevel is
 		abus_read          : in    std_logic                     := '0';             --                               .read
 		abus_write         : in    std_logic_vector(1 downto 0)  := (others => '0'); --                               .write
 		abus_interrupt     : out    std_logic                     := '0';              --                               .interrupt
-		abus_interrupt_disable_out   : out   std_logic                     := '0';              --                       
+		abus_interrupt_disable_out   : out   std_logic                     := '1';              --                       
 		abus_direction	  : out   std_logic                     := '0';              --                               .direction
 		heartbeat : out   std_logic                     := '0'   ;
 		spi_stm32_MISO                              : in   std_logic;                                        -- MISO
@@ -112,7 +112,7 @@ architecture rtl of wasca_toplevel is
 			abus_avalon_sdram_bridge_0_abus_interrupt => abus_interrupt,
 			abus_avalon_sdram_bridge_0_abus_data => abus_data,
 			abus_avalon_sdram_bridge_0_abus_direction => abus_direction,
-			abus_avalon_sdram_bridge_0_abus_interrupt_disable_out => abus_interrupt_disable_out,
+			abus_avalon_sdram_bridge_0_abus_interrupt_disable_out => open,--abus_interrupt_disable_out,
 			abus_avalon_sdram_bridge_0_abus_reset => reset_reset_n,
 			heartbeat_heartbeat_out => heartbeat,
 			buffered_spi_sync => spi_stm32_sync,
@@ -149,6 +149,7 @@ architecture rtl of wasca_toplevel is
 		
 		audio_SSEL <= '1';
 		--sega_saturn_abus_slave_0_abus_direction <= '0';
+		abus_interrupt_disable_out <= '1';
 
 		
 		--por

@@ -20,9 +20,9 @@
 // Altera IRQ Mapper
 //
 // Parameters
-//   NUM_RCVRS        : 1
+//   NUM_RCVRS        : 0
 //   SENDER_IRW_WIDTH : 32
-//   IRQ_MAP          : 0:0
+//   IRQ_MAP          : 
 //
 // -------------------------------------------------------
 
@@ -39,7 +39,6 @@ module wasca_irq_mapper
     // -------------------
     // IRQ Receivers
     // -------------------
-    input                receiver0_irq,
 
     // -------------------
     // Command Source (Output)
@@ -47,11 +46,11 @@ module wasca_irq_mapper
     output reg [31 : 0] sender_irq
 );
 
+    initial sender_irq = 0;
 
     always @* begin
 	sender_irq = 0;
 
-        sender_irq[0] = receiver0_irq;
     end
 
 endmodule

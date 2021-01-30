@@ -28,9 +28,7 @@ module wasca (
 	clock_116_mhz_clk,
 	heartbeat_heartbeat_out,
 	reset_reset_n,
-	reset_controller_0_reset_in1_reset,
-	uart_0_external_connection_rxd,
-	uart_0_external_connection_txd);	
+	reset_controller_0_reset_in1_reset);	
 
 	input	[24:0]	abus_avalon_sdram_bridge_0_abus_address;
 	input		abus_avalon_sdram_bridge_0_abus_read;
@@ -61,6 +59,4 @@ module wasca (
 	output		heartbeat_heartbeat_out;
 	input		reset_reset_n;
 	input		reset_controller_0_reset_in1_reset;
-	input		uart_0_external_connection_rxd;
-	output		uart_0_external_connection_txd;
 endmodule

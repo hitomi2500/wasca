@@ -27,8 +27,6 @@
 		.clock_116_mhz_clk                                     (<connected-to-clock_116_mhz_clk>),                                     //                    clock_116_mhz.clk
 		.heartbeat_heartbeat_out                               (<connected-to-heartbeat_heartbeat_out>),                               //                        heartbeat.heartbeat_out
 		.reset_reset_n                                         (<connected-to-reset_reset_n>),                                         //                            reset.reset_n
-		.reset_controller_0_reset_in1_reset                    (<connected-to-reset_controller_0_reset_in1_reset>),                    //     reset_controller_0_reset_in1.reset
-		.uart_0_external_connection_rxd                        (<connected-to-uart_0_external_connection_rxd>),                        //       uart_0_external_connection.rxd
-		.uart_0_external_connection_txd                        (<connected-to-uart_0_external_connection_txd>)                         //                                 .txd
+		.reset_controller_0_reset_in1_reset                    (<connected-to-reset_controller_0_reset_in1_reset>)                     //     reset_controller_0_reset_in1.reset
 	);
 

@@ -32,9 +32,7 @@ module wasca (
 		output wire        clock_116_mhz_clk,                                     //                    clock_116_mhz.clk
 		output wire        heartbeat_heartbeat_out,                               //                        heartbeat.heartbeat_out
 		input  wire        reset_reset_n,                                         //                            reset.reset_n
-		input  wire        reset_controller_0_reset_in1_reset,                    //     reset_controller_0_reset_in1.reset
-		input  wire        uart_0_external_connection_rxd,                        //       uart_0_external_connection.rxd
-		output wire        uart_0_external_connection_txd                         //                                 .txd
+		input  wire        reset_controller_0_reset_in1_reset                     //     reset_controller_0_reset_in1.reset
 	);
 
 	wire         nios2_gen2_0_debug_reset_request_reset;                                  // nios2_gen2_0:debug_reset_request -> [buffered_spi_0:reset, mm_interconnect_0:buffered_spi_0_reset_reset_bridge_in_reset_reset, reset_controller_0:reset_in0]
@@ -105,16 +103,8 @@ module wasca (
 	wire         mm_interconnect_0_onchip_memory2_0_s1_write;                             // mm_interconnect_0:onchip_memory2_0_s1_write -> onchip_memory2_0:write
 	wire  [31:0] mm_interconnect_0_onchip_memory2_0_s1_writedata;                         // mm_interconnect_0:onchip_memory2_0_s1_writedata -> onchip_memory2_0:writedata
 	wire         mm_interconnect_0_onchip_memory2_0_s1_clken;                             // mm_interconnect_0:onchip_memory2_0_s1_clken -> onchip_memory2_0:clken
-	wire         mm_interconnect_0_uart_0_s1_chipselect;                                  // mm_interconnect_0:uart_0_s1_chipselect -> uart_0:chipselect
-	wire  [15:0] mm_interconnect_0_uart_0_s1_readdata;                                    // uart_0:readdata -> mm_interconnect_0:uart_0_s1_readdata
-	wire   [2:0] mm_interconnect_0_uart_0_s1_address;                                     // mm_interconnect_0:uart_0_s1_address -> uart_0:address
-	wire         mm_interconnect_0_uart_0_s1_read;                                        // mm_interconnect_0:uart_0_s1_read -> uart_0:read_n
-	wire         mm_interconnect_0_uart_0_s1_begintransfer;                               // mm_interconnect_0:uart_0_s1_begintransfer -> uart_0:begintransfer
-	wire         mm_interconnect_0_uart_0_s1_write;                                       // mm_interconnect_0:uart_0_s1_write -> uart_0:write_n
-	wire  [15:0] mm_interconnect_0_uart_0_s1_writedata;                                   // mm_interconnect_0:uart_0_s1_writedata -> uart_0:writedata
-	wire         irq_mapper_receiver0_irq;                                                // uart_0:irq -> irq_mapper:receiver0_irq
 	wire  [31:0] nios2_gen2_0_irq_irq;                                                    // irq_mapper:sender_irq -> nios2_gen2_0:irq
-	wire         rst_controller_reset_out_reset;                                          // rst_controller:reset_out -> [abus_avalon_sdram_bridge_0:reset, heartbeat_0:reset, irq_mapper:reset, mm_interconnect_0:nios2_gen2_0_reset_reset_bridge_in_reset_reset, nios2_gen2_0:reset_n, onchip_flash_0:reset_n, onchip_memory2_0:reset, rst_translator:in_reset, uart_0:reset_n]
+	wire         rst_controller_reset_out_reset;                                          // rst_controller:reset_out -> [abus_avalon_sdram_bridge_0:reset, heartbeat_0:reset, irq_mapper:reset, mm_interconnect_0:nios2_gen2_0_reset_reset_bridge_in_reset_reset, nios2_gen2_0:reset_n, onchip_flash_0:reset_n, onchip_memory2_0:reset, rst_translator:in_reset]
 	wire         rst_controller_reset_out_reset_req;                                      // rst_controller:reset_req -> [onchip_memory2_0:reset_req, rst_translator:reset_req_in]
 	wire         reset_controller_0_reset_out_reset;                                      // reset_controller_0:reset_out -> [rst_controller:reset_in0, rst_controller_002:reset_in0]
 	wire         rst_controller_001_reset_out_reset;                                      // rst_controller_001:reset_out -> [altpll_1:reset, mm_interconnect_0:altpll_1_inclk_interface_reset_reset_bridge_in_reset_reset]
@@ -385,21 +375,6 @@ module wasca (
 		.reset_req_in15 (1'b0)                                    // (terminated)
 	);
 
-	wasca_uart_0 uart_0 (
-		.clk           (clock_116_mhz_clk),                         //                 clk.clk
-		.reset_n       (~rst_controller_reset_out_reset),           //               reset.reset_n
-		.address       (mm_interconnect_0_uart_0_s1_address),       //                  s1.address
-		.begintransfer (mm_interconnect_0_uart_0_s1_begintransfer), //                    .begintransfer
-		.chipselect    (mm_interconnect_0_uart_0_s1_chipselect),    //                    .chipselect
-		.read_n        (~mm_interconnect_0_uart_0_s1_read),         //                    .read_n
-		.write_n       (~mm_interconnect_0_uart_0_s1_write),        //                    .write_n
-		.writedata     (mm_interconnect_0_uart_0_s1_writedata),     //                    .writedata
-		.readdata      (mm_interconnect_0_uart_0_s1_readdata),      //                    .readdata
-		.rxd           (uart_0_external_connection_rxd),            // external_connection.export
-		.txd           (uart_0_external_connection_txd),            //                    .export
-		.irq           (irq_mapper_receiver0_irq)                   //                 irq.irq
-	);
-
 	wasca_mm_interconnect_0 mm_interconnect_0 (
 		.altpll_1_c0_clk                                            (clock_116_mhz_clk),                                                       //                                          altpll_1_c0.clk
 		.clk_0_clk_clk                                              (clk_clk),                                                                 //                                            clk_0_clk.clk
@@ -472,21 +447,13 @@ module wasca (
 		.onchip_memory2_0_s1_writedata                              (mm_interconnect_0_onchip_memory2_0_s1_writedata),                         //                                                     .writedata
 		.onchip_memory2_0_s1_byteenable                             (mm_interconnect_0_onchip_memory2_0_s1_byteenable),                        //                                                     .byteenable
 		.onchip_memory2_0_s1_chipselect                             (mm_interconnect_0_onchip_memory2_0_s1_chipselect),                        //                                                     .chipselect
-		.onchip_memory2_0_s1_clken                                  (mm_interconnect_0_onchip_memory2_0_s1_clken),                             //                                                     .clken
-		.uart_0_s1_address                                          (mm_interconnect_0_uart_0_s1_address),                                     //                                            uart_0_s1.address
-		.uart_0_s1_write                                            (mm_interconnect_0_uart_0_s1_write),                                       //                                                     .write
-		.uart_0_s1_read                                             (mm_interconnect_0_uart_0_s1_read),                                        //                                                     .read
-		.uart_0_s1_readdata                                         (mm_interconnect_0_uart_0_s1_readdata),                                    //                                                     .readdata
-		.uart_0_s1_writedata                                        (mm_interconnect_0_uart_0_s1_writedata),                                   //                                                     .writedata
-		.uart_0_s1_begintransfer                                    (mm_interconnect_0_uart_0_s1_begintransfer),                               //                                                     .begintransfer
-		.uart_0_s1_chipselect                                       (mm_interconnect_0_uart_0_s1_chipselect)                                   //                                                     .chipselect
+		.onchip_memory2_0_s1_clken                                  (mm_interconnect_0_onchip_memory2_0_s1_clken)                              //                                                     .clken
 	);
 
 	wasca_irq_mapper irq_mapper (
-		.clk           (clock_116_mhz_clk),              //       clk.clk
-		.reset         (rst_controller_reset_out_reset), // clk_reset.reset
-		.receiver0_irq (irq_mapper_receiver0_irq),       // receiver0.irq
-		.sender_irq    (nios2_gen2_0_irq_irq)            //    sender.irq
+		.clk        (clock_116_mhz_clk),              //       clk.clk
+		.reset      (rst_controller_reset_out_reset), // clk_reset.reset
+		.sender_irq (nios2_gen2_0_irq_irq)            //    sender.irq
 	);
 
 	altera_reset_controller #(
