@@ -28,7 +28,9 @@
 			clock_116_mhz_clk                                     : out   std_logic;                                        -- clk
 			heartbeat_heartbeat_out                               : out   std_logic;                                        -- heartbeat_out
 			reset_reset_n                                         : in    std_logic                     := 'X';             -- reset_n
-			reset_controller_0_reset_in1_reset                    : in    std_logic                     := 'X'              -- reset
+			reset_controller_0_reset_in1_reset                    : in    std_logic                     := 'X';             -- reset
+			uart_0_external_connection_rxd                        : in    std_logic                     := 'X';             -- rxd
+			uart_0_external_connection_txd                        : out   std_logic                                         -- txd
 		);
 	end component wasca;
 
@@ -62,6 +64,8 @@
 			clock_116_mhz_clk                                     => CONNECTED_TO_clock_116_mhz_clk,                                     --                    clock_116_mhz.clk
 			heartbeat_heartbeat_out                               => CONNECTED_TO_heartbeat_heartbeat_out,                               --                        heartbeat.heartbeat_out
 			reset_reset_n                                         => CONNECTED_TO_reset_reset_n,                                         --                            reset.reset_n
-			reset_controller_0_reset_in1_reset                    => CONNECTED_TO_reset_controller_0_reset_in1_reset                     --     reset_controller_0_reset_in1.reset
+			reset_controller_0_reset_in1_reset                    => CONNECTED_TO_reset_controller_0_reset_in1_reset,                    --     reset_controller_0_reset_in1.reset
+			uart_0_external_connection_rxd                        => CONNECTED_TO_uart_0_external_connection_rxd,                        --       uart_0_external_connection.rxd
+			uart_0_external_connection_txd                        => CONNECTED_TO_uart_0_external_connection_txd                         --                                 .txd
 		);
 
