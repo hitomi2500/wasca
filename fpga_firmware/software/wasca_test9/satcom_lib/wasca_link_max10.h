@@ -350,6 +350,7 @@ typedef struct _wl_verinfo_ext_t
  *       [CRC]
  */
 #define WL_PKT_READ    (0x20)
+#define WL_PKT_GETCRC  (0x21)
 typedef struct _wl_reg_access_t
 {
     /* Read start address.

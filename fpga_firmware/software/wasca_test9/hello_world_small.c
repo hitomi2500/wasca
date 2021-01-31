@@ -163,15 +163,7 @@ void load_boot_rom(unsigned char rom_id)
     volatile unsigned short * pRegs_16 = (unsigned short *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
     unsigned char* boot_rom = (unsigned char*)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
 
-    /* First things first - clear boot ROM area.
-     * This is not necessary, but a good way of doing
-     * in the case of loading a ROM over a smaller one.
-     *
-     * In the case of Pseudo Saturn, size is 1MB, 
-     * and it is 2MB in the case of game boot ROM.
-     */
-    memset(boot_rom, 0xFF, (rom_id == 0 ? 1*1024*1024 : 2*1024*1024));
-
+    WASCA_PERF_START_MEASURE();
     /* Retrieve ROM file size. */
     wl_spicomm_bootinfo_t info = { 0 };
     char full_path[WL_MAX_PATH] = { '\0' };
@@ -196,7 +188,7 @@ void load_boot_rom(unsigned char rom_id)
             block_len = rom_size - offset;
         }
 
-        log_to_uart("[Boot ROM]Reading from offset=%u ...", offset);
+        //log_to_uart("[Boot ROM]Reading from offset=%u ...", offset);
         // logflush();
 
         int read_status = spi_boot_readdata(rom_id, offset, block_len, boot_rom+offset);
@@ -207,25 +199,37 @@ void load_boot_rom(unsigned char rom_id)
         }
     }
 
+    /* Clear unused part of boot ROM area.
+     * This is not necessary, but a good way of doing
+     * in the case of loading a ROM over a larger one, 
+     * or when ROM could not be loaded.
+     *
+     * In the case of Pseudo Saturn, size is 1MB, 
+     * and it is 2MB in the case of game boot ROM.
+     */
+    unsigned long fill_len = (rom_id == 0 ? 1*1024*1024 : 2*1024*1024);
+    if(fill_len > rom_size)
+    {
+        memset(boot_rom + rom_size, 0xFF, fill_len - rom_size);
+    }
+
     /* Mark read status as terminated. */
     pRegs_16[PCNTR_REG_OFFSET] = 100;
 
-    log_to_uart("[Boot ROM]Read ended. Offset=%u KB", offset>>10);
+    WASCA_PERF_STOP_MEASURE();
+    unsigned long elapsed = wasca_perf_get_usec(WASCA_PERF_GET_TIME());
+    elapsed = elapsed / 100000;
+
+    unsigned long crc32 = crc32_calc(boot_rom, rom_size);
+
+    log_to_uart("[Boot ROM]Read ended. Size=%u KB, Time = %u.%u sec, CRC=%x", rom_size>>10, elapsed / 10, elapsed % 10, crc32);
 }
 
 
-
-int main(void)
+void wasca_startup(void)
 {
-    int i;
-    volatile unsigned char  * pCS0     = (unsigned char  *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
-    volatile unsigned char  * pCS1     = (unsigned char  *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x2000000);
-    // volatile unsigned short * pCS0_16  = (unsigned short *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
     volatile unsigned short * pRegs_16 = (unsigned short *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
 
-
-    /*--------------------------------------------*/
-//blink_the_leds();
     HEARTBEAT_FAST();
 
     /*--------------------------------------------*/
@@ -252,16 +256,46 @@ int main(void)
     /*--------------------------------------------*/
     /* Load Pseudo Saturn from SD card to SDRAM.  */
 // HEARTBEAT_FORCE(1);
-    load_boot_rom(0x00/*ROM ID*/);
+    load_boot_rom(0/*ROM ID*/);
 // HEARTBEAT_FORCE(0);
 
 
     /* Write version. */
     pRegs_16[SWVER_REG_OFFSET] = SOFTWARE_VERSION;
 
+
     /* Initialization ended : blink the LED at slow speed. */
     HEARTBEAT_SLOW();
+}
 
+
+
+int main(void)
+{
+    int i;
+    volatile unsigned char  * pCS0     = (unsigned char  *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+    volatile unsigned char  * pCS1     = (unsigned char  *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x2000000);
+    // volatile unsigned short * pCS0_16  = (unsigned short *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+    volatile unsigned short * pRegs_16 = (unsigned short *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
+
+
+#if 0
+    /* Setup UART link speed.
+     * Let's use super slow speed to avoid characters to be eaten by UART.
+     */
+    {
+        unsigned long freq_tmp2 = 2 * UART_0_FREQ;
+        //unsigned long br2 = 9600;
+        unsigned long br2 = 115200;
+        freq_tmp2 = freq_tmp2 / br2;
+        ((unsigned long*)UART_0_BASE)[4] = freq_tmp2 / 2;
+        log_to_uart("UART Baud Rate : %u bps", br2);
+    }
+#endif
+
+    /*--------------------------------------------------*/
+    /* Load boot ROM and do other misc initializations. */
+    wasca_startup();
 
     /*----------------------------------------------------------------*/
     /* Poll MODE register and setup Wasca accordingly when it is set. */
@@ -362,27 +396,27 @@ int main(void)
             }
             else if((mode_reg & 0x0F00) != 0)
             {
-              log_to_uart("Octet 2, value %x",(mode_reg & 0x0F00));
-              /* KOF95/Ultraman boot ROM :
-               *  - 0x01 : KOF95
-               *  - 0x02 : Ultraman
-               */
-              unsigned char rom_id = (unsigned char)((mode_reg & 0x0F00) >> 8);
+                log_to_uart("Octet 2, value %x",(mode_reg & 0x0F00));
+                /* KOF95/Ultraman boot ROM :
+                 *  - 0x01 : KOF95
+                 *  - 0x02 : Ultraman
+                 */
+                unsigned char rom_id = (unsigned char)((mode_reg & 0x0F00) >> 8);
 
-              log_to_uart("Preparing KoF'95 / Ultraman ROM");
-              load_boot_rom(rom_id);
+                log_to_uart("Preparing KoF'95 / Ultraman ROM");
+                load_boot_rom(rom_id);
 
-              /* Mapper stuff. */
-              pRegs_16[MAPPER_WRITE_0] =      0; /* Lock cs0 writes.                            */
-              pRegs_16[MAPPER_WRITE_1] =      0; /* Lock cs0 writes.                            */
-              pRegs_16[MAPPER_WRITE_2] =      0; /* Lock cs1 writes.                            */
-              pRegs_16[MAPPER_WRITE_3] =      0; /* Lock cs2 writes.                            */
-              pRegs_16[MAPPER_READ_0 ] =      3; /* Unmap cs0, leave first 2 megs.              */
-              pRegs_16[MAPPER_READ_1 ] = 0x8100; /* Unmap cs0, leave regs and minipseudo areas. */
-              pRegs_16[MAPPER_READ_2 ] =      0; /* Unmap cs1.                                  */
-              pRegs_16[MAPPER_READ_3 ] =      0; /* Unmap cs2.                                  */
+                /* Mapper stuff. */
+                pRegs_16[MAPPER_WRITE_0] =      0; /* Lock cs0 writes.                            */
+                pRegs_16[MAPPER_WRITE_1] =      0; /* Lock cs0 writes.                            */
+                pRegs_16[MAPPER_WRITE_2] =      0; /* Lock cs1 writes.                            */
+                pRegs_16[MAPPER_WRITE_3] =      0; /* Lock cs2 writes.                            */
+                pRegs_16[MAPPER_READ_0 ] =      3; /* Unmap cs0, leave first 2 megs.              */
+                pRegs_16[MAPPER_READ_1 ] = 0x8100; /* Unmap cs0, leave regs and minipseudo areas. */
+                pRegs_16[MAPPER_READ_2 ] =      0; /* Unmap cs1.                                  */
+                pRegs_16[MAPPER_READ_3 ] =      0; /* Unmap cs2.                                  */
 
-              log_to_uart("Done");
+                log_to_uart("Done");
             }
             else
             {

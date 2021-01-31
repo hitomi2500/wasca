@@ -179,16 +179,27 @@ void logout_internal(int level, const char* fmt, ... )
         }
     }
 
-    /* Indicate size taken by this log message.
-     *
-     * Log message itself is already written at the
-     * right position, so there's no need to copy it.
-     */
-    len += sizeof(len);
-    memcpy(log_buff_start, &len, sizeof(len));
+    if(level == -1)
+    {
+        /* Dirty hack to use output to UART instead of SPI. */
+        char* str = ((char*)log_buff_start) + sizeof(len);
+        str[len-1] = '\0';
+        alt_putstr(str);
+        alt_putstr("\r\n");
+    }
+    else
+    {
+        /* Indicate size taken by this log message.
+         *
+         * Log message itself is already written at the
+         * right position, so there's no need to copy it.
+         */
+        len += sizeof(len);
+        memcpy(log_buff_start, &len, sizeof(len));
 
-    /* Update space taken in log messages buffer. */
-    _log_buffer_len += len;
+        /* Update space taken in log messages buffer. */
+        _log_buffer_len += len;
+    }
 }
 
 

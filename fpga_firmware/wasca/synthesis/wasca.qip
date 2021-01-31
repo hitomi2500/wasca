@@ -2,7 +2,7 @@ set_global_assignment -entity "wasca" -library "wasca" -name IP_TOOL_NAME "Qsys"
 set_global_assignment -entity "wasca" -library "wasca" -name IP_TOOL_VERSION "18.1"
 set_global_assignment -entity "wasca" -library "wasca" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "wasca" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../wasca.sopcinfo"]
-set_global_assignment -entity "wasca" -library "wasca" -name SLD_INFO "QSYS_NAME wasca HAS_SOPCINFO 1 GENERATION_ID 1611259816"
+set_global_assignment -entity "wasca" -library "wasca" -name SLD_INFO "QSYS_NAME wasca HAS_SOPCINFO 1 GENERATION_ID 1612090137"
 set_global_assignment -library "wasca" -name MISC_FILE [file join $::quartus(qip_path) "../wasca.cmp"]
 set_global_assignment -library "wasca" -name SLD_FILE [file join $::quartus(qip_path) "wasca.debuginfo"]
 set_global_assignment -entity "wasca" -library "wasca" -name IP_TARGETED_DEVICE_FAMILY "MAX 10"
@@ -15,7 +15,7 @@ set_global_assignment -entity "wasca" -library "wasca" -name IP_COMPONENT_DISPLA
 set_global_assignment -entity "wasca" -library "wasca" -name IP_COMPONENT_REPORT_HIERARCHY "On"
 set_global_assignment -entity "wasca" -library "wasca" -name IP_COMPONENT_INTERNAL "Off"
 set_global_assignment -entity "wasca" -library "wasca" -name IP_COMPONENT_VERSION "MS4w"
-set_global_assignment -entity "wasca" -library "wasca" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTYxMTI1OTgxNg==::QXV0byBHRU5FUkFUSU9OX0lE"
+set_global_assignment -entity "wasca" -library "wasca" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTYxMjA5MDEzNw==::QXV0byBHRU5FUkFUSU9OX0lE"
 set_global_assignment -entity "wasca" -library "wasca" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfRkFNSUxZ::TUFYIDEw::QXV0byBERVZJQ0VfRkFNSUxZ"
 set_global_assignment -entity "wasca" -library "wasca" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0U=::MTBNMDhTQ0UxNDRDOEc=::QXV0byBERVZJQ0U="
 set_global_assignment -entity "wasca" -library "wasca" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfU1BFRURHUkFERQ==::OA==::QXV0byBERVZJQ0VfU1BFRURHUkFERQ=="
@@ -837,7 +837,7 @@ set_global_assignment -entity "wasca_uart_0" -library "wasca" -name IP_COMPONENT
 set_global_assignment -entity "wasca_uart_0" -library "wasca" -name IP_COMPONENT_VERSION "MTguMQ=="
 set_global_assignment -entity "wasca_uart_0" -library "wasca" -name IP_COMPONENT_PARAMETER "YmF1ZA==::MTE1MjAw::QmF1ZCByYXRlIChicHMp"
 set_global_assignment -entity "wasca_uart_0" -library "wasca" -name IP_COMPONENT_PARAMETER "ZGF0YUJpdHM=::OA==::RGF0YSBiaXRz"
-set_global_assignment -entity "wasca_uart_0" -library "wasca" -name IP_COMPONENT_PARAMETER "Zml4ZWRCYXVk::dHJ1ZQ==::Rml4ZWQgYmF1ZCByYXRl"
+set_global_assignment -entity "wasca_uart_0" -library "wasca" -name IP_COMPONENT_PARAMETER "Zml4ZWRCYXVk::ZmFsc2U=::Rml4ZWQgYmF1ZCByYXRl"
 set_global_assignment -entity "wasca_uart_0" -library "wasca" -name IP_COMPONENT_PARAMETER "cGFyaXR5::Tk9ORQ==::UGFyaXR5"
 set_global_assignment -entity "wasca_uart_0" -library "wasca" -name IP_COMPONENT_PARAMETER "c2ltSW50ZXJhY3RpdmVJbnB1dEVuYWJsZQ==::ZmFsc2U=::SW50ZXJhY3RpdmUgc3RpbXVsdXMgd2luZG93"
 set_global_assignment -entity "wasca_uart_0" -library "wasca" -name IP_COMPONENT_PARAMETER "c2ltSW50ZXJhY3RpdmVPdXRwdXRFbmFibGU=::ZmFsc2U=::U3RyZWFtaW5nIG91dHB1dCB3aW5kb3c="

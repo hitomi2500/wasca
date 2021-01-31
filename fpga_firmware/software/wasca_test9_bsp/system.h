@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Thu Jan 21 15:04:35 JST 2021
+ * Generated: Fri Jan 29 20:29:37 JST 2021
  */
 
 /*
@@ -345,7 +345,7 @@
 #define UART_0_BASE 0x410000
 #define UART_0_BAUD 115200
 #define UART_0_DATA_BITS 8
-#define UART_0_FIXED_BAUD 1
+#define UART_0_FIXED_BAUD 0
 #define UART_0_FREQ 116000000
 #define UART_0_IRQ 0
 #define UART_0_IRQ_INTERRUPT_CONTROLLER_ID 0

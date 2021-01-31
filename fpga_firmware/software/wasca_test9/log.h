@@ -24,7 +24,8 @@ void logout_internal(int level, const char* fmt, ... );
      *        is not instanced on Qsys.
      */
 #ifdef __ALTERA_AVALON_UART
-#   define log_to_uart(...) alt_printf(__VA_ARGS__, 0); alt_putstr("\r\n")
+//#   define log_to_uart(...) alt_printf(__VA_ARGS__, 0); alt_putstr("\r\n")
+#   define log_to_uart(...) logout_internal(-1, __VA_ARGS__)
 #else // !__ALTERA_AVALON_UART
 #   define log_to_uart(...) logout(WL_LOG_DEBUGNORMAL, __VA_ARGS__)
 #endif // !__ALTERA_AVALON_UART

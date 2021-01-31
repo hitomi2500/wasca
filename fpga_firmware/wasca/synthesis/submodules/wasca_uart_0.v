@@ -42,7 +42,7 @@ module wasca_uart_0_tx (
   output           tx_ready;
   output           tx_shift_empty;
   output           txd;
-  input   [  9: 0] baud_divisor;
+  input   [ 15: 0] baud_divisor;
   input            begintransfer;
   input            clk;
   input            clk_en;
@@ -54,7 +54,7 @@ module wasca_uart_0_tx (
 
 
 reg              baud_clk_en;
-reg     [  9: 0] baud_rate_counter;
+reg     [ 15: 0] baud_rate_counter;
 wire             baud_rate_counter_is_zero;
 reg              do_load_shifter;
 wire             do_shift;
@@ -206,7 +206,7 @@ module wasca_uart_0_rx_stimulus_source (
 ;
 
   output           source_rxd;
-  input   [  9: 0] baud_divisor;
+  input   [ 15: 0] baud_divisor;
   input            clk;
   input            clk_en;
   input            reset_n;
@@ -312,7 +312,7 @@ module wasca_uart_0_rx (
   output           rx_char_ready;
   output  [  7: 0] rx_data;
   output           rx_overrun;
-  input   [  9: 0] baud_divisor;
+  input   [ 15: 0] baud_divisor;
   input            begintransfer;
   input            clk;
   input            clk_en;
@@ -323,8 +323,8 @@ module wasca_uart_0_rx (
 
 
 reg              baud_clk_en;
-wire    [  9: 0] baud_load_value;
-reg     [  9: 0] baud_rate_counter;
+wire    [ 15: 0] baud_load_value;
+reg     [ 15: 0] baud_rate_counter;
 wire             baud_rate_counter_is_zero;
 reg              break_detect;
 reg              delayed_unxrx_in_processxx3;
@@ -333,7 +333,7 @@ reg              delayed_unxsync_rxdxx2;
 reg              do_start_rx;
 reg              framing_error;
 wire             got_new_char;
-wire    [  8: 0] half_bit_cell_divisor;
+wire    [ 14: 0] half_bit_cell_divisor;
 wire             is_break;
 wire             is_framing_error;
 wire             parity_error;
@@ -398,7 +398,7 @@ reg     [  9: 0] unxshiftxrxd_shift_regxshift_reg_start_bit_nxx6_out;
 
   assign rxd_edge = (sync_rxd) ^  (delayed_unxsync_rxdxx2);
   assign rx_rd_strobe_onset = rx_rd_strobe && begintransfer;
-  assign half_bit_cell_divisor = baud_divisor[9 : 1];
+  assign half_bit_cell_divisor = baud_divisor[15 : 1];
   assign baud_load_value = (rxd_edge)? half_bit_cell_divisor :
     baud_divisor;
 
@@ -578,7 +578,7 @@ module wasca_uart_0_regs (
                          )
 ;
 
-  output  [  9: 0] baud_divisor;
+  output  [ 15: 0] baud_divisor;
   output           dataavailable;
   output           do_force_break;
   output           irq;
@@ -608,7 +608,7 @@ module wasca_uart_0_regs (
 
 
 wire             any_error;
-wire    [  9: 0] baud_divisor;
+reg     [ 15: 0] baud_divisor;
 reg     [  9: 0] control_reg;
 wire             control_wr_strobe;
 wire             cts_status_bit;
@@ -617,7 +617,8 @@ reg              d1_tx_ready;
 wire             dataavailable;
 wire             dcts_status_bit;
 reg              delayed_unxtx_readyxx4;
-wire    [  9: 0] divisor_constant;
+wire    [ 15: 0] divisor_constant;
+wire             divisor_wr_strobe;
 wire             do_force_break;
 wire             do_write_char;
 wire             eop_status_bit;
@@ -662,6 +663,7 @@ wire             tx_wr_strobe;
   assign tx_wr_strobe = chipselect && ~write_n && (address == 3'd1);
   assign status_wr_strobe = chipselect && ~write_n && (address == 3'd2);
   assign control_wr_strobe = chipselect && ~write_n && (address == 3'd3);
+  assign divisor_wr_strobe = chipselect && ~write_n  && (address == 3'd4);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -680,7 +682,15 @@ wire             tx_wr_strobe;
     end
 
 
-  assign baud_divisor = divisor_constant;
+  always @(posedge clk or negedge reset_n)
+    begin
+      if (reset_n == 0)
+          baud_divisor <= divisor_constant;
+      else if (divisor_wr_strobe)
+          baud_divisor <= writedata[15 : 0];
+    end
+
+
   assign cts_status_bit = 0;
   assign dcts_status_bit = 0;
   assign {do_force_break,
@@ -737,7 +747,8 @@ ie_parity_error} = control_reg;
   assign selected_read_data = ({16 {(address == 3'd0)}} & rx_data) |
     ({16 {(address == 3'd1)}} & tx_data) |
     ({16 {(address == 3'd2)}} & status_reg) |
-    ({16 {(address == 3'd3)}} & control_reg);
+    ({16 {(address == 3'd3)}} & control_reg) |
+    ({16 {(address == 3'd4)}} & baud_divisor);
 
   assign qualified_irq = (ie_any_error      && any_error      ) ||
     (ie_tx_shift_empty && tx_shift_empty ) ||
@@ -827,7 +838,7 @@ module wasca_uart_0 (
   input   [ 15: 0] writedata;
 
 
-wire    [  9: 0] baud_divisor;
+wire    [ 15: 0] baud_divisor;
 wire             break_detect;
 wire             clk_en;
 wire             dataavailable;
