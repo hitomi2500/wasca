@@ -66,7 +66,7 @@ module wasca_mm_interconnect_0 (
 		output wire [3:0]  nios2_gen2_0_debug_mem_slave_byteenable,                    //                                                     .byteenable
 		input  wire        nios2_gen2_0_debug_mem_slave_waitrequest,                   //                                                     .waitrequest
 		output wire        nios2_gen2_0_debug_mem_slave_debugaccess,                   //                                                     .debugaccess
-		output wire [14:0] onchip_flash_0_data_address,                                //                                  onchip_flash_0_data.address
+		output wire [15:0] onchip_flash_0_data_address,                                //                                  onchip_flash_0_data.address
 		output wire        onchip_flash_0_data_read,                                   //                                                     .read
 		input  wire [31:0] onchip_flash_0_data_readdata,                               //                                                     .readdata
 		output wire [3:0]  onchip_flash_0_data_burstcount,                             //                                                     .burstcount
@@ -1158,7 +1158,7 @@ module wasca_mm_interconnect_0 (
 	);
 
 	altera_merlin_slave_translator #(
-		.AV_ADDRESS_W                   (15),
+		.AV_ADDRESS_W                   (16),
 		.AV_DATA_W                      (32),
 		.UAV_DATA_W                     (32),
 		.AV_BURSTCOUNT_W                (4),

@@ -39,7 +39,7 @@ set_time_format -unit ns -decimal_places 3
 #**************************************************************
 
 create_clock -name {altera_reserved_tck} -period 100.000 -waveform { 0.000 50.000 } [get_ports {altera_reserved_tck}]
-create_clock -name {smpc_clk} -period 44.288 -waveform { 0.000 22.144 } [get_ports {clk_clk}]
+create_clock -name {smpc_clk} -period 16.667 -waveform { 0.000 8.333 } [get_ports {clk_clk}]
 create_clock -name {system_clk} -period 8.627 -waveform { 0.000 4.313 } [get_nets {my_little_wasca|altpll_1|sd1|wire_pll7_clk[0]}]
 
 

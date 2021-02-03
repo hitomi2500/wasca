@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sat Dec 19 21:48:31 MSK 2020
+ * Generated: Mon Feb 01 01:09:54 MSK 2021
  */
 
 /*
@@ -275,15 +275,15 @@
 #define ONCHIP_FLASH_0_SECTOR2_END_ADDR 0x7fff
 #define ONCHIP_FLASH_0_SECTOR2_START_ADDR 0x4000
 #define ONCHIP_FLASH_0_SECTOR3_ENABLED 1
-#define ONCHIP_FLASH_0_SECTOR3_END_ADDR 0x167ff
+#define ONCHIP_FLASH_0_SECTOR3_END_ADDR 0x1c7ff
 #define ONCHIP_FLASH_0_SECTOR3_START_ADDR 0x8000
-#define ONCHIP_FLASH_0_SECTOR4_ENABLED 0
-#define ONCHIP_FLASH_0_SECTOR4_END_ADDR 0xffffffff
-#define ONCHIP_FLASH_0_SECTOR4_START_ADDR 0xffffffff
+#define ONCHIP_FLASH_0_SECTOR4_ENABLED 1
+#define ONCHIP_FLASH_0_SECTOR4_END_ADDR 0x2afff
+#define ONCHIP_FLASH_0_SECTOR4_START_ADDR 0x1c800
 #define ONCHIP_FLASH_0_SECTOR5_ENABLED 0
 #define ONCHIP_FLASH_0_SECTOR5_END_ADDR 0xffffffff
 #define ONCHIP_FLASH_0_SECTOR5_START_ADDR 0xffffffff
-#define ONCHIP_FLASH_0_SPAN 92160
+#define ONCHIP_FLASH_0_SPAN 176128
 #define ONCHIP_FLASH_0_TYPE "altera_onchip_flash"
 
 

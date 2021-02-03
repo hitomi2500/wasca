@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sat Dec 19 21:48:31 MSK 2020
+ * Generated: Mon Feb 01 01:12:49 MSK 2021
  */
 
 /*
@@ -53,6 +53,7 @@ MEMORY
     entry : ORIGIN = 0x0, LENGTH = 32
     onchip_flash_0 : ORIGIN = 0x20, LENGTH = 15840
     exceptions : ORIGIN = 0x3e00, LENGTH = 512
+    extra_flash : ORIGIN = 0x4000, LENGTH = 159744
     onchip_memory2_0 : ORIGIN = 0x800000, LENGTH = 16384
     abus_avalon_sdram_bridge_0_avalon_sdram : ORIGIN = 0x4000000, LENGTH = 33554432
 }
@@ -119,6 +120,14 @@ SECTIONS
     } > exceptions
 
     PROVIDE (__flash_exceptions_start = LOADADDR(.exceptions));
+
+    .extra :
+    {
+        PROVIDE (_alt_partition_extra_start = ABSOLUTE(.));
+        *(.extra .extra.*)
+        . = ALIGN(4);
+        PROVIDE (_alt_partition_extra_end = ABSOLUTE(.));
+    } > extra_flash
 
     .text :
     {

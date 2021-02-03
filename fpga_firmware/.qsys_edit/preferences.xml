@@ -8,7 +8,7 @@
    <export preferredWidth="261" />
   </columns>
  </systemtable>
- <library expandedCategories="Library,Project" />
+ <library expandedCategories="Project,Library" />
  <window width="1680" height="1017" x="0" y="0" />
  <hdlexample language="VHDL" />
 </preferences>

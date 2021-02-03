@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Dec 19, 2020 9:48:31 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1608400111009</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>03.02.2021 23:41:41</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1612381301270</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
@@ -923,6 +923,14 @@
                 <addressRange>0x00003E00 - 0x00003FFF</addressRange>
         </LinkerRegion>
         <LinkerRegion>
+                <regionName>extra_flash</regionName>
+                <memoryName>onchip_flash_0</memoryName>
+                <offset>16384</offset>
+                <size>159744</size>
+                <baseAddress>0x4000</baseAddress>
+                <addressRange>0x00004000 - 0x0002AFFF</addressRange>
+        </LinkerRegion>
+        <LinkerRegion>
                 <regionName>onchip_memory2_0</regionName>
                 <memoryName>onchip_memory2_0</memoryName>
                 <offset>0</offset>
@@ -940,8 +948,8 @@
         </LinkerRegion>
         <MemoryMap>
                 <slaveDescriptor>onchip_flash_0</slaveDescriptor>
-                <addressRange>0x00000000 - 0x000167FF</addressRange>
-                <addressSpan>92160</addressSpan>
+                <addressRange>0x00000000 - 0x0002AFFF</addressRange>
+                <addressSpan>176128</addressSpan>
                 <attributes>flash, memory, non-volatile</attributes>
         </MemoryMap>
         <MemoryMap>
@@ -1009,5 +1017,9 @@
         <LinkerSection>
                 <sectionName>.stack</sectionName>
                 <regionName>onchip_memory2_0</regionName>
+        </LinkerSection>
+        <LinkerSection>
+                <sectionName>.extra</sectionName>
+                <regionName>extra_flash</regionName>
         </LinkerSection>
 </sch:Settings>

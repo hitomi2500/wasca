@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sat Dec 19 20:56:26 MSK 2020
+ * Generated: Sun Jan 31 01:18:00 MSK 2021
  */
 
 /*

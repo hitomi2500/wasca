@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sat Dec 19 21:48:31 MSK 2020
+ * Generated: Mon Feb 01 01:12:49 MSK 2021
  */
 
 /*
@@ -71,6 +71,8 @@
 #define ENTRY_REGION_SPAN 32
 #define EXCEPTIONS_REGION_BASE 0x3e00
 #define EXCEPTIONS_REGION_SPAN 512
+#define EXTRA_FLASH_REGION_BASE 0x4000
+#define EXTRA_FLASH_REGION_SPAN 159744
 #define ONCHIP_FLASH_0_REGION_BASE 0x20
 #define ONCHIP_FLASH_0_REGION_SPAN 15840
 #define ONCHIP_MEMORY2_0_REGION_BASE 0x800000

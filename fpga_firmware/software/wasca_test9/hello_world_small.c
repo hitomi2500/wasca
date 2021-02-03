@@ -98,9 +98,9 @@
 #define PCNTR_REG_OFFSET 0xF0
 #define MODE_REG_OFFSET 0xF4
 #define SWVER_REG_OFFSET 0xF8
-//extern const unsigned char rawData[131072];
+extern const unsigned char rawData[131072];
 //extern const unsigned char minipseudo[15588];
-//extern const unsigned char minipseudo_nowait[15588];
+extern const unsigned char minipseudo_nowait[15588];
 
 
 const char Power_Memory_Signature[16] = "BackUpRam Format";
@@ -263,6 +263,11 @@ int main()
   volatile unsigned int iCurrentBlock;
   char backup_filename[16];
   unsigned char LazyBuf[512];
+
+  //startup - switching heartbeat freq
+  unsigned short * Heartbeat_p16 = (unsigned short *)HEARTBEAT_0_BASE;
+  Heartbeat_p16[0] = 23;//7 Hz
+
   /*unsigned char UpdateArray[2048];
   for (i=0;i<2048;i++)
 	  UpdateArray[i] = 0;*/
@@ -375,7 +380,11 @@ int main()
   {
 	  /*for (j=0;j<512;j++)
 		  p[i*512+j] = alt_up_sd_card_read(_file_handler);//; p2[j];*/
-	  alt_up_sd_card_read_512b(_file_handler,&(pCS0[i*512+j]),i);
+	  //alt_up_sd_card_read_512b(_file_handler,&(pCS0[i*512+j]),i);
+	  for (j=0;j<512;j++)
+	  {
+		  pCS0[i*512+j] = rawData[i*512+j];
+	  }
 	  alt_printf(".");
   }
   //alt_up_sd_card_fclose(_file_handler);
@@ -391,7 +400,11 @@ int main()
 	  //for (j=0;j<512;j++)
 		 // p[0x9C000 + i*512+j] =  alt_up_sd_card_read(_file_handler);// p2[j];
 	  //alt_up_sd_card_read_512b(_file_handler,&(p[0x9C000 + i*512+j]),i);
-	  alt_up_sd_card_read_512b(_file_handler,&(pCS0[0x1800000 + i*512+j]),i);
+	  //alt_up_sd_card_read_512b(_file_handler,&(pCS0[0x1800000 + i*512+j]),i);
+	  for (j=0;j<512;j++)
+	  {
+		  pCS0[0x1800000 + i*512+j] = minipseudo_nowait[i*512+j];
+	  }
 	  alt_printf(".");
   }
   //alt_up_sd_card_fclose(_file_handler);
