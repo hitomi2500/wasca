@@ -1,0 +1,3 @@
+[submodule "mcu_firmware/STM32CubeF4"]
+	path = mcu_firmware/STM32CubeF4
+	url = https://github.com/STMicroelectronics/STM32CubeF4
