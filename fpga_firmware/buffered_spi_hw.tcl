@@ -128,7 +128,7 @@ add_interface_port conduit_end spi_mosi mosi Output 1
 add_interface_port conduit_end spi_clk clk Output 1
 add_interface_port conduit_end spi_miso miso Input 1
 add_interface_port conduit_end spi_cs cs Output 1
-add_interface_port conduit_end spi_sync sync Output 1
+add_interface_port conduit_end spi_sync sync Input 1
 
 
 # 

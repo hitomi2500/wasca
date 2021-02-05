@@ -23,7 +23,7 @@
 			buffered_spi_clk                                      : out   std_logic;                                        -- clk
 			buffered_spi_miso                                     : in    std_logic                     := 'X';             -- miso
 			buffered_spi_cs                                       : out   std_logic;                                        -- cs
-			buffered_spi_sync                                     : out   std_logic;                                        -- sync
+			buffered_spi_sync                                     : in    std_logic                     := 'X';             -- sync
 			clk_clk                                               : in    std_logic                     := 'X';             -- clk
 			clock_116_mhz_clk                                     : out   std_logic;                                        -- clk
 			heartbeat_heartbeat_out                               : out   std_logic;                                        -- heartbeat_out

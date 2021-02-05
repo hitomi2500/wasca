@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'wasca'
  * SOPC Builder design path: ../../wasca.sopcinfo
  *
- * Generated: Sat Dec 19 20:56:26 MSK 2020
+ * Generated: Mon Jan 11 20:34:22 JST 2021
  */
 
 /*
@@ -59,6 +59,7 @@
  */
 
 #include "altera_nios2_gen2_irq.h"
+#include "altera_avalon_performance_counter.h"
 #include "altera_avalon_uart.h"
 
 /*
@@ -66,6 +67,7 @@
  */
 
 ALTERA_NIOS2_GEN2_IRQ_INSTANCE ( NIOS2_GEN2_0, nios2_gen2_0);
+ALTERA_AVALON_PERFORMANCE_COUNTER_INSTANCE ( PERFORMANCE_COUNTER_0, performance_counter_0);
 ALTERA_AVALON_UART_INSTANCE ( UART_0, uart_0);
 
 /*
@@ -89,5 +91,6 @@ void alt_irq_init ( const void* base )
 
 void alt_sys_init( void )
 {
+    ALTERA_AVALON_PERFORMANCE_COUNTER_INIT ( PERFORMANCE_COUNTER_0, performance_counter_0);
     ALTERA_AVALON_UART_INIT ( UART_0, uart_0);
 }

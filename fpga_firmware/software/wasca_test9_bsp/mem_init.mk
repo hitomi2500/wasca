@@ -155,7 +155,7 @@ ACDS_VERSION := 18.1
 
 # This following BUILD_NUMBER comment indicates the build number of the tool 
 # used to generate this makefile. 
-# BUILD_NUMBER: 625
+# BUILD_NUMBER: 646
 
 # Optimize for simulation
 SIM_OPTIMIZE ?= 0
@@ -190,6 +190,17 @@ $(MEM_0)_HEX_DATA_WIDTH := 8
 $(MEM_0)_ENDIANNESS := --little-endian-mem
 $(MEM_0)_CREATE_LANES := 0
 $(MEM_0)_CFI_FLAGS := --base=$($(MEM_0)_START) --end=$($(MEM_0)_END) --reset=$(RESET_ADDRESS)
+$(MEM_0)_BOOT_LOADER_FLAG := --boot="$(BOOT_LOADER_CFI)"
+
+$(HDL_SIM_DIR)/$(MEM_0).dat: $(MEM_0).flash
+	$(post-process-info)
+	$(MKDIR) -p $(@D)
+	$(FLASH2DAT) --infile=$< --outfile=$@ \
+		--base=0x0 --end=0x167ff --width=$(mem_width) \
+		--create-lanes=$(mem_create_lanes) $(flash2dat_extra_args)
+
+
+FLASH_DAT_FILES += $(HDL_SIM_DIR)/$(MEM_0).dat
 
 .PHONY: onchip_flash_0
 onchip_flash_0: check_elf_exists $(MEM_INIT_DIR)/$(MEM_0).hex $(HDL_SIM_DIR)/$(MEM_0).dat $(HDL_SIM_DIR)/$(MEM_0).sym $(MEM_0).flash
@@ -204,9 +215,9 @@ DAT_FILES += $(HDL_SIM_DIR)/$(MEM_1).dat
 HDL_SIM_INSTALL_FILES += $(HDL_SIM_INSTALL_DIR)/$(MEM_1).dat
 SYM_FILES += $(HDL_SIM_DIR)/$(MEM_1).sym
 HDL_SIM_INSTALL_FILES += $(HDL_SIM_INSTALL_DIR)/$(MEM_1).sym
-$(MEM_1)_START := 0x00800000
-$(MEM_1)_END := 0x00803fff
-$(MEM_1)_SPAN := 0x00004000
+$(MEM_1)_START := 0x00080000
+$(MEM_1)_END := 0x00085fff
+$(MEM_1)_SPAN := 0x00006000
 $(MEM_1)_HIERARCHICAL_PATH := onchip_memory2_0
 $(MEM_1)_WIDTH := 32
 $(MEM_1)_HEX_DATA_WIDTH := 32

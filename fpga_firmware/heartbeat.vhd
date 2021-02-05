@@ -27,6 +27,9 @@ signal heartbeat_divider         : unsigned(4 downto 0) := to_unsigned(27,5); --
 signal heartbeat_divider_16         : std_logic_vector(15 downto 0) := (others => '0');  
 signal heartbeat_divider_int         : integer range 31 downto 0 := 27; 
 
+signal heartbeat_force_flag         :  std_logic := '0'; 
+signal heartbeat_force_value        :  std_logic := '0'; 
+
 begin
 
 	heartbeat_divider_16 <= std_logic_vector(resize(heartbeat_divider,16));
@@ -62,6 +65,8 @@ begin
 				case avalon_regs_address(7 downto 0) is 
 					when X"00" => 
 						heartbeat_divider <= unsigned(avalon_regs_writedata(4 downto 0));
+						heartbeat_force_value <= avalon_regs_writedata(6);
+						heartbeat_force_flag  <= avalon_regs_writedata(7);
 					when others =>
 						null;
 				end case;
@@ -79,32 +84,36 @@ begin
 	process (clock)
 	begin
 		if rising_edge(clock) then
-			case heartbeat_divider_int is 
-				when 21 => 
-					heartbeat_out <= heartbeat_counter_logic(20);	-- 54 Hz				
-				when 22 => 
-					heartbeat_out <= heartbeat_counter_logic(21);	-- 28 Hz 				
-				when 23 => 
-					heartbeat_out <= heartbeat_counter_logic(22);	-- 14 Hz				
-				when 24 => 
-					heartbeat_out <= heartbeat_counter_logic(23);	-- 7 Hz				
-				when 25 => 
-					heartbeat_out <= heartbeat_counter_logic(24);	--3.2 Hz				
-				when 26 => 
-					heartbeat_out <= heartbeat_counter_logic(25);	--1.6 Hz				
-				when 27 => 
-					heartbeat_out <= heartbeat_counter_logic(26);	--0.8 Hz				
-				when 28 => 
-					heartbeat_out <= heartbeat_counter_logic(27);					
-				when 29 => 
-					heartbeat_out <= heartbeat_counter_logic(28);					
-				when 30 => 
-					heartbeat_out <= heartbeat_counter_logic(29);					
-				when 31 => 
-					heartbeat_out <= heartbeat_counter_logic(30);									
-				when others =>
-					heartbeat_out <= heartbeat_counter_logic(26);	
-			end case;
+			if heartbeat_force_flag = '1' then
+				heartbeat_out <= heartbeat_force_value;
+			else
+				case heartbeat_divider_int is 
+					when 21 => 
+						heartbeat_out <= heartbeat_counter_logic(20);	-- 54 Hz				
+					when 22 => 
+						heartbeat_out <= heartbeat_counter_logic(21);	-- 28 Hz 				
+					when 23 => 
+						heartbeat_out <= heartbeat_counter_logic(22);	-- 14 Hz				
+					when 24 => 
+						heartbeat_out <= heartbeat_counter_logic(23);	-- 7 Hz				
+					when 25 => 
+						heartbeat_out <= heartbeat_counter_logic(24);	--3.2 Hz				
+					when 26 => 
+						heartbeat_out <= heartbeat_counter_logic(25);	--1.6 Hz				
+					when 27 => 
+						heartbeat_out <= heartbeat_counter_logic(26);	--0.8 Hz				
+					when 28 => 
+						heartbeat_out <= heartbeat_counter_logic(27);					
+					when 29 => 
+						heartbeat_out <= heartbeat_counter_logic(28);					
+					when 30 => 
+						heartbeat_out <= heartbeat_counter_logic(29);					
+					when 31 => 
+						heartbeat_out <= heartbeat_counter_logic(30);									
+					when others =>
+						heartbeat_out <= heartbeat_counter_logic(26);	
+				end case;
+			end if;
 		end if;
 	end process;	
 	
