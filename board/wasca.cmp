@@ -354,7 +354,7 @@ BeginCmp
 TimeStamp = /5530C876;
 Reference = CN1;
 ValeurCmp = CARTRIDGE_EDGE_CONNECTOR;
-IdModule  = Wasca:CARTRIDGE_EDGE_CONNECTOR2;
+IdModule  = wasca:CARTRIDGE_EDGE_CONNECTOR2;
 EndCmp
 
 BeginCmp
@@ -382,7 +382,7 @@ BeginCmp
 TimeStamp = /5530A78B;
 Reference = IC1;
 ValeurCmp = MT48LC32M16A2TG;
-IdModule  = Wasca:TSOP_II_54;
+IdModule  = wasca:TSOP_II_54;
 EndCmp
 
 BeginCmp

@@ -31,13 +31,7 @@
 			spi_sd_card_MISO                                           : in    std_logic                     := 'X';             -- MISO
 			spi_sd_card_MOSI                                           : out   std_logic;                                        -- MOSI
 			spi_sd_card_SCLK                                           : out   std_logic;                                        -- SCLK
-			spi_sd_card_SS_n                                           : out   std_logic;                                        -- SS_n
-			spi_stm32_MISO                                             : out   std_logic;                                        -- MISO
-			spi_stm32_MOSI                                             : in    std_logic                     := 'X';             -- MOSI
-			spi_stm32_SCLK                                             : in    std_logic                     := 'X';             -- SCLK
-			spi_stm32_SS_n                                             : in    std_logic                     := 'X';             -- SS_n
-			uart_0_external_connection_rxd                             : in    std_logic                     := 'X';             -- rxd
-			uart_0_external_connection_txd                             : out   std_logic                                         -- txd
+			spi_sd_card_SS_n                                           : out   std_logic                                         -- SS_n
 		);
 	end component wasca;
 

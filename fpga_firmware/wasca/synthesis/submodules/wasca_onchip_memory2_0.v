@@ -1,4 +1,4 @@
-//Legal Notice: (C)2015 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2016 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -34,9 +34,6 @@ module wasca_onchip_memory2_0 (
                                  readdata
                               )
 ;
-
-  parameter INIT_FILE = "wasca_onchip_memory2_0.hex";
-
 
   output  [ 31: 0] readdata;
   input   [ 11: 0] address;

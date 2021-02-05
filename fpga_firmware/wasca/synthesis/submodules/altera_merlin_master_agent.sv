@@ -1,4 +1,4 @@
-// (C) 2001-2015 Altera Corporation. All rights reserved.
+// (C) 2001-2016 Altera Corporation. All rights reserved.
 // Your use of Altera Corporation's design tools, logic functions and other 
 // software and tools, and its AMPP partner logic functions, and any output 
 // files any of the foregoing (including device programming or simulation 
@@ -11,9 +11,9 @@
 // agreement for further details.
 
 
-// $Id: //acds/rel/15.0/ip/merlin/altera_merlin_master_agent/altera_merlin_master_agent.sv#1 $
+// $Id: //acds/rel/15.1/ip/merlin/altera_merlin_master_agent/altera_merlin_master_agent.sv#1 $
 // $Revision: #1 $
-// $Date: 2015/02/08 $
+// $Date: 2015/08/09 $
 // $Author: swbranch $
 
 // --------------------------------------
@@ -166,7 +166,7 @@ module altera_merlin_master_agent
       INCR        = 2'b01,
       WRAP        = 2'b10,
       OTHER_WRAP  = 2'b11
-   } MerlinBurstType; 
+   } MerlinBurstType;
 
    // --------------------------------------
    // Potential optimization: compare in words to save bits?
@@ -199,7 +199,7 @@ module altera_merlin_master_agent
    // --------------------------------------
    // Command & Response Construction
    // --------------------------------------
-   always @* begin
+   always_comb begin
       cp_data                                              = '0;
 
       cp_data[PKT_PROTECTION_L]                            = av_debugaccess;    
@@ -236,7 +236,7 @@ module altera_merlin_master_agent
    // --------------------------------------
    // Command Control
    // --------------------------------------
-   always @* begin
+   always_comb begin
       cp_valid = 0;
 
       if (av_write || av_read)
@@ -283,7 +283,7 @@ module altera_merlin_master_agent
          hold_waitrequest <= 1'b0;
    end  
 
-   always @* begin
+   always_comb begin
       rp_ready              = 1;
       av_readdatavalid      = 0;
       av_writeresponsevalid = 0;

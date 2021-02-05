@@ -2,6 +2,9 @@
 		.altpll_0_areset_conduit_export                             (<connected-to-altpll_0_areset_conduit_export>),                             //                       altpll_0_areset_conduit.export
 		.altpll_0_locked_conduit_export                             (<connected-to-altpll_0_locked_conduit_export>),                             //                       altpll_0_locked_conduit.export
 		.altpll_0_phasedone_conduit_export                          (<connected-to-altpll_0_phasedone_conduit_export>),                          //                    altpll_0_phasedone_conduit.export
+		.audio_out_BCLK                                             (<connected-to-audio_out_BCLK>),                                             //                                     audio_out.BCLK
+		.audio_out_DACDAT                                           (<connected-to-audio_out_DACDAT>),                                           //                                              .DACDAT
+		.audio_out_DACLRCK                                          (<connected-to-audio_out_DACLRCK>),                                          //                                              .DACLRCK
 		.clk_clk                                                    (<connected-to-clk_clk>),                                                    //                                           clk.clk
 		.clock_116_mhz_clk                                          (<connected-to-clock_116_mhz_clk>),                                          //                                 clock_116_mhz.clk
 		.external_sdram_controller_wire_addr                        (<connected-to-external_sdram_controller_wire_addr>),                        //                external_sdram_controller_wire.addr
@@ -27,15 +30,6 @@
 		.spi_sd_card_MISO                                           (<connected-to-spi_sd_card_MISO>),                                           //                                   spi_sd_card.MISO
 		.spi_sd_card_MOSI                                           (<connected-to-spi_sd_card_MOSI>),                                           //                                              .MOSI
 		.spi_sd_card_SCLK                                           (<connected-to-spi_sd_card_SCLK>),                                           //                                              .SCLK
-		.spi_sd_card_SS_n                                           (<connected-to-spi_sd_card_SS_n>),                                           //                                              .SS_n
-		.uart_0_external_connection_rxd                             (<connected-to-uart_0_external_connection_rxd>),                             //                    uart_0_external_connection.rxd
-		.uart_0_external_connection_txd                             (<connected-to-uart_0_external_connection_txd>),                             //                                              .txd
-		.spi_stm32_MISO                                             (<connected-to-spi_stm32_MISO>),                                             //                                     spi_stm32.MISO
-		.spi_stm32_MOSI                                             (<connected-to-spi_stm32_MOSI>),                                             //                                              .MOSI
-		.spi_stm32_SCLK                                             (<connected-to-spi_stm32_SCLK>),                                             //                                              .SCLK
-		.spi_stm32_SS_n                                             (<connected-to-spi_stm32_SS_n>),                                             //                                              .SS_n
-		.audio_out_BCLK                                             (<connected-to-audio_out_BCLK>),                                             //                                     audio_out.BCLK
-		.audio_out_DACDAT                                           (<connected-to-audio_out_DACDAT>),                                           //                                              .DACDAT
-		.audio_out_DACLRCK                                          (<connected-to-audio_out_DACLRCK>)                                           //                                              .DACLRCK
+		.spi_sd_card_SS_n                                           (<connected-to-spi_sd_card_SS_n>)                                            //                                              .SS_n
 	);
 

@@ -1,4 +1,4 @@
-// (C) 2001-2015 Altera Corporation. All rights reserved.
+// (C) 2001-2016 Altera Corporation. All rights reserved.
 // Your use of Altera Corporation's design tools, logic functions and other 
 // software and tools, and its AMPP partner logic functions, and any output 
 // files any of the foregoing (including device programming or simulation 
@@ -81,13 +81,13 @@ module wasca_mm_interconnect_0_avalon_st_adapter_error_adapter_0
 
  /*AUTOARG*/);
    
-   reg in_error;   
+   reg in_error = 0;
    initial in_error = 0;
 
    // ---------------------------------------------------------------------
    //| Pass-through Mapping
    // ---------------------------------------------------------------------
-   always @* begin
+   always_comb begin
       in_ready = out_ready;
       out_valid = in_valid;
       out_data = in_data;
@@ -97,7 +97,7 @@ module wasca_mm_interconnect_0_avalon_st_adapter_error_adapter_0
    // ---------------------------------------------------------------------
    //| Error Mapping 
    // ---------------------------------------------------------------------
-   always @* begin
+   always_comb begin
       out_error = 0;
       
       out_error = in_error;

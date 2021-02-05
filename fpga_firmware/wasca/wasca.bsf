@@ -4,14 +4,14 @@ editor if you plan to continue editing the block that represents it in
 the Block Editor! File corruption is VERY likely to occur.
 */
 /*
-Copyright (C) 1991-2015 Altera Corporation. All rights reserved.
+Copyright (C) 1991-2016 Altera Corporation. All rights reserved.
 Your use of Altera Corporation's design tools, logic functions 
 and other software and tools, and its AMPP partner logic 
 functions, and any output files from any of the foregoing 
 (including device programming or simulation files), and any 
 associated documentation or information are expressly subject 
 to the terms and conditions of the Altera Program License 
-Subscription Agreement, the Altera Quartus II License Agreement,
+Subscription Agreement, the Altera Quartus Prime License Agreement,
 the Altera MegaCore Function License Agreement, or other 
 applicable license agreement, including, without limitation, 
 that your use is for the sole purpose of programming logic 
@@ -21,9 +21,9 @@ agreement for further details.
 */
 (header "symbol" (version "1.1"))
 (symbol
-	(rect 0 0 768 920)
+	(rect 0 0 768 776)
 	(text "wasca" (rect 366 -1 390 11)(font "Arial" (font_size 10)))
-	(text "inst" (rect 8 904 20 916)(font "Arial" ))
+	(text "inst" (rect 8 760 20 772)(font "Arial" ))
 	(port
 		(pt 0 72)
 		(input)
@@ -93,34 +93,6 @@ agreement for further details.
 		(text "spi_sd_card_MISO" (rect 0 0 79 12)(font "Arial" (font_size 8)))
 		(text "spi_sd_card_MISO" (rect 4 685 100 696)(font "Arial" (font_size 8)))
 		(line (pt 0 696)(pt 336 696)(line_width 1))
-	)
-	(port
-		(pt 0 800)
-		(input)
-		(text "spi_stm32_MOSI" (rect 0 0 70 12)(font "Arial" (font_size 8)))
-		(text "spi_stm32_MOSI" (rect 4 789 88 800)(font "Arial" (font_size 8)))
-		(line (pt 0 800)(pt 336 800)(line_width 1))
-	)
-	(port
-		(pt 0 816)
-		(input)
-		(text "spi_stm32_SCLK" (rect 0 0 73 12)(font "Arial" (font_size 8)))
-		(text "spi_stm32_SCLK" (rect 4 805 88 816)(font "Arial" (font_size 8)))
-		(line (pt 0 816)(pt 336 816)(line_width 1))
-	)
-	(port
-		(pt 0 832)
-		(input)
-		(text "spi_stm32_SS_n" (rect 0 0 69 12)(font "Arial" (font_size 8)))
-		(text "spi_stm32_SS_n" (rect 4 821 88 832)(font "Arial" (font_size 8)))
-		(line (pt 0 832)(pt 336 832)(line_width 1))
-	)
-	(port
-		(pt 0 872)
-		(input)
-		(text "uart_0_external_connection_rxd" (rect 0 0 128 12)(font "Arial" (font_size 8)))
-		(text "uart_0_external_connection_rxd" (rect 4 861 184 872)(font "Arial" (font_size 8)))
-		(line (pt 0 872)(pt 336 872)(line_width 1))
 	)
 	(port
 		(pt 0 112)
@@ -263,20 +235,6 @@ agreement for further details.
 		(line (pt 0 744)(pt 336 744)(line_width 1))
 	)
 	(port
-		(pt 0 784)
-		(output)
-		(text "spi_stm32_MISO" (rect 0 0 70 12)(font "Arial" (font_size 8)))
-		(text "spi_stm32_MISO" (rect 4 773 88 784)(font "Arial" (font_size 8)))
-		(line (pt 0 784)(pt 336 784)(line_width 1))
-	)
-	(port
-		(pt 0 888)
-		(output)
-		(text "uart_0_external_connection_txd" (rect 0 0 127 12)(font "Arial" (font_size 8)))
-		(text "uart_0_external_connection_txd" (rect 4 877 184 888)(font "Arial" (font_size 8)))
-		(line (pt 0 888)(pt 336 888)(line_width 1))
-	)
-	(port
 		(pt 0 384)
 		(bidir)
 		(text "external_sdram_controller_wire_dq[15..0]" (rect 0 0 164 12)(font "Arial" (font_size 8)))
@@ -333,19 +291,11 @@ agreement for further details.
 		(text "MOSI" (rect 341 707 706 1424)(font "Arial" (color 0 0 0)))
 		(text "SCLK" (rect 341 723 706 1456)(font "Arial" (color 0 0 0)))
 		(text "SS_n" (rect 341 739 706 1488)(font "Arial" (color 0 0 0)))
-		(text "spi_stm32" (rect 276 755 606 1523)(font "Arial" (color 128 0 0)(font_size 9)))
-		(text "MISO" (rect 341 779 706 1568)(font "Arial" (color 0 0 0)))
-		(text "MOSI" (rect 341 795 706 1600)(font "Arial" (color 0 0 0)))
-		(text "SCLK" (rect 341 811 706 1632)(font "Arial" (color 0 0 0)))
-		(text "SS_n" (rect 341 827 706 1664)(font "Arial" (color 0 0 0)))
-		(text "uart_0_external_connection" (rect 176 843 508 1699)(font "Arial" (color 128 0 0)(font_size 9)))
-		(text "rxd" (rect 341 867 700 1744)(font "Arial" (color 0 0 0)))
-		(text "txd" (rect 341 883 700 1776)(font "Arial" (color 0 0 0)))
-		(text " wasca " (rect 739 904 1520 1818)(font "Arial" ))
+		(text " wasca " (rect 739 760 1520 1530)(font "Arial" ))
 		(line (pt 336 32)(pt 432 32)(line_width 1))
-		(line (pt 432 32)(pt 432 904)(line_width 1))
-		(line (pt 336 904)(pt 432 904)(line_width 1))
-		(line (pt 336 32)(pt 336 904)(line_width 1))
+		(line (pt 432 32)(pt 432 760)(line_width 1))
+		(line (pt 336 760)(pt 432 760)(line_width 1))
+		(line (pt 336 32)(pt 336 760)(line_width 1))
 		(line (pt 337 52)(pt 337 76)(line_width 1))
 		(line (pt 338 52)(pt 338 76)(line_width 1))
 		(line (pt 337 92)(pt 337 116)(line_width 1))
@@ -366,13 +316,9 @@ agreement for further details.
 		(line (pt 338 636)(pt 338 660)(line_width 1))
 		(line (pt 337 676)(pt 337 748)(line_width 1))
 		(line (pt 338 676)(pt 338 748)(line_width 1))
-		(line (pt 337 764)(pt 337 836)(line_width 1))
-		(line (pt 338 764)(pt 338 836)(line_width 1))
-		(line (pt 337 852)(pt 337 892)(line_width 1))
-		(line (pt 338 852)(pt 338 892)(line_width 1))
 		(line (pt 0 0)(pt 768 0)(line_width 1))
-		(line (pt 768 0)(pt 768 920)(line_width 1))
-		(line (pt 0 920)(pt 768 920)(line_width 1))
-		(line (pt 0 0)(pt 0 920)(line_width 1))
+		(line (pt 768 0)(pt 768 776)(line_width 1))
+		(line (pt 0 776)(pt 768 776)(line_width 1))
+		(line (pt 0 0)(pt 0 776)(line_width 1))
 	)
 )

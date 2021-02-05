@@ -34,11 +34,6 @@ entity wasca_toplevel is
 		spi_sd_card_MOSI                                           : out   std_logic;                                        -- MOSI
 		spi_sd_card_SCLK                                           : out   std_logic;                                        -- SCLK
 		spi_sd_card_SS_n                                           : out   std_logic;                                        -- SS_n
-		uart_0_external_connection_txd : out   std_logic                     := '0'   ;
-		spi_stm32_MISO                              : out   std_logic;                                        -- MISO
-		spi_stm32_MOSI                              : in    std_logic                     := '0';             -- MOSI
-		spi_stm32_SCLK                              : in    std_logic                     := '0';             -- SCLK
-		spi_stm32_SS_n                              : in    std_logic                     := '0';             -- SS_n
 		audio_out_BCLK                              : in    std_logic                     := '0';             -- BCLK
 		audio_out_DACDAT                            : out   std_logic;                                        -- DACDAT
 		audio_out_DACLRCK                           : in    std_logic                     := '0';              -- DACLRCK
@@ -80,12 +75,6 @@ architecture rtl of wasca_toplevel is
 			spi_sd_card_MOSI                                           : out   std_logic;                                        -- MOSI
 			spi_sd_card_SCLK                                           : out   std_logic;                                        -- SCLK
 			spi_sd_card_SS_n                                           : out   std_logic;                                        -- SS_n
-			uart_0_external_connection_rxd                              : in    std_logic                     := '0';             -- rxd
-			uart_0_external_connection_txd                              : out   std_logic;                                         -- txd
-			spi_stm32_MISO                                             : out   std_logic;                                        -- MISO
-			spi_stm32_MOSI                                             : in    std_logic                     := '0';             -- MOSI
-			spi_stm32_SCLK                                             : in    std_logic                     := '0';             -- SCLK
-			spi_stm32_SS_n                                             : in    std_logic                     := '0';             -- SS_n
 			audio_out_BCLK                                             : in    std_logic                     := '0';             -- BCLK
 			audio_out_DACDAT                                           : out   std_logic;                                        -- DACDAT
 			audio_out_DACLRCK                                          : in    std_logic                     := '0'              -- DACLRCK
@@ -139,12 +128,6 @@ architecture rtl of wasca_toplevel is
 			altpll_0_areset_conduit_export => open,
 			altpll_0_locked_conduit_export => altpll_0_locked_conduit_export,
 			altpll_0_phasedone_conduit_export => open,
-			uart_0_external_connection_rxd => '0',
-			uart_0_external_connection_txd => uart_0_external_connection_txd,
-			spi_stm32_MISO => spi_stm32_MISO,
-			spi_stm32_MOSI => spi_stm32_MOSI,
-			spi_stm32_SCLK => spi_stm32_SCLK,
-			spi_stm32_SS_n => spi_stm32_SS_n,
 			audio_out_BCLK => audio_out_BCLK,
 			audio_out_DACDAT => audio_out_DACDAT,
 			audio_out_DACLRCK => audio_out_DACLRCK
