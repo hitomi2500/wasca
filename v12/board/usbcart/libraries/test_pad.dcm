@@ -1,8 +1,0 @@
-EESchema-DOCLIB  Version 2.0  Date: 27/05/2013 21:25:29
-#
-$CMP TP
-D Test Pad
-K TP DEV
-$ENDCMP
-#
-#End Doc Library

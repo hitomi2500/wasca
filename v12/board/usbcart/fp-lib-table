@@ -1,3 +1,0 @@
-(fp_lib_table
-  (lib (name usbcart)(type KiCad)(uri "$(KIPRJMOD)\\usbcart.pretty")(options "")(descr ""))
-)

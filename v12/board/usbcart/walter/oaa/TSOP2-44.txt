@@ -1,1 +1,0 @@
-https://github.com/betovar/kicad-parts/blob/master/3d/TSOP2-44.wrl

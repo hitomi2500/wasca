@@ -1,6 +1,0 @@
-http://smisioto.no-ip.org/elettronica/kicad/kicad.htm
-
-microsd_socket (socket MicroSD Card, Molex P/N 502774-0811)
-   http://jp.mouser.com/ProductDetail/Molex/104031-0811/?qs=sGAEpiMZZMu8pH2ruRacAPUH4e9i8WPT
-sd_socket (socket SD Card, 4UCOMP P/N 19607)
-
