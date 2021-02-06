@@ -29,3 +29,11 @@
 /fpga_firmware/wasca.ipregen.rpt
 /fpga_firmware/wasca.qws
 /mcu_firmware/build
+/fpga_firmware/.qsys_edit/filters.xml
+/fpga_firmware/.qsys_edit/preferences.xml
+/fpga_firmware/.qsys_edit/wasca_schematic.nlv
+/fpga_firmware/wasca.sopcinfo
+/fpga_firmware/wasca/synthesis/wasca.debuginfo
+/fpga_firmware/wasca/synthesis/wasca.qip
+/fpga_firmware/wasca/wasca.html
+/fpga_firmware/wasca/wasca.xml
