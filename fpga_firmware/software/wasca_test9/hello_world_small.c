@@ -248,8 +248,15 @@ void wasca_startup(void)
          *        so that SH-2 can access to it.
          */
         wl_verinfo_ext_t*     max_ver = NULL;
-        wl_spicomm_version_t* arm_ver = NULL;
+
+        wl_spicomm_version_t arm_ver_dat = {0};
+        wl_spicomm_version_t* arm_ver = &arm_ver_dat;
         spi_exc_version(max_ver, arm_ver);
+
+        arm_ver->build_date[sizeof(arm_ver->build_date)-1] = '\0';
+        arm_ver->build_time[sizeof(arm_ver->build_time)-1] = '\0';
+        log_to_uart("STM32 FW build_date:\"%s\"", arm_ver->build_date);
+        log_to_uart("STM32 FW build_time:\"%s\"", arm_ver->build_time);
     }
 
 
