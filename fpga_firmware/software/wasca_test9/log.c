@@ -183,7 +183,7 @@ void logout_internal(int level, const char* fmt, ... )
     {
         /* Dirty hack to use output to UART instead of SPI. */
         char* str = ((char*)log_buff_start) + sizeof(len);
-        str[len-1] = '\0';
+        str[len] = '\0';
         alt_putstr(str);
         alt_putstr("\r\n");
     }
