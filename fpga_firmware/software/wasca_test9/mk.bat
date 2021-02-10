@@ -14,31 +14,25 @@ pause
 exit
 :compiler_available
 
-REM REM Path to NIOS2 tools. Adapt this to your Quartus setup.
-REM set path=%path%;%quartus_path%\nios2eds\bin
-REM set path=%path%;%quartus_path%\nios2eds\sdk2\bin
-
-REM Guess path to BSP folder
+REM Set path to BSP folder
 for %%a in ("%cd%") do set current_dir=%%~na
 set bsp_dir="%cd%"\..\%current_dir%_bsp
+
+REM Include stuff for STM32 firmware compilation
+set PATH="C:\Program Files (x86)\GNU Tools Arm Embedded\9 2019-q4-major\bin\";%PATH%
 
 
 @REM Dummy initialize command
 set cm=dmy
 
-@REM Set the project name (= the name of the folder where this batch file is)
+@REM Retrieve the branch name of this project from git informations
 set pj_workdir="%cd%"
-cd ..\..
+cd ..\..\..\.git\refs\heads
 set pj_basedir="%cd%"
-for %%a in ("%cd%") do set pj_design_name=%%~na
+set pj_branch_name=master
+for %%a in ("%cd%\*") do set pj_branch_name=%%~na
 cd %pj_workdir%
 for %%a in ("%cd%") do set pj_software_name=%%~na
-
-REM Avoid project name set to "fpga_firmware", because it is always set to that when compiling from github repo.
-if not "%pj_design_name%" == "fpga_firmware" goto skip_name_correct
-for /f "delims=" %%x in (pj_design_name.txt) do set pj_design_name=%%x
-:skip_name_correct
-echo %pj_design_name%> pj_design_name.txt
 
 
 @REM Silent build by default
@@ -57,18 +51,16 @@ set cm=dummy
 @REM [After processing]If command line parameter, exit
 If NOT "%1%" == "" goto end
 
-echo --------------------- pj=%pj_design_name%:%pj_software_name%
+echo --------------------- pj=%pj_branch_name%:%pj_software_name%
 echo  Type `end' to end.
 echo  Type `b' to run bash.
 echo  Type `rb' to rebuild everything.
 echo  Type `c' to clean project, excluding BSP.
-echo  Type `m' to make project, excluding BSP.
+echo  Type `m' or `m32' or `m10' to make project, excluding BSP.
 echo  Type `s' to upload sof to SRAM.
 echo  Type `e' to upload elf to OCRAM.
 echo  Type `u' to upload both sof and elf.
-echo  Type `flash' to flash CPLD.
-if exist ..\..\readme.txt echo  Type `rdm' to open readme file.
-if exist ..\..\readme.txt echo  Type `arc' to archive everything.
+echo  Type `flash' or `f32' or `f10' to flash CPLD and/or MCU.
 echo  Other: exec dos command.
 set /P cm="Command: "
 
@@ -89,13 +81,15 @@ If "%cm%" == "end" goto end
 If "%cm%" == "b" goto run_bash
 If "%cm%" == "rb" goto do_rebuild
 If "%cm%" == "c" goto do_clean
-If "%cm%" == "m" goto do_make
+If "%cm%" == "m10" goto do_make10
+If "%cm%" == "m32" goto do_make32
+If "%cm%" == "m" goto do_make10
 If "%cm%" == "s" goto do_sof_upload
 If "%cm%" == "e" goto do_elf_upload
 If "%cm%" == "u" goto do_both_upload
-If "%cm%" == "flash" goto do_flash
-If "%cm%" == "rdm" goto do_readme
-If "%cm%" == "arc" goto do_archive
+If "%cm%" == "f10" goto do_flash10
+If "%cm%" == "f32" goto do_flash32
+If "%cm%" == "flash" goto do_flash32
 %cm%
 goto start
 
@@ -107,6 +101,13 @@ goto start
 
 :do_rebuild
 
+@REM Rebuild STM32 firmware
+cd ..\..\..\mcu_firmware
+make clean
+make
+cd %pj_workdir%
+
+
 @REM Update informations about PL build time, device type and project name in header file
 echo // Generated: %date:~0,4%/%date:~5,2%/%date:~8,2%, %time:~0,2%:%time:~3,2%> m10_ver_infos.h
 echo #ifndef M10_VER_INFOS_H>> m10_ver_infos.h
@@ -115,7 +116,7 @@ echo #define MAX10_FWDT_STR  "%pl_dt%">> m10_ver_infos.h
 echo #define MAX10_FWDT_VAL  %pl_dt:~0,8%>> m10_ver_infos.h
 echo #define MAX10_FWTM_VAL  1%pl_dt:~8,4%>> m10_ver_infos.h
 echo #define MAX10_DEV_TYPE  "%dev_line:~9,14%">> m10_ver_infos.h
-echo #define MAX10_PROJ_NAME "%pj_design_name%">> m10_ver_infos.h
+echo #define MAX10_PROJ_NAME "%pj_branch_name%">> m10_ver_infos.h
 echo #endif // M10_VER_INFOS_H>> m10_ver_infos.h
 
 cat m10_ver_infos.h
@@ -129,7 +130,13 @@ call %quartus_path%\nios2eds\"Nios II Command Shell.bat" ./make_clean.sh
 goto start
 
 
-:do_make
+:do_make32
+cd ..\..\..\mcu_firmware
+make
+cd %pj_workdir%
+If "%cm%" == "m32" goto start
+
+:do_make10
 call %quartus_path%\nios2eds\"Nios II Command Shell.bat" make
 goto start
 
@@ -149,7 +156,20 @@ call %quartus_path%\nios2eds\"Nios II Command Shell.bat" ./upload_elf.sh
 goto start
 
 
-:do_flash
+
+:do_flash32
+cd ..\..\..\mcu_firmware
+
+@REM If necessary, update the build file. And then upload it to board.
+make && make upload
+
+cd %pj_workdir%
+
+If "%cm%" == "f32" goto start
+
+
+
+:do_flash10
 REM REM First, verify that project can compile correctly
 REM del /Q %pj_software_name%.elf
 REM call %quartus_path%\nios2eds\"Nios II Command Shell.bat" make
@@ -159,55 +179,14 @@ goto start
 
 :flash_compilation_ok
 REM Update CPLD flash log : write on this folder's log file and on the file common for all projects too.
-set flash_log=Flash_Time: %date:~0,4%/%date:~5,2%/%date:~8,2%, %time:~0,2%:%time:~3,2%, Device: %dev_line:~9,14%, PL_Date: %pl_dt%, PJ_Name:%pj_design_name%
+set flash_log=Flash_Time: %date:~0,4%/%date:~5,2%/%date:~8,2%, %time:~0,2%:%time:~3,2%, Device: %dev_line:~9,14%, PL_Date: %pl_dt%, PJ_Name:%pj_branch_name%
 echo %flash_log% >> m10_flash_log.txt
-echo %flash_log% >> ..\..\..\m10_flash_log.txt
 
 REM Then, rebuild the programming file since this is not done by the makefile
 call %quartus_path%\nios2eds\"Nios II Command Shell.bat" ./rebuild_flash.sh
 
 REM Finally, program the generated pof file to CPLD
 quartus_pgm -z --mode=JTAG --operation="p;%pj_basedir%\output_files\nios2_ufm_boot_test9.pof"
-goto start
-
-
-:do_readme
-cd ..\..
-start /WAIT notepad2.exe readme.txt
-cd %pj_workdir%
-goto start
-
-
-:do_archive
-
-@REM Go to project root folder
-cd ..\..
-
-@REM Prompt for archive strength
-set arc_mx=5
-@echo (mx=3 takes around  50MB of RAM for 150MB resulting archive)
-@echo (mx=7 takes around 700MB of RAM for 50MB resulting archive)
-SET /P arc_mx="Set archive strength (0-9, default:%arc_mx%): "
-
-@REM Automatically open readme for updating
-echo Let's no forget to update the readme
-start /WAIT notepad2.exe readme.txt
-
-@REM Set archive base name
-set date_tmp=%date:~0,4%%date:~5,2%%date:~8,2%_%time:~0,2%%time:~3,2%
-SET date_zero=%date_tmp: =0%
-set archive_base_name="%pj_design_name%_%date_zero%_mx%arc_mx%"
-set archive_full_base=..\..\[ARC]\%archive_base_name%
-
-@REM Archive everything
-set archive_type=-t7z -mx=%arc_mx%
-set archive_ext=7z
-del %archive_full_base%.%archive_ext%
-..\..\7za a %archive_type% %archive_full_base%.%archive_ext% .
-
-@REM Return back to work folder
-cd %pj_workdir%
-
 goto start
 
 
