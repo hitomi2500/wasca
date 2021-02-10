@@ -196,8 +196,8 @@ LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BU
 # Upload commands
 ###############################################################################
 
-OPENOCD_CFG = ../OpenOCD/stlink-v2-1.cfg
-OPENOCD_TARGET_CFG = ../OpenOCD/stm32f4x.cfg
+OPENOCD_CFG = OpenOCD/stlink-v2.cfg
+OPENOCD_TARGET_CFG = OpenOCD/stm32f4x.cfg
 OPENOCD_ARGS  = -f $(OPENOCD_CFG)
 OPENOCD_ARGS += -f $(OPENOCD_TARGET_CFG)
 # Upload
