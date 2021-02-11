@@ -278,12 +278,18 @@ void spi_sendreceive_dual(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsi
 #define spi_receive(_PTR_, _COUNT_) spi_sendreceive_dual(NULL, _PTR_, _COUNT_)
 
 
-/* Initialize SPI header contents. */
-void spi_init_header(wl_spi_common_hdr_t* hdr)
+/* Initialize SPI packet. */
+void spi_init_packet(wl_spi_pkt_t* pkt)
 {
-    memset(hdr, 0, sizeof(wl_spi_common_hdr_t));
-    hdr->magic_ca = 0xCA;
-    hdr->magic_fe = 0xFE;
+    memset(&pkt->cmn, 0, sizeof(wl_spi_common_hdr_t));
+    pkt->cmn.magic_ca = 0xCA;
+    pkt->cmn.magic_fe = 0xFE;
+
+    /* Initialize CRC length : it will be set
+     * a bit after if integrity check is enabled.
+     */
+    pkt->params_crc_len = 0;
+    pkt->data_crc_len   = 0;
 }
 
 
@@ -295,10 +301,10 @@ void spi_exc_version(wl_verinfo_ext_t* max_ver, wl_spicomm_version_t* arm_ver)
     wl_spi_pkt_t* pkt = &pkt_dat;
 
     /* Setup packet header. */
-    spi_init_header(&pkt->cmn);
-    pkt->cmn.command  = WL_SPICMD_VERSION;
-    pkt->cmn.pkt_len  = 0; // TODO
-    pkt->cmn.rsp_len  = sizeof(wl_spi_pkt_t); // TODO
+    spi_init_packet(pkt);
+    pkt->cmn.command = WL_SPICMD_VERSION;
+    pkt->cmn.pkt_len = 0; // TODO
+    pkt->cmn.rsp_len = sizeof(wl_spi_pkt_t); // TODO
 
     {
         /* Send MAX 10 firmware informations to STM32.
@@ -382,10 +388,10 @@ void spi_send_logs(wl_spicomm_logs_t* logset, unsigned char* logdata)
     wl_spi_pkt_t* pkt = &pkt_dat;
 
     /* Setup packet header. */
-    spi_init_header(&pkt->cmn);
-    pkt->cmn.command  = WL_SPICMD_LOGS;
-    pkt->cmn.pkt_len  = 0; // TODO
-    pkt->cmn.rsp_len  = sizeof(wl_spi_pkt_t); // TODO
+    spi_init_packet(pkt);
+    pkt->cmn.command = WL_SPICMD_LOGS;
+    pkt->cmn.pkt_len = 0; // TODO
+    pkt->cmn.rsp_len = sizeof(wl_spi_pkt_t); // TODO
 
     /* Copy log informations. */
     memcpy(pkt->params, logset, sizeof(wl_spicomm_logs_t));
@@ -447,10 +453,10 @@ rsp_len = sizeof(wl_spi_pkt_t); // TMP
     wl_spi_pkt_t* pkt = &pkt_dat;
 
     /* Setup packet header. */
-    spi_init_header(&pkt->cmn);
-    pkt->cmn.command  = command;
-    pkt->cmn.pkt_len  = 0; // TODO
-    pkt->cmn.rsp_len  = rsp_len;
+    spi_init_packet(pkt);
+    pkt->cmn.command = command;
+    pkt->cmn.pkt_len = 0; // TODO
+    pkt->cmn.rsp_len = rsp_len;
 
     /* Setup memory read parameters. */
     wl_spicomm_memacc_t* params = (wl_spicomm_memacc_t*)pkt->params;
@@ -542,7 +548,7 @@ void spi_boot_getinfo(unsigned char rom_id, wl_spicomm_bootinfo_t* info, char* f
     wl_spi_pkt_t* pkt = &pkt_dat;
 
     /* Setup packet header. */
-    spi_init_header(&pkt->cmn);
+    spi_init_packet(pkt);
     pkt->cmn.command = WL_SPICMD_BOOTINFO;
     pkt->cmn.pkt_len = 0; // TODO
     pkt->cmn.rsp_len = sizeof(wl_spi_pkt_t);
@@ -578,27 +584,51 @@ int spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long 
     wl_spi_pkt_t pkt_dat;
     wl_spi_pkt_t* pkt = &pkt_dat;
 
-    /* Setup packet header. */
-    spi_init_header(&pkt->cmn);
-    pkt->cmn.command = WL_SPICMD_BOOTREAD;
-    pkt->cmn.pkt_len = 0; // TODO
-    pkt->cmn.rsp_len = sizeof(wl_spi_pkt_t);
+    /* Retry reception until data matches with CRC. */
+    for(int i=0; i<10; i++)
+    {
+        /* Setup packet header. */
+        spi_init_packet(pkt);
+        pkt->cmn.command = WL_SPICMD_BOOTREAD;
+        pkt->cmn.pkt_len = 0; // TODO
+        pkt->cmn.rsp_len = sizeof(wl_spi_pkt_t);
 
-    /* Setup read parameters. */
-    wl_spicomm_memacc_t* params = (wl_spicomm_memacc_t*)pkt->params;
-    params->rom_id = rom_id;
-    params->addr   = offset;
-    params->len    = len;
+        /* Setup read parameters. */
+        wl_spicomm_memacc_t* params = (wl_spicomm_memacc_t*)pkt->params;
+        params->rom_id = rom_id;
+        params->addr   = offset;
+        params->len    = len;
 
-    /* Wait for STM32 to be ready until being able to send packet. */
-    while(BUFFSPI_SYNC_STATUS() == 1);
+        /* Wait for STM32 to be ready until being able to send packet. */
+        while(BUFFSPI_SYNC_STATUS() == 1);
 
-    spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
+        spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
 
-    /* Wait for STM32 to be ready until receiving response. */
-    while(BUFFSPI_SYNC_STATUS() == 0);
+        /* Wait for STM32 to be ready until receiving response. */
+        while(BUFFSPI_SYNC_STATUS() == 0);
 
-    spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
+        spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
+
+        /* Verify CRC. */
+        int valid_crc = 1;
+        if(pkt->data_crc_len != 0)
+        {
+            unsigned long crc = crc32_calc(pkt->data, pkt->data_crc_len);
+            if(crc != pkt->data_crc_val)
+            {
+                valid_crc = 0;
+            }
+        }
+
+        if(!valid_crc)
+        {
+            log_to_uart("ERROR: invalid CRC at offset %08X", offset);
+        }
+        else
+        {
+            break;
+        }
+    }
 
     /* Copy back read data to destination buffer. */
     wl_spicomm_bootinfo_t* info = (wl_spicomm_bootinfo_t*)pkt->params;

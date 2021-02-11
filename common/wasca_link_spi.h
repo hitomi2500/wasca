@@ -34,8 +34,8 @@
 #define WL_SPI_PARAMS_LEN 16
 
 /* Enough space to hold at least one backup memory block = 512 bytes. */
-//#define WL_SPI_DATA_LEN 512
-#define WL_SPI_DATA_LEN 896
+#define WL_SPI_DATA_LEN 512
+//#define WL_SPI_DATA_LEN 896
 
 /* Maximum length of the full path of a file, 
  * including terminating null character.
@@ -79,13 +79,28 @@ typedef struct _wl_spi_pkt_t
 {
     wl_spi_common_hdr_t cmn;
 
+    /* CRC value for parameters and data blocks.
+     * 
+     * CRC is computed on specified length, so that
+     * unused data is not taken into account, and also
+     * to make possible to disable CRC check by setting
+     * a length of zero.
+     * 
+     * CRC integrity check is experimental and may be
+     * removed if it is not necessary, so that the
+     * enable/disable switch #defined below.
+     */
+#define WL_SPI_CRC_USE 1
+    unsigned long  params_crc_val;
+    unsigned short params_crc_len;
+    unsigned short data_crc_len;
+    unsigned long  data_crc_val;
+
     /* Parameters, whose contents differ for each datagram. */
     unsigned char params[WL_SPI_PARAMS_LEN];
-    unsigned long params_crc;
 
     /* Data block. */
     unsigned char data[WL_SPI_DATA_LEN];
-    unsigned long data_crc;
 
     /* Dummy bytes, do not access. */
     unsigned short dummy[2];

@@ -2,6 +2,7 @@
 #include "bup_bootrom.h"
 
 #include "fatfs.h"
+#include "crc.h"
 #include "log.h"
 
 #include "recovery_rom.h"
@@ -591,6 +592,11 @@ void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
             }
         }
 
+#if WL_SPI_CRC_USE == 1
+        /* Allow to verify data integrity on MAX 10 side. */
+        pkt_tx->data_crc_len = len;
+        pkt_tx->data_crc_val = crc32_calc(data, pkt_tx->data_crc_len);
+#endif // WL_SPI_CRC_USE == 1
 
         /* Terminate boot ROM mode when last fragment of the file is read. */
         if(info->status == WL_BOOTROM_END)

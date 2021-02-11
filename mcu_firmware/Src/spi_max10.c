@@ -274,6 +274,12 @@ void spi_send_answer(void)
     /* Copy back header from Rx to Tx buffer. */
     memcpy(&(pkt_tx->cmn), &(pkt_rx->cmn), sizeof(wl_spi_common_hdr_t));
 
+    /* Initialize CRC length : it will be set
+     * a bit after if integrity check is enabled.
+     */
+    pkt_tx->params_crc_len = 0;
+    pkt_tx->data_crc_len   = 0;
+
     /******************************************/
     /* Prepare response for sending to MAX10. */
     spi_logout("Tick[0x%08X] CMD[0x%02X]", (unsigned int)HAL_GetTick(), pkt_rx->cmn.command);
