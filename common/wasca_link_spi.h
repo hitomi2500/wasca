@@ -9,8 +9,6 @@
 #ifndef WASCA_LINK_SPI_H
 #define WASCA_LINK_SPI_H
 
-#include "wasca_link_base.h"
-
 /*****************************************************************************
  * SPI transaction header.
  * This is used when communicating between MAX10 and STM32.
@@ -75,7 +73,7 @@ typedef struct _wl_spi_common_hdr_t
      *           is sent back to MAX 10.
      */
     unsigned short rsp_len;
-} SC_ALIGN_4_BYTES(wl_spi_common_hdr_t);
+} wl_spi_common_hdr_t;
 
 typedef struct _wl_spi_pkt_t
 {
@@ -83,13 +81,15 @@ typedef struct _wl_spi_pkt_t
 
     /* Parameters, whose contents differ for each datagram. */
     unsigned char params[WL_SPI_PARAMS_LEN];
+    unsigned long params_crc;
 
     /* Data block. */
     unsigned char data[WL_SPI_DATA_LEN];
+    unsigned long data_crc;
 
     /* Dummy bytes, do not access. */
     unsigned short dummy[2];
-} SC_ALIGN_4_BYTES(wl_spi_pkt_t);
+} wl_spi_pkt_t;
 
 
 /* Compute packet size according to custom data length specified.
@@ -132,6 +132,80 @@ typedef struct _wl_spi_pkt_t
  *        so that STM32 doesn't needs to retrieve it after that.
  */
 #define WL_SPICMD_VERSION 0x10
+typedef struct _wl_nios_verinfo_t
+{
+    /* NIOS program build date.
+     * GCC date macro as-is.
+     * Example : "Mar 20 2018"
+     */
+    char build_date[12];
+    /* NIOS program build time.
+     * GCC time macro as-is.
+     * Example : "21:31:18"
+     */
+    char build_time[10];
+
+    /* Board type.
+     * This is basically used to indicate which board is currently connected, 
+     * and hide unrelated settings on SerialTerm.
+     * Setting to "Generic" type won't hide anything hence is recommended
+     * when constantly merging code from a project to another.
+     */
+#define WL_DEVTYPE_GENERIC       0
+#define WL_DEVTYPE_WASCA         1  /* Wasca cartridge                        */
+#define WL_DEVTYPE_M10BRD        2  /* MAX 10 Board.                          */
+#define WL_DEVTYPE_SIM           3  /* SIM (cartridge access tester).         */
+#define WL_DEVTYPE_M10BRD_WARP   4  /* MAX 10 Board, used in couple with SIM. */
+#define WL_DEVTYPE_SIM_WARP      5  /* SIM, used in couple with MAX 10 Board. */
+#define WL_DEVTYPE_DUMMY       255
+    unsigned char board_type;
+
+    /* Unused space for Nios. */
+    unsigned char unused_nios[3];
+
+    /* MAX10 -> STM32 SPI frequency.
+     * From Nios BSP's system.h.
+     * Unit : KHz (example : 1234 -> 1.234 MHz)
+     * Zero : SPI not used.
+     */
+    unsigned short stm32_spi_khz;
+
+    /* MAX10 onchip RAM size.
+     * From Nios BSP's system.h.
+     * Unit : byte
+     */
+    unsigned long ocram_size;
+} wl_nios_verinfo_t;
+
+typedef struct _wl_verinfo_ext_t
+{
+    /* MAX 10 device type.
+     * Example : "10M16SAE144C8G"
+     * Note : null-terminated string.
+     */
+    char dev_type[16];
+
+    /* MAX 10 project name.
+     * Example : "brd_10m16sa"
+     * Note : null-terminated string.
+     */
+    char prj_name[42];
+
+    /* MAX 10 firmware (PL part) synthesis time.
+     * It is formatted as unsigned integer at 32 bits
+     * and 16 bits data size for respectively date and time.
+     * Example : "2019/08/28 19:44" -> 20190828 (32 bits) and 1944 (16 bits)
+     */
+    unsigned short pl_time;
+    unsigned long  pl_date;
+
+
+    /* NIOS firmware version.
+     * (Structure size : 32 bytes)
+     */
+    wl_nios_verinfo_t nios;
+} wl_verinfo_ext_t;
+
 typedef struct _wl_spicomm_version_t
 {
     /* STM32 firmware build date.
@@ -150,7 +224,7 @@ typedef struct _wl_spicomm_version_t
      * (Size of this structure must be packet to 32 bytes)
      */
     unsigned char unused[10];
-} SC_ALIGN_4_BYTES(wl_spicomm_version_t);
+} wl_spicomm_version_t;
 
 
 /* Send log messages to STM32.
@@ -181,7 +255,7 @@ typedef struct _wl_spicomm_logs_t
      */
     unsigned char block_id;
     unsigned char block_cnt;
-} SC_ALIGN_4_BYTES(wl_spicomm_logs_t);
+} wl_spicomm_logs_t;
 
 
 /* Log messages buffer.
@@ -200,6 +274,74 @@ typedef struct _wl_spicomm_logs_t
  * Messages longer than this length are truncated.
  */
 #define WL_LOG_MESSAGE_MAXLEN 100
+
+
+
+/* Log levels :
+ *  - 1 : critical messages
+ *    ...
+ *  - 5 : debug messages
+ */
+#define WL_LOG_ERROR       1
+#define WL_LOG_IMPORTANT   2
+#define WL_LOG_DEBUGEASY   3
+#define WL_LOG_DEBUGNORMAL 4
+#define WL_LOG_DEBUGHARD   5
+
+
+
+/* Logs circular buffer size.
+ *
+ * The larger the more it can handle log messages between two link access.
+ * But as onchip memory is a limited resource on MAX 10 side, circular buffer
+ * is set to a modest (but reasonably large enough) size.
+ */
+//#define CIRCBUFF_SIZE (4*1024)
+//#define CIRCBUFF_SIZE (16*1024)
+#define CIRCBUFF_SIZE (2*1024)
+
+/* Maximum length when formating log messages.
+ * This doesn't includes terminating null character.
+ */
+#define LOG_STR_MAXLEN (256)
+
+
+typedef struct _log_infos_t
+{
+    /* Circular buffer R/W pointers (address is relative from the begining of circular buffer). */
+    unsigned long readptr;
+    unsigned long writeptr;
+
+    /* Circular buffer internals. */
+    unsigned long buffer_size;
+    unsigned long start_address;
+    unsigned long end_address;
+
+    /* Log level.
+     *
+     * Need to set value #defined in WL_LOG_* macros.
+     * Logs with level stricly higher ( > ) than this level
+     * are discarded from output.
+     *
+     * Note : log output can be stopped by setting this
+     *        level value to zero.
+     */
+    char level;
+
+    /* Unused, for structure alignment purpose. */
+    unsigned char padding[3];
+
+    /* Circular buffer used when reading/writing debug data. */
+    unsigned char circbuff[CIRCBUFF_SIZE];
+
+    /* Message format buffer, used just before appending to circular buffer.
+     * First two bytes are used to store message length.
+     * Message is NOT null-terminated.
+     */
+    unsigned char format_buff[sizeof(unsigned short) + LOG_STR_MAXLEN];
+} log_infos_t;
+
+
 
 
 /* STM32 Register (or memory) read (or write) access.
@@ -231,6 +373,104 @@ typedef struct _wl_spicomm_logs_t
  */
 #define WL_SPICMD_MEMREAD  0x20
 #define WL_SPICMD_MEMWRITE 0x21
+
+
+
+/*****************************************************************************
+ * STM32 Address Mapping.
+ *
+ * Reference : stm32f446re.pdf, "5  Memory mapping" (Page 67/202)
+ * https://www.st.com/resource/en/datasheet/stm32f446re.pdf
+ *****************************************************************************/
+
+/* ---------------
+ * --- Outline ---
+ *
+ * Address aliasing allows redirection of STM32 physical address and/or
+ * application-specific features to user-defined (aliased) address.
+ *
+ * It can be accessed from MAX10 by using memory (or register) access commands :
+ *  - WL_SPICMD_MEMREAD
+ *  - WL_SPICMD_MEMWRITE
+ *
+ * Main purpose of this alias feature is to provide shortcuts to several STM32
+ * from same commands from MAX10.
+ *
+ * This has the advantage to relieve code complexity on MAX10 side, which is
+ * an important point since onchip memory (where NIOS programs is running) is
+ * quite limited.
+ * Additionally, this also allow complex STM32 operations in a single memory
+ * access from MAX10, thus simplifying SPI transfer flow and consequently
+ * improve application performance.
+ *
+ * -----------------------------
+ * --- Address map (summary) ---
+ *
+ * | 0x0000_0000 - 0x001F_FFFF : Boot area
+ * | 0x0020_0000 - 0x07FF_FFFF : Reserved ---> chip-specific alias
+ * |+0x0100_0000 - 0x02FF_FFFF : | Flash memory       (ALIAS) Max 2MB
+ * |+0x0300_0000 - 0x03FF_FFFF : | SRAM               (ALIAS) Max 1MB
+ * |+0x0400_0000 - 0x07FF_FFFF : | Unused alias
+ * | 0x0800_0000 - 0x081F_FFFF : Flash Memory
+ * | 0x0820_0000 - 0x0FFF_FFFF : Reserved ---> application-specific alias
+ * |+0x0820_0000 - 0x08FF_FFFF : | Unused (padding)
+ * |+0x0900_0000 - 0x09FF_FFFF : | Logs circ. buffer  (ALIAS)
+ * |+0x0A00_0000 - 0x0FFF_FFFF : | Unused alias
+ * | 
+ * (further reserved areas are skipped)
+ * | 
+ * | 0x1FFE_C000 - 0x1FFE_C00F : Option bytes
+ * | 0x1FFF_0000 - 0x1FFF_7A0F : System Memory
+ * | 0x1FFF_C000 - 0x1FFF_C00F : Option bytes
+ * | 0x2000_0000 - 0x2001_BFFF : SRAM (112 KB)
+ * | 0x2001_C000 - 0x2001_FFFF : SRAM ( 16 KB)
+ *
+ * ------------------------------------
+ * --- Detail about alias address : ---
+ *
+ * |+0x0100_0000 - 0x02FF_FFFF : WL_STADR_FLASH : Flash memory (Max 2MB)
+ * +-> Redirect to 0x0800_0000 physical address.
+ *
+ * |+0x0300_0000 - 0x03FF_FFFF : WL_STADR_SRAM  : SRAM         (Max 1MB)
+ * +-> Redirect to 0x2000_0000 physical address.
+ *
+ * |+0x0900_0000 - 0x09FF_FFFF : Logs circular buffer
+ * +-> 0x00_0000 -   0x00_FFFF : WL_STADR_LOGS_FIFO
+ * |                           : Extract specified length from circular buffer.
+ * |                           : (*) Address offset is ignored so that chunk
+ * |                           :     read can be seen consecutive from PC.
+ * +-> 0x01_0000               : WL_STADR_LOGS_STAT
+ * |                           : Return circular buffer usage status.
+ * |                           : (Associated structure : wla_logs_stats_t)
+ * |                           : (*) Available only at 0x01_0000 offset.
+ */
+#define WL_STADR_FLASH      (0x01000000)
+
+#define WL_STADR_SRAM       (0x03000000)
+
+#define WL_STADR_LOGS_FIFO  (0x09000000)
+#define WL_STADR_LOGS_STAT  (WL_STADR_LOGS_FIFO + 0x00010000)
+typedef struct _wla_logs_stats_t
+{
+    /* Circular buffer size.
+     * Unit : byte.
+     */
+    unsigned short buffer_size;
+
+    /* Circular buffer usage.
+     * Unit : byte.
+     *  - 0                  : no log message available.
+     *  - <= (buffer_size-1) : log message(s) available.
+     *  - else               : something is broken !
+     */
+    unsigned short usage;
+
+    /* Reserved for future use.
+     * (Structure size : 16 bytes)
+     */
+    unsigned char reserved[12];
+} wla_logs_stats_t;
+
 
 
 
@@ -344,7 +584,7 @@ typedef struct _wl_spicomm_bootinfo_t
 
     /* Unused, reserved for future usage if any. */
     unsigned char unused[WL_SPI_PARAMS_LEN - 4 - 4 - 4];
-} SC_ALIGN_4_BYTES(wl_spicomm_bootinfo_t);
+} wl_spicomm_bootinfo_t;
 
 
 
@@ -476,7 +716,7 @@ typedef struct _wl_spicomm_memacc_t
 
     /* Unused, reserved for future usage if any. */
     unsigned char unused[WL_SPI_PARAMS_LEN - 4 - 4 - 1];
-} SC_ALIGN_4_BYTES(wl_spicomm_memacc_t);
+} wl_spicomm_memacc_t;
 
 
 #endif // WASCA_LINK_SPI_H

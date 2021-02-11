@@ -101,13 +101,6 @@ goto start
 
 :do_rebuild
 
-@REM Rebuild STM32 firmware
-cd ..\..\..\mcu_firmware
-make clean
-make
-cd %pj_workdir%
-
-
 @REM Update informations about PL build time, device type and project name in header file
 echo // Generated: %date:~0,4%/%date:~5,2%/%date:~8,2%, %time:~0,2%:%time:~3,2%> m10_ver_infos.h
 echo #ifndef M10_VER_INFOS_H>> m10_ver_infos.h
@@ -121,7 +114,15 @@ echo #endif // M10_VER_INFOS_H>> m10_ver_infos.h
 
 cat m10_ver_infos.h
 
+@REM Update common headers and rebuild MAX 10 firmware
 call %quartus_path%\nios2eds\"Nios II Command Shell.bat" ./rebuild_all.sh
+
+@REM Rebuild STM32 firmware
+cd ..\..\..\mcu_firmware
+make clean
+make
+cd %pj_workdir%
+
 goto start
 
 

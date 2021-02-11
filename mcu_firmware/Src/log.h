@@ -8,7 +8,7 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 
-#include "satcom_lib/wasca_link.h"
+#include "wasca_defs.h"
 
 
 /* Log enable/disable switch :

@@ -4,13 +4,8 @@
 #include <system.h>
 #include <sys/alt_stdio.h>
 
-/* Link related inclusion.
- *
- * The wasca_link.h header below is shared
- * between both PC and Nios sides, hence the #define
- * below is needed.
- */
-#include "satcom_lib/wasca_link.h"
+/* Inclusion of definitions shared between MAX 10 and STM32. */
+#include "../../../common/wasca_link_spi.h"
 
 
 /* Log enable/disable switch :

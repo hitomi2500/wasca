@@ -6,7 +6,7 @@
 #include "log.h"
 #include "stm32f4xx_hal.h"
 
-#include "satcom_lib/wasca_link.h"
+#include "wasca_defs.h"
 
 #include "misc_tests.h"
 

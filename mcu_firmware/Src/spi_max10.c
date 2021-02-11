@@ -291,7 +291,7 @@ void spi_send_answer(void)
 
         /* Send back STM32 firmware informations to MAX 10. */
         wl_spicomm_version_t* ver = (wl_spicomm_version_t*)pkt_tx->data;
-        memset(ver, 0, sizeof(wl_verinfo_t));
+        memset(ver, 0, sizeof(wl_spicomm_version_t));
 
         char* build_date = __DATE__;
         char* build_time = __TIME__;

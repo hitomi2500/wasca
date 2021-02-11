@@ -1,6 +1,0 @@
-Do not edit wasca_link.h in this folder !
-
-This file is copied from SatLink sources :
-D:\dev\Saturn\SatCom\satlink\wasca -> wasca_link.h
-
-It can be updated with ../rebuild_all.sh .
