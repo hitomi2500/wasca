@@ -131,7 +131,33 @@
  */
 void blink_the_leds(void)
 {
-#if 1
+#if 1 /* Periodically change LED blinking rate and sent log message on UART too = easily check if Nios program is still alive or not. */
+    unsigned char* boot_rom = (unsigned char*)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+
+    int j = 0;
+    while(1)
+    {
+        if(j % 2)
+        {
+            HEARTBEAT_FAST();
+            log_to_uart("fast");
+        }
+        else
+        {
+            HEARTBEAT_SLOW();
+            log_to_uart("slow");
+        }
+
+        int i;
+        for(i=0;i<20000;i++)
+        {
+            boot_rom[0xA0 + (i%16)] = rand() & 0xFF;
+        }
+        j++;
+    }
+
+#else /* Simply make the LED blinking. */
+
     int i = 0;
 
     while(1)
@@ -269,6 +295,9 @@ void wasca_startup(void)
 
     /* Write version. */
     pRegs_16[SWVER_REG_OFFSET] = SOFTWARE_VERSION;
+
+
+//blink_the_leds();
 
 
     /* Initialization ended : blink the LED at slow speed. */
