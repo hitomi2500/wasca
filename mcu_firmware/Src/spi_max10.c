@@ -422,13 +422,13 @@ void spi_send_answer(void)
 
         spi_logout("HAL_SPI_Receive DATA[%s]", (char*)(pkt_rx->data));
 
-        unsigned char answer_tmp[WL_SPI_DATA_LEN];
-        memset(answer_tmp, 0, WL_SPI_DATA_LEN * sizeof(unsigned char));
-        pkt_tx->data[WL_SPI_DATA_LEN / 2] = '\0'; /* Should be enough for storing both messages from MAX10 and STM32. */
-        sprintf((char*)answer_tmp, "Tick[%08X][%s]Hello, this is STM32, hope you are well."
+        char answer_tmp[30];
+        memcpy(answer_tmp, pkt_tx->data, sizeof(answer_tmp)-1);
+        answer_tmp[sizeof(answer_tmp)-1] = '\0';
+
+        sprintf((char*)pkt_tx->data, "Tick[%08X][%s]Hello, this is STM32, hope you are well."
             , (unsigned int)HAL_GetTick()
-            , (char*)pkt_tx->data);
-        memcpy(pkt_tx->data, answer_tmp, WL_SPI_DATA_LEN * sizeof(unsigned char));
+            , answer_tmp);
         pkt_tx->data[WL_SPI_DATA_LEN - 1] = '\0';
     }
 

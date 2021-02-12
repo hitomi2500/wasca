@@ -19,17 +19,20 @@ for %%a in ("%cd%") do set current_dir=%%~na
 set bsp_dir="%cd%"\..\%current_dir%_bsp
 
 REM Include stuff for STM32 firmware compilation
-set PATH="C:\Program Files (x86)\GNU Tools Arm Embedded\9 2019-q4-major\bin\";%PATH%
+set PATH=C:\Program Files (x86)\GNU Arm Embedded Toolchain\10 2020-q4-major\bin;%PATH%
 
 
 @REM Dummy initialize command
 set cm=dmy
 
-@REM Retrieve the branch name of this project from git informations
 set pj_workdir="%cd%"
-cd ..\..\..\.git\refs\heads
+cd ..\..
 set pj_basedir="%cd%"
+cd %pj_workdir%
+
+@REM Retrieve the branch name of this project from git informations
 set pj_branch_name=master
+cd ..\..\..\.git\refs\heads
 for %%a in ("%cd%\*") do set pj_branch_name=%%~na
 cd %pj_workdir%
 for %%a in ("%cd%") do set pj_software_name=%%~na
@@ -128,6 +131,11 @@ goto start
 
 :do_clean
 call %quartus_path%\nios2eds\"Nios II Command Shell.bat" ./make_clean.sh
+
+cd ..\..\..\mcu_firmware
+make clean
+cd %pj_workdir%
+
 goto start
 
 
