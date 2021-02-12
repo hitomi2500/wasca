@@ -142,8 +142,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   /* Output a message on Hyperterminal using printf function */
-  termout(WL_LOG_DEBUGNORMAL, "UART Printf Example: retarget the C library printf function to the UART");
-  termout(WL_LOG_DEBUGNORMAL, "Build Date : %s, time : %s, for Nucleo F446RE.", __DATE__, __TIME__);
+  termout(WL_LOG_DEBUGNORMAL, "Wasca STM32 firmware build Date : %s, time : %s.", __DATE__, __TIME__);
+  logout(WL_LOG_DEBUGNORMAL, "---");
 
 
   /* Initialize SD card and FatFs. */
@@ -164,30 +164,6 @@ int main(void)
         //while(1);
     }
   }
-
-
-#if 0
-while(1) // TEST : see how good or bad SPI synchronization status is read from MAX10
-{
-//#define SPI_MAX10_RCV_HDR_READY() HAL_GPIO_WritePin(GPIOA, SPI_SYNC_Pin, GPIO_PIN_RESET)
-//#define SPI_MAX10_SND_RSP_READY() HAL_GPIO_WritePin(GPIOA, SPI_SYNC_Pin, GPIO_PIN_SET  )
-    int stateOfPushButton = HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
-    if(stateOfPushButton == GPIO_PIN_RESET)
-    {
-        HAL_GPIO_WritePin(SPI_SYNC_Port, SPI_SYNC_Pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-    }
-    else
-    {
-        HAL_GPIO_WritePin(SPI_SYNC_Port, SPI_SYNC_Pin, GPIO_PIN_SET  );
-        HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-    }
-}
-#endif
-
-  logout(WL_LOG_DEBUGNORMAL, "---");
-  logout(WL_LOG_DEBUGNORMAL, "UART Printf Example: retarget the C library printf function to the UART");
-  logout(WL_LOG_DEBUGNORMAL, "Build Date : %s, time : %s, for Nucleo F446RE.", __DATE__, __TIME__);
 
   /* Initialize SPI internals. */
   spi_init();
@@ -242,7 +218,6 @@ while(1) // TEST : see how good or bad SPI synchronization status is read from M
             , (unsigned int)spi_speed_kbps
             , (unsigned int)_spi_rcv_cnt
             , (unsigned int)_spi_shift_cnt
-            //, trans_hdr->cmn.magic_ca , trans_hdr->cmn.magic_fe // PKT[%02X %02X]
             , trans_hdr->data
             , (unsigned int)log_cbmem_use()
             , log_info->readptr, log_info->writeptr
@@ -257,14 +232,6 @@ while(1) // TEST : see how good or bad SPI synchronization status is read from M
     //int i;
     while(1)
     {
-        // // STM32 SPI synchronization test (I/O test only) vvv
-        // int stateOfPushButton = HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
-        // logout(WL_LOG_DEBUGNORMAL, "    [0x%08X][%s::%d] SYNC:%d", (unsigned int)HAL_GetTick(), __FILE__, __LINE__, stateOfPushButton);
-        // HAL_GPIO_WritePin(SPI_SYNC_Port, SPI_SYNC_Pin, (stateOfPushButton ? GPIO_PIN_SET : GPIO_PIN_RESET));
-        // // STM32 SPI synchronization test (I/O test only) ^^^
-
-        //HAL_Delay(50);
-
         /* Send log message at a reasonable rate when blue button is released,
          * and like crazy when it is pushed.
          */
@@ -273,7 +240,6 @@ while(1) // TEST : see how good or bad SPI synchronization status is read from M
         {
             break;
         }
-
 
         /* If packet received from MAX 10,
          * then process its answer.
@@ -529,10 +495,21 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, SD_GND_DETECT_Pin|LD2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, LD1_R_Pin|LD1_G_Pin|LD1_B_Pin|SD_GND_DETECT_Pin
+                          |LD2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SPI_SYNC_GPIO_Port, SPI_SYNC_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pins : LD1_R_Pin LD1_G_Pin LD1_B_Pin LD2_Pin */
+  GPIO_InitStruct.Pin = LD1_R_Pin|LD1_G_Pin|LD1_B_Pin|LD2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SD_GND_DETECT_Pin */
   GPIO_InitStruct.Pin = SD_GND_DETECT_Pin;
@@ -547,6 +524,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : LD3_Pin */
+  GPIO_InitStruct.Pin = LD3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LD3_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : SD_DETECT_Pin */
   GPIO_InitStruct.Pin = SD_DETECT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
@@ -560,13 +544,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : LD2_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SPI_SYNC_Pin */
   GPIO_InitStruct.Pin = SPI_SYNC_Pin;

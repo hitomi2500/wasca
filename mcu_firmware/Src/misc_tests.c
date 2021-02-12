@@ -3,6 +3,7 @@
 #include <stdarg.h>
 
 #include "main.h"
+#include "crc.h"
 #include "log.h"
 #include "stm32f4xx_hal.h"
 
@@ -14,6 +15,59 @@
 #include "bup_bootrom.h"
 
 
+
+
+
+/*
+ * ------------------------------------------
+ * - LEDs and push button test --------------
+ * ------------------------------------------
+ */
+#if LEDS_TEST_ENABLE == 1
+
+void leds_test(void)
+{
+    unsigned long tick = HAL_GetTick();
+    int b1_status = HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
+
+    /* Cheap log output test. */
+    if((tick % 1000) <= 100)
+    {
+        logout(WL_LOG_DEBUGNORMAL, "leds_test: b1_status[%d]", b1_status);
+    }
+
+    if(b1_status == GPIO_PIN_RESET)
+    {
+        /* Make monochromatic LEDs blinking faster
+         * when test button is pushed.
+         */
+        tick = tick / 4;
+    }
+
+#define LED_BINK_PERIOD 800
+    tick = tick % LED_BINK_PERIOD;
+    if(tick > (LED_BINK_PERIOD / 2))
+    {
+        HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET  );
+        HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
+    }
+    else
+    {
+        HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET  );
+    }
+
+#define LED_BLINK(_PER_) ((HAL_GetTick() % (_PER_)) > ((_PER_)/2) ? GPIO_PIN_SET : GPIO_PIN_RESET)
+    if(b1_status == GPIO_PIN_RESET)
+    {
+        /* Change colors or RGB LED when test button is pushed. */
+        HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, LED_BLINK(5000/3)); /* (Green on my board) */
+        HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, LED_BLINK(2000/3)); /* (Blue on my board)  */
+        HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, LED_BLINK(1500/3)); /* (Red on my board)   */
+    }
+}
+
+#endif // LEDS_TEST_ENABLE == 1
 
 
 /*
@@ -32,6 +86,31 @@ void sdcard_access_test(void)
   FRESULT res;               /* FatFs function common result code */
   uint32_t byteswritten, bytesread; /* File write/read counts */
   char rtext[256];                /* File read buffer */
+
+
+
+    if(f_open(&MyFile, "/PSKAI.BIN", FA_READ) != FR_OK)
+    {
+        //HAL_GPIO_WritePin(GPIOG, GPIO_PIN_10, GPIO_PIN_RESET);
+        termout(WL_LOG_DEBUGNORMAL, "'PSKAI.BIN' file Open for read Error !");
+        //while(1);
+    }
+    else
+    {
+            unsigned char buff[2048] = { 0 };
+            unsigned long crc32 = CRC32_INITVAL;
+            unsigned long tick_stt = HAL_GetTick();
+            for(int ite=0; ite<((1024*1024)/sizeof(buff)); ite++)
+            {
+                res = f_read(&MyFile, buff, sizeof(buff), (UINT*)&bytesread);
+
+                crc32 = crc32_update(crc32, buff, sizeof(buff));
+            }
+            unsigned long tick_end = HAL_GetTick();
+            termout(WL_LOG_DEBUGNORMAL, "[%08X]'PSKAI.BIN' CRC : %08X (%u msec)", HAL_GetTick(), crc32, tick_end-tick_stt);
+    }
+    return;
+
 
 /*##-0- Turn all LEDs off(red, green, orange and blue) */
 //    HAL_GPIO_WritePin(GPIOG, (GPIO_PIN_10 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_12), GPIO_PIN_SET);
@@ -295,7 +374,12 @@ void bup_test_bench(void)
  */
 void do_tests(void)
 {
-    /* Do tests only when blue button is pushed. */
+#if LEDS_TEST_ENABLE == 1
+    leds_test();
+#endif // LEDS_TEST_ENABLE == 1
+
+
+    /* Do the following tests only when blue button is pushed. */
     if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_SET)
     {
         return;
