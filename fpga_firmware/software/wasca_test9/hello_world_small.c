@@ -132,8 +132,6 @@
 void blink_the_leds(void)
 {
 #if 1 /* Periodically change LED blinking rate and sent log message on UART too = easily check if Nios program is still alive or not. */
-    unsigned char* boot_rom = (unsigned char*)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
-
     int j = 0;
     while(1)
     {
@@ -148,11 +146,9 @@ void blink_the_leds(void)
             log_to_uart("slow");
         }
 
-        int i;
-        for(i=0;i<20000;i++)
-        {
-            boot_rom[0xA0 + (i%16)] = rand() & 0xFF;
-        }
+        /* Wait for around 1.2 sec. */
+        for(int i=0; i<(10*1000*1000); i++) {;}
+
         j++;
     }
 
@@ -214,7 +210,10 @@ void load_boot_rom(unsigned char rom_id)
             block_len = rom_size - offset;
         }
 
-        //log_to_uart("[Boot ROM]Reading from offset=%u ...", offset);
+        if(((offset / WL_SPI_DATA_LEN) % 100) == 0)
+        {
+            log_to_uart("[Boot ROM]Reading from block %5u ...", offset / WL_SPI_DATA_LEN);
+        }
         // logflush();
 
         int read_status = spi_boot_readdata(rom_id, offset, block_len, boot_rom+offset);
@@ -284,6 +283,27 @@ void wasca_startup(void)
         log_to_uart("STM32 FW build_date:\"%s\"", arm_ver->build_date);
         log_to_uart("STM32 FW build_time:\"%s\"", arm_ver->build_time);
     }
+
+
+#if 0 // Test continous ROM loading
+int load_counter = 0;
+while(1)
+{
+    if(load_counter % 2)
+    {
+        HEARTBEAT_FAST();
+    }
+    else
+    {
+        HEARTBEAT_SLOW();
+    }
+    load_counter++;
+
+    load_boot_rom(0/*ROM ID*/);
+
+    log_to_uart("ROM load count : %u", load_counter);
+}
+#endif // Test continous ROM loading
 
 
     /*--------------------------------------------*/
