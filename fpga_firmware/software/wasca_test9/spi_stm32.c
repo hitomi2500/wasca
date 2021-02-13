@@ -613,10 +613,18 @@ int spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long 
         int valid_crc = 1;
         if(pkt->data_crc_len != 0)
         {
-            unsigned long crc = crc32_calc(pkt->data, pkt->data_crc_len);
-            if(crc != pkt->data_crc_val)
+            if(pkt->data_crc_len > WL_SPI_DATA_LEN)
             {
                 valid_crc = 0;
+            }
+            else
+            {
+                unsigned long crc = crc32_calc(pkt->data, pkt->data_crc_len);
+
+                if(crc != pkt->data_crc_val)
+                {
+                    valid_crc = 0;
+                }
             }
         }
 
