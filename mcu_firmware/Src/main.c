@@ -210,7 +210,7 @@ int main(void)
         spi_speed_kbps = spi_speed_kbps / 1024;
 
         trans_hdr->data[WL_SPI_DATA_LEN-1] = '\0';
-        logout(WL_LOG_DEBUGNORMAL, "[%08X:%d] ID[%2u] PKT/s[%4u][%4u KB/s] Tot[%5u]S[%5u] [%s] [cbu:%5u] R:%04X W:%04X"
+        termout(WL_LOG_DEBUGNORMAL, "[%08X:%d] ID[%2u] PKT/s[%4u][%4u KB/s] Tot[%5u]S[%5u] [cbu:%5u] R:%04X W:%04X"
             , (unsigned int)HAL_GetTick()
             , _spi_state
             , (unsigned int)logmsg_id
@@ -218,10 +218,8 @@ int main(void)
             , (unsigned int)spi_speed_kbps
             , (unsigned int)_spi_rcv_cnt
             , (unsigned int)_spi_shift_cnt
-            , trans_hdr->data
             , (unsigned int)log_cbmem_use()
-            , log_info->readptr, log_info->writeptr
-            );
+            , log_info->readptr, log_info->writeptr);
 
         logmsg_id = (logmsg_id+1) % 100;
     }
@@ -314,7 +312,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
