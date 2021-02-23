@@ -32,8 +32,8 @@ entity wasca_toplevel is
 		spi_stm32_MISO                              : in   std_logic;                                        -- MISO
 		spi_stm32_MOSI                              : out    std_logic                     := '0';             -- MOSI
 		spi_stm32_SCLK                              : out    std_logic                     := '0';             -- SCLK
-		spi_stm32_SS_n                              : out    std_logic                     := '0';             -- SS_n
-		spi_stm32_sync                              : in   std_logic;                                        -- SPI synchronization
+		spi_stm32_sync_miso                         : in   std_logic;                                        -- SPI synchronization
+		spi_stm32_sync_mosi                         : out    std_logic                     := '0';             -- SS_n
 		uart_0_external_connection_txd              : out   std_logic                     := '0'
 	);
 end entity wasca_toplevel;
@@ -62,7 +62,8 @@ architecture rtl of wasca_toplevel is
             abus_avalon_sdram_bridge_0_sdram_ras_n                      : out   std_logic;                                        -- ras_n
             abus_avalon_sdram_bridge_0_sdram_we_n                       : out   std_logic;                                        -- we_n
             abus_avalon_sdram_bridge_0_sdram_clk                        : out   std_logic;                                        -- clk
-            buffered_spi_sync                                           : in    std_logic;                                        -- SPI synchronization
+            buffered_spi_sync_miso                                      : in    std_logic;                                        -- SPI synchronization
+            buffered_spi_sync_mosi                                      : out   std_logic;                                        -- cs
             buffered_spi_mosi                                           : out   std_logic;                                        -- mosi
             buffered_spi_clk                                            : out   std_logic;                                        -- clk
             buffered_spi_miso                                           : in    std_logic                     := 'X';             -- miso
@@ -117,11 +118,12 @@ architecture rtl of wasca_toplevel is
 			abus_avalon_sdram_bridge_0_abus_interrupt_disable_out => open,--abus_interrupt_disable_out,
 			abus_avalon_sdram_bridge_0_abus_reset => reset_reset_n,
 			heartbeat_heartbeat_out => heartbeat,
-			buffered_spi_sync => spi_stm32_sync,
+			buffered_spi_sync_miso => spi_stm32_sync_miso,
+			buffered_spi_sync_mosi => spi_stm32_sync_mosi,
 			buffered_spi_miso => spi_stm32_MISO,
 			buffered_spi_mosi => spi_stm32_MOSI,
 			buffered_spi_clk => spi_stm32_SCLK,
-			buffered_spi_cs => spi_stm32_SS_n,
+			buffered_spi_cs => open,
 			reset_reset_n => por_reset_n,
 			reset_controller_0_reset_in1_reset => por_reset,
 			uart_0_external_connection_rxd => '0',
