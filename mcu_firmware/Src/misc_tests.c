@@ -31,12 +31,15 @@ void leds_test(void)
     unsigned long tick = HAL_GetTick();
     int b1_status = HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
 
-    /* Output one log message to UART every second. */
-    unsigned long logout_time = tick / 1000;
-    if(logout_time != _prev_logout_time)
+    /* Output 10 log messages to UART every second when test button is pushed. */
+    if(b1_status == GPIO_PIN_RESET)
     {
-        termout(WL_LOG_DEBUGNORMAL, "log_test[%u] b1_status[%d]", logout_time % 10, b1_status);
-        _prev_logout_time = logout_time;
+        unsigned long logout_time = tick / 100;
+        if(logout_time != _prev_logout_time)
+        {
+             termout(WL_LOG_DEBUGNORMAL, "log_test[%2u]", logout_time % 100, b1_status);
+            _prev_logout_time = logout_time;
+        }
     }
 
     if(b1_status == GPIO_PIN_RESET)

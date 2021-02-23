@@ -185,6 +185,8 @@ void load_boot_rom(unsigned char rom_id)
     volatile unsigned short * pRegs_16 = (unsigned short *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
     unsigned char* boot_rom = (unsigned char*)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
 
+    log_to_uart("[Boot ROM]START");
+
     WASCA_PERF_START_MEASURE();
     /* Retrieve ROM file size. */
     wl_spicomm_bootinfo_t info = { 0 };
@@ -248,6 +250,11 @@ void load_boot_rom(unsigned char rom_id)
     unsigned long crc32 = crc32_calc(boot_rom, rom_size);
 
     log_to_uart("[Boot ROM]Read ended. Size=%u KB, Time = %u.%u sec, CRC=%x", rom_size>>10, elapsed / 10, elapsed % 10, crc32);
+    log_to_uart("[Boot ROM]Header: %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 
+        boot_rom[ 0], boot_rom[ 1], boot_rom[ 2], boot_rom[ 3], 
+        boot_rom[ 4], boot_rom[ 5], boot_rom[ 6], boot_rom[ 7], 
+        boot_rom[ 8], boot_rom[ 9], boot_rom[10], boot_rom[11], 
+        boot_rom[12], boot_rom[13], boot_rom[14], boot_rom[15]);
 }
 
 
@@ -265,6 +272,17 @@ void wasca_startup(void)
     /*--------------------------------------------*/
     /* Initialize block SPI module internals.     */
     spi_init();
+
+    /* Wait for around 2.5 sec before using SPI.
+     * (Just for debug, will be removed soon)
+     */
+    log_to_uart("MAX 10 STT1");
+    for(int i=0; i<(20*1000*1000); i++)
+    {
+        HEARTBEAT_SLOW();
+    }
+    HEARTBEAT_FAST();
+    log_to_uart("MAX 10 STT2");
 
     /*--------------------------------------------*/
     /* Exchange version information with STM32.   */
@@ -285,25 +303,25 @@ void wasca_startup(void)
     }
 
 
-#if 0 // Test continous ROM loading
-int load_counter = 0;
-while(1)
-{
-    if(load_counter % 2)
+#if 0 // Test continous ROM loading (DEBUG)
+    int load_counter = 0;
+    while(1)
     {
-        HEARTBEAT_FAST();
+        if(load_counter % 2)
+        {
+            HEARTBEAT_FAST();
+        }
+        else
+        {
+            HEARTBEAT_SLOW();
+        }
+        load_counter++;
+    
+        load_boot_rom(0/*ROM ID*/);
+    
+        log_to_uart("ROM load count : %u", load_counter);
     }
-    else
-    {
-        HEARTBEAT_SLOW();
-    }
-    load_counter++;
-
-    load_boot_rom(0/*ROM ID*/);
-
-    log_to_uart("ROM load count : %u", load_counter);
-}
-#endif // Test continous ROM loading
+#endif // Test continous ROM loading (DEBUG)
 
 
     /*--------------------------------------------*/

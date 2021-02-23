@@ -50,8 +50,6 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-CRC_HandleTypeDef hcrc;
-
 SD_HandleTypeDef hsd;
 
 SPI_HandleTypeDef hspi1;
@@ -73,7 +71,6 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_SDIO_SD_Init(void);
-static void MX_CRC_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_UART4_Init(void);
 /* USER CODE BEGIN PFP */
@@ -135,7 +132,6 @@ int main(void)
   MX_DMA_Init();
   MX_SDIO_SD_Init();
   MX_FATFS_Init();
-  MX_CRC_Init();
   MX_USB_DEVICE_Init();
   MX_SPI1_Init();
   MX_UART4_Init();
@@ -239,9 +235,7 @@ int main(void)
             break;
         }
 
-        /* If packet received from MAX 10,
-         * then process its answer.
-         */
+        /* If SPI communication is requested from MAX 10, process it here. */
         if(spi_periodic_check() == 1)
         {
             spi_init_cnt++;
@@ -334,32 +328,6 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief CRC Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_CRC_Init(void)
-{
-
-  /* USER CODE BEGIN CRC_Init 0 */
-
-  /* USER CODE END CRC_Init 0 */
-
-  /* USER CODE BEGIN CRC_Init 1 */
-
-  /* USER CODE END CRC_Init 1 */
-  hcrc.Instance = CRC;
-  if (HAL_CRC_Init(&hcrc) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN CRC_Init 2 */
-
-  /* USER CODE END CRC_Init 2 */
-
-}
-
-/**
   * @brief SDIO Initialization Function
   * @param None
   * @retval None
@@ -409,7 +377,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.DataSize = SPI_DATASIZE_16BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi1.Init.NSS = SPI_NSS_HARD_INPUT;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -500,7 +468,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(SPI_SYNC_GPIO_Port, SPI_SYNC_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(SPI_SYNC_MISO_GPIO_Port, SPI_SYNC_MISO_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : LD1_R_Pin LD1_G_Pin LD1_B_Pin LD2_Pin */
   GPIO_InitStruct.Pin = LD1_R_Pin|LD1_G_Pin|LD1_B_Pin|LD2_Pin;
@@ -508,6 +476,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : SPI_SYNC_MOSI_Pin */
+  GPIO_InitStruct.Pin = SPI_SYNC_MOSI_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(SPI_SYNC_MOSI_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SD_GND_DETECT_Pin */
   GPIO_InitStruct.Pin = SD_GND_DETECT_Pin;
@@ -543,12 +517,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : SPI_SYNC_Pin */
-  GPIO_InitStruct.Pin = SPI_SYNC_Pin;
+  /*Configure GPIO pin : SPI_SYNC_MISO_Pin */
+  GPIO_InitStruct.Pin = SPI_SYNC_MISO_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  HAL_GPIO_Init(SPI_SYNC_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(SPI_SYNC_MISO_GPIO_Port, &GPIO_InitStruct);
 
 }
 

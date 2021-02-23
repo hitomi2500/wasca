@@ -15,7 +15,8 @@ entity buffered_spi is
            avalon_writedata : in STD_LOGIC_VECTOR (15 downto 0);
            avalon_readdata : out STD_LOGIC_VECTOR (15 downto 0);
            avalon_readdatavalid : out std_logic := '0';
-           spi_sync :  in STD_LOGIC := '0';
+           spi_sync_miso :  in std_logic := '0';
+           spi_sync_mosi : out std_logic := '0';
            spi_mosi : out STD_LOGIC := '0';
            spi_clk : out STD_LOGIC := '0';
            spi_miso : in STD_LOGIC;
@@ -71,7 +72,8 @@ signal avalon_address_latched : std_logic_vector (13 downto 0);
 
 signal avalon_readdatavalid_p1 : STD_LOGIC;
 
-signal spi_sync_register         : std_logic  := '0';
+signal spi_sync_miso_register         : std_logic  := '1';
+signal spi_sync_mosi_register         : std_logic  := '1';
 
 --inferred ram, quartus fails to recognize'em like bram
 --type spi_buf_type is array(0 to 511) of std_logic_vector(15 downto 0);
@@ -102,7 +104,8 @@ begin
 	avalon_read_f1 <=  avalon_read when rising_edge(clock);
 	avalon_read_f2 <=  avalon_read_f1 when rising_edge(clock);
 	
-	spi_sync_register <= spi_sync;
+	spi_sync_miso_register <= spi_sync_miso;
+	spi_sync_mosi <= spi_sync_mosi_register;
 
 	--Avalon regs read interface
 	process (clock)
@@ -135,9 +138,9 @@ begin
                            when "101" =>
                                  avalon_readdata_p1 <= X"000"&"000"&buffer_select_register;
                            when "110" =>
-                                 avalon_readdata_p1 <= X"000"&"000"&spi_sync_register;
+                                 avalon_readdata_p1 <= X"000"&"000"&spi_sync_miso_register;
                            when "111" =>
-                                 avalon_readdata_p1 <= X"FACE";
+                                 avalon_readdata_p1 <= X"000"&"000"&spi_sync_mosi_register;
                            when others =>
                                  avalon_readdata_p1 <= X"ABBA";
 					  	end case;
@@ -184,8 +187,8 @@ begin
                              delay_register <= avalon_writedata;
                        when "101" => 
                              buffer_select_register <= avalon_writedata(0);
-                       -- when "110" => 
-                       --       spi_sync_register <= avalon_writedata(0);
+                       when "111" => 
+                             spi_sync_mosi_register <= avalon_writedata(0);
                        when others =>
                              null; 
                        end case;

@@ -72,9 +72,13 @@ wl_spi_pkt_t _spi_rx_wk_buff;
 /* SPI flow control macros.
  * For internal use here only.
  */
-#define SPI_MAX10_RCV_HDR_READY() HAL_GPIO_WritePin(SPI_SYNC_GPIO_Port, SPI_SYNC_Pin, GPIO_PIN_RESET)
-#define SPI_MAX10_SND_RSP_READY() HAL_GPIO_WritePin(SPI_SYNC_GPIO_Port, SPI_SYNC_Pin, GPIO_PIN_SET  )
+#define SPI_MASTER_REQUESTING() (HAL_GPIO_ReadPin(SPI_SYNC_MOSI_GPIO_Port, SPI_SYNC_MOSI_Pin) == GPIO_PIN_RESET)
+#define SPI_INDICATE_READY() HAL_GPIO_WritePin(SPI_SYNC_MISO_GPIO_Port, SPI_SYNC_MISO_Pin, GPIO_PIN_RESET)
+#define SPI_INDICATE_IDLE()  HAL_GPIO_WritePin(SPI_SYNC_MISO_GPIO_Port, SPI_SYNC_MISO_Pin, GPIO_PIN_SET  )
 
+// (Will remove these ones soon)
+#define SPI_MAX10_RCV_HDR_READY() HAL_GPIO_WritePin(SPI_SYNC_MISO_GPIO_Port, SPI_SYNC_MISO_Pin, GPIO_PIN_RESET)
+#define SPI_MAX10_SND_RSP_READY() HAL_GPIO_WritePin(SPI_SYNC_MISO_GPIO_Port, SPI_SYNC_MISO_Pin, GPIO_PIN_SET  )
 
 /* Internals to receive and process log messages from MAX 10. */
 int _logs_process_flag = 0;
@@ -107,7 +111,7 @@ void spi_init(void)
     memset(&_logs_buffer, 0, sizeof(_logs_buffer));
 
 //    /* Prevent from receiving data while transaction header isn't yet processed. */
-//    HAL_GPIO_WritePin(SPI_SYNC_GPIO_Port, SPI_SYNC_Pin, GPIO_PIN_RESET);
+//    HAL_GPIO_WritePin(SPI_SYNC_MISO_GPIO_Port, SPI_SYNC_MISO_Pin, GPIO_PIN_RESET);
 
     /* Reset the internals. */
     memset(&_spi_trans_hdr_rx, 0, sizeof(wl_spi_pkt_t));
@@ -268,8 +272,58 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef* hspi)
 
 void spi_send_answer(void)
 {
+    // Will remove soon !
+}
+
+void spi_update_state(int spi_state)
+{
+    // Will remove soon !
+}
+
+
+int spi_periodic_check(void)
+{
+    if(!SPI_MASTER_REQUESTING())
+    {
+        return 0;
+    }
+
+    unsigned long rxtx_timeout = 1000;
     wl_spi_pkt_t* pkt_rx = &_spi_trans_hdr_rx;
     wl_spi_pkt_t* pkt_tx = &_spi_trans_hdr_tx;
+
+    /* Process request from MAX 10. */
+    SPI_INDICATE_READY();
+
+    /* We need to be fast between the time we indicate MAX 10
+     * that we are ready and the time we are actually ready
+     * to process input from SPI.
+     * 
+     * So extra processing (log output etc) is prohibited here.
+     */
+    if(HAL_SPI_Receive(&hspi1, (uint8_t*)&_spi_rx_wk_buff, sizeof(wl_spi_pkt_t) / sizeof(unsigned short), rxtx_timeout) != HAL_OK)
+    {
+        Error_Handler();
+    }
+
+
+    if(_spi_rx_wk_buff.cmn.magic_ca == 0xCA)
+    {
+        memcpy(pkt_rx, &_spi_rx_wk_buff, sizeof(wl_spi_pkt_t));
+    }
+    else
+    {
+        /* Dirty tweak ... */
+        unsigned short* dst = (unsigned short*)pkt_rx;
+        unsigned short* src = (unsigned short*)&_spi_rx_wk_buff;
+        for(int i=0; i<((sizeof(wl_spi_pkt_t)-1) / sizeof(unsigned short)); i++)
+        {
+            dst[i] = src[i+1];
+        }
+//termout(WL_LOG_DEBUGNORMAL, "[HAL_SPI_RxCpltCallback] Warning : packet contents was shifted.");
+        _spi_shift_cnt++;
+    }
+
 
     /* Copy back header from Rx to Tx buffer. */
     memcpy(&(pkt_tx->cmn), &(pkt_rx->cmn), sizeof(wl_spi_common_hdr_t));
@@ -282,7 +336,7 @@ void spi_send_answer(void)
 
     /******************************************/
     /* Prepare response for sending to MAX10. */
-    spi_logout("Tick[0x%08X] CMD[0x%02X]", (unsigned int)HAL_GetTick(), pkt_rx->cmn.command);
+    spi_logout("Tick[0x%08X] MAGIC[%02X %02X] CMD[0x%02X]", (unsigned int)HAL_GetTick(), pkt_rx->cmn.magic_ca, pkt_rx->cmn.magic_fe, pkt_rx->cmn.command);
 
     if(pkt_rx->cmn.command == WL_SPICMD_VERSION)
     { /* MAX10/STM32 firmware versions exchange. */
@@ -439,142 +493,27 @@ void spi_send_answer(void)
         , pkt_tx->data[ 8], pkt_tx->data[ 9], pkt_tx->data[10], pkt_tx->data[11]);
 
 
-    /* Indicate that SPI must be re-init for next transation.
-     * We are currently in interrupt handler, and this must be
-     * done on main module side, hence the trick below with
-     * global variable.
+    /* As response data is ready, indicate that we are
+     * ready to send it back to MAX 10.
      */
-    _spi_state = SPI_STATE_SEND_RESPONSE;
-}
+    SPI_INDICATE_IDLE();
 
-
-void spi_update_state(int spi_state)
-{
-#if SPI_DEBUG_LOGS == 1
-    int spi_original_state = _spi_state;
-    spi_logout("@@@ Tick[0x%08X] spi_update_state STT [%d]"
-        , (unsigned int)HAL_GetTick()
-        , spi_state);
-#endif // !SPI_DEBUG_LOGS
-
-    if(spi_state == SPI_STATE_PREPARE_RCV)
+    /* Similarly to packet reception, we need to be fast
+     * between the time we indicate MAX 10 that we are
+     * ready to reply and the time we are actually ready
+     * to process input from SPI.
+     * 
+     * So extra processing (log output etc) is prohibited here.
+     */
+    if(HAL_SPI_Transmit(&hspi1, (uint8_t*)pkt_tx, sizeof(wl_spi_pkt_t) / sizeof(unsigned short), rxtx_timeout) != HAL_OK)
     {
-        /* Goto next state. */
-        _spi_state = SPI_STATE_RCV_IDLE;
-
-        if(HAL_SPI_Receive_DMA(&hspi1, (uint8_t*)(&_spi_rx_wk_buff), sizeof(wl_spi_pkt_t) / sizeof(unsigned short)) != HAL_OK)
-        {
-            Error_Handler();
-        }
-
-        /* Indicate that we are ready to receive header. */
-        SPI_MAX10_RCV_HDR_READY();
-    }
-    else if(spi_state == SPI_STATE_SEND_RESPONSE)
-    {
-        /* Goto next state. */
-        _spi_state = SPI_STATE_SEND_IDLE;
-
-        /* Output message about to send to UART. */
-        //if(_spi_trans_hdr_tx.data[ 4] == '0')
-        {
-            spi_logout("[SPI_Transmit_DMA]pkt_len:%4u rsp_len:%4u, data[%c%c%c%c][%c%c%c%c][%c%c%c%c]\r\n",
-                _spi_trans_hdr_tx.cmn.pkt_len, 
-                _spi_rx_wk_buff.cmn.rsp_len, 
-                char2pchar(_spi_trans_hdr_tx.data[ 0]), char2pchar(_spi_trans_hdr_tx.data[ 1]), char2pchar(_spi_trans_hdr_tx.data[ 2]), char2pchar(_spi_trans_hdr_tx.data[ 3]), 
-                char2pchar(_spi_trans_hdr_tx.data[ 4]), char2pchar(_spi_trans_hdr_tx.data[ 5]), char2pchar(_spi_trans_hdr_tx.data[ 6]), char2pchar(_spi_trans_hdr_tx.data[ 7]), 
-                char2pchar(_spi_trans_hdr_tx.data[ 8]), char2pchar(_spi_trans_hdr_tx.data[ 9]), char2pchar(_spi_trans_hdr_tx.data[10]), char2pchar(_spi_trans_hdr_tx.data[11])
-            );
-        }
-
-        /* Answer back the data size specified by MAX 10.
-         * -> Allows for example long request from MAX10, with short ACK from STM32.
-         */
-        unsigned long answer_size = _spi_rx_wk_buff.cmn.rsp_len;
-        if(answer_size < sizeof(wl_spi_common_hdr_t))
-        {
-            answer_size = sizeof(wl_spi_pkt_t);
-        }
-answer_size = sizeof(wl_spi_pkt_t); // TMP
-
-        if(HAL_SPI_Transmit_DMA(&hspi1, (uint8_t*)(&_spi_trans_hdr_tx), answer_size / sizeof(unsigned short)) != HAL_OK)
-        {
-            Error_Handler();
-        }
-
-        /* Indicate that we are ready to send response. */
-        SPI_MAX10_SND_RSP_READY();
-
-        spi_logout("Tick[0x%08X]Send response header END", (unsigned int)HAL_GetTick());
+        Error_Handler();
     }
 
-
-#if SPI_DEBUG_LOGS == 1
-    spi_logout("@@@ Tick[0x%08X] spi_update_state END [%d -> %d]"
-        , (unsigned int)HAL_GetTick()
-        , spi_original_state, _spi_state);
-#endif // !SPI_DEBUG_LOGS
-}
+// TODO : allow reception when it's necessary :
+//   HAL_SPI_TransmitReceive(SPI_HandleTypeDef *hspi, uint8_t *pTxData, uint8_t *pRxData, uint16_t Size, uint32_t Timeout)
+//   HAL_SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t Size, uint32_t Timeout)
 
 
-int spi_periodic_check(void)
-{
-    int ret = 0;
-
-    /* If packet received from MAX 10, then process its answer. */
-    if(_spi_state == SPI_STATE_MSGPROC_START)
-    {
-        spi_send_answer();
-    }
-
-    /* If required, re-init SPI state. */
-    int spi_state = _spi_state;
-    if((spi_state == SPI_STATE_PREPARE_RCV)
-    || (spi_state == SPI_STATE_SEND_RESPONSE))
-    {
-        spi_update_state(spi_state);
-
-        if(spi_state == SPI_STATE_PREPARE_RCV)
-        {
-            ret = 1;
-        }
-
-        /* If finished to receive logs buffer, display their contents. */
-        if(_logs_process_flag)
-        {
-            unsigned short offset = 0;
-            unsigned short len = 0;
-
-            while(1)
-            {
-                /* Retrieve current message length, and verify integrity
-                 * regarding length, position within buffer etc.
-                 */
-                memcpy(&len, _logs_buffer + offset, sizeof(len));
-                if((len < sizeof(len))
-                || (len > (sizeof(len) + WL_LOG_MESSAGE_MAXLEN))
-                || ((offset + sizeof(len) + len) > _logs_msg_len))
-                {
-                    break;
-                }
-
-                /* Extract and output current log message. */
-                char msg_buff[WL_LOG_MESSAGE_MAXLEN];
-                memcpy(msg_buff, _logs_buffer + offset + sizeof(len), len-sizeof(len));
-                msg_buff[len - sizeof(len) - 1] = '\0';
-                termout(WL_LOG_DEBUGNORMAL, "MAX10: %s", msg_buff);
-
-                /* Jump to next log message. */
-                offset = offset + sizeof(len) + len;
-                if(offset >= _logs_msg_len)
-                {
-                    break;
-                }
-            }
-
-            _logs_process_flag = 0;
-        }
-    }
-
-    return ret;
+    return 1;
 }

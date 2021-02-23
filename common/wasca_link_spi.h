@@ -10,23 +10,37 @@
 #define WASCA_LINK_SPI_H
 
 /*****************************************************************************
- * SPI transaction header.
- * This is used when communicating between MAX10 and STM32.
- *
- * Outline of transmission headers exchange :
- * ___________________________________________________________________________
- * | Contents | Idle (1)|       (2)|       (3)|      (4) |      (5) | Idle (1)
- * ___________________________________________________________________________
- * | SPI      |         | M10->STM |          | STM->M10 |          |         
- * ___________________________________________________________________________
- * | SYNC     | ______________________________|---------------------|_________
- * ___________________________________________________________________________
- *  (1) Idle : STM32 is ready to receive transmission header
- *  (2) Reception of header from MAX10
- *  (3) Processing of datagram contents and preparation of response header
- *  (4) Send back reponse to MAX10
- *  (5) Preparation for reception of next header
- *      On STM32 side, SYNC must be reset after setting up reception settings.
+ * Outline of SPI communication between MAX 10 and STM32 :
+ *  - MAX 10 is SPI master
+ *  - Two synchronization signals are shared between master and slave :
+ *    - MOSI SYNC : indicate that MAX 10 is requesting communication
+ *                  (direction from MAX 10 to STM32)
+ *    - MISO SYNC : indicate that STM32 is ready to communicate
+ *                  (direction from STM32 to MAX 10)
+ * __________________________________________________________________________
+ * | Contents | (1)     | (2) | (3) | (4)    | (5) | (6) | (7)      | (1)    
+ * __________________________________________________________________________
+ * | MOSI SYNC|---------|___________|----------------------------------------
+ * __________________________________________________________________________
+ * | MISO SYNC|---------------|____________________|-------------------------
+ * __________________________________________________________________________
+ * | SPI      |                     |  M->S  |           |  S<->M  |         
+ * __________________________________________________________________________
+ *  (1) Idle : MAX 10 and STM32 are doing non-SPI things
+ *  (2) MAX 10 requesting communication with STM32
+ *  (3) STM32 indicating it is ready to listen
+ *  (4) Transfer of packet from MAX 10 to STM32
+ *      -> Fixed (and small) data size
+ *  (5) Processing of packet and preparation of response data on STM32 side
+ *      -> Use synchronization signal to indicate when response is ready
+ *  (6) STM32 indicating it is ready to send response
+ *  (7) Full duplex data transfer between MAX 10 and STM32
+ *      -> Variable (large if necessary) data size, depending of packet contents
+ *         (Data size upper limit depends on implementation on STM32 side)
+ *      -> If MAX 10 needs to send a large chunk of data, this is done here
+ *         Example : write backup memory block on SD card
+ *      -> If MAX 10 needs to receive a large chunk of data, this is done here
+ *         Example : boot ROM data read from SD card
  *
  *****************************************************************************/
 

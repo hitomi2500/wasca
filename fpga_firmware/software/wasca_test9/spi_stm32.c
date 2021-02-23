@@ -38,11 +38,8 @@
 #define BUFFSPI_REG_CS_MODE         0x2003
 #define BUFFSPI_REG_DELAY           0x2004
 #define BUFFSPI_REG_BUFFER_SELECT   0x2005
-#define BUFFSPI_REG_SYNC            0x2006
-#define BUFFSPI_REG_MAGIC_FACE      0x2007
-
-/* SPI synchronization signal status. */
-#define BUFFSPI_SYNC_STATUS() (((volatile unsigned short *)BUFFERED_SPI_0_BASE)[BUFFSPI_REG_SYNC])
+#define BUFFSPI_REG_SYNC_MISO       0x2006
+#define BUFFSPI_REG_SYNC_MOSI       0x2007
 
 
 /* Maximum word (16 bits) count for each (Tx0, Tx1, Rx0, Rx1) buffers.
@@ -61,6 +58,30 @@
  */
 //#define BUFFSPI_MAXCNT              512
 #define BUFFSPI_MAXCNT              128
+
+/* Internal functions to synchronize around each part of SPI transfer. */
+void spi_sync_start(void)
+{
+    ((volatile unsigned short *)BUFFERED_SPI_0_BASE)[BUFFSPI_REG_SYNC_MOSI] = 0;
+
+    while(((volatile unsigned short *)BUFFERED_SPI_0_BASE)[BUFFSPI_REG_SYNC_MISO] == 1);
+
+    ((volatile unsigned short *)BUFFERED_SPI_0_BASE)[BUFFSPI_REG_SYNC_MOSI] = 1;
+
+    // TODO : add some nops ?
+    //for(int i=0; i<(10); i++) {;}
+}
+
+void spi_sync_middle(void)
+{
+    while(((volatile unsigned short *)BUFFERED_SPI_0_BASE)[BUFFSPI_REG_SYNC_MISO] == 0);
+
+    // ((volatile unsigned short *)BUFFERED_SPI_0_BASE)[BUFFSPI_REG_SYNC_MOSI] = 1;
+
+    // TODO : add some nops ?
+    //for(int i=0; i<(10); i++) {;}
+}
+
 
 void spi_init(void)
 {
@@ -348,13 +369,9 @@ void spi_exc_version(wl_verinfo_ext_t* max_ver, wl_spicomm_version_t* arm_ver)
         }
     }
 
-    /* Wait for STM32 to be ready until being able to send packet. */
-    while(BUFFSPI_SYNC_STATUS() == 1);
-
+    spi_sync_start();
     spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
-
-    /* Wait for STM32 to be ready until receiving response. */
-    while(BUFFSPI_SYNC_STATUS() == 0);
+    spi_sync_middle();
 
     spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
 
@@ -397,13 +414,9 @@ void spi_send_logs(wl_spicomm_logs_t* logset, unsigned char* logdata)
     memcpy(pkt->params, logset, sizeof(wl_spicomm_logs_t));
     memcpy(pkt->data, logdata, logset->block_len);
 
-    /* Wait for STM32 to be ready until being able to send packet. */
-    while(BUFFSPI_SYNC_STATUS() == 1);
-
+    spi_sync_start();
     spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
-
-    /* Wait for STM32 to be ready until receiving response. */
-    while(BUFFSPI_SYNC_STATUS() == 0);
+    spi_sync_middle();
 
     /* Receive and trash ACK from STM32. */
     spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
@@ -468,13 +481,9 @@ rsp_len = sizeof(wl_spi_pkt_t); // TMP
         memcpy(pkt->data, snd_data, len);
     }
 
-    /* Wait for STM32 to be ready until being able to send packet. */
-    while(BUFFSPI_SYNC_STATUS() == 1);
-
+    spi_sync_start();
     spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
-
-    /* Wait for STM32 to be ready until receiving response. */
-    while(BUFFSPI_SYNC_STATUS() == 0);
+    spi_sync_middle();
 
     spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
 
@@ -557,13 +566,9 @@ void spi_boot_getinfo(unsigned char rom_id, wl_spicomm_bootinfo_t* info, char* f
     wl_spicomm_memacc_t* params = (wl_spicomm_memacc_t*)pkt->params;
     params->rom_id = rom_id;
 
-    /* Wait for STM32 to be ready until being able to send packet. */
-    while(BUFFSPI_SYNC_STATUS() == 1);
-
+    spi_sync_start();
     spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
-
-    /* Wait for STM32 to be ready until receiving response. */
-    while(BUFFSPI_SYNC_STATUS() == 0);
+    spi_sync_middle();
 
     spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
 
@@ -599,13 +604,9 @@ int spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long 
         params->addr   = offset;
         params->len    = len;
 
-        /* Wait for STM32 to be ready until being able to send packet. */
-        while(BUFFSPI_SYNC_STATUS() == 1);
-
+        spi_sync_start();
         spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
-
-        /* Wait for STM32 to be ready until receiving response. */
-        while(BUFFSPI_SYNC_STATUS() == 0);
+        spi_sync_middle();
 
         spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
 

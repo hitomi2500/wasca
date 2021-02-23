@@ -64,6 +64,8 @@ void Error_Handler(void);
 #define LD1_G_GPIO_Port GPIOC
 #define LD1_B_Pin GPIO_PIN_15
 #define LD1_B_GPIO_Port GPIOC
+#define SPI_SYNC_MOSI_Pin GPIO_PIN_4
+#define SPI_SYNC_MOSI_GPIO_Port GPIOA
 #define SD_GND_DETECT_Pin GPIO_PIN_5
 #define SD_GND_DETECT_GPIO_Port GPIOC
 #define B1_Pin GPIO_PIN_14
@@ -80,8 +82,8 @@ void Error_Handler(void);
 #define LD2_GPIO_Port GPIOC
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
-#define SPI_SYNC_Pin GPIO_PIN_6
-#define SPI_SYNC_GPIO_Port GPIOB
+#define SPI_SYNC_MISO_Pin GPIO_PIN_6
+#define SPI_SYNC_MISO_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
