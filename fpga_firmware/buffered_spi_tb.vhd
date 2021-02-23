@@ -39,6 +39,7 @@ architecture Behavioral of buffered_spi_tb is
 
 component buffered_spi is
     Port ( clock : in STD_LOGIC;
+           reset : in STD_LOGIC;
            avalon_read : in STD_LOGIC;
            avalon_write : in STD_LOGIC;
            avalon_address : in STD_LOGIC_VECTOR (13 downto 0);
@@ -53,7 +54,7 @@ component buffered_spi is
 end component;
 
 signal	clock                :     std_logic                     := '0';  
-
+signal	reset                :     std_logic                     := '0';  
 signal	avalon_read          :    std_logic := '0';  
 signal	avalon_write         :    std_logic := '0'; 
 signal	avalon_waitrequest         :    std_logic := '0';
@@ -104,6 +105,7 @@ clock <= not clock after 5000 ps; --100 MHz clock
 UUT: buffered_spi 
 	port map(
 		clock => clock,
+		reset => reset,
 		avalon_read => avalon_read,
 		avalon_write => avalon_write,
 		avalon_address => avalon_address,
@@ -119,7 +121,12 @@ UUT: buffered_spi
 	
 process
     begin
-        wait for 500ns;
+		  reset <= '1';
+        wait for 100ns;
+		  reset <= '0';
+        wait for 300ns;
+		  reset <= '1';
+        wait for 300ns;
         --write
         write_avalon_16("10"&X"001",X"0200",avalon_address,avalon_writedata,avalon_write); --len
         wait for 100ns;
