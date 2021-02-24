@@ -467,7 +467,7 @@ write2_buf: buff_spi_ram
     process (clock)
     begin
        if rising_edge(clock) then
-          if (transaction_active = '1') and transaction_bit_counter <= to_unsigned(15,16) then
+          if (transaction_active = '1') and transaction_bit_counter <= to_unsigned(15,16) and transaction_clkdiv_counter = "0001" then
               transaction_data_read(15-to_integer(transaction_bit_counter(3 downto 0))) <= spi_miso;
           end if;
        end if;
