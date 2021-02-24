@@ -232,11 +232,11 @@ void load_boot_rom(unsigned char rom_id)
      * In the case of Pseudo Saturn, size is 1MB, 
      * and it is 2MB in the case of game boot ROM.
      */
-    /*unsigned long fill_len = (rom_id == 0 ? 1*1024*1024 : 2*1024*1024);
+    unsigned long fill_len = (rom_id == 0 ? 1*1024*1024 : 2*1024*1024);
     if(fill_len > rom_size)
     {
         memset(boot_rom + rom_size, 0xFF, fill_len - rom_size);
-    }*/
+    }
 
     /* Mark read status as terminated. */
     pRegs_16[PCNTR_REG_OFFSET] = 100;

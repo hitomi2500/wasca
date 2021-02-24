@@ -640,19 +640,9 @@ int spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long 
 
     /* Copy back read data to destination buffer. */
     wl_spicomm_bootinfo_t* info = (wl_spicomm_bootinfo_t*)pkt->params;
-    uint16_t * dst16 = (uint16_t*) dst;
-    uint8_t * pktdata8 = (uint8_t*) pkt->data;
-    uint16_t tmp16;
-    uint8_t * tmp8 = &tmp16;
     if(info->block_len != 0)
     {
-        //memcpy(dst, pkt->data, info->block_len);
-    	for (int i=0; i<info->block_len/2; i++)
-    	{
-    		tmp8[0] = pktdata8[i*2];
-    		tmp8[1] = pktdata8[i*2+1];
-    		dst16[i] = tmp16;
-    	}
+        memcpy(dst, pkt->data, info->block_len);
     }
 
     return (info->status == WL_BOOTROM_END ? 1 : 0);
