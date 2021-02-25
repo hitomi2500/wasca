@@ -27,7 +27,8 @@ module wasca (
 		output wire        buffered_spi_clk,                                      //                                 .clk
 		input  wire        buffered_spi_miso,                                     //                                 .miso
 		output wire        buffered_spi_cs,                                       //                                 .cs
-		input  wire        buffered_spi_sync,                                     //                                 .sync
+		input  wire        buffered_spi_sync_miso,                                //                                 .sync_miso
+		output wire        buffered_spi_sync_mosi,                                //                                 .sync_mosi
 		input  wire        clk_clk,                                               //                              clk.clk
 		output wire        clock_116_mhz_clk,                                     //                    clock_116_mhz.clk
 		output wire        heartbeat_heartbeat_out,                               //                        heartbeat.heartbeat_out
@@ -203,7 +204,8 @@ module wasca (
 		.spi_clk              (buffered_spi_clk),                                      //            .clk
 		.spi_miso             (buffered_spi_miso),                                     //            .miso
 		.spi_cs               (buffered_spi_cs),                                       //            .cs
-		.spi_sync             (buffered_spi_sync),                                     //            .sync
+		.spi_sync_miso        (buffered_spi_sync_miso),                                //            .sync_miso
+		.spi_sync_mosi        (buffered_spi_sync_mosi),                                //            .sync_mosi
 		.clock                (clock_116_mhz_clk)                                      //       clock.clk
 	);
 
