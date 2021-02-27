@@ -182,11 +182,6 @@ int main(void)
   unsigned long prev_tick = HAL_GetTick();
   while (1)
   {
-    wl_spi_pkt_t* trans_hdr = &_spi_trans_hdr_tx;
-
-    /* Display SPI communication status. */
-    log_infos_t* log_info = &_log_inf_data;
-
     /* Compute the number of packets exchanged in one second. */
     unsigned long spi_init_tickcnt = HAL_GetTick();
     unsigned long spi_tick_delta = spi_init_tickcnt - prev_spi_init_tickcnt;
@@ -205,17 +200,14 @@ int main(void)
         unsigned long spi_speed_kbps = spi_packet_rate * (sizeof(wl_spi_pkt_t) * 2);
         spi_speed_kbps = spi_speed_kbps / 1024;
 
-        trans_hdr->data[WL_SPI_DATA_LEN-1] = '\0';
-        termout(WL_LOG_DEBUGNORMAL, "[%08X:%d] ID[%2u] PKT/s[%4u][%4u KB/s] Tot[%5u]S[%5u] [cbu:%5u] R:%04X W:%04X"
+        termout(WL_LOG_DEBUGNORMAL, "[%08X:%d] ID[%2u] PKT/s[%4u][%4u KB/s] Tot[%5u]S[%5u]"
             , (unsigned int)HAL_GetTick()
             , _spi_state
             , (unsigned int)logmsg_id
             , (unsigned int)spi_packet_rate
             , (unsigned int)spi_speed_kbps
             , (unsigned int)_spi_rcv_cnt
-            , (unsigned int)_spi_shift_cnt
-            , (unsigned int)log_cbmem_use()
-            , log_info->readptr, log_info->writeptr);
+            , (unsigned int)_spi_shift_cnt);
 
         logmsg_id = (logmsg_id+1) % 100;
     }
@@ -223,13 +215,13 @@ int main(void)
     prev_spi_init_cnt = spi_init_cnt;
     prev_spi_init_tickcnt = spi_init_tickcnt;
 
-    //int i;
     while(1)
     {
-        /* Send log message at a reasonable rate when blue button is released,
-         * and like crazy when it is pushed.
-         */
-        unsigned long log_period = (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET ? 10 : 500);
+        // /* Send log message at a reasonable rate when blue button is released,
+        //  * and like crazy when it is pushed.
+        //  */
+        //unsigned long log_period = (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET ? 10 : 500);
+        unsigned long log_period = 1000;
         if((HAL_GetTick() - prev_tick) > log_period)
         {
             break;

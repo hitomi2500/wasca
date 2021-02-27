@@ -16,7 +16,7 @@
  *  - 0 : disable the test
  *  - 1 : enable the test, and change behavior when test button is pushed
  */
-#define LEDS_TEST_ENABLE 1
+#define LEDS_TEST_ENABLE 0
 
 #if LEDS_TEST_ENABLE == 1
 void leds_test(void);
