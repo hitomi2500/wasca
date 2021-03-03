@@ -86,7 +86,7 @@ If "%cm%" == "rb" goto do_rebuild
 If "%cm%" == "c" goto do_clean
 If "%cm%" == "m10" goto do_make10
 If "%cm%" == "m32" goto do_make32
-If "%cm%" == "m" goto do_make10
+If "%cm%" == "m" goto do_make32
 If "%cm%" == "s" goto do_sof_upload
 If "%cm%" == "e" goto do_elf_upload
 If "%cm%" == "u" goto do_both_upload
