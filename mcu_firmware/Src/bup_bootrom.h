@@ -25,11 +25,15 @@ void bootrom_init(void);
 
 
 /**
- * bootrom_process
+ * bootrom_pre_process / bootrom_post_process
  *
  * Do cartridge boot ROM file access.
+ *
+ * "Pre" stage concerns the preparation of data block to MAX 10.
+ * "Post" stage concerns the processing of data block received from MAX 10.
 **/
-void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx);
+void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx);
+void bootrom_post_process(wl_spi_header_t* hdr, void* data_rx);
 
 
 
@@ -64,11 +68,15 @@ void bup_periodic_check(void);
 
 
 /**
- * bup_file_process
+ * bup_file_pre_process / bup_file_post_process
  *
  * Do backup memory file access according to SPI packet contents.
+ *
+ * "Pre" stage concerns the preparation of data block to MAX 10.
+ * "Post" stage concerns the processing of data block received from MAX 10.
 **/
-void bup_file_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx);
+void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx);
+void bup_file_post_process(wl_spi_header_t* hdr, void* data_rx);
 
 
 #endif // _WL_BUP_BOOTROM_H_

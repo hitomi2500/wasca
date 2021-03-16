@@ -139,7 +139,7 @@ void bup_cache_flush(void)
 }
 
 
-void bup_cache_append(unsigned long block_id, unsigned char* ptr)
+void bup_cache_append(unsigned long block_id, unsigned char* ptr, unsigned short len)
 {
     if(_BupSize == 0)
     {
@@ -149,17 +149,21 @@ void bup_cache_append(unsigned long block_id, unsigned char* ptr)
     /* Let's indicate that we are processing backup data. */
     bup_led_status_set(1/*turn_on*/);
 
-    /* If cache is full, let's empty it now. */
-    if(_bup_cache_cnt >= (BUP_CACHE_BLOCK_CNT))
+    /* Split input data into 512 bytes blocks that will be cached individually. */
+    unsigned short pos;
+    for(pos=0; pos<len; pos+=BUP_CACHE_BLOCK_SIZE)
     {
-        bup_cache_flush();
-        return;
-    }
+        /* If cache is full, let's empty it now. */
+        if(_bup_cache_cnt >= (BUP_CACHE_BLOCK_CNT))
+        {
+            bup_cache_flush();
+        }
 
-    /* Append block data to cache. */
-    _bup_cache_info[_bup_cache_cnt].block_id = block_id;
-    memcpy(_bup_cache_data + (_bup_cache_cnt*BUP_CACHE_BLOCK_SIZE), ptr, BUP_CACHE_BLOCK_SIZE);
-    _bup_cache_cnt++;
+        /* Append block data to cache. */
+        _bup_cache_info[_bup_cache_cnt].block_id = block_id++;
+        memcpy(_bup_cache_data + (_bup_cache_cnt*BUP_CACHE_BLOCK_SIZE), ptr+pos, BUP_CACHE_BLOCK_SIZE);
+        _bup_cache_cnt++;
+    }
 
     /* Remember the last moment there was write activity from MAX 10. */
     _bup_prev_append_tick = HAL_GetTick();
@@ -236,14 +240,11 @@ void bup_periodic_check(void)
 }
 
 
-void bup_file_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
+void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
 {
+    wl_spi_memacc_t* params = (wl_spi_memacc_t*)hdr->params;
+
     int f_ret;
-
-    /* Copy parameters to output buffer, and only use output buffer from now. */
-    wl_spicomm_memacc_t* params = (wl_spicomm_memacc_t*)pkt_tx->params;
-    memcpy(params, pkt_rx->params, WL_SPI_PARAMS_LEN*sizeof(unsigned char));
-
 
     if(_BupBootMode != MODE_BUP)
     {
@@ -261,7 +262,7 @@ void bup_file_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
     }
 
 
-    if(pkt_rx->cmn.command == WL_SPICMD_BUPOPEN)
+    if(hdr->command == WL_SPICMD_BUPOPEN)
     {
         /* If already open, don't forget to close the previous file. */
         if(_BupSize != 0)
@@ -326,20 +327,18 @@ void bup_file_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
             f_lseek(&_BupFile, _BupSize);
             f_truncate(&_BupFile);
         }
-    }
-    else if(pkt_rx->cmn.command == WL_SPICMD_BUPREAD)
-    {
-        /* Sanitize access length : only one block (512 bytes)
-         * access possible for now.
-         */
-        params->len = BUP_CACHE_BLOCK_SIZE;
 
+        /* Copy file status to output buffer. */
+        memcpy(data_tx, params, sizeof(wl_spi_memacc_t));
+    }
+    else if(hdr->command == WL_SPICMD_BUPREAD)
+    {
         /* Ensure that access is done within file boundaries. */
         unsigned long offset = params->addr * BUP_CACHE_BLOCK_SIZE;
         if((offset + params->len) > _BupSize)
         {
             /* Return FFh data and zero length in case of wrong access. */
-            memset(pkt_tx->data, 0xFF, params->len);
+            memset(data_tx, 0xFF, params->len);
             params->len = 0;
             _bup_error_flag = 1;
         }
@@ -347,38 +346,23 @@ void bup_file_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
         {
             f_lseek(&_BupFile, offset);
             UINT bytes_read = 0;
-            f_ret = f_read(&_BupFile, pkt_tx->data, params->len, &bytes_read);
+            f_ret = f_read(&_BupFile, data_tx, params->len, &bytes_read);
             if(f_ret != FR_OK)
             {
                 /* Return FFh data and zero length in case of wrong access. */
-                memset(pkt_tx->data, 0xFF, params->len);
+                memset(data_tx, 0xFF, params->len);
                 params->len = 0;
                 _bup_error_flag = 1;
             }
         }
     }
-    else if(pkt_rx->cmn.command == WL_SPICMD_BUPWRITE)
+    else if(hdr->command == WL_SPICMD_BUPWRITE)
     {
-        /* Sanitize access length : only one block (512 bytes)
-         * access possible for now.
+        /* As data block from MAX 10 is not received yet, this command
+         * will be processed in "post" stage.
          */
-        params->len = BUP_CACHE_BLOCK_SIZE;
-
-        /* Ensure that access is done within file boundaries. */
-        unsigned long block_id = params->addr;
-        unsigned long offset = block_id * BUP_CACHE_BLOCK_SIZE;
-        if((offset + params->len) > _BupSize)
-        {
-            /* Return zero length in case of wrong access. */
-            params->len = 0;
-            _bup_error_flag = 1;
-        }
-        else
-        {
-            bup_cache_append(block_id, pkt_rx->data);
-        }
     }
-    else if(pkt_rx->cmn.command == WL_SPICMD_BUPCLOSE)
+    else if(hdr->command == WL_SPICMD_BUPCLOSE)
     {
         if(_BupSize != 0)
         {
@@ -401,6 +385,40 @@ void bup_file_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
 }
 
 
+void bup_file_post_process(wl_spi_header_t* hdr, void* data_rx)
+{
+    wl_spi_memacc_t* params = (wl_spi_memacc_t*)hdr->params;
+
+    if(hdr->command == WL_SPICMD_BUPOPEN)
+    {
+        /* No data to process for this command. */
+    }
+    else if(hdr->command == WL_SPICMD_BUPREAD)
+    {
+        /* No data to process for this command. */
+    }
+    else if(hdr->command == WL_SPICMD_BUPWRITE)
+    {
+        /* Ensure that access is done within file boundaries. */
+        unsigned long block_id = params->addr;
+        unsigned long offset = block_id * BUP_CACHE_BLOCK_SIZE;
+        if((offset + params->len) > _BupSize)
+        {
+            /* Return zero length in case of wrong access. */
+            params->len = 0;
+            _bup_error_flag = 1;
+        }
+        else
+        {
+            bup_cache_append(block_id, data_rx, params->len);
+        }
+    }
+    else if(hdr->command == WL_SPICMD_BUPCLOSE)
+    {
+        /* No data to process for this command. */
+    }
+}
+
 
 
 
@@ -411,8 +429,10 @@ void bootrom_init(void)
 }
 
 
-void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
+void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
 {
+    wl_spi_memacc_t* params = (wl_spi_memacc_t*)hdr->params;
+
     int f_ret;
 //termout(WL_LOG_DEBUGNORMAL, "[bootrom_process] STT");
 
@@ -438,7 +458,7 @@ void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
     }
 
 
-    if(pkt_rx->cmn.command == WL_SPICMD_BOOTINFO)
+    if(hdr->command == WL_SPICMD_BOOTINFO)
     {
         /* Don't forget to close if we need to re-open a file. */
         if(_BootRomIsFile)
@@ -448,10 +468,8 @@ void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
         }
 
         /* Prepare file information. */
-        wl_spicomm_bootinfo_t* info = (wl_spicomm_bootinfo_t*)pkt_tx->params;
-        char* out_path = (char*)pkt_tx->data;
-        memset(info, 0, sizeof(wl_spicomm_bootinfo_t));
-        memset(out_path, 0, WL_SPI_DATA_LEN*sizeof(unsigned char));
+        wl_spi_bootinfo_t* info = (wl_spi_bootinfo_t*)data_tx;
+        memset(info, 0, sizeof(wl_spi_bootinfo_t));
 
 
         /* Adapt file name according to ROM ID.
@@ -466,7 +484,6 @@ void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
          *        into a settings file.
          */
         char boot_rom_path[WL_MAX_PATH] = {'\0'};
-        wl_spicomm_memacc_t* params = (wl_spicomm_memacc_t*)pkt_rx->params;
         int open_success = 1;
 
         if(params->rom_id != 15)
@@ -520,7 +537,7 @@ void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
             _BootRomSize = f_size(&_BupFile);
 //termout(WL_LOG_DEBUGNORMAL, "[BOOTROM]boot_rom_path:\"%s\" -> info->size = %u", boot_rom_path, info->size);
 
-            strncpy(out_path, boot_rom_path, WL_SPI_DATA_LEN-1);
+            strcpy(info->path, boot_rom_path);
         }
         else
         {
@@ -532,17 +549,18 @@ void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
         /* Fill file information. */
         info->status    = (_BootRomIsFile ? WL_BOOTROM_FILE : WL_BOOTROM_RECOV);
         info->size      = _BootRomSize;
-        info->block_len = info->size; /* Omake */
+
+        /* Turn on LED2 when starting to read boot ROM. */
+        HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
     }
-    else if(pkt_rx->cmn.command == WL_SPICMD_BOOTREAD)
+    else if(hdr->command == WL_SPICMD_BOOTREAD)
     {
-        wl_spicomm_memacc_t* params = (wl_spicomm_memacc_t*)pkt_rx->params;
-        unsigned long  offset = params->addr; /* IN  */
-        unsigned long  len    = params->len;  /* IN  */
-        unsigned char* data   = pkt_tx->data; /* OUT */
-        if(len > sizeof(pkt_tx->data))
+        unsigned long  offset = params->addr;               /* IN  */
+        unsigned long  len    = params->len;                /* IN  */
+        unsigned char* data   = (unsigned char*)data_tx;    /* OUT */
+        if(len > WL_SPI_DATA_MAXLEN)
         {
-            len = sizeof(pkt_tx->data);
+            len = WL_SPI_DATA_MAXLEN;
         }
 
 
@@ -558,18 +576,14 @@ void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
 
 
         /* Prepare read status and data. */
-        wl_spicomm_bootinfo_t* info = (wl_spicomm_bootinfo_t*)pkt_tx->params;
-        memset(info,    0, sizeof(pkt_tx->params));
-        memset(data, 0xFF, sizeof(pkt_tx->data  ));
+        memset(data, 0xFF, len);
 
-        info->status = (_BootRomIsFile ? WL_BOOTROM_FILE : WL_BOOTROM_RECOV);
+        int last_block = 0;
         if(((offset + len) >= _BootRomSize) || (len == 0))
         {
-            /* Indicate when this is the end of the file. */
-            info->status = WL_BOOTROM_END;
+            /* Check if this is the end of the file or not. */
+            last_block = 1;
         }
-        info->size      = _BootRomSize; /* Total size.   */
-        info->block_len = len;          /* Current size. */
 
         if(len != 0)
         {
@@ -579,11 +593,6 @@ void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
 
                 UINT bytes_read = 0;
                 f_ret = f_read(&_BupFile, data, len, &bytes_read);
-
-                if(f_ret != FR_OK)
-                {
-                    info->block_len = 0;
-                }
             }
             else
             { /* Read from internal ROM. */
@@ -592,14 +601,8 @@ void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
             }
         }
 
-#if WL_SPI_CRC_USE == 1
-        /* Allow to verify data integrity on MAX 10 side. */
-        pkt_tx->data_crc_len = len;
-        pkt_tx->data_crc_val = crc32_calc(data, pkt_tx->data_crc_len);
-#endif // WL_SPI_CRC_USE == 1
-
         /* Terminate boot ROM mode when last fragment of the file is read. */
-        if(info->status == WL_BOOTROM_END)
+        if(last_block)
         {
             if(_BootRomIsFile)
             {
@@ -609,12 +612,29 @@ void bootrom_process(wl_spi_pkt_t* pkt_rx, wl_spi_pkt_t* pkt_tx)
             _BootRomSize = 0;
 
             _BupBootMode = MODE_NONE;
+
+            /* Turn off LED2 when boot ROM read ended. */
+            HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
         }
     }
-    else if(pkt_rx->cmn.command == WL_SPICMD_BOOTREG)
+    else if(hdr->command == WL_SPICMD_BOOTREG)
     {
         // TBD
     }
 }
 
-
+void bootrom_post_process(wl_spi_header_t* hdr, void* data_rx)
+{
+    if(hdr->command == WL_SPICMD_BOOTINFO)
+    {
+        /* No data to process for this command. */
+    }
+    else if(hdr->command == WL_SPICMD_BOOTREAD)
+    {
+        /* No data to process for this command. */
+    }
+    else if(hdr->command == WL_SPICMD_BOOTREG)
+    {
+        // TBD
+    }
+}

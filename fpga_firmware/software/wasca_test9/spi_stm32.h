@@ -8,9 +8,6 @@
 
 #include "wasca_defs.h"
 
-/* SPI related #includes. */
-// (nothing really special)
-
 
 /*
  * ------------------------------------------
@@ -35,12 +32,12 @@ void spi_init(void);
  * Send MAX 10 firmmware version, and receive STM32's.
  *
  * About each parameters :
- *  - wl_verinfo_ext_t* max_ver   : MAX 10 firmware version     [OUT]
+ *  - wl_verinfo_max_t* max_ver : MAX 10 firmware version   [OUT]
  *      It is set in this function, and can be copied to specified pointer if it is not NULL.
- *  - wl_spicomm_version_t* arm_ver : STM32 firmware version    [OUT]
+ *  - wl_verinfo_stm_t* arm_ver : STM32 firmware version    [OUT]
  *      Returned after calling this function.
 **/
-void spi_exc_version(wl_verinfo_ext_t* max_ver, wl_spicomm_version_t* arm_ver);
+void spi_exc_version(wl_verinfo_max_t* max_ver, wl_verinfo_stm_t* arm_ver);
 
 
 /**
@@ -49,25 +46,11 @@ void spi_exc_version(wl_verinfo_ext_t* max_ver, wl_spicomm_version_t* arm_ver);
  * Send log message(s) to STM32.
  *
  * About each parameters :
- *  - logset  : misc. log informations.
- *  - logdata : log messages themselves.
+ *  - logdata : log message(s) themselves.
+ *  - datalen : log message(s) length, in byte unit.
+ *              this length doesn't includes terminating null character.
 **/
-void spi_send_logs(wl_spicomm_logs_t* logset, unsigned char* logdata);
-
-
-/**
- * spi_mem_read/spi_mem_write
- * 
- * Read/write data from/to STM32 space.
- * 
- * Note : these functions exchange only one SPI packet, so it is
- *        necessary to call these functions several times when
- *        reading or writing data not fitting in one packet.
- * 
- * Returns 1 when no error happened, zero else.
-**/
-int spi_mem_read(unsigned long addr, unsigned long len, unsigned char* data);
-int spi_mem_write(unsigned long addr, unsigned long len, unsigned char* data);
+void spi_send_logs(unsigned char* logdata, unsigned short datalen);
 
 
 /**
@@ -80,9 +63,9 @@ int spi_mem_write(unsigned long addr, unsigned long len, unsigned char* data);
  * 
  * Returns 1 when no error happened, zero else.
 **/
-int spi_bup_open(unsigned long len_kb);
-int spi_bup_read(unsigned long block, unsigned long len, unsigned char* data);
-int spi_bup_write(unsigned long block, unsigned long len, unsigned char* data);
+int spi_bup_open(unsigned short len_kb);
+int spi_bup_read(unsigned short block, unsigned short len, unsigned char* data);
+int spi_bup_write(unsigned short block, unsigned short len, unsigned char* data);
 int spi_bup_close(void);
 
 
@@ -98,7 +81,7 @@ int spi_bup_close(void);
  *                It can be either set to NULL or pointing to a
  *                buffer containing WL_MAX_PATH characters.
 **/
-void spi_boot_getinfo(unsigned char rom_id, wl_spicomm_bootinfo_t* info, char* full_path);
+void spi_boot_getinfo(unsigned char rom_id, wl_spi_bootinfo_t* info);
 
 
 /**
@@ -111,12 +94,8 @@ void spi_boot_getinfo(unsigned char rom_id, wl_spicomm_bootinfo_t* info, char* f
  *  - len    : read data length.
  *             It can't be larger than WL_SPI_DATA_LEN bytes.
  *  - dst    : read destination pointer.
- * 
- * Returns :
- *  - Zero when read operated correctly
- *  - 1 on end of data, or when an error happened.
 **/
-int spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long len, unsigned char* dst);
+void spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long len, unsigned char* dst);
 
 
 #endif // _WL_SPI_STM32_H_

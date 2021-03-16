@@ -93,7 +93,14 @@ void sdcard_access_test(void)
   uint32_t byteswritten, bytesread; /* File write/read counts */
   char rtext[256];                /* File read buffer */
 
-
+    if(BSP_SD_IsDetected() == SD_PRESENT)
+    {
+        termout(WL_LOG_DEBUGNORMAL, "SD card detected.");
+    }
+    else
+    {
+        termout(WL_LOG_DEBUGNORMAL, "*** SD card not found !");
+    }
 
     if(f_open(&MyFile, "/PSKAI.BIN", FA_READ) != FR_OK)
     {
@@ -115,7 +122,7 @@ void sdcard_access_test(void)
             unsigned long tick_end = HAL_GetTick();
             termout(WL_LOG_DEBUGNORMAL, "[%08X]'PSKAI.BIN' CRC : %08X (%u msec)", HAL_GetTick(), crc32, tick_end-tick_stt);
     }
-    return;
+//    return;
 
 
 /*##-0- Turn all LEDs off(red, green, orange and blue) */
@@ -182,8 +189,29 @@ void sdcard_access_test(void)
 
                     for (int i = 0; i < CHAR_PER_LINE; i++)
                     {
-unsigned char char2pchar(unsigned char c);
-                        tmp[i] = char2pchar(ip_header[(j*CHAR_PER_LINE) + i]);
+                        unsigned char c = ip_header[(j*CHAR_PER_LINE) + i];
+
+                        /* Display differently null and FF characters.
+                         * It helps to spot them in screen full of hexa codes.
+                         */
+                        if(c == 0x00)
+                        {
+                            c = '~';
+                        }
+                        else if(c == 0xFF)
+                        {
+                            c = 'X';
+                        }
+                        else if(c < ' ')
+                        {
+                            c = '.';
+                        }
+                        else if(c > 127)
+                        {
+                            c = '?';
+                        }
+
+                        tmp[i] = c;
                     }
 
                     termout(WL_LOG_DEBUGNORMAL, "%03X: %s", j*CHAR_PER_LINE, tmp);

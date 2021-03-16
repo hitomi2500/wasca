@@ -190,22 +190,10 @@ int main(void)
         unsigned long spi_packet_cnt = spi_init_cnt - prev_spi_init_cnt;
         unsigned long spi_packet_rate = (1000 * spi_packet_cnt) / spi_tick_delta;
 
-        /* Also indicate transfer speed in KB/s unit.
-         * Note : as same data size is sent in both directions between
-         *        MAX 10 and STM32, speed is indicated as maximum speed
-         *        that would be reached with proper transmission protocol
-         *        which (for example) would feature larger packet size from
-         *        the device transferring the larger amount of data.
-         */
-        unsigned long spi_speed_kbps = spi_packet_rate * (sizeof(wl_spi_pkt_t) * 2);
-        spi_speed_kbps = spi_speed_kbps / 1024;
-
-        termout(WL_LOG_DEBUGNORMAL, "[%08X:%d] ID[%2u] PKT/s[%4u][%4u KB/s] Tot[%5u]S[%5u]"
+        termout(WL_LOG_DEBUGNORMAL, "[%08X] ID[%2u] PKT/s[%4u] Tot[%5u]S[%5u]"
             , (unsigned int)HAL_GetTick()
-            , _spi_state
             , (unsigned int)logmsg_id
             , (unsigned int)spi_packet_rate
-            , (unsigned int)spi_speed_kbps
             , (unsigned int)_spi_rcv_cnt
             , (unsigned int)_spi_shift_cnt);
 

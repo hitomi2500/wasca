@@ -17,15 +17,17 @@
  *                  (direction from MAX 10 to STM32)
  *    - MISO SYNC : indicate that STM32 is ready to communicate
  *                  (direction from STM32 to MAX 10)
- * __________________________________________________________________________
+ * ==========================================================================
  * | Contents | (1)     | (2) | (3) | (4)    | (5) | (6) | (7)      | (1)    
- * __________________________________________________________________________
- * | MOSI SYNC|---------|___________|----------------------------------------
- * __________________________________________________________________________
- * | MISO SYNC|---------------|____________________|-------------------------
- * __________________________________________________________________________
+ * ==========================================================================
+ * | MOSI SYNC|_________             ________________________________________
+ * |          |         |___________|                                        
+ * ==========================================================================
+ * | MISO SYNC|_______________                      ________________________
+ * |          |               |____________________|                         
+ * ==========================================================================
  * | SPI      |                     |  M->S  |           |  S<->M  |         
- * __________________________________________________________________________
+ * ==========================================================================
  *  (1) Idle : MAX 10 and STM32 are doing non-SPI things
  *  (2) MAX 10 requesting communication with STM32
  *  (3) STM32 indicating it is ready to listen
@@ -44,19 +46,54 @@
  *
  *****************************************************************************/
 
-/* Enough space for each parameters. */
+
+/* Size (byte unit) to hold parameters included in communication header.
+ * Usage varies from a kind of packet to another, and this size is set
+ * to be large enough to hold each cases.
+ */
 #define WL_SPI_PARAMS_LEN 16
 
-/* Enough space to hold at least one backup memory block = 512 bytes. */
-#define WL_SPI_DATA_LEN 512
-//#define WL_SPI_DATA_LEN 896
+/* Maximum length of data block exchanged after SPI header.
+ * 
+ * It must be large enough to hold :
+ *  - at least one backup memory block = 512 bytes.
+ *  - MAX 10 logs buffer = WL_LOG_BUFFER_SIZE bytes.
+ *  - Data length of other commands, which shouldn't take more than 512 bytes.
+ * 
+ * 
+ * This is the maximum value of a data block, and each command is designed
+ * to set data length to only what is actually needed. So tuning this value to
+ * a larger one shall not degrade SPI transfer speed.
+ * However the larger length the less transmission overhead, but the more
+ * memory it takes on STM32 sides.
+ *
+ *
+ * About memory usage :
+ *  - MAX 10 : header x1, data block x0 (*)
+ *  - STM32  : header x1, data block x2
+ * (*) Refers to onchip RAM usage, data blocks are declared on SDRAM.
+ *
+ *
+ * Some notes about SPI transfer speed according to block data length :
+ *  -  512 bytes : 1MB ROM loaded at 467 KB/s (2.2 sec)
+ *  - 1024 bytes : 1MB ROM loaded at 544 KB/s (1.9 sec)
+ *  - 2048 bytes : 1MB ROM loaded at 615 KB/s (1.7 sec)
+ *  - 8192 bytes : 1MB ROM loaded at 641 KB/s (1.6 sec)
+ *  - 16K  bytes : 1MB ROM loaded at 669 KB/s (1.5 sec)
+ * Remark : first ROM read after MAX 10 and STM32 startup is a bit (8%-ish)
+ *          slower than the results above. Maybe caused by SD card access, or
+ *          to initialize some FatFs internals ?
+ * Example (8KB block) : 606 KB/s on first read, then 641 KB/s after that
+ */
+#define WL_SPI_DATA_MAXLEN (8*1024)
+
 
 /* Maximum length of the full path of a file, 
  * including terminating null character.
  */
 #define WL_MAX_PATH 256
 
-typedef struct _wl_spi_common_hdr_t
+typedef struct _wl_spi_header_t
 {
     /* Always set to 0xCA. */
     unsigned char magic_ca;
@@ -68,145 +105,44 @@ typedef struct _wl_spi_common_hdr_t
     unsigned char command;
 
     /* Reserved for future use. */
-    unsigned char reserved;
+    unsigned char reserved1[1];
 
-    /* Packet length.
-     * Direction : MAX10 -> STM32.
-     *
-     * Currently unused, because length of all packets is
-     * considered as maximum length = sizeof(wl_spi_pkt_t).
-     */
-    unsigned short pkt_len;
+    /* Parameters, whose contents differ for each kind of packet. */
+    unsigned char params[WL_SPI_PARAMS_LEN];
 
-    /* Response length, excluding heading packet.
-     * Direction : STM32 -> MAX10.
+    /* Length of data exchanged after this header, in byte unit.
      *
      * Note #1 : length must be a multiple of two bytes.
      *
-     * Note #2 : When set to zero, full packet = sizeof(wl_spi_pkt_t)
-     *           is sent back to MAX 10.
+     * Note #2 : length excludes this header, so that zero means that
+     *           data block is not exchanged.
      */
-    unsigned short rsp_len;
-} wl_spi_common_hdr_t;
+    unsigned short data_len;
 
-typedef struct _wl_spi_pkt_t
-{
-    wl_spi_common_hdr_t cmn;
-
-    /* CRC value for parameters and data blocks.
-     * 
-     * CRC is computed on specified length, so that
-     * unused data is not taken into account, and also
-     * to make possible to disable CRC check by setting
-     * a length of zero.
-     * 
-     * CRC integrity check is experimental and may be
-     * removed if it is not necessary, so that the
-     * enable/disable switch #defined below.
-     */
-#define WL_SPI_CRC_USE 1
-    unsigned long  params_crc_val;
-    unsigned short params_crc_len;
-    unsigned short data_crc_len;
-    unsigned long  data_crc_val;
-
-    /* Parameters, whose contents differ for each datagram. */
-    unsigned char params[WL_SPI_PARAMS_LEN];
-
-    /* Data block. */
-    unsigned char data[WL_SPI_DATA_LEN];
-
-    /* Dummy bytes, do not access. */
-    unsigned short dummy[2];
-} wl_spi_pkt_t;
+    /* Reserved for future use. */
+    unsigned char reserved2[2];
+} wl_spi_header_t;
 
 
-/* Compute packet size according to custom data length specified.
- * 
- * Examples :
- *  - No data block    -> WL_SPI_CUSTOM_PKTLEN(0)
- *  - 16 bytes of data -> WL_SPI_CUSTOM_PKTLEN(16)
- *  - Full packet      -> WL_SPI_CUSTOM_PKTLEN(WL_SPI_DATA_LEN)
- * 
- * Also, the following macros are available :
- *  - WL_SPI_ACK_ONLY_RSPLEN : only header = smallest possible length
- *  - WL_SPI_PARAMS_RSPLEN   : header + parameters
- *  - WL_SPI_FULL_RSPLEN     : full packet
- */
-#define WL_SPI_CUSTOM_RSPLEN(_DATALEN_) (sizeof(wl_spi_pkt_t) - WL_SPI_DATA_LEN + (_DATALEN_))
-#define WL_SPI_ACK_ONLY_RSPLEN (WL_SPI_CUSTOM_RSPLEN(0) - WL_SPI_PARAMS_LEN)
-#define WL_SPI_PARAMS_RSPLEN   (WL_SPI_CUSTOM_RSPLEN(0)                    )
-#define WL_SPI_FULL_RSPLEN     (WL_SPI_CUSTOM_RSPLEN(WL_SPI_DATA_LEN)      )
 
 
-/* Dummy command ID, used for every unrecognized commands. */
-#define WL_SPICMD_DUMMY 0x00
-
-
-/* STM32 firmware version.
+/* MAX 10 / STM32 firmware version exchange.
  *
  * Transfer outline :
- *  1. Send version request from MAX10
- *     | unsigned char params[]
- *     |  -> unused
- *     | (wl_verinfo_ext_t*)data[]
- *     |  -> contains MAX 10 firmware version.
- *  2. Send back read data to MAX10
- *     | unsigned char params[]
- *     |  -> unused
- *     | (wl_spicomm_version_t*)data[]
- *     |  -> contains STM32 firmware version.
+ *  1. Send header from MAX 10
+ *     | M->S : wl_spi_header_t
+ *     | S->M : nothing special
+ *  2. Exchange version information between MAX 10 and STM32
+ *     | M->S : wl_verinfo_max_t : MAX 10 firmware version
+ *     | S->M : wl_verinfo_stm_t : STM32 firmware version
  *
- * Note : Version is sent from MAX 10 to STM32 during firmware startup, 
- *        so that STM32 doesn't needs to retrieve it after that.
+ * Note : Version is requested from MAX 10 to STM32 during firmware startup, 
+ *        so that if it is kept in a global variable, STM32 is able to
+ *        check MAX 10 version any time after that.
  */
 #define WL_SPICMD_VERSION 0x10
-typedef struct _wl_nios_verinfo_t
-{
-    /* NIOS program build date.
-     * GCC date macro as-is.
-     * Example : "Mar 20 2018"
-     */
-    char build_date[12];
-    /* NIOS program build time.
-     * GCC time macro as-is.
-     * Example : "21:31:18"
-     */
-    char build_time[10];
 
-    /* Board type.
-     * This is basically used to indicate which board is currently connected, 
-     * and hide unrelated settings on SerialTerm.
-     * Setting to "Generic" type won't hide anything hence is recommended
-     * when constantly merging code from a project to another.
-     */
-#define WL_DEVTYPE_GENERIC       0
-#define WL_DEVTYPE_WASCA         1  /* Wasca cartridge                        */
-#define WL_DEVTYPE_M10BRD        2  /* MAX 10 Board.                          */
-#define WL_DEVTYPE_SIM           3  /* SIM (cartridge access tester).         */
-#define WL_DEVTYPE_M10BRD_WARP   4  /* MAX 10 Board, used in couple with SIM. */
-#define WL_DEVTYPE_SIM_WARP      5  /* SIM, used in couple with MAX 10 Board. */
-#define WL_DEVTYPE_DUMMY       255
-    unsigned char board_type;
-
-    /* Unused space for Nios. */
-    unsigned char unused_nios[3];
-
-    /* MAX10 -> STM32 SPI frequency.
-     * From Nios BSP's system.h.
-     * Unit : KHz (example : 1234 -> 1.234 MHz)
-     * Zero : SPI not used.
-     */
-    unsigned short stm32_spi_khz;
-
-    /* MAX10 onchip RAM size.
-     * From Nios BSP's system.h.
-     * Unit : byte
-     */
-    unsigned long ocram_size;
-} wl_nios_verinfo_t;
-
-typedef struct _wl_verinfo_ext_t
+typedef struct _wl_verinfo_max_t
 {
     /* MAX 10 device type.
      * Example : "10M16SAE144C8G"
@@ -214,28 +150,39 @@ typedef struct _wl_verinfo_ext_t
      */
     char dev_type[16];
 
-    /* MAX 10 project name.
-     * Example : "brd_10m16sa"
-     * Note : null-terminated string.
-     */
-    char prj_name[42];
-
     /* MAX 10 firmware (PL part) synthesis time.
      * It is formatted as unsigned integer at 32 bits
      * and 16 bits data size for respectively date and time.
      * Example : "2019/08/28 19:44" -> 20190828 (32 bits) and 1944 (16 bits)
      */
-    unsigned short pl_time;
     unsigned long  pl_date;
+    unsigned short pl_time;
 
-
-    /* NIOS firmware version.
-     * (Structure size : 32 bytes)
+    /* NIOS program build date.
+     * GCC date macro as-is.
+     * Example : "Mar 20 2018"
      */
-    wl_nios_verinfo_t nios;
-} wl_verinfo_ext_t;
+    char build_date[12];
 
-typedef struct _wl_spicomm_version_t
+    /* NIOS program build time.
+     * GCC time macro as-is.
+     * Example : "21:31:18"
+     */
+    char build_time[10];
+
+    /* Onchip RAM size.
+     * From Nios BSP's system.h.
+     * Unit : byte
+     */
+    unsigned long ocram_size;
+
+    /* Reserved for future usage if any.
+     * (Pack the size of this structure 64 bytes)
+     */
+    unsigned char reserved[16];
+} wl_verinfo_max_t;
+
+typedef struct _wl_verinfo_stm_t
 {
     /* STM32 firmware build date.
      * GCC date macro as-is.
@@ -249,67 +196,42 @@ typedef struct _wl_spicomm_version_t
      */
     char build_time[10];
 
-    /* Unused, reserved for future usage if any.
-     * (Size of this structure must be packet to 32 bytes)
+    /* Reserved for future usage if any.
+     * (Pack the size of this structure 64 bytes)
      */
-    unsigned char unused[10];
-} wl_spicomm_version_t;
+    unsigned char reserved[42];
+} wl_verinfo_stm_t;
+
+/* Packet data size required when requesting
+ * firmware version information.
+ */
+#define WL_SPIDATALEN_VERSION ((sizeof(wl_verinfo_max_t) > sizeof(wl_verinfo_stm_t)) ? sizeof(wl_verinfo_max_t) : sizeof(wl_verinfo_stm_t))
 
 
 /* Send log messages to STM32.
  *
  * Transfer outline :
- *  1. Send log message(s) from MAX10
- *     | (wl_spicomm_logs_t*)params[]
- *     |  -> contains misc. informations about logs data block.
- *     | unsigned char data[]
- *     |  -> contains logs data block itself.
- *  2. Send back ACK to MAX10
- *     | unsigned char params[]
- *     |  -> unused
- *     | unsigned char data[]
- *     |  -> unused
- *
- * Note : Version is sent from MAX 10 to STM32 during firmware startup, 
- *        so that STM32 doesn't needs to retrieve it after that.
+ *  1. Send header from MAX 10
+ *     | M->S : wl_spi_header_t
+ *     | S->M : nothing special
+ *  2. Send log message(s) from MAX 10
+ *     | M->S : unsigned char data[] (size specified in header sent above)
+ *     | S->M : nothing special
+ *     | 
+ *     | Note : log messages must be separated with null character
+ *     | Note : final null character at the end of data block is not necessary
  */
 #define WL_SPICMD_LOGS 0x11
-typedef struct _wl_spicomm_logs_t
-{
-    /* Data length (byte unit) of this block. */
-    unsigned short block_len;
-
-    /* Block ID and total count.
-     * Both start from 1.
-     */
-    unsigned char block_id;
-    unsigned char block_cnt;
-} wl_spicomm_logs_t;
-
-
-/* Log messages buffer.
- * 
- * This is declared on both MAX 10 and STM32 sides :
- *  - MAX 10 uses a buffer to send multiple gather log messages in a few
- *    SPI transaction(s).
- *  - STM32 uses a buffer to parse logs after they are received.
- * 
- * (If needed, adjust the size of buffer according to resources available)
- */
-#define WL_LOG_BUFFER_SIZE 2048
-
-/* Maximum log message length.
- * 
- * Messages longer than this length are truncated.
- */
-#define WL_LOG_MESSAGE_MAXLEN 100
-
 
 
 /* Log levels :
  *  - 1 : critical messages
  *    ...
  *  - 5 : debug messages
+ *
+ * Level can be used to filter logs on MAX 10 / STM32 side, 
+ * or sent with message to PC so that it can be dynamically
+ * filtered there.
  */
 #define WL_LOG_ERROR       1
 #define WL_LOG_IMPORTANT   2
@@ -319,186 +241,21 @@ typedef struct _wl_spicomm_logs_t
 
 
 
-/* Logs circular buffer size.
- *
- * The larger the more it can handle log messages between two link access.
- * But as onchip memory is a limited resource on MAX 10 side, circular buffer
- * is set to a modest (but reasonably large enough) size.
+/* Log messages buffer.
+ * 
+ * This is declared on both MAX 10 and STM32 sides :
+ *  - MAX 10 uses a log buffer to send multiple messages in a single SPI packet.
+ *  - STM32 uses a log buffer to parse logs after they are received.
+ * 
+ * (If needed, the size should be adjusted according to resources available)
  */
-//#define CIRCBUFF_SIZE (4*1024)
-//#define CIRCBUFF_SIZE (16*1024)
-#define CIRCBUFF_SIZE (2*1024)
+#define WL_LOG_BUFFER_SIZE 512
 
-/* Maximum length when formating log messages.
- * This doesn't includes terminating null character.
+/* Maximum length when formatting log messages on MAX 10 or STM32 side.
+ * 
+ * Messages longer than this length are truncated.
  */
-#define LOG_STR_MAXLEN (256)
-
-
-typedef struct _log_infos_t
-{
-    /* Circular buffer R/W pointers (address is relative from the begining of circular buffer). */
-    unsigned long readptr;
-    unsigned long writeptr;
-
-    /* Circular buffer internals. */
-    unsigned long buffer_size;
-    unsigned long start_address;
-    unsigned long end_address;
-
-    /* Log level.
-     *
-     * Need to set value #defined in WL_LOG_* macros.
-     * Logs with level stricly higher ( > ) than this level
-     * are discarded from output.
-     *
-     * Note : log output can be stopped by setting this
-     *        level value to zero.
-     */
-    char level;
-
-    /* Unused, for structure alignment purpose. */
-    unsigned char padding[3];
-
-    /* Circular buffer used when reading/writing debug data. */
-    unsigned char circbuff[CIRCBUFF_SIZE];
-
-    /* Message format buffer, used just before appending to circular buffer.
-     * First two bytes are used to store message length.
-     * Message is NOT null-terminated.
-     */
-    unsigned char format_buff[sizeof(unsigned short) + LOG_STR_MAXLEN];
-} log_infos_t;
-
-
-
-
-/* STM32 Register (or memory) read (or write) access.
- * Also featuring backup memory block access and management.
- *
- * READ Transfer outline :
- *  1. Send read request from MAX10
- *     | (wl_nios_verinfo_t*)params[]
- *     |  -> contains access parameters.
- *     | unsigned char data[]
- *     |  -> unused
- *  2. Send back read data to MAX10
- *     | unsigned char params[]
- *     |  -> unused
- *     | unsigned char data[]
- *     |  -> contains the read data.
- *
- * WRITE Transfer outline :
- *  1. Send write request and data from MAX10
- *     | (wl_nios_verinfo_t*)params[]
- *     |  -> contains access parameters.
- *     | unsigned char data[]
- *     |  -> contains data to write.
- *  2. Send back ACK to MAX10
- *     | (wl_nios_verinfo_t*)params[]
- *     |  -> contains access parameters as-is.
- *     | unsigned char data[]
- *     |  -> unused
- */
-#define WL_SPICMD_MEMREAD  0x20
-#define WL_SPICMD_MEMWRITE 0x21
-
-
-
-/*****************************************************************************
- * STM32 Address Mapping.
- *
- * Reference : stm32f446re.pdf, "5  Memory mapping" (Page 67/202)
- * https://www.st.com/resource/en/datasheet/stm32f446re.pdf
- *****************************************************************************/
-
-/* ---------------
- * --- Outline ---
- *
- * Address aliasing allows redirection of STM32 physical address and/or
- * application-specific features to user-defined (aliased) address.
- *
- * It can be accessed from MAX10 by using memory (or register) access commands :
- *  - WL_SPICMD_MEMREAD
- *  - WL_SPICMD_MEMWRITE
- *
- * Main purpose of this alias feature is to provide shortcuts to several STM32
- * from same commands from MAX10.
- *
- * This has the advantage to relieve code complexity on MAX10 side, which is
- * an important point since onchip memory (where NIOS programs is running) is
- * quite limited.
- * Additionally, this also allow complex STM32 operations in a single memory
- * access from MAX10, thus simplifying SPI transfer flow and consequently
- * improve application performance.
- *
- * -----------------------------
- * --- Address map (summary) ---
- *
- * | 0x0000_0000 - 0x001F_FFFF : Boot area
- * | 0x0020_0000 - 0x07FF_FFFF : Reserved ---> chip-specific alias
- * |+0x0100_0000 - 0x02FF_FFFF : | Flash memory       (ALIAS) Max 2MB
- * |+0x0300_0000 - 0x03FF_FFFF : | SRAM               (ALIAS) Max 1MB
- * |+0x0400_0000 - 0x07FF_FFFF : | Unused alias
- * | 0x0800_0000 - 0x081F_FFFF : Flash Memory
- * | 0x0820_0000 - 0x0FFF_FFFF : Reserved ---> application-specific alias
- * |+0x0820_0000 - 0x08FF_FFFF : | Unused (padding)
- * |+0x0900_0000 - 0x09FF_FFFF : | Logs circ. buffer  (ALIAS)
- * |+0x0A00_0000 - 0x0FFF_FFFF : | Unused alias
- * | 
- * (further reserved areas are skipped)
- * | 
- * | 0x1FFE_C000 - 0x1FFE_C00F : Option bytes
- * | 0x1FFF_0000 - 0x1FFF_7A0F : System Memory
- * | 0x1FFF_C000 - 0x1FFF_C00F : Option bytes
- * | 0x2000_0000 - 0x2001_BFFF : SRAM (112 KB)
- * | 0x2001_C000 - 0x2001_FFFF : SRAM ( 16 KB)
- *
- * ------------------------------------
- * --- Detail about alias address : ---
- *
- * |+0x0100_0000 - 0x02FF_FFFF : WL_STADR_FLASH : Flash memory (Max 2MB)
- * +-> Redirect to 0x0800_0000 physical address.
- *
- * |+0x0300_0000 - 0x03FF_FFFF : WL_STADR_SRAM  : SRAM         (Max 1MB)
- * +-> Redirect to 0x2000_0000 physical address.
- *
- * |+0x0900_0000 - 0x09FF_FFFF : Logs circular buffer
- * +-> 0x00_0000 -   0x00_FFFF : WL_STADR_LOGS_FIFO
- * |                           : Extract specified length from circular buffer.
- * |                           : (*) Address offset is ignored so that chunk
- * |                           :     read can be seen consecutive from PC.
- * +-> 0x01_0000               : WL_STADR_LOGS_STAT
- * |                           : Return circular buffer usage status.
- * |                           : (Associated structure : wla_logs_stats_t)
- * |                           : (*) Available only at 0x01_0000 offset.
- */
-#define WL_STADR_FLASH      (0x01000000)
-
-#define WL_STADR_SRAM       (0x03000000)
-
-#define WL_STADR_LOGS_FIFO  (0x09000000)
-#define WL_STADR_LOGS_STAT  (WL_STADR_LOGS_FIFO + 0x00010000)
-typedef struct _wla_logs_stats_t
-{
-    /* Circular buffer size.
-     * Unit : byte.
-     */
-    unsigned short buffer_size;
-
-    /* Circular buffer usage.
-     * Unit : byte.
-     *  - 0                  : no log message available.
-     *  - <= (buffer_size-1) : log message(s) available.
-     *  - else               : something is broken !
-     */
-    unsigned short usage;
-
-    /* Reserved for future use.
-     * (Structure size : 16 bytes)
-     */
-    unsigned char reserved[12];
-} wla_logs_stats_t;
+#define WL_LOG_MESSAGE_MAXLEN 100
 
 
 
@@ -514,65 +271,66 @@ typedef struct _wla_logs_stats_t
  *    (For example to indicate on TV screen that SD card is not inserted, 
  *     or to allow to format it or that boot ROM file is not found etc)
  *
- * Limitation : boot ROM and backup memory features can't be used together.
- * As a countermeasure, it is required to load boot ROM and the setup backup
- * memory when initialyzing the cartridge.
+ * Limitation : in order to optimize memory usage on STM32 side, boot ROM and
+ *              backup memory features can't be used together.
+ *              As a consequence, it is required to load boot ROM and then
+ *              backup memory separately when initialyzing the cartridge.
  *
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  * Command     : WL_SPICMD_BOOTINFO
  * Description : Check boot ROM file and return details about it.
  * Outline     : 
- *    1. Send request from MAX10
- *       | (wl_spicomm_memacc_t*)params[]
- *       |  -> rom_id : boot ROM ID
- *       |              (Pseudo Saturn Kai / KOF95 / Ultraman / etc)
- *       | unsigned char data[]
- *       |  -> unused
- *    2. Send back boot ROM details to MAX10
- *       | (wl_spicomm_bootinfo_t*)params[]
- *       |  -> status, length etc
- *       | unsigned char data[]
- *       |  -> full path to file
+ *  1. Send header from MAX 10
+ *     | M->S : wl_spi_header_t
+ *     |        | data_len set to sizeof(wl_spi_bootinfo_t)
+ *     |        | (wl_spi_memacc_t*)params[]
+ *     |        | | rom_id : boot ROM ID
+ *     |        | |          (Pseudo Saturn Kai / KOF95 / Ultraman / etc)
+ *     | S->M : nothing special
+ *  2. Send back boot ROM details to MAX 10
+ *     | M->S : nothing special
+ *     | S->M : wl_spi_bootinfo_t
+ *     |        | -> status, length, path to file etc
  * 
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  * Command     : WL_SPICMD_BOOTREAD
  * Description : Read boot ROM data at specified offset and length.
- *             : Size is limited to one data block per transaction.
- *             : Contents outside of boot ROM are filled with FFh value.
+ *               Size is limited to one data block per transaction.
+ *               Contents outside of boot ROM are filled with FFh value.
  * Note #1     : Boot ROM file is opened on first read, and closed when 
- *             : last block is accessed, so it is recommended to read it
- *             : sequentially from its beginning to end on MAX 10 side.
+ *               last block is accessed, so it is recommended to read it
+ *               sequentially from its beginning to end on MAX 10 side.
  * Outline     : 
- *    1. Send read request from MAX10
- *       | (wl_spicomm_memacc_t*)params[]
- *       |  -> rom_id : unused
- *       |              (ID specified in WL_SPICMD_BOOTINFO command is used)
- *       |  -> addr   : offset within boot ROM, in byte unit
- *       |  -> len    : read data length, maximum WL_SPI_DATA_LEN bytes
- *       | unsigned char data[]
- *       |  -> unused
- *    2. Send back read data to MAX10
- *       | (wl_spicomm_bootinfo_t*)params[]
- *       |  -> status, length etc
- *       | unsigned char data[]
- *       |  -> read data itself
+ *  1. Send header from MAX 10
+ *     | M->S : wl_spi_header_t
+ *     |        | (wl_spi_memacc_t*)params[]
+ *     |        | | rom_id : unused
+ *     |        | |          (used when WL_SPICMD_BOOTINFO command is sent)
+ *     |        | | addr   : offset within boot ROM, in byte unit
+ *     |        | | len    : read data length, maximum WL_SPI_DATA_MAXLEN bytes
+ *     | S->M : nothing special
+ *  2. Send back boot ROM contents to MAX 10
+ *     | M->S : unsigned char data[] (size specified in header sent above)
+ *     | S->M : nothing special
+ *     | 
+ *     | Note : data read outside of ROM boundaries is returned as FFh bytes.
  * 
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  * Command     : WL_SPICMD_BOOTREG
  * Description : Register specified file path as cartridge boot ROM.
- *             : (Save the path into a settings file)
+ *               (Save the path into a settings file)
  * Outline     : 
- *    1. Send request from MAX10
- *       | (wl_spicomm_memacc_t*)params[]
- *       |  -> rom_id : boot ROM ID
- *       |              (Pseudo Saturn Kai / KOF95 / Ultraman / etc)
- *       | unsigned char data[]
- *       |  -> Contains full path to cartridge boot ROM file
- *    2. Send back ACK to MAX10
- *       | unsigned char params[]
- *       |  -> unused
- *       | unsigned char data[]
- *       |  -> unused
+ *  1. Send header from MAX 10
+ *     | M->S : wl_spi_header_t
+ *     |        | data_len set to sizeof(wl_spi_bootinfo_t)
+ *     |        | (wl_spi_memacc_t*)params[]
+ *     |        | | rom_id : boot ROM ID
+ *     |        | |          (Pseudo Saturn Kai / KOF95 / Ultraman / etc)
+ *     | S->M : nothing special
+ *  2. Send path to file from MAX 10
+ *     | M->S : wl_spi_bootinfo_t
+ *     |        | -> Contains full path to cartridge boot ROM file
+ *     | S->M : nothing special
  * 
  */
 #define WL_SPICMD_BOOTINFO 0x24
@@ -581,7 +339,7 @@ typedef struct _wla_logs_stats_t
 
 #define WL_SPICMD_IS_BOOTROM(_CMD_) (((_CMD_) >= WL_SPICMD_BOOTINFO) && ((_CMD_) <= WL_SPICMD_BOOTREG) ? 1 : 0)
 
-typedef struct _wl_spicomm_bootinfo_t
+typedef struct _wl_spi_bootinfo_t
 {
     /* Boot ROM size, in byte unit.
      * Typical values : 262144, 1048576 etc.
@@ -595,25 +353,19 @@ typedef struct _wl_spicomm_bootinfo_t
     /* Boot ROM file status.
      *  - 0 : Recovery boot ROM.
      *  - 1 : Boot ROM loaded from SD card.
-     *  - 2 : Boot ROM last block.
      */
 #define WL_BOOTROM_RECOV 0
 #define WL_BOOTROM_FILE  1
-#define WL_BOOTROM_END   2
     unsigned char status;
 
     /* Unused, reserved for future usage if any. */
     unsigned char reserved[3];
 
-    /* Size of block currently read.
-     * Valid for WL_SPICMD_BOOTREAD command only, and should be used
-     * when copying read data on MAX 10 side.
+    /* Full path to file.
+     * Set to empty string when loading from STM32 ROM.
      */
-    unsigned long block_len;
-
-    /* Unused, reserved for future usage if any. */
-    unsigned char unused[WL_SPI_PARAMS_LEN - 4 - 4 - 4];
-} wl_spicomm_bootinfo_t;
+    char path[WL_MAX_PATH];
+} wl_spi_bootinfo_t;
 
 
 
@@ -625,82 +377,76 @@ typedef struct _wl_spicomm_bootinfo_t
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  * Command     : WL_SPICMD_BUPOPEN
  * Description : Open backup file with specified data length.
- *             : If already open, previous file is closed.
- *             : If not exist, contents are allocated and initialized to FFh.
- *             : File name is decided on STM32 side and depends on data size.
+ *               If already open, previous file is closed.
+ *               If not exist, contents are allocated and initialized to FFh.
+ *               File name is decided on STM32 side and depends on data size.
  * Outline     : 
- *    1. Send open request from MAX10
- *       | (wl_spicomm_memacc_t*)params[]
- *       |  -> len : backup data length, KB unit
- *       |           (0.5MB = 512KB, 1MB = 1MB etc)
- *       | unsigned char data[]
- *       |  -> unused
- *    2. Send back open ACK to MAX10
- *       | (wl_spicomm_memacc_t*)params[]
- *       |  -> len : same as input parameter on success
- *       |           set to zero if file open failed
- *       | unsigned char params[]
- *       |  -> unused
+ *  1. Send open request from MAX 10
+ *     | M->S : wl_spi_header_t
+ *     |        | data_len set to sizeof(wl_spi_memacc_t)
+ *     |        | (wl_spi_memacc_t*)params[]
+ *     |        | | len : backup data length, KB unit
+ *     |        | |       (0.5MB = 512KB, 1MB = 1MB etc)
+ *     | S->M : nothing special
+ *  2. Send path to file from MAX 10
+ *     | M->S : wl_spi_memacc_t
+ *     |        | len : same as input parameter on success
+ *     |        |       set to zero if file open failed
+ *     | S->M : nothing special
  * 
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  * Command     : WL_SPICMD_BUPREAD
- * Description : Read backup data at specified block ID.
- *             : Size is limited to one block (512 bytes) per transaction.
+ * Description : Read backup data from specified block ID.
  * Outline     : 
- *    1. Send read request from MAX10
- *       | (wl_spicomm_memacc_t*)params[]
- *       |  -> addr : block ID
- *       |           (0 = first block, 1 = block from 512th byte etc)
- *       | unsigned char data[]
- *       |  -> unused
- *    2. Send back read data to MAX10
- *       | (wl_spicomm_memacc_t*)params[]
- *       |  -> len : read data length (512 bytes) on success
- *       |           set to zero if read failed
- *       | unsigned char data[]
- *       |  -> read data itself
+ *  1. Send read request from MAX 10
+ *     | M->S : wl_spi_header_t
+ *     |        | data_len set to a mutiple of 512 bytes = length of one block
+ *     |        | (wl_spi_memacc_t*)params[]
+ *     |        | | addr : read start block ID
+ *     |        | |        (0 = first block, 1 = block #2 from 512th byte etc)
+ *     |        | | len    : read data length, maximum WL_SPI_DATA_MAXLEN bytes
+ *     | S->M : nothing special
+ *  2. Send back read data to MAX 10
+ *     | M->S : nothing special
+ *     | S->M : unsigned char data[512 x N] : read data itself
  * 
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  * Command     : WL_SPICMD_BUPWRITE
- * Description : Write backup data at specified block ID.
- *             : Size is limited to one block (512 bytes) per transaction.
+ * Description : Write backup data from specified block ID.
+ *               Size is limited to one block (512 bytes) per transaction.
  * Note #1     : Write data is gathered on STM32 side and consecutive blocks
- *             : are written in a single time.
+ *               are written in a single time.
  * Note #2     : Write data contents are automatically flushed to SD card
- *             : after an interval of time without write request from MAX 10.
+ *               after an interval of time without write request from MAX 10.
  * Outline     : 
- *    1. Send write request from MAX10
- *       | (wl_spicomm_memacc_t*)params[]
- *       |  -> addr : block ID
- *       |           (0 = first block, 1 = block from 512th byte etc)
- *       | unsigned char data[]
- *       |  -> data to write
- *    2. Send back write ACK to MAX10
- *       | (wl_spicomm_memacc_t*)params[]
- *       |  -> len : written data length (512 bytes) on success
- *       |           set to zero if write failed
- *       | unsigned char data[]
- *       |  -> unused
+ *  1. Send write request from MAX 10
+ *     | M->S : wl_spi_header_t
+ *     |        | data_len set to a mutiple of 512 bytes = length of one block
+ *     |        | (wl_spi_memacc_t*)params[]
+ *     |        | | addr : write start block ID
+ *     |        | |        (0 = first block, 1 = block #2 from 512th byte etc)
+ *     |        | | len    : write data length, maximum WL_SPI_DATA_MAXLEN bytes
+ *     | S->M : nothing special
+ *  2. Send data to write to STM32
+ *     | M->S : unsigned char data[512 x N] : data to write
+ *     | S->M : nothing special
  * 
  * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  * Command     : WL_SPICMD_BUPCLOSE
  * Description : Close backup data access to SD card.
- *             : (After that, backup data read/write return an error)
+ *               (After that, backup data read/write return an error)
  * Note #1     : Write data is automatically gathered and synchronized on STM32
- *             : side so that it should not be necessary to use this command
- *             : in normal time.
+ *               side so that it should not be necessary to use this command
+ *               in normal time.
  * Outline     : 
- *    1. Send close request from MAX10
- *       | unsigned char params[]
- *       |  -> unused
- *       | unsigned char data[]
- *       |  -> unused
- *    2. Send back close ACK to MAX10
- *       | (wl_spicomm_memacc_t*)params[]
- *       |  -> len : length (in KB unit) of file just closed
- *       |           set to zero if close failed
- *       | unsigned char data[]
- *       |  -> unused
+ *  1. Send open request from MAX 10
+ *     | M->S : no parameter to set
+ *     | S->M : nothing special
+ *  2. Send back close ACK to MAX 10
+ *     | M->S : wl_spi_memacc_t
+ *     |        | len : length (in KB unit) of file just closed
+ *     |        |       set to zero if couldn't close the file
+ *     | S->M : nothing special
  * 
  */
 #define WL_SPICMD_BUPOPEN  0x28
@@ -710,10 +456,10 @@ typedef struct _wl_spicomm_bootinfo_t
 
 #define WL_SPICMD_IS_BUP(_CMD_) (((_CMD_) >= WL_SPICMD_BUPOPEN) && ((_CMD_) <= WL_SPICMD_BUPCLOSE) ? 1 : 0)
 
-typedef struct _wl_spicomm_memacc_t
+typedef struct _wl_spi_memacc_t
 {
     /* Read start address.
-     * This is the address within STM32 space.
+     * This is the address within boot ROM file.
      *
      * When accessing backup memory, this is the block ID.
      */
@@ -735,17 +481,21 @@ typedef struct _wl_spicomm_memacc_t
      * This is used to specify which ROM file should be read.
      *
      * Available values :
-     *  - 0    : Pseudo Saturn Kai
-     *  - 1    : KOF95
-     *  - 2    : Ultraman
-     *  - 3-14 : (Reserved)
-     *  - 15   : Firmware internal boot ROM
+     *  -  0    : Pseudo Saturn Kai
+     *  -  1    : KOF95
+     *  -  2    : Ultraman
+     *  -  3-13 : (Reserved)
+     *  - 14    : WascaLoader
+     *  - 15    : Firmware internal boot ROM
      */
     unsigned char rom_id;
 
     /* Unused, reserved for future usage if any. */
-    unsigned char unused[WL_SPI_PARAMS_LEN - 4 - 4 - 1];
-} wl_spicomm_memacc_t;
+    unsigned char reserved[3];
+
+    /* Unused, reserved for future usage if any. */
+    unsigned char unused[WL_SPI_PARAMS_LEN - 4 - 4 - 4];
+} wl_spi_memacc_t;
 
 
 #endif // WASCA_LINK_SPI_H

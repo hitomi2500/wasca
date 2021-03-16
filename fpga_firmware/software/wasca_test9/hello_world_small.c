@@ -189,41 +189,35 @@ void load_boot_rom(unsigned char rom_id)
 
     WASCA_PERF_START_MEASURE();
     /* Retrieve ROM file size. */
-    wl_spicomm_bootinfo_t info = { 0 };
-    char full_path[WL_MAX_PATH] = { '\0' };
-    spi_boot_getinfo(rom_id, &info, full_path);
+    wl_spi_bootinfo_t info = { 0 };
+    spi_boot_getinfo(rom_id, &info);
 
-    log_to_uart("[Boot ROM]Size=%u KB, status:%u, path:\"%s\"", info.size>>10, info.status, full_path);
+    log_to_uart("[Boot ROM]Size=%u KB, status:%u, path:\"%s\"", info.size>>10, info.status, info.path);
 
     /* Read ROM data. */
     unsigned long rom_size = info.size;
     unsigned long offset = 0;
 
-    for(offset=0; offset<rom_size; offset+=WL_SPI_DATA_LEN)
+    for(offset=0; offset<rom_size; offset+=WL_SPI_DATA_MAXLEN)
     {
         /* Provide read status to Saturn. */
         unsigned long status = (offset * 99);
         status = status / rom_size;
         pRegs_16[PCNTR_REG_OFFSET] = (unsigned short)status;
 
-        unsigned long block_len = WL_SPI_DATA_LEN;
-        if((offset + WL_SPI_DATA_LEN) > rom_size)
+        unsigned long block_len = WL_SPI_DATA_MAXLEN;
+        if((offset + WL_SPI_DATA_MAXLEN) > rom_size)
         {
             block_len = rom_size - offset;
         }
 
-        if(((offset / WL_SPI_DATA_LEN) % 100) == 0)
+        if(((offset / WL_SPI_DATA_MAXLEN) % 100) == 0)
         {
-            log_to_uart("[Boot ROM]Reading from block %5u ...", offset / WL_SPI_DATA_LEN);
+            log_to_uart("[Boot ROM]Reading from block %5u ...", offset / WL_SPI_DATA_MAXLEN);
         }
         // logflush();
 
-        int read_status = spi_boot_readdata(rom_id, offset, block_len, boot_rom+offset);
-        if(read_status != 0)
-        {
-            /* Emergency exit, or end of file. */
-            break;
-        }
+        spi_boot_readdata(rom_id, offset, block_len, boot_rom+offset);
     }
 
     /* Clear unused part of boot ROM area.
@@ -245,16 +239,29 @@ void load_boot_rom(unsigned char rom_id)
 
     WASCA_PERF_STOP_MEASURE();
     unsigned long elapsed = wasca_perf_get_usec(WASCA_PERF_GET_TIME());
-    elapsed = elapsed / 100000;
+
+    elapsed = elapsed / 1000;
+    if(elapsed == 0)
+    {
+        elapsed = 1;
+    }
+    unsigned long kbps = rom_size / elapsed;
+
+    elapsed = elapsed / 100;
 
     unsigned long crc32 = crc32_calc(boot_rom, rom_size);
 
-    log_to_uart("[Boot ROM]Read ended. Size=%u KB, Time = %u.%u sec, CRC=%x", rom_size>>10, elapsed / 10, elapsed % 10, crc32);
-    log_to_uart("[Boot ROM]Header: %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 
-        boot_rom[ 0], boot_rom[ 1], boot_rom[ 2], boot_rom[ 3], 
-        boot_rom[ 4], boot_rom[ 5], boot_rom[ 6], boot_rom[ 7], 
-        boot_rom[ 8], boot_rom[ 9], boot_rom[10], boot_rom[11], 
-        boot_rom[12], boot_rom[13], boot_rom[14], boot_rom[15]);
+    log_to_uart("[Boot ROM]Read ended. Size:%u KB, Time:%u.%u sec, %u KB/s, CRC=%x", 
+        rom_size>>10, 
+        elapsed / 10, elapsed % 10, 
+        kbps, 
+        crc32);
+
+    // log_to_uart("[Boot ROM]Header: %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 
+    //     boot_rom[ 0], boot_rom[ 1], boot_rom[ 2], boot_rom[ 3], 
+    //     boot_rom[ 4], boot_rom[ 5], boot_rom[ 6], boot_rom[ 7], 
+    //     boot_rom[ 8], boot_rom[ 9], boot_rom[10], boot_rom[11], 
+    //     boot_rom[12], boot_rom[13], boot_rom[14], boot_rom[15]);
 }
 
 
@@ -273,27 +280,28 @@ void wasca_startup(void)
     /* Initialize block SPI module internals.     */
     spi_init();
 
-    /* Wait for around 2.5 sec before using SPI.
-     * (Just for debug, will be removed soon)
-     */
-    log_to_uart("MAX 10 STT1");
-    for(int i=0; i<(20*1000*1000); i++)
-    {
-        HEARTBEAT_SLOW();
-    }
-    HEARTBEAT_FAST();
-    log_to_uart("MAX 10 STT2");
+    // /* Wait for around 2.5 sec before using SPI.
+    //  * (Just for debug, will be removed soon)
+    //  */
+    // log_to_uart("MAX 10 STT1");
+    // for(int i=0; i<(20*1000*1000); i++)
+    // {
+    //     HEARTBEAT_SLOW();
+    // }
+    // HEARTBEAT_FAST();
+    // log_to_uart("MAX 10 STT2");
 
     /*--------------------------------------------*/
     /* Exchange version information with STM32.   */
     {
-        /* TODO : should store version information somewhere in SDRAM
-         *        so that SH-2 can access to it.
+        /* TODO : should store each version information somewhere in SDRAM
+         *        so that SH-2 can access to it any time after that.
          */
-        wl_verinfo_ext_t*     max_ver = NULL;
+        wl_verinfo_max_t max_ver_dat = {0};
+        wl_verinfo_max_t* max_ver = &max_ver_dat;
 
-        wl_spicomm_version_t arm_ver_dat = {0};
-        wl_spicomm_version_t* arm_ver = &arm_ver_dat;
+        wl_verinfo_stm_t arm_ver_dat = {0};
+        wl_verinfo_stm_t* arm_ver = &arm_ver_dat;
         spi_exc_version(max_ver, arm_ver);
 
         arm_ver->build_date[sizeof(arm_ver->build_date)-1] = '\0';

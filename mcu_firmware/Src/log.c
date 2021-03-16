@@ -212,11 +212,11 @@ void log_cbread(unsigned char* data, unsigned long read_len, int update_rp)
 
 
 
-void logout_internal(int to_uart, int to_spi, int level, const char* fmt, ... )
+void logout_internal(int to_uart, int to_usb, int level, const char* fmt, ... )
 {
 #if LOG_ENABLE == 1
 
-    if((to_uart == 0) && (to_spi == 0))
+    if((to_uart == 0) && (to_usb == 0))
     {
         return;
     }
@@ -240,14 +240,14 @@ void logout_internal(int to_uart, int to_spi, int level, const char* fmt, ... )
     if(to_uart)
     {
         /* Simply throw log message to UART.
-         * That's slow, but handy when log via SPI can't be used.
+         * That's slow, but handy when log via USB can't be used.
          */
         printf("%s\r\n", buff);
     }
 
-    if(to_spi)
+    if(to_usb)
     {
-        /* Append to circular buffer shared with MAX 10 via SPI.
+        /* Append to circular buffer shared between this device and PC.
          * First two bytes are used to store message length.
          * Then, log message without terminating null character is stored.
          */

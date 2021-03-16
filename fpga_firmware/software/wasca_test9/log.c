@@ -212,36 +212,13 @@ void logflush_internal(void)
     }
 
     /* Send log messages buffer to STM32 via SPI.
-     * 
-     * If necessary, buffer is split into several packets
-     * containing up to WL_SPI_DATA_LEN characters
+     * SPI communication is designed to be able to send whole log buffer in a
+     * single transaction, so that this buffer doesn't needs to be split into
+     * several packets
      */
-    unsigned char block_cnt = _log_buffer_len / WL_SPI_DATA_LEN;
-    if((_log_buffer_len % WL_SPI_DATA_LEN) != 0)
-    {
-        block_cnt++;
-    }
+    spi_send_logs(_log_buffer, _log_buffer_len);
 
-    wl_spicomm_logs_t log_set = {0};
-    log_set.block_cnt = block_cnt;
-
-    unsigned char block_id;
-    for(block_id=0; block_id<block_cnt; block_id++)
-    {
-        unsigned short log_offset = block_id * WL_SPI_DATA_LEN;
-        unsigned short log_len    = _log_buffer_len - log_offset;
-        if(log_len > WL_SPI_DATA_LEN)
-        {
-            log_len = WL_SPI_DATA_LEN;
-        }
-
-        log_set.block_id  = block_id + 1;
-        log_set.block_len = log_len;
-
-        spi_send_logs(&log_set, _log_buffer + log_offset);
-    }
-
-    /* Indicate that log messages buffer is empty. */
+    /* Indicate that log messages buffer is now empty. */
     _log_buffer_len = 0;
 }
 

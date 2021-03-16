@@ -69,7 +69,7 @@ void spi_sync_start(void)
     ((volatile unsigned short *)BUFFERED_SPI_0_BASE)[BUFFSPI_REG_SYNC_MOSI] = 1;
 
     // TODO : add some nops ?
-    //for(int i=0; i<(10); i++) {;}
+    //for(int i=0; i<200; i++) {;}
 }
 
 void spi_sync_middle(void)
@@ -79,7 +79,7 @@ void spi_sync_middle(void)
     // ((volatile unsigned short *)BUFFERED_SPI_0_BASE)[BUFFSPI_REG_SYNC_MOSI] = 1;
 
     // TODO : add some nops ?
-    //for(int i=0; i<(10); i++) {;}
+    //for(int i=0; i<200; i++) {;}
 }
 
 
@@ -292,6 +292,10 @@ void spi_sendreceive_dual(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsi
 }
 
 
+
+/* Wrapper to send and receive function with STM32. */
+#define spi_sendreceive(_SND_PTR_, _RCV_PTR_, _COUNT_) spi_sendreceive_dual(_SND_PTR_, _RCV_PTR_, _COUNT_)
+
 /* Send specified data over SPI to STM32. */
 #define spi_send(_PTR_, _COUNT_) spi_sendreceive_dual(_PTR_, NULL, _COUNT_)
 
@@ -299,99 +303,122 @@ void spi_sendreceive_dual(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsi
 #define spi_receive(_PTR_, _COUNT_) spi_sendreceive_dual(NULL, _PTR_, _COUNT_)
 
 
-/* Initialize SPI packet. */
-void spi_init_packet(wl_spi_pkt_t* pkt)
+/* Initialize SPI header. */
+void spi_init_header(wl_spi_header_t* hdr, unsigned char command, unsigned short data_len)
 {
-    memset(&pkt->cmn, 0, sizeof(wl_spi_common_hdr_t));
-    pkt->cmn.magic_ca = 0xCA;
-    pkt->cmn.magic_fe = 0xFE;
+    memset(hdr, 0, sizeof(wl_spi_header_t));
+    hdr->magic_ca = 0xCA;
+    hdr->magic_fe = 0xFE;
+    hdr->command  = command;
+    hdr->data_len = data_len;
+}
 
-    /* Initialize CRC length : it will be set
-     * a bit after if integrity check is enabled.
-     */
-    pkt->params_crc_len = 0;
-    pkt->data_crc_len   = 0;
+/* Cheap debug function to log raw data contents. */
+void spi_raw_log(char* str, unsigned char* ptr, unsigned short len)
+{
+#define SPI_RAW_LOG_LINELEN 8
+
+    for (int j = 0; j < (len / SPI_RAW_LOG_LINELEN); j++)
+    {
+        char tmp_h[(3*SPI_RAW_LOG_LINELEN) + 1] = { '\0' };
+        char tmp_a[SPI_RAW_LOG_LINELEN + 1] = { '\0' };
+
+        for (int i = 0; i < SPI_RAW_LOG_LINELEN; i++)
+        {
+            unsigned char c = ptr[(j*SPI_RAW_LOG_LINELEN) + i];
+
+#define NIBBLE_TO_CHAR(_N_) ((_N_) <= 9 ? '0' + (_N_) : ('A' - 10) + (_N_))
+            unsigned char nw = c >> 4;
+            tmp_h[(3*i) + 0] = NIBBLE_TO_CHAR(nw);
+            nw = c & 0x0F;
+            tmp_h[(3*i) + 1] = NIBBLE_TO_CHAR(nw);
+            tmp_h[(3*i) + 2] = ' ';
+
+            /* Display differently null and FF characters.
+             * It helps to spot them in screen full of hexa codes.
+             */
+            if(c == 0x00)
+            {
+                c = '~';
+            }
+            else if(c == 0xFF)
+            {
+                c = 'X';
+            }
+            else if(c < ' ')
+            {
+                c = '.';
+            }
+            else if(c > 127)
+            {
+                c = '?';
+            }
+
+            tmp_a[i] = c;
+        }
+
+        log_to_uart("%s_%02X: %s %s", str, j*SPI_RAW_LOG_LINELEN, tmp_h, tmp_a);
+    }
 }
 
 
-
-
-void spi_exc_version(wl_verinfo_ext_t* max_ver, wl_spicomm_version_t* arm_ver)
+void spi_exc_version(wl_verinfo_max_t* max_ver, wl_verinfo_stm_t* arm_ver)
 {
-    wl_spi_pkt_t pkt_dat;
-    wl_spi_pkt_t* pkt = &pkt_dat;
+    wl_spi_header_t hdr_dat;
+    wl_spi_header_t* hdr = &hdr_dat;
 
     /* Setup packet header. */
-    spi_init_packet(pkt);
-    pkt->cmn.command = WL_SPICMD_VERSION;
-    pkt->cmn.pkt_len = 0; // TODO
-    pkt->cmn.rsp_len = sizeof(wl_spi_pkt_t); // TODO
-
-    {
-        /* Send MAX 10 firmware informations to STM32.
-         *  -> Base version informations.
-         */
-        wl_verinfo_ext_t* ver = (wl_verinfo_ext_t*)(pkt->data);
-        memset(ver, 0, sizeof(wl_verinfo_ext_t));
-        char* build_date = __DATE__;
-        char* build_time = __TIME__;
-
-        /* Indicate type of board used : defined in wasca_defs.h . */
-        ver->nios.board_type = WL_DEVTYPE_WASCA;
-
-        /* Write Nios build date and time. */
-        strcpy(ver->nios.build_date, build_date);
-        strcpy(ver->nios.build_time, build_time);
-
-        /* Write Block SPI frequency.
-         * It is currently main frequency / 16 = 7.25 MHz.
-         */
-        ver->nios.stm32_spi_khz = (ALT_CPU_CPU_FREQ / 16) / 1000;
-
-        /* Write OCRAM size. */
-        ver->nios.ocram_size = ONCHIP_MEMORY2_0_SPAN;
-
-
-        /* Send MAX 10 firmware informations to STM32.
-         *  -> Extended version informations.
-         */
-        char* dev_type = MAX10_DEV_TYPE;  // Example : "10M16SAE144C8G"
-        char* prj_name = MAX10_PROJ_NAME; // Example : "brd_10m16sa"
-
-        strncpy(ver->dev_type, dev_type, sizeof(ver->dev_type) - 1);
-        strncpy(ver->prj_name, prj_name, sizeof(ver->prj_name) - 1);
-        ver->pl_date = MAX10_FWDT_VAL;         // Example : 20190828 (decimal, YYYYMMDD format)
-        ver->pl_time = MAX10_FWTM_VAL - 10000; // Example : 11944 (decimal, 1HHMM format)
-
-        if(max_ver)
-        {
-            memcpy(max_ver, ver, sizeof(wl_verinfo_ext_t));
-        }
-    }
+    spi_init_header(hdr, WL_SPICMD_VERSION, WL_SPIDATALEN_VERSION/*data_len*/);
 
     spi_sync_start();
-    spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
+    spi_send((unsigned short*)hdr, sizeof(wl_spi_header_t) / sizeof(unsigned short));
     spi_sync_middle();
 
-    spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
 
-    /* Don't forget to copy STM32 version informations to output buffer. */
-    if(arm_ver)
+    /* Prepare MAX 10 firmware that will be sent to STM32. */
+    wl_verinfo_max_t max_ver_buff = {0};
+
+    /* Indicate which MAX 10 device is used. */
+    char* dev_type = MAX10_DEV_TYPE;  // Example : "10M16SAE144C8G"
+    strncpy(max_ver_buff.dev_type, dev_type, sizeof(max_ver_buff.dev_type) - 1);
+
+    /* Indicate PL build date and time. */
+    max_ver_buff.pl_date = MAX10_FWDT_VAL;         // Example : 20190828 (decimal, YYYYMMDD format)
+    max_ver_buff.pl_time = MAX10_FWTM_VAL - 10000; // Example : 11944 (decimal, 1HHMM format)
+
+    /* Write Nios build date and time. */
+    char* build_date = __DATE__;
+    char* build_time = __TIME__;
+    strcpy(max_ver_buff.build_date, build_date);
+    strcpy(max_ver_buff.build_time, build_time);
+
+    /* Write OCRAM size. */
+    max_ver_buff.ocram_size = ONCHIP_MEMORY2_0_SPAN;
+
+    if(max_ver)
     {
-        memcpy(arm_ver, pkt->data, sizeof(wl_spicomm_version_t));
+        memcpy(max_ver, &max_ver_buff, sizeof(wl_verinfo_max_t));
     }
 
+    /* Receive STM32 firmware information.
+     * Note : both version information are exchanged simultaneously.
+     */
+    spi_sendreceive((unsigned short*)&max_ver_buff, (unsigned short*)arm_ver, sizeof(wl_verinfo_stm_t) / sizeof(unsigned short));
+
+
+    /* Raw log of data sent and received to/from STM32. */
+    // spi_raw_log("VerH", (unsigned char*)hdr, sizeof(wl_spi_header_t));
+    // spi_raw_log("VerS", (unsigned char*)&max_ver_buff, 32);
+    // spi_raw_log("VerR", (unsigned char*)arm_ver, 32);
+
 #if SPI_DEBUG_LOGS == 1
-    spi_logout("[SPI] HDR[%02X %02X] PARAMS[%s]"
-        , pkt->cmn.magic_ca
-        , pkt->cmn.magic_fe
-        //, pkt->cmn.pkt_len
-        //, pkt->cmn.rsp_len
-        , pkt->params);
+    spi_logout("[SPI] HDR[%02X %02X]"
+        , hdr->magic_ca
+        , hdr->magic_fe);
     int i;
     for(i=0; i<8; i++)
     {
-        unsigned char c = ((unsigned char*)pkt)[i];
+        unsigned char c = ((unsigned char*)hdr)[i];
         spi_logout("[SPI]| Rcv[%3d]:0x%02X (%c)", i, c, c);
     }
 #endif // SPI_DEBUG_LOGS == 1
@@ -399,27 +426,29 @@ void spi_exc_version(wl_verinfo_ext_t* max_ver, wl_spicomm_version_t* arm_ver)
 
 
 
-void spi_send_logs(wl_spicomm_logs_t* logset, unsigned char* logdata)
+void spi_send_logs(unsigned char* logdata, unsigned short datalen)
 {
-    wl_spi_pkt_t pkt_dat;
-    wl_spi_pkt_t* pkt = &pkt_dat;
+    wl_spi_header_t hdr_dat;
+    wl_spi_header_t* hdr = &hdr_dat;
+
+    /* Small tweak to properly handle the case of odd data length.
+     * In that case, terminating null character is sent.
+     */
+    unsigned short datalen_u16 = datalen / sizeof(unsigned short);
+    if(datalen % 2)
+    {
+        datalen_u16++;
+    }
 
     /* Setup packet header. */
-    spi_init_packet(pkt);
-    pkt->cmn.command = WL_SPICMD_LOGS;
-    pkt->cmn.pkt_len = 0; // TODO
-    pkt->cmn.rsp_len = sizeof(wl_spi_pkt_t); // TODO
-
-    /* Copy log informations. */
-    memcpy(pkt->params, logset, sizeof(wl_spicomm_logs_t));
-    memcpy(pkt->data, logdata, logset->block_len);
+    spi_init_header(hdr, WL_SPICMD_LOGS, datalen/*data_len*/);
 
     spi_sync_start();
-    spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
+    spi_send((unsigned short*)hdr, sizeof(wl_spi_header_t) / sizeof(unsigned short));
     spi_sync_middle();
 
-    /* Receive and trash ACK from STM32. */
-    spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
+    /* Send log data. */
+    spi_send((unsigned short*)logdata, datalen_u16);
 }
 
 
@@ -431,11 +460,10 @@ void spi_send_logs(wl_spicomm_logs_t* logset, unsigned char* logdata)
  * It supports raw memory access and backup memory access.
  *
  * About each parameters :
- *  - pkt      : pointer to buffer for SPI packet
  *  - command  : which command to use. Example memory read, memory write etc
  *  - addr     : start address
  *  - len      : data length
- *  - rsp_len  : response (answer) length, including start header
+ *  - data_len : length of data sent after header, in byte unit
  *  - snd_data : send data buffer
  *  - rcv_data : receive data buffer
  * 
@@ -445,65 +473,41 @@ int spi_generic_access
 (
     unsigned char command, 
     unsigned long addr, unsigned long len, 
-    unsigned short rsp_len, 
+    unsigned short data_len, 
     unsigned char* snd_data, 
     unsigned char* rcv_data
 )
 {
-rsp_len = sizeof(wl_spi_pkt_t); // TMP
-
-    /* Clamp size to one SPI packet.
-     * This should be improved to use as many packets as needed ...
-     *
-     * Note : this is now clamped on caller side, hence commented-out.
-     */
-    // if(len > WL_SPI_DATA_LEN)
-    // {
-    //     len = WL_SPI_DATA_LEN;
-    // }
-
-    wl_spi_pkt_t pkt_dat;
-    wl_spi_pkt_t* pkt = &pkt_dat;
+    wl_spi_header_t hdr_dat;
+    wl_spi_header_t* hdr = &hdr_dat;
 
     /* Setup packet header. */
-    spi_init_packet(pkt);
-    pkt->cmn.command = command;
-    pkt->cmn.pkt_len = 0; // TODO
-    pkt->cmn.rsp_len = rsp_len;
+    spi_init_header(hdr, command, data_len);
 
     /* Setup memory read parameters. */
-    wl_spicomm_memacc_t* params = (wl_spicomm_memacc_t*)pkt->params;
+    wl_spi_memacc_t* params = (wl_spi_memacc_t*)hdr->params;
     params->addr = addr;
     params->len  = len;
 
-    if(snd_data)
-    {
-        memcpy(pkt->data, snd_data, len);
-    }
-
     spi_sync_start();
-    spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
+    spi_send((unsigned short*)hdr, sizeof(wl_spi_header_t) / sizeof(unsigned short));
     spi_sync_middle();
 
-    spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
-
-    /* Don't forget to copy read data to output buffer. */
-    if(rcv_data)
+    /* Transfer data with STM32 when it is ready. */
+    if(data_len != 0)
     {
-        memcpy(rcv_data, pkt->data, len);
+        spi_sendreceive((unsigned short*)snd_data, (unsigned short*)rcv_data, data_len / sizeof(unsigned short));
     }
 
 #if SPI_DEBUG_LOGS == 1
-    spi_logout("[SPI] HDR[%02X %02X] PARAMS[%s] rsp_len[%u]"
-        , pkt->cmn.magic_ca
-        , pkt->cmn.magic_fe
-        //, pkt->cmn.pkt_len
-        , pkt->cmn.rsp_len
-        , pkt->params);
+    spi_logout("[SPI] HDR[%02X %02X] data_len[%u]"
+        , hdr->magic_ca
+        , hdr->magic_fe
+        , hdr->data_len);
     int i;
     for(i=0; i<8; i++)
     {
-        unsigned char c = ((unsigned char*)pkt)[i];
+        unsigned char c = ((unsigned char*)hdr)[i];
         spi_logout("[SPI]| Rcv[%3d]:0x%02X (%c)", i, c, c);
     }
 #endif // SPI_DEBUG_LOGS == 1
@@ -517,136 +521,73 @@ rsp_len = sizeof(wl_spi_pkt_t); // TMP
 
 
 
-/* The functions to do raw memory read/write. */
-int spi_mem_read(unsigned long addr, unsigned long len, unsigned char* data)
-{
-    spi_generic_access(WL_SPICMD_MEMREAD, addr, len, WL_SPI_CUSTOM_RSPLEN(WL_SPI_DATA_LEN)/*rsp_len*/, NULL/*snd_data*/, data/*rcv_data*/);
-
-    return 1;
-}
-int spi_mem_write(unsigned long addr, unsigned long len, unsigned char* data)
-{
-    spi_generic_access(WL_SPICMD_MEMWRITE, addr, len, WL_SPI_CUSTOM_RSPLEN(0)/*rsp_len*/, data/*snd_data*/, NULL/*rcv_data*/);
-
-    return 1;
-}
-
 /* The functions to do backup memory read/write/etc. */
-int spi_bup_open(unsigned long len_kb)
+int spi_bup_open(unsigned short len_kb)
 {
-    return spi_generic_access(WL_SPICMD_BUPOPEN, 0/*block*/, len_kb, WL_SPI_PARAMS_RSPLEN/*rsp_len*/, NULL, NULL);
+    return spi_generic_access(WL_SPICMD_BUPOPEN, 0/*block*/, len_kb, sizeof(wl_spi_memacc_t)/*data_len*/, NULL, NULL);
 }
-int spi_bup_read(unsigned long block, unsigned long len, unsigned char* data)
+int spi_bup_read(unsigned short block, unsigned short len, unsigned char* data)
 {
-    return spi_generic_access(WL_SPICMD_BUPREAD, block, len, WL_SPI_FULL_RSPLEN/*rsp_len*/, NULL/*snd_data*/, data/*rcv_data*/);
+    return spi_generic_access(WL_SPICMD_BUPREAD, block, len, len/*data_len*/, NULL/*snd_data*/, data/*rcv_data*/);
 }
-int spi_bup_write(unsigned long block, unsigned long len, unsigned char* data)
+int spi_bup_write(unsigned short block, unsigned short len, unsigned char* data)
 {
-    return spi_generic_access(WL_SPICMD_BUPWRITE, block, len, WL_SPI_PARAMS_RSPLEN/*rsp_len*/, data/*snd_data*/, NULL/*rcv_data*/);
+    return spi_generic_access(WL_SPICMD_BUPWRITE, block, len, len/*data_len*/, data/*snd_data*/, NULL/*rcv_data*/);
 }
 int spi_bup_close(void)
 {
-    return spi_generic_access(WL_SPICMD_BUPCLOSE, 0/*block*/, 0/*len*/, WL_SPI_PARAMS_RSPLEN/*rsp_len*/, NULL, NULL);
+    return spi_generic_access(WL_SPICMD_BUPCLOSE, 0/*block*/, 0/*len*/, sizeof(wl_spi_memacc_t)/*data_len*/, NULL, NULL);
 }
 
 
 /* Boot ROM access : retrieve informations. */
-void spi_boot_getinfo(unsigned char rom_id, wl_spicomm_bootinfo_t* info, char* full_path)
+void spi_boot_getinfo(unsigned char rom_id, wl_spi_bootinfo_t* info)
 {
-    wl_spi_pkt_t pkt_dat;
-    wl_spi_pkt_t* pkt = &pkt_dat;
+    wl_spi_header_t hdr_dat;
+    wl_spi_header_t* hdr = &hdr_dat;
 
     /* Setup packet header. */
-    spi_init_packet(pkt);
-    pkt->cmn.command = WL_SPICMD_BOOTINFO;
-    pkt->cmn.pkt_len = 0; // TODO
-    pkt->cmn.rsp_len = sizeof(wl_spi_pkt_t);
+    spi_init_header(hdr, WL_SPICMD_BOOTINFO, sizeof(wl_spi_bootinfo_t)/*data_len*/);
 
     /* Specify ROM ID. */
-    wl_spicomm_memacc_t* params = (wl_spicomm_memacc_t*)pkt->params;
+    wl_spi_memacc_t* params = (wl_spi_memacc_t*)hdr->params;
     params->rom_id = rom_id;
 
     spi_sync_start();
-    spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
+    spi_send((unsigned short*)hdr, sizeof(wl_spi_header_t) / sizeof(unsigned short));
     spi_sync_middle();
 
-    spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
+    spi_receive((unsigned short*)info, sizeof(wl_spi_bootinfo_t) / sizeof(unsigned short));
 
-    /* Copy received data to output parameters. */
-    memcpy(info, pkt->params, sizeof(wl_spicomm_bootinfo_t));
+    /* Raw log of data sent and received to/from STM32. */
+    // spi_raw_log("BtiH", (unsigned char*)hdr, sizeof(wl_spi_header_t));
+    // spi_raw_log("BtiR", (unsigned char*)info, 32);
 
-    if(full_path)
-    {
-        memcpy(full_path, pkt->data, WL_MAX_PATH);
-        full_path[WL_MAX_PATH - 1] = '\0';
-    }
+    /* Sanitize path to boot ROM file. */
+    info->path[WL_MAX_PATH - 1] = '\0';
 }
 
 
 /* Boot ROM access : read data. */
-int spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long len, unsigned char* dst)
+void spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long len, unsigned char* dst)
 {
-    wl_spi_pkt_t pkt_dat;
-    wl_spi_pkt_t* pkt = &pkt_dat;
+    wl_spi_header_t hdr_dat;
+    wl_spi_header_t* hdr = &hdr_dat;
 
-    /* Retry reception until data matches with CRC. */
-    for(int i=0; i<10; i++)
-    {
-        /* Setup packet header. */
-        spi_init_packet(pkt);
-        pkt->cmn.command = WL_SPICMD_BOOTREAD;
-        pkt->cmn.pkt_len = 0; // TODO
-        pkt->cmn.rsp_len = sizeof(wl_spi_pkt_t);
+    /* Setup packet header. */
+    spi_init_header(hdr, WL_SPICMD_BOOTREAD, len/*data_len*/);
 
-        /* Setup read parameters. */
-        wl_spicomm_memacc_t* params = (wl_spicomm_memacc_t*)pkt->params;
-        params->rom_id = rom_id;
-        params->addr   = offset;
-        params->len    = len;
+    /* Setup read parameters. */
+    wl_spi_memacc_t* params = (wl_spi_memacc_t*)hdr->params;
+    params->rom_id = rom_id;
+    params->addr   = offset;
+    params->len    = len;
 
-        spi_sync_start();
-        spi_send((unsigned short*)pkt, sizeof(wl_spi_pkt_t) / sizeof(unsigned short));
-        spi_sync_middle();
+    spi_sync_start();
+    spi_send((unsigned short*)hdr, sizeof(wl_spi_header_t) / sizeof(unsigned short));
+    spi_sync_middle();
 
-        spi_receive((unsigned short*)pkt, pkt->cmn.rsp_len / sizeof(unsigned short));
-
-        /* Verify CRC. */
-        int valid_crc = 1;
-        if(pkt->data_crc_len != 0)
-        {
-            if(pkt->data_crc_len > WL_SPI_DATA_LEN)
-            {
-                valid_crc = 0;
-            }
-            else
-            {
-                unsigned long crc = crc32_calc(pkt->data, pkt->data_crc_len);
-
-                if(crc != pkt->data_crc_val)
-                {
-                    valid_crc = 0;
-                }
-            }
-        }
-
-        if(!valid_crc)
-        {
-            log_to_uart("ERROR: invalid CRC at offset %08X", offset);
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    /* Copy back read data to destination buffer. */
-    wl_spicomm_bootinfo_t* info = (wl_spicomm_bootinfo_t*)pkt->params;
-    if(info->block_len != 0)
-    {
-        memcpy(dst, pkt->data, info->block_len);
-    }
-
-    return (info->status == WL_BOOTROM_END ? 1 : 0);
+    spi_receive((unsigned short*)dst, len / sizeof(unsigned short));
 }
 
 

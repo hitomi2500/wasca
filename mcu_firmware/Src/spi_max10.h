@@ -12,10 +12,6 @@
  * ------------------------------------------
  */
 
-extern wl_spi_pkt_t _spi_trans_hdr_rx;
-extern wl_spi_pkt_t _spi_trans_hdr_tx;
-
-
 /* Global variables for debug usage. */
 extern unsigned long _spi_rcv_cnt;
 extern unsigned long _spi_shift_cnt;
@@ -33,14 +29,5 @@ void spi_init(void);
  * Returns 1 when finished to process a SPI packet, zero else.
  */
 int spi_periodic_check(void);
-
-
-/* Global variable indicating SPI communication state.
- * This is shared between SPI interrupt handler
- * and main routines.
- *
- * Note : it is exposed to other modules just for debug purpose.
- */
-extern int _spi_state;
 
 #endif // _WL_SPI_MAX10_H_

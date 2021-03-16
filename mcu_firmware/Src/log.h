@@ -32,7 +32,49 @@ void log_init(void);
 /* Log output to MAX 10. */
 #if LOG_ENABLE == 1
 
-extern log_infos_t _log_inf_data;
+
+/* Logs circular buffer size.
+ *
+ * The larger the more it can handle log messages between two access from PC.
+ */
+#define CIRCBUFF_SIZE (2*1024)
+
+typedef struct _log_infos_t
+{
+    /* Circular buffer R/W pointers (address is relative from the begining of circular buffer). */
+    unsigned long readptr;
+    unsigned long writeptr;
+
+    /* Circular buffer internals. */
+    unsigned long buffer_size;
+    unsigned long start_address;
+    unsigned long end_address;
+
+    // /* Log level.
+    //  *
+    //  * Need to set value #defined in WL_LOG_* macros.
+    //  * Logs with level stricly higher ( > ) than this level
+    //  * are discarded from output.
+    //  *
+    //  * Note : log output can be stopped by setting this
+    //  *        level value to zero.
+    //  */
+    // char level;
+    // 
+    // /* Unused, for structure alignment purpose. */
+    // unsigned char padding[3];
+
+    /* Circular buffer used when reading/writing debug data. */
+    unsigned char circbuff[CIRCBUFF_SIZE];
+
+    /* Message format buffer, used just before appending to circular buffer.
+     * First two bytes are used to store message length.
+     * Message is NOT null-terminated.
+     */
+    unsigned char format_buff[sizeof(unsigned short) + WL_LOG_MESSAGE_MAXLEN];
+} log_infos_t;
+
+
 
 /* Append specified data to logs circular buffer. */
 void log_cbwrite(unsigned char* data, unsigned long datalen);
@@ -44,7 +86,7 @@ unsigned short log_cbmem_use(void);
 /* Read specified length from logs circular buffer. */
 void log_cbread(unsigned char* data, unsigned long read_len, int update_rp);
 
-void logout_internal(int to_uart, int to_spi, int level, const char* fmt, ... );
+void logout_internal(int to_uart, int to_usb, int level, const char* fmt, ... );
 #   define logout(_LVL_, ...) logout_internal(0, 1, _LVL_, __VA_ARGS__)
 
 void logflush_internal(void);
@@ -58,7 +100,7 @@ void logflush_internal(void);
 
 
 /* Log output directly to terminal via UART.
- * That's slow, but handy when log via SPI can't be used.
+ * That's slow, but handy when log via USB can't be used.
  */
 #if LOG_UART_ENABLE == 1
 #   define termout(_LVL_, ...) logout_internal(1, 0, _LVL_, __VA_ARGS__)
