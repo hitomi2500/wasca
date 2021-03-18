@@ -249,9 +249,10 @@ void load_boot_rom(unsigned char rom_id)
 
     elapsed = elapsed / 100;
 
+#if 0 /* Log CRC value of ROM we just loaded (DEBUG). */
     unsigned long crc32 = crc32_calc(boot_rom, rom_size);
 
-    log_to_uart("[Boot ROM]Read ended. Size:%u KB, Time:%u.%u sec, %u KB/s, CRC=%x", 
+    log_to_uart("[Boot ROM]Read ended. Size:%u KB, Time:%u.%u sec, %u KB/s, CRC=%08X", 
         rom_size>>10, 
         elapsed / 10, elapsed % 10, 
         kbps, 
@@ -262,6 +263,15 @@ void load_boot_rom(unsigned char rom_id)
     //     boot_rom[ 4], boot_rom[ 5], boot_rom[ 6], boot_rom[ 7], 
     //     boot_rom[ 8], boot_rom[ 9], boot_rom[10], boot_rom[11], 
     //     boot_rom[12], boot_rom[13], boot_rom[14], boot_rom[15]);
+
+#else /* Log transfer speed. */
+
+    log_to_uart("[Boot ROM]Read ended. Size:%u KB, Time:%u.%u sec, %u KB/s", 
+        rom_size>>10, 
+        elapsed / 10, elapsed % 10, 
+        kbps);
+
+#endif
 }
 
 
