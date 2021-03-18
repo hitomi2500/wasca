@@ -500,6 +500,10 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
             {
                 strcpy(boot_rom_path, "/ULTRAMAN.BIN");
             }
+            else if(params->rom_id == 14)
+            {
+                strcpy(boot_rom_path, "/WASCALDR.BIN");
+            }
             else
             {
                 strcpy(boot_rom_path, "/BOOT.BIN");

@@ -334,9 +334,8 @@ void wasca_startup(void)
 
     /*--------------------------------------------*/
     /* Load Pseudo Saturn from SD card to SDRAM.  */
-// HEARTBEAT_FORCE(1);
-    load_boot_rom(0/*ROM ID*/);
-// HEARTBEAT_FORCE(0);
+    //load_boot_rom(0/*ROM ID*/);
+    load_boot_rom(14/*ROM ID*/); /* Temporarily set to WascaLoader. */
 
 
     /* Write version. */
