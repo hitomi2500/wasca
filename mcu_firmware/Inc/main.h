@@ -84,6 +84,10 @@ void Error_Handler(void);
 #define SWO_GPIO_Port GPIOB
 #define SPI_SYNC_MISO_Pin GPIO_PIN_6
 #define SPI_SYNC_MISO_GPIO_Port GPIOB
+#define BUFFER_ENABLE_Pin GPIO_PIN_2
+#define BUFFER_ENABLE_GPIO_Port GPIOA
+#define SATURN_POWER_Pin GPIO_PIN_3
+#define SATURN_POWER_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

@@ -141,6 +141,17 @@ int main(void)
   termout(WL_LOG_DEBUGNORMAL, "Wasca STM32 firmware build Date : %s, time : %s.", __DATE__, __TIME__);
   logout(WL_LOG_DEBUGNORMAL, "---");
 
+  /* Check if power is present on Saturn side */
+  if (GPIO_PIN_SET == HAL_GPIO_ReadPin(SATURN_POWER_GPIO_Port, SATURN_POWER_Pin))
+  {
+    /* Power is present, enabling buffers */
+    HAL_GPIO_WritePin(BUFFER_ENABLE_GPIO_Port, BUFFER_ENABLE_Pin, GPIO_PIN_RESET);
+  }
+  else
+  {
+    /* Power is not present, disabling buffers */
+    HAL_GPIO_WritePin(BUFFER_ENABLE_GPIO_Port, BUFFER_ENABLE_Pin, GPIO_PIN_SET);
+  }
 
   /* Initialize SD card and FatFs. */
   termout(WL_LOG_DEBUGNORMAL, "retSD:%d SDPath:%c%c%c%c", retSD, SDPath[0], SDPath[1], SDPath[2], SDPath[3]);
@@ -449,7 +460,10 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SPI_SYNC_MISO_GPIO_Port, SPI_SYNC_MISO_Pin, GPIO_PIN_SET);
-
+  
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(BUFFER_ENABLE_GPIO_Port, BUFFER_ENABLE_Pin, GPIO_PIN_SET);//buffers are enabled at init
+  
   /*Configure GPIO pins : LD1_R_Pin LD1_G_Pin LD1_B_Pin LD2_Pin */
   GPIO_InitStruct.Pin = LD1_R_Pin|LD1_G_Pin|LD1_B_Pin|LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -503,6 +517,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(SPI_SYNC_MISO_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : BUFFER_ENABLE */
+  GPIO_InitStruct.Pin = BUFFER_ENABLE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(BUFFER_ENABLE_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : SATURN_POWER */
+  GPIO_InitStruct.Pin = SATURN_POWER_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(SATURN_POWER_GPIO_Port, &GPIO_InitStruct);
 
 }
 
