@@ -152,7 +152,8 @@ process
         --toggle miso
         for i in 0 to 5000 loop
             spi_miso <= not spi_miso;
-            wait for 320ns;
+            --wait for 320ns;
+            wait for 160ns;
         end loop;
         --switch to buf2
         write_avalon_16("10"&X"005",X"0001",avalon_address,avalon_writedata,avalon_write); --bufselect

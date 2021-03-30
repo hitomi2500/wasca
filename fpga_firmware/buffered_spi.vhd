@@ -47,7 +47,7 @@ signal transaction_data_write1          : std_logic_vector (15 downto 0)  := (ot
 signal transaction_data_write2          : std_logic_vector (15 downto 0)  := (others => '0');
 signal transaction_buf_write1           : std_logic := '0';
 signal transaction_buf_write2           : std_logic := '0';
-signal transaction_clkdiv_counter            : std_logic_vector (3 downto 0)  := (others => '0');
+signal transaction_clkdiv_counter            : std_logic_vector (2 downto 0)  := (others => '0');
 
 
 signal spi_cs_constant            : std_logic := '1';
@@ -211,7 +211,7 @@ begin
        if rising_edge(clock) then
           if transaction_prestart_1 = '1' then
                 transaction_prestart_2 <= '1';
-          elsif transaction_clkdiv_counter = "1011" then
+          elsif transaction_clkdiv_counter = "001" then
                 transaction_prestart_2 <= '0';
           end if;
        end if;
@@ -220,7 +220,7 @@ begin
 	process (clock)
     begin
        if rising_edge(clock) then
-          if transaction_clkdiv_counter = "1011" then
+          if transaction_clkdiv_counter = "000" then
                 transaction_start<= transaction_prestart_2;   
           end if;
        end if;
@@ -342,7 +342,7 @@ write2_buf: buff_spi_ram
        if rising_edge(clock) then
           if (transaction_start = '1') then
              transaction_bit_counter <= to_unsigned(0,16);
-          elsif (transaction_clkdiv_counter = "1000") and transaction_active = '1' then
+          elsif (transaction_clkdiv_counter = "100") and transaction_active = '1' then
             if transaction_bit_counter < 16 + unsigned(delay_register) then
                  transaction_bit_counter <= transaction_bit_counter + 1;
             else
@@ -358,7 +358,7 @@ write2_buf: buff_spi_ram
        if rising_edge(clock) then
           if (transaction_start = '1') then
              transaction_byte_counter <= to_unsigned(0,12);
-          elsif transaction_clkdiv_counter = "1001"  and transaction_active = '1' then
+          elsif transaction_clkdiv_counter = "101"  and transaction_active = '1' then
             if transaction_byte_counter <= unsigned(length_register) then
                  if transaction_bit_counter = to_unsigned(16,16) then  --16 bits per frame
                     transaction_byte_counter <= transaction_byte_counter + 1;
@@ -392,12 +392,12 @@ write2_buf: buff_spi_ram
        end if;
     end process;
     
-    --transaction clock divider (test clockspeed is 1/16, 7.25 Mhz for 116Mhz base clock)
+    --transaction clock divider (clockspeed is 1/8, 14.5 Mhz for 116Mhz base clock)
     process (clock)
     begin
        if rising_edge(clock) then
           if (transaction_prestart_1 = '1') then
-              transaction_clkdiv_counter <= "1100";
+              transaction_clkdiv_counter <= "100";
           else
               transaction_clkdiv_counter <= std_logic_vector(unsigned(transaction_clkdiv_counter) + 1);  
           end if;
@@ -409,9 +409,9 @@ write2_buf: buff_spi_ram
     begin
        if rising_edge(clock) then
           if (transaction_active = '1') and  transaction_bit_counter <= to_unsigned(15,16) then
-              if (transaction_clkdiv_counter = "0001") and (transaction_start = '0') then
+              if (transaction_clkdiv_counter = "001") and (transaction_start = '0') then
                  spi_clk <= '1';
-              elsif (transaction_clkdiv_counter = "1001") then
+              elsif (transaction_clkdiv_counter = "101") then
                  spi_clk <= '0';
               end if;
           else
@@ -470,7 +470,7 @@ write2_buf: buff_spi_ram
     process (clock)
     begin
        if rising_edge(clock) then
-          if (transaction_active = '1') and transaction_bit_counter <= to_unsigned(15,16) and transaction_clkdiv_counter = "0001" then
+          if (transaction_active = '1') and transaction_bit_counter <= to_unsigned(15,16) and transaction_clkdiv_counter = "001" then
               transaction_data_read(15-to_integer(transaction_bit_counter(3 downto 0))) <= spi_miso;
           end if;
        end if;
