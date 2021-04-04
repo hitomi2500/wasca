@@ -277,19 +277,18 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
          * Also, prepare save data file name according to its size.
          */
         char file_name[64];
-        if((params->len % 1024) == 0)
+        if((params->len / 2) >= 1024)
         {
             /* 1/2/4/etc MB mode. */
             _BupSize = params->len * 1024;
-            sprintf(file_name, "/BUP_%uM.BIN", (unsigned int)(params->len / 1024));
+            sprintf(file_name, "/BUP_%uM.BIN", (unsigned int)(params->len / 1024 / 2));
         }
-        else // if(params->len == 512)
+        else // if(params->len == (512 * 2))
         {
             /* 0.5MB mode. */
-            _BupSize = 512 * 1024;
+            _BupSize = 512 * 1024 * 2;
             strcat(file_name, "/BUP_05M.BIN");
         }
-//termout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPOPEN]file_name:\"%s\"", file_name);
 
         f_ret = f_open(&_BupFile, file_name, FA_READ | FA_WRITE);
 

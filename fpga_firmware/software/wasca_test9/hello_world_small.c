@@ -432,18 +432,23 @@ int main(void)
                 {
                     size_kb = 4096;
                 }
+                /* Change size from actual data to length of this data mapped on A-Bus. */
+                size_kb *= 2;
 
                 /* Initialize SDRAM with backup memory file from SD card. */
                 log_to_uart("Preparing backup RAM");
                 spi_bup_open(size_kb);
-                unsigned long count = size_kb * 4;
+                unsigned long count = size_kb * (1024 / 512);
                 for(i=0; i<count; i++)
                 {
                     unsigned long status = 99 * i;
                     status = status / count;
                     pRegs_16[PCNTR_REG_OFFSET] = (unsigned short)status;
 
-                    log_to_uart(".");
+                    if((i % 32) == 0)
+                    {
+                        log_to_uart(".");
+                    }
 
                     spi_bup_read(i/*ID*/, 512/*size*/, (unsigned char*)(pCS1 + (i*512)));
                 }
@@ -546,7 +551,7 @@ int main(void)
 
                 /* Flushing block to file. */
                 unsigned char* pCS1_a = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x2000000 + (512*current_block));
-                spi_bup_read(current_block/*ID*/, 512/*size*/, pCS1_a);
+                spi_bup_write(current_block/*ID*/, 512/*size*/, pCS1_a);
 
                 /* Blinking led. */
                 log_to_uart("SYNC %x(%x) <%x> ", current_block, current_block, pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET]);
