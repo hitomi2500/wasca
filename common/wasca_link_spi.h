@@ -260,6 +260,71 @@ typedef struct _wl_verinfo_stm_t
 
 
 
+/* MAX 10 / STM32 SPI communication ping.
+ *
+ * Transfer outline :
+ *  1. Send header from MAX 10
+ *     | M->S : wl_spi_header_t
+ *     |        | (wl_spi_ping_params_t*)params[]
+ *     |        | | -> contains CRC test length, test pattern settings etc
+ *     | S->M : nothing special
+ *  2. Send ping parameters and test data from both MAX 10 and STM32 sides
+ *     | M->S : wl_spi_ping_verif_t + data (variable size, indicated in step 1)
+ *     | S->M : wl_spi_ping_verif_t + data (variable size, indicated in step 1)
+ *
+ * Note : wl_spi_ping_verif_t contains integrity result of received data.
+ *        But because it is sent packed with test data, this result concerns
+ *        previous ping request.
+ */
+#define WL_SPICMD_PING 0x12
+
+typedef struct _wl_spi_ping_params_t
+{
+    /* Length of data where to compute CRC from.
+     * Protip : as it is possible to set this length independently from length
+     *          specified in SPI header, it is for example possible to set this
+     *          length to zero can be used to measure SPI transfer speed without
+     *          the overhead caused by CRC computation.
+     */
+    unsigned short crc_len;
+
+    /* Unused, for data alignment purpose. */
+    unsigned char unused[3];
+
+    /* Test pattern type. */
+#define WL_SPI_PING_RANDOM    0
+#define WL_SPI_PING_CONSTANT  1
+#define WL_SPI_PING_INCREMENT 2
+    unsigned char pattern;
+
+    /* Extra data that can be used when generating test pattern data.
+     * Example : constant value, random seed, etc.
+     */
+    unsigned short pattern_seed;
+} wl_spi_ping_params_t;
+
+typedef struct _wl_spi_ping_verif_t
+{
+    /* CRC of data following this structure. */
+    unsigned long crc_val;
+
+    /* Unused, for data alignment reason. */
+    unsigned char unused;
+
+    /* CRC verification result of previous ping request.
+     *  0   : no error
+     *  else: error
+     */
+    unsigned char prev_crc_fail;
+
+    /* Total count of CRC error(s) that happened so far.
+     * Note : this doesn't includes result for this ping request.
+     */
+    unsigned short crc_error_total;
+} wl_spi_ping_verif_t;
+
+
+
 /* Command IDs for boot ROM access.
  * 
  * Boot ROM have the following features :
