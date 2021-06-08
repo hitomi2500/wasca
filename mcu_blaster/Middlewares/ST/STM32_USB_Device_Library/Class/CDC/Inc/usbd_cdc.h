@@ -41,6 +41,36 @@ extern "C" {
 /** @defgroup usbd_cdc_Exported_Defines
   * @{
   */
+
+#define BLASTER_EP_NUM                          (3)
+
+#define BLASTER_EP0_OUT     ((uint8_t)0x00)
+#define BLASTER_EP0_IN      ((uint8_t)0x80)
+#define BLASTER_EP1_OUT     ((uint8_t)0x01)
+#define BLASTER_EP1_IN      ((uint8_t)0x81)
+#define BLASTER_EP2_OUT     ((uint8_t)0x02)
+#define BLASTER_EP2_IN      ((uint8_t)0x82)
+
+/* EP0  */
+/* rx/tx buffer base address */
+#define BLASTER_ENDP0_RXADDR        (0x20)
+#define BLASTER_ENDP0_TXADDR        (0x60)
+#define BLASTER_ENDP0_SIZE          (0x40)
+
+/* EP1  */
+/* tx buffer base address */
+#define BLASTER_ENDP1_TXADDR        (0xA0)
+#define BLASTER_ENDP1_TXSIZE        (0x40)
+
+/* EP2  */
+/* rx buffer base address */
+#define BLASTER_ENDP2_RXADDR0       (0x100)
+#define BLASTER_ENDP2_RXADDR1       (0x140)
+#define BLASTER_ENDP2_RXSIZE        (0x40)
+
+#define BLASTER_SIZ_CONFIG_DESC                 	32U
+
+
 #define CDC_IN_EP                                   0x81U  /* EP1 for data IN */
 #define CDC_OUT_EP                                  0x01U  /* EP1 for data OUT */
 #define CDC_CMD_EP                                  0x82U  /* EP2 for CDC commands */
