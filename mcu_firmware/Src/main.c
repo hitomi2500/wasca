@@ -29,8 +29,9 @@
 
 #include <string.h>
 #include "bup_bootrom.h"
-#include "spi_max10.h"
 #include "log.h"
+#include "spi_max10.h"
+#include "spi_ping.h"
 #include "misc_tests.h"
 
 /* USER CODE END Includes */
@@ -173,6 +174,7 @@ int main(void)
   }
 
   /* Initialize SPI internals. */
+  spi_ping_init();
   spi_init();
 
   /* Update backup and boot ROM access modules. */

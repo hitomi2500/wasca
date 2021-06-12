@@ -178,6 +178,59 @@ void blink_the_leds(void)
 }
 
 
+/*
+ * ------------------------------------------
+ * - DEBUG: test SPI communication ----------
+ * ------------------------------------------
+ */
+unsigned long _spi_ping_cnt = 0;
+void do_spi_ping_test(void)
+{
+    /* TODO : in the future, it may be good to allow setting
+     * of these parameters from SH-2.
+     */
+    wl_spi_ping_params_t params = {0};
+    params.data_len = WL_SPI_DATA_MAXLEN - sizeof(wl_spi_ping_verif_t);
+    params.crc_len  = params.data_len;
+    params.pattern  = WL_SPI_PING_RANDOM;
+    params.pattern_seed = _spi_ping_cnt; /* Not super random ... */
+
+    /* Set buffer to test data to a relatively unused area in SDRAM. */
+    unsigned char* txrx_buffer = ((unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE) + (30 * 1024 * 1024);
+    wl_spi_ping_verif_t* ping_verifs = (wl_spi_ping_verif_t*)(txrx_buffer + (2 * WL_SPI_DATA_MAXLEN));
+
+    /* On first test, initialize test results. */
+    if(_spi_ping_cnt == 0)
+    {
+        memset(ping_verifs, 0, 2*sizeof(wl_spi_ping_verif_t));
+    }
+
+    /* Send a log message before the first ping.
+     * -> just in case this function doesn't works at all ...
+     */
+    if(_spi_ping_cnt == 0)
+    {
+        log_to_uart("[SPI PING]spi_ping_test STT");
+    }
+
+    spi_ping_test(&params, ping_verifs, txrx_buffer);
+
+    /* Periodically log SPI test results.
+     * Note : as results concern previous test, it's a good idea to
+     *        output result from second pass.
+     */
+    if((_spi_ping_cnt % 100) == 1)
+    {
+        log_to_uart("[SPI PING]CNT:%7u K, CRC:%08X/%08X, Error : %3u/%3u", 
+            _spi_ping_cnt/1000, 
+            ping_verifs[1].crc_val, ping_verifs[0].crc_val, 
+            ping_verifs[1].crc_error_total, ping_verifs[0].crc_error_total);
+    }
+
+    _spi_ping_cnt++;
+}
+
+
 
 
 void load_boot_rom(unsigned char rom_id)

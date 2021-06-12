@@ -4,6 +4,7 @@
 
 #include "bup_bootrom.h"
 #include "log.h"
+#include "spi_ping.h"
 
 /* External definitions for our SPI interface. */
 extern SPI_HandleTypeDef hspi1;
@@ -149,6 +150,10 @@ int spi_periodic_check(void)
 
         bootrom_pre_process(hdr, data_tx);
     }
+    else if(hdr->command == WL_SPICMD_PING)
+    { /* SPI ping. */
+        spi_ping_pre_process(hdr, data_tx);
+    }
 
 //     spi_logout("Tick[0x%08X]Response str[%c%c%c%c%c%c%c%c%c%c%c%c]"
 //         , (unsigned int)HAL_GetTick()
@@ -211,6 +216,10 @@ int spi_periodic_check(void)
     { /* Cartridge boot ROM file access. */
 
         bootrom_post_process(hdr, data_rx);
+    }
+    else if(hdr->command == WL_SPICMD_PING)
+    { /* SPI ping. */
+        spi_ping_post_process(hdr, data_rx);
     }
 
     return 1;

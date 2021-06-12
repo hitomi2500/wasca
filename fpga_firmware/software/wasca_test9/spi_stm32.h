@@ -98,4 +98,24 @@ void spi_boot_getinfo(unsigned char rom_id, wl_spi_bootinfo_t* info);
 void spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long len, unsigned char* dst);
 
 
+/**
+ * spi_ping_test
+ *
+ * Verify SPI communication between MAX 10 and STM32.
+ *
+ * About each parameters :
+ *  - params     : test data setup information.
+ * - ping_verifs : Contains data verification result for this test
+ *                 as well as previous ones.
+ *                 It must point to two wl_spi_ping_verif_t structures.
+ *                  -> First  structure : results on MAX 10 side.
+ *                  -> Second structure : results on STM32 side.
+ * - txrx_buffer : Pointer to area where to put communication test data.
+ *                 It must must contain 2*params->data_len bytes.
+ *                 It can be located either on onchip RAM (if it fits there)
+ *                 or external SDRAM.
+**/
+void spi_ping_test(wl_spi_ping_params_t* params, wl_spi_ping_verif_t* ping_verifs, unsigned char* txrx_buffer);
+
+
 #endif // _WL_SPI_STM32_H_

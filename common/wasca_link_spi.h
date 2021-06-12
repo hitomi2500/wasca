@@ -280,32 +280,43 @@ typedef struct _wl_verinfo_stm_t
 
 typedef struct _wl_spi_ping_params_t
 {
+    /* Length of data to exchange with STM32.
+     * It can be different from crc_len and can't be larger than : 
+     *  WL_SPI_DATA_MAXLEN - sizeof(wl_spi_ping_verif_t)
+     */
+    unsigned short data_len;
+
     /* Length of data where to compute CRC from.
+     * It must be set between zero (empty CRC) and data_len (all data).
+     *
      * Protip : as it is possible to set this length independently from length
-     *          specified in SPI header, it is for example possible to set this
-     *          length to zero can be used to measure SPI transfer speed without
-     *          the overhead caused by CRC computation.
+     *          specified in SPI header, setting crc_len to zero allows to
+     *          measure SPI transfer speed without the overhead caused by
+     *          CRC computation.
      */
     unsigned short crc_len;
+
+    /* Test pattern types. */
+#define WL_SPI_PING_NOTSET    0 /* Unitialized data, to measure speed. */
+#define WL_SPI_PING_RANDOM    1 /* Random value.                       */
+#define WL_SPI_PING_CONSTANT  2 /* Constant value.                     */
+#define WL_SPI_PING_INCREMENT 3 /* Incremental value.                  */
+    unsigned char pattern;
 
     /* Unused, for data alignment purpose. */
     unsigned char unused[3];
 
-    /* Test pattern type. */
-#define WL_SPI_PING_RANDOM    0
-#define WL_SPI_PING_CONSTANT  1
-#define WL_SPI_PING_INCREMENT 2
-    unsigned char pattern;
-
     /* Extra data that can be used when generating test pattern data.
      * Example : constant value, random seed, etc.
      */
-    unsigned short pattern_seed;
+    unsigned long pattern_seed;
 } wl_spi_ping_params_t;
 
 typedef struct _wl_spi_ping_verif_t
 {
-    /* CRC of data following this structure. */
+    /* CRC of data following this structure.
+     * It concerns data set on this device.
+     */
     unsigned long crc_val;
 
     /* Unused, for data alignment reason. */
@@ -314,13 +325,20 @@ typedef struct _wl_spi_ping_verif_t
     /* CRC verification result of previous ping request.
      *  0   : no error
      *  else: error
+     *
+     * It concerns data set on remote device.
      */
     unsigned char prev_crc_fail;
 
     /* Total count of CRC error(s) that happened so far.
      * Note : this doesn't includes result for this ping request.
+     *
+     * It concerns data set on remote device.
      */
     unsigned short crc_error_total;
+
+    /* Total count of tests done so far. */
+    unsigned long count_total;
 } wl_spi_ping_verif_t;
 
 

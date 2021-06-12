@@ -314,6 +314,7 @@ void spi_init_header(wl_spi_header_t* hdr, unsigned char command, unsigned short
 }
 
 /* Cheap debug function to log raw data contents. */
+#if 0
 void spi_raw_log(char* str, unsigned char* ptr, unsigned short len)
 {
 #define SPI_RAW_LOG_LINELEN 8
@@ -360,6 +361,10 @@ void spi_raw_log(char* str, unsigned char* ptr, unsigned short len)
         log_to_uart("%s_%02X: %s %s", str, j*SPI_RAW_LOG_LINELEN, tmp_h, tmp_a);
     }
 }
+#else
+#   define spi_raw_log(_STR_, _PTR_, _LEN_)
+#endif
+
 
 
 void spi_exc_version(wl_verinfo_max_t* max_ver, wl_verinfo_stm_t* arm_ver)
@@ -407,9 +412,9 @@ void spi_exc_version(wl_verinfo_max_t* max_ver, wl_verinfo_stm_t* arm_ver)
 
 
     /* Raw log of data sent and received to/from STM32. */
-    // spi_raw_log("VerH", (unsigned char*)hdr, sizeof(wl_spi_header_t));
-    // spi_raw_log("VerS", (unsigned char*)&max_ver_buff, 32);
-    // spi_raw_log("VerR", (unsigned char*)arm_ver, 32);
+    spi_raw_log("VerH", (unsigned char*)hdr, sizeof(wl_spi_header_t));
+    spi_raw_log("VerS", (unsigned char*)&max_ver_buff, 32);
+    spi_raw_log("VerR", (unsigned char*)arm_ver, 32);
 
 #if SPI_DEBUG_LOGS == 1
     spi_logout("[SPI] HDR[%02X %02X]"
@@ -560,8 +565,8 @@ void spi_boot_getinfo(unsigned char rom_id, wl_spi_bootinfo_t* info)
     spi_receive((unsigned short*)info, sizeof(wl_spi_bootinfo_t) / sizeof(unsigned short));
 
     /* Raw log of data sent and received to/from STM32. */
-    // spi_raw_log("BtiH", (unsigned char*)hdr, sizeof(wl_spi_header_t));
-    // spi_raw_log("BtiR", (unsigned char*)info, 32);
+    spi_raw_log("BtiH", (unsigned char*)hdr, sizeof(wl_spi_header_t));
+    spi_raw_log("BtiR", (unsigned char*)info, 32);
 
     /* Sanitize path to boot ROM file. */
     info->path[WL_MAX_PATH - 1] = '\0';
@@ -590,4 +595,108 @@ void spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long
     spi_receive((unsigned short*)dst, len / sizeof(unsigned short));
 }
 
+
+/* SPI ping command.
+ *
+ * Transfer outline :
+ *  1. Send header from MAX 10
+ *     | M->S : wl_spi_header_t
+ *     |        | (wl_spi_ping_params_t*)params[]
+ *     |        | | -> contains CRC test length, test pattern settings etc
+ *     | S->M : nothing special
+ *  2. Send ping parameters and test data from both MAX 10 and STM32 sides
+ *     | M->S : wl_spi_ping_verif_t + data (variable size, indicated in step 1)
+ *     | S->M : wl_spi_ping_verif_t + data (variable size, indicated in step 1)
+ */
+#include <stdlib.h> /* For rand functions. */
+unsigned long _spi_ping_prev_seed = 0x12345678;
+void spi_ping_test(wl_spi_ping_params_t* params, wl_spi_ping_verif_t* ping_verifs, unsigned char* txrx_buffer)
+{
+    wl_spi_header_t hdr_dat;
+    wl_spi_header_t* hdr = &hdr_dat;
+
+    /* Data length integrity check. */
+    if(params->data_len > (WL_SPI_DATA_MAXLEN - sizeof(wl_spi_ping_verif_t)))
+    {
+        params->data_len = WL_SPI_DATA_MAXLEN - sizeof(wl_spi_ping_verif_t);
+    }
+    if(params->crc_len > params->data_len)
+    {
+        params->crc_len = params->data_len;
+    }
+
+    /* Prepare test data. */
+    unsigned char pattern = params->pattern;
+    wl_spi_ping_verif_t* verif_m10 = ping_verifs + 0;
+    wl_spi_ping_verif_t* verif_s32 = ping_verifs + 1;
+
+    if(pattern != WL_SPI_PING_NOTSET)
+    {
+        int i;
+        unsigned char c;
+
+        if(params->pattern_seed != _spi_ping_prev_seed)
+        {
+            srand(params->pattern_seed);
+            _spi_ping_prev_seed = params->pattern_seed;
+        }
+        c = (unsigned char)rand();
+
+        for(i=0; i<params->data_len; i++)
+        {
+            if(pattern == WL_SPI_PING_RANDOM)
+            {
+                c = (unsigned char)rand();
+            }
+            else if(pattern == WL_SPI_PING_CONSTANT)
+            {
+                /* Don't change constant value. */
+            }
+            else //if(pattern == WL_SPI_PING_INCREMENT)
+            {
+                c++;
+            }
+
+            txrx_buffer[i] = c;
+        }
+    }
+
+    /* Compute CRC of test data about to send.
+     * Note : the case crc_len equal to zero doesn't harms.
+     */
+    verif_m10->crc_val = crc32_calc(txrx_buffer, params->crc_len);
+
+    /* Setup packet header. */
+    spi_init_header(hdr, WL_SPICMD_PING, sizeof(wl_spi_ping_verif_t) + params->data_len);
+
+    /* Setup ping parameters. */
+    memcpy(hdr->params, params, sizeof(wl_spi_ping_params_t));
+
+    spi_sync_start();
+    spi_send((unsigned short*)hdr, sizeof(wl_spi_header_t) / sizeof(unsigned short));
+    spi_sync_middle();
+
+    /* Exchange ping results from previous time. */
+    spi_sendreceive((unsigned short*)verif_m10, (unsigned short*)verif_s32, sizeof(wl_spi_ping_verif_t) / sizeof(unsigned short));
+
+    /* Exchange current test data. */
+    spi_sendreceive((unsigned short*)(txrx_buffer+0), (unsigned short*)(txrx_buffer+params->data_len), params->data_len / sizeof(unsigned short));
+
+    /* Verify CRC of test data received from STM32.
+     * (Even in the case crc_len equal to zero, CRC value must be set)
+     * 
+     * Note : because STM32 have to send packet before checking the one received
+     *        from MAX 10, CRC test result from previous request is received.
+     */
+    unsigned long crc = crc32_calc(txrx_buffer+params->data_len, params->crc_len);
+    verif_m10->prev_crc_fail = (crc != verif_s32->crc_val ? 1 : 0);
+    if(verif_m10->crc_error_total < 0xFFFF)
+    {
+        verif_m10->crc_error_total += verif_m10->prev_crc_fail;
+    }
+    if(verif_m10->count_total < 0xFFFFFFFF)
+    {
+        verif_m10->count_total++;
+    }
+}
 
