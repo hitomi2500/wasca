@@ -37,4 +37,4 @@
 /fpga_firmware/wasca/synthesis/wasca.qip
 /fpga_firmware/wasca/wasca.html
 /fpga_firmware/wasca/wasca.xml
-/mcu_blaster/Debug/
+/mcu_svf_player/Debug/
