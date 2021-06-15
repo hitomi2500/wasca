@@ -1,14 +1,18 @@
 #include "wasca_svf.h"
+#include "libxsvf.h"
 #include "main.h"
 
 extern const unsigned char cmdlist[127330];
 extern const unsigned int args1_list[46997];
 extern const unsigned int args2_list[48];
 
+struct libxsvf_host *h
+
 void __do_RUNTEST_TCK(unsigned int value)
 {
-	int * p = value;
-	p[0] = 0;
+	for (int i=0; i < value; i++) {
+						LIBXSVF_HOST_PULSE_SCK();
+					}
 }
 
 void __do_RUNTEST_TCK_ENDSTATE_IDLE(unsigned int value)
