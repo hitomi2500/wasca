@@ -1,6 +1,7 @@
 #include "spi_ping.h"
 
 #include "crc.h"
+#include "log.h"
 
 
 /*
@@ -98,7 +99,7 @@ void spi_ping_post_process(wl_spi_header_t* hdr, unsigned char* data_rx)
      * SPI communication verification is done on MAX 10 side, in preparation of
      * providing the results to Saturn.
      */
-    //wl_spi_ping_verif_t* verif_m10 = (wl_spi_ping_verif_t*)data_rx;
+    wl_spi_ping_verif_t* verif_m10 = (wl_spi_ping_verif_t*)data_rx;
     unsigned char* data_m10 = data_rx + sizeof(wl_spi_ping_verif_t);
 
     wl_spi_ping_verif_t* verif_s32 = &_spi_ping_verif;
@@ -108,7 +109,14 @@ void spi_ping_post_process(wl_spi_header_t* hdr, unsigned char* data_rx)
      * (Even in the case crc_len equal to zero, CRC value must be set)
      */
     unsigned long crc = crc32_calc(data_m10, params->crc_len);
-    verif_s32->prev_crc_fail = (crc != verif_s32->crc_val ? 1 : 0);
+    verif_s32->prev_crc_fail = (crc != verif_m10->crc_val ? 1 : 0);
+    if(crc != verif_m10->crc_val)
+    {
+        termout(WL_LOG_DEBUGNORMAL, "## [%08X] Error STM32 CRC[%08X] is not %08X"
+            , (unsigned int)HAL_GetTick()
+            , crc
+            , verif_m10->crc_val);
+    }
     if(verif_s32->crc_error_total < 0xFFFF)
     {
         verif_s32->crc_error_total += verif_s32->prev_crc_fail;

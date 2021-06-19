@@ -105,7 +105,7 @@ void spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long
  *
  * About each parameters :
  *  - params     : test data setup information.
- * - ping_verifs : Contains data verification result for this test
+ * - ping_verif* : Contains data verification result for this test
  *                 as well as previous ones.
  *                 It must point to two wl_spi_ping_verif_t structures.
  *                  -> First  structure : results on MAX 10 side.
@@ -115,7 +115,7 @@ void spi_boot_readdata(unsigned char rom_id, unsigned long offset, unsigned long
  *                 It can be located either on onchip RAM (if it fits there)
  *                 or external SDRAM.
 **/
-void spi_ping_test(wl_spi_ping_params_t* params, wl_spi_ping_verif_t* ping_verifs, unsigned char* txrx_buffer);
+void spi_ping_test(wl_spi_ping_params_t* params, wl_spi_ping_verif_t* ping_verif_m10, wl_spi_ping_verif_t* ping_verif_s32, unsigned char* txrx_buffer);
 
 
 #endif // _WL_SPI_STM32_H_

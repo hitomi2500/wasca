@@ -1,4 +1,4 @@
-// Generated: 2021/03/16, 18:20
+// Generated: 2021/06/19, 17:34
 #ifndef M10_VER_INFOS_H
 #define M10_VER_INFOS_H
 #define MAX10_FWDT_STR  "202102241951"

@@ -184,6 +184,8 @@ void blink_the_leds(void)
  * ------------------------------------------
  */
 unsigned long _spi_ping_cnt = 0;
+wl_spi_ping_verif_t _spi_ping_verif_m10 = {0};
+wl_spi_ping_verif_t _spi_ping_verif_s32 = {0};
 void do_spi_ping_test(void)
 {
     /* TODO : in the future, it may be good to allow setting
@@ -192,28 +194,20 @@ void do_spi_ping_test(void)
     wl_spi_ping_params_t params = {0};
     params.data_len = WL_SPI_DATA_MAXLEN - sizeof(wl_spi_ping_verif_t);
     params.crc_len  = params.data_len;
-    params.pattern  = WL_SPI_PING_RANDOM;
+    params.pattern  = WL_SPI_PING_INCREMENT;//WL_SPI_PING_RANDOM;
     params.pattern_seed = _spi_ping_cnt; /* Not super random ... */
 
     /* Set buffer to test data to a relatively unused area in SDRAM. */
     unsigned char* txrx_buffer = ((unsigned char *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE) + (30 * 1024 * 1024);
-    wl_spi_ping_verif_t* ping_verifs = (wl_spi_ping_verif_t*)(txrx_buffer + (2 * WL_SPI_DATA_MAXLEN));
 
     /* On first test, initialize test results. */
     if(_spi_ping_cnt == 0)
     {
-        memset(ping_verifs, 0, 2*sizeof(wl_spi_ping_verif_t));
+        memset(&_spi_ping_verif_m10, 0, sizeof(wl_spi_ping_verif_t));
+        memset(&_spi_ping_verif_s32, 0, sizeof(wl_spi_ping_verif_t));
     }
 
-    /* Send a log message before the first ping.
-     * -> just in case this function doesn't works at all ...
-     */
-    if(_spi_ping_cnt == 0)
-    {
-        log_to_uart("[SPI PING]spi_ping_test STT");
-    }
-
-    spi_ping_test(&params, ping_verifs, txrx_buffer);
+    spi_ping_test(&params, &_spi_ping_verif_m10, &_spi_ping_verif_s32, txrx_buffer);
 
     /* Periodically log SPI test results.
      * Note : as results concern previous test, it's a good idea to
@@ -221,10 +215,10 @@ void do_spi_ping_test(void)
      */
     if((_spi_ping_cnt % 100) == 1)
     {
-        log_to_uart("[SPI PING]CNT:%7u K, CRC:%08X/%08X, Error : %3u/%3u", 
-            _spi_ping_cnt/1000, 
-            ping_verifs[1].crc_val, ping_verifs[0].crc_val, 
-            ping_verifs[1].crc_error_total, ping_verifs[0].crc_error_total);
+        log_to_uart("[SPI PING]CNT:%7u, CRC:%08X/%08X, Error : %2u/%2u", 
+            _spi_ping_cnt, 
+            _spi_ping_verif_m10.crc_val, _spi_ping_verif_s32.crc_val, 
+            _spi_ping_verif_m10.crc_error_total, _spi_ping_verif_s32.crc_error_total);
     }
 
     _spi_ping_cnt++;
@@ -238,7 +232,7 @@ void load_boot_rom(unsigned char rom_id)
     volatile unsigned short * pRegs_16 = (unsigned short *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
     unsigned char* boot_rom = (unsigned char*)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
 
-    log_to_uart("[Boot ROM]START");
+    log_to_uart("[Boot ROM]START id:%u", rom_id);
 
     WASCA_PERF_START_MEASURE();
     /* Retrieve ROM file size. */
@@ -319,7 +313,8 @@ void load_boot_rom(unsigned char rom_id)
 
 #else /* Log transfer speed. */
 
-    log_to_uart("[Boot ROM]Read ended. Size:%u KB, Time:%u.%u sec, %u KB/s", 
+    log_to_uart("[Boot ROM]Read ended. ID:%u, Size:%u KB, Time:%u.%u sec, %u KB/s", 
+        rom_id, 
         rom_size>>10, 
         elapsed / 10, elapsed % 10, 
         kbps);
