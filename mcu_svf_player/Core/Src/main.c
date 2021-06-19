@@ -43,6 +43,7 @@ extern const char cmdlist[];
 UART_HandleTypeDef huart4;
 
 /* USER CODE BEGIN PV */
+int iErrorCount;
 
 /* USER CODE END PV */
 
@@ -91,9 +92,9 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   //set led to white
-  HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_RESET); /* (Green on my board) */
-  HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_RESET); /* (Blue on my board)  */
-  HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_RESET); /* (Red on my board)   */
+  HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_SET); /* (Green on my board) */
+  HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_SET); /* (Blue on my board)  */
+  HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_SET); /* (Red on my board)   */
 
   __do_play_xsvf();
 

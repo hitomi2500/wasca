@@ -1,56 +1,58 @@
 #include "wasca_svf.h"
-#include "libxsvf.h"
+#include "jtag.h"
 #include "main.h"
 
 extern const unsigned char cmdlist[127330];
 extern const unsigned int args1_list[46997];
 extern const unsigned int args2_list[48];
-
-struct libxsvf_host *h
+extern int iErrorCount;
 
 void __do_RUNTEST_TCK(unsigned int value)
 {
-	for (int i=0; i < value; i++) {
-						LIBXSVF_HOST_PULSE_SCK();
-					}
+	for (int i=0; i<value;i++)
+	{
+		JTAG_Tick();
+	}
 }
 
 void __do_RUNTEST_TCK_ENDSTATE_IDLE(unsigned int value)
 {
-	int * p = value;
-	p[0] = 0;
+	__do_RUNTEST_TCK(value);
+	JTAG_Reset();
 }
 
 void __do_SDR_TDI(unsigned int length, unsigned int value)
 {
-	int * p = value;
-	p[0] = 0;
+	JTAG_SDR(value,length);
 }
 
 void __do_SDR_TDI_TDO(unsigned int value1, unsigned int value2)
 {
-	int * p = value1;
-	int * p2 = value2;
-	p[0] = p2[0];
+	unsigned int res = JTAG_SDR(value1,32);
+	if (res != value2)
+	{
+		iErrorCount++;
+	}
 }
 
 void __do_SDR_TDI_TDO_MASK(unsigned int value1, unsigned int value2, unsigned int value3)
 {
-	int * p = value1;
-	int * p2 = value2;
-	int * p3 = value3;
-	p[0] = p2[0];
+	unsigned int res = JTAG_SDR(value1,32);
+	if ((res&value3) != (value2&value3))
+	{
+		iErrorCount++;
+	}
 }
 
 void __do_SDR_1_TDI_0_TDO_1_MASK_1()
 {
-	int * p = 0;
-	p[0] = 0;
+	JTAG_SDR(0,1);
 }
 
 void __do_play_xsvf()
 {
 	int iArgsIndex;
+	iErrorCount = 0;
 	//struct CMD_ARGS _args;
 	int iArgs1_Index = 0;
 	int iArgs2_Index = 0;
@@ -107,37 +109,45 @@ void __do_play_xsvf()
 		if (i%10000 < 5000)
 		{
 			  //set led to blue
-			  HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_SET); /* (Green on my board) */
-			  HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_SET); /* (Blue on my board)  */
-			  HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_RESET); /* (Red on my board)   */
+			  HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_RESET); /* (Green on my board) */
+			  HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_RESET); /* (Blue on my board)  */
+			  HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_SET); /* (Red on my board)   */
 		}
 		else
 		{
-			  //set led to red
-			  HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_RESET); /* (Green on my board) */
-			  HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_SET); /* (Blue on my board)  */
+			  //set led to yellow
+			  HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_SET); /* (Green on my board) */
+			  HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_RESET); /* (Blue on my board)  */
 			  HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_SET); /* (Red on my board)   */
+		}
+
+		if (iErrorCount > 0)
+		{
+			  //set led to red
+			  HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_SET); /* (Green on my board) */
+			  HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_RESET); /* (Blue on my board)  */
+			  HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_RESET); /* (Red on my board)   */
 		}
 
 	}
 
 	//set led to green
-	HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_SET); /* (Green on my board) */
-	HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_RESET); /* (Blue on my board)  */
-	HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_SET); /* (Red on my board)   */
+	HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_RESET); /* (Green on my board) */
+	HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_SET); /* (Blue on my board)  */
+	HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_RESET); /* (Red on my board)   */
 
 	if (iArgs1_Index != 46997)
 	{
 		//set led to red
-		HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_RESET); /* (Green on my board) */
-		HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_SET); /* (Blue on my board)  */
-		HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_SET); /* (Red on my board)   */
+		HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_SET); /* (Green on my board) */
+		HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_RESET); /* (Blue on my board)  */
+		HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_RESET); /* (Red on my board)   */
 	}
 	if (iArgs2_Index != 48)
 	{
 		//set led to violet
-		HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_RESET); /* (Green on my board) */
-		HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_SET); /* (Blue on my board)  */
-		HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_RESET); /* (Red on my board)   */
+		HAL_GPIO_WritePin(LD1_R_GPIO_Port, LD1_R_Pin, GPIO_PIN_SET); /* (Green on my board) */
+		HAL_GPIO_WritePin(LD1_G_GPIO_Port, LD1_G_Pin, GPIO_PIN_RESET); /* (Blue on my board)  */
+		HAL_GPIO_WritePin(LD1_B_GPIO_Port, LD1_B_Pin, GPIO_PIN_SET); /* (Red on my board)   */
 	}
 }
