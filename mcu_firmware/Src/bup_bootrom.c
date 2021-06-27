@@ -134,8 +134,22 @@ void bup_cache_flush(void)
         i+=block_cnt;
     }
 
+    /* Synchronize any pending write to SD card, 
+     * so that it's safe to turn off the Saturn now.
+     */
+    f_sync(&_BupFile);
+
     /* Indicate that cache is now empty. */
     _bup_cache_cnt = 0;
+
+    /* As all backup data is written to SD card and that
+     * additional data wasn't received for a while,
+     * let's indicate that backup data process finished.
+     */
+    if(!_bup_error_flag)
+    {
+        bup_led_status_set(0/*turn_on*/);
+    }
 }
 
 
@@ -147,7 +161,10 @@ void bup_cache_append(unsigned long block_id, unsigned char* ptr, unsigned short
     }
 
     /* Let's indicate that we are processing backup data. */
-    bup_led_status_set(1/*turn_on*/);
+    if(!_bup_error_flag)
+    {
+        bup_led_status_set(1/*turn_on*/);
+    }
 
     /* Split input data into 512 bytes blocks that will be cached individually. */
     unsigned short pos;
@@ -220,23 +237,13 @@ void bup_periodic_check(void)
         diff = (0xFFFFFFFF - _bup_prev_append_tick) + tick;
     }
 
+    /* If there's no recent activity from MAX 10, 
+     * flush write buffer contents to SD card.
+     */
     if(diff >= BUP_FLUSH_INTERVAL)
     {
         bup_cache_flush();
-
-        /* Synchronize any pending write to SD card, 
-         * so that it's safe to turn off the Saturn now.
-         */
-        f_sync(&_BupFile);
-
-        /* As all backup data is written to SD card and that
-         * additional data wasn't received for a while,
-         * let's indicate that backup data process finished.
-         */
-        bup_led_status_set(0/*turn_on*/);
     }
-
-    _bup_prev_append_tick = HAL_GetTick();
 }
 
 
