@@ -37,28 +37,3 @@ enum CMDS {
 #define SDR_1_TDI_0_TDO_1_MASK_1 11
 #define SIR_10_TDI 12
 
-/*struct CMD_ARGS {
-	unsigned char cmd;
-	unsigned char arg1_8;
-	unsigned char arg2_8;
-	unsigned int arg3_32;
-	unsigned char arg4_8;
-	unsigned int arg5_32;
-	unsigned char arg6_8;
-	unsigned int arg7_32;
-};*/
-
-/*
-void __do_SIR_3(int a,enum JTAG_PIN b,int c);
-
-void __do_SDR_3(int a,enum JTAG_PIN b,int c);
-
-void __do_SDR_5(int a,enum JTAG_PIN b,int c, enum JTAG_PIN d,int e);
-
-void __do_RUNTEST_2(int a,enum JTAG_PIN b);
-
-void __do_RUNTEST_5(enum STATES a,int b,enum JTAG_PIN c,enum FLAGS d,enum STATES e);
-
-void __do_SDR_7(int a,enum JTAG_PIN b,int c,enum JTAG_PIN d,int e,enum FLAGS f,int g);
-
-*/

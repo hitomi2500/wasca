@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2020 Sean Gonsalves
  *
- * This file is part of Neo CD SD Loader.
+ * This file is heavily based on Neo CD SD Loader.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,15 +57,5 @@ void TDI_SET(int v);
 void JTAG_Reset();
 void JTAG_SIR(uint32_t data_in, const uint32_t length);
 uint32_t JTAG_SDR(uint32_t data_in, const uint32_t length);
-//uint32_t JTAG_Code(const uint32_t cmd);
-//void JTAG_Run(uint32_t ticks);
-//void JTAG_Erase();
-//void JTAG_Enable();
-//void JTAG_Disable();
-//void JTAG_StartProgram();
-//void JTAG_Program(const uint16_t * data_ptr, uint32_t size);
-//void JTAG_StartRead();
-//uint32_t JTAG_Verify(const uint16_t * data_ptr, uint32_t size);
-//void JTAG_ProgramDone();
 
 #endif /* __CPLD_UPDATE_H__ */

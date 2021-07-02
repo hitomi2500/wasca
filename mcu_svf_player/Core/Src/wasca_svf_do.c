@@ -2,6 +2,7 @@
 #include "jtag.h"
 #include "main.h"
 
+//these numbers must be copied from auto-generated wasca_svf.c
 #define CMDLIST_SIZE 133931
 #define ARGS1_SIZE 53583
 #define ARGS2_SIZE 55
@@ -13,20 +14,6 @@ extern int iErrorCount;
 
 void __do_RUNTEST_TCK(unsigned int value)
 {
-	/*unsigned int v2 = value/3;
-	for (uint32_t c = 0; c < v2; c++)
-	{
-		asm("nop");
-		asm("nop");
-		asm("nop");
-		asm("nop");
-		asm("nop");
-		asm("nop");
-	}*/
-	/*for (int i=0; i<(value);i++)  //our freq is ~14.8 times lower than expected 25MHz
-	{
-		JTAG_Tick();
-	}*/
 	JTAG_Ticks(value);
 }
 

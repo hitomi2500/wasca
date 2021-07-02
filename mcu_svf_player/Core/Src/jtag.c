@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2020 Sean Gonsalves
  *
- * This file is part of Neo CD SD Loader.
+ * This file is heavily based on Neo CD SD Loader.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,10 +43,8 @@ const unsigned int MAX_TCK_Pin_32 = MAX_TCK_Pin;
 const unsigned int MAX_TCK_Pin_32_L16 = (uint32_t)MAX_TCK_Pin << 16U;
 
 void JTAG_Tick() {
-	//asm("nop");//delay_us(1);
 	//TCK_HIGH
 	TCK_PORT->BSRR = MAX_TCK_Pin_32;
-	//asm("nop");//delay_us(1);
 	//TCK_LOW
 	TCK_PORT->BSRR = MAX_TCK_Pin_32_L16;
 }
@@ -156,106 +154,3 @@ uint32_t JTAG_SDR(uint32_t data_in, const uint32_t length) {
 
 	return sr;
 }
-
-/*void JTAG_Run(uint32_t ticks) {
-	for (uint32_t c = 0; c < ticks; c++)
-		delay_us(2);
-}*/
-
-/*void JTAG_SetAddress(uint32_t address) {
-	JTAG_SIR(ISC_ADDRESS_SHIFT, 10);
-	JTAG_Run(6);
-	JTAG_SDR(address, 13);
-}*/
-
-/*uint32_t JTAG_Code(const uint32_t cmd) {
-	// This is NOT the silicon ID !
-	// 5M240ZT100 IDCODE is 0x020A50DD
-
-	JTAG_Reset();
-	JTAG_SIR(cmd, 10);
-
-	return JTAG_SDR(0xFFFF, 32);
-}*/
-
-/*void JTAG_Erase() {
-	JTAG_SetAddress(0x0011);
-	JTAG_SIR(ISC_ERASE, 10);
-	JTAG_Run(250000);	// Wait 500ms
-
-	JTAG_SetAddress(0x0001);
-	JTAG_SIR(ISC_ERASE, 10);
-	JTAG_Run(250000);	// Wait 500ms
-
-	JTAG_SetAddress(0x0000);
-	JTAG_SIR(ISC_ERASE, 10);
-	JTAG_Run(250000);	// Wait 500ms
-}*/
-
-/*void JTAG_Enable() {
-	JTAG_SIR(ISC_ENABLE, 10);
-	JTAG_Run(500);	// Wait 1ms
-}
-
-void JTAG_Disable() {
-	JTAG_SIR(ISC_DISABLE, 10);
-	JTAG_Run(500);	// Wait 1ms
-	JTAG_SIR(JTAG_BYPASS, 10);
-	JTAG_Run(500);	// Wait 1ms
-}*/
-
-
-
-/*void JTAG_StartProgram() {
-	JTAG_SetAddress(0x0000);
-	JTAG_SIR(ISC_PROGRAM, 10);
-	JTAG_Run(6);
-}
-
-/*void JTAG_Program(const uint16_t * data_ptr, uint32_t size) {
-	for (uint32_t c = 0; c < size; c++) {
-		JTAG_SDR(*data_ptr++, 16);
-		JTAG_Run(50);	// Wait 100us
-	}
-}*/
-
-/*void JTAG_StartRead() {
-	JTAG_SetAddress(0x0000);
-	JTAG_SIR(ISC_READ, 10);
-	JTAG_Run(6);
-}*/
-
-/*uint32_t JTAG_Verify(const uint16_t * data_ptr, uint32_t size) {
-	for (uint32_t c = 0; c < size; c++) {
-#ifdef STANDALONE
-	    char buffer_print[64];
-		uint16_t readback = JTAG_SDR(0xFFFF, 16);
-		if (*data_ptr != readback) {
-			sprintf(buffer_print, "%04lx: %04x vs %04x", c, *data_ptr, readback);
-			CDCPrint(buffer_print);
-			return 1;	// Error
-		}
-		data_ptr++;
-#else
-		if (*data_ptr++ != JTAG_SDR(0xFFFF, 16))
-			return 1;	// Error
-#endif
-	}
-	return 0;
-}*/
-
-/*void JTAG_ProgramDone() {
-	JTAG_SetAddress(0x0000);
-	JTAG_SIR(ISC_PROGRAM, 10);
-	JTAG_Run(6);
-
-	JTAG_SDR(0x7BFF, 16);
-	JTAG_Run(50);	// Wait 100us
-	// Same as already programmed data. Following operations are not needed ?
-	JTAG_SDR(0xFFFF, 16);
-	JTAG_Run(50);	// Wait 100us
-	JTAG_SDR(0xBFFF, 16);
-	JTAG_Run(50);	// Wait 100us
-	JTAG_SDR(0xFFFF, 16);
-	JTAG_Run(50);	// Wait 100us
-}*/
