@@ -58,16 +58,20 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LD1_R_Pin GPIO_PIN_13
-#define LD1_R_GPIO_Port GPIOC
-#define LD1_G_Pin GPIO_PIN_14
-#define LD1_G_GPIO_Port GPIOC
-#define LD1_B_Pin GPIO_PIN_15
+#define LD1_B_Pin GPIO_PIN_13
 #define LD1_B_GPIO_Port GPIOC
-#define B1_Pin GPIO_PIN_14
-#define B1_GPIO_Port GPIOB
-#define LD3_Pin GPIO_PIN_15
-#define LD3_GPIO_Port GPIOB
+#define LD1_R_Pin GPIO_PIN_14
+#define LD1_R_GPIO_Port GPIOC
+#define LD1_G_Pin GPIO_PIN_15
+#define LD1_G_GPIO_Port GPIOC
+#define MAX_TDI_Pin GPIO_PIN_0
+#define MAX_TDI_GPIO_Port GPIOA
+#define MAX_TMS_Pin GPIO_PIN_1
+#define MAX_TMS_GPIO_Port GPIOA
+#define MAX_TDO_Pin GPIO_PIN_14
+#define MAX_TDO_GPIO_Port GPIOB
+#define MAX_TCK_Pin GPIO_PIN_15
+#define MAX_TCK_GPIO_Port GPIOB
 #define LD2_Pin GPIO_PIN_12
 #define LD2_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */

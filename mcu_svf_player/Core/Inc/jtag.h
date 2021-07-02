@@ -25,23 +25,19 @@
 #define __CPLD_UPDATE_H__
 
 #define TMS_PORT GPIOA
-#define TCK_PORT GPIOA
+#define TCK_PORT GPIOB
 #define TDI_PORT GPIOA
-#define TDO_PORT GPIOA
-#define TMS_PIN GPIO_PIN_10
-#define TCK_PIN GPIO_PIN_15
-#define TDI_PIN GPIO_PIN_13
-#define TDO_PIN GPIO_PIN_14
+#define TDO_PORT GPIOB
 
 //#define TMS_HIGH LL_GPIO_SetOutputPin(GPIOA, GPIO_PIN_10);
-#define TMS_HIGH HAL_GPIO_WritePin(TMS_PORT, TMS_PIN, GPIO_PIN_SET);
+#define TMS_HIGH HAL_GPIO_WritePin(TMS_PORT, MAX_TMS_Pin, GPIO_PIN_SET);
 //#define TMS_LOW LL_GPIO_ResetOutputPin(GPIOA, GPIO_PIN_10);
-#define TMS_LOW HAL_GPIO_WritePin(TMS_PORT, TMS_PIN, GPIO_PIN_RESET);
+#define TMS_LOW HAL_GPIO_WritePin(TMS_PORT, MAX_TMS_Pin, GPIO_PIN_RESET);
 
 //#define TCK_HIGH LL_GPIO_SetOutputPin(GPIOA, GPIO_PIN_15);
-#define TCK_HIGH HAL_GPIO_WritePin(TCK_PORT, TCK_PIN, GPIO_PIN_SET);
+#define TCK_HIGH HAL_GPIO_WritePin(TCK_PORT, MAX_TCK_Pin, GPIO_PIN_SET);
 //#define TCK_LOW LL_GPIO_ResetOutputPin(GPIOA, GPIO_PIN_15);
-#define TCK_LOW HAL_GPIO_WritePin(TCK_PORT, TCK_PIN, GPIO_PIN_RESET);
+#define TCK_LOW HAL_GPIO_WritePin(TCK_PORT, MAX_TCK_Pin, GPIO_PIN_RESET);
 
 //#define TDI_SET(v) GPIOA->BSRR = ((v) ? GPIO_BSRR_BS_13 : GPIO_BSRR_BR_13);
 void TDI_SET(int v);
@@ -61,15 +57,15 @@ void TDI_SET(int v);
 void JTAG_Reset();
 void JTAG_SIR(uint32_t data_in, const uint32_t length);
 uint32_t JTAG_SDR(uint32_t data_in, const uint32_t length);
-uint32_t JTAG_Code(const uint32_t cmd);
-void JTAG_Erase();
-void JTAG_Enable();
-void JTAG_Disable();
-void JTAG_Run(uint32_t ticks);
-void JTAG_StartProgram();
-void JTAG_Program(const uint16_t * data_ptr, uint32_t size);
-void JTAG_StartRead();
-uint32_t JTAG_Verify(const uint16_t * data_ptr, uint32_t size);
-void JTAG_ProgramDone();
+//uint32_t JTAG_Code(const uint32_t cmd);
+//void JTAG_Run(uint32_t ticks);
+//void JTAG_Erase();
+//void JTAG_Enable();
+//void JTAG_Disable();
+//void JTAG_StartProgram();
+//void JTAG_Program(const uint16_t * data_ptr, uint32_t size);
+//void JTAG_StartRead();
+//uint32_t JTAG_Verify(const uint16_t * data_ptr, uint32_t size);
+//void JTAG_ProgramDone();
 
 #endif /* __CPLD_UPDATE_H__ */
