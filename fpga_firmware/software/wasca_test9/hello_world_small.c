@@ -109,18 +109,8 @@
 #define MODE_REG_OFFSET                     0xF4
 #define SWVER_REG_OFFSET                    0xF8
 
-// const char Power_Memory_Signature[16] = "BackUpRam Format";
-// const char Wasca_Sysarea_Signature[64] =
-// {
-//     0x80, 0x00, 0x00, 0x00, 0x77, 0x61, 0x73, 0x63,
-//     0x61, 0x20, 0x73, 0x79, 0x73, 0x20, 0x20, 0x01,
-//     0xBE, 0xB6, 0xDE, 0xBB, 0xC0, 0xB0, 0xDD, 0x2C,
-//     0xBC, 0xDB, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-//     0x0E, 0x74, 0x7F, 0xFC, 0x7F, 0xFD, 0x7F, 0xFE,
-//     0x7F, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-//     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-//     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-// };
+/* The base settings, retrieved from STM32 on startup. */
+wl_baseset_max_t _baseset = {0};
 
 
 
@@ -271,18 +261,15 @@ void load_boot_rom(unsigned char rom_id)
      * This is not necessary, but a good way of doing
      * in the case of loading a ROM over a larger one, 
      * or when ROM could not be loaded.
-     *
-     * In the case of Pseudo Saturn, size is 1MB, 
-     * and it is 2MB in the case of game boot ROM.
      */
-    unsigned long fill_len = (rom_id == 0 ? 1*1024*1024 : 2*1024*1024);
+    unsigned long fill_len = 2*1024*1024;
     if(fill_len > rom_size)
     {
         memset(boot_rom + rom_size, 0xFF, fill_len - rom_size);
     }
 
     /* Mark read status as terminated. */
-    pRegs_16[PCNTR_REG_OFFSET] = 100;
+    pRegs_16[PCNTR_REG_OFFSET] = 99;
 
     WASCA_PERF_STOP_MEASURE();
     unsigned long elapsed = wasca_perf_get_usec(WASCA_PERF_GET_TIME());
@@ -323,11 +310,25 @@ void load_boot_rom(unsigned char rom_id)
 }
 
 
-void wasca_startup(void)
+int main(void)
 {
+    int i;
+    //volatile unsigned char  * pCS0     = (unsigned char  *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
+    volatile unsigned char  * pCS1     = (unsigned char  *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x2000000);
+    // volatile unsigned short * pCS0_16  = (unsigned short *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
     volatile unsigned short * pRegs_16 = (unsigned short *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
 
     HEARTBEAT_FAST();
+
+    /*--------------------------------------------*/
+    /* Initialize settings. */
+    memset(&_baseset, 0, sizeof(wl_baseset_max_t));
+    _baseset.cart_mode = 0x0341;
+    _baseset.log_level = WL_LOG_DISABLE;
+
+    /* Write version. */
+    pRegs_16[SWVER_REG_OFFSET] = SOFTWARE_VERSION;
+
 
     /*--------------------------------------------*/
     /* Initialize log internals. */
@@ -366,7 +367,15 @@ void wasca_startup(void)
         arm_ver->build_time[sizeof(arm_ver->build_time)-1] = '\0';
         log_to_uart("STM32 FW build_date:\"%s\"", arm_ver->build_date);
         log_to_uart("STM32 FW build_time:\"%s\"", arm_ver->build_time);
+
+        /* Keep base settings in global variable. */
+        memcpy(&_baseset, &arm_ver->set, sizeof(wl_baseset_max_t));
     }
+
+
+
+    /* Initialization ended : blink the LED at slow speed. */
+    HEARTBEAT_SLOW();
 
 
 #if 0 // Test continous ROM loading (DEBUG)
@@ -382,59 +391,18 @@ void wasca_startup(void)
             HEARTBEAT_SLOW();
         }
         load_counter++;
-    
-        load_boot_rom(0/*ROM ID*/);
-    
+
+        load_boot_rom(WL_ROM_PSEUDOSAT/*ROM ID*/);
+
         log_to_uart("ROM load count : %u", load_counter);
     }
 #endif // Test continous ROM loading (DEBUG)
 
 
-    /*--------------------------------------------*/
-    /* Load Pseudo Saturn from SD card to SDRAM.  */
-    //load_boot_rom(0/*ROM ID*/);
-    load_boot_rom(14/*ROM ID*/); /* Temporarily set to WascaLoader. */
-
-
-    /* Write version. */
-    pRegs_16[SWVER_REG_OFFSET] = SOFTWARE_VERSION;
-
-
-//blink_the_leds();
-
-
-    /* Initialization ended : blink the LED at slow speed. */
-    HEARTBEAT_SLOW();
-}
-
-
-
-int main(void)
-{
-    int i;
-    volatile unsigned char  * pCS0     = (unsigned char  *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
-    volatile unsigned char  * pCS1     = (unsigned char  *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x2000000);
-    // volatile unsigned short * pCS0_16  = (unsigned short *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
-    volatile unsigned short * pRegs_16 = (unsigned short *) ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
-
-
-#if 0
-    /* Setup UART link speed.
-     * Let's use super slow speed to avoid characters to be eaten by UART.
-     */
-    {
-        unsigned long freq_tmp2 = 2 * UART_0_FREQ;
-        //unsigned long br2 = 9600;
-        unsigned long br2 = 115200;
-        freq_tmp2 = freq_tmp2 / br2;
-        ((unsigned long*)UART_0_BASE)[4] = freq_tmp2 / 2;
-        log_to_uart("UART Baud Rate : %u bps", br2);
-    }
-#endif
-
-    /*--------------------------------------------------*/
-    /* Load boot ROM and do other misc initializations. */
-    wasca_startup();
+    // /*--------------------------------------------*/
+    // /* Load Pseudo Saturn from SD card to SDRAM.  */
+    // //load_boot_rom(WL_ROM_PSEUDOSAT/*ROM ID*/);
+    // load_boot_rom(WL_ROM_WASCALOADER/*ROM ID*/); /* Temporarily set to WascaLoader. */
 
     /*----------------------------------------------------------------*/
     /* Poll MODE register and setup Wasca accordingly when it is set. */
@@ -442,15 +410,30 @@ int main(void)
     int bram_mode = 0;
 
     int loop_counter = 0;
+    int first_loop = 1;
     while(1)
     {
         volatile unsigned short current_block;
-        unsigned short mode_reg = pRegs_16[MODE_REG_OFFSET];
+
+        unsigned short mode_reg;
+        if(first_loop)
+        {
+            /* On startup, use cartridge mode from settings file on SD card. */
+            mode_reg = _baseset.cart_mode;
+            prev_mode_reg = ~mode_reg;
+        }
+        else
+        {
+            mode_reg = pRegs_16[MODE_REG_OFFSET];
+        }
 
         /* Re-init internals in the case MODE register changed. */
         if(mode_reg != prev_mode_reg)
         {
-            log_to_uart("Mode set to %x",mode_reg);
+            /* Indicate that initialization is starting. */
+            pRegs_16[PCNTR_REG_OFFSET] = 0;
+
+            log_to_uart("Mode set to %x", mode_reg);
 
             /* If we were emulating backup memory until now, 
              * close its file before starting a new mode initialization.
@@ -464,6 +447,52 @@ int main(void)
             /* Okay, now start a MODE-dependent preparation routine.
              * lower octets have higher priority.
              */
+            if((mode_reg & 0x0F00) != 0)
+            {
+                log_to_uart("Octet 2, value %x", (mode_reg & 0x0F00));
+                /* Select cartridge ROM :
+                 *  - 0    : No ROM
+                 *  - 1    : KOF95.bin
+                 *  - 2    : Ultraman.bin
+                 *  - 3    : Wascaloadr
+                 *  - 4    : Pseudo
+                 *  - 5    : ROM5.bin
+                 *  - 6    : ROM6.bin
+                 *  - 7    : ROM7.bin
+                 *  - 8-14 : (Reserved)
+                 *  - 15   : Firmware internal boot ROM
+                 */
+                unsigned char rom_id = (unsigned char)((mode_reg & 0x0F00) >> 8);
+
+                log_to_uart("Preparing KoF'95 / Ultraman ROM");
+                load_boot_rom(rom_id);
+
+                /* Mapper stuff. */
+                pRegs_16[MAPPER_WRITE_0] =      0; /* Lock cs0 writes.                            */
+                pRegs_16[MAPPER_WRITE_1] =      0; /* Lock cs0 writes.                            */
+                pRegs_16[MAPPER_WRITE_2] =      0; /* Lock cs1 writes.                            */
+                pRegs_16[MAPPER_WRITE_3] =      0; /* Lock cs2 writes.                            */
+                pRegs_16[MAPPER_READ_0 ] =      3; /* Unmap cs0, leave first 2 megs.              */
+                pRegs_16[MAPPER_READ_1 ] = 0x8100; /* Unmap cs0, leave regs and minipseudo areas. */
+                pRegs_16[MAPPER_READ_2 ] =      0; /* Unmap cs1.                                  */
+                pRegs_16[MAPPER_READ_3 ] =      0; /* Unmap cs2.                                  */
+
+                log_to_uart("Done");
+            }
+
+            if((mode_reg & 0x00F0) != 0)
+            {
+                log_to_uart("Octet 1, value %x", (mode_reg & 0x00F0));
+
+                // /* RAM expansion cart, clear bootrom's signature just in case. */
+                // for(i=0;i<256;i++)
+                // {
+                //     pCS0[i] = 0;
+                // }
+
+                /* And that is all for RAM cart. */
+            }
+
             if((mode_reg & 0x000F) != 0)
             {
                 log_to_uart("Octet 0, value %x", (mode_reg & 0x000F));
@@ -500,8 +529,6 @@ int main(void)
 
                     spi_bup_read(i/*ID*/, 512/*size*/, (unsigned char*)(pCS1 + (i*512)));
                 }
-                pRegs_16[PCNTR_REG_OFFSET] = 100;
-                log_to_uart("Done");
 
                 /* Setup mapper stuff. */
                 pRegs_16[MAPPER_WRITE_0] =      0; /* Lock cs0 writes.                            */
@@ -524,48 +551,8 @@ int main(void)
                  * synchronized to SD card when Saturn modifies it.
                  */
                 bram_mode = 1;
-            }
-            else if((mode_reg & 0x00F0) != 0)
-            {
-                log_to_uart("Octet 1, value %x",(mode_reg & 0x00F0));
-
-                /* RAM expansion cart, clear bootrom's signature just in case. */
-                for(i=0;i<256;i++)
-                {
-                    pCS0[i] = 0;
-                }
-
-                /* and that is all for RAM cart. */
-                pRegs_16[PCNTR_REG_OFFSET] = 100;
-            }
-            else if((mode_reg & 0x0F00) != 0)
-            {
-                log_to_uart("Octet 2, value %x",(mode_reg & 0x0F00));
-                /* KOF95/Ultraman boot ROM :
-                 *  - 0x01 : KOF95
-                 *  - 0x02 : Ultraman
-                 */
-                unsigned char rom_id = (unsigned char)((mode_reg & 0x0F00) >> 8);
-
-                log_to_uart("Preparing KoF'95 / Ultraman ROM");
-                load_boot_rom(rom_id);
-
-                /* Mapper stuff. */
-                pRegs_16[MAPPER_WRITE_0] =      0; /* Lock cs0 writes.                            */
-                pRegs_16[MAPPER_WRITE_1] =      0; /* Lock cs0 writes.                            */
-                pRegs_16[MAPPER_WRITE_2] =      0; /* Lock cs1 writes.                            */
-                pRegs_16[MAPPER_WRITE_3] =      0; /* Lock cs2 writes.                            */
-                pRegs_16[MAPPER_READ_0 ] =      3; /* Unmap cs0, leave first 2 megs.              */
-                pRegs_16[MAPPER_READ_1 ] = 0x8100; /* Unmap cs0, leave regs and minipseudo areas. */
-                pRegs_16[MAPPER_READ_2 ] =      0; /* Unmap cs1.                                  */
-                pRegs_16[MAPPER_READ_3 ] =      0; /* Unmap cs2.                                  */
 
                 log_to_uart("Done");
-            }
-            else
-            {
-                log_to_uart("UNKNOWN MODE %x", mode_reg);
-                pRegs_16[PCNTR_REG_OFFSET] = 100;
             }
 
 
@@ -573,6 +560,9 @@ int main(void)
              * in order to detect change after that.
              */
             prev_mode_reg = mode_reg;
+
+            /* Indicate that initialization ended. */
+            pRegs_16[PCNTR_REG_OFFSET] = 100;
         }
 
 
@@ -615,6 +605,17 @@ int main(void)
         }
 
         loop_counter++;
+
+
+        /* On startup, as cartridge mode from settings file on SD card is used, 
+         * it's necessary to tweak the check of mode register.
+         */
+        if(first_loop)
+        {
+            mode_reg = pRegs_16[MODE_REG_OFFSET];
+            prev_mode_reg = mode_reg;
+            first_loop = 0;
+        }
     }
 
     /* Never reached. */

@@ -75,6 +75,8 @@ Src/spi_max10.c \
 Src/bup_bootrom.c \
 Src/misc_tests.c \
 Src/spi_ping.c \
+Src/settings.c \
+Src/sd_wrapper.c \
 $(STM32CUBEF4)/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c \
 Src/system_stm32f4xx.c \
 Src/bsp_driver_sd.c \

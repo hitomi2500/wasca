@@ -479,10 +479,14 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
 
 
         /* Adapt file name according to ROM ID.
-         *  - 0    : Pseudo Saturn Kai
-         *  - 1    : KOF95
-         *  - 2    : Ultraman
-         *  - 3-14 : (Reserved)
+         *  - 0    : No ROM
+         *  - 1    : KOF95.bin
+         *  - 2    : Ultraman.bin
+         *  - 3    : Wascaloadr
+         *  - 4    : Pseudo
+         *  - 5    : ROM5.bin
+         *  - 6    : ROM6.bin
+         *  - 8-14 : (Reserved)
          *  - 15   : Firmware internal boot ROM
          * 
          * Note : This implementation uses only a fixed file path.
@@ -492,13 +496,9 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
         char boot_rom_path[WL_MAX_PATH] = {'\0'};
         int open_success = 1;
 
-        if(params->rom_id != 15)
+        if(params->rom_id != WL_ROM_INTERNAL)
         {
-            if(params->rom_id == 0)
-            {
-                strcpy(boot_rom_path, "/PSKAI.BIN");
-            }
-            else if(params->rom_id == 1)
+            if(params->rom_id == 1)
             {
                 strcpy(boot_rom_path, "/KOF95.BIN");
             }
@@ -506,9 +506,21 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
             {
                 strcpy(boot_rom_path, "/ULTRAMAN.BIN");
             }
-            else if(params->rom_id == 14)
+            else if(params->rom_id == WL_ROM_WASCALOADER)
             {
                 strcpy(boot_rom_path, "/WASCALDR.BIN");
+            }
+            else if(params->rom_id == WL_ROM_PSEUDOSAT)
+            {
+                strcpy(boot_rom_path, "/PSKAI.BIN");
+            }
+            else if(params->rom_id == 5)
+            {
+                strcpy(boot_rom_path, "/ROM5.BIN");
+            }
+            else if(params->rom_id == 6)
+            {
+                strcpy(boot_rom_path, "/ROM6.BIN");
             }
             else
             {

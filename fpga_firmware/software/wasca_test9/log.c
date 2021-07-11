@@ -2,7 +2,7 @@
 #include "spi_stm32.h"
 
 #include "wasca_defs.h"
-
+#include "settings.h"
 
 /*
  * ------------------------------------------
@@ -29,6 +29,19 @@ void log_init(void)
 
 void logout_internal(int level, const char* fmt, ... )
 {
+    /* Check if log should be sent to STM32 or UART. */
+    int to_uart = (level == -1 ? 1 : 0);
+
+    /* Discard logs with level above specified one. */
+    if(!to_uart)
+    {
+        if((level > _baseset.log_level) || (level <= 0))
+        {
+            return;
+        }
+    }
+
+
     /* Ensure that there is enough space available in buffer to format the log message.
      * If not, flush the log messages buffer.
      */
@@ -179,9 +192,8 @@ void logout_internal(int level, const char* fmt, ... )
         }
     }
 
-    if(level == -1)
+    if(to_uart)
     {
-        /* Dirty hack to use output to UART instead of SPI. */
         char* str = ((char*)log_buff_start) + sizeof(len);
         str[len] = '\0';
         alt_putstr(str);
@@ -214,7 +226,7 @@ void logflush_internal(void)
     /* Send log messages buffer to STM32 via SPI.
      * SPI communication is designed to be able to send whole log buffer in a
      * single transaction, so that this buffer doesn't needs to be split into
-     * several packets
+     * several packets.
      */
     spi_send_logs(_log_buffer, _log_buffer_len);
 
