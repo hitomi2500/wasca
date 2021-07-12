@@ -4,6 +4,7 @@
 
 #include "bup_bootrom.h"
 #include "log.h"
+#include "settings.h"
 #include "spi_ping.h"
 
 /* External definitions for our SPI interface. */
@@ -138,6 +139,9 @@ int spi_periodic_check(void)
         strcpy(s32_ver->build_date, build_date);
         strcpy(s32_ver->build_time, build_time);
 
+        /* Pack MAX 10 base settings with STM32 version information. */
+        memcpy(&s32_ver->set, &_wasca_set.max, sizeof(wl_baseset_max_t));
+
         spi_logout("Tick[0x%08X] Version[%s][%s]", (unsigned int)HAL_GetTick(), s32_ver->build_date, s32_ver->build_time);
     }
     else if(WL_SPICMD_IS_BUP(hdr->command))
@@ -195,6 +199,7 @@ int spi_periodic_check(void)
     }
     else if(hdr->command == WL_SPICMD_LOGS)
     { /* Log messages from MAX 10. */
+#if 0
         /* Keep logs messages received from MAX 10 in a circular buffer
          * so that they can be to sent to PC via USB when needed.
          *
@@ -206,6 +211,7 @@ int spi_periodic_check(void)
         unsigned char* logs_data = data_rx;
 
         log_cbwrite(logs_data, logs_datalen);
+#endif
     }
     else if(WL_SPICMD_IS_BUP(hdr->command))
     { /* Backup memory read/write/etc access. */

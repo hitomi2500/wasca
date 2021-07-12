@@ -25,14 +25,14 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include <fatfs.h>
-
 #include <string.h>
 #include "bup_bootrom.h"
 #include "log.h"
+#include "settings.h"
 #include "spi_max10.h"
 #include "spi_ping.h"
 #include "misc_tests.h"
+#include "sd_wrapper.h"
 
 /* USER CODE END Includes */
 
@@ -61,9 +61,6 @@ UART_HandleTypeDef huart4;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
-/* File system object for SD card logical drive */
-FATFS SDFatFs;
 
 /* USER CODE END PV */
 
@@ -118,7 +115,14 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+
+  /* Reset base module's internals.
+   * Note : SD card can't be accessed yet.
+   */
+  sdcard_reset();
+  settings_init();
   log_init();
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -138,9 +142,11 @@ int main(void)
   MX_UART4_Init();
   /* USER CODE BEGIN 2 */
 
-  /* Output a message on Hyperterminal using printf function */
-  termout(WL_LOG_DEBUGNORMAL, "Wasca STM32 firmware build Date : %s, time : %s.", __DATE__, __TIME__);
-  logout(WL_LOG_DEBUGNORMAL, "---");
+  /* Initialize SD card and FatFs.
+   * After that it's the time to read settings from ini file in SD card.
+   */
+  sdcard_init();
+  settings_read();
 
   /* Check if power is present on Saturn side */
   if (GPIO_PIN_SET == HAL_GPIO_ReadPin(SATURN_POWER_GPIO_Port, SATURN_POWER_Pin))
@@ -154,25 +160,6 @@ int main(void)
     HAL_GPIO_WritePin(BUFFER_ENABLE_GPIO_Port, BUFFER_ENABLE_Pin, GPIO_PIN_SET);
   }
 
-  /* Initialize SD card and FatFs. */
-  termout(WL_LOG_DEBUGNORMAL, "retSD:%d SDPath:%c%c%c%c", retSD, SDPath[0], SDPath[1], SDPath[2], SDPath[3]);
-  termout(WL_LOG_DEBUGNORMAL, "BSP_SD_IsDetected:%d", BSP_SD_IsDetected());
-  if(retSD == 0)
-  {
-    /* success: set the orange LED on */
-    // HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, GPIO_PIN_RESET);
-
-    /*##-2- Register the file system object to the FatFs module ###*/
-    termout(WL_LOG_DEBUGNORMAL, "FatFs Initialization STT ...");
-    if(f_mount(&SDFatFs, (TCHAR const*)SDPath, 0) != FR_OK)
-    {
-        /* FatFs Initialization Error : set the red LED on */
-        termout(WL_LOG_DEBUGNORMAL, "FatFs Initialization Error !");
-        //HAL_GPIO_WritePin(GPIOG, GPIO_PIN_10, GPIO_PIN_RESET);
-        //while(1);
-    }
-  }
-
   /* Initialize SPI internals. */
   spi_ping_init();
   spi_init();
@@ -180,6 +167,9 @@ int main(void)
   /* Update backup and boot ROM access modules. */
   bup_init();
   bootrom_init();
+
+  /* Output a message to celebrate the end of initialization. */
+  termout(WL_LOG_DEBUGNORMAL, "Wasca STM32 firmware build Date : %s, time : %s.", __DATE__, __TIME__);
 
   /* USER CODE END 2 */
 
@@ -236,6 +226,9 @@ int main(void)
 
         /* Update backup data internals. */
         bup_periodic_check();
+
+        /* If needed, write log messages from buffer to SD card. */
+        log_periodic_check();
 
         /* Do miscellaneous tests. */
         do_tests();

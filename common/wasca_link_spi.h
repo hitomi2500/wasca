@@ -182,6 +182,28 @@ typedef struct _wl_verinfo_max_t
     unsigned char reserved[16];
 } wl_verinfo_max_t;
 
+typedef struct _wl_baseset_max_t
+{
+    /* ROM/RAM/etc initial mode. */
+    unsigned short cart_mode;
+
+    /* Reserved for future usage. */
+    unsigned char reserved[5];
+
+    /* Log level on MAX 10 side :
+     *  - 0 : disable log output    (WL_LOG_DISABLE    )
+     *  - 1 : error messages        (WL_LOG_ERROR      )
+     *  - 2 : important messages    (WL_LOG_IMPORTANT  )
+     *  - 3 : debug messages #1     (WL_LOG_DEBUGEASY  )
+     *  - 6 : debug messages #2     (WL_LOG_DEBUGNORMAL)
+     *  - 9 : debug messages #3     (WL_LOG_DEBUGHARD  )
+     *
+     * Note : the higher the log level the more it uses SPI communication.
+     */
+    unsigned char log_level;
+
+} wl_baseset_max_t;
+
 typedef struct _wl_verinfo_stm_t
 {
     /* STM32 firmware build date.
@@ -199,7 +221,15 @@ typedef struct _wl_verinfo_stm_t
     /* Reserved for future usage if any.
      * (Pack the size of this structure 64 bytes)
      */
-    unsigned char reserved[42];
+    unsigned char reserved[42 - sizeof(wl_baseset_max_t)];
+
+
+    /* Base settings for MAX 10.
+     * These are read from ini file on SD card
+     * and requested to STM32 during firmware startup.
+     */
+    wl_baseset_max_t set;
+
 } wl_verinfo_stm_t;
 
 /* Packet data size required when requesting
@@ -225,19 +255,23 @@ typedef struct _wl_verinfo_stm_t
 
 
 /* Log levels :
- *  - 1 : critical messages
- *    ...
- *  - 5 : debug messages
+ *  - 0 : disable log output    (WL_LOG_DISABLE    )
+ *  - 1 : error messages        (WL_LOG_ERROR      )
+ *  - 2 : important messages    (WL_LOG_IMPORTANT  )
+ *  - 3 : debug messages #1     (WL_LOG_DEBUGEASY  )
+ *  - 6 : debug messages #2     (WL_LOG_DEBUGNORMAL)
+ *  - 9 : debug messages #3     (WL_LOG_DEBUGHARD  )
  *
  * Level can be used to filter logs on MAX 10 / STM32 side, 
  * or sent with message to PC so that it can be dynamically
  * filtered there.
  */
+#define WL_LOG_DISABLE     0
 #define WL_LOG_ERROR       1
 #define WL_LOG_IMPORTANT   2
 #define WL_LOG_DEBUGEASY   3
-#define WL_LOG_DEBUGNORMAL 4
-#define WL_LOG_DEBUGHARD   5
+#define WL_LOG_DEBUGNORMAL 6
+#define WL_LOG_DEBUGHARD   9
 
 
 
@@ -564,13 +598,20 @@ typedef struct _wl_spi_memacc_t
      * This is used to specify which ROM file should be read.
      *
      * Available values :
-     *  -  0    : Pseudo Saturn Kai
-     *  -  1    : KOF95
-     *  -  2    : Ultraman
-     *  -  3-13 : (Reserved)
-     *  - 14    : WascaLoader
-     *  - 15    : Firmware internal boot ROM
+     *  - 0    : No ROM
+     *  - 1    : KOF95.bin
+     *  - 2    : Ultraman.bin
+     *  - 3    : Wascaloadr
+     *  - 4    : Pseudo
+     *  - 5    : ROM5.bin
+     *  - 6    : ROM6.bin
+     *  - 7    : ROM7.bin
+     *  - 8-14 : (Reserved)
+     *  - 15   : Firmware internal boot ROM
      */
+#define WL_ROM_WASCALOADER  3
+#define WL_ROM_PSEUDOSAT    4
+#define WL_ROM_INTERNAL    15
     unsigned char rom_id;
 
     /* Unused, reserved for future usage if any. */
