@@ -1,4 +1,4 @@
-86339677830662
+88703905214750
 wasca
 2450BM14E0003
 Johanson integrated balun+filter for nRF24
@@ -97,6 +97,13 @@ LOGO_VACHE_SIM
 0
 0
 0
+wasca
+LQFP-64_10x10mm_P0.5mm
+64 LEAD LQFP 10x10mm (see MICREL LQFP10x10-64LD-PL-1.pdf)
+QFP 0.5
+0
+64
+64
 wasca
 L_4.2X4.2_LARGE
 
