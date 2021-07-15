@@ -199,19 +199,12 @@ int spi_periodic_check(void)
     }
     else if(hdr->command == WL_SPICMD_LOGS)
     { /* Log messages from MAX 10. */
-#if 0
-        /* Keep logs messages received from MAX 10 in a circular buffer
-         * so that they can be to sent to PC via USB when needed.
-         *
-         * TODO : should verify if log data last character is null or not, 
-         *        because last character may not be sent when size of data
-         *        sent over SPI is not a even number of bytes.
-         */
+#if LOG_ENABLE == 1
+        char* logs_data = (char*)data_rx;
         unsigned short logs_datalen = hdr->data_len;
-        unsigned char* logs_data = data_rx;
 
-        log_cbwrite(logs_data, logs_datalen);
-#endif
+        spi_logs_process(logs_data, logs_datalen);
+#endif // LOG_ENABLE == 1
     }
     else if(WL_SPICMD_IS_BUP(hdr->command))
     { /* Backup memory read/write/etc access. */

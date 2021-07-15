@@ -193,7 +193,7 @@ int main(void)
         unsigned long spi_packet_cnt = spi_init_cnt - prev_spi_init_cnt;
         unsigned long spi_packet_rate = (1000 * spi_packet_cnt) / spi_tick_delta;
 
-        termout(WL_LOG_DEBUGNORMAL, "[%08X] ID[%2u] PKT/s[%4u] Tot[%5u]S[%5u]"
+        logout(WL_LOG_DEBUGNORMAL, "[%08X] ID[%2u] PKT/s[%4u] Tot[%5u]S[%5u]"
             , (unsigned int)HAL_GetTick()
             , (unsigned int)logmsg_id
             , (unsigned int)spi_packet_rate

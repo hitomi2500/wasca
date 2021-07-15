@@ -37,16 +37,18 @@ void settings_init(void)
      * If ini file is not found, the settings below will be used.
      */
     memset(&_wasca_set, 0, sizeof(wasca_settings_t));
-    _wasca_set.log_level    = 3;
-    _wasca_set.log_max_size = 10*1024; /* 10KB. */
-    _wasca_set.log_to_uart  = 1;
-    _wasca_set.log_to_usb   = 0;
-    _wasca_set.log_to_sd    = 1;
+    _wasca_set.log_level     = WL_LOG_DEBUGHARD;
+    _wasca_set.log_max_size  = 10*1024; /* 10KB. */
+    _wasca_set.uart_mode = 2;
+    _wasca_set.log_to_usb    = 0;
+    _wasca_set.log_to_sd     = 1;
     _wasca_set.flush_interval = 500; /* 0.5 sec. */
 
     /* Reset base settings for MAX 10. */
-    _wasca_set.max.cart_mode = 0x0342;
-    _wasca_set.max.log_level = WL_LOG_IMPORTANT;
+    _wasca_set.max.cart_mode = 0x0000; /* No mode initialization on startup. */
+    _wasca_set.max.log_level = WL_LOG_DEBUGHARD;
+    _wasca_set.max.uart_mode = 1;
+    _wasca_set.max.flush_interval = 9; /* Flush every 10 loops. */
 }
 
 void settings_read(void)
@@ -272,13 +274,13 @@ ini_logout(" -> Setup.Mode:0x%04X", v);
                                 {
                                     v = atoi(val);
 ini_logout(" -> log.M10Level:%d", v);
-                                    if(v < 0)
+                                    if(v < WL_LOG_ERROR)
                                     {
-                                        v = 0;
+                                        v = WL_LOG_ERROR;
                                     }
-                                    else if(v > 255)
+                                    else if(v > WL_LOG_DEBUGHARD)
                                     {
-                                        v = 255;
+                                        v = WL_LOG_DEBUGHARD;
                                     }
                                     _wasca_set.max.log_level = v;
                                 }
@@ -286,13 +288,13 @@ ini_logout(" -> log.M10Level:%d", v);
                                 {
                                     v = atoi(val);
 ini_logout(" -> log.S32Level:%d", v);
-                                    if(v < 0)
+                                    if(v < WL_LOG_ERROR)
                                     {
-                                        v = 0;
+                                        v = WL_LOG_ERROR;
                                     }
-                                    else if(v > 255)
+                                    else if(v > WL_LOG_DEBUGHARD)
                                     {
-                                        v = 255;
+                                        v = WL_LOG_DEBUGHARD;
                                     }
                                     _wasca_set.log_level = v;
                                 }
@@ -311,10 +313,15 @@ ini_logout(" -> log.maxsize:%d", v);
                                     }
                                     _wasca_set.log_max_size = v * 1024;
                                 }
-                                else if(strcasecmp(name, "touart") == 0)
+                                else if(strcasecmp(name, "uartmodes32") == 0)
                                 {
                                     v = atoi(val);
-                                    _wasca_set.log_to_uart = (v == 0 ? 0 : 1);
+                                    _wasca_set.uart_mode = v;
+                                }
+                                else if(strcasecmp(name, "uartmodem10") == 0)
+                                {
+                                    v = atoi(val);
+                                    _wasca_set.max.uart_mode = (unsigned char)v;
                                 }
                                 else if(strcasecmp(name, "tousb") == 0)
                                 {
@@ -326,7 +333,7 @@ ini_logout(" -> log.maxsize:%d", v);
                                     v = atoi(val);
                                     _wasca_set.log_to_sd = (v == 0 ? 0 : 1);
                                 }
-                                else if(strcasecmp(name, "flushinterval") == 0)
+                                else if(strcasecmp(name, "flushintervals32") == 0)
                                 {
                                     v = atoi(val);
 
@@ -343,6 +350,21 @@ ini_logout(" -> log.maxsize:%d", v);
                                     }
 
                                     _wasca_set.flush_interval = v;
+                                }
+                                else if(strcasecmp(name, "flushintervalm10") == 0)
+                                {
+                                    v = atoi(val);
+
+                                    if(v < 0)
+                                    {
+                                        v = 0;
+                                    }
+                                    else if(v > 255)
+                                    {
+                                        v = 255;
+                                    }
+
+                                    _wasca_set.max.flush_interval = v;
                                 }
                             }
                             else

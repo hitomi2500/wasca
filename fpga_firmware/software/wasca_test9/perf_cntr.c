@@ -29,8 +29,8 @@ void wasca_perf_logout(char* name, alt_u64 elapsed_time)
 #if LOG_ENABLE == 1
     unsigned long time_usec = wasca_perf_get_usec(elapsed_time);
 
-    //logout("PERF[%s]:%u CLK (%u usec)", name, clk_cnt_u32, time_usec);
-    logout("PERF[%s]:%u usec", name, time_usec);
+    //logout(WL_LOG_DEBUGNORMAL, "PERF[%s]:%u CLK (%u usec)", name, clk_cnt_u32, time_usec);
+    logout(WL_LOG_DEBUGNORMAL, "PERF[%s]:%u usec", name, time_usec);
 #endif // LOG_ENABLE == 1
 }
 

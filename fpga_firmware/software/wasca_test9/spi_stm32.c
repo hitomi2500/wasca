@@ -437,12 +437,11 @@ void spi_send_logs(unsigned char* logdata, unsigned short datalen)
     wl_spi_header_t* hdr = &hdr_dat;
 
     /* Small tweak to properly handle the case of odd data length.
-     * In that case, terminating null character is sent.
+     * In that case, a dummy null character is sent at the end of the message.
      */
-    unsigned short datalen_u16 = datalen / sizeof(unsigned short);
-    if(datalen % 2)
+    if(datalen % sizeof(unsigned short))
     {
-        datalen_u16++;
+        logdata[datalen++] = '\0';
     }
 
     /* Setup packet header. */
@@ -453,7 +452,7 @@ void spi_send_logs(unsigned char* logdata, unsigned short datalen)
     spi_sync_middle();
 
     /* Send log data. */
-    spi_send((unsigned short*)logdata, datalen_u16);
+    spi_send((unsigned short*)logdata, datalen / sizeof(unsigned short));
 }
 
 

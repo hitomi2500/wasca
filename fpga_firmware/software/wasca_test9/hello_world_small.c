@@ -370,6 +370,13 @@ int main(void)
 
         /* Keep base settings in global variable. */
         memcpy(&_baseset, &arm_ver->set, sizeof(wl_baseset_max_t));
+
+        log_to_uart("M10_Set mode[%04X] level[%u] uart[%u] interval[%u]", 
+            _baseset.cart_mode, 
+            _baseset.log_level, 
+            _baseset.uart_mode, 
+            _baseset.flush_interval);
+
     }
 
 
@@ -411,6 +418,7 @@ int main(void)
 
     int loop_counter = 0;
     int first_loop = 1;
+
     while(1)
     {
         volatile unsigned short current_block;
@@ -418,9 +426,21 @@ int main(void)
         unsigned short mode_reg;
         if(first_loop)
         {
-            /* On startup, use cartridge mode from settings file on SD card. */
-            mode_reg = _baseset.cart_mode;
-            prev_mode_reg = ~mode_reg;
+            /* On startup, use cartridge mode from settings file on SD card.
+             * 
+             * When value is set to zero then don't initialize anything : debug
+             * mode for use with WascaLoader.
+             */
+            if(_baseset.cart_mode != 0)
+            {
+                mode_reg = _baseset.cart_mode;
+                prev_mode_reg = ~mode_reg;
+            }
+            else
+            {
+                mode_reg = pRegs_16[MODE_REG_OFFSET];
+                prev_mode_reg = mode_reg;
+            }
         }
         else
         {
@@ -604,8 +624,6 @@ int main(void)
             logflush();
         }
 
-        loop_counter++;
-
 
         /* On startup, as cartridge mode from settings file on SD card is used, 
          * it's necessary to tweak the check of mode register.
@@ -616,6 +634,11 @@ int main(void)
             prev_mode_reg = mode_reg;
             first_loop = 0;
         }
+
+        /* Send accumulated log messages to STM32. */
+        log_periodic_check();
+
+        loop_counter++;
     }
 
     /* Never reached. */

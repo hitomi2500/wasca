@@ -184,24 +184,77 @@ typedef struct _wl_verinfo_max_t
 
 typedef struct _wl_baseset_max_t
 {
-    /* ROM/RAM/etc initial mode. */
+    /* ROM/RAM/etc initial mode.
+     *
+     * Bit0-4 : Backup Select
+     * - 0 : No backup
+     * - 1 : 0.5M
+     * - 2 : 1M
+     * - 3 : 2M
+     * - 4 : 4M
+     *
+     * Bit4-7 : RAM select
+     * - 0 : No RAM
+     * - 2 : 1M with mirror
+     * - 4 : 4M
+     * - 7 : 32M
+     * - 8 : 48M
+     *
+     * Bit8-11 : ROM select
+     * - 0 : No ROM
+     * - 1 : KOF95.bin
+     * - 2 : Ultraman.bin
+     * - 3 : Wascaloadr
+     * - 4 : Pseudo
+     * - 5 : ROM5.bin
+     * - 6 : ROM6.bin
+     * - 7 : ROM7.bin
+     *
+     * Special case : when set to zero, cartridge mode is left unchanged.
+     *
+     * Name : [Setup]Mode
+     */
     unsigned short cart_mode;
 
-    /* Reserved for future usage. */
-    unsigned char reserved[5];
-
     /* Log level on MAX 10 side :
-     *  - 0 : disable log output    (WL_LOG_DISABLE    )
      *  - 1 : error messages        (WL_LOG_ERROR      )
      *  - 2 : important messages    (WL_LOG_IMPORTANT  )
      *  - 3 : debug messages #1     (WL_LOG_DEBUGEASY  )
      *  - 6 : debug messages #2     (WL_LOG_DEBUGNORMAL)
      *  - 9 : debug messages #3     (WL_LOG_DEBUGHARD  )
      *
-     * Note : the higher the log level the more it uses SPI communication.
+     * Example : when level is set to 2, error and important messages are sent.
+     * Note #1 : the higher the log level the more it uses SPI communication.
+     * Note #2 : it's not possible to stop output of error messages.
+     *
+     * Name : [Log]LevelM10
      */
     unsigned char log_level;
 
+    /* UART log control.
+     *  - 0 : disable all logs to UART, except error or direct output ones
+     *  - 1 : output only logs targeted to UART
+     *  - 2 : output logs targeted to UART + copy normal logs to UART
+     *
+     * Name : [Log]UartModeM10
+     */
+    unsigned char uart_mode;
+
+    /* Log flush interval :
+     *  - 0   : send each message individually
+     *  - 1   : send message(s) every 2 loops
+     *    [ . . . ]
+     *  - 9   : send message(s) every 10 loops
+     *    [ . . . ]
+     *  - 255 : send message(s) every 256 loops
+     *
+     * The higher the less impact it haves on flow execution, but small value
+     * is recommended to keep chronology between MAX 10 and STM32 logs.
+     */
+    unsigned char flush_interval;
+
+    /* Reserved for future usage. */
+    unsigned char reserved[11];
 } wl_baseset_max_t;
 
 typedef struct _wl_verinfo_stm_t
@@ -291,6 +344,29 @@ typedef struct _wl_verinfo_stm_t
  */
 #define WL_LOG_MESSAGE_MAXLEN 100
 
+
+/* MAX 10 log header.
+ *
+ * Contains information to gather several logs into one SPI packet, 
+ * and also output level of each messages so that they can be filtered on PC.
+ */
+typedef struct _wl_log_header_t
+{
+    /* Log message length.
+     * It doesn't includes the data length of this header.
+     */
+    unsigned short len;
+
+    /* Log output level.
+     * Example : WL_LOG_ERROR, WL_LOG_DEBUGNORMAL etc
+     *
+     * This is used to filter logs on PC side.
+     */
+    char level;
+
+    /* Unused, reserved for future usage if any. */
+    unsigned char reserved[1];
+} wl_log_header_t;
 
 
 

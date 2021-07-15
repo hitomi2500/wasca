@@ -25,8 +25,17 @@ typedef struct _wasca_settings_t
     wl_baseset_max_t max;
 
     /* Log level.
-     * 
-     * Name : [Log]Level
+     *  - 1 : error messages        (WL_LOG_ERROR      )
+     *  - 2 : important messages    (WL_LOG_IMPORTANT  )
+     *  - 3 : debug messages #1     (WL_LOG_DEBUGEASY  )
+     *  - 6 : debug messages #2     (WL_LOG_DEBUGNORMAL)
+     *  - 9 : debug messages #3     (WL_LOG_DEBUGHARD  )
+     *
+     * Example : when level is set to 2, error and important messages are sent.
+     * Note #1 : the higher the log level the more program execution slows down.
+     * Note #2 : it's not possible to stop output of error messages.
+     *
+     * Name : [Log]LevelS32
      */
     long log_level;
 
@@ -42,15 +51,22 @@ typedef struct _wasca_settings_t
      */
     long log_max_size;
 
+    /* UART log control.
+     *  - 0 : disable all logs to UART, except error or direct output ones
+     *  - 1 : output only logs targeted to UART
+     *  - 2 : output logs targeted to UART + copy normal logs to UART
+     *
+     * Name : [Log]UartModeS32
+     */
+    long uart_mode;
+
     /* Log destination output flags.
      * Zero: disable, 1/else: enable
      *
      * Names :
-     *  - [Log]ToUart : output to debug UART
-     *  - [Log]ToUsb  : output via USB port
-     *  - [Log]ToSd   : output to file on SD card
+     *  - [Log]ToUsb : output via USB port
+     *  - [Log]ToSd  : output to file on SD card
      */
-    long log_to_uart;
     long log_to_usb;
     long log_to_sd;
 
@@ -62,7 +78,7 @@ typedef struct _wasca_settings_t
      *  -   0: write log messages one by one
      *  - 500: gather and then write messages every 500 milliseconds
      *
-     * Name : [Log]FlushInterval
+     * Name : [Log]FlushIntervalS32
      */
     long flush_interval;
 
