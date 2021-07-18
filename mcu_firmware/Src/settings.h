@@ -51,6 +51,19 @@ typedef struct _wasca_settings_t
      */
     long log_max_size;
 
+    /* Log file count.
+     * When current file reachs its size limit, next file is opened until this
+     * file count is reached.
+     *
+     * Examples :
+     * -  1 : write to WASCA.LOG file only.
+     * -  2 : write to WASCA01.LOG file and then to WASCA02.LOG .
+     * - 20 : write to WASCA01.LOG until WASCA20.LOG .
+     *
+     * Name : [Log]FileCount
+     */
+    long log_file_count;
+
     /* UART log control.
      *  - 0 : disable all logs to UART, except error or direct output ones
      *  - 1 : output only logs targeted to UART

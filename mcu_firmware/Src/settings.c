@@ -37,8 +37,9 @@ void settings_init(void)
      * If ini file is not found, the settings below will be used.
      */
     memset(&_wasca_set, 0, sizeof(wasca_settings_t));
-    _wasca_set.log_level     = WL_LOG_DEBUGHARD;
-    _wasca_set.log_max_size  = 10*1024; /* 10KB. */
+    _wasca_set.log_level      = WL_LOG_DEBUGHARD;
+    _wasca_set.log_max_size   = 10*1024; /* 10KB. */
+    _wasca_set.log_file_count = 10;
     _wasca_set.uart_mode = 2;
     _wasca_set.log_to_usb    = 0;
     _wasca_set.log_to_sd     = 1;
@@ -312,6 +313,20 @@ ini_logout(" -> log.maxsize:%d", v);
                                         v = 10*1024;
                                     }
                                     _wasca_set.log_max_size = v * 1024;
+                                }
+                                else if(strcasecmp(name, "filecount") == 0)
+                                {
+                                    v = atoi(val);
+                                    if(v < 1)
+                                    {
+                                        v = 1;
+                                    }
+                                    else if(v > 99)
+                                    {
+                                        /* Restrict log file count to maximum 99. */
+                                        v = 99;
+                                    }
+                                    _wasca_set.log_file_count = v;
                                 }
                                 else if(strcasecmp(name, "uartmodes32") == 0)
                                 {

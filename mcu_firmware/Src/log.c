@@ -94,12 +94,14 @@ int USB_write(void* buf, size_t count)
  *        be larger than WL_LOG_MESSAGE_MAXLEN.
  */
 char _log_buffer[MAX(4*1024, WL_LOG_MESSAGE_MAXLEN)];
-unsigned short _log_bufflen = 0;
+unsigned short _log_bufflen  = 0;
 unsigned long _log_total_len = 0;
+unsigned long _log_file_id   = 0;
 unsigned long _log_prev_flush_tick = 0;
 
 FIL _LogFile;
 int _log_file_open = 0;
+int _log_files_rename_done = 0;
 
 
 
@@ -107,10 +109,12 @@ void log_init(void)
 {
     /* Initialize log internals. */
     memset(_log_buffer, 0, sizeof(_log_buffer));
-    _log_bufflen = 0;
+    _log_bufflen   = 0;
     _log_total_len = 0;
+    _log_file_id   = 0;
     _log_prev_flush_tick = HAL_GetTick();
     _log_file_open = 0;
+    _log_files_rename_done = 0;
 }
 
 
@@ -122,10 +126,44 @@ void logflush_internal(void)
         return;
     }
 
-    /* If not already done, open log file . */
+    /* If not already done, open log file. */
     if(!_log_file_open)
     {
-        int f_ret = f_open(&_LogFile, "/WASCA.LOG", FA_WRITE | FA_CREATE_ALWAYS);
+        char file_name[16];
+        if(_wasca_set.log_file_count <= 1)
+        {
+            strcpy(file_name, "/WASCA.LOG");
+        }
+        else
+        {
+            if(!_log_files_rename_done)
+            {
+                /* Rename old log files.
+                 * 
+                 * Example with log files count set to 5 :
+                 *  1. Rename WASCA04.LOG to WASCA05.LOG
+                 *  2. Rename WASCA03.LOG to WASCA04.LOG
+                 *  3. Rename WASCA02.LOG to WASCA03.LOG
+                 *  4. Rename WASCA01.LOG to WASCA02.LOG
+                 * After that, logs are written to WASCA01.LOG file.
+                 */
+                for(int i=_wasca_set.log_file_count-1; i>0; i--)
+                {
+                    char old_file_name[sizeof(file_name)];
+                    sprintf(file_name    , "/WASCA%02u.LOG", (unsigned char)(i+0));
+                    sprintf(old_file_name, "/WASCA%02u.LOG", (unsigned char)(i+1));
+                    f_unlink(old_file_name);
+                    f_rename(file_name, old_file_name);
+                }
+
+                /* Prevent to re-rename files in the case file open failed. */
+                _log_files_rename_done = 1;
+            }
+
+            strcpy(file_name, "/WASCA01.LOG");
+        }
+
+        int f_ret = f_open(&_LogFile, file_name, FA_WRITE | FA_CREATE_ALWAYS);
 
         if(f_ret == FR_OK)
         {
@@ -141,7 +179,7 @@ void logflush_internal(void)
         f_sync(&_LogFile);
     }
 
-    /* Flush log messages from buffer. */
+    /* Indicate that data was written from buffer to SD card. */
     _log_bufflen = 0;
     _log_prev_flush_tick = HAL_GetTick();
 }
@@ -228,7 +266,24 @@ void logout_internal(int to_uart, int level, int from_m10, const char* fmt, ... 
     {
         if(_log_total_len >= _wasca_set.log_max_size)
         {
-            to_sd = 0;
+            /* Close current log file. */
+            if(_log_file_open)
+            {
+                f_close(&_LogFile);
+                _log_file_open = 0;
+
+                /* Allow to bump log files on next access. */
+                _log_files_rename_done = 0;
+            }
+
+            /* If file count settings allows it, jump to next log file. */
+            _log_total_len = 0;
+            _log_file_id++;
+
+            if(_log_file_id >= _wasca_set.log_file_count)
+            {
+                to_sd = 0;
+            }
         }
     }
 
@@ -279,10 +334,11 @@ void logout_internal(int to_uart, int level, int from_m10, const char* fmt, ... 
     if(to_sd)
     {
         _log_bufflen += len;
-    }
-    if(_log_total_len < 0xFFFF0000)
-    {
-        _log_total_len += len;
+
+        if(_log_total_len < 0xFFFF0000)
+        {
+            _log_total_len += len;
+        }
     }
 
     if(to_uart)
