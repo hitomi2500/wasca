@@ -4,9 +4,6 @@
 
 #include "log.h"
 
-/* File system object for SD card logical drive */
-FATFS SDFatFs;
-
 int _sdcard_available = 0;
 
 
@@ -30,7 +27,7 @@ void sdcard_init(void)
 
     /*##-2- Register the file system object to the FatFs module ###*/
     termout(WL_LOG_DEBUGNORMAL, "FatFs Initialization STT ...");
-    if(f_mount(&SDFatFs, (TCHAR const*)SDPath, 0) == FR_OK)
+    if(f_mount(&SDFatFS, (TCHAR const*)SDPath, 0) == FR_OK)
     {
         _sdcard_available = 1;
     }
