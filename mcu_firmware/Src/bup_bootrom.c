@@ -177,16 +177,36 @@ void bup_cache_append(unsigned long block_id, unsigned char* ptr, unsigned short
     unsigned short pos;
     for(pos=0; pos<len; pos+=BUP_CACHE_BLOCK_SIZE)
     {
-        /* If cache is full, let's empty it now. */
-        if(_bup_cache_cnt >= (BUP_CACHE_BLOCK_CNT))
+        unsigned char* block_ptr = ptr+pos;
+
+        /* If block is already in cache, overwrite previous data. */
+        int already_in_cache = 0;
+        unsigned short block_wk;
+        for(block_wk=0; block_wk<_bup_cache_cnt; block_wk++)
         {
-            bup_cache_flush();
+            if(_bup_cache_info[block_wk].block_id == block_id)
+            {
+                memcpy(_bup_cache_data + (block_wk*BUP_CACHE_BLOCK_SIZE), block_ptr, BUP_CACHE_BLOCK_SIZE);
+                already_in_cache = 1;
+                break;
+            }
         }
 
-        /* Append block data to cache. */
-        _bup_cache_info[_bup_cache_cnt].block_id = block_id++;
-        memcpy(_bup_cache_data + (_bup_cache_cnt*BUP_CACHE_BLOCK_SIZE), ptr+pos, BUP_CACHE_BLOCK_SIZE);
-        _bup_cache_cnt++;
+        /* If block not already in cache, append it there. */
+        if(!already_in_cache)
+        {
+            /* If cache is full, let's empty it now. */
+            if(_bup_cache_cnt >= (BUP_CACHE_BLOCK_CNT))
+            {
+                bup_cache_flush();
+            }
+
+            _bup_cache_info[_bup_cache_cnt].block_id = block_id;
+            memcpy(_bup_cache_data + (_bup_cache_cnt*BUP_CACHE_BLOCK_SIZE), block_ptr, BUP_CACHE_BLOCK_SIZE);
+            _bup_cache_cnt++;
+        }
+
+        block_id++;
     }
 
     /* Remember the last moment there was write activity from MAX 10. */
