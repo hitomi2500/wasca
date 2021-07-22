@@ -20,25 +20,28 @@ enum
     MODE_BUP , /* Backup memory mode.  */
     MODE_BOOT, /* Cartridge boot mode. */
 };
-long _BupBootMode = MODE_NONE;
+long _bup_boot_mode = MODE_NONE;
 
-
-FIL _BupFile;
+/* File handle, shared between backup memory and boot ROM features. */
+FIL _bup_boot_file;
 
 
 /* Boot ROM file size, in byte unit. */
-unsigned long _BootRomSize = 0;
+unsigned long _boot_rom_size = 0;
 
 /* Boot ROM type.
  *  - 0 : cartridge internal data from STM32 flash ROM.
  *  - 1 : file from SD card.
  */
-long _BootRomIsFile = 0;
+long _boot_rom_is_file = 0;
 
 
 
-/* Backup memory file size, in byte unit. */
-unsigned long _BupSize = 0;
+/* Backup memory file size, in byte unit.
+ * Also featuring backup file name.
+ */
+unsigned long _bup_size = 0;
+char _bup_file_name[64] = {'\0'};
 
 
 /* Number of blocks (512 bytes) to keep in memory
@@ -75,6 +78,10 @@ unsigned long _bup_prev_append_tick = 0;
 
 int _bup_error_flag = 0;
 
+/* Inidividual initialization functions, internally used in this module. */
+void bup_init(void);
+void bootrom_init(void);
+
 
 /* Function to update backup status on LED. */
 void bup_led_status_set(int turn_on)
@@ -86,7 +93,7 @@ void bup_led_status_set(int turn_on)
 
 void bup_cache_flush(void)
 {
-    if((_BupSize == 0) || (_bup_cache_cnt == 0))
+    if((_bup_size == 0) || (_bup_cache_cnt == 0))
     {
         return;
     }
@@ -111,7 +118,7 @@ void bup_cache_flush(void)
         /* Write the backup memory block(s). */
         unsigned long offset  = block_id  * BUP_CACHE_BLOCK_SIZE;
         unsigned long datalen = block_cnt * BUP_CACHE_BLOCK_SIZE;
-        if((offset + datalen) > _BupSize)
+        if((offset + datalen) > _bup_size)
         {
             /* Indicate that an error happened.
              * (Not really needed because that's already checked beforehand)
@@ -120,9 +127,9 @@ void bup_cache_flush(void)
         }
         else
         {
-            f_lseek(&_BupFile, offset);
+            f_lseek(&_bup_boot_file, offset);
             UINT bytes_written = 0;
-            int f_ret = f_write(&_BupFile, _bup_cache_data + (i*BUP_CACHE_BLOCK_SIZE), datalen, &bytes_written);
+            int f_ret = f_write(&_bup_boot_file, _bup_cache_data + (i*BUP_CACHE_BLOCK_SIZE), datalen, &bytes_written);
             if(f_ret != FR_OK)
             {
                 /* Indicate that an error happened. */
@@ -137,7 +144,7 @@ void bup_cache_flush(void)
     /* Synchronize any pending write to SD card, 
      * so that it's safe to turn off the Saturn now.
      */
-    f_sync(&_BupFile);
+    f_sync(&_bup_boot_file);
 
     /* Indicate that cache is now empty. */
     _bup_cache_cnt = 0;
@@ -155,7 +162,7 @@ void bup_cache_flush(void)
 
 void bup_cache_append(unsigned long block_id, unsigned char* ptr, unsigned short len)
 {
-    if(_BupSize == 0)
+    if(_bup_size == 0)
     {
         return;
     }
@@ -199,9 +206,6 @@ void bup_init(void)
 
     _bup_prev_append_tick = HAL_GetTick();
 
-    /* Make error flag persistent. */
-    //_bup_error_flag = 0;
-
     bup_led_status_set(0/*turn_on*/);
 }
 
@@ -214,12 +218,12 @@ void bup_periodic_check(void)
         bup_led_status_set((HAL_GetTick() % 1000) > 500 ? 1 : 0);
     }
 
-    if((_BupSize == 0) || (_bup_cache_cnt == 0))
+    if((_bup_size == 0) || (_bup_cache_cnt == 0))
     {
         return;
     }
 
-    if(_BupBootMode != MODE_BUP)
+    if(_bup_boot_mode != MODE_BUP)
     {
         /* Don't do anything when backup memory mode is not enabled. */
         return;
@@ -253,57 +257,56 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
 
     int f_ret;
 
-    if(_BupBootMode != MODE_BUP)
+    if(_bup_boot_mode != MODE_BUP)
     {
-        if(_BupBootMode == MODE_BOOT)
+        if(_bup_boot_mode == MODE_BOOT)
         {
             /* If previously enabled, terminate boot mode. */
-            if(_BootRomIsFile)
+            if(_boot_rom_is_file)
             {
-                f_close(&_BupFile);
+                f_close(&_bup_boot_file);
             }
             bootrom_init();
             bup_init();
         }
-        _BupBootMode = MODE_BUP;
+        _bup_boot_mode = MODE_BUP;
     }
 
 
     if(hdr->command == WL_SPICMD_BUPOPEN)
     {
         /* If already open, don't forget to close the previous file. */
-        if(_BupSize != 0)
+        if(_bup_size != 0)
         {
             bup_cache_flush();
-            f_close(&_BupFile);
+            f_close(&_bup_boot_file);
 
-            _BupSize = 0;
+            _bup_size = 0;
         }
 
         /* Setup and sanitize size of save data file.
          * Also, prepare save data file name according to its size.
          */
-        char file_name[64];
         if((params->len / 2) >= 1024)
         {
             /* 1/2/4/etc MB mode. */
-            _BupSize = params->len * 1024;
-            sprintf(file_name, "/BUP_%uM.BIN", (unsigned int)(params->len / 1024 / 2));
+            _bup_size = params->len * 1024;
+            sprintf(_bup_file_name, "/BUP_%uM.BIN", (unsigned int)(params->len / 1024 / 2));
         }
         else // if(params->len == (512 * 2))
         {
             /* 0.5MB mode. */
-            _BupSize = 512 * 1024 * 2;
-            strcpy(file_name, "/BUP_05M.BIN");
+            _bup_size = 512 * 1024 * 2;
+            strcpy(_bup_file_name, "/BUP_05M.BIN");
         }
 
-        f_ret = f_open(&_BupFile, file_name, FA_READ | FA_WRITE);
+        f_ret = f_open(&_bup_boot_file, _bup_file_name, FA_READ | FA_WRITE);
 
         int create_new = 0;
         if(f_ret != FR_OK)
         {
             /* Try to re-open by force. */
-            f_ret = f_open(&_BupFile, file_name, FA_READ | FA_WRITE | FA_CREATE_ALWAYS);
+            f_ret = f_open(&_bup_boot_file, _bup_file_name, FA_READ | FA_WRITE | FA_CREATE_ALWAYS);
             create_new = 1;
         }
 
@@ -323,15 +326,15 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
 
                 memset(empty_block, 0xFF, sizeof(empty_block));
 
-                for(offset=0; offset<_BupSize; offset+=sizeof(empty_block))
+                for(offset=0; offset<_bup_size; offset+=sizeof(empty_block))
                 {
                     UINT bytes_written = 0;
-                    f_write(&_BupFile, empty_block, sizeof(empty_block), &bytes_written);
+                    f_write(&_bup_boot_file, empty_block, sizeof(empty_block), &bytes_written);
                 }
             }
 
-            f_lseek(&_BupFile, _BupSize);
-            f_truncate(&_BupFile);
+            f_lseek(&_bup_boot_file, _bup_size);
+            f_truncate(&_bup_boot_file);
         }
 
         /* Copy file status to output buffer. */
@@ -341,7 +344,7 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
     {
         /* Ensure that access is done within file boundaries. */
         unsigned long offset = params->addr * BUP_CACHE_BLOCK_SIZE;
-        if((offset + params->len) > _BupSize)
+        if((offset + params->len) > _bup_size)
         {
             /* Return FFh data and zero length in case of wrong access. */
             memset(data_tx, 0xFF, params->len);
@@ -350,9 +353,9 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
         }
         else
         {
-            f_lseek(&_BupFile, offset);
+            f_lseek(&_bup_boot_file, offset);
             UINT bytes_read = 0;
-            f_ret = f_read(&_BupFile, data_tx, params->len, &bytes_read);
+            f_ret = f_read(&_bup_boot_file, data_tx, params->len, &bytes_read);
             if(f_ret != FR_OK)
             {
                 /* Return FFh data and zero length in case of wrong access. */
@@ -370,16 +373,16 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
     }
     else if(hdr->command == WL_SPICMD_BUPCLOSE)
     {
-        if(_BupSize != 0)
+        if(_bup_size != 0)
         {
             /* Flush data pending in write cache. */
             bup_cache_flush();
-            f_close(&_BupFile);
+            f_close(&_bup_boot_file);
 
             /* On success, return size of the file we just closed. */
-            params->len = (unsigned short)(_BupSize / 1024);
+            params->len = (unsigned short)(_bup_size / 1024);
 
-            _BupSize = 0;
+            _bup_size = 0;
         }
         else
         {
@@ -408,7 +411,7 @@ void bup_file_post_process(wl_spi_header_t* hdr, void* data_rx)
         /* Ensure that access is done within file boundaries. */
         unsigned long block_id = params->addr;
         unsigned long offset = block_id * BUP_CACHE_BLOCK_SIZE;
-        if((offset + params->len) > _BupSize)
+        if((offset + params->len) > _bup_size)
         {
             /* Return zero length in case of wrong access. */
             params->len = 0;
@@ -430,8 +433,8 @@ void bup_file_post_process(wl_spi_header_t* hdr, void* data_rx)
 
 void bootrom_init(void)
 {
-    _BootRomSize = 0;
-    _BootRomIsFile = 0;
+    _boot_rom_size = 0;
+    _boot_rom_is_file = 0;
 }
 
 
@@ -442,35 +445,35 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
     int f_ret;
 //termout(WL_LOG_DEBUGNORMAL, "[bootrom_process] STT");
 
-    if(_BupBootMode != MODE_BOOT)
+    if(_bup_boot_mode != MODE_BOOT)
     {
-        if(_BupBootMode == MODE_BUP)
+        if(_bup_boot_mode == MODE_BUP)
         {
             /* If previously enabled, terminate backup memory mode. */
-            if(_BupSize != 0)
+            if(_bup_size != 0)
             {
                 /* Flush data pending in write cache. */
                 bup_cache_flush();
-                f_close(&_BupFile);
+                f_close(&_bup_boot_file);
 
-                _BupSize = 0;
+                _bup_size = 0;
             }
 
             bup_init();
             bootrom_init();
         }
 
-        _BupBootMode = MODE_BOOT;
+        _bup_boot_mode = MODE_BOOT;
     }
 
 
     if(hdr->command == WL_SPICMD_BOOTINFO)
     {
         /* Don't forget to close if we need to re-open a file. */
-        if(_BootRomIsFile)
+        if(_boot_rom_is_file)
         {
-            f_close(&_BupFile);
-            _BootRomIsFile = 0;
+            f_close(&_bup_boot_file);
+            _boot_rom_is_file = 0;
         }
 
         /* Prepare file information. */
@@ -529,7 +532,7 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
 
 //termout(WL_LOG_DEBUGNORMAL, "[BOOTROM]boot_rom_path:\"%s\"", boot_rom_path);
 
-            f_ret = f_open(&_BupFile, boot_rom_path, FA_READ);
+            f_ret = f_open(&_bup_boot_file, boot_rom_path, FA_READ);
 
             if(f_ret != FR_OK)
             {
@@ -538,11 +541,11 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
             }
             else
             {
-//termout(WL_LOG_DEBUGNORMAL, "[BOOTROM]boot_rom_path:\"%s\" -> OK, size = %u", boot_rom_path, f_size(&_BupFile));
+//termout(WL_LOG_DEBUGNORMAL, "[BOOTROM]boot_rom_path:\"%s\" -> OK, size = %u", boot_rom_path, f_size(&_bup_boot_file));
                 /* Discard files too small to be a cartridge boot ROM. */
-                if(f_size(&_BupFile) < 1024)
+                if(f_size(&_bup_boot_file) < 1024)
                 {
-                    f_close(&_BupFile);
+                    f_close(&_bup_boot_file);
                     open_success = 0;
                 }
             }
@@ -555,8 +558,8 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
 //termout(WL_LOG_DEBUGNORMAL, "[BOOTROM]boot_rom_path:\"%s\" -> open_success = %u", boot_rom_path, open_success);
         if(open_success)
         {
-            _BootRomIsFile = 1;
-            _BootRomSize = f_size(&_BupFile);
+            _boot_rom_is_file = 1;
+            _boot_rom_size = f_size(&_bup_boot_file);
 //termout(WL_LOG_DEBUGNORMAL, "[BOOTROM]boot_rom_path:\"%s\" -> info->size = %u", boot_rom_path, info->size);
 
             strcpy(info->path, boot_rom_path);
@@ -564,13 +567,13 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
         else
         {
             /* File open failure : use data from STM32 flash ROM. */
-            _BootRomIsFile = 0;
-            _BootRomSize = (unsigned long )(&_recovery_rom_end - &_recovery_rom_dat);
+            _boot_rom_is_file = 0;
+            _boot_rom_size = (unsigned long )(&_recovery_rom_end - &_recovery_rom_dat);
         }
 
         /* Fill file information. */
-        info->status    = (_BootRomIsFile ? WL_BOOTROM_FILE : WL_BOOTROM_RECOV);
-        info->size      = _BootRomSize;
+        info->status    = (_boot_rom_is_file ? WL_BOOTROM_FILE : WL_BOOTROM_RECOV);
+        info->size      = _boot_rom_size;
 
         /* Turn on LED2 when starting to read boot ROM. */
         HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
@@ -587,13 +590,13 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
 
 
         /* Don't read outside of ROM file/data. */
-        if(offset > _BootRomSize)
+        if(offset > _boot_rom_size)
         {
-            offset = _BootRomSize;
+            offset = _boot_rom_size;
         }
-        if((offset + len) > _BootRomSize)
+        if((offset + len) > _boot_rom_size)
         {
-            len = _BootRomSize - offset;
+            len = _boot_rom_size - offset;
         }
 
 
@@ -601,7 +604,7 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
         memset(data, 0xFF, len);
 
         int last_block = 0;
-        if(((offset + len) >= _BootRomSize) || (len == 0))
+        if(((offset + len) >= _boot_rom_size) || (len == 0))
         {
             /* Check if this is the end of the file or not. */
             last_block = 1;
@@ -609,12 +612,12 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
 
         if(len != 0)
         {
-            if(_BootRomIsFile)
+            if(_boot_rom_is_file)
             { /* Read from file. */
-                f_lseek(&_BupFile, offset);
+                f_lseek(&_bup_boot_file, offset);
 
                 UINT bytes_read = 0;
-                f_ret = f_read(&_BupFile, data, len, &bytes_read);
+                f_ret = f_read(&_bup_boot_file, data, len, &bytes_read);
             }
             else
             { /* Read from internal ROM. */
@@ -626,14 +629,14 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
         /* Terminate boot ROM mode when last fragment of the file is read. */
         if(last_block)
         {
-            if(_BootRomIsFile)
+            if(_boot_rom_is_file)
             {
-                f_close(&_BupFile);
-                _BootRomIsFile = 0;
+                f_close(&_bup_boot_file);
+                _boot_rom_is_file = 0;
             }
-            _BootRomSize = 0;
+            _boot_rom_size = 0;
 
-            _BupBootMode = MODE_NONE;
+            _bup_boot_mode = MODE_NONE;
 
             /* Turn off LED2 when boot ROM read ended. */
             HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
@@ -660,3 +663,20 @@ void bootrom_post_process(wl_spi_header_t* hdr, void* data_rx)
         // TBD
     }
 }
+
+
+void bup_boot_init(void)
+{
+    _bup_boot_mode = MODE_NONE;
+
+    _boot_rom_size = 0;
+    _boot_rom_is_file = 0;
+
+    _bup_size = 0;
+    memset(_bup_file_name, '\0', sizeof(_bup_file_name));
+    _bup_error_flag = 0;
+
+    bootrom_init();
+    bup_init();
+}
+

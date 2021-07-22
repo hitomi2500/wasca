@@ -165,8 +165,7 @@ int main(void)
   spi_init();
 
   /* Update backup and boot ROM access modules. */
-  bup_init();
-  bootrom_init();
+  bup_boot_init();
 
   /* Output a message to celebrate the end of initialization. */
   termout(WL_LOG_DEBUGNORMAL, "Wasca STM32 firmware build Date : %s, time : %s.", __DATE__, __TIME__);

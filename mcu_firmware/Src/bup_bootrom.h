@@ -7,21 +7,22 @@
 #include "wasca_defs.h"
 
 
+/**
+ * bup_boot_init
+ *
+ * Initialize boot ROM and backup memory module internals.
+ *
+ * Must be called on STM32 startup.
+**/
+void bup_boot_init(void);
+
+
+
 /*
  * ------------------------------------------
  * - Cartridge boot ROM file access. --------
  * ------------------------------------------
  */
-
-
-/**
- * bootrom_init
- *
- * Initialize boot ROM access module internals.
- *
- * Must be called on STM32 startup.
-**/
-void bootrom_init(void);
 
 
 /**
@@ -38,22 +39,11 @@ void bootrom_post_process(wl_spi_header_t* hdr, void* data_rx);
 
 
 
-
 /*
  * ------------------------------------------
  * - Backup memory file access. -------------
  * ------------------------------------------
  */
-
-
-/**
- * bup_init
- *
- * Initialize backup module internals.
- *
- * Must be called on STM32 startup.
-**/
-void bup_init(void);
 
 
 /**
