@@ -294,7 +294,7 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
         {
             /* 0.5MB mode. */
             _BupSize = 512 * 1024 * 2;
-            strcat(file_name, "/BUP_05M.BIN");
+            strcpy(file_name, "/BUP_05M.BIN");
         }
 
         f_ret = f_open(&_BupFile, file_name, FA_READ | FA_WRITE);
