@@ -453,7 +453,7 @@ int main(void)
             /* Indicate that initialization is starting. */
             pRegs_16[PCNTR_REG_OFFSET] = 0;
 
-            log_to_uart("Mode set to %x", mode_reg);
+            logout(WL_LOG_IMPORTANT, "Mode set to 0x%04X", mode_reg);
 
             /* If we were emulating backup memory until now, 
              * close its file before starting a new mode initialization.
@@ -469,7 +469,7 @@ int main(void)
              */
             if((mode_reg & 0x0F00) != 0)
             {
-                log_to_uart("Octet 2, value %x", (mode_reg & 0x0F00));
+                logout(WL_LOG_IMPORTANT, "Octet 2, value %x, preparing boot ROM ...", ((mode_reg >> 16) & 0x000F));
                 /* Select cartridge ROM :
                  *  - 0    : No ROM
                  *  - 1    : KOF95.bin
@@ -484,7 +484,6 @@ int main(void)
                  */
                 unsigned char rom_id = (unsigned char)((mode_reg & 0x0F00) >> 8);
 
-                log_to_uart("Preparing KoF'95 / Ultraman ROM");
                 load_boot_rom(rom_id);
 
                 /* Mapper stuff. */
@@ -497,12 +496,12 @@ int main(void)
                 pRegs_16[MAPPER_READ_2 ] =      0; /* Unmap cs1.                                  */
                 pRegs_16[MAPPER_READ_3 ] =      0; /* Unmap cs2.                                  */
 
-                log_to_uart("Done");
+                logout(WL_LOG_IMPORTANT, "Boot ROM read done.");
             }
 
             if((mode_reg & 0x00F0) != 0)
             {
-                log_to_uart("Octet 1, value %x", (mode_reg & 0x00F0));
+                logout(WL_LOG_IMPORTANT, "Octet 1, value %x -> prepare RAM expansion", ((mode_reg >> 4) & 0x000F));
 
                 // /* RAM expansion cart, clear bootrom's signature just in case. */
                 // for(i=0;i<256;i++)
@@ -511,11 +510,12 @@ int main(void)
                 // }
 
                 /* And that is all for RAM cart. */
+                logout(WL_LOG_IMPORTANT, "RAM expansion setup done.");
             }
 
             if((mode_reg & 0x000F) != 0)
             {
-                log_to_uart("Octet 0, value %x", (mode_reg & 0x000F));
+                logout(WL_LOG_IMPORTANT, "Octet 0, value %x -> preparing backup RAM ...", (mode_reg & 0x000F));
 
                 /* Lowest nibble is active, it's a backup memory.
                  * Bit 0-4 values :
@@ -533,19 +533,22 @@ int main(void)
                 size_kb *= 2;
 
                 /* Initialize SDRAM with backup memory file from SD card. */
-                log_to_uart("Preparing backup RAM");
+                logout(WL_LOG_IMPORTANT, "Backup RAM size : %u KB", size_kb);
                 spi_bup_open(size_kb);
                 unsigned long count = size_kb * (1024 / 512);
+                int prev_status = -1;
                 for(i=0; i<count; i++)
                 {
-                    unsigned long status = 99 * i;
+                    int status = 99 * i;
                     status = status / count;
                     pRegs_16[PCNTR_REG_OFFSET] = (unsigned short)status;
 
-                    if((i % 32) == 0)
+                    /* Log reading status from time to time. */
+                    if((status / 10) != (prev_status / 10))
                     {
-                        log_to_uart(".");
+                        logout(WL_LOG_IMPORTANT, "Backup RAM %u %% reading ...", status);
                     }
+                    prev_status = status;
 
                     spi_bup_read(i/*ID*/, 512/*size*/, (unsigned char*)(pCS1 + (i*512)));
                 }
@@ -572,7 +575,7 @@ int main(void)
                  */
                 bram_mode = 1;
 
-                log_to_uart("Done");
+                logout(WL_LOG_IMPORTANT, "Backup RAM setup done.");
             }
 
 
@@ -594,34 +597,34 @@ int main(void)
              * the buffer is flused to SD, the new one is loaded from SD, and only then the processing continues.
              * If the fifo is overfilled ( > 1024 samples), issue an error message.
              */
-            while(pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
+            unsigned short fifo_depth = pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET];
+
+            if(fifo_depth > 0)
             {
+                logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] -> START", fifo_depth);
                 /* Check if close to overfill. */
-                // if(p16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 1020)
+                // if(fifo_depth > 1020)
                 // {
                 //     //fifo almost overfilled, let's panic!
                 //     for(i=0;i<10000;i++)
                 //     log_to_uart("FFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
                 // }
 
-                /* Access data in fifo, checking address. */
-                current_block = pRegs_16[SNIFF_DATA_REG_OFFSET];
+                do
+                {
+                    /* Check address from fifo to flush block to file. */
+                    current_block = pRegs_16[SNIFF_DATA_REG_OFFSET];
+                    unsigned char* pCS1_a = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x2000000 + (512*current_block));
 
-                /* Flushing block to file. */
-                unsigned char* pCS1_a = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x2000000 + (512*current_block));
-                spi_bup_write(current_block/*ID*/, 512/*size*/, pCS1_a);
+                    logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] Blk[0x%04X] (%02X%02X %02X%02X %02X%02X)", fifo_depth, current_block, pCS1_a[0], pCS1_a[1], pCS1_a[2], pCS1_a[3], pCS1_a[4], pCS1_a[5]);
 
-                /* Blinking led. */
-                log_to_uart("SYNC %x(%x) <%x> ", current_block, current_block, pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET]);
+                    spi_bup_write(current_block/*ID*/, 512/*size*/, pCS1_a);
+
+                    fifo_depth = pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET];
+                } while(fifo_depth > 0);
+
+                logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] -> DONE", fifo_depth);
             }
-        }
-
-        /* Check from time to time logs messages remaining in buffer, 
-         * and send them to STM32 if necessary.
-         */
-        if((loop_counter % 16) == 0)
-        {
-            logflush();
         }
 
 
