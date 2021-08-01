@@ -107,8 +107,10 @@ int spi_periodic_check(void)
      * 
      * So extra processing (log output etc) is prohibited here.
      */
+    memset(hdr, 0x77, sizeof(wl_spi_header_t));
     if(HAL_SPI_Receive(&hspi1, (uint8_t*)hdr, sizeof(wl_spi_header_t) / sizeof(unsigned short), rxtx_timeout) != HAL_OK)
     {
+        logout(WL_LOG_ERROR, "Error SPI Header Rx timeout ! Magic[%02X %02X] Command[%02X]", hdr->magic_ca, hdr->magic_fe, hdr->command);
         Error_Handler();
     }
 
@@ -125,7 +127,7 @@ int spi_periodic_check(void)
 
     /******************************************/
     /* Prepare response for sending to MAX10. */
-    spi_logout("Tick[0x%08X] MAGIC[%02X %02X] CMD[0x%02X]", (unsigned int)HAL_GetTick(), hdr->magic_ca, hdr->magic_fe, hdr->command);
+    spi_logout("Tick[0x%08X] MAGIC[%02X %02X] CMD[%02X]", (unsigned int)HAL_GetTick(), hdr->magic_ca, hdr->magic_fe, hdr->command);
 
     if(hdr->command == WL_SPICMD_VERSION)
     { /* MAX10/STM32 firmware versions exchange. */
@@ -182,6 +184,7 @@ int spi_periodic_check(void)
     {
         if(HAL_SPI_TransmitReceive(&hspi1, data_tx, data_rx, hdr->data_len / sizeof(unsigned short), rxtx_timeout) != HAL_OK)
         {
+            logout(WL_LOG_ERROR, "Error SPI Data TxRx timeout ! Magic[%02X %02X] Command[%02X]", hdr->magic_ca, hdr->magic_fe, hdr->command);
             Error_Handler();
         }
     }
