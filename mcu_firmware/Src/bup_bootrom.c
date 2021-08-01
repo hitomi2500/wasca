@@ -124,12 +124,19 @@ void bup_cache_flush(void)
              * (Not really needed because that's already checked beforehand)
              */
             _bup_error_flag = 1;
+
+            logout(WL_LOG_DEBUGNORMAL, "[bup_cache_flush] (offset[%08X] + datalen[%08X]) > _bup_size[%08X] -> ERROR !", offset, datalen, _bup_size);
         }
         else
         {
+            unsigned char* write_ptr = _bup_cache_data + (i*BUP_CACHE_BLOCK_SIZE);
+
+            logout(WL_LOG_DEBUGNORMAL, "[bup_cache_flush] Write block_id[%04X] offset[%08X][%4u KB] cnt[%2u]", block_id, offset, offset >> 10, block_cnt);
+            logout(WL_LOG_DEBUGNORMAL, "[bup_cache_flush] Write Data[%02X%02X %02X%02X %02X%02X]", write_ptr[0], write_ptr[1], write_ptr[2], write_ptr[3], write_ptr[4], write_ptr[5]);
+
             f_lseek(&_bup_boot_file, offset);
             UINT bytes_written = 0;
-            int f_ret = f_write(&_bup_boot_file, _bup_cache_data + (i*BUP_CACHE_BLOCK_SIZE), datalen, &bytes_written);
+            int f_ret = f_write(&_bup_boot_file, write_ptr, datalen, &bytes_written);
             if(f_ret != FR_OK)
             {
                 /* Indicate that an error happened. */
@@ -162,6 +169,8 @@ void bup_cache_flush(void)
 
 void bup_cache_append(unsigned long block_id, unsigned char* ptr, unsigned short len)
 {
+    logout(WL_LOG_DEBUGNORMAL, "[bup_cache_append] block_id[%04X] len[%04X]", block_id, len);
+
     if(_bup_size == 0)
     {
         return;
@@ -320,6 +329,9 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
             strcpy(_bup_file_name, "/BUP_05M.BIN");
         }
 
+        logout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPOPEN] [1] params->len[%u KB] -> bup_size[%08X][%u KB]", params->len >> 10, _bup_size, _bup_size >> 10);
+        logout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPOPEN] [1] _bup_file_name[%s]", _bup_file_name);
+
         f_ret = f_open(&_bup_boot_file, _bup_file_name, FA_READ | FA_WRITE);
 
         int create_new = 0;
@@ -356,6 +368,8 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
             f_lseek(&_bup_boot_file, _bup_size);
             f_truncate(&_bup_boot_file);
         }
+
+        logout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPOPEN] [9] bup_size[%08X][%u KB]", _bup_size, _bup_size >> 10);
 
         /* Copy file status to output buffer. */
         memcpy(data_tx, params, sizeof(wl_spi_memacc_t));
@@ -431,6 +445,9 @@ void bup_file_post_process(wl_spi_header_t* hdr, void* data_rx)
         /* Ensure that access is done within file boundaries. */
         unsigned long block_id = params->addr;
         unsigned long offset = block_id * BUP_CACHE_BLOCK_SIZE;
+
+        logout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPWRITE] Rcv block_id[%04X] bup_size[%08X][%u KB]", block_id, _bup_size, _bup_size >> 10);
+
         if((offset + params->len) > _bup_size)
         {
             /* Return zero length in case of wrong access. */
