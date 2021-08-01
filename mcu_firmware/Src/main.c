@@ -535,16 +535,18 @@ static void MX_GPIO_Init(void)
   * @brief  This function is executed in case of error occurrence.
   * @retval None
   */
-void Error_Handler(void)
+void Error_Handler_Ex(const char* file, int line, const char* func)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
 
-    logout(WL_LOG_DEBUGNORMAL, "***-***-***-***-***-***");
-    // logout(WL_LOG_DEBUGNORMAL, "Tick[0x%08X] Error_Handler at \"%s\"::%d"
-    //     , (unsigned int)HAL_GetTick()
-    //     , file
-    //     , line);
+    logout(WL_LOG_ERROR, 
+        "Tick[0x%08X] Error_Handler at [%s::%d] [%s]"
+        , (unsigned int)HAL_GetTick()
+        , file
+        , line
+        , func
+    );
 
     /* Make LD2 (green LED) blinking for a small while when error happens. */
     int i;

@@ -51,10 +51,10 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
+#define Error_Handler() Error_Handler_Ex(__BASE_FILE__, __LINE__, __FUNCTION__)
 
 /* USER CODE BEGIN EFP */
-
+void Error_Handler_Ex(const char* file, int line, const char* func);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
