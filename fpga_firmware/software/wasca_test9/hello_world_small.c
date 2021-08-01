@@ -205,7 +205,7 @@ void do_spi_ping_test(void)
      */
     if((_spi_ping_cnt % 100) == 1)
     {
-        log_to_uart("[SPI PING]CNT:%7u, CRC:%08X/%08X, Error : %2u/%2u", 
+        logout(WL_LOG_IMPORTANT, "[SPI PING]CNT:%7u, CRC:%08X/%08X, Error : %2u/%2u", 
             _spi_ping_cnt, 
             _spi_ping_verif_m10.crc_val, _spi_ping_verif_s32.crc_val, 
             _spi_ping_verif_m10.crc_error_total, _spi_ping_verif_s32.crc_error_total);
@@ -222,14 +222,14 @@ void load_boot_rom(unsigned char rom_id)
     volatile unsigned short * pRegs_16 = (unsigned short *)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_REGS_BASE;
     unsigned char* boot_rom = (unsigned char*)ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE;
 
-    log_to_uart("[Boot ROM]START id:%u", rom_id);
+    logout(WL_LOG_IMPORTANT, "[Boot ROM]START id:%u", rom_id);
 
     WASCA_PERF_START_MEASURE();
     /* Retrieve ROM file size. */
     wl_spi_bootinfo_t info = { 0 };
     spi_boot_getinfo(rom_id, &info);
 
-    log_to_uart("[Boot ROM]Size=%u KB, status:%u, path:\"%s\"", info.size>>10, info.status, info.path);
+    logout(WL_LOG_IMPORTANT, "[Boot ROM]Size=%u KB, status:%u, path:\"%s\"", info.size>>10, info.status, info.path);
 
     /* Read ROM data. */
     unsigned long rom_size = info.size;
@@ -250,7 +250,7 @@ void load_boot_rom(unsigned char rom_id)
 
         if(((offset / WL_SPI_DATA_MAXLEN) % 100) == 0)
         {
-            log_to_uart("[Boot ROM]Reading from block %5u ...", offset / WL_SPI_DATA_MAXLEN);
+            logout(WL_LOG_IMPORTANT, "[Boot ROM]Reading from block %5u ...", offset / WL_SPI_DATA_MAXLEN);
         }
         // logflush();
 
@@ -286,13 +286,13 @@ void load_boot_rom(unsigned char rom_id)
 #if 0 /* Log CRC value of ROM we just loaded (DEBUG). */
     unsigned long crc32 = crc32_calc(boot_rom, rom_size);
 
-    log_to_uart("[Boot ROM]Read ended. Size:%u KB, Time:%u.%u sec, %u KB/s, CRC=%08X", 
+    logout(WL_LOG_IMPORTANT, "[Boot ROM]Read ended. Size:%u KB, Time:%u.%u sec, %u KB/s, CRC=%08X", 
         rom_size>>10, 
         elapsed / 10, elapsed % 10, 
         kbps, 
         crc32);
 
-    // log_to_uart("[Boot ROM]Header: %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 
+    // logout(WL_LOG_IMPORTANT, "[Boot ROM]Header: %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 
     //     boot_rom[ 0], boot_rom[ 1], boot_rom[ 2], boot_rom[ 3], 
     //     boot_rom[ 4], boot_rom[ 5], boot_rom[ 6], boot_rom[ 7], 
     //     boot_rom[ 8], boot_rom[ 9], boot_rom[10], boot_rom[11], 
@@ -300,7 +300,7 @@ void load_boot_rom(unsigned char rom_id)
 
 #else /* Log transfer speed. */
 
-    log_to_uart("[Boot ROM]Read ended. ID:%u, Size:%u KB, Time:%u.%u sec, %u KB/s", 
+    logout(WL_LOG_IMPORTANT, "[Boot ROM]Read ended. ID:%u, Size:%u KB, Time:%u.%u sec, %u KB/s", 
         rom_id, 
         rom_size>>10, 
         elapsed / 10, elapsed % 10, 
@@ -324,7 +324,8 @@ int main(void)
     /* Initialize settings. */
     memset(&_baseset, 0, sizeof(wl_baseset_max_t));
     _baseset.cart_mode = 0x0341;
-    _baseset.log_level = WL_LOG_DISABLE;
+    _baseset.log_level = WL_LOG_DEBUGNORMAL;
+    _baseset.uart_mode = 2; /* All logs to UART until settings are received from STM32. */
 
     /* Write version. */
     pRegs_16[SWVER_REG_OFFSET] = SOFTWARE_VERSION;
@@ -334,21 +335,29 @@ int main(void)
     /* Initialize log internals. */
     log_init();
 
+#if 1
+    {
+        /* Wait for around 0.3 sec before using SPI.
+         * (Just for debug, will be removed soon)
+         */
+        // WASCA_PERF_START_MEASURE();
+
+        for(int i=0; i<(1500*1000); i++)
+        {
+            HEARTBEAT_FAST();
+        }
+
+        // WASCA_PERF_STOP_MEASURE();
+        // unsigned long elapsed = wasca_perf_get_usec(WASCA_PERF_GET_TIME());
+        // elapsed = elapsed / 10000;
+        // log_to_uart("Startup wait ended. Time:%u.%02u sec", elapsed / 100, elapsed % 100);
+    }
+#endif
 
     /*--------------------------------------------*/
     /* Initialize block SPI module internals.     */
     spi_init();
 
-    // /* Wait for around 2.5 sec before using SPI.
-    //  * (Just for debug, will be removed soon)
-    //  */
-    // log_to_uart("MAX 10 STT1");
-    // for(int i=0; i<(20*1000*1000); i++)
-    // {
-    //     HEARTBEAT_SLOW();
-    // }
-    // HEARTBEAT_FAST();
-    // log_to_uart("MAX 10 STT2");
 
     /*--------------------------------------------*/
     /* Exchange version information with STM32.   */
@@ -365,21 +374,20 @@ int main(void)
 
         arm_ver->build_date[sizeof(arm_ver->build_date)-1] = '\0';
         arm_ver->build_time[sizeof(arm_ver->build_time)-1] = '\0';
-        log_to_uart("STM32 FW build_date:\"%s\"", arm_ver->build_date);
-        log_to_uart("STM32 FW build_time:\"%s\"", arm_ver->build_time);
+        logout(WL_LOG_IMPORTANT, "MAX10 FW build_date:\"%s\"", max_ver->build_date);
+        logout(WL_LOG_IMPORTANT, "      FW build_time:\"%s\"", max_ver->build_time);
+        logout(WL_LOG_IMPORTANT, "STM32 FW build_date:\"%s\"", arm_ver->build_date);
+        logout(WL_LOG_IMPORTANT, "      FW build_time:\"%s\"", arm_ver->build_time);
 
         /* Keep base settings in global variable. */
         memcpy(&_baseset, &arm_ver->set, sizeof(wl_baseset_max_t));
 
-        log_to_uart("M10_Set mode[%04X] level[%u] uart[%u] interval[%u]", 
+        logout(WL_LOG_IMPORTANT, "M10_Set mode[%04X] level[%u] uart[%u] interval[%u]", 
             _baseset.cart_mode, 
             _baseset.log_level, 
             _baseset.uart_mode, 
             _baseset.flush_interval);
-
     }
-
-
 
     /* Initialization ended : blink the LED at slow speed. */
     HEARTBEAT_SLOW();
@@ -401,7 +409,7 @@ int main(void)
 
         load_boot_rom(WL_ROM_PSEUDOSAT/*ROM ID*/);
 
-        log_to_uart("ROM load count : %u", load_counter);
+        logout(WL_LOG_IMPORTANT, "ROM load count : %u", load_counter);
     }
 #endif // Test continous ROM loading (DEBUG)
 
@@ -533,6 +541,8 @@ int main(void)
                 size_kb *= 2;
 
                 /* Initialize SDRAM with backup memory file from SD card. */
+                WASCA_PERF_START_MEASURE();
+
                 logout(WL_LOG_IMPORTANT, "Backup RAM size : %u KB", size_kb);
                 spi_bup_open(size_kb);
                 unsigned long count = size_kb * (1024 / 512);
@@ -552,6 +562,28 @@ int main(void)
 
                     spi_bup_read(i/*ID*/, 512/*size*/, (unsigned char*)(pCS1 + (i*512)));
                 }
+
+
+#if 1 /* Log time it took to load backup memory data (DEBUG). */
+                WASCA_PERF_STOP_MEASURE();
+                unsigned long elapsed = wasca_perf_get_usec(WASCA_PERF_GET_TIME());
+
+                elapsed = elapsed / 1000;
+                if(elapsed == 0)
+                {
+                    elapsed = 1;
+                }
+                unsigned long kbps = (size_kb * 1024) / elapsed;
+
+                elapsed = elapsed / 100;
+
+                logout(WL_LOG_IMPORTANT, 
+                    "[BRAM]Read ended. Size:%u KB, Time:%u.%u sec, %u KB/s", 
+                    size_kb, 
+                    elapsed / 10, elapsed % 10, 
+                    kbps
+                );
+#endif /* Log time it took to load backup memory data (DEBUG). */
 
                 /* Setup mapper stuff. */
                 pRegs_16[MAPPER_WRITE_0] =      0; /* Lock cs0 writes.                            */
@@ -602,6 +634,8 @@ int main(void)
             if(fifo_depth > 0)
             {
                 logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] -> START", fifo_depth);
+                char updated_status[16] = {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'};
+
                 /* Check if close to overfill. */
                 // if(fifo_depth > 1020)
                 // {
@@ -616,14 +650,25 @@ int main(void)
                     current_block = pRegs_16[SNIFF_DATA_REG_OFFSET];
                     unsigned char* pCS1_a = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x2000000 + (512*current_block));
 
-                    logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] Blk[0x%04X] (%02X%02X %02X%02X %02X%02X)", fifo_depth, current_block, pCS1_a[0], pCS1_a[1], pCS1_a[2], pCS1_a[3], pCS1_a[4], pCS1_a[5]);
+                    //logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] Blk[0x%04X] (%02X%02X %02X%02X %02X%02X)", fifo_depth, current_block, pCS1_a[0], pCS1_a[1], pCS1_a[2], pCS1_a[3], pCS1_a[4], pCS1_a[5]);
+                    logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] Blk[0x%04X]", fifo_depth, current_block);
+
+                    if(updated_status[current_block & 0xF] != '9')
+                    {
+                        updated_status[current_block & 0xF]++;
+                    }
 
                     spi_bup_write(current_block/*ID*/, 512/*size*/, pCS1_a);
 
                     fifo_depth = pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET];
                 } while(fifo_depth > 0);
 
-                logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] -> DONE", fifo_depth);
+                //logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] -> DONE", fifo_depth);
+                logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] -> DONE [%c%c%c%c %c%c%c%c %c%c%c%c %c%c%c%c]", fifo_depth, 
+                    updated_status[ 0], updated_status[ 1], updated_status[ 2], updated_status[ 3], 
+                    updated_status[ 4], updated_status[ 5], updated_status[ 6], updated_status[ 7], 
+                    updated_status[ 8], updated_status[ 9], updated_status[10], updated_status[11], 
+                    updated_status[12], updated_status[13], updated_status[14], updated_status[15]);
             }
         }
 
