@@ -38,22 +38,28 @@ void settings_init(void)
      */
     memset(&_wasca_set, 0, sizeof(wasca_settings_t));
     _wasca_set.log_level      = WL_LOG_DEBUGHARD;
-    _wasca_set.log_max_size   = 10*1024; /* 10KB. */
+    _wasca_set.log_max_size   = 20*1024; /* 20KB. */
     _wasca_set.log_file_count = 10;
     _wasca_set.uart_mode = 2;
     _wasca_set.log_to_usb    = 0;
     _wasca_set.log_to_sd     = 1;
     _wasca_set.flush_interval = 500; /* 0.5 sec. */
+    _wasca_set.log_timestamp = 1;
 
     /* Reset base settings for MAX 10. */
     _wasca_set.max.cart_mode = 0x0000; /* No mode initialization on startup. */
     _wasca_set.max.log_level = WL_LOG_DEBUGHARD;
-    _wasca_set.max.uart_mode = 1;
+    _wasca_set.max.uart_mode = 2;
     _wasca_set.max.flush_interval = 9; /* Flush every 10 loops. */
 }
 
 void settings_read(void)
 {
+#if 1 // Test settings without having to insert/remove the SD card
+    return;
+#endif // Test settings without having to insert/remove the SD card
+
+
     int i, j;
 
     /* Open ini file and parse it line per line */
@@ -380,6 +386,12 @@ ini_logout(" -> log.maxsize:%d", v);
                                     }
 
                                     _wasca_set.max.flush_interval = v;
+                                }
+                                else if(strcasecmp(name, "timestamp") == 0)
+                                {
+                                    v = (atoi(val) == 0 ? 0 : 1);
+
+                                    _wasca_set.log_timestamp = v;
                                 }
                             }
                             else

@@ -212,7 +212,7 @@ void log_periodic_check(void)
     }
 }
 
-
+unsigned int _log_prev_timestamp = 0;
 void logout_internal(int to_uart, int level, int from_m10, const char* fmt, ... )
 {
     int to_usb  = _wasca_set.log_to_usb;
@@ -305,11 +305,33 @@ void logout_internal(int to_uart, int level, int from_m10, const char* fmt, ... 
      *  - First letter  : origin 'M' = MAX 10, 'S' = STM32.
      *  - Second letter : level, from '1' (error) to '9' (debug)
      */
-    unsigned short len = 3;
+    unsigned short len = 0;
     char* log_ptr = _log_buffer + _log_bufflen;
-    log_ptr[0] = (from_m10 ? 'M' : 'S');
-    log_ptr[1] = '0' + level;
-    log_ptr[2] = '>';
+
+    /* Check if time stamp have to be output or not. */
+    if(_wasca_set.log_timestamp)
+    {
+        unsigned int tick = HAL_GetTick();
+
+        /* If previous log was sent recently, output time
+         * difference rather than absolute time stamp.
+         */
+        unsigned int diff = tick - _log_prev_timestamp;
+        if(diff < 500)
+        {
+            len += sprintf(log_ptr, "[    +%03u]", diff);
+        }
+        else
+        {
+            len += sprintf(log_ptr, "[%08X]", tick);
+        }
+
+        _log_prev_timestamp = tick;
+    }
+
+    log_ptr[len++] = (from_m10 ? 'M' : 'S');
+    log_ptr[len++] = '0' + level;
+    log_ptr[len++] = '>';
 
     /* Print the log message to memory. */
     char* format_ptr = log_ptr + len;

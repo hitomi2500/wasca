@@ -250,6 +250,8 @@ typedef struct _wl_baseset_max_t
      *
      * The higher the less impact it haves on flow execution, but small value
      * is recommended to keep chronology between MAX 10 and STM32 logs.
+     *
+     * Name : [Log]FlushIntervalM10
      */
     unsigned char flush_interval;
 

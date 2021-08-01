@@ -95,6 +95,14 @@ typedef struct _wasca_settings_t
      */
     long flush_interval;
 
+    /* Time stamp output in logs :
+     *  - 0 : time stamp output disabled
+     *  - 1 : time stamp output enabled
+     *
+     * (Enabling time stamp output adds a small overhead when formatting logs)
+     */
+    long log_timestamp;
+
 } wasca_settings_t;
 
 extern wasca_settings_t _wasca_set;
