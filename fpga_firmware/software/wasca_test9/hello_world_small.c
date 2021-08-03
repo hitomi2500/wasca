@@ -424,7 +424,7 @@ int main(void)
     unsigned short prev_mode_reg = 0;
     int bram_mode = 0;
 
-    int loop_counter = 0;
+    unsigned long loop_counter = 0;
     int first_loop = 1;
 
     while(1)
@@ -442,17 +442,30 @@ int main(void)
             if(_baseset.cart_mode != 0)
             {
                 mode_reg = _baseset.cart_mode;
-                prev_mode_reg = ~mode_reg;
             }
             else
             {
                 mode_reg = pRegs_16[MODE_REG_OFFSET];
-                prev_mode_reg = mode_reg;
             }
+            prev_mode_reg = ~mode_reg;
         }
         else
         {
             mode_reg = pRegs_16[MODE_REG_OFFSET];
+        }
+
+        if((loop_counter % 50000) == 0)
+        {
+            if(((loop_counter / 50000) % 2) == 0)
+            {
+                HEARTBEAT_FAST();
+            }
+            else
+            {
+                HEARTBEAT_SLOW();
+            }
+
+            log_to_uart("loop[%u] MODE_REG[%04X]", loop_counter / 50000, mode_reg);
         }
 
         /* Re-init internals in the case MODE register changed. */
@@ -678,7 +691,7 @@ int main(void)
          */
         if(first_loop)
         {
-            mode_reg = pRegs_16[MODE_REG_OFFSET];
+            pRegs_16[MODE_REG_OFFSET] = mode_reg;
             prev_mode_reg = mode_reg;
             first_loop = 0;
         }

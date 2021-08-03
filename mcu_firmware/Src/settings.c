@@ -47,6 +47,7 @@ void settings_init(void)
     _wasca_set.log_timestamp = 1;
 
     /* Reset base settings for MAX 10. */
+    //_wasca_set.max.cart_mode = 0x0341; /* WascaLoader + Backup memory. */
     _wasca_set.max.cart_mode = 0x0000; /* No mode initialization on startup. */
     _wasca_set.max.log_level = WL_LOG_DEBUGHARD;
     _wasca_set.max.uart_mode = 2;
