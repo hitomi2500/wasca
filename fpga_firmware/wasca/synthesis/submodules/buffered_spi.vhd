@@ -47,8 +47,10 @@ signal transaction_data_write1          : std_logic_vector (15 downto 0)  := (ot
 signal transaction_data_write2          : std_logic_vector (15 downto 0)  := (others => '0');
 signal transaction_buf_write1           : std_logic := '0';
 signal transaction_buf_write2           : std_logic := '0';
-signal transaction_clkdiv_counter            : std_logic_vector (2 downto 0)  := (others => '0');
-
+signal transaction_clkdiv_counter            : std_logic_vector (3 downto 0)  := (others => '0');
+signal transaction_clkdiv_limit            : std_logic_vector (3 downto 0)  := (others => '0');
+signal transaction_clkdiv_latch            : std_logic_vector (3 downto 0)  := (others => '0');
+signal transaction_clkdiv_prelatch            : std_logic_vector (3 downto 0)  := (others => '0');
 
 signal spi_cs_constant            : std_logic := '1';
 signal spi_cs_gappy            : std_logic := '1';
@@ -58,6 +60,7 @@ signal length_register         : std_logic_vector(10 downto 0)  := (others => '0
 signal cs_mode_register         : std_logic  := '0';
 signal delay_register         : std_logic_vector(15 downto 0)  := (others => '0');
 signal buffer_select_register         : std_logic  := '0';
+signal freq_divider_register         : std_logic_vector(1 downto 0)  := (others => '0');
 
 signal avalon_readdata_readbuf1 : std_logic_vector (15 downto 0);
 signal avalon_readdata_writebuf1 : std_logic_vector (15 downto 0);
@@ -132,7 +135,7 @@ begin
                            when "010" => 
                                  avalon_readdata_p1 <= X"0"&std_logic_vector(transaction_byte_counter);
                            when "011" => 
-                                 avalon_readdata_p1 <= X"000"&"000"&cs_mode_register;
+                                 avalon_readdata_p1 <= X"00"&"00"&freq_divider_register&"000"&cs_mode_register;
                            when "100" => 
                                  avalon_readdata_p1 <= delay_register;
                            when "101" =>
@@ -183,6 +186,7 @@ begin
                              null;
                        when "011" => 
                              cs_mode_register <= avalon_writedata(0);
+									  freq_divider_register <= avalon_writedata(5 downto 4);
                        when "100" => 
                              delay_register <= avalon_writedata;
                        when "101" => 
@@ -211,7 +215,7 @@ begin
        if rising_edge(clock) then
           if transaction_prestart_1 = '1' then
                 transaction_prestart_2 <= '1';
-          elsif transaction_clkdiv_counter = "001" then
+          elsif transaction_clkdiv_counter = "0001" then
                 transaction_prestart_2 <= '0';
           end if;
        end if;
@@ -220,7 +224,7 @@ begin
 	process (clock)
     begin
        if rising_edge(clock) then
-          if transaction_clkdiv_counter = "000" then
+          if transaction_clkdiv_counter = "0000" then
                 transaction_start<= transaction_prestart_2;   
           end if;
        end if;
@@ -342,7 +346,7 @@ write2_buf: buff_spi_ram
        if rising_edge(clock) then
           if (transaction_start = '1') then
              transaction_bit_counter <= to_unsigned(0,16);
-          elsif (transaction_clkdiv_counter = "100") and transaction_active = '1' then
+          elsif (transaction_clkdiv_counter = transaction_clkdiv_prelatch) and transaction_active = '1' then
             if transaction_bit_counter < 16 + unsigned(delay_register) then
                  transaction_bit_counter <= transaction_bit_counter + 1;
             else
@@ -358,7 +362,7 @@ write2_buf: buff_spi_ram
        if rising_edge(clock) then
           if (transaction_start = '1') then
              transaction_byte_counter <= to_unsigned(0,12);
-          elsif transaction_clkdiv_counter = "101"  and transaction_active = '1' then
+          elsif transaction_clkdiv_counter = transaction_clkdiv_latch  and transaction_active = '1' then
             if transaction_byte_counter <= unsigned(length_register) then
                  if transaction_bit_counter = to_unsigned(16,16) then  --16 bits per frame
                     transaction_byte_counter <= transaction_byte_counter + 1;
@@ -392,14 +396,39 @@ write2_buf: buff_spi_ram
        end if;
     end process;
     
-    --transaction clock divider (clockspeed is 1/8, 14.5 Mhz for 116Mhz base clock)
+    --transaction clock divider 
+	 --controlled by freq_divider_register
+	 -- 0 => clockspeed is 1/8, 14.5 Mhz for 116Mhz base clock
+	 -- 1 => clockspeed is 1/10, 11.6 Mhz for 116Mhz base clock
+	 -- 2 => clockspeed is 1/12, 9.67 Mhz for 116Mhz base clock
+	 -- 3 => clockspeed is 1/16, 7.25 Mhz for 116Mhz base clock
+	 
+	 transaction_clkdiv_limit <= X"7" when freq_divider_register = "00" else
+										  X"9" when freq_divider_register = "01" else
+										  X"B" when freq_divider_register = "10" else
+										  X"F";
+	
+	 transaction_clkdiv_latch <= X"5" when freq_divider_register = "00" else
+										  X"6" when freq_divider_register = "01" else
+										  X"7" when freq_divider_register = "10" else
+										  X"9";
+										  
+	 transaction_clkdiv_prelatch <= X"4" when freq_divider_register = "00" else
+										  X"5" when freq_divider_register = "01" else
+										  X"6" when freq_divider_register = "10" else
+										  X"8";
+	 
+
+										  
     process (clock)
     begin
        if rising_edge(clock) then
           if (transaction_prestart_1 = '1') then
-              transaction_clkdiv_counter <= "100";
-          else
+              transaction_clkdiv_counter <= transaction_clkdiv_prelatch;
+          elsif unsigned(transaction_clkdiv_counter) < unsigned(transaction_clkdiv_limit) then
               transaction_clkdiv_counter <= std_logic_vector(unsigned(transaction_clkdiv_counter) + 1);  
+			 else 
+				  transaction_clkdiv_counter <= "0000";
           end if;
        end if;
     end process;
@@ -409,9 +438,9 @@ write2_buf: buff_spi_ram
     begin
        if rising_edge(clock) then
           if (transaction_active = '1') and  transaction_bit_counter <= to_unsigned(15,16) then
-              if (transaction_clkdiv_counter = "001") and (transaction_start = '0') then
+              if (transaction_clkdiv_counter = "0001") and (transaction_start = '0') then
                  spi_clk <= '1';
-              elsif (transaction_clkdiv_counter = "101") then
+              elsif (transaction_clkdiv_counter = transaction_clkdiv_latch) then
                  spi_clk <= '0';
               end if;
           else
@@ -470,7 +499,7 @@ write2_buf: buff_spi_ram
     process (clock)
     begin
        if rising_edge(clock) then
-          if (transaction_active = '1') and transaction_bit_counter <= to_unsigned(15,16) and transaction_clkdiv_counter = "001" then
+          if (transaction_active = '1') and transaction_bit_counter <= to_unsigned(15,16) and transaction_clkdiv_counter = "0001" then
               transaction_data_read(15-to_integer(transaction_bit_counter(3 downto 0))) <= spi_miso;
           end if;
        end if;
