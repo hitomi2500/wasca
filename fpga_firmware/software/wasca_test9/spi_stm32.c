@@ -83,6 +83,34 @@ void spi_sync_middle(void)
 }
 
 
+unsigned short _spi_mode = 1 | (3 << 4);
+void spi_set_clock_div(unsigned char clock_div)
+{
+    /* Bit 4-5 : clock divider
+     *  - 0 : 116/ 8 = 14.5 Mhz (fastest)
+     *  - 1 : 116/10 = 11.6 Mhz
+     *  - 2 : 116/12 = 9.67 Mhz
+     *  - 3 : 116/16 = 7.25 Mhz (safest)
+     */
+    if(clock_div == 8)
+    { /* 14.5 Mhz */
+        _spi_mode = 1 | (0 << 4);
+    }
+    else if(clock_div == 10)
+    { /* 11.6 Mhz */
+        _spi_mode = 1 | (1 << 4);
+    }
+    else if(clock_div == 12)
+    { /* 9.67 Mhz */
+        _spi_mode = 1 | (2 << 4);
+    }
+    else
+    { /* 7.25 Mhz */
+        _spi_mode = 1 | (3 << 4);
+    }
+}
+
+
 void spi_init(void)
 {
     volatile unsigned short * p16_spi = (unsigned short *)BUFFERED_SPI_0_BASE;
@@ -99,10 +127,13 @@ void spi_init(void)
         p16_spi[BUFFSPI_BUFFER1_READ  + i] = 0;
     }
 
-    p16_spi[BUFFSPI_REG_LENGTH       ] =   1; /* Number of words = 16 bit each. */
-    p16_spi[BUFFSPI_REG_CS_MODE      ] =   1; /* CS blinking. */
-    p16_spi[BUFFSPI_REG_DELAY        ] =  70; /* 70 SPI clocks @ 7.25 Mhz between each 16 bit. */
-    p16_spi[BUFFSPI_REG_BUFFER_SELECT] =   0; /* Using buffer 0. */
+    /* Initialize clock divider to safest (/16) value. */
+    _spi_mode = 1 | (3 << 4);
+
+    p16_spi[BUFFSPI_REG_LENGTH       ] =   1;       /* Number of words = 16 bit each.                */
+    p16_spi[BUFFSPI_REG_CS_MODE      ] = _spi_mode; /* CS blinking + clock divider.                  */
+    p16_spi[BUFFSPI_REG_DELAY        ] =  70;       /* 70 SPI clocks @ 7.25 Mhz between each 16 bit. */
+    p16_spi[BUFFSPI_REG_BUFFER_SELECT] =   0;       /* Using buffer 0.                               */
 }
 
 
@@ -127,10 +158,10 @@ void spi_sendreceive_single(unsigned short* snd_ptr, unsigned short* rcv_ptr, un
         }
 
         /* Setting up the core. */
-        p16_spi[BUFFSPI_REG_LENGTH       ] = len; /* Number of words = 16 bit each. */
-        p16_spi[BUFFSPI_REG_CS_MODE      ] =   1; /* CS blinking. */
-        p16_spi[BUFFSPI_REG_DELAY        ] =   1; /* 1 SPI clock @ 7.25 Mhz between each 16 bit. */
-        p16_spi[BUFFSPI_REG_BUFFER_SELECT] =   0; /* Using buffer 0. */
+        p16_spi[BUFFSPI_REG_LENGTH       ] = len;       /* Number of words = 16 bit each.              */
+        p16_spi[BUFFSPI_REG_CS_MODE      ] = _spi_mode; /* CS blinking + clock divider.                */
+        p16_spi[BUFFSPI_REG_DELAY        ] =   1;       /* 1 SPI clock @ 7.25 Mhz between each 16 bit. */
+        p16_spi[BUFFSPI_REG_BUFFER_SELECT] =   0;       /* Using buffer 0.                             */
 
         /* Fill transmit buffer with input data. */
         int i;
@@ -194,8 +225,8 @@ void spi_sendreceive_dual(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsi
     volatile unsigned short* p16_spi = (unsigned short *)BUFFERED_SPI_0_BASE;
 
     /* Setting up core base registers. */
-    p16_spi[BUFFSPI_REG_CS_MODE] = 1; /* CS blinking. */
-    p16_spi[BUFFSPI_REG_DELAY  ] = 1; /* 1 SPI clock @ 7.25 Mhz between each 16 bit. */
+    p16_spi[BUFFSPI_REG_CS_MODE] = _spi_mode; /* CS blinking + clock divider.                */
+    p16_spi[BUFFSPI_REG_DELAY  ] = 1;         /* 1 SPI clock @ 7.25 Mhz between each 16 bit. */
 
     int next_len = (BUFFSPI_MAXCNT > count ? count : BUFFSPI_MAXCNT);
     int prev_len = 0;

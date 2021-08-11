@@ -27,6 +27,19 @@ void spi_init(void);
 
 
 /**
+ * spi_set_clock_div
+ * 
+ * Set SPI clock divider :
+ *  -  8 : 116/ 8 = 14.5 Mhz (fastest)
+ *  - 10 : 116/10 = 11.6 Mhz
+ *  - 12 : 116/12 = 9.67 Mhz
+ *  - 16 : 116/16 = 7.25 Mhz (safest)
+ *  - Other : safest value = 14.5 Mhz
+**/
+void spi_set_clock_div(unsigned char clock_div);
+
+
+/**
  * spi_exc_version
  * 
  * Send MAX 10 firmmware version, and receive STM32's.

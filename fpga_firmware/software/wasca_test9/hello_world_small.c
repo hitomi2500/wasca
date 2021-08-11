@@ -235,10 +235,11 @@ void load_boot_rom(unsigned char rom_id)
     unsigned long rom_size = info.size;
     unsigned long offset = 0;
 
+    int prev_status = -1;
     for(offset=0; offset<rom_size; offset+=WL_SPI_DATA_MAXLEN)
     {
         /* Provide read status to Saturn. */
-        unsigned long status = (offset * 99);
+        int status = (offset * 99);
         status = status / rom_size;
         pRegs_16[PCNTR_REG_OFFSET] = (unsigned short)status;
 
@@ -248,11 +249,12 @@ void load_boot_rom(unsigned char rom_id)
             block_len = rom_size - offset;
         }
 
-        if(((offset / WL_SPI_DATA_MAXLEN) % 100) == 0)
+        if((status / 10) != (prev_status / 10))
         {
             logout(WL_LOG_IMPORTANT, "[Boot ROM]Reading from block %5u ...", offset / WL_SPI_DATA_MAXLEN);
+            logflush();
         }
-        // logflush();
+        prev_status = status;
 
         spi_boot_readdata(rom_id, offset, block_len, boot_rom+offset);
     }
@@ -361,33 +363,25 @@ int main(void)
 
     /*--------------------------------------------*/
     /* Exchange version information with STM32.   */
-    {
-        /* TODO : should store each version information somewhere in SDRAM
-         *        so that SH-2 can access to it any time after that.
-         */
-        wl_verinfo_max_t max_ver_dat = {0};
-        wl_verinfo_max_t* max_ver = &max_ver_dat;
+    wl_verinfo_max_t max_ver_dat = {0};
+    wl_verinfo_max_t* max_ver = &max_ver_dat;
 
-        wl_verinfo_stm_t arm_ver_dat = {0};
-        wl_verinfo_stm_t* arm_ver = &arm_ver_dat;
-        spi_exc_version(max_ver, arm_ver);
+    wl_verinfo_stm_t arm_ver_dat = {0};
+    wl_verinfo_stm_t* arm_ver = &arm_ver_dat;
+    spi_exc_version(max_ver, arm_ver);
 
-        arm_ver->build_date[sizeof(arm_ver->build_date)-1] = '\0';
-        arm_ver->build_time[sizeof(arm_ver->build_time)-1] = '\0';
-        logout(WL_LOG_IMPORTANT, "MAX10 FW build_date:\"%s\"", max_ver->build_date);
-        logout(WL_LOG_IMPORTANT, "      FW build_time:\"%s\"", max_ver->build_time);
-        logout(WL_LOG_IMPORTANT, "STM32 FW build_date:\"%s\"", arm_ver->build_date);
-        logout(WL_LOG_IMPORTANT, "      FW build_time:\"%s\"", arm_ver->build_time);
+    arm_ver->build_date[sizeof(arm_ver->build_date)-1] = '\0';
+    arm_ver->build_time[sizeof(arm_ver->build_time)-1] = '\0';
 
-        /* Keep base settings in global variable. */
-        memcpy(&_baseset, &arm_ver->set, sizeof(wl_baseset_max_t));
+    /* Keep base settings in global variable. */
+    memcpy(&_baseset, &arm_ver->set, sizeof(wl_baseset_max_t));
 
-        logout(WL_LOG_IMPORTANT, "M10_Set mode[%04X] level[%u] uart[%u] interval[%u]", 
-            _baseset.cart_mode, 
-            _baseset.log_level, 
-            _baseset.uart_mode, 
-            _baseset.flush_interval);
-    }
+    /* Update SPI clock divider.
+     * -> If NIOS freezes and/or boot ROM can't be loaded then it's needed
+     *    to set a safer value (example : 16) in ini settings file.
+     */
+    spi_set_clock_div(_baseset.spi_clock_div);
+
 
     /* Initialization ended : blink the LED at slow speed. */
     HEARTBEAT_SLOW();
@@ -410,49 +404,51 @@ int main(void)
         load_boot_rom(WL_ROM_PSEUDOSAT/*ROM ID*/);
 
         logout(WL_LOG_IMPORTANT, "ROM load count : %u", load_counter);
+        logflush();
     }
 #endif // Test continous ROM loading (DEBUG)
 
 
-    // /*--------------------------------------------*/
-    // /* Load Pseudo Saturn from SD card to SDRAM.  */
-    // //load_boot_rom(WL_ROM_PSEUDOSAT/*ROM ID*/);
-    // load_boot_rom(WL_ROM_WASCALOADER/*ROM ID*/); /* Temporarily set to WascaLoader. */
+
+#if 0 // Boot ROM manual loading. Not necessary because this is specified from settings in SD card.
+    /*--------------------------------------------*/
+    /* Load Pseudo Saturn from SD card to SDRAM.  */
+    //load_boot_rom(WL_ROM_PSEUDOSAT/*ROM ID*/);
+    load_boot_rom(WL_ROM_WASCALOADER/*ROM ID*/); /* Temporarily set to WascaLoader. */
+#endif // Boot ROM manual loading. Not necessary because this is specified from settings in SD card.
+
+
+    /*---------------------------------------*/
+    /* Log settings and version information. */
+    logout(WL_LOG_IMPORTANT, "MAX10 FW build_date:\"%s\"", max_ver->build_date);
+    logout(WL_LOG_IMPORTANT, "      FW build_time:\"%s\"", max_ver->build_time);
+
+    logout(WL_LOG_IMPORTANT, "STM32 FW build_date:\"%s\"", arm_ver->build_date);
+    logout(WL_LOG_IMPORTANT, "      FW build_time:\"%s\"", arm_ver->build_time);
+
+    logout(WL_LOG_IMPORTANT, "M10_Set mode[%04X] level[%u] uart[%u] interval[%u] clk_div[%u]", 
+        _baseset.cart_mode, 
+        _baseset.log_level, 
+        _baseset.uart_mode, 
+        _baseset.flush_interval, 
+        _baseset.spi_clock_div);
+
 
     /*----------------------------------------------------------------*/
     /* Poll MODE register and setup Wasca accordingly when it is set. */
-    unsigned short prev_mode_reg = 0;
     int bram_mode = 0;
-
     unsigned long loop_counter = 0;
-    int first_loop = 1;
+
+    /* On startup, as cartridge mode from settings file on SD card is used, 
+     * it's necessary to tweak the mode register.
+     */
+    pRegs_16[MODE_REG_OFFSET] = _baseset.cart_mode;
+    unsigned short prev_mode_reg = (_baseset.cart_mode == 0 ? 0 : ~_baseset.cart_mode);
 
     while(1)
     {
         volatile unsigned short current_block;
-
-        unsigned short mode_reg;
-        if(first_loop)
-        {
-            /* On startup, use cartridge mode from settings file on SD card.
-             * 
-             * When value is set to zero then don't initialize anything : debug
-             * mode for use with WascaLoader.
-             */
-            if(_baseset.cart_mode != 0)
-            {
-                mode_reg = _baseset.cart_mode;
-            }
-            else
-            {
-                mode_reg = pRegs_16[MODE_REG_OFFSET];
-            }
-            prev_mode_reg = ~mode_reg;
-        }
-        else
-        {
-            mode_reg = pRegs_16[MODE_REG_OFFSET];
-        }
+        unsigned short mode_reg = pRegs_16[MODE_REG_OFFSET];
 
         if((loop_counter % 50000) == 0)
         {
@@ -488,7 +484,7 @@ int main(void)
             /* Okay, now start a MODE-dependent preparation routine.
              * lower octets have higher priority.
              */
-            if((mode_reg & 0x0F00) != 0)
+            if((mode_reg & 0x0F00) != (prev_mode_reg & 0x0F00))
             {
                 logout(WL_LOG_IMPORTANT, "Octet 2, value %x, preparing boot ROM ...", ((mode_reg >> 16) & 0x000F));
                 /* Select cartridge ROM :
@@ -520,7 +516,7 @@ int main(void)
                 logout(WL_LOG_IMPORTANT, "Boot ROM read done.");
             }
 
-            if((mode_reg & 0x00F0) != 0)
+            if((mode_reg & 0x00F0) != (prev_mode_reg & 0x00F0))
             {
                 logout(WL_LOG_IMPORTANT, "Octet 1, value %x -> prepare RAM expansion", ((mode_reg >> 4) & 0x000F));
 
@@ -534,6 +530,10 @@ int main(void)
                 logout(WL_LOG_IMPORTANT, "RAM expansion setup done.");
             }
 
+            /* Because it's needed to close backup memory access in order to
+             * load a boot ROM, it is needed to reload backup memory even if
+             * its value is not changed.
+             */
             if((mode_reg & 0x000F) != 0)
             {
                 logout(WL_LOG_IMPORTANT, "Octet 0, value %x -> preparing backup RAM ...", (mode_reg & 0x000F));
@@ -570,6 +570,7 @@ int main(void)
                     if((status / 10) != (prev_status / 10))
                     {
                         logout(WL_LOG_IMPORTANT, "Backup RAM %u %% reading ...", status);
+                        logflush();
                     }
                     prev_status = status;
 
@@ -683,17 +684,6 @@ int main(void)
                     updated_status[ 8], updated_status[ 9], updated_status[10], updated_status[11], 
                     updated_status[12], updated_status[13], updated_status[14], updated_status[15]);
             }
-        }
-
-
-        /* On startup, as cartridge mode from settings file on SD card is used, 
-         * it's necessary to tweak the check of mode register.
-         */
-        if(first_loop)
-        {
-            pRegs_16[MODE_REG_OFFSET] = mode_reg;
-            prev_mode_reg = mode_reg;
-            first_loop = 0;
         }
 
         /* Send accumulated log messages to STM32. */

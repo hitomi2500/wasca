@@ -47,8 +47,8 @@ void settings_init(void)
     _wasca_set.log_timestamp = 1;
 
     /* Reset base settings for MAX 10. */
-    //_wasca_set.max.cart_mode = 0x0341; /* WascaLoader + Backup memory. */
-    _wasca_set.max.cart_mode = 0x0000; /* No mode initialization on startup. */
+    _wasca_set.max.cart_mode = 0x0342; /* WascaLoader + Backup memory. */
+    //_wasca_set.max.cart_mode = 0x0000; /* No mode initialization on startup. */
     _wasca_set.max.log_level = WL_LOG_DEBUGHARD;
     _wasca_set.max.uart_mode = 2;
     _wasca_set.max.flush_interval = 9; /* Flush every 10 loops. */
@@ -56,7 +56,7 @@ void settings_init(void)
 
 void settings_read(void)
 {
-#if 1 // Test settings without having to insert/remove the SD card
+#if 0 // Test settings without having to insert/remove the SD card
     return;
 #endif // Test settings without having to insert/remove the SD card
 
@@ -201,16 +201,16 @@ void settings_read(void)
                             }
                         }
                         char* s = line_buff + 1;
-ini_logout("Section:\"%s\"", s);
+                        ini_logout("Section:\"%s\"", s);
                         if(strcasecmp(s, "setup") == 0)
                         {
                             section = SECTION_SETUP;
-ini_logout(" -> COMMON");
+                            ini_logout(" -> SETUP");
                         }
                         else if(strcasecmp(s, "log") == 0)
                         {
                             section = SECTION_LOG;
-ini_logout(" -> LOG");
+                            ini_logout(" -> LOG");
                         }
                     }
                     else if(((c0 >= 'A') && (c0 <= 'Z')) || ((c0 >= 'a') && (c0 <= 'z')))
@@ -230,9 +230,9 @@ ini_logout(" -> LOG");
                                 break;
                             }
                         }
-ini_logout(" sect:%d", section);
-ini_logout(" name:\"%s\"", name);
-ini_logout(" val :\"%s\"", (val ? val : "(null)"));
+                        ini_logout(" sect:%d", section);
+                        ini_logout(" name:\"%s\"", name);
+                        ini_logout(" val :\"%s\"", (val ? val : "(null)"));
 
                         if(val != NULL)
                         {
@@ -272,8 +272,14 @@ ini_logout(" val :\"%s\"", (val ? val : "(null)"));
                                 if(strcasecmp(name, "mode") == 0)
                                 {
                                     v = strtoul(val, NULL, 16) & 0x0000FFFF;
-ini_logout(" -> Setup.Mode:0x%04X", v);
+                                    ini_logout(" -> Setup.Mode:0x%04X", v);
                                     _wasca_set.max.cart_mode = (unsigned short)v;
+                                }
+                                else if(strcasecmp(name, "spiclockdiv") == 0)
+                                {
+                                    v = atoi(val);
+                                    ini_logout(" -> Setup.SpiClockDiv:%d", v);
+                                    _wasca_set.max.spi_clock_div = (unsigned char)v;
                                 }
                             }
                             else if(section == SECTION_LOG)
@@ -281,7 +287,7 @@ ini_logout(" -> Setup.Mode:0x%04X", v);
                                 if(strcasecmp(name, "levelm10") == 0)
                                 {
                                     v = atoi(val);
-ini_logout(" -> log.M10Level:%d", v);
+                                    ini_logout(" -> log.M10Level:%d", v);
                                     if(v < WL_LOG_ERROR)
                                     {
                                         v = WL_LOG_ERROR;
@@ -292,10 +298,10 @@ ini_logout(" -> log.M10Level:%d", v);
                                     }
                                     _wasca_set.max.log_level = v;
                                 }
-                                if(strcasecmp(name, "levels32") == 0)
+                                else if(strcasecmp(name, "levels32") == 0)
                                 {
                                     v = atoi(val);
-ini_logout(" -> log.S32Level:%d", v);
+                                    ini_logout(" -> log.S32Level:%d", v);
                                     if(v < WL_LOG_ERROR)
                                     {
                                         v = WL_LOG_ERROR;
@@ -309,7 +315,7 @@ ini_logout(" -> log.S32Level:%d", v);
                                 else if(strcasecmp(name, "maxsize") == 0)
                                 {
                                     v = atoi(val);
-ini_logout(" -> log.maxsize:%d", v);
+                                    ini_logout(" -> log.maxsize:%d", v);
                                     if(v < 0)
                                     {
                                         v = 0;

@@ -512,7 +512,16 @@ begin
 								end case;
 						end case;
 				end case;
+
+			elsif avalon_regs_write= '1' then
+				case avalon_regs_address(7 downto 0) is 
+					when X"F4" =>
+						REG_MODE <= avalon_regs_writedata;
+					when others =>
+						null;
+				end case;
 			end if;
+
 		end if;
 	end process;
 	

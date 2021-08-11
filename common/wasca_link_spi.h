@@ -255,8 +255,19 @@ typedef struct _wl_baseset_max_t
      */
     unsigned char flush_interval;
 
+    /* SPI clock divider :
+     *  -  8 : 116/ 8 = 14.5 Mhz (fastest)
+     *  - 10 : 116/10 = 11.6 Mhz
+     *  - 12 : 116/12 = 9.67 Mhz
+     *  - 16 : 116/16 = 7.25 Mhz (safest)
+     *  - Other : safest value = 14.5 Mhz
+     *
+     * Name : [Setup]SpiClockDiv
+     */
+    unsigned char spi_clock_div;
+
     /* Reserved for future usage. */
-    unsigned char reserved[11];
+    unsigned char reserved[10];
 } wl_baseset_max_t;
 
 typedef struct _wl_verinfo_stm_t
