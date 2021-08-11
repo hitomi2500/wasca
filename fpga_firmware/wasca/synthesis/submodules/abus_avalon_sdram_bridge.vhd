@@ -171,6 +171,7 @@ signal sniffer_filter_control      : std_logic_vector(7 downto 0) := (others => 
 signal sniffer_data_in     : std_logic_vector(15 downto 0) := (others => '0'); 
 signal sniffer_data_in_p1     : std_logic_vector(15 downto 0) := (others => '0'); 
 signal sniffer_data_out     : std_logic_vector(15 downto 0) := (others => '0'); 
+signal sniffer_data_out_p1     : std_logic_vector(15 downto 0) := (others => '0'); 
 --signal sniffer_data_write_p1    : std_logic := '0';
 signal sniffer_data_write    : std_logic := '0';
 signal sniffer_data_ack    : std_logic := '0';
@@ -512,7 +513,33 @@ begin
 								end case;
 						end case;
 				end case;
+
+			elsif avalon_regs_write= '1' then
+				case avalon_regs_address(7 downto 0) is 
+					when X"F4" =>
+						REG_MODE <= avalon_regs_writedata;
+						case (avalon_regs_writedata (3 downto 0)) is 
+							when X"1" => wasca_mode  <= MODE_POWER_MEMORY_05M;
+							when X"2" => wasca_mode  <= MODE_POWER_MEMORY_1M;
+							when X"3" => wasca_mode  <= MODE_POWER_MEMORY_2M;
+							when X"4" => wasca_mode  <= MODE_POWER_MEMORY_4M;
+							when others =>
+								case (avalon_regs_writedata (7 downto 4)) is 
+									when X"1" => wasca_mode  <= MODE_RAM_1M;
+									when X"2" => wasca_mode  <= MODE_RAM_4M;
+									when others => 
+										case (avalon_regs_writedata (11 downto 8)) is 
+											when X"1" => wasca_mode  <= MODE_ROM_KOF95;
+											when X"2" => wasca_mode  <= MODE_ROM_ULTRAMAN;
+											when others => null;-- wasca_mode  <= MODE_INIT;
+										end case;
+								end case;
+						end case;
+					when others =>
+						null;
+				end case;
 			end if;
+
 		end if;
 	end process;
 	
@@ -558,7 +585,7 @@ begin
 					--D6 is a reset, writeonly
 					--D8 to DE are reserved
 					when X"E0" => 
-						avalon_regs_readdata <= sniffer_data_out;
+						avalon_regs_readdata <= sniffer_data_out_p1;
 						sniffer_data_ack <= '1';
 					--E2 to E6 are reserved
 					when X"E8" => 
@@ -1171,6 +1198,7 @@ begin
 	sniffer_data_in_p1(15 downto 0) <= sniffer_last_active_block when rising_edge(clock);
 	sniffer_data_in <= sniffer_data_in_p1 when rising_edge(clock);
 	--sniffer_data_write <= sniffer_data_write_p1 when rising_edge(clock);
+	sniffer_data_out_p1 <= sniffer_data_out when rising_edge(clock);
 	
 	sniff_fifo_inst : sniff_fifo PORT MAP (
 		clock	 => clock,
