@@ -74,7 +74,7 @@ end component;
 --    dout : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
 --    full : OUT STD_LOGIC;
 --    empty : OUT STD_LOGIC;
---    data_count : OUT STD_LOGIC_VECTOR(9 DOWNTO 0)
+--    data_count : OUT STD_LOGIC_VECTOR(10 DOWNTO 0)
 --	);
 --end component;
 
@@ -161,6 +161,8 @@ signal avalon_sdram_pending_data          : std_logic_vector(15 downto 0) := (ot
 signal avalon_sdram_readdata_latched          : std_logic_vector(15 downto 0) := (others => '0'); 
 
 --signal avalon_regs_address_latched          : std_logic_vector(7 downto 0) := (others => '0'); 
+signal avalon_regs_readdatavalid_p1      : std_logic := '0';
+
 
 signal counter_filter_control      : std_logic_vector(7 downto 0) := (others => '0'); 
 signal counter_reset     : std_logic := '0';
@@ -171,7 +173,9 @@ signal sniffer_filter_control      : std_logic_vector(7 downto 0) := (others => 
 signal sniffer_data_in     : std_logic_vector(15 downto 0) := (others => '0'); 
 signal sniffer_data_in_p1     : std_logic_vector(15 downto 0) := (others => '0'); 
 signal sniffer_data_out     : std_logic_vector(15 downto 0) := (others => '0'); 
-signal sniffer_data_out_p1     : std_logic_vector(15 downto 0) := (others => '0'); 
+--signal sniffer_data_out_p1     : std_logic_vector(15 downto 0) := (others => '0'); 
+signal sniffer_prefifo     : std_logic_vector(15 downto 0) := (others => '0'); 
+signal sniffer_prefifo_full     : std_logic := '0'; 
 --signal sniffer_data_write_p1    : std_logic := '0';
 signal sniffer_data_write    : std_logic := '0';
 signal sniffer_data_ack    : std_logic := '0';
@@ -554,10 +558,10 @@ begin
 	process (clock)
 	begin
 		if rising_edge(clock) then
-			avalon_regs_readdatavalid <= '0';
+			avalon_regs_readdatavalid_p1 <= '0';
 			sniffer_data_ack <= '0';
 			if avalon_regs_read = '1' then
-				avalon_regs_readdatavalid <= '1';
+				avalon_regs_readdatavalid_p1 <= '1';
 				case avalon_regs_address(7 downto 0) is 
 					when X"C0" => 
 						avalon_regs_readdata <= REG_MAPPER_READ(15 downto 0);					
@@ -585,7 +589,7 @@ begin
 					--D6 is a reset, writeonly
 					--D8 to DE are reserved
 					when X"E0" => 
-						avalon_regs_readdata <= sniffer_data_out_p1;
+						avalon_regs_readdata <= sniffer_data_out;
 						sniffer_data_ack <= '1';
 					--E2 to E6 are reserved
 					when X"E8" => 
@@ -614,6 +618,8 @@ begin
 			end if;
 		end if;
 	end process;
+	
+	avalon_regs_readdatavalid <= avalon_regs_readdatavalid_p1 when rising_edge(clock);
 	
 	--Avalon regs write interface
 	process (clock)
@@ -1152,25 +1158,39 @@ begin
           end if;
         end if;
     end process;
-
-    --if we have a pending request, and it's for a different block, issue write
-    --if we don't have eny requests, but the timeout fired, issue write as well
+    
+    --if we have a pending request, and it's for a different block, fill prefifo
     process (clock)
     begin
         if rising_edge(clock) then
            sniffer_pending_reset <= '0';
-           sniffer_data_write <= '0';
            if sniffer_pending_flag = '1' and sniffer_pending_block /= sniffer_last_active_block then
-               sniffer_data_write <= '1';
                sniffer_last_active_block <= sniffer_pending_block;
-               sniffer_pending_reset <= '1';
-           elsif sniffer_pending_timeout = '1' then
-               sniffer_data_write <= '1';
-               sniffer_last_active_block <= sniffer_pending_block;
+               sniffer_prefifo <= sniffer_pending_block;
                sniffer_pending_reset <= '1';
            end if;
         end if;
-    end process;   	
+    end process;
+    
+    --if we have a pending request, and it's for a different block, and prefifo is full, flush prefifo
+    --if we don't have eny requests, but the timeout fired, flush prefifo as well
+    process (clock)
+    begin
+        if rising_edge(clock) then
+           sniffer_data_write <= '0';
+           if sniffer_pending_flag = '1' and sniffer_pending_block /= sniffer_last_active_block then
+               sniffer_prefifo_full <= '1';
+               if sniffer_prefifo_full='1' then
+                    sniffer_data_in <= sniffer_prefifo;
+                    sniffer_data_write <= '1';               
+               end if;
+           elsif sniffer_pending_timeout = '1' then
+               sniffer_data_write <= '1';
+               sniffer_data_in <= sniffer_prefifo;
+               sniffer_prefifo_full <= '0';
+           end if;
+        end if;
+    end process;
     
     --timeout counter. resets when another pending is set
     process (clock)
@@ -1195,10 +1215,10 @@ begin
         end if;
     end process;    
 
-	sniffer_data_in_p1(15 downto 0) <= sniffer_last_active_block when rising_edge(clock);
-	sniffer_data_in <= sniffer_data_in_p1 when rising_edge(clock);
+	--sniffer_data_in_p1(15 downto 0) <= sniffer_last_active_block when rising_edge(clock);
+	--sniffer_data_in <= sniffer_data_in_p1 when rising_edge(clock);
 	--sniffer_data_write <= sniffer_data_write_p1 when rising_edge(clock);
-	sniffer_data_out_p1 <= sniffer_data_out when rising_edge(clock);
+	--sniffer_data_out_p1 <= sniffer_data_out when rising_edge(clock);
 	
 	sniff_fifo_inst : sniff_fifo PORT MAP (
 		clock	 => clock,

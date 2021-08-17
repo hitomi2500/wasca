@@ -41,7 +41,7 @@ component abus_avalon_sdram_bridge is
 		avalon_sdram_read          : in   std_logic := '0';                                        -- avalon_master.read
 		avalon_sdram_write         : in   std_logic := '0';                                        --              .write
 		avalon_sdram_waitrequest   : out    std_logic                     := '0';             --              .waitrequest
-		avalon_sdram_address       : in   std_logic_vector(24 downto 0) := (others => '0');                    --              .address
+		avalon_sdram_address       : in   std_logic_vector(25 downto 0) := (others => '0');                    --              .address
 		avalon_sdram_writedata     : in   std_logic_vector(15 downto 0) := (others => '0');                    --              .writedata
 		avalon_sdram_readdata      : out    std_logic_vector(15 downto 0) := (others => '0'); --              .readdata
 		avalon_sdram_readdatavalid : out    std_logic                     := '0';             --              .readdatavalid
@@ -89,14 +89,14 @@ end component;
 ----------------------ins
 
 signal	clock                :     std_logic                     := '0';             --         clock.clk
-signal	abus_address         :     std_logic_vector(9 downto 0) := (others => '0'); --          abus.address
+signal	abus_address         :     std_logic_vector(24 downto 0) := (others => '0'); --          abus.address
 signal	abus_chipselect      :     std_logic_vector(2 downto 0)  := (others => '1'); --              .chipselect
 signal	abus_read            :     std_logic                     := '1';             --              .read
 signal	abus_write           :     std_logic_vector(1 downto 0)  := (others => '1'); --              .write
 
 signal	avalon_sdram_read          :    std_logic := '0';                                        -- avalon_master.read
 signal	avalon_sdram_write         :    std_logic := '0';                                        --              .write
-signal	avalon_sdram_address       :    std_logic_vector(24 downto 0) := (others => '0');                    --              .address
+signal	avalon_sdram_address       :    std_logic_vector(25 downto 0) := (others => '0');                    --              .address
 signal	avalon_sdram_writedata     :    std_logic_vector(15 downto 0) := (others => '0');                    --              .writedata
 
 signal	avalon_regs_read          :    std_logic := '0';                                        -- avalon_master.read
@@ -294,7 +294,7 @@ clock <= not clock after 4310 ps; --116 MHz clock
 abus_data <= abus_data_in when abus_direction = '0' else
                     (others => 'Z');
 
-abus_address <= abus_full_address(25 downto 16);
+abus_address <= abus_full_address(24 downto 0);
 
 UUT: abus_avalon_sdram_bridge 
 	port map(
@@ -304,7 +304,6 @@ UUT: abus_avalon_sdram_bridge
 		abus_chipselect => abus_chipselect,
 		abus_read => abus_read,
 		abus_write => abus_write,
-		abus_waitrequest => abus_waitrequest,
 		abus_interrupt => abus_interrupt,
 		abus_direction => abus_direction,
 		abus_interrupt_disable_out => abus_interrupt_disable_out,
@@ -337,29 +336,29 @@ UUT: abus_avalon_sdram_bridge
 	);
 
 
-REFER: sdram_controller 
-	port map(
-		clk => clock,
-		rst_n => refer_rst_n,
-		busy => open,
-		wr_addr => refer_wr_addr,
-		wr_data => refer_wr_data,
-		wr_enable => refer_wr_enable,
-		rd_addr => refer_rd_addr,
-		rd_data => refer_rd_data,
-		rd_ready => refer_rd_ready,
-		rd_enable => refer_rd_enable,
-		addr => open,
-		bank_addr => open,
-		cas_n => open,
-		clock_enable => open,
-		cs_n => open,
-		data => open,
-		data_mask_low => open,
-		data_mask_high => open,
-		ras_n => open,
-		we_n => open
-	);
+--REFER: sdram_controller 
+--	port map(
+--		clk => clock,
+--		rst_n => refer_rst_n,
+--		busy => open,
+--		wr_addr => refer_wr_addr,
+--		wr_data => refer_wr_data,
+--		wr_enable => refer_wr_enable,
+--		rd_addr => refer_rd_addr,
+--		rd_data => refer_rd_data,
+--		rd_ready => refer_rd_ready,
+--		rd_enable => refer_rd_enable,
+--		addr => open,
+--		bank_addr => open,
+--		cas_n => open,
+--		clock_enable => open,
+--		cs_n => open,
+--		data => open,
+--		data_mask_low => open,
+--		data_mask_high => open,
+--		ras_n => open,
+--		we_n => open
+--	);
 
 process
 begin
@@ -379,12 +378,23 @@ begin
     wait for 3150ns;
     read_abus_16("00"&X"EFAFAE","101",abus_full_address,abus_chipselect,abus_read,refer_rd_addr,refer_rd_enable);
     --abus pack write
-    for w in 0 to 1025 loop
-        wait for 1 us;
-        write_abus_16(std_logic_vector(to_unsigned(w*2,26)),X"DADA","101","00",abus_full_address,abus_data_in,abus_chipselect,abus_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
+    for w in 0 to 10 loop
+        wait for 10 us;
+        write_abus_16(std_logic_vector(to_unsigned(w*512,26)),X"DADA","101","00",abus_full_address,abus_data_in,abus_chipselect,abus_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
     end loop;
-
+    
     wait for 100 us;
+    wait for 11 ms;
+    
+    --avalon normal read
+    for w in 0 to 20 loop
+        wait for 500 ns;
+        read_avalon_16_regs(X"E0",avalon_regs_address,avalon_regs_read);
+        wait for 500 ns;
+        read_avalon_16_regs(X"EA",avalon_regs_address,avalon_regs_read);
+    end loop;
+    
+    wait;
     
     --pack read fifo
     for w in 0 to 1025 loop
@@ -397,7 +407,7 @@ begin
     
     --abus pack write
     for w in 0 to 1025 loop
-        wait for 1 us;
+        wait for 10 us;
         write_abus_16(std_logic_vector(to_unsigned(w*512,26)),X"DADA","101","00",abus_full_address,abus_data_in,abus_chipselect,abus_write,refer_wr_addr,refer_wr_data,refer_wr_enable);
     end loop;
 
