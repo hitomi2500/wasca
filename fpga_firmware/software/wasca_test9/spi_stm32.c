@@ -138,89 +138,8 @@ void spi_init(void)
 
 
 
-/* Common function for SPI data send and receive.
- * 
- * Both "single" and "dual" functions are available :
- *  - Single : use only Rx0 and Tx0
- *  - Dual   : use only Rx0/Rx1 and Tx0/Tx1 in parallel
- */
-void spi_sendreceive_single(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsigned long count)
-{
-    volatile unsigned short* p16_spi = (unsigned short *)BUFFERED_SPI_0_BASE;
-
-    int pos;
-    for(pos=0; pos<count; pos+=BUFFSPI_MAXCNT)
-    {
-        int len = BUFFSPI_MAXCNT;
-        if((pos + BUFFSPI_MAXCNT) > count)
-        {
-            len = count - pos;
-        }
-
-        /* Setting up the core. */
-        p16_spi[BUFFSPI_REG_LENGTH       ] = len;       /* Number of words = 16 bit each.              */
-        p16_spi[BUFFSPI_REG_CS_MODE      ] = _spi_mode; /* CS blinking + clock divider.                */
-        p16_spi[BUFFSPI_REG_DELAY        ] =   1;       /* 1 SPI clock @ 7.25 Mhz between each 16 bit. */
-        p16_spi[BUFFSPI_REG_BUFFER_SELECT] =   0;       /* Using buffer 0.                             */
-
-        /* Fill transmit buffer with input data. */
-        int i;
-        if(snd_ptr)
-        {
-            for(i=0; i<len; i++)
-            {
-                p16_spi[BUFFSPI_BUFFER0_WRITE + i] = *snd_ptr++;
-            }
-        }
-
-        /* Fire spi transaction. */
-        p16_spi[BUFFSPI_REG_START] = 1; /* Go go go! */
-
-
-        /* Wait until complete. */
-#if 0 // Official way of waiting (with transfer busy flag polling), which doesn't works here.
-        while(p16_spi[BUFFSPI_REG_START] != 0);
-#else // Alternate waiting with check of the count of words sent so far.
-        volatile unsigned long wait_cnt = 0;
-        while(1)
-        {
-            volatile unsigned short c1 = p16_spi[BUFFSPI_REG_COUNTER];
-            volatile unsigned short c2 = p16_spi[BUFFSPI_REG_COUNTER];
-            wait_cnt++;
-            if((c1 >= len) && (c2 >= len))
-            {
-                break;
-            }
-        }
-        spi_logout("wait_cnt[%07u]", wait_cnt);
-#endif
-
-        /* Read the received data. */
-        if(rcv_ptr)
-        {
-#if SPI_DEBUG_LOGS == 1 // Extra log output to verify that everything is received
-            for(i=0; i<5; i++)
-            {
-                spi_logout("B[%04X] C[%04u] D:%04X %04X %04X %04X", 
-                    p16_spi[BUFFSPI_REG_START], 
-                    p16_spi[BUFFSPI_REG_COUNTER], 
-                    p16_spi[BUFFSPI_BUFFER0_READ +   0], 
-                    p16_spi[BUFFSPI_BUFFER0_READ +  10], 
-                    p16_spi[BUFFSPI_BUFFER0_READ + 100], 
-                    p16_spi[BUFFSPI_BUFFER0_READ + len-1]);
-            }
-#endif // SPI_DEBUG_LOGS == 1
-
-            for(i=0; i<len; i++)
-            {
-                *rcv_ptr++ = p16_spi[BUFFSPI_BUFFER0_READ + i];
-            }
-        }
-    }
-}
-
-
-void spi_sendreceive_dual(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsigned long count)
+/* Common function for SPI data send and receive. */
+void spi_sendreceive(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsigned long count)
 {
     volatile unsigned short* p16_spi = (unsigned short *)BUFFERED_SPI_0_BASE;
 
@@ -324,14 +243,11 @@ void spi_sendreceive_dual(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsi
 
 
 
-/* Wrapper to send and receive function with STM32. */
-#define spi_sendreceive(_SND_PTR_, _RCV_PTR_, _COUNT_) spi_sendreceive_dual(_SND_PTR_, _RCV_PTR_, _COUNT_)
-
 /* Send specified data over SPI to STM32. */
-#define spi_send(_PTR_, _COUNT_) spi_sendreceive_dual(_PTR_, NULL, _COUNT_)
+#define spi_send(_PTR_, _COUNT_) spi_sendreceive(_PTR_, NULL, _COUNT_)
 
 /* Receive specified length of data over SPI from STM32. */
-#define spi_receive(_PTR_, _COUNT_) spi_sendreceive_dual(NULL, _PTR_, _COUNT_)
+#define spi_receive(_PTR_, _COUNT_) spi_sendreceive(NULL, _PTR_, _COUNT_)
 
 
 /* Initialize SPI header. */
