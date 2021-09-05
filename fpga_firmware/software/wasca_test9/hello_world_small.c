@@ -342,17 +342,19 @@ int main(void)
         /* Wait for around 0.3 sec before using SPI.
          * (Just for debug, will be removed soon)
          */
-        // WASCA_PERF_START_MEASURE();
+        WASCA_PERF_START_MEASURE();
 
-        for(int i=0; i<(1500*1000); i++)
+        for(int i=0; i<(3500*1000); i++)
         {
-            HEARTBEAT_FAST();
+            //HEARTBEAT_FAST();
+            HEARTBEAT_FORCE(0);
         }
+        HEARTBEAT_FAST();
 
-        // WASCA_PERF_STOP_MEASURE();
-        // unsigned long elapsed = wasca_perf_get_usec(WASCA_PERF_GET_TIME());
-        // elapsed = elapsed / 10000;
-        // log_to_uart("Startup wait ended. Time:%u.%02u sec", elapsed / 100, elapsed % 100);
+        WASCA_PERF_STOP_MEASURE();
+        unsigned long elapsed = wasca_perf_get_usec(WASCA_PERF_GET_TIME());
+        elapsed = elapsed / 10000;
+        log_to_uart("Startup wait ended. Time:%u.%02u sec", elapsed / 100, elapsed % 100);
     }
 #endif
 
@@ -407,15 +409,6 @@ int main(void)
         logflush();
     }
 #endif // Test continous ROM loading (DEBUG)
-
-
-
-#if 0 // Boot ROM manual loading. Not necessary because this is specified from settings in SD card.
-    /*--------------------------------------------*/
-    /* Load Pseudo Saturn from SD card to SDRAM.  */
-    //load_boot_rom(WL_ROM_PSEUDOSAT/*ROM ID*/);
-    load_boot_rom(WL_ROM_WASCALOADER/*ROM ID*/); /* Temporarily set to WascaLoader. */
-#endif // Boot ROM manual loading. Not necessary because this is specified from settings in SD card.
 
 
     /*---------------------------------------*/
@@ -587,13 +580,14 @@ int main(void)
                 {
                     elapsed = 1;
                 }
-                unsigned long kbps = (size_kb * 1024) / elapsed;
+                /* Consider size actually transfered (half of size seen from SH-2) when logging results. */
+                unsigned long kbps = (size_kb * 1024) / (2 * elapsed);
 
                 elapsed = elapsed / 100;
 
                 logout(WL_LOG_IMPORTANT, 
                     "[BRAM]Read ended. Size:%u KB, Time:%u.%u sec, %u KB/s", 
-                    size_kb, 
+                    size_kb / 2, 
                     elapsed / 10, elapsed % 10, 
                     kbps
                 );

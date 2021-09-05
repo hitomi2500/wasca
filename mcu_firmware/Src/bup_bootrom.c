@@ -44,16 +44,18 @@ unsigned long _bup_size = 0;
 char _bup_file_name[64] = {'\0'};
 
 
-/* Number of blocks (512 bytes) to keep in memory
- * before writing to SD card.
+/* Number of blocks to keep in memory before writing to SD card.
+ * 
+ * Block raw size is 512 bytes but as bytes at odd address are dummy
+ * only relevant part (256 bytes) is kept here.
  * 
  * Write conditions :
  *  - Backup file close is requested.
  *  - Cache full.
  *  - No write activity after a given time interval.
  */
-#define BUP_CACHE_BLOCK_SIZE 512
-#define BUP_CACHE_BLOCK_CNT    8
+#define BUP_CACHE_BLOCK_SIZE (512/2)
+#define BUP_CACHE_BLOCK_CNT       8
 
 /* Interval of time (msec unit) to wait until flushing
  * backup memory data after no write request from MAX 10.
@@ -61,6 +63,11 @@ char _bup_file_name[64] = {'\0'};
 #define BUP_FLUSH_INTERVAL 500
 
 
+/* Extra macro to restrict backup memory to read access.
+ * This is (only) useful to debug without breaking backup memory
+ * file on every test.
+ */
+#define BUP_ENABLE_WRITE 1
 
 
 /* Information for each blocks pending in cache. */
@@ -118,7 +125,7 @@ void bup_cache_flush(void)
         /* Write the backup memory block(s). */
         unsigned long offset  = block_id  * BUP_CACHE_BLOCK_SIZE;
         unsigned long datalen = block_cnt * BUP_CACHE_BLOCK_SIZE;
-        if((offset + datalen) > _bup_size)
+        if((offset + datalen) > (_bup_size/2))
         {
             /* Indicate that an error happened.
              * (Not really needed because that's already checked beforehand)
@@ -134,6 +141,7 @@ void bup_cache_flush(void)
             logout(WL_LOG_DEBUGNORMAL, "[bup_cache_flush] Write block_id[%04X] offset[%08X][%4u KB] cnt[%2u]", block_id, offset, offset >> 10, block_cnt);
             logout(WL_LOG_DEBUGNORMAL, "[bup_cache_flush] Write Data[%02X%02X %02X%02X %02X%02X]", write_ptr[0], write_ptr[1], write_ptr[2], write_ptr[3], write_ptr[4], write_ptr[5]);
 
+#if BUP_ENABLE_WRITE == 1
             f_lseek(&_bup_boot_file, offset);
             UINT bytes_written = 0;
             int f_ret = f_write(&_bup_boot_file, write_ptr, datalen, &bytes_written);
@@ -142,16 +150,19 @@ void bup_cache_flush(void)
                 /* Indicate that an error happened. */
                 _bup_error_flag = 1;
             }
+#endif // BUP_ENABLE_WRITE == 1
         }
 
         /* Jump to next block in cache. */
         i+=block_cnt;
     }
 
+#if BUP_ENABLE_WRITE == 1
     /* Synchronize any pending write to SD card, 
      * so that it's safe to turn off the Saturn now.
      */
     f_sync(&_bup_boot_file);
+#endif // BUP_ENABLE_WRITE == 1
 
     /* Indicate that cache is now empty. */
     _bup_cache_cnt = 0;
@@ -182,7 +193,7 @@ void bup_cache_append(unsigned long block_id, unsigned char* ptr, unsigned short
         bup_led_status_set(1/*turn_on*/);
     }
 
-    /* Split input data into 512 bytes blocks that will be cached individually. */
+    /* Split input data into 256 bytes blocks that will be cached individually. */
     unsigned short pos;
     for(pos=0; pos<len; pos+=BUP_CACHE_BLOCK_SIZE)
     {
@@ -358,14 +369,14 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
 
                 memset(empty_block, 0xFF, sizeof(empty_block));
 
-                for(offset=0; offset<_bup_size; offset+=sizeof(empty_block))
+                for(offset=0; offset<(_bup_size/2); offset+=sizeof(empty_block))
                 {
                     UINT bytes_written = 0;
                     f_write(&_bup_boot_file, empty_block, sizeof(empty_block), &bytes_written);
                 }
             }
 
-            f_lseek(&_bup_boot_file, _bup_size);
+            f_lseek(&_bup_boot_file, (_bup_size/2));
             f_truncate(&_bup_boot_file);
         }
 
@@ -378,10 +389,11 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
     {
         /* Ensure that access is done within file boundaries. */
         unsigned long offset = params->addr * BUP_CACHE_BLOCK_SIZE;
-        if((offset + params->len) > _bup_size)
+
+        if((offset + (params->len/2)) > (_bup_size/2))
         {
             /* Return FFh data and zero length in case of wrong access. */
-            memset(data_tx, 0xFF, params->len);
+            memset(data_tx, 0xFF, params->len/2);
             params->len = 0;
             _bup_error_flag = 1;
         }
@@ -389,11 +401,11 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
         {
             f_lseek(&_bup_boot_file, offset);
             UINT bytes_read = 0;
-            f_ret = f_read(&_bup_boot_file, data_tx, params->len, &bytes_read);
+            f_ret = f_read(&_bup_boot_file, data_tx, params->len/2, &bytes_read);
             if(f_ret != FR_OK)
             {
                 /* Return FFh data and zero length in case of wrong access. */
-                memset(data_tx, 0xFF, params->len);
+                memset(data_tx, 0xFF, params->len/2);
                 params->len = 0;
                 _bup_error_flag = 1;
             }
@@ -448,7 +460,7 @@ void bup_file_post_process(wl_spi_header_t* hdr, void* data_rx)
 
         logout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPWRITE] Rcv block_id[%04X] bup_size[%08X][%u KB]", block_id, _bup_size, _bup_size >> 10);
 
-        if((offset + params->len) > _bup_size)
+        if((offset + (params->len/2)) > (_bup_size/2))
         {
             /* Return zero length in case of wrong access. */
             params->len = 0;
@@ -456,7 +468,7 @@ void bup_file_post_process(wl_spi_header_t* hdr, void* data_rx)
         }
         else
         {
-            bup_cache_append(block_id, data_rx, params->len);
+            bup_cache_append(block_id, data_rx, params->len/2);
         }
     }
     else if(hdr->command == WL_SPICMD_BUPCLOSE)

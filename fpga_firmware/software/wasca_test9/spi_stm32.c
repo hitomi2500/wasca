@@ -138,10 +138,29 @@ void spi_init(void)
 
 
 
+
+/* Memory access type during SPI transfer :
+ *  - Normal : normal 16 bits access
+ *  - Half   : 8 bits access, for backup memory on CS1
+ * 
+ * In the case of half access, count (a.k.a. data length) must include dummy
+ * bytes so that from user point of view, toggling between one type to another
+ * only requires to change one parameter.
+ */
+#define SPI_ACCESS_NORMAL 0
+#define SPI_ACCESS_HALF   1
+
+
 /* Common function for SPI data send and receive. */
-void spi_sendreceive(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsigned long count)
+void spi_sendreceive_type(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsigned long count, unsigned char access_type)
 {
     volatile unsigned short* p16_spi = (unsigned short *)BUFFERED_SPI_0_BASE;
+
+    /* In the case of half transfer ... only transfer half of the data. */
+    if(access_type == SPI_ACCESS_HALF)
+    {
+        count /= 2;
+    }
 
     /* Setting up core base registers. */
     p16_spi[BUFFSPI_REG_CS_MODE] = _spi_mode; /* CS blinking + clock divider.                */
@@ -173,9 +192,26 @@ void spi_sendreceive(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsigned 
         {
             /* Fill transmit buffer with first round of input data. */
             p16_wk = p16_spi + (spi_buffer == 0 ? BUFFSPI_BUFFER0_WRITE : BUFFSPI_BUFFER1_WRITE);
-            for(i=0; i<len; i++)
+            if(access_type == SPI_ACCESS_NORMAL)
             {
-                *p16_wk++ = *snd_ptr++;
+                for(i=0; i<len; i++)
+                {
+                    *p16_wk++ = *snd_ptr++;
+                }
+            }
+            else // if(access_type == SPI_ACCESS_HALF)
+            {
+                for(i=0; i<len; i++)
+                {
+                    /* Merge two 16 bits words into a single one. */
+                    unsigned short s1, s2;
+                    s1 = (snd_ptr[0]) & 0xFF00;
+                    s2 = (snd_ptr[1]) >> 8;
+                    s1 |= s2;
+
+                    *p16_wk++ = s1;
+                    snd_ptr += 2;
+                }
             }
         }
 
@@ -188,9 +224,26 @@ void spi_sendreceive(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsigned 
              * while current one is being sent.
              */
             p16_wk = p16_spi + (spi_buffer == 0 ? BUFFSPI_BUFFER1_WRITE : BUFFSPI_BUFFER0_WRITE);
-            for(i=0; i<next_len; i++)
+            if(access_type == SPI_ACCESS_NORMAL)
             {
-                *p16_wk++ = *snd_ptr++;
+                for(i=0; i<next_len; i++)
+                {
+                    *p16_wk++ = *snd_ptr++;
+                }
+            }
+            else // if(access_type == SPI_ACCESS_HALF)
+            {
+                for(i=0; i<next_len; i++)
+                {
+                    /* Merge two 16 bits words into a single one. */
+                    unsigned short s1, s2;
+                    s1 = (snd_ptr[0]) & 0xFF00;
+                    s2 = (snd_ptr[1]) >> 8;
+                    s1 |= s2;
+
+                    *p16_wk++ = s1;
+                    snd_ptr += 2;
+                }
             }
         }
 
@@ -200,9 +253,26 @@ void spi_sendreceive(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsigned 
              * while current one is being received.
              */
             p16_wk = p16_spi + (spi_buffer == 0 ? BUFFSPI_BUFFER1_READ : BUFFSPI_BUFFER0_READ);
-            for(i=0; i<prev_len; i++)
+            if(access_type == SPI_ACCESS_NORMAL)
             {
-                *rcv_ptr++ = *p16_wk++;
+                for(i=0; i<prev_len; i++)
+                {
+                    *rcv_ptr++ = *p16_wk++;
+                }
+            }
+            else // if(access_type == SPI_ACCESS_HALF)
+            {
+                for(i=0; i<prev_len; i++)
+                {
+                    /* Write two 16 bits words from a single received one. */
+                    unsigned short s1, s2;
+                    s2 = *p16_wk++;
+                    s1 = (s2 << 8)     | 0x00FF;
+                    s2 = (s2 & 0xFF00) | 0x00FF;
+
+                    *rcv_ptr++ = s1;
+                    *rcv_ptr++ = s2;
+                }
             }
         }
 
@@ -229,9 +299,26 @@ void spi_sendreceive(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsigned 
         {
             /* Read last round of received data. */
             p16_wk = p16_spi + (spi_buffer == 0 ? BUFFSPI_BUFFER0_READ : BUFFSPI_BUFFER1_READ);
-            for(i=0; i<len; i++)
+            if(access_type == SPI_ACCESS_NORMAL)
             {
-                *rcv_ptr++ = *p16_wk++;
+                for(i=0; i<len; i++)
+                {
+                    *rcv_ptr++ = *p16_wk++;
+                }
+            }
+            else // if(access_type == SPI_ACCESS_HALF)
+            {
+                for(i=0; i<len; i++)
+                {
+                    /* Write two 16 bits words from a single received one. */
+                    unsigned short s1, s2;
+                    s2 = *p16_wk++;
+                    s1 = (s2 << 8)     | 0x00FF;
+                    s2 = (s2 & 0xFF00) | 0x00FF;
+
+                    *rcv_ptr++ = s1;
+                    *rcv_ptr++ = s2;
+                }
             }
         }
 
@@ -243,11 +330,16 @@ void spi_sendreceive(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsigned 
 
 
 
+/* Wrapper to send and receive function with STM32. */
+#define spi_sendreceive(_SND_PTR_, _RCV_PTR_, _COUNT_) spi_sendreceive_type(_SND_PTR_, _RCV_PTR_, _COUNT_, SPI_ACCESS_NORMAL)
+
 /* Send specified data over SPI to STM32. */
-#define spi_send(_PTR_, _COUNT_) spi_sendreceive(_PTR_, NULL, _COUNT_)
+#define spi_send(_PTR_, _COUNT_) spi_sendreceive_type(_PTR_, NULL, _COUNT_, SPI_ACCESS_NORMAL)
+#define spi_send_type(_PTR_, _COUNT_, _ACCESS_TYPE_) spi_sendreceive_type(_PTR_, NULL, _COUNT_, _ACCESS_TYPE_)
 
 /* Receive specified length of data over SPI from STM32. */
-#define spi_receive(_PTR_, _COUNT_) spi_sendreceive(NULL, _PTR_, _COUNT_)
+#define spi_receive(_PTR_, _COUNT_) spi_sendreceive_type(NULL, _PTR_, _COUNT_, SPI_ACCESS_NORMAL)
+#define spi_receive_type(_PTR_, _COUNT_, _ACCESS_TYPE_) spi_sendreceive_type(NULL, _PTR_, _COUNT_, _ACCESS_TYPE_)
 
 
 /* Initialize SPI header. */
@@ -411,12 +503,13 @@ void spi_send_logs(unsigned char* logdata, unsigned short datalen)
  * It supports raw memory access and backup memory access.
  *
  * About each parameters :
- *  - command  : which command to use. Example memory read, memory write etc
- *  - addr     : start address
- *  - len      : data length
- *  - data_len : length of data sent after header, in byte unit
- *  - snd_data : send data buffer
- *  - rcv_data : receive data buffer
+ *  - command     : which command to use. Example memory read, memory write etc
+ *  - addr        : start address
+ *  - len         : data length
+ *  - data_len    : length of data sent after header, in byte unit
+ *  - snd_data    : send data buffer
+ *  - rcv_data    : receive data buffer
+ *  - access_type : access type (normal or half)
  * 
  * Returns 1 when no error happened, zero else.
 **/
@@ -426,7 +519,8 @@ int spi_generic_access
     unsigned long addr, unsigned long len, 
     unsigned short data_len, 
     unsigned char* snd_data, 
-    unsigned char* rcv_data
+    unsigned char* rcv_data, 
+    unsigned char access_type
 )
 {
     wl_spi_header_t hdr_dat;
@@ -434,6 +528,10 @@ int spi_generic_access
 
     /* Setup packet header. */
     spi_init_header(hdr, command, data_len);
+    if(access_type == SPI_ACCESS_HALF)
+    {
+        hdr->data_len /= 2;
+    }
 
     /* Setup memory read parameters. */
     wl_spi_memacc_t* params = (wl_spi_memacc_t*)hdr->params;
@@ -441,13 +539,13 @@ int spi_generic_access
     params->len  = len;
 
     spi_sync_start();
-    spi_send((unsigned short*)hdr, sizeof(wl_spi_header_t) / sizeof(unsigned short));
+    spi_send_type((unsigned short*)hdr, sizeof(wl_spi_header_t) / sizeof(unsigned short), SPI_ACCESS_NORMAL);
     spi_sync_middle();
 
     /* Transfer data with STM32 when it is ready. */
     if(data_len != 0)
     {
-        spi_sendreceive((unsigned short*)snd_data, (unsigned short*)rcv_data, data_len / sizeof(unsigned short));
+        spi_sendreceive_type((unsigned short*)snd_data, (unsigned short*)rcv_data, data_len / sizeof(unsigned short), access_type);
     }
 
 #if SPI_DEBUG_LOGS == 1
@@ -475,19 +573,19 @@ int spi_generic_access
 /* The functions to do backup memory read/write/etc. */
 int spi_bup_open(unsigned short len_kb)
 {
-    return spi_generic_access(WL_SPICMD_BUPOPEN, 0/*block*/, len_kb, sizeof(wl_spi_memacc_t)/*data_len*/, NULL, NULL);
+    return spi_generic_access(WL_SPICMD_BUPOPEN, 0/*block*/, len_kb, sizeof(wl_spi_memacc_t)/*data_len*/, NULL, NULL, SPI_ACCESS_NORMAL);
 }
 int spi_bup_read(unsigned short block, unsigned short len, unsigned char* data)
 {
-    return spi_generic_access(WL_SPICMD_BUPREAD, block, len, len/*data_len*/, NULL/*snd_data*/, data/*rcv_data*/);
+    return spi_generic_access(WL_SPICMD_BUPREAD, block, len, len/*data_len*/, NULL/*snd_data*/, data/*rcv_data*/, SPI_ACCESS_HALF);
 }
 int spi_bup_write(unsigned short block, unsigned short len, unsigned char* data)
 {
-    return spi_generic_access(WL_SPICMD_BUPWRITE, block, len, len/*data_len*/, data/*snd_data*/, NULL/*rcv_data*/);
+    return spi_generic_access(WL_SPICMD_BUPWRITE, block, len, len/*data_len*/, data/*snd_data*/, NULL/*rcv_data*/, SPI_ACCESS_HALF);
 }
 int spi_bup_close(void)
 {
-    return spi_generic_access(WL_SPICMD_BUPCLOSE, 0/*block*/, 0/*len*/, sizeof(wl_spi_memacc_t)/*data_len*/, NULL, NULL);
+    return spi_generic_access(WL_SPICMD_BUPCLOSE, 0/*block*/, 0/*len*/, sizeof(wl_spi_memacc_t)/*data_len*/, NULL, NULL, SPI_ACCESS_NORMAL);
 }
 
 

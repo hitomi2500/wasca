@@ -591,8 +591,8 @@ typedef struct _wl_spi_bootinfo_t
  *     | M->S : wl_spi_header_t
  *     |        | data_len set to sizeof(wl_spi_memacc_t)
  *     |        | (wl_spi_memacc_t*)params[]
- *     |        | | len : backup data length, KB unit
- *     |        | |       (0.5MB = 512KB, 1MB = 1MB etc)
+ *     |        | | len : backup data length (including dummy bytes), KB unit
+ *     |        | |       (0.5MB = 512, 1MB = 1024 etc)
  *     | S->M : nothing special
  *  2. Send path to file from MAX 10
  *     | M->S : wl_spi_memacc_t
