@@ -390,6 +390,11 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
         /* Ensure that access is done within file boundaries. */
         unsigned long offset = params->addr * BUP_CACHE_BLOCK_SIZE;
 
+        if(params->addr < 5)
+        {
+            logout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPREAD] addr[%u] len[%u] offset[%u] _bup_size[%u KB]", params->addr, params->len, offset, _bup_size>>10);
+        }
+
         if((offset + (params->len/2)) > (_bup_size/2))
         {
             /* Return FFh data and zero length in case of wrong access. */
@@ -408,6 +413,13 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
                 memset(data_tx, 0xFF, params->len/2);
                 params->len = 0;
                 _bup_error_flag = 1;
+            }
+
+            if(params->addr < 5)
+            {
+                logout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPREAD] f_read(offset[%u]) -> %d bytes_read[%u]", offset, f_ret, bytes_read);
+                unsigned char* ptr8 = (unsigned char*)data_tx;
+                logout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPREAD] data_tx[%02X %02X %02X %02X %02X %02X %02X %02X]", ptr8[0], ptr8[1], ptr8[2], ptr8[3], ptr8[4], ptr8[5], ptr8[6], ptr8[7]);
             }
         }
     }
@@ -459,6 +471,12 @@ void bup_file_post_process(wl_spi_header_t* hdr, void* data_rx)
         unsigned long offset = block_id * BUP_CACHE_BLOCK_SIZE;
 
         logout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPWRITE] Rcv block_id[%04X] bup_size[%08X][%u KB]", block_id, _bup_size, _bup_size >> 10);
+        if(params->addr < 5)
+        {
+            logout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPWRITE] addr[%u] len[%u] offset[%u] _bup_size[%u KB]", params->addr, params->len, offset, _bup_size>>10);
+            unsigned char* ptr8 = (unsigned char*)data_rx;
+            logout(WL_LOG_DEBUGNORMAL, "[WL_SPICMD_BUPWRITE] data_rx[%02X %02X %02X %02X %02X %02X %02X %02X]", ptr8[0], ptr8[1], ptr8[2], ptr8[3], ptr8[4], ptr8[5], ptr8[6], ptr8[7]);
+        }
 
         if((offset + (params->len/2)) > (_bup_size/2))
         {
