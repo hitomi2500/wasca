@@ -205,8 +205,8 @@ void spi_sendreceive_type(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsi
                 {
                     /* Merge two 16 bits words into a single one. */
                     unsigned short s1, s2;
-                    s1 = (snd_ptr[0]) & 0xFF00;
-                    s2 = (snd_ptr[1]) >> 8;
+                    s1 = (snd_ptr[1]) >> 8;
+                    s2 = (snd_ptr[0]) & 0xFF00;
                     s1 |= s2;
 
                     *p16_wk++ = s1;
@@ -237,8 +237,8 @@ void spi_sendreceive_type(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsi
                 {
                     /* Merge two 16 bits words into a single one. */
                     unsigned short s1, s2;
-                    s1 = (snd_ptr[0]) & 0xFF00;
-                    s2 = (snd_ptr[1]) >> 8;
+                    s1 = (snd_ptr[1]) >> 8;
+                    s2 = (snd_ptr[0]) & 0xFF00;
                     s1 |= s2;
 
                     *p16_wk++ = s1;
@@ -270,8 +270,8 @@ void spi_sendreceive_type(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsi
                     s1 = (s2 << 8)     | 0x00FF;
                     s2 = (s2 & 0xFF00) | 0x00FF;
 
-                    *rcv_ptr++ = s1;
                     *rcv_ptr++ = s2;
+                    *rcv_ptr++ = s1;
                 }
             }
         }
@@ -316,8 +316,8 @@ void spi_sendreceive_type(unsigned short* snd_ptr, unsigned short* rcv_ptr, unsi
                     s1 = (s2 << 8)     | 0x00FF;
                     s2 = (s2 & 0xFF00) | 0x00FF;
 
-                    *rcv_ptr++ = s1;
                     *rcv_ptr++ = s2;
+                    *rcv_ptr++ = s1;
                 }
             }
         }
