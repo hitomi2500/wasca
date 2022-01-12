@@ -1,4 +1,4 @@
-88703905214750
+91391724022756
 wasca
 2450BM14E0003
 Johanson integrated balun+filter for nRF24
@@ -20,6 +20,13 @@ CHAMFER_WARNING
 0
 0
 0
+wasca
+Conn_TE-DDR2-SODIMM-0.6-200P-doublesided
+
+
+0
+202
+200
 wasca
 Crystal_5x3.2mm
 
