@@ -38,3 +38,5 @@
 /fpga_firmware/wasca/wasca.html
 /fpga_firmware/wasca/wasca.xml
 /mcu_svf_player/Debug/
+/fpga_firmware/software/wasca_test9/m10_flash_log.txt
+/mcu_svf_player/.vscode/settings.json
