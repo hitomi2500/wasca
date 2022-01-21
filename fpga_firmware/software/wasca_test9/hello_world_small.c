@@ -497,13 +497,13 @@ int main(void)
                 load_boot_rom(rom_id);
 
                 /* Mapper stuff. */
-                pRegs_16[MAPPER_WRITE_0] =      0; /* Lock cs0 writes.                            */
-                pRegs_16[MAPPER_WRITE_1] =      0; /* Lock cs0 writes.                            */
-                pRegs_16[MAPPER_WRITE_2] =      0; /* Lock cs1 writes.                            */
+                pRegs_16[MAPPER_WRITE_0] =      0xFFFF; /* Lock cs0 writes.                            */
+                pRegs_16[MAPPER_WRITE_1] =      0xFFFF; /* Lock cs0 writes.                            */
+                pRegs_16[MAPPER_WRITE_2] =      0xFFFF; /* Lock cs1 writes.                            */
                 pRegs_16[MAPPER_WRITE_3] =      0; /* Lock cs2 writes.                            */
-                pRegs_16[MAPPER_READ_0 ] =      3; /* Unmap cs0, leave first 2 megs.              */
-                pRegs_16[MAPPER_READ_1 ] = 0x8100; /* Unmap cs0, leave regs and minipseudo areas. */
-                pRegs_16[MAPPER_READ_2 ] =      0; /* Unmap cs1.                                  */
+                pRegs_16[MAPPER_READ_0 ] = 0xFFFF;//     3; /* Unmap cs0, leave first 2 megs.              */
+                pRegs_16[MAPPER_READ_1 ] = 0xFFFF;//0x8100; /* Unmap cs0, leave regs and minipseudo areas. */
+                pRegs_16[MAPPER_READ_2 ] = 0xFFFF;//     0; /* Unmap cs1.                                  */
                 pRegs_16[MAPPER_READ_3 ] =      0; /* Unmap cs2.                                  */
 
                 logout(WL_LOG_IMPORTANT, "Boot ROM read done.");
@@ -594,12 +594,12 @@ int main(void)
 #endif /* Log time it took to load backup memory data (DEBUG). */
 
                 /* Setup mapper stuff. */
-                pRegs_16[MAPPER_WRITE_0] =      0; /* Lock cs0 writes.                            */
-                pRegs_16[MAPPER_WRITE_1] =      0; /* Lock cs0 writes.                            */
+                pRegs_16[MAPPER_WRITE_0] = 0xFFFF;//     0; /* Lock cs0 writes.                            */
+                pRegs_16[MAPPER_WRITE_1] = 0xFFFF;//     0; /* Lock cs0 writes.                            */
                 pRegs_16[MAPPER_WRITE_2] = 0xFFFF; /* Keep all cs1 writes unlocked.               */
                 pRegs_16[MAPPER_WRITE_3] =      0; /* Lock cs2 writes.                            */
-                pRegs_16[MAPPER_READ_0 ] =      0; /* Unmap cs0.                                  */
-                pRegs_16[MAPPER_READ_1 ] = 0x8100; /* Unmap cs0, leave regs and minipseudo areas. */
+                pRegs_16[MAPPER_READ_0 ] = 0xFFFF;//     0; /* Unmap cs0.                                  */
+                pRegs_16[MAPPER_READ_1 ] = 0xFFFF;//0x8100; /* Unmap cs0, leave regs and minipseudo areas. */
                 pRegs_16[MAPPER_READ_2 ] = 0xFFFF; /* Keep cs1 mapped.                            */
                 pRegs_16[MAPPER_READ_3 ] =      0; /* Unmap cs2.                                  */
 
