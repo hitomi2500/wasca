@@ -482,11 +482,11 @@ F 3 "" H 8450 8600 60  0000 C CNN
 	1    8450 8600
 	1    0    0    -1  
 $EndComp
-Text Label 29400 5650 0    40   ~ 0
+Text Label 24700 6450 0    40   ~ 0
 ABUS_3V_A23
-Text Label 29400 5450 0    40   ~ 0
+Text Label 24700 6350 0    40   ~ 0
 ABUS_3V_A21
-Text Label 29400 5350 0    40   ~ 0
+Text Label 24700 6250 0    40   ~ 0
 ABUS_3V_A19
 Text Label 27100 7550 0    40   ~ 0
 ABUS_3V_RD
@@ -494,11 +494,11 @@ Text Label 27100 7450 0    40   ~ 0
 ABUS_3V_CS1
 Text Label 29750 3250 2    40   ~ 0
 ABUS_3V_CS0
-Text Label 29800 4250 2    40   ~ 0
+Text Label 25250 5050 2    40   ~ 0
 ABUS_3V_CS2
 Text Label 29800 4150 2    40   ~ 0
 ABUS_3V_WR0
-Text Label 29400 5550 0    40   ~ 0
+Text Label 24700 6150 0    40   ~ 0
 ABUS_3V_A17
 Text Label 24650 7550 0    40   ~ 0
 ABUS_3V_A16
@@ -508,8 +508,6 @@ Text Label 25050 7750 2    40   ~ 0
 ABUS_3V_A20
 Text Label 24650 7650 0    40   ~ 0
 ABUS_3V_A18
-Text Label 29400 5150 0    40   ~ 0
-RESET_3V
 Text Label 22650 5600 0    40   ~ 0
 ABUS_3V_IRQ
 $Comp
@@ -1070,15 +1068,13 @@ Wire Wire Line
 Wire Wire Line
 	29200 2350 29950 2350
 Wire Wire Line
-	29200 5150 29950 5150
-Wire Wire Line
-	29200 5550 29950 5550
+	24500 6350 25400 6350
 Wire Wire Line
 	22450 5600 23200 5600
 Wire Wire Line
 	25400 7350 24500 7350
 Wire Wire Line
-	29950 4250 29200 4250
+	25400 5050 24500 5050
 Wire Wire Line
 	29950 4150 29200 4150
 Wire Wire Line
@@ -1086,11 +1082,11 @@ Wire Wire Line
 Wire Wire Line
 	22450 5100 23200 5100
 Wire Wire Line
-	29200 5350 29950 5350
+	24500 6150 25400 6150
 Wire Wire Line
-	29200 5450 29950 5450
+	24500 6250 25400 6250
 Wire Wire Line
-	29200 5650 29950 5650
+	24500 6450 25400 6450
 Connection ~ 8450 8550
 Wire Wire Line
 	8450 8550 8450 8600
@@ -1254,19 +1250,19 @@ Wire Wire Line
 Wire Wire Line
 	26800 7450 27650 7450
 Wire Wire Line
-	29200 4350 29950 4350
+	24500 5150 25400 5150
 Wire Wire Line
-	29200 4450 29950 4450
+	24500 5250 25400 5250
 Wire Wire Line
-	29200 4550 29950 4550
+	24500 5350 25400 5350
 Wire Wire Line
-	29200 4650 29950 4650
+	24500 5650 25400 5650
 Wire Wire Line
-	29200 4750 29950 4750
+	24500 5750 25400 5750
 Wire Wire Line
-	29950 5250 29200 5250
+	25400 6050 24500 6050
 Wire Wire Line
-	29950 5050 29200 5050
+	25400 5950 24500 5950
 Wire Wire Line
 	25400 7250 24500 7250
 Wire Wire Line
@@ -1823,24 +1819,24 @@ Wire Wire Line
 Wire Wire Line
 	9300 10500 11050 10500
 Connection ~ 9300 10500
-Text Label 29400 4350 0    40   ~ 0
+Text Label 24850 5150 0    40   ~ 0
 ABUS_3V_A1
-Text Label 29400 4450 0    40   ~ 0
+Text Label 24850 5250 0    40   ~ 0
 ABUS_3V_A10
-Text Label 29400 4550 0    40   ~ 0
+Text Label 24850 5350 0    40   ~ 0
 ABUS_3V_A11
-Text Label 29400 4650 0    40   ~ 0
+Text Label 24700 5650 0    40   ~ 0
 ABUS_3V_A9
-Text Label 29400 4750 0    40   ~ 0
+Text Label 24700 5750 0    40   ~ 0
 ABUS_3V_A8
-Text Label 29400 4950 0    40   ~ 0
+Text Label 24700 5850 0    40   ~ 0
 ABUS_3V_A13
-Text Label 29400 5050 0    40   ~ 0
+Text Label 24700 5950 0    40   ~ 0
 ABUS_3V_A12
-Text Label 29400 5250 0    40   ~ 0
+Text Label 24700 6050 0    40   ~ 0
 ABUS_3V_A15
 Wire Wire Line
-	29950 4950 29200 4950
+	25400 5850 24500 5850
 Text Label 25050 7450 2    40   ~ 0
 ABUS_3V_A14
 Text Label 25000 7350 2    40   ~ 0
@@ -5145,6 +5141,10 @@ Text Label 27100 7950 0    40   ~ 0
 ABUS_3V_A5
 Wire Wire Line
 	26800 7950 27650 7950
+Wire Wire Line
+	24500 6550 25400 6550
+Text Label 24700 6550 0    40   ~ 0
+RESET_3V
 Wire Bus Line
 	2150 1400 2150 5850
 Wire Bus Line
