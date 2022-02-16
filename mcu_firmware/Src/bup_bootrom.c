@@ -568,6 +568,10 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
 
         if(params->rom_id != WL_ROM_INTERNAL)
         {
+            if(params->rom_id == 0)
+            {
+                /* Don't load anything when ROM ID is zero = no ROM. */
+            }
             if(params->rom_id == 1)
             {
                 strcpy(boot_rom_path, "/KOF95.BIN");
@@ -599,7 +603,15 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
 
 //termout(WL_LOG_DEBUGNORMAL, "[BOOTROM]boot_rom_path:\"%s\"", boot_rom_path);
 
-            f_ret = f_open(&_bup_boot_file, boot_rom_path, FA_READ);
+            if(boot_rom_path[0] != '\0')
+            {
+                f_ret = f_open(&_bup_boot_file, boot_rom_path, FA_READ);
+            }
+            else
+            {
+                /* Don't load anything when ROM ID is zero = no ROM. */
+                f_ret = FR_NO_FILE;
+            }
 
             if(f_ret != FR_OK)
             {
@@ -635,7 +647,16 @@ void bootrom_pre_process(wl_spi_header_t* hdr, void* data_tx)
         {
             /* File open failure : use data from STM32 flash ROM. */
             _boot_rom_is_file = 0;
-            _boot_rom_size = (unsigned long )(&_recovery_rom_end - &_recovery_rom_dat);
+
+            if(params->rom_id == 0)
+            {
+                /* Don't load anything when ROM ID is zero = no ROM. */
+                _boot_rom_size = 0;
+            }
+            else
+            {
+                _boot_rom_size = (unsigned long )(&_recovery_rom_end - &_recovery_rom_dat);
+            }
         }
 
         /* Fill file information. */
