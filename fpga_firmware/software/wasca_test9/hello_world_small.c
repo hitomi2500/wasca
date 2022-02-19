@@ -432,6 +432,46 @@ int main(void)
     int bram_mode = 0;
     unsigned long loop_counter = 0;
 
+
+    /* Under some conditions such as poor SD card performance
+     * or backup memory format or heavy save data being written, 
+     * sniffer's FIFO can't keep track of all blocks that need
+     * to be transferred to STM32.
+     * As a countermeasure, update status for each blocks is
+     * kept in a table and data pending from this table is
+     * transferred to STM32 when sniffer's FIFO is empty.
+     *
+     * This table is too large to be kept in on-chip memory
+     * so the only possible location for it is SDRAM and
+     * because it is busy on A-Bus side at that moment, some
+     * care should be taken about how to manage it.
+     * SDRAM bus width is 16 bits but as timing doesn't changes
+     * when it is accessed at 8 bits size, one byte is allocated
+     * for each backup memory block.
+     * Maximum backup memory size is 4MB and as the size of
+     * one block is 256 bytes (actually 512 bytes when dummy
+     * bytes are included), the size of this table is 16KB.
+     *
+     * This table have to be located in a region not interfering
+     * with memory accessible from Saturn, so it is set just
+     * after the end of CS-1 region, at SDRAM's 48MB offset.
+     *
+     * Major interest of this table is to be able to keep a track
+     * of backup memory write access without (nearly) any time
+     * constraint : only constraint is to send one block to STM32
+     * faster than 1024 blocks from Saturn, which hopefully
+     * shouldn't be a problem.
+     * This table also prevents from transferring the same block
+     * when it is written several times in a short interval.
+     */
+    unsigned short bram_pending_min = 0xFFFF;
+    unsigned short bram_pending_max = 0x0000;
+#define BRAM_SYNC_DEBUG 0
+#define BRAM_PENDING_BUFF    ((unsigned char*)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x3000000))
+#define BRAM_PENDING_MAXCNT  ((4*1024*1024) / 256)
+#define BRAM_PENDING_DATALEN (BRAM_PENDING_MAXCNT * sizeof(unsigned char))
+
+
     /* On startup, as cartridge mode from settings file on SD card is used, 
      * it's necessary to tweak the mode register.
      */
@@ -472,6 +512,8 @@ int main(void)
             {
                 spi_bup_close();
                 bram_mode = 0;
+                bram_pending_min = 0xFFFF;
+                bram_pending_max = 0x0000;
             }
 
             /* Okay, now start a MODE-dependent preparation routine.
@@ -614,6 +656,9 @@ int main(void)
                  * synchronized to SD card when Saturn modifies it.
                  */
                 bram_mode = 1;
+                bram_pending_min = 0xFFFF;
+                bram_pending_max = 0x0000;
+                memset(BRAM_PENDING_BUFF, 0, BRAM_PENDING_DATALEN);
 
                 logout(WL_LOG_IMPORTANT, "Backup RAM setup done.");
             }
@@ -632,18 +677,77 @@ int main(void)
         /* Backup memory contents synchronization. */
         if(bram_mode)
         {
-            /* Sync is done using a 1024 entry deep fifo.
-             * When a transaction occurs within a 512-b sector different to current one,
-             * the buffer is flused to SD, the new one is loaded from SD, and only then the processing continues.
-             * If the fifo is overfilled ( > 1024 samples), issue an error message.
+            /* Sync is done using a 1024 entry deep FIFO.
+             * As this is not large enough to handle large access on backup
+             * memory, access history is buffered from FIFO to SDRAM and
+             * updated backup memory contents are flushed to SD card when
+             * FIFO is empty.
              */
             unsigned short fifo_depth = pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET];
 
+            /* Transfer pending blocks to STM32 when write activity
+             * on backup memory stopped.
+             */
+            if((fifo_depth == 0) && (bram_pending_max >= bram_pending_min))
+            {
+#if BRAM_SYNC_DEBUG == 1
+                char updated_status[16] = {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'};
+#endif // BRAM_SYNC_DEBUG == 1
+
+                for(current_block=bram_pending_min; current_block<=bram_pending_max; current_block++)
+                {
+                    /* If a write access to backup memory is reported, 
+                     * interrupt transfer to STM32 in favor of sniffer's
+                     * FIFO buffering job.
+                     */
+                    fifo_depth = pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET];
+                    if(fifo_depth > 0)
+                    {
+                        break;
+                    }
+
+                    if(BRAM_PENDING_BUFF[current_block])
+                    {
+                        /* Check address from fifo to flush block to file. */
+                        unsigned char* pCS1_a = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x2000000 + (512*current_block));
+
+#if BRAM_SYNC_DEBUG == 1
+                        logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] Blk[0x%04X]", fifo_depth, current_block);
+
+                        if(updated_status[current_block & 0xF] != '9')
+                        {
+                            updated_status[current_block & 0xF]++;
+                        }
+#endif // BRAM_SYNC_DEBUG == 1
+
+                        spi_bup_write(current_block/*ID*/, 512/*size*/, pCS1_a);
+
+                        /* Indicate that the block was transferred to STM32. */
+                        BRAM_PENDING_BUFF[current_block] = 0;
+                    }
+
+                    bram_pending_min++;
+                }
+
+                /* Don't forget to reset flag when all pending blocks could be sent to STM32. */
+                if(fifo_depth == 0)
+                {
+#if BRAM_SYNC_DEBUG == 1
+                    logout(WL_LOG_IMPORTANT, "SYNC DONE [%c%c%c%c %c%c%c%c %c%c%c%c %c%c%c%c]", 
+                        updated_status[ 0], updated_status[ 1], updated_status[ 2], updated_status[ 3], 
+                        updated_status[ 4], updated_status[ 5], updated_status[ 6], updated_status[ 7], 
+                        updated_status[ 8], updated_status[ 9], updated_status[10], updated_status[11], 
+                        updated_status[12], updated_status[13], updated_status[14], updated_status[15]);
+#endif // BRAM_SYNC_DEBUG == 1
+
+                    bram_pending_min = 0xFFFF;
+                    bram_pending_max = 0x0000;
+                }
+            }
+
+
             if(fifo_depth > 0)
             {
-                logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] -> START", fifo_depth);
-                char updated_status[16] = {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'};
-
                 /* Check if close to overfill. */
                 // if(fifo_depth > 1020)
                 // {
@@ -656,27 +760,27 @@ int main(void)
                 {
                     /* Check address from fifo to flush block to file. */
                     current_block = pRegs_16[SNIFF_DATA_REG_OFFSET];
-                    unsigned char* pCS1_a = (unsigned char *)(ABUS_AVALON_SDRAM_BRIDGE_0_AVALON_SDRAM_BASE + 0x2000000 + (512*current_block));
 
-                    //logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] Blk[0x%04X] (%02X%02X %02X%02X %02X%02X)", fifo_depth, current_block, pCS1_a[0], pCS1_a[1], pCS1_a[2], pCS1_a[3], pCS1_a[4], pCS1_a[5]);
-                    logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] Blk[0x%04X]", fifo_depth, current_block);
-
-                    if(updated_status[current_block & 0xF] != '9')
+                    /* Update block access table.
+                     * Also, keep in local memory the range of blocks that
+                     * will have to be transferred to STM32.
+                     */
+                    if(current_block < BRAM_PENDING_MAXCNT)
                     {
-                        updated_status[current_block & 0xF]++;
-                    }
+                        BRAM_PENDING_BUFF[current_block] = 1;
 
-                    spi_bup_write(current_block/*ID*/, 512/*size*/, pCS1_a);
+                        if(current_block < bram_pending_min)
+                        {
+                            bram_pending_min = current_block;
+                        }
+                        if(current_block > bram_pending_max)
+                        {
+                            bram_pending_max = current_block;
+                        }
+                    }
 
                     fifo_depth = pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET];
                 } while(fifo_depth > 0);
-
-                //logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] -> DONE", fifo_depth);
-                logout(WL_LOG_IMPORTANT, "SYNC Depth[%u] -> DONE [%c%c%c%c %c%c%c%c %c%c%c%c %c%c%c%c]", fifo_depth, 
-                    updated_status[ 0], updated_status[ 1], updated_status[ 2], updated_status[ 3], 
-                    updated_status[ 4], updated_status[ 5], updated_status[ 6], updated_status[ 7], 
-                    updated_status[ 8], updated_status[ 9], updated_status[10], updated_status[11], 
-                    updated_status[12], updated_status[13], updated_status[14], updated_status[15]);
             }
         }
 
