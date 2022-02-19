@@ -369,7 +369,39 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
 
                 memset(empty_block, 0xFF, sizeof(empty_block));
 
-                for(offset=0; offset<(_bup_size/2); offset+=sizeof(empty_block))
+                /* Write backup memory header. */
+                char* header_pattern = "BackUpRam Format";
+                const unsigned long pattern_len = 16;
+                f_lseek(&_bup_boot_file, 0);
+
+                /* Setup count of header patterns to fill at the beginning
+                 * of the backup memory file.
+                 * Note : 512KB backup memory size contains 16 header patterns
+                 *        at the beginning of their flash ROM.
+                 */
+                unsigned long header_len = 16 * pattern_len;
+
+                unsigned long pos;
+                for(pos=0; pos<header_len; pos+=pattern_len)
+                {
+                    UINT bytes_written = 0;
+                    f_write(&_bup_boot_file, header_pattern, pattern_len, &bytes_written);
+                }
+
+                /* Align file size with write block size. */
+                offset = header_len;
+                if((offset % sizeof(empty_block)) != 0)
+                {
+                    unsigned long remain_len = sizeof(empty_block) - (offset % sizeof(empty_block));
+
+                    UINT bytes_written = 0;
+                    f_write(&_bup_boot_file, empty_block, remain_len, &bytes_written);
+
+                    offset += remain_len;
+                }
+
+                /* Write remaining empty data. */
+                for(/*nothing*/; offset<(_bup_size/2); offset+=sizeof(empty_block))
                 {
                     UINT bytes_written = 0;
                     f_write(&_bup_boot_file, empty_block, sizeof(empty_block), &bytes_written);
