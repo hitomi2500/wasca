@@ -483,23 +483,19 @@ int main(void)
         volatile unsigned short current_block;
         unsigned short mode_reg = pRegs_16[MODE_REG_OFFSET];
 
-        if((loop_counter % 50000) == 0)
+        if((loop_counter & ((1<<18)-1)) == 0)
         {
-            if(((loop_counter / 50000) % 2) == 0)
-            {
-                HEARTBEAT_FAST();
-            }
-            else
-            {
-                HEARTBEAT_SLOW();
-            }
-
-            log_to_uart("loop[%u] MODE_REG[%04X]", loop_counter / 50000, mode_reg);
+            log_to_uart("loop[%u] MODE_REG[%04X]", loop_counter >> 18, mode_reg);
         }
 
         /* Re-init internals in the case MODE register changed. */
         if(mode_reg != prev_mode_reg)
         {
+            /* Blink the LED to indicate that a new mode
+             * is about to be set up.
+             */
+            HEARTBEAT_FAST();
+
             /* Indicate that initialization is starting. */
             pRegs_16[PCNTR_REG_OFFSET] = 0;
 
@@ -671,6 +667,9 @@ int main(void)
 
             /* Indicate that initialization ended. */
             pRegs_16[PCNTR_REG_OFFSET] = 100;
+
+            /* End of mode setup : turn of the blinking LED. */
+            HEARTBEAT_FORCE(0);
         }
 
 
@@ -690,6 +689,11 @@ int main(void)
              */
             if((fifo_depth == 0) && (bram_pending_max >= bram_pending_min))
             {
+                /* Flash the LED to indicate that memory blocks
+                 * are being transferred to STM32.
+                 */
+                HEARTBEAT_FLASH_MSEC(10);
+
 #if BRAM_SYNC_DEBUG == 1
                 char updated_status[16] = {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'};
 #endif // BRAM_SYNC_DEBUG == 1
@@ -748,6 +752,11 @@ int main(void)
 
             if(fifo_depth > 0)
             {
+                /* Flash the LED to indicate that write
+                 * activity is detected on CS-1.
+                 */
+                HEARTBEAT_FLASH_MSEC(50);
+
                 /* Check if close to overfill. */
                 // if(fifo_depth > 1020)
                 // {

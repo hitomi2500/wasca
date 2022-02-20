@@ -30,6 +30,11 @@ signal heartbeat_divider_int         : integer range 31 downto 0 := 27;
 signal heartbeat_force_flag         :  std_logic := '0'; 
 signal heartbeat_force_value        :  std_logic := '0'; 
 
+signal led_flash_cntr   : unsigned(27 downto 0) := (others => '0');
+signal led_flash_limit  : unsigned(27 downto 0) := (others => '0');
+signal led_flash_enable :  std_logic := '0'; 
+signal led_flash_sig    :  std_logic := '0'; 
+
 begin
 
 	heartbeat_divider_16 <= std_logic_vector(resize(heartbeat_divider,16));
@@ -63,13 +68,27 @@ begin
 		if rising_edge(clock) then
 			if avalon_regs_write= '1' then
 				case avalon_regs_address(7 downto 0) is 
-					when X"00" => 
+					when X"00" => -- LED heartbeat control
 						heartbeat_divider <= unsigned(avalon_regs_writedata(4 downto 0));
 						heartbeat_force_value <= avalon_regs_writedata(6);
 						heartbeat_force_flag  <= avalon_regs_writedata(7);
+						led_flash_enable <= '0';
+
+					when X"10" => -- LED flash control
+						led_flash_limit <= unsigned(avalon_regs_writedata(11 downto 0) & X"FFFF");
+						led_flash_cntr <= X"0000000";
+						heartbeat_force_flag <= '0';
+						led_flash_enable <= '1';
 					when others =>
 						null;
 				end case;
+
+			elsif led_flash_cntr < led_flash_limit then -- LED flash ON
+				led_flash_cntr <= led_flash_cntr + 1;
+				led_flash_sig <= '1';
+			else -- LED flash OFF
+				led_flash_cntr <= X"FFFFFFF";
+				led_flash_sig <= '0';
 			end if;
 		end if;
 	end process;
@@ -86,6 +105,8 @@ begin
 		if rising_edge(clock) then
 			if heartbeat_force_flag = '1' then
 				heartbeat_out <= heartbeat_force_value;
+			elsif led_flash_enable = '1' then
+				heartbeat_out <= led_flash_sig;
 			else
 				case heartbeat_divider_int is 
 					when 21 => 
