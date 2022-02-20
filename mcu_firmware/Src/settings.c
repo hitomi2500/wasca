@@ -14,7 +14,8 @@
 typedef enum _ini_section_t
 {
     SECTION_SETUP = 0,      /* [Setup] */
-    SECTION_LOG             /* [Log]   */
+    SECTION_LOG,            /* [Log]   */
+    SECTION_BUP             /* [Bup]   */
 } ini_section_t;
 
 wasca_settings_t _wasca_set = { 0 };
@@ -41,10 +42,11 @@ void settings_init(void)
     _wasca_set.log_max_size   = 20*1024; /* 20KB. */
     _wasca_set.log_file_count = 10;
     _wasca_set.uart_mode = 2;
-    _wasca_set.log_to_usb    = 0;
-    _wasca_set.log_to_sd     = 1;
+    _wasca_set.log_to_usb     = 0;
+    _wasca_set.log_to_sd      = 1;
     _wasca_set.flush_interval = 500; /* 0.5 sec. */
-    _wasca_set.log_timestamp = 1;
+    _wasca_set.log_timestamp  = 1;
+    _wasca_set.bup_autoformat = 0;
 
     /* Reset base settings for MAX 10. */
     _wasca_set.max.cart_mode = 0x0342; /* WascaLoader + Backup memory. */
@@ -211,6 +213,11 @@ void settings_read(void)
                         {
                             section = SECTION_LOG;
                             ini_logout(" -> LOG");
+                        }
+                        else if(strcasecmp(s, "bup") == 0)
+                        {
+                            section = SECTION_BUP;
+                            ini_logout(" -> BUP");
                         }
                     }
                     else if(((c0 >= 'A') && (c0 <= 'Z')) || ((c0 >= 'a') && (c0 <= 'z')))
@@ -399,6 +406,15 @@ void settings_read(void)
                                     v = (atoi(val) == 0 ? 0 : 1);
 
                                     _wasca_set.log_timestamp = v;
+                                }
+                            }
+                            else if(section == SECTION_BUP)
+                            {
+                                if(strcasecmp(name, "autoformat") == 0)
+                                {
+                                    v = (atoi(val) == 0 ? 0 : 1);
+
+                                    _wasca_set.bup_autoformat = v;
                                 }
                             }
                             else

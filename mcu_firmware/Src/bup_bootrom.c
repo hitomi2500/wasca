@@ -4,6 +4,7 @@
 #include "fatfs.h"
 #include "crc.h"
 #include "log.h"
+#include "settings.h"
 
 #include "recovery_rom.h"
 
@@ -364,32 +365,45 @@ void bup_file_pre_process(wl_spi_header_t* hdr, void* data_tx)
             /* Sanitize file size and pre-allocate its data if necessary. */
             if(create_new)
             {
-                unsigned char empty_block[BUP_CACHE_BLOCK_SIZE];
-                unsigned long offset;
-
-                memset(empty_block, 0xFF, sizeof(empty_block));
-
-                /* Write backup memory header. */
-                char* header_pattern = "BackUpRam Format";
-                const unsigned long pattern_len = 16;
                 f_lseek(&_bup_boot_file, 0);
 
-                /* Setup count of header patterns to fill at the beginning
-                 * of the backup memory file.
-                 * Note : 512KB backup memory size contains 16 header patterns
-                 *        at the beginning of their flash ROM.
-                 */
-                unsigned long header_len = 16 * pattern_len;
-
-                unsigned long pos;
-                for(pos=0; pos<header_len; pos+=pattern_len)
+                unsigned long header_len = 0;
+                if(_wasca_set.bup_autoformat)
                 {
-                    UINT bytes_written = 0;
-                    f_write(&_bup_boot_file, header_pattern, pattern_len, &bytes_written);
+                    /* Write backup memory header. */
+                    char* header_pattern = "BackUpRam Format";
+                    const unsigned long pattern_len = 16;
+
+                    /* Setup count of header patterns to fill at the beginning
+                     * of the backup memory file.
+                     *
+                     * Count of header patterns depends on backup memory size :
+                     *  - 512K :  8079 blocks, 32 patterns
+                     *  -   1M : 16159 blocks, 32 patterns
+                     *  -   2M : 29292 blocks, 32 patterns
+                     *  -   4M : 64976 blocks, 64 patterns
+                     *
+                     * Save data files dumped from official 512K memory carts
+                     * seem to contain only 16 header patterns, so right now
+                     * this automatic format feature must be considered as
+                     * experimental hence not used on important save data.
+                     */
+                    int size_mb = params->len / 1024 / 2;
+                    header_len = (size_mb >= 4 ? 64 : 32) * pattern_len;
+
+                    unsigned long pos;
+                    for(pos=0; pos<header_len; pos+=pattern_len)
+                    {
+                        UINT bytes_written = 0;
+                        f_write(&_bup_boot_file, header_pattern, pattern_len, &bytes_written);
+                    }
                 }
 
                 /* Align file size with write block size. */
-                offset = header_len;
+                unsigned char empty_block[BUP_CACHE_BLOCK_SIZE];
+                memset(empty_block, 0x00, sizeof(empty_block));
+
+                unsigned long offset = header_len;
                 if((offset % sizeof(empty_block)) != 0)
                 {
                     unsigned long remain_len = sizeof(empty_block) - (offset % sizeof(empty_block));

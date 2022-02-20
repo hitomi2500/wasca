@@ -103,6 +103,22 @@ typedef struct _wasca_settings_t
      */
     long log_timestamp;
 
+    /* Backup memory cartridge automatic format.
+     * When enabled, backup memory file is automatically initialized
+     * with appropriate header so that it's not needed to manually
+     * format the cartridge from Save Data Manager.
+     *
+     * This is an experimental feature, don't use when cartridge is
+     * used to store important save data.
+     *
+     * Values :
+     *  -   0: don't format the backup memory data
+     *  -   1: format the backup memory data during its file creation
+     *
+     * Name : [Bup]AutoFormat
+     */
+    long bup_autoformat;
+
 } wasca_settings_t;
 
 extern wasca_settings_t _wasca_set;
