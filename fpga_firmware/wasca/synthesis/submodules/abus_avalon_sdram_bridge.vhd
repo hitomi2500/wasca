@@ -150,6 +150,7 @@ signal sdram_wait_counter          : unsigned(3 downto 0) := (others => '0');
 signal sdram_init_counter : unsigned(15 downto 0) := (others => '0'); 
 signal sdram_autorefresh_counter : unsigned(9 downto 0) := (others => '1'); 
 signal sdram_datain_latched          : std_logic_vector(15 downto 0) := (others => '0'); 
+signal sdram_datain_next_latched : std_logic_vector(15 downto 0) := (others => '0'); 
 
 signal avalon_sdram_complete      : std_logic := '0';
 signal avalon_sdram_reset_pending      : std_logic := '0';
@@ -718,7 +719,7 @@ begin
 	process (clock)
 	begin
 		if rising_edge(clock) then
-			if abus_cspulse2 = '1' then
+			if (abus_read = '1' and abus_cspulse2 = '1') or abus_read_pulse='1' then --for abus reads, we react faster
 				sdram_abus_pending <= '1';
 			elsif sdram_abus_complete = '1' then
 				sdram_abus_pending <= '0';
@@ -809,7 +810,8 @@ begin
                         sdram_ras_n <= '0';
                         sdram_cas_n <= '0';
                         sdram_we_n <= '0';
-                        sdram_addr <= "0001000110000"; --write single, no testmode, cas 3, burst seq, burst len 1
+                        --sdram_addr <= "0001000110000"; --write single, no testmode, cas 3, burst seq, burst len 1
+                        sdram_addr <= "0001000110001"; --write single, no testmode, cas 3, burst seq, burst len 2
                         sdram_wait_counter <= to_unsigned(10,4);
                     end if;
 
@@ -847,6 +849,7 @@ begin
 					-- if none of these events occur, we keep staying in the idle mode
 					if sdram_abus_pending = '1' and sdram_abus_complete = '0' then
 						sdram_mode <= SDRAM_ABUS_ACTIVATE;
+						sdram_datain_latched <= sdram_datain_next_latched; --if someone tries to read data too early, he gets "next" value
 						--something on abus, address should be stable already (is it???), so we activate row now
                   sdram_ras_n <= '0';
                   sdram_addr <= abus_address_latched(23 downto 11);
@@ -892,6 +895,7 @@ begin
 						--switching to ABUS in case of ABUS request caught us between refresh stages
 						if sdram_abus_pending = '1' then
 							sdram_mode <= SDRAM_ABUS_ACTIVATE;
+							sdram_datain_latched <= sdram_datain_next_latched; --if someone tries to read data too early, he gets "next" value
 							--something on abus, address should be stable already (is it???), so we activate row now
 							sdram_ras_n <= '0';
 							sdram_addr <= abus_address_latched(23 downto 11);
@@ -973,6 +977,7 @@ begin
 						sdram_datain_latched <= sdram_dq;
 					end if;	
 					if sdram_wait_counter = 0 then
+					    sdram_datain_next_latched <= sdram_dq;
 						sdram_mode <= SDRAM_IDLE;
 						sdram_abus_complete <= '1';
 						sdram_dqm <= "11";
@@ -987,7 +992,10 @@ begin
 					sdram_we_n <= '1';
 					sdram_dq <= (others => 'Z');
 					sdram_wait_counter <= sdram_wait_counter - 1;
-					if sdram_wait_counter = 0 then
+					if sdram_wait_counter = 4 then
+				    	--issue burst stop immediately to cancel second burst write
+						sdram_we_n <= '0';
+					elsif sdram_wait_counter = 0 then
 						sdram_mode <= SDRAM_IDLE;
 						sdram_abus_complete <= '1';
 						sdram_dqm <= "11";
