@@ -377,6 +377,23 @@ begin
     --setup sniff fifo - only writes on cs1
     write_avalon_16_regs(X"E8",X"000A",avalon_regs_address,avalon_regs_writedata,avalon_regs_write); --filter - only write on cs1 
     
+    wait for 3405 ns;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
+    wait for 8620 ps;
     --abus normal read
     read_abus_16("00"&X"EFAFAE","101",abus_full_address,abus_chipselect,abus_read,refer_rd_addr,refer_rd_enable);
     --abus read while autorefresh

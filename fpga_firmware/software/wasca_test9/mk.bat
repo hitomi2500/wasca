@@ -1,10 +1,10 @@
 @echo off & setlocal EnableDelayedExpansion
 
 REM Path to Quartus folder. Adapt this to your Quartus setup.
-set quartus_path=D:\altera\18.1
+set quartus_path=C:\intelFPGA_lite\18.1
 
 REM Note to hitomi2500 : please set below the path to your Quartus setup :
-if not exist %quartus_path%\nios2eds\version.txt set quartus_path=D:\altera\15.1
+if not exist %quartus_path%\nios2eds\version.txt set quartus_path=C:\intelFPGA_lite\18.1
 set path=%path%;%quartus_path%\quartus\bin64
 
 REM Verify that compiler environment is available.
@@ -19,8 +19,9 @@ for %%a in ("%cd%") do set current_dir=%%~na
 set bsp_dir="%cd%"\..\%current_dir%_bsp
 
 REM Include stuff for STM32 firmware compilation
-set PATH=C:\Program Files (x86)\GNU Arm Embedded Toolchain\10 2020-q4-major\bin;%PATH%
-
+REM set PATH="C:\Program Files (x86)\GNU Tools Arm Embedded\9 2019-q4-major\bin\";%PATH%
+REM set PATH="C:\ST\STM32CubeIDE_1.5.0\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.make.win32_1.5.0.202011040924\tools\bin";%PATH%
+set PATH="/cygdrive/c\ST\STM32CubeIDE_1.5.0\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.win32_1.5.0.202011040924\tools\bin";%PATH%
 
 @REM Dummy initialize command
 set cm=dmy

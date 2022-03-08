@@ -22,7 +22,8 @@
 		.buffered_spi_clk                                      (<connected-to-buffered_spi_clk>),                                      //                                 .clk
 		.buffered_spi_miso                                     (<connected-to-buffered_spi_miso>),                                     //                                 .miso
 		.buffered_spi_cs                                       (<connected-to-buffered_spi_cs>),                                       //                                 .cs
-		.buffered_spi_sync                                     (<connected-to-buffered_spi_sync>),                                     //                                 .sync
+		.buffered_spi_sync_miso                                (<connected-to-buffered_spi_sync_miso>),                                //                                 .sync_miso
+		.buffered_spi_sync_mosi                                (<connected-to-buffered_spi_sync_mosi>),                                //                                 .sync_mosi
 		.clk_clk                                               (<connected-to-clk_clk>),                                               //                              clk.clk
 		.clock_116_mhz_clk                                     (<connected-to-clock_116_mhz_clk>),                                     //                    clock_116_mhz.clk
 		.heartbeat_heartbeat_out                               (<connected-to-heartbeat_heartbeat_out>),                               //                        heartbeat.heartbeat_out

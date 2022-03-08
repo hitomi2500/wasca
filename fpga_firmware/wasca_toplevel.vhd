@@ -159,8 +159,10 @@ architecture rtl of wasca_toplevel is
 		--por
 		process (clock_116_mhz)
 		begin
-			if std_logic(por_counter(24)) = '0' then
-				por_counter <= por_counter + 1;
+			if rising_edge(clock_116_mhz) then
+				if std_logic(por_counter(24)) = '0' then
+					por_counter <= por_counter + 1;
+				end if;
 			end if;
 		end process;
 		

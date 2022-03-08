@@ -23,7 +23,8 @@
 			buffered_spi_clk                                      : out   std_logic;                                        -- clk
 			buffered_spi_miso                                     : in    std_logic                     := 'X';             -- miso
 			buffered_spi_cs                                       : out   std_logic;                                        -- cs
-			buffered_spi_sync                                     : in    std_logic                     := 'X';             -- sync
+			buffered_spi_sync_miso                                : in    std_logic                     := 'X';             -- sync_miso
+			buffered_spi_sync_mosi                                : out   std_logic;                                        -- sync_mosi
 			clk_clk                                               : in    std_logic                     := 'X';             -- clk
 			clock_116_mhz_clk                                     : out   std_logic;                                        -- clk
 			heartbeat_heartbeat_out                               : out   std_logic;                                        -- heartbeat_out
@@ -59,7 +60,8 @@
 			buffered_spi_clk                                      => CONNECTED_TO_buffered_spi_clk,                                      --                                 .clk
 			buffered_spi_miso                                     => CONNECTED_TO_buffered_spi_miso,                                     --                                 .miso
 			buffered_spi_cs                                       => CONNECTED_TO_buffered_spi_cs,                                       --                                 .cs
-			buffered_spi_sync                                     => CONNECTED_TO_buffered_spi_sync,                                     --                                 .sync
+			buffered_spi_sync_miso                                => CONNECTED_TO_buffered_spi_sync_miso,                                --                                 .sync_miso
+			buffered_spi_sync_mosi                                => CONNECTED_TO_buffered_spi_sync_mosi,                                --                                 .sync_mosi
 			clk_clk                                               => CONNECTED_TO_clk_clk,                                               --                              clk.clk
 			clock_116_mhz_clk                                     => CONNECTED_TO_clock_116_mhz_clk,                                     --                    clock_116_mhz.clk
 			heartbeat_heartbeat_out                               => CONNECTED_TO_heartbeat_heartbeat_out,                               --                        heartbeat.heartbeat_out

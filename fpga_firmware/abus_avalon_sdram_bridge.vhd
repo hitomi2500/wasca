@@ -1,6 +1,7 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
+--ts 0090
 
 ENTITY abus_avalon_sdram_bridge IS
 	PORT (
@@ -49,47 +50,47 @@ END ENTITY abus_avalon_sdram_bridge;
 
 ARCHITECTURE rtl OF abus_avalon_sdram_bridge IS
 
-	--component sniff_fifo
-	--	PORT
-	--	(
-	--		clock		: IN STD_LOGIC ;
-	--		data		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
-	--		rdreq		: IN STD_LOGIC ;
-	--		wrreq		: IN STD_LOGIC ;
-	--		empty		: OUT STD_LOGIC ;
-	--		full		: OUT STD_LOGIC ;
-	--		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
-	--		usedw		: OUT STD_LOGIC_VECTOR (10 DOWNTO 0)
-	--	);
-	--end component;
-	--xilinx mode
-	COMPONENT sniff_fifo
-		PORT (
-			clk : IN STD_LOGIC;
-			srst : IN STD_LOGIC;
-			din : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-			wr_en : IN STD_LOGIC;
-			rd_en : IN STD_LOGIC;
-			dout : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-			full : OUT STD_LOGIC;
-			empty : OUT STD_LOGIC;
-			data_count : OUT STD_LOGIC_VECTOR(10 DOWNTO 0)
+	component sniff_fifo
+		PORT
+	(
+			clock		: IN STD_LOGIC ;
+			data		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+			rdreq		: IN STD_LOGIC ;
+			wrreq		: IN STD_LOGIC ;
+			empty		: OUT STD_LOGIC ;
+			full		: OUT STD_LOGIC ;
+			q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
+			usedw		: OUT STD_LOGIC_VECTOR (10 DOWNTO 0)
 		);
-	END COMPONENT;
+	end component;
+	--xilinx mode
+--	COMPONENT sniff_fifo
+--		PORT (
+--			clk : IN STD_LOGIC;
+--			srst : IN STD_LOGIC;
+--			din : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+--			wr_en : IN STD_LOGIC;
+--			rd_en : IN STD_LOGIC;
+--			dout : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+--			full : OUT STD_LOGIC;
+--			empty : OUT STD_LOGIC;
+--			data_count : OUT STD_LOGIC_VECTOR(10 DOWNTO 0)
+--		);
+--	END COMPONENT;
 
 	SIGNAL abus_address_ms : STD_LOGIC_VECTOR(24 DOWNTO 0) := (OTHERS => '0'); --          abus.address
-	SIGNAL abus_address_buf : STD_LOGIC_VECTOR(24 DOWNTO 0) := (OTHERS => '0'); --          abus.address
+	--SIGNAL abus_address_buf : STD_LOGIC_VECTOR(24 DOWNTO 0) := (OTHERS => '0'); --          abus.address
 	SIGNAL abus_data_ms : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0'); --              .data
 	SIGNAL abus_data_buf : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0'); --              .data
 	SIGNAL abus_chipselect_ms : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0'); --              .chipselect
 	SIGNAL abus_chipselect_buf : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0'); --              .chipselect
-	--signal abus_read_ms            : std_logic                     := '0';             --              .read
+	signal abus_read_ms            : std_logic                     := '0';             --              .read
 	SIGNAL abus_read_buf : STD_LOGIC := '0'; --              .read
 	SIGNAL abus_write_ms : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --              .write
 	SIGNAL abus_write_buf : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --              .write
 
-	SIGNAL abus_write_buf2 : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --              .write
-	SIGNAL abus_chipselect_buf2 : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0'); --              .chipselect
+	--SIGNAL abus_write_buf2 : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --              .write
+	--SIGNAL abus_chipselect_buf2 : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0'); --              .chipselect
 
 	SIGNAL abus_read_pulse : STD_LOGIC := '0'; --              .read
 	SIGNAL abus_write_pulse : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --              .write
@@ -98,9 +99,6 @@ ARCHITECTURE rtl OF abus_avalon_sdram_bridge IS
 	SIGNAL abus_write_pulse_off : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '0'); --              .write
 	SIGNAL abus_chipselect_pulse_off : STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0'); --              .chipselect
 
-	SIGNAL abus_anypulse : STD_LOGIC := '0';
-	SIGNAL abus_anypulse2 : STD_LOGIC := '0';
-	SIGNAL abus_anypulse3 : STD_LOGIC := '0';
 	SIGNAL abus_anypulse_off : STD_LOGIC := '0';
 	SIGNAL abus_cspulse : STD_LOGIC := '0';
 	SIGNAL abus_cspulse2 : STD_LOGIC := '0';
@@ -111,8 +109,10 @@ ARCHITECTURE rtl OF abus_avalon_sdram_bridge IS
 	SIGNAL abus_cspulse7 : STD_LOGIC := '0';
 	SIGNAL abus_cspulse_off : STD_LOGIC := '0';
 
-	SIGNAL abus_address_latched_prepatch : STD_LOGIC_VECTOR(24 DOWNTO 0) := (OTHERS => '0'); --          abus.address prior to patching
-	SIGNAL abus_address_latched : STD_LOGIC_VECTOR(24 DOWNTO 0) := (OTHERS => '0'); --          abus.address
+	SIGNAL abus_address_latched_read_prepatch : STD_LOGIC_VECTOR(24 DOWNTO 0) := (OTHERS => '0'); --          abus.address prior to patching
+	SIGNAL abus_address_latched_read : STD_LOGIC_VECTOR(24 DOWNTO 0) := (OTHERS => '0'); --          abus.address
+	SIGNAL abus_address_latched_write_prepatch : STD_LOGIC_VECTOR(24 DOWNTO 0) := (OTHERS => '0'); --          abus.address prior to patching
+	SIGNAL abus_address_latched_write : STD_LOGIC_VECTOR(24 DOWNTO 0) := (OTHERS => '0'); --          abus.address
 	SIGNAL abus_chipselect_latched : STD_LOGIC_VECTOR(1 DOWNTO 0) := (OTHERS => '1'); --          abus.address
 	SIGNAL abus_direction_internal : STD_LOGIC := '0';
 	SIGNAL abus_data_out : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
@@ -121,7 +121,7 @@ ARCHITECTURE rtl OF abus_avalon_sdram_bridge IS
 	SIGNAL REG_PCNTR : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
 	SIGNAL REG_STATUS : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
 	SIGNAL REG_MODE : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
-	SIGNAL REG_HWVER : STD_LOGIC_VECTOR(15 DOWNTO 0) := X"0002";
+	SIGNAL REG_HWVER : STD_LOGIC_VECTOR(15 DOWNTO 0) := X"0003";
 	SIGNAL REG_SWVER : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
 	SIGNAL REG_MAPPER_READ : STD_LOGIC_VECTOR(63 DOWNTO 0) := (OTHERS => '1');
 	SIGNAL REG_MAPPER_WRITE : STD_LOGIC_VECTOR(63 DOWNTO 0) := (OTHERS => '1');
@@ -141,7 +141,7 @@ ARCHITECTURE rtl OF abus_avalon_sdram_bridge IS
 	SIGNAL avalon_sdram_complete : STD_LOGIC := '0';
 	SIGNAL avalon_sdram_reset_pending : STD_LOGIC := '0';
 	SIGNAL avalon_sdram_read_pending : STD_LOGIC := '0';
-	SIGNAL avalon_sdram_read_pending_f1 : STD_LOGIC := '0';
+	--SIGNAL avalon_sdram_read_pending_f1 : STD_LOGIC := '0';
 	SIGNAL avalon_sdram_write_pending : STD_LOGIC := '0';
 	SIGNAL avalon_sdram_pending_address : STD_LOGIC_VECTOR(25 DOWNTO 0) := (OTHERS => '0');
 	SIGNAL avalon_sdram_pending_data : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
@@ -163,7 +163,7 @@ ARCHITECTURE rtl OF abus_avalon_sdram_bridge IS
 	SIGNAL sniffer_data_write : STD_LOGIC := '0';
 	SIGNAL sniffer_data_ack : STD_LOGIC := '0';
 	SIGNAL sniffer_fifo_content_size : STD_LOGIC_VECTOR(10 DOWNTO 0) := (OTHERS => '0');
-	SIGNAL sniffer_fifo_empty : STD_LOGIC := '0';
+	--SIGNAL sniffer_fifo_empty : STD_LOGIC := '0';
 	SIGNAL sniffer_fifo_full : STD_LOGIC := '0';
 	SIGNAL sniffer_last_active_block : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '1');
 	SIGNAL sniffer_pending_set : STD_LOGIC := '0';
@@ -205,6 +205,7 @@ ARCHITECTURE rtl OF abus_avalon_sdram_bridge IS
 		SDRAM_AVALON_WRITE_AND_PRECHARGE
 	);
 	SIGNAL sdram_mode : sdram_mode_type := SDRAM_INIT0;
+	signal sdram_mode_debug : STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');
 BEGIN
 	abus_direction <= abus_direction_internal;
 
@@ -223,13 +224,13 @@ BEGIN
 			abus_address_ms <= abus_address;
 			abus_data_ms <= abus_data;
 			abus_chipselect_ms <= abus_chipselect; --work only with CS1 for now
-			--abus_read_ms <= abus_read;
+			abus_read_ms <= abus_read;
 			abus_write_ms <= abus_write;
 			--2nd stage
-			abus_address_buf <= abus_address_ms;
+			--abus_address_buf <= abus_address_ms;
 			abus_data_buf <= abus_data_ms;
 			abus_chipselect_buf <= abus_chipselect_ms;
-			--abus_read_buf <= abus_read_ms;
+			abus_read_buf <= abus_read_ms;
 			abus_write_buf <= abus_write_ms;
 		END IF;
 	END PROCESS;
@@ -238,10 +239,8 @@ BEGIN
 	PROCESS (clock)
 	BEGIN
 		IF rising_edge(clock) THEN
-			abus_write_buf2 <= abus_write_buf;
-			abus_chipselect_buf2 <= abus_chipselect_buf;
-			abus_anypulse2 <= abus_anypulse;
-			abus_anypulse3 <= abus_anypulse2;
+			--abus_write_buf2 <= abus_write_buf;
+			--abus_chipselect_buf2 <= abus_chipselect_buf;
 			abus_cspulse2 <= abus_cspulse;
 			abus_cspulse3 <= abus_cspulse2;
 			abus_cspulse4 <= abus_cspulse3;
@@ -253,14 +252,12 @@ BEGIN
 
 	--abus write/read pulse is a falling edge since read and write signals are negative polarity
 	abus_write_pulse <= abus_write_buf AND NOT abus_write_ms;
-	--abus_read_pulse <= abus_read_buf and not abus_read_ms;
+	abus_read_pulse <= abus_read_buf and not abus_read_ms;
 	abus_chipselect_pulse <= abus_chipselect_buf AND NOT abus_chipselect_ms;
 	abus_write_pulse_off <= abus_write_ms AND NOT abus_write_buf;
-	--abus_read_pulse_off <= abus_read_ms and not abus_read_buf;
+	abus_read_pulse_off <= abus_read_ms and not abus_read_buf;
 	abus_chipselect_pulse_off <= abus_chipselect_ms AND NOT abus_chipselect_buf;
 
-	abus_anypulse <= abus_write_pulse(0) OR abus_write_pulse(1) OR abus_read_pulse OR
-		abus_chipselect_pulse(0) OR abus_chipselect_pulse(1) OR abus_chipselect_pulse(2);
 	abus_anypulse_off <= abus_write_pulse_off(0) OR abus_write_pulse_off(1) OR abus_read_pulse_off OR
 		abus_chipselect_pulse_off(0) OR abus_chipselect_pulse_off(1) OR abus_chipselect_pulse_off(2);
 	abus_cspulse <= abus_chipselect_pulse(0) OR abus_chipselect_pulse(1) OR abus_chipselect_pulse(2);
@@ -274,24 +271,36 @@ BEGIN
 	BEGIN
 		IF rising_edge(clock) THEN
 			IF abus_cspulse = '1' THEN
-				abus_address_latched_prepatch <= abus_address;
+				abus_address_latched_write_prepatch <= abus_address;
+			END IF;
+		END IF;
+	END PROCESS;
+	
+	--for read we latch faster 
+	PROCESS (clock)
+	BEGIN
+		IF rising_edge(clock) THEN
+			IF (abus_read = '0' and abus_read_ms = '1') or abus_cspulse = '1' THEN
+				abus_address_latched_read_prepatch <= abus_address;
 			END IF;
 		END IF;
 	END PROCESS;
 
 	--patching abus_address_latched : for RAM 1M mode A19 and A20 should be set to zero
 	--trying to do this asynchronously
-	abus_address_latched <= abus_address_latched_prepatch(24 DOWNTO 21) & "00" & abus_address_latched_prepatch(18 DOWNTO 0) WHEN wasca_mode = MODE_RAM_1M AND abus_address_latched_prepatch(24 DOWNTO 21) = "0010"
-		ELSE abus_address_latched_prepatch;
+	abus_address_latched_write <= abus_address_latched_write_prepatch(24 DOWNTO 21) & "00" & abus_address_latched_write_prepatch(18 DOWNTO 0) WHEN wasca_mode = MODE_RAM_1M AND abus_address_latched_write_prepatch(24 DOWNTO 21) = "0010"
+		ELSE abus_address_latched_write_prepatch;
+	abus_address_latched_read <= abus_address_latched_read_prepatch(24 DOWNTO 21) & "00" & abus_address_latched_read_prepatch(18 DOWNTO 0) WHEN wasca_mode = MODE_RAM_1M AND abus_address_latched_read_prepatch(24 DOWNTO 21) = "0010"
+		ELSE abus_address_latched_read_prepatch;
 
 	--mapper write enable decode
 	PROCESS (clock)
 	BEGIN
 		IF rising_edge(clock) THEN
 			IF abus_chipselect_buf(0) = '0' THEN
-				mapper_write_enable <= REG_MAPPER_WRITE(to_integer(unsigned(abus_address_latched(24 DOWNTO 20))));
+				mapper_write_enable <= REG_MAPPER_WRITE(to_integer(unsigned(abus_address_latched_write(24 DOWNTO 20))));
 			ELSIF abus_chipselect_buf(1) = '0' THEN
-				mapper_write_enable <= REG_MAPPER_WRITE(32 + to_integer(unsigned(abus_address_latched(23 DOWNTO 20))));
+				mapper_write_enable <= REG_MAPPER_WRITE(32 + to_integer(unsigned(abus_address_latched_write(23 DOWNTO 20))));
 			ELSIF abus_chipselect_buf(2) = '0' THEN
 				mapper_write_enable <= REG_MAPPER_WRITE(48);
 			END IF;
@@ -303,9 +312,9 @@ BEGIN
 	BEGIN
 		IF rising_edge(clock) THEN
 			IF abus_chipselect_buf(0) = '0' THEN
-				mapper_read_enable <= REG_MAPPER_READ(to_integer(unsigned(abus_address_latched(24 DOWNTO 20))));
+				mapper_read_enable <= REG_MAPPER_READ(to_integer(unsigned(abus_address_latched_read(24 DOWNTO 20))));
 			ELSIF abus_chipselect_buf(1) = '0' THEN
-				mapper_read_enable <= REG_MAPPER_READ(32 + to_integer(unsigned(abus_address_latched(23 DOWNTO 20))));
+				mapper_read_enable <= REG_MAPPER_READ(32 + to_integer(unsigned(abus_address_latched_read(23 DOWNTO 20))));
 			ELSIF abus_chipselect_buf(2) = '0' THEN
 				mapper_read_enable <= REG_MAPPER_READ(48);
 			END IF;
@@ -371,51 +380,52 @@ BEGIN
 		IF rising_edge(clock) THEN
 			IF abus_chipselect_latched = "00" THEN
 				--CS0 access
-				IF abus_address_latched(24 DOWNTO 0) = "1" & X"FF0FFE" THEN
+				IF abus_address_latched_read(24 DOWNTO 0) = "1" & X"FF0FFE" THEN
 					--wasca specific SD card control register
 					abus_data_out <= X"CDCD";
-				ELSIF abus_address_latched(24 DOWNTO 0) = "1" & X"FFFFF0" THEN
+				ELSIF abus_address_latched_read(24 DOWNTO 0) = "1" & X"FFFFF0" THEN
 					--wasca prepare counter
 					abus_data_out <= REG_PCNTR;
-				ELSIF abus_address_latched(24 DOWNTO 0) = "1" & X"FFFFF2" THEN
+				ELSIF abus_address_latched_read(24 DOWNTO 0) = "1" & X"FFFFF2" THEN
 					--wasca status register
 					abus_data_out <= REG_STATUS;
-				ELSIF abus_address_latched(24 DOWNTO 0) = "1" & X"FFFFF4" THEN
+				ELSIF abus_address_latched_read(24 DOWNTO 0) = "1" & X"FFFFF4" THEN
 					--wasca mode register
 					abus_data_out <= REG_MODE;
-				ELSIF abus_address_latched(24 DOWNTO 0) = "1" & X"FFFFF6" THEN
+				ELSIF abus_address_latched_read(24 DOWNTO 0) = "1" & X"FFFFF6" THEN
 					--wasca hwver register
 					abus_data_out <= REG_HWVER;
-				ELSIF abus_address_latched(24 DOWNTO 0) = "1" & X"FFFFF8" THEN
+				ELSIF abus_address_latched_read(24 DOWNTO 0) = "1" & X"FFFFF8" THEN
 					--wasca swver register
 					abus_data_out <= REG_SWVER;
-				ELSIF abus_address_latched(24 DOWNTO 0) = "1" & X"FFFFFA" THEN
+				ELSIF abus_address_latched_read(24 DOWNTO 0) = "1" & X"FFFFFA" THEN
 					--wasca signature "wa"
 					abus_data_out <= X"7761";
-				ELSIF abus_address_latched(24 DOWNTO 0) = "1" & X"FFFFFC" THEN
+				ELSIF abus_address_latched_read(24 DOWNTO 0) = "1" & X"FFFFFC" THEN
 					--wasca signature "sc"
 					abus_data_out <= X"7363";
-				ELSIF abus_address_latched(24 DOWNTO 0) = "1" & X"FFFFFE" THEN
+				ELSIF abus_address_latched_read(24 DOWNTO 0) = "1" & X"FFFFFE" THEN
 					--wasca signature "a "
 					abus_data_out <= X"6120";
 				ELSE
 					--normal CS0 read access
-					CASE wasca_mode IS
-						WHEN MODE_INIT => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_POWER_MEMORY_05M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_POWER_MEMORY_1M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_POWER_MEMORY_2M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_POWER_MEMORY_4M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_RAM_1M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_RAM_4M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_ROM_KOF95 => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_ROM_ULTRAMAN => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_BOOT => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-					END CASE;
+					abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--					CASE wasca_mode IS
+--						WHEN MODE_INIT => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_POWER_MEMORY_05M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_POWER_MEMORY_1M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_POWER_MEMORY_2M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_POWER_MEMORY_4M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_RAM_1M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_RAM_4M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_ROM_KOF95 => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_ROM_ULTRAMAN => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_BOOT => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--					END CASE;
 				END IF;
 			ELSIF abus_chipselect_latched = "01" THEN
 				--CS1 access
-				IF (abus_address_latched(23 DOWNTO 0) = X"FFFFFE" OR abus_address_latched(23 DOWNTO 0) = X"FFFFFC") THEN
+				IF (abus_address_latched_read(23 DOWNTO 0) = X"FFFFFE" OR abus_address_latched_read(23 DOWNTO 0) = X"FFFFFC") THEN
 					--saturn cart id register
 					CASE wasca_mode IS
 						WHEN MODE_INIT => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
@@ -431,18 +441,19 @@ BEGIN
 					END CASE;
 				ELSE
 					--normal CS1 access
-					CASE wasca_mode IS
-						WHEN MODE_INIT => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_POWER_MEMORY_05M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_POWER_MEMORY_1M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_POWER_MEMORY_2M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_POWER_MEMORY_4M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_RAM_1M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_RAM_4M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_ROM_KOF95 => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_ROM_ULTRAMAN => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-						WHEN MODE_BOOT => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
-					END CASE;
+					abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--					CASE wasca_mode IS
+--						WHEN MODE_INIT => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_POWER_MEMORY_05M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_POWER_MEMORY_1M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_POWER_MEMORY_2M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_POWER_MEMORY_4M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_RAM_1M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_RAM_4M => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_ROM_KOF95 => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_ROM_ULTRAMAN => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--						WHEN MODE_BOOT => abus_data_out <= sdram_datain_latched(7 DOWNTO 0) & sdram_datain_latched (15 DOWNTO 8);
+--					END CASE;
 				END IF;
 			ELSE
 				--CS2 access
@@ -459,7 +470,7 @@ BEGIN
 			--if saturn_reset='0' then wasca_mode  <= MODE_INIT;
 			--els
 			IF my_little_transaction_dir = DIR_WRITE AND abus_chipselect_latched = "00" AND abus_cspulse7 = '1' AND
-				abus_address_latched(23 DOWNTO 0) = X"FFFFF4" THEN
+				abus_address_latched_write(23 DOWNTO 0) = X"FFFFF4" THEN
 				--wasca mode register
 				REG_MODE <= abus_data_in;
 				CASE (abus_data_in (3 DOWNTO 0)) IS
@@ -571,7 +582,7 @@ BEGIN
 					WHEN X"F8" =>
 						avalon_regs_readdata <= REG_SWVER;
 					WHEN X"FA" =>
-						avalon_regs_readdata <= X"ABCD"; --for debug, remove later
+						avalon_regs_readdata <= X"ABC"&sdram_mode_debug;--X"ABCD"; --for debug, remove later
 					WHEN OTHERS =>
 						avalon_regs_readdata <= REG_HWVER; --to simplify mux
 				END CASE;
@@ -660,7 +671,7 @@ BEGIN
 		END IF;
 	END PROCESS;
 
-	avalon_sdram_read_pending_f1 <= avalon_sdram_read_pending WHEN rising_edge(clock);
+	--avalon_sdram_read_pending_f1 <= avalon_sdram_read_pending WHEN rising_edge(clock);
 
 	--avalon_sdram_readdatavalid <= avalon_sdram_complete and avalon_sdram_read_pending_f1;
 
@@ -674,7 +685,9 @@ BEGIN
 	PROCESS (clock)
 	BEGIN
 		IF rising_edge(clock) THEN
-			IF abus_read_pulse = '1' THEN --for abus reads, we react faster
+			--IF abus_read_pulse = '1' THEN --for abus reads, we react faster
+				--sdram_abus_pending_read <= '1';
+			IF abus_read = '0' AND abus_cspulse = '1' THEN
 				sdram_abus_pending_read <= '1';
 			ELSIF abus_read = '1' AND abus_cspulse2 = '1' THEN
 				sdram_abus_pending_write <= '1';
@@ -692,6 +705,7 @@ BEGIN
 			CASE sdram_mode IS
 				WHEN SDRAM_INIT0 =>
 					--first stage init. cke off, dqm high,  others Z
+					sdram_mode_debug <= X"0";
 					sdram_addr <= (OTHERS => 'Z');
 					sdram_ba <= "ZZ";
 					sdram_cas_n <= 'Z';
@@ -711,6 +725,7 @@ BEGIN
 
 				WHEN SDRAM_INIT1 =>
 					--another stage init. cke on, dqm high, set other pin
+					sdram_mode_debug <= X"1";					
 					sdram_addr <= (OTHERS => '0');
 					sdram_ba <= "00";
 					sdram_cas_n <= '1';
@@ -731,6 +746,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_INIT2 =>
+					sdram_mode_debug <= X"2";
 					--move on with init
 					sdram_ras_n <= '1';
 					sdram_we_n <= '1';
@@ -745,6 +761,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_INIT3 =>
+					sdram_mode_debug <= X"3";
 					--move on with init
 					sdram_ras_n <= '1';
 					sdram_cas_n <= '1';
@@ -758,6 +775,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_INIT4 =>
+					sdram_mode_debug <= X"4";
 					--move on with init
 					sdram_ras_n <= '1';
 					sdram_cas_n <= '1';
@@ -774,6 +792,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_INIT5 =>
+					sdram_mode_debug <= X"5";
 					--move on with init
 					sdram_ras_n <= '1';
 					sdram_cas_n <= '1';
@@ -786,6 +805,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_IDLE =>
+					sdram_mode_debug <= X"6";
 					sdram_addr <= (OTHERS => '0');
 					sdram_ba <= "00";
 					sdram_cas_n <= '1';
@@ -805,22 +825,23 @@ BEGIN
 					-- 2) avalon transaction detected - priority 1
 					-- 3) autorefresh counter exceeded threshold - priority 2
 					-- if none of these events occur, we keep staying in the idle mode
-					IF sdram_abus_pending_read = '1' AND sdram_abus_complete = '0' THEN
+					--IF ( sdram_abus_pending_read = '1' OR abus_read_pulse = '1' ) AND sdram_abus_complete = '0' THEN
+					IF ( sdram_abus_pending_read = '1' ) AND sdram_abus_complete = '0' THEN
 						sdram_mode <= SDRAM_ABUS_ACTIVATE_READ;
 						sdram_datain_latched <= sdram_datain_next_latched; --if someone tries to read data too early, he gets "next" value
 						--something on abus, address should be stable already (is it???), so we activate row now
 						sdram_ras_n <= '0';
-						sdram_addr <= abus_address_latched(23 DOWNTO 11);
-						sdram_ba(0) <= abus_address_latched(24);
+						sdram_addr <= abus_address_latched_read(23 DOWNTO 11);
+						sdram_ba(0) <= abus_address_latched_read(24);
 						sdram_ba(1) <= abus_chipselect_buf(0); --if CS0 is active, it's 0, else it's 1
 						sdram_dqm <= "00"; --it's a read
 						sdram_wait_counter <= to_unsigned(3, 4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
-					ELSIF sdram_abus_pending_write = '1' AND sdram_abus_complete = '0' THEN
+					ELSIF sdram_abus_pending_write = '1' AND sdram_abus_complete = '0' AND mapper_write_enable = '1' THEN
 						sdram_mode <= SDRAM_ABUS_ACTIVATE_WRITE;
 						--something on abus, address should be stable already (is it???), so we activate row now
 						sdram_ras_n <= '0';
-						sdram_addr <= abus_address_latched(23 DOWNTO 11);
-						sdram_ba(0) <= abus_address_latched(24);
+						sdram_addr <= abus_address_latched_write(23 DOWNTO 11);
+						sdram_ba(0) <= abus_address_latched_write(24);
 						sdram_ba(1) <= abus_chipselect_buf(0); --if CS0 is active, it's 0, else it's 1
 						sdram_dqm(0) <= abus_write_buf(1); --it's a write
 						sdram_dqm(1) <= abus_write_buf(0); --it's a write
@@ -849,19 +870,20 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_PRECHARGE =>
+					sdram_mode_debug <= X"7";
 					sdram_ras_n <= '1';
 					sdram_we_n <= '1';
 					sdram_addr(10) <= '0';
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					IF sdram_wait_counter = 0 THEN
 						--switching to ABUS in case of ABUS request caught us between refresh stages
-						IF sdram_abus_pending_read = '1' THEN
+						IF sdram_abus_pending_read = '1' THEN -- or abus_read = '0' THEN
 							sdram_mode <= SDRAM_ABUS_ACTIVATE_READ;
 							sdram_datain_latched <= sdram_datain_next_latched; --if someone tries to read data too early, he gets "next" value
 							--something on abus, address should be stable already (is it???), so we activate row now
 							sdram_ras_n <= '0';
-							sdram_addr <= abus_address_latched(23 DOWNTO 11);
-							sdram_ba(0) <= abus_address_latched(24);
+							sdram_addr <= abus_address_latched_read(23 DOWNTO 11);
+							sdram_ba(0) <= abus_address_latched_read(24);
 							sdram_ba(1) <= abus_chipselect_buf(0); --if CS0 is active, it's 0, else it's 1
 							sdram_wait_counter <= to_unsigned(3, 4); -- tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
 							IF abus_write_buf = "11" THEN
@@ -880,6 +902,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_AUTOREFRESH =>
+					sdram_mode_debug <= X"8";
 					--here we wait for autorefresh to end and move on to idle state
 					sdram_cas_n <= '1';
 					sdram_ras_n <= '1';
@@ -889,6 +912,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_ABUS_ACTIVATE_READ =>
+					sdram_mode_debug <= X"9";
 					--while waiting for row to be activated, we choose where to switch to - read or write
 					sdram_addr <= (OTHERS => '0');
 					sdram_ba <= "00";
@@ -900,8 +924,8 @@ BEGIN
 						sdram_mode <= SDRAM_ABUS_READ_AND_PRECHARGE;
 						counter_count_read <= '1';
 						sdram_cas_n <= '0';
-						sdram_addr <= "001" & abus_address_latched(10 DOWNTO 1);
-						sdram_ba(0) <= abus_address_latched(24);
+						sdram_addr <= "001" & abus_address_latched_read(10 DOWNTO 1);
+						sdram_ba(0) <= abus_address_latched_read(24);
 						sdram_ba(1) <= abus_chipselect_buf(0); --if CS0 is active, it's 0, else it's 1
 						sdram_wait_counter <= to_unsigned(4, 4); --5 cut to 4 -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 						-- this is an invalid transaction - either it's for CS2 or from an unmapped range
@@ -910,6 +934,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_ABUS_ACTIVATE_WRITE =>
+					sdram_mode_debug <= X"A";
 					--while waiting for row to be activated, we choose where to switch to - read or write
 					sdram_addr <= (OTHERS => '0');
 					sdram_ba <= "00";
@@ -924,13 +949,14 @@ BEGIN
 						sdram_cas_n <= '0';
 						sdram_we_n <= '0';
 						sdram_dq <= abus_data_in(7 DOWNTO 0) & abus_data_in(15 DOWNTO 8);
-						sdram_addr <= "001" & abus_address_latched(10 DOWNTO 1);
-						sdram_ba(0) <= abus_address_latched(24);
+						sdram_addr <= "001" & abus_address_latched_write(10 DOWNTO 1);
+						sdram_ba(0) <= abus_address_latched_write(24);
 						sdram_ba(1) <= abus_chipselect_buf(0); --if CS0 is active, it's 0, else it's 1
 						sdram_wait_counter <= to_unsigned(4, 4); -- tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
 					END IF;
 
 				WHEN SDRAM_ABUS_READ_AND_PRECHARGE =>
+					sdram_mode_debug <= X"B";
 					--move on with reading, bus is a Z after idle
 					--data should be latched at 2nd or 3rd clock (cas=2 or cas=3)
 					counter_count_read <= '0';
@@ -940,8 +966,7 @@ BEGIN
 					sdram_wait_counter <= sdram_wait_counter - 1;
 					IF sdram_wait_counter = 1 THEN
 						sdram_datain_latched <= sdram_dq;
-					END IF;
-					IF sdram_wait_counter = 0 THEN
+					ELSIF sdram_wait_counter = 0 THEN
 						sdram_datain_next_latched <= sdram_dq;
 						sdram_mode <= SDRAM_IDLE;
 						sdram_abus_complete <= '1';
@@ -949,6 +974,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_ABUS_WRITE_AND_PRECHARGE =>
+					sdram_mode_debug <= X"C";
 					--move on with writing
 					counter_count_write <= '0';
 					sdram_addr <= (OTHERS => '0');
@@ -967,6 +993,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_AVALON_ACTIVATE =>
+					sdram_mode_debug <= X"D";
 					--while waiting for row to be activated, we choose where to switch to - read or write
 					sdram_addr <= (OTHERS => '0');
 					sdram_ba <= "00";
@@ -991,6 +1018,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_AVALON_READ_AND_PRECHARGE =>
+					sdram_mode_debug <= X"E";
 					--move on with reading, bus is a Z after idle
 					--data should be latched at 2nd or 3rd clock (cas=2 or cas=3)
 					sdram_addr <= (OTHERS => '0');
@@ -1011,6 +1039,7 @@ BEGIN
 					END IF;
 
 				WHEN SDRAM_AVALON_WRITE_AND_PRECHARGE =>
+					sdram_mode_debug <= X"F";
 					--move on with writing
 					sdram_addr <= (OTHERS => '0');
 					sdram_ba <= "00";
@@ -1018,11 +1047,11 @@ BEGIN
 					sdram_we_n <= '1';
 					sdram_dq <= (OTHERS => 'Z');
 					sdram_wait_counter <= sdram_wait_counter - 1;
+					--sdram_mode <= SDRAM_IDLE;
 					IF sdram_wait_counter = 1 THEN
 						avalon_sdram_reset_pending <= '1';
 						avalon_sdram_waitrequest <= '0';
-					END IF;
-					IF sdram_wait_counter = 0 THEN
+					ELSIF sdram_wait_counter = 0 THEN
 						sdram_mode <= SDRAM_IDLE;
 						avalon_sdram_complete <= '1';
 						sdram_dqm <= "11";
@@ -1125,7 +1154,7 @@ BEGIN
 		IF rising_edge(clock) THEN
 			IF sniffer_pending_set = '1' THEN
 				sniffer_pending_flag <= '1';
-				sniffer_pending_block <= abus_address_latched(24 DOWNTO 9);
+				sniffer_pending_block <= abus_address_latched_write(24 DOWNTO 9);
 			ELSIF sniffer_pending_reset = '1' THEN
 				sniffer_pending_flag <= '0';
 			END IF;
@@ -1193,27 +1222,27 @@ BEGIN
 	--sniffer_data_write <= sniffer_data_write_p1 when rising_edge(clock);
 	--sniffer_data_out_p1 <= sniffer_data_out when rising_edge(clock);
 
-	--	sniff_fifo_inst : sniff_fifo PORT MAP (
-	--		clock	 => clock,
-	--		data	 => sniffer_data_in,
-	--		rdreq	 => sniffer_data_ack,
-	--		wrreq	 => sniffer_data_write,
-	--		empty	 => sniffer_fifo_empty,
-	--		full	 => sniffer_fifo_full,
-	--		q	 => sniffer_data_out,
-	--		usedw	 => sniffer_fifo_content_size
-	--	);
+		sniff_fifo_inst : sniff_fifo PORT MAP (
+			clock	 => clock,
+			data	 => sniffer_data_in,
+			rdreq	 => sniffer_data_ack,
+			wrreq	 => sniffer_data_write,
+			empty	 => open,--sniffer_fifo_empty,
+			full	 => sniffer_fifo_full,
+			q	 => sniffer_data_out,
+			usedw	 => sniffer_fifo_content_size
+		);
 	--	--xilinx mode
-	sniff_fifo_inst : sniff_fifo PORT MAP(
-		clk => clock,
-		srst => '0',
-		din => sniffer_data_in,
-		rd_en => sniffer_data_ack,
-		wr_en => sniffer_data_write,
-		empty => sniffer_fifo_empty,
-		full => sniffer_fifo_full,
-		dout => sniffer_data_out,
-		data_count => sniffer_fifo_content_size
-	);
+--	sniff_fifo_inst : sniff_fifo PORT MAP(
+--		clk => clock,
+--		srst => '0',
+--		din => sniffer_data_in,
+--		rd_en => sniffer_data_ack,
+--		wr_en => sniffer_data_write,
+--		empty => sniffer_fifo_empty,
+--		full => sniffer_fifo_full,
+--		dout => sniffer_data_out,
+--		data_count => sniffer_fifo_content_size
+--	);
 
 END ARCHITECTURE rtl; -- of sega_saturn_abus_slave
