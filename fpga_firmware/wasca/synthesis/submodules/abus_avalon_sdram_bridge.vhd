@@ -846,7 +846,7 @@ BEGIN
 						sdram_dqm(0) <= abus_write_buf(1); --it's a write
 						sdram_dqm(1) <= abus_write_buf(0); --it's a write
 						sdram_wait_counter <= to_unsigned(5, 4); -- for writing we use a little longer activate delay, so that the data at the a-bus will become ready
-					ELSIF (avalon_sdram_read_pending = '1' OR avalon_sdram_write_pending = '1') AND avalon_sdram_complete = '0' THEN
+					ELSIF (avalon_sdram_read_pending = '1' OR avalon_sdram_write_pending = '1') AND avalon_sdram_complete = '0' THEN --AND abus_read = '1' THEN
 						sdram_mode <= SDRAM_AVALON_ACTIVATE;
 						--something on avalon, activating!
 						sdram_ras_n <= '0';
@@ -859,7 +859,7 @@ BEGIN
 							sdram_dqm(0) <= NOT avalon_sdram_byteenable(0);
 							sdram_dqm(1) <= NOT avalon_sdram_byteenable(1);
 						END IF;
-					ELSIF sdram_autorefresh_counter(9) = '1' THEN --512 cycles
+					ELSIF sdram_autorefresh_counter(9) = '1' AND abus_read_buf = '1' THEN --512 cycles
 						sdram_mode <= SDRAM_PRECHARGE;
 						--first stage of autorefresh issues "precharge all" command
 						sdram_ras_n <= '0';

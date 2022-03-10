@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>08.03.2022 21:02:13</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1646758933400</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>11.03.2022 1:12:53</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1646946773645</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\wasca\GIT\wasca\fpga_firmware\software\wasca_test9_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\wasca.sopcinfo</SopcDesignFile>
