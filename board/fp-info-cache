@@ -1,393 +1,5188 @@
-91391724022756
-wasca
-2450BM14E0003
-Johanson integrated balun+filter for nRF24
-
 0
-6
-6
-wasca
-CARTRIDGE_EDGE_CONNECTOR2
-
-
-0
-134
-134
-wasca
-CHAMFER_WARNING
-
-
-0
-0
-0
-wasca
-Conn_TE-DDR2-SODIMM-0.6-200P-doublesided
-
-
-0
-202
-200
-wasca
-Crystal_5x3.2mm
-
-
+Battery
+BatteryHolder_Bulgin_BX0036_1xC
+Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
+Bulgin BX0036
 0
 2
 2
-wasca
-DESIGNED_WITH_KICAD_10X05
-
-
-0
-0
-0
-wasca
-DX07S016JA1R1500
-USB Type-C receptacle for USB 2.0 and PD, http://www.krhro.com/uploads/soft/180320/1-1P320120243.pdf
-usb usb-c 2.0 pd
-0
-20
-17
-wasca
-FRAME
-
-
-0
-0
-0
-wasca
-JTAG_Header
-
-
-0
-10
-10
-wasca
-LED-3MM
-LED 3mm round vertical
-LED  3mm round vertical
+Battery
+BatteryHolder_ComfortableElectronic_CH273-2450_1x2450
+Comfortable Electronic CR2450 battery holder, http://www.comf.com.tw/ProductDetail.asp?no=148
+Comfortable Electronic CR2450
 0
 2
 2
-wasca
-LED_0805
-LED 0805 smd package
-LED led 0805 SMD smd SMT smt smdled SMDLED smtled SMTLED
+Battery
+BatteryHolder_Eagle_12BH611-GR
+https://eu.mouser.com/datasheet/2/209/EPD-200766-1274481.pdf
+9V Battery Holder
 0
 2
 2
-wasca
-LED_MEMO
-
-
-0
-0
-0
-wasca
-LOGO_VACHE
-
-
-0
-0
-0
-wasca
-LOGO_VACHE_SILKSCREEN
-
-
-0
-0
-0
-wasca
-LOGO_VACHE_SIM
-
-
-0
-0
-0
-wasca
-LQFP-64_10x10mm_P0.5mm
-64 LEAD LQFP 10x10mm (see MICREL LQFP10x10-64LD-PL-1.pdf)
-QFP 0.5
-0
-64
-64
-wasca
-L_4.2X4.2_LARGE
-
-
+Battery
+BatteryHolder_Keystone_103_1x20mm
+http://www.keyelco.com/product-pdf.cfm?p=719
+Keystone type 103 battery holder
 0
 2
 2
-wasca
-MODULE_ESP32-CAM
-
-
-0
-16
-16
-wasca
-MODULE_ESP32-CAM-HALF
-
-
-0
-8
-8
-wasca
-MODULE_ESP32-DEVKITC-32D
-
-
-0
-38
-38
-wasca
-MicroUSB
-Molex 47642-0001 : Micro USB B connector, mid mount w/ through hole solder tab
-
-0
-9
-6
-wasca
-Multicomp_MC9A22-1034_2x05_P2.54mm_Horizontal
-http://www.farnell.com/cad/360651.pdf
-connector multicomp MC9A MC9A22
-0
-10
-10
-wasca
-NINJA_SW
-Ninja Switch
-pin header
-0
-3
-3
-wasca
-PCB_IF_ANT_2.4G
-PCB trace antenna for 2.4GHz applications (based on TI DN0007 Inverted F antenna reference design)
-
+Battery
+BatteryHolder_Keystone_104_1x23mm
+http://www.keyelco.com/product-pdf.cfm?p=744
+Keystone type 104 battery holder
 0
 2
 2
-wasca
-Pin_Header_Straight_2x02
-Through hole pin header
-pin header
-0
-4
-4
-wasca
-Pin_Header_Straight_2x04
-Through hole straight pin header, 2x04, 2.54mm pitch, double rows
-Through hole pin header THT 2x04 2.54mm double row
-0
-8
-8
-wasca
-Pin_Header_Straight_2x05
-Through hole straight pin header, 2x05, 2.54mm pitch, double rows
-Through hole pin header THT 2x05 2.54mm double row
-0
-10
-10
-wasca
-Pinhead_2x3_SMD
-
-
-0
-6
-6
-wasca
-Pinhead_2x5_SMD
-
-
-0
-10
-10
-wasca
-QFN40_0.5mmPitch_6x6mm
-
-
-0
-49
-41
-wasca
-QFN48_EXP
-
-
-0
-49
-49
-wasca
-QFN56_EXP
-
-
-0
-57
-57
-wasca
-SM0603
-
-
+Battery
+BatteryHolder_Keystone_105_1x2430
+http://www.keyelco.com/product-pdf.cfm?p=745
+Keystone type 105 battery holder
 0
 2
 2
-wasca
-SM0805
-
-
+Battery
+BatteryHolder_Keystone_106_1x20mm
+http://www.keyelco.com/product-pdf.cfm?p=720
+Keystone type 106 battery holder
 0
 2
 2
-wasca
-SMD_SW
-Light Touch Switch, https://www.mouser.jp/datasheet/2/15/SKQG-1155865.pdf
-
+Battery
+BatteryHolder_Keystone_107_1x23mm
+http://www.keyelco.com/product-pdf.cfm?p=746
+Keystone type 107 battery holder
 0
-4
 2
-wasca
-SOT23-5_LARGEPADS
-SOT23-5
-
+2
+Battery
+BatteryHolder_Keystone_500
+Keystone #500, CR1220 battery holder, http://www.keyelco.com/product-pdf.cfm?p=710
+CR1220 battery holder
 0
-5
-5
-wasca
-SSOP28
-SSOP 28 pins
-CMS SSOP SMD
+2
+2
+Battery
+BatteryHolder_Keystone_1042_1x18650
+Battery holder for 18650 cylindrical cells http://www.keyelco.com/product.cfm/product_id/918
+18650 Keystone 1042 Li-ion
 0
-28
-28
-wasca
-SeHa_Saturn
-
-
+2
+2
+Battery
+BatteryHolder_Keystone_1058_1x2032
+http://www.keyelco.com/product-pdf.cfm?p=14028
+Keystone type 1058 coin cell retainer
 0
+2
+2
+Battery
+BatteryHolder_Keystone_1060_1x2032
+http://www.keyelco.com/product-pdf.cfm?p=726
+CR2032 BR2032 BatteryHolder Battery
 0
+2
+2
+Battery
+BatteryHolder_Keystone_2460_1xAA
+https://www.keyelco.com/product-pdf.cfm?p=1025
+AA battery cell holder
 0
-wasca
-SeHa_Saturn_Copper
-
-
+2
+2
+Battery
+BatteryHolder_Keystone_2462_2xAA
+2xAA cell battery holder, Keystone P/N 2462, https://www.keyelco.com/product-pdf.cfm?p=1027
+AA battery cell holder
 0
+2
+2
+Battery
+BatteryHolder_Keystone_2466_1xAAA
+1xAAA Battery Holder, Keystone, Plastic Case, http://www.keyelco.com/product-pdf.cfm?p=1031
+AAA battery holder Keystone
 0
+2
+2
+Battery
+BatteryHolder_Keystone_2468_2xAAA
+2xAAA cell battery holder, Keystone P/N 2468, http://www.keyelco.com/product-pdf.cfm?p=1033
+AAA battery cell holder
 0
-wasca
-SeHa_Saturn_Silk
-
-
+2
+2
+Battery
+BatteryHolder_Keystone_2479_3xAAA
+Keystone Battery Holder, 2479, Battery Type 3xAAA (Script generated with StandardBox.py) (Keystone Battery Holder, 2479, Battery Type 3xAAA)
+Keystone Battery Holder 2479 Battery Type 3xAAA
 0
-0
-0
-wasca
-Segata_Sanshiro
-
-
-0
-0
-0
-wasca
-TEST_PAD
-Test Pad - SMD
-CONN DEV
+2
+2
+Battery
+BatteryHolder_Keystone_2993
+http://www.keyelco.com/product-pdf.cfm?p=776
+Keystone type 2993 negative battery contact
 0
 1
 1
-wasca
-TFP09212B
-TFP09-2-12B-2
+Battery
+BatteryHolder_Keystone_2998_1x6.8mm
+www.keyelco.com/product-pdf.cfm?p=763
+Keystone type 2998 battery holder
+0
+3
+2
+Battery
+BatteryHolder_Keystone_3000_1x12mm
+http://www.keyelco.com/product-pdf.cfm?p=777
+Keystone type 3000 coin cell retainer
+0
+3
+2
+Battery
+BatteryHolder_Keystone_3001_1x12mm
+http://www.keyelco.com/product-pdf.cfm?p=778
+Keystone type 3001 coin cell retainer
+0
+3
+2
+Battery
+BatteryHolder_Keystone_3002_1x2032
+https://www.tme.eu/it/Document/a823211ec201a9e209042d155fe22d2b/KEYS2996.pdf
+BR2016 CR2016 DL2016 BR2020 CL2020 BR2025 CR2025 DL2025 DR2032 CR2032 DL2032
+0
+3
+2
+Battery
+BatteryHolder_Keystone_3008_1x2450
+http://www.keyelco.com/product-pdf.cfm?p=786
+Keystone type 3008 coin cell retainer
+0
+3
+2
+Battery
+BatteryHolder_Keystone_3009_1x2450
+http://www.keyelco.com/product-pdf.cfm?p=787
+Keystone type 3009 coin cell retainer
+0
+3
+2
+Battery
+BatteryHolder_Keystone_3034_1x20mm
+Keystone 3034 SMD battery holder for 2020, 2025 and 2032 coincell batteries. http://www.keyelco.com/product-pdf.cfm?p=798
+Keystone type 3034 coin cell retainer
+0
+3
+2
+Battery
+BatteryHolder_LINX_BAT-HLD-012-SMT
+SMT battery holder for CR1216/1220/1225, https://linxtechnologies.com/wp/wp-content/uploads/bat-hld-012-smt.pdf
+battery holder coin cell cr1216 cr1220 cr1225
+0
+3
+2
+Battery
+BatteryHolder_MPD_BA9VPC_1xPP3
+1xPP3 (9V) battery holder, Memory Protection Devices P/N BA9VPC, http://www.memoryprotectiondevices.com/datasheets/BA9VPC-datasheet.pdf
+PP3 Battery Holder BA9VPC 9V
+0
+2
+2
+Battery
+BatteryHolder_MPD_BC2AAPC_2xAA
+2xAA cell battery holder, Memory Protection Devices P/N BC2AAPC, http://www.memoryprotectiondevices.com/datasheets/BC2AAPC-datasheet.pdf
+AA battery cell holder
+0
+2
+2
+Battery
+BatteryHolder_MPD_BC12AAPC_2xAA
+2xAA cell battery holder, Memory Protection Devices P/N BC12AAPC, http://www.memoryprotectiondevices.com/datasheets/BC12AAPC-datasheet.pdf
+AA battery cell holder
+0
+2
+2
+Battery
+BatteryHolder_MPD_BC2003_1x2032
+http://www.memoryprotectiondevices.com/datasheets/BC-2003-datasheet.pdf
+BC2003 CR2032 2032 Battery Holder
+0
+3
+2
+Battery
+BatteryHolder_MPD_BH-18650-PC2
+18650 Battery Holder (http://www.memoryprotectiondevices.com/datasheets/BK-18650-PC2-datasheet.pdf)
+18650 Battery Holder
+0
+2
+2
+Battery
+BatteryHolder_Seiko_MS621F
+Seiko MS621F, https://www.sii.co.jp/en/me/files/2014/02/file_EXTENDED_PRDCT_SPEC_75_FILE_11.jpg
+Seiko MS621F
+0
+2
+2
+Battery
+BatteryHolder_TruPower_BH-331P_3xAA
+Keystone Battery Holder BH-331P Battery Type 3xAA (Script generated with StandardBox.py) (Keystone Battery Holder BH-331P Battery Type 3xAA)
+Battery Holder BH-331P Battery Type 3xAA
+0
+2
+2
+Battery
+Battery_CR1225
+CR1225 battery
+battery CR1225 coin cell
+0
+0
+0
+Battery
+Battery_Panasonic_CR1025-VSK_Vertical_CircularHoles
+Panasonic CR-1025/VSK battery, https://industrial.panasonic.com/cdbs/www-data/pdf2/AAA4000/AAA4000D140.pdf
+battery CR-1025 coin cell vertical
+0
+2
+2
+Battery
+Battery_Panasonic_CR1220-VCN_Vertical_CircularHoles
+Panasonic CR-1220/VCN battery, https://industrial.panasonic.com/cdbs/www-data/pdf2/AAA4000/AAA4000D140.pdf
+battery CR-1220 coin cell vertical
+0
+2
+2
+Battery
+Battery_Panasonic_CR1632-V1AN_Vertical_CircularHoles
+Panasonic CR-1632-V1AN battery, https://industrial.panasonic.com/cdbs/www-data/pdf2/AAA4000/AAA4000D140.pdf
+battery CR-1632 coin cell vertical
+0
+2
+2
+Battery
+Battery_Panasonic_CR2025-V1AK_Vertical_CircularHoles
+Panasonic CR-2025/V1AK battery, https://industrial.panasonic.com/cdbs/www-data/pdf2/AAA4000/AAA4000D140.pdf
+battery CR-2025 coin cell vertical
+0
+2
+2
+Battery
+Battery_Panasonic_CR2032-VS1N_Vertical_CircularHoles
+Panasonic CR-2032/VS1N battery, https://industrial.panasonic.com/cdbs/www-data/pdf2/AAA4000/AAA4000D140.pdf
+battery CR-2032 coin cell vertical
+0
+2
+2
+Battery
+Battery_Panasonic_CR2354-VCN_Vertical_CircularHoles
+Panasonic CR-2354/VCN battery, https://industrial.panasonic.com/cdbs/www-data/pdf2/AAA4000/AAA4000D140.pdf
+battery CR-2354/VCN coin cell vertical
+0
+2
+2
+Battery
+Battery_Panasonic_CR2450-VAN_Vertical_CircularHoles
+Panasonic CR-2450/VAN battery, https://industrial.panasonic.com/cdbs/www-data/pdf2/AAA4000/AAA4000D140.pdf
+battery CR-2450 coin cell
+0
+2
+2
+Battery
+Battery_Panasonic_CR2477-VCN_Vertical_CircularHoles
+Panasonic CR-2477/VCN battery, https://industrial.panasonic.com/cdbs/www-data/pdf2/AAA4000/AAA4000D140.pdf
+battery CR-2477 coin cell vertical
+0
+2
+2
+Battery
+Battery_Panasonic_CR3032-VCN_Vertical_CircularHoles
+Panasonic CR-3032/VCN battery, https://industrial.panasonic.com/cdbs/www-data/pdf2/AAA4000/AAA4000D140.pdf
+battery CR-3032 coin cell vertical
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_1.00u_PCB
+Cherry MX keyswitch, 1.00u, PCB mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 1.00u PCB
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_1.00u_Plate
+Cherry MX keyswitch, 1.00u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 1.00u plate
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_1.25u_PCB
+Cherry MX keyswitch, 1.25u, PCB mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 1.25u PCB
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_1.25u_Plate
+Cherry MX keyswitch, 1.25u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 1.25u plate
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_1.50u_PCB
+Cherry MX keyswitch, 1.50u, PCB mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 1.50u PCB
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_1.50u_Plate
+Cherry MX keyswitch, 1.50u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 1.50u plate
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_1.75u_PCB
+Cherry MX keyswitch, 1.75u, PCB mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 1.75u PCB
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_1.75u_Plate
+Cherry MX keyswitch, 1.75u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 1.75u plate
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_2.00u_PCB
+Cherry MX keyswitch, 2.00u, PCB mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 2.00u PCB
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_2.00u_Plate
+Cherry MX keyswitch, 2.00u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 2.00u plate
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_2.00u_Vertical_PCB
+Cherry MX keyswitch, 2.00u, vertical, PCB mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 2.00u vertical PCB
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_2.00u_Vertical_Plate
+Cherry MX keyswitch, 2.00u, vertical, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 2.00u vertical plate
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_2.25u_PCB
+Cherry MX keyswitch, 2.25u, PCB mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 2.25u PCB
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_2.25u_Plate
+Cherry MX keyswitch, 2.25u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 2.25u plate
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_2.75u_PCB
+Cherry MX keyswitch, 2.75u, PCB mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 2.75u PCB
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_2.75u_Plate
+Cherry MX keyswitch, 2.75u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 2.75u plate
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_6.25u_PCB
+Cherry MX keyswitch, 6.25u, PCB mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 6.25u PCB
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_6.25u_Plate
+Cherry MX keyswitch, 6.25u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch 6.25u plate
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_ISOEnter_PCB
+Cherry MX keyswitch, ISO Enter, PCB mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch ISO enter PCB
+0
+2
+2
+Button_Switch_Keyboard
+SW_Cherry_MX_ISOEnter_Plate
+Cherry MX keyswitch, ISO Enter, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf
+Cherry MX keyswitch ISO enter plate
+0
+2
+2
+Button_Switch_Keyboard
+SW_Matias_1.00u
+Matias/ALPS keyswitch, 1.00u, http://matias.ca/switches/
+Matias ALPS keyswitch 1.00u
+0
+2
+2
+Button_Switch_Keyboard
+SW_Matias_1.25u
+Matias/ALPS keyswitch, 1.25u, http://matias.ca/switches/
+Matias ALPS keyswitch 1.25u
+0
+2
+2
+Button_Switch_Keyboard
+SW_Matias_1.50u
+Matias/ALPS keyswitch, 1.50u, http://matias.ca/switches/
+Matias ALPS keyswitch 1.50u
+0
+2
+2
+Button_Switch_Keyboard
+SW_Matias_1.75u
+Matias/ALPS keyswitch, 1.75u, http://matias.ca/switches/
+Matias ALPS keyswitch 1.75u
+0
+2
+2
+Button_Switch_Keyboard
+SW_Matias_2.00u
+Matias/ALPS keyswitch, 2.00u, http://matias.ca/switches/
+Matias ALPS keyswitch 2.00u
+0
+2
+2
+Button_Switch_Keyboard
+SW_Matias_2.25u
+Matias/ALPS keyswitch, 2.25u, http://matias.ca/switches/
+Matias ALPS keyswitch 2.25u
+0
+2
+2
+Button_Switch_Keyboard
+SW_Matias_2.75u
+Matias/ALPS keyswitch, 2.75u, http://matias.ca/switches/
+Matias ALPS keyswitch 2.75u
+0
+2
+2
+Button_Switch_Keyboard
+SW_Matias_6.25u
+Matias/ALPS keyswitch, 6.25u, http://matias.ca/switches/
+Matias ALPS keyswitch 6.25u
+0
+2
+2
+Button_Switch_Keyboard
+SW_Matias_ISOEnter
+Matias/ALPS keyswitch, ISO Enter, http://matias.ca/switches/
+Matias ALPS keyswitch ISO enter
+0
+2
+2
+Buzzer_Beeper
+Buzzer_12x9.5RM7.6
+Generic Buzzer, D12mm height 9.5mm with RM7.6mm
+buzzer
+0
+2
+2
+Buzzer_Beeper
+Buzzer_15x7.5RM7.6
+Generic Buzzer, D15mm height 7.5mm with RM7.6mm
+buzzer
+0
+2
+2
+Buzzer_Beeper
+Buzzer_CUI_CPT-9019S-SMT
+https://www.cui.com/product/resource/cpt-9019s-smt.pdf
+buzzer piezo
+0
+2
+2
+Buzzer_Beeper
+Buzzer_D14mm_H7mm_P10mm
+Generic Buzzer, D14mm height 7mm with pitch 10mm
+buzzer
+0
+2
+2
+Buzzer_Beeper
+Buzzer_Mallory_AST1109MLTRQ
+Mallory low-profile piezo buzzer, https://www.mspindy.com/specifications/AST1109MLTRQ.pdf
+buzzer piezo
+0
+2
+2
+Buzzer_Beeper
+Buzzer_Murata_PKMCS0909E4000-R1
+Murata Buzzer http://www.murata.com/en-us/api/pdfdownloadapi?cate=&partno=PKMCS0909E4000-R1
+Murata Buzzer Beeper
+0
+2
+2
+Buzzer_Beeper
+Buzzer_TDK_PS1240P02BT_D12.2mm_H6.5mm
+Buzzer, D12.2mm height 6.5mm, https://product.tdk.com/info/en/catalog/datasheets/piezoelectronic_buzzer_ps_en.pdf
+buzzer
+0
+2
+2
+Buzzer_Beeper
+MagneticBuzzer_CUI_CMT-8504-100-SMT
+magnetic transducer buzzer, 5V, SPL of 100 dB at 10 cm, https://www.cuidevices.com/product/resource/pdf/cmt-8504-100-smt-tr.pdf
+CMT 8504
+0
+4
+4
+Buzzer_Beeper
+MagneticBuzzer_CUI_CST-931RP-A
+CST-931RP-A, http://www.cui.com/product/resource/cst-931rp-a.pdf
+CST-931RP-A
+0
+2
+2
+Buzzer_Beeper
+MagneticBuzzer_Kingstate_KCG0601
+Buzzer, Elektromagnetic Beeper, Summer,
+Kingstate KCG0601 
+0
+2
+2
+Buzzer_Beeper
+MagneticBuzzer_Kobitone_254-EMB84Q-RO
+MagneticBuzzer Kobitone 254-EMB84Q-RO https://www.mouser.es/datasheet/2/209/KT-400385-1171904.pdf
+MagneticBuzzer Kobitone 254-EMB84Q-RO
+0
+3
+3
+Buzzer_Beeper
+MagneticBuzzer_PUI_AT-0927-TT-6-R
+Buzzer Magnetic 9mm AT-0927-TT-6-R, http://www.puiaudio.com/pdf/AT-0927-TT-6-R.pdf
+Buzzer Magnetic 9mm AT-0927-TT-6-R
+0
+2
+2
+Buzzer_Beeper
+MagneticBuzzer_ProSignal_ABI-009-RC
+Buzzer, Elektromagnetic Beeper, Summer, 6V-DC,
+Pro Signal ABI-009-RC 
+0
+2
+2
+Buzzer_Beeper
+MagneticBuzzer_ProSignal_ABI-010-RC
+Buzzer, Elektromagnetic Beeper, Summer, 12V-DC,
+Pro Signal ABI-010-RC 
+0
+2
+2
+Buzzer_Beeper
+MagneticBuzzer_ProSignal_ABT-410-RC
+Buzzer, Elektromagnetic Beeper, Summer, 1,5V-DC,
+Pro Signal ABT-410-RC 
+0
+2
+2
+Buzzer_Beeper
+MagneticBuzzer_ProjectsUnlimited_AI-4228-TWT-R
+Buzzer, Elektromagnetic Beeper, Summer, 3-28V-DC, https://www.kynix.com/uploadfiles/pdf/AI-4228-TWT-R.pdf
+Projects Unlimited AI-4228-TWT-R 
+0
+2
+2
+Buzzer_Beeper
+MagneticBuzzer_StarMicronics_HMB-06_HMB-12
+Buzzer, Elektromagnetic Beeper, Summer,
+Star Micronics HMB-06 HMB-12
+0
+2
+2
+Buzzer_Beeper
+PUIAudio_SMT_0825_S_4_R
+SMD 8540, http://www.puiaudio.com/product-detail.aspx?partnumber=SMT-0825-S-4-R
+SMD 8540
+0
+4
+4
+Buzzer_Beeper
+Speaker_CUI_CMR-1206S-67
+Speaker, 30mW, 300-7000Hz, IP67 face, 12x6x2,25mm, https://www.cuidevices.com/product/resource/cmr-12062s-67.pdf
+speaker CUI
+0
+2
+2
+Calibration_Scale
+Gauge_10mm_Type1_CopperTop
+Gauge, Massstab, 10mm, CopperTop, Type 1,
+Gauge Massstab 10mm CopperTop Type 1
+0
+0
+0
+Calibration_Scale
+Gauge_10mm_Type1_SilkScreenTop
+Gauge, Massstab, 10mm, SilkScreenTop, Type 1,
+Gauge Massstab 10mm SilkScreenTop Type 1
+0
+0
+0
+Calibration_Scale
+Gauge_10mm_Type2_CopperTop
+Gauge, Massstab, 10mm, CopperTop, Type 2,
+Gauge Massstab 10mm CopperTop Type 2
+0
+0
+0
+Calibration_Scale
+Gauge_10mm_Type2_SilkScreenTop
+Gauge, Massstab, 10mm, SilkScreenTop, Type 2,
+Gauge Massstab 10mm SilkScreenTop Type 2
+0
+0
+0
+Calibration_Scale
+Gauge_10mm_Type3_CopperTop
+Gauge, Massstab, 10mm, CopperTop, Type 3,
+Gauge Massstab 10mm CopperTop Type 3
+0
+0
+0
+Calibration_Scale
+Gauge_10mm_Type3_SilkScreenTop
+Gauge, Massstab, 10mm, SilkScreenTop, Type 3,
+Gauge Massstab 10mm SilkScreenTop Type 3
+0
+0
+0
+Calibration_Scale
+Gauge_10mm_Type4_CopperTop
+Gauge, Massstab, 10mm, CopperTop, Type 4,
+Gauge Massstab 10mm CopperTop Type 4
+0
+0
+0
+Calibration_Scale
+Gauge_10mm_Type4_SilkScreenTop
+Gauge, Massstab, 10mm, SilkScreenTop, Type 4,
+Gauge Massstab 10mm SilkScreenTop Type 4
+0
+0
+0
+Calibration_Scale
+Gauge_10mm_Type5_CopperTop
+Gauge, Massstab, 10mm, CopperTop, Type 5,
+Gauge Massstab 10mm CopperTop Type 5
+0
+0
+0
+Calibration_Scale
+Gauge_10mm_Type5_SilkScreenTop
+Gauge, Massstab, 10mm, SilkScreenTop, Type 5,
+Gauge Massstab 10mm SilkScreenTop Type 5
+0
+0
+0
+Calibration_Scale
+Gauge_50mm_Type1_CopperTop
+Gauge, Massstab, 50mm, CopperTop, Type 1,
+Gauge Massstab 50mm CopperTop Type 1
+0
+0
+0
+Calibration_Scale
+Gauge_50mm_Type1_SilkScreenTop
+Gauge, Massstab, 50mm, SilkScreenTop, Type 1,
+Gauge Massstab 50mm SilkScreenTop Type 1
+0
+0
+0
+Calibration_Scale
+Gauge_50mm_Type2_CopperTop
+Gauge, Massstab, 50mm, CopperTop, Type 2,
+Gauge Massstab 50mm CopperTop Type 2
+0
+0
+0
+Calibration_Scale
+Gauge_50mm_Type2_SilkScreenTop
+Gauge, Massstab, 50mm, SilkScreenTop, Type 2,
+Gauge Massstab 50mm SilkScreenTop Type 2
+0
+0
+0
+Calibration_Scale
+Gauge_100mm_Grid_Type1_CopperTop
+Gauge, Massstab, 100mm, Gitter, Grid, CopperTop, Type 1,
+Gauge Massstab 100mm Gitter Grid CopperTop Type 1
+0
+0
+0
+Calibration_Scale
+Gauge_100mm_Type1_CopperTop
+Gauge, Massstab, 100mm, CopperTop, Type 1,
+Gauge Massstab 100mm CopperTop Type 1
+0
+0
+0
+Calibration_Scale
+Gauge_100mm_Type1_SilkScreenTop
+Gauge, Massstab, 100mm, SilkScreenTop, Type 1,
+Gauge Massstab 100mm SilkScreenTop Type 1
+0
+0
+0
+Calibration_Scale
+Gauge_100mm_Type2_CopperTop
+Gauge, Massstab, 100mm, CopperTop, Type 2,
+Gauge Massstab 100mm  CopperTop Type 2
+0
+0
+0
+Calibration_Scale
+Gauge_100mm_Type2_SilkScreenTop
+Gauge, Massstab, 100mm, SilkScreenTop, Type 2,
+Gauge Massstab 100mm SilkScreenTop Type 2
+0
+0
+0
+Capacitor_Tantalum_SMD
+CP_EIA-1608-08_AVX-J
+Tantalum Capacitor SMD AVX-J (1608-08 Metric), IPC_7351 nominal, (Body size from: https://www.vishay.com/docs/48064/_t58_vmn_pt0471_1601.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-1608-08_AVX-J_Pad1.25x1.05mm_HandSolder
+Tantalum Capacitor SMD AVX-J (1608-08 Metric), IPC_7351 nominal, (Body size from: https://www.vishay.com/docs/48064/_t58_vmn_pt0471_1601.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-1608-10_AVX-L
+Tantalum Capacitor SMD AVX-L (1608-10 Metric), IPC_7351 nominal, (Body size from: https://www.vishay.com/docs/48064/_t58_vmn_pt0471_1601.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-1608-10_AVX-L_Pad1.25x1.05mm_HandSolder
+Tantalum Capacitor SMD AVX-L (1608-10 Metric), IPC_7351 nominal, (Body size from: https://www.vishay.com/docs/48064/_t58_vmn_pt0471_1601.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-2012-12_Kemet-R
+Tantalum Capacitor SMD Kemet-R (2012-12 Metric), IPC_7351 nominal, (Body size from: https://www.vishay.com/docs/40182/tmch.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-2012-12_Kemet-R_Pad1.30x1.05mm_HandSolder
+Tantalum Capacitor SMD Kemet-R (2012-12 Metric), IPC_7351 nominal, (Body size from: https://www.vishay.com/docs/40182/tmch.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-2012-15_AVX-P
+Tantalum Capacitor SMD AVX-P (2012-15 Metric), IPC_7351 nominal, (Body size from: https://www.vishay.com/docs/40182/tmch.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-2012-15_AVX-P_Pad1.30x1.05mm_HandSolder
+Tantalum Capacitor SMD AVX-P (2012-15 Metric), IPC_7351 nominal, (Body size from: https://www.vishay.com/docs/40182/tmch.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3216-10_Kemet-I
+Tantalum Capacitor SMD Kemet-I (3216-10 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3216-10_Kemet-I_Pad1.58x1.35mm_HandSolder
+Tantalum Capacitor SMD Kemet-I (3216-10 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3216-12_Kemet-S
+Tantalum Capacitor SMD Kemet-S (3216-12 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3216-12_Kemet-S_Pad1.58x1.35mm_HandSolder
+Tantalum Capacitor SMD Kemet-S (3216-12 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3216-18_Kemet-A
+Tantalum Capacitor SMD Kemet-A (3216-18 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3216-18_Kemet-A_Pad1.58x1.35mm_HandSolder
+Tantalum Capacitor SMD Kemet-A (3216-18 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3528-12_Kemet-T
+Tantalum Capacitor SMD Kemet-T (3528-12 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3528-12_Kemet-T_Pad1.50x2.35mm_HandSolder
+Tantalum Capacitor SMD Kemet-T (3528-12 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3528-15_AVX-H
+Tantalum Capacitor SMD AVX-H (3528-15 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3528-15_AVX-H_Pad1.50x2.35mm_HandSolder
+Tantalum Capacitor SMD AVX-H (3528-15 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3528-21_Kemet-B
+Tantalum Capacitor SMD Kemet-B (3528-21 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-3528-21_Kemet-B_Pad1.50x2.35mm_HandSolder
+Tantalum Capacitor SMD Kemet-B (3528-21 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-6032-15_Kemet-U
+Tantalum Capacitor SMD Kemet-U (6032-15 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-6032-15_Kemet-U_Pad2.25x2.35mm_HandSolder
+Tantalum Capacitor SMD Kemet-U (6032-15 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-6032-20_AVX-F
+Tantalum Capacitor SMD AVX-F (6032-20 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-6032-20_AVX-F_Pad2.25x2.35mm_HandSolder
+Tantalum Capacitor SMD AVX-F (6032-20 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-6032-28_Kemet-C
+Tantalum Capacitor SMD Kemet-C (6032-28 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-6032-28_Kemet-C_Pad2.25x2.35mm_HandSolder
+Tantalum Capacitor SMD Kemet-C (6032-28 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7132-20_AVX-U
+Tantalum Capacitor SMD AVX-U (7132-20 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7132-20_AVX-U_Pad2.72x3.50mm_HandSolder
+Tantalum Capacitor SMD AVX-U (7132-20 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7132-28_AVX-C
+Tantalum Capacitor SMD AVX-C (7132-28 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7132-28_AVX-C_Pad2.72x3.50mm_HandSolder
+Tantalum Capacitor SMD AVX-C (7132-28 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7260-15_AVX-R
+Tantalum Capacitor SMD AVX-R (7260-15 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7260-15_AVX-R_Pad2.68x6.30mm_HandSolder
+Tantalum Capacitor SMD AVX-R (7260-15 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7260-20_AVX-M
+Tantalum Capacitor SMD AVX-M (7260-20 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7260-20_AVX-M_Pad2.68x6.30mm_HandSolder
+Tantalum Capacitor SMD AVX-M (7260-20 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7260-28_AVX-M
+Tantalum Capacitor SMD AVX-M (7260-28 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7260-28_AVX-M_Pad2.68x6.30mm_HandSolder
+Tantalum Capacitor SMD AVX-M (7260-28 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7260-38_AVX-R
+Tantalum Capacitor SMD AVX-R (7260-38 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7260-38_AVX-R_Pad2.68x6.30mm_HandSolder
+Tantalum Capacitor SMD AVX-R (7260-38 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/F72-F75.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-15_Kemet-W
+Tantalum Capacitor SMD Kemet-W (7343-15 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-15_Kemet-W_Pad2.25x2.55mm_HandSolder
+Tantalum Capacitor SMD Kemet-W (7343-15 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-20_Kemet-V
+Tantalum Capacitor SMD Kemet-V (7343-20 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-20_Kemet-V_Pad2.25x2.55mm_HandSolder
+Tantalum Capacitor SMD Kemet-V (7343-20 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-30_AVX-N
+Tantalum Capacitor SMD AVX-N (7343-30 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-30_AVX-N_Pad2.25x2.55mm_HandSolder
+Tantalum Capacitor SMD AVX-N (7343-30 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-31_Kemet-D
+Tantalum Capacitor SMD Kemet-D (7343-31 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-31_Kemet-D_Pad2.25x2.55mm_HandSolder
+Tantalum Capacitor SMD Kemet-D (7343-31 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-40_Kemet-Y
+Tantalum Capacitor SMD Kemet-Y (7343-40 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-40_Kemet-Y_Pad2.25x2.55mm_HandSolder
+Tantalum Capacitor SMD Kemet-Y (7343-40 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-43_Kemet-X
+Tantalum Capacitor SMD Kemet-X (7343-43 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7343-43_Kemet-X_Pad2.25x2.55mm_HandSolder
+Tantalum Capacitor SMD Kemet-X (7343-43 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7360-38_Kemet-E
+Tantalum Capacitor SMD Kemet-E (7360-38 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7360-38_Kemet-E_Pad2.25x4.25mm_HandSolder
+Tantalum Capacitor SMD Kemet-E (7360-38 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7361-38_AVX-V
+Tantalum Capacitor SMD AVX-V (7361-38 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/NOS.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7361-38_AVX-V_Pad2.18x3.30mm_HandSolder
+Tantalum Capacitor SMD AVX-V (7361-38 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/NOS.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7361-438_AVX-U
+Tantalum Capacitor SMD AVX-U (7361-438 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/NOS.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
+Capacitor_Tantalum_SMD
+CP_EIA-7361-438_AVX-U_Pad2.18x3.30mm_HandSolder
+Tantalum Capacitor SMD AVX-U (7361-438 Metric), IPC_7351 nominal, (Body size from: http://datasheets.avx.com/NOS.pdf), generated with kicad-footprint-generator
+capacitor tantalum
+0
+2
+2
 Connector
-0
-13
-13
-wasca
-TQFP44
-
-
-0
-44
-44
-wasca
-TQFP144_ALTERA_HANDSOLDERING
-
-
-0
-145
-145
-wasca
-TSOP-II-54_22.2x10.16mm_P0.8mm
-54-lead TSOP typ II package
-TSOPII TSOP2
-0
-54
-54
-wasca
-TSOP66_JEDEC_DDR_SDRAM
-
-TSOP66 JEDEC DDR SDRAM Opendous
-0
-66
-66
-wasca
-TSOPII54_SDRAM_MT48
-
-TSOPII54 JEDEC SDRAM Opendous
-0
-54
-54
-wasca
-TSOP_II_54
-TSOP II 54
-
-0
-54
-54
-wasca
-TSSOP-48_6.1x12.5mm_Pitch0.5mm
-TSSOP48: plastic thin shrink small outline package; 48 leads; body width 6.1 mm (see NXP SSOP-TSSOP-VSO-REFLOW.pdf and sot362-1_po.pdf)
-SSOP 0.5
-0
-48
-48
-wasca
-Termal_Quad
-
-
+Banana_Jack_1Pin
+Single banana socket, footprint - 6mm drill
+banana socket
 0
 1
 1
-wasca
-WIRE_PAD
-
-
+Connector
+Banana_Jack_2Pin
+Dual banana socket, footprint - 2 x 6mm drills
+banana socket
+0
+2
+2
+Connector
+Banana_Jack_3Pin
+Triple banana socket, footprint - 3 x 6mm drills
+banana socket
+0
+3
+3
+Connector
+CUI_PD-30
+3 pin connector, PD-30, http://www.cui.com/product/resource/pd-30.pdf
+connector 3-pin PD-30 power DIN
+0
+4
+4
+Connector
+CalTest_CT3151
+Right-angle standard banana jack, http://www.caltestelectronics.com/images/attachments/P315100rH_drawing.pdf
+banana jack horizontal
+0
+4
+1
+Connector
+Connector_SFP_and_Cage
+https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=2227302&DocType=Customer+Drawing&DocLang=English
+SFP+ SFP
+0
+40
+21
+Connector
+DTF13-12Px
+http://www.te.com/usa-en/product-DTF13-12PA-G003.html
+DEUTSCH DT header 12 pin 
+0
+12
+12
+Connector
+FanPinHeader_1x03_P2.54mm_Vertical
+3-pin CPU fan Through hole pin header, see http://www.formfactors.org/developer%5Cspecs%5Crev1_2_public.pdf
+pin header 3-pin CPU fan
+0
+3
+3
+Connector
+FanPinHeader_1x04_P2.54mm_Vertical
+4-pin CPU fan Through hole pin header, e.g. for Wieson part number 2366C888-007 Molex 47053-1000, Foxconn HF27040-M1, Tyco 1470947-1 or equivalent, see http://www.formfactors.org/developer%5Cspecs%5Crev1_2_public.pdf
+pin header 4-pin CPU fan
+0
+4
+4
+Connector
+GB042-34S-H10
+http://www.lsmtron.com/pdf/Connector&Antenna_catalog.PDF
+34pin SMD connector 
+0
+34
+34
+Connector
+IHI_B6A-PCB-45_Vertical
+https://lugsdirect.com/PDF_Webprint/B6A-PCB-45-XX(-X).pdf
+connector IHI B6A-PCB-45
+0
+49
+1
+Connector
+JWT_A3963_1x02_P3.96mm_Vertical
+JWT A3963, 3.96mm pitch Pin head connector (http://www.jwt.com.tw/pro_pdf/A3963.pdf)
+connector JWT A3963 pinhead
+0
+2
+2
+Connector
+NS-Tech_Grove_1x04_P2mm_Vertical
+https://statics3.seeedstudio.com/images/opl/datasheet/3470130P1.pdf
+Grove-1x04
+0
+4
+4
+Connector
+SpringContact_Harwin_S1941-46R
+7.25mm SMT Multi-directional Spring Contact (T+R), https://cdn.harwin.com/pdfs/S1941R.pdf
+spring contact emi emc shield
 0
 1
 1
-wasca
-con-usb-USB-A-H
-USB SERIES A HOLE MOUNTED
-USB SERIES A HOLE MOUNTED
+Connector
+Tag-Connect_TC2030-IDC-FP_2x03_P1.27mm_Vertical
+Tag-Connect programming header; http://www.tag-connect.com/Materials/TC2030-IDC.pdf
+tag connect programming header pogo pins
 0
 6
 6
-wasca
-con-usb-USB-MB-S
-USB SERIES MINI-B SURFACE MOUNTED
-USB SERIES MINI-B SURFACE MOUNTED
+Connector
+Tag-Connect_TC2030-IDC-NL_2x03_P1.27mm_Vertical
+Tag-Connect programming header; http://www.tag-connect.com/Materials/TC2030-IDC-NL.pdf
+tag connect programming header pogo pins
 0
-11
-11
-wasca
+6
+6
+Connector
+Tag-Connect_TC2050-IDC-FP_2x05_P1.27mm_Vertical
+Tag-Connect programming header; http://www.tag-connect.com/Materials/TC2050-IDC-430%20Datasheet.pdf
+tag connect programming header pogo pins
+0
+10
+10
+Connector
+Tag-Connect_TC2050-IDC-NL_2x05_P1.27mm_Vertical
+Tag-Connect programming header; http://www.tag-connect.com/Materials/TC2050-IDC-NL%20Datasheet.pdf
+tag connect programming header pogo pins
+0
+10
+10
+Connector
+Tag-Connect_TC2050-IDC-NL_2x05_P1.27mm_Vertical_with_bottom_clip
+Tag-Connect programming header with bottom courtyard for TC2050-NL Clip board ; https://www.tag-connect.com/wp-content/uploads/bsk-pdf-manager/TC2050-IDC-NL_Datasheet_8.pdf https://www.tag-connect.com/wp-content/uploads/bsk-pdf-manager/TC2050-CLIP_Datasheet_25.pdf
+tag connect programming header pogo pins
+0
+10
+10
+Connector
+Tag-Connect_TC2070-IDC-FP_2x07_P1.27mm_Vertical
+Tag-Connect programming header; http://www.tag-connect.com/Materials/TC2070-IDC%20Datasheet.pdf
+tag connect programming header pogo pins
+0
+14
+14
+Connector_AMASS
+AMASS_MR30PW-FB_1x03_P3.50mm_Horizontal
+Connector XT30 Horizontal PCB Female, https://www.tme.eu/en/Document/5e47640ba39fa492dbd4c0f4c8ae7b93/MR30PW%20SPEC.pdf
+RC Connector XT30
+0
+5
+3
+Connector_AMASS
+AMASS_MR30PW-M_1x03_P3.50mm_Horizontal
+Connector XT30 Horizontal PCB Male, https://www.tme.eu/en/Document/5e47640ba39fa492dbd4c0f4c8ae7b93/MR30PW%20SPEC.pdf
+RC Connector XT30
+0
+5
+3
+Connector_AMASS
+AMASS_XT30PW-F_1x02_P2.50mm_Horizontal
+Connector XT30 Horizontal PCB Female, https://www.tme.eu/en/Document/ce4077e36b79046da520ca73227e15de/XT30PW%20SPEC.pdf
+RC Connector XT30
+0
+4
+2
+Connector_AMASS
+AMASS_XT30PW-M_1x02_P2.50mm_Horizontal
+Connector XT30 Horizontal PCB Male, https://www.tme.eu/en/Document/ce4077e36b79046da520ca73227e15de/XT30PW%20SPEC.pdf
+RC Connector XT30
+0
+4
+2
+Connector_AMASS
+AMASS_XT30U-F_1x02_P5.0mm_Vertical
+Connector XT30 Vertical Cable Female, https://www.tme.eu/en/Document/3cbfa5cfa544d79584972dd5234a409e/XT30U%20SPEC.pdf
+RC Connector XT30
+0
+2
+2
+Connector_AMASS
+AMASS_XT30U-M_1x02_P5.0mm_Vertical
+Connector XT30 Vertical Cable Male, https://www.tme.eu/en/Document/3cbfa5cfa544d79584972dd5234a409e/XT30U%20SPEC.pdf
+RC Connector XT30
+0
+2
+2
+Connector_AMASS
+AMASS_XT30UPB-F_1x02_P5.0mm_Vertical
+Connector XT30 Vertical PCB Female, https://www.tme.eu/en/Document/4acc913878197f8c2e30d4b8cdc47230/XT30UPB%20SPEC.pdf
+RC Connector XT30
+0
+2
+2
+Connector_AMASS
+AMASS_XT30UPB-M_1x02_P5.0mm_Vertical
+Connector XT30 Vertical PCB Male, https://www.tme.eu/en/Document/4acc913878197f8c2e30d4b8cdc47230/XT30UPB%20SPEC.pdf
+RC Connector XT30
+0
+2
+2
+Connector_AMASS
+AMASS_XT60-F_1x02_P7.20mm_Vertical
+AMASS female XT60, through hole, vertical, https://www.tme.eu/Document/2d152ced3b7a446066e6c419d84bb460/XT60%20SPEC.pdf
+XT60 female vertical
+0
+2
+2
+Connector_AMASS
+AMASS_XT60-M_1x02_P7.20mm_Vertical
+AMASS female XT60, through hole, vertical, https://www.tme.eu/Document/2d152ced3b7a446066e6c419d84bb460/XT60%20SPEC.pdf
+XT60 female vertical
+0
+2
+2
+Connector_Amphenol
+Amphenol_M8S-03PMMR-SF8001
+M8 Male connector for panel, 90° PCB mount (https://www.amphenolltw.com/2012download/2D%20PDF/03_M%20Series%20Sensor%20Connectors/M8S-XXPMMR-SF8001.pdf)
+three-pin M8
+0
+5
+4
+Connector_BarrelJack
+BarrelJack_CLIFF_FC681465S_SMT_Horizontal
+Surface-mount DC Barrel Jack, https://www.cliffuk.co.uk/products/dcconnectors/FC681465S.pdf
+Power Jack SMT
+0
+4
+3
+Connector_BarrelJack
+BarrelJack_CUI_PJ-036AH-SMT_Horizontal
+Surface-mount DC Barrel Jack, http://www.cui.com/product/resource/pj-036ah-smt.pdf
+Power Jack SMT
+0
+3
+3
+Connector_BarrelJack
+BarrelJack_CUI_PJ-063AH_Horizontal
+Barrel Jack, 2.0mm ID, 5.5mm OD, 24V, 8A, no switch, https://www.cui.com/product/resource/pj-063ah.pdf
+barrel jack cui dc power
+0
+4
+3
+Connector_BarrelJack
+BarrelJack_CUI_PJ-063AH_Horizontal_CircularHoles
+Barrel Jack, 2.0mm ID, 5.5mm OD, 24V, 8A, no switch, https://www.cui.com/product/resource/pj-063ah.pdf
+barrel jack cui dc power
+0
+4
+3
+Connector_BarrelJack
+BarrelJack_CUI_PJ-102AH_Horizontal
+Thin-pin DC Barrel Jack, https://cdn-shop.adafruit.com/datasheets/21mmdcjackDatasheet.pdf
+Power Jack
+0
+3
+3
+Connector_BarrelJack
+BarrelJack_Horizontal
+DC Barrel Jack
+Power Jack
+0
+3
+3
+Connector_BarrelJack
+BarrelJack_Wuerth_6941xx301002
+Wuerth electronics barrel jack connector (5.5mm outher diameter, inner diameter 2.05mm or 2.55mm depending on exact order number), See: http://katalog.we-online.de/em/datasheet/6941xx301002.pdf
+connector barrel jack
+0
+3
+3
+Connector_Card
+CF-Card_3M_N7E50-7516PK-20-WF
+Compact Flash Card connector (https://multimedia.3m.com/mws/media/22365O/3mtm-cf-card-header-compactflashtm-type-i-sm-ts0662.pdf)
+connector cf
+0
+54
+50
+Connector_Card
+SD_Kyocera_145638009211859+
+SD Card Connector, Normal Type, Outer Tail, Without Ejector (https://global.kyocera.com/prdct/electro/product/pdf/5638.pdf)
+sd card smt
+0
+13
+13
+Connector_Card
+SD_Kyocera_145638009511859+
+SD Card Connector, Normal Type, Outer Tail, Spring Eject Type (https://global.kyocera.com/prdct/electro/product/pdf/5638.pdf)
+sd card smt
+0
+13
+13
+Connector_Card
+SD_Kyocera_145638109211859+
+SD Card Connector, Reverse Type, Outer Tail, Without Ejector (https://global.kyocera.com/prdct/electro/product/pdf/5638.pdf)
+sd card smt
+0
+13
+13
+Connector_Card
+SD_Kyocera_145638109511859+
+SD Card Connector, Reverse Type, Outer Tail, Spring Eject Type (https://global.kyocera.com/prdct/electro/product/pdf/5638.pdf)
+sd card smt
+0
+13
+13
+Connector_Card
+SD_TE_2041021
+SD card connector, top mount, SMT (http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F2041021%7FB%7Fpdf%7FEnglish%7FENG_CD_2041021_B_C_2041021_B.pdf%7F2041021-4)
+sd card
+0
+15
+12
+Connector_Card
 microSD_HC_Hirose_DM3AT-SF-PEJM5
 Micro SD, SMD, right-angle, push-pull (https://www.hirose.com/product/en/download_file/key_name/DM3AT-SF-PEJM5/category/Drawing%20(2D)/doc_file_id/44099/?file_category_id=6&item_id=06090031000&is_series=)
 Micro SD
 0
 14
 11
-wasca
-sd_socket
-SD Card socket, 4UCON P/N 19607
-
+Connector_Card
+microSD_HC_Hirose_DM3BT-DSF-PEJS
+Micro SD, SMD, reverse on-board, right-angle, push-pull (https://www.hirose.com/product/en/download_file/key_name/DM3BT-DSF-PEJS/category/Drawing%20(2D)/doc_file_id/44097/?file_category_id=6&item_id=06090029900&is_series=)
+Micro SD
 0
-19
+16
+11
+Connector_Card
+microSD_HC_Hirose_DM3D-SF
+Micro SD, SMD, right-angle, push-pull (https://media.digikey.com/PDF/Data%20Sheets/Hirose%20PDFs/DM3D-SF.pdf)
+Micro SD
+0
+14
+11
+Connector_Card
+microSD_HC_Molex_104031-0811
+1.10mm Pitch microSD Memory Card Connector, Surface Mount, Push-Pull Type, 1.42mm Height, with Detect Switch (https://www.molex.com/pdm_docs/sd/1040310811_sd.pdf)
+microSD SD molex
+0
+14
+11
+Connector_Card
+microSD_HC_Wuerth_693072010801
+http://katalog.we-online.de/em/datasheet/693072010801.pdf
+Micro SD Wuerth Wurth Würth
+0
+12
+9
+Connector_Card
+microSIM_JAE_SF53S006VCBR2000
+https://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ115712.pdf
+microSIM GSM Card
+0
+14
+7
+Connector_Coaxial
+BNC_Amphenol_031-6575_Horizontal
+dual independently isolated BNC plug (https://www.amphenolrf.com/downloads/dl/file/id/2980/product/644/031_6575_customer_drawing.pdf)
+Dual BNC Amphenol Horizontal
+0
+6
+4
+Connector_Coaxial
+BNC_Amphenol_B6252HB-NPP3G-50_Horizontal
+http://www.farnell.com/datasheets/612848.pdf
+BNC Amphenol Horizontal
+0
+4
+2
+Connector_Coaxial
+BNC_PanelMountable_Vertical
+Panel-mountable BNC connector mounted through PCB, vertical
+BNC connector
+0
+2
+2
+Connector_Coaxial
+BNC_TEConnectivity_1478204_Vertical
+BNC female PCB mount 4 pin straight chassis connector http://www.te.com/usa-en/product-1-1478204-0.html
+BNC female PCB mount 4 pin straight chassis connector 
+0
+5
+2
+Connector_Coaxial
+BNC_Win_364A2x95_Horizontal
+Dual front isolated BNC plug (https://www.winconn.com/wp-content/uploads/364A2595.pdf)
+Dual BNC Horizontal Isolated
+0
+6
+3
+Connector_Coaxial
+CoaxialSwitch_Hirose_MS-156C3_Horizontal
+Subminiature Coaxial Switch 1.35mm High, DC to 11GHz
+Switch Coaxial RF
+0
+12
+3
+Connector_Coaxial
+MMCX_Molex_73415-0961_Horizontal_0.8mm-PCB
+Molex MMCX Horizontal Coaxial https://www.molex.com/pdm_docs/sd/734150961_sd.pdf
+Molex MMCX Horizontal Coaxial
+0
+3
+2
+Connector_Coaxial
+MMCX_Molex_73415-0961_Horizontal_1.0mm-PCB
+Molex MMCX Horizontal Coaxial https://www.molex.com/pdm_docs/sd/734150961_sd.pdf
+Molex MMCX Horizontal Coaxial
+0
+3
+2
+Connector_Coaxial
+MMCX_Molex_73415-0961_Horizontal_1.6mm-PCB
+Molex MMCX Horizontal Coaxial https://www.molex.com/pdm_docs/sd/734150961_sd.pdf
+Molex MMCX Horizontal Coaxial
+0
+3
+2
+Connector_Coaxial
+MMCX_Molex_73415-1471_Vertical
+http://www.molex.com/pdm_docs/sd/734151471_sd.pdf
+Molex MMCX Coaxial Connector 50 ohms Female Jack Vertical THT
+0
+5
+2
+Connector_Coaxial
+SMA_Amphenol_901-144_Vertical
+https://www.amphenolrf.com/downloads/dl/file/id/7023/product/3103/901_144_customer_drawing.pdf
+SMA THT Female Jack Vertical
+0
+5
+2
+Connector_Coaxial
+SMA_Amphenol_132134-10_Vertical
+https://www.amphenolrf.com/downloads/dl/file/id/4007/product/2974/132134_10_customer_drawing.pdf
+SMA SMD Female Jack Vertical
+0
+3
+2
+Connector_Coaxial
+SMA_Amphenol_132134-11_Vertical
+https://www.amphenolrf.com/downloads/dl/file/id/3406/product/2975/132134_11_customer_drawing.pdf
+SMA THT Female Jack Vertical ExtendedLegs
+0
+5
+2
+Connector_Coaxial
+SMA_Amphenol_132134-14_Vertical
+https://www.amphenolrf.com/downloads/dl/file/id/1793/product/2976/132134_14_customer_drawing.pdf
+SMA THT Female Jack Vertical ExtendedLegs
+0
+5
+2
+Connector_Coaxial
+SMA_Amphenol_132134-16_Vertical
+https://www.amphenolrf.com/downloads/dl/file/id/1141/product/2978/132134_16_customer_drawing.pdf
+SMA THT Female Jack Vertical ExtendedLegs
+0
+5
+2
+Connector_Coaxial
+SMA_Amphenol_132134_Vertical
+https://www.amphenolrf.com/downloads/dl/file/id/2187/product/2843/132134_customer_drawing.pdf
+SMA THT Female Jack Vertical ExtendedLegs
+0
+5
+2
+Connector_Coaxial
+SMA_Amphenol_132203-12_Horizontal
+https://www.amphenolrf.com/media/downloads/1769/132203-12.pdf
+SMA THT Female Jack Horizontal
+0
+5
+2
+Connector_Coaxial
+SMA_Amphenol_132289_EdgeMount
+http://www.amphenolrf.com/132289.html
+SMA
+0
+5
+2
+Connector_Coaxial
+SMA_Amphenol_132291-12_Vertical
+https://www.amphenolrf.com/downloads/dl/file/id/1688/product/3020/132291_12_customer_drawing.pdf
+SMA THT Female Jack Vertical Bulkhead
+0
+5
+2
+Connector_Coaxial
+SMA_Amphenol_132291_Vertical
+https://www.amphenolrf.com/downloads/dl/file/id/3222/product/2918/132291_customer_drawing.pdf
+SMA THT Female Jack Vertical Bulkhead
+0
+5
+2
+Connector_Coaxial
+SMA_Molex_73251-1153_EdgeMount_Horizontal
+Molex SMA RF Connectors, Edge Mount, (http://www.molex.com/pdm_docs/sd/732511150_sd.pdf)
+sma edge
+0
+11
+2
+Connector_Coaxial
+SMA_Molex_73251-2120_EdgeMount_Horizontal
+Molex SMA RF Connector, Edge Mount, (http://www.molex.com/pdm_docs/sd/732512120_sd.pdf)
+sma edge
+0
+11
+2
+Connector_Coaxial
+SMA_Molex_73251-2200_Horizontal
+https://www.molex.com/webdocs/datasheets/pdf/en-us/0732512200_RF_COAX_CONNECTORS.pdf
+SMA THT Female Jack Horizontal
+0
+5
+2
+Connector_Coaxial
+SMA_Samtec_SMA-J-P-X-ST-EM1_EdgeMount
+Connector SMA, 0Hz to 20GHz, 50Ohm, Edge Mount (http://suddendocs.samtec.com/prints/sma-j-p-x-st-em1-mkt.pdf)
+SMA Straight Samtec Edge Mount
+0
+5
+2
+Connector_Coaxial
+SMA_Wurth_60312002114503_Vertical
+https://www.we-online.de/katalog/datasheet/60312002114503.pdf
+SMA THT Female Jack Vertical ExtendedLegs
+0
+5
+2
+Connector_Coaxial
+SMB_Jack_Vertical
+SMB pcb mounting jack
+SMB Jack  Striaght
+0
+5
+2
+Connector_Coaxial
+U.FL_Hirose_U.FL-R-SMT-1_Vertical
+Hirose U.FL Coaxial https://www.hirose.com/product/en/products/U.FL/U.FL-R-SMT-1%2810%29/
+Hirose U.FL Coaxial
+0
+3
+2
+Connector_Coaxial
+U.FL_Molex_MCRF_73412-0110_Vertical
+Molex Microcoaxial RF Connectors (MCRF), mates Hirose U.FL, (http://www.molex.com/pdm_docs/sd/734120110_sd.pdf)
+mcrf hirose ufl u.fl microcoaxial
+0
+4
+2
+Connector_DIN
+DIN41612_B2_2x8_Female_Vertical_THT
+DIN41612 connector, type B/2, Vertical, 2 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B/2
+0
+16
+16
+Connector_DIN
+DIN41612_B2_2x8_Male_Horizontal_THT
+DIN41612 connector, type B/2, Horizontal, 2 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B/2
+0
+16
+16
+Connector_DIN
+DIN41612_B2_2x16_Female_Vertical_THT
+DIN41612 connector, type B/2, Vertical, 2 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B/2
+0
+32
+32
+Connector_DIN
+DIN41612_B2_2x16_Male_Horizontal_THT
+DIN41612 connector, type B/2, Horizontal, 2 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B/2
+0
+32
+32
+Connector_DIN
+DIN41612_B3_2x5_Female_Vertical_THT
+DIN41612 connector, type B/3, Vertical, 2 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B/3
+0
+10
+10
+Connector_DIN
+DIN41612_B3_2x5_Male_Horizontal_THT
+DIN41612 connector, type B/3, Horizontal, 2 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B/3
+0
+10
+10
+Connector_DIN
+DIN41612_B3_2x10_Female_Vertical_THT
+DIN41612 connector, type B/3, Vertical, 2 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B/3
+0
+20
+20
+Connector_DIN
+DIN41612_B3_2x10_Male_Horizontal_THT
+DIN41612 connector, type B/3, Horizontal, 2 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B/3
+0
+20
+20
+Connector_DIN
+DIN41612_B_1x32_Female_Vertical_THT
+DIN41612 connector, type B, Vertical, 2 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B
+0
+32
+32
+Connector_DIN
+DIN41612_B_1x32_Male_Horizontal_THT
+DIN41612 connector, type B, Horizontal, 2 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B
+0
+32
+32
+Connector_DIN
+DIN41612_B_2x16_Female_Vertical_THT
+DIN41612 connector, type B, Vertical, 2 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B
+0
+32
+32
+Connector_DIN
+DIN41612_B_2x16_Male_Horizontal_THT
+DIN41612 connector, type B, Horizontal, 2 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B
+0
+32
+32
+Connector_DIN
+DIN41612_B_2x32_Female_Vertical_THT
+DIN41612 connector, type B, Vertical, 2 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B
+0
+64
+64
+Connector_DIN
+DIN41612_B_2x32_Male_Horizontal_THT
+DIN41612 connector, type B, Horizontal, 2 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 B
+0
+64
+64
+Connector_DIN
+DIN41612_C2_2x16_Female_Vertical_THT
+DIN41612 connector, type C/2, Vertical, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C/2
+0
+32
+32
+Connector_DIN
+DIN41612_C2_2x16_Male_Horizontal_THT
+DIN41612 connector, type C/2, Horizontal, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C/2
+0
+32
+32
+Connector_DIN
+DIN41612_C2_3x16_Female_Vertical_THT
+DIN41612 connector, type C/2, Vertical, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C/2
+0
+48
+48
+Connector_DIN
+DIN41612_C2_3x16_Male_Horizontal_THT
+DIN41612 connector, type C/2, Horizontal, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C/2
+0
+48
+48
+Connector_DIN
+DIN41612_C3_2x10_Female_Vertical_THT
+DIN41612 connector, type C/3, Vertical, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C/3
+0
+20
+20
+Connector_DIN
+DIN41612_C3_2x10_Male_Horizontal_THT
+DIN41612 connector, type C/3, Horizontal, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C/3
+0
+20
+20
+Connector_DIN
+DIN41612_C3_3x10_Female_Vertical_THT
+DIN41612 connector, type C/3, Vertical, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C/3
+0
+30
+30
+Connector_DIN
+DIN41612_C3_3x10_Male_Horizontal_THT
+DIN41612 connector, type C/3, Horizontal, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C/3
+0
+30
+30
+Connector_DIN
+DIN41612_C_1x32_Female_Vertical_THT
+DIN41612 connector, type C, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C
+0
+32
+32
+Connector_DIN
+DIN41612_C_1x32_Male_Horizontal_THT
+DIN41612 connector, type C, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C
+0
+32
+32
+Connector_DIN
+DIN41612_C_2x16_Female_Vertical_THT
+DIN41612 connector, type C, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C
+0
+32
+32
+Connector_DIN
+DIN41612_C_2x16_Male_Horizontal_THT
+DIN41612 connector, type C, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C
+0
+32
+32
+Connector_DIN
+DIN41612_C_2x32_Female_Vertical_THT
+DIN41612 connector, type C, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C
+0
+64
+64
+Connector_DIN
+DIN41612_C_2x32_Male_Horizontal_THT
+DIN41612 connector, type C, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C
+0
+64
+64
+Connector_DIN
+DIN41612_C_3x16_Female_Vertical_THT
+DIN41612 connector, type C, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C
+0
+48
+48
+Connector_DIN
+DIN41612_C_3x16_Male_Horizontal_THT
+DIN41612 connector, type C, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C
+0
+48
+48
+Connector_DIN
+DIN41612_C_3x32_Female_Vertical_THT
+DIN41612 connector, type C, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C
+0
+96
+96
+Connector_DIN
+DIN41612_C_3x32_Male_Horizontal_THT
+DIN41612 connector, type C, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 C
+0
+96
+96
+Connector_DIN
+DIN41612_D_2x8_Female_Vertical_THT
+DIN41612 connector, type D, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 D
+0
+16
+16
+Connector_DIN
+DIN41612_D_2x8_Male_Horizontal_THT
+DIN41612 connector, type D, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 D
+0
+16
+16
+Connector_DIN
+DIN41612_D_2x16_Female_Vertical_THT
+DIN41612 connector, type D, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 D
+0
+32
+32
+Connector_DIN
+DIN41612_D_2x16_Male_Horizontal_THT
+DIN41612 connector, type D, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 D
+0
+32
+32
+Connector_DIN
+DIN41612_E_2x16_Female_Vertical_THT
+DIN41612 connector, type E, Vertical, 5 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 E
+0
+32
+32
+Connector_DIN
+DIN41612_E_2x16_Male_Horizontal_THT
+DIN41612 connector, type E, Horizontal, 5 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 E
+0
+32
+32
+Connector_DIN
+DIN41612_E_2x16_RowsAC_Female_Vertical_THT
+DIN41612 connector, type E, Vertical, 5 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 E
+0
+32
+32
+Connector_DIN
+DIN41612_E_2x16_RowsAC_Male_Horizontal_THT
+DIN41612 connector, type E, Horizontal, 5 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 E
+0
+32
+32
+Connector_DIN
+DIN41612_E_3x16_Female_Vertical_THT
+DIN41612 connector, type E, Vertical, 5 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 E
+0
+48
+48
+Connector_DIN
+DIN41612_E_3x16_Male_Horizontal_THT
+DIN41612 connector, type E, Horizontal, 5 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 E
+0
+48
+48
+Connector_DIN
+DIN41612_F_2x16_Female_Vertical_THT
+DIN41612 connector, type F, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 F
+0
+32
+32
+Connector_DIN
+DIN41612_F_2x16_Male_Horizontal_THT
+DIN41612 connector, type F, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 F
+0
+32
+32
+Connector_DIN
+DIN41612_F_2x16_RowsZD_Female_Vertical_THT
+DIN41612 connector, type F, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 F
+0
+32
+32
+Connector_DIN
+DIN41612_F_2x16_RowsZD_Male_Horizontal_THT
+DIN41612 connector, type F, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 F
+0
+32
+32
+Connector_DIN
+DIN41612_F_3x16_Female_Vertical_THT
+DIN41612 connector, type F, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 F
+0
+48
+48
+Connector_DIN
+DIN41612_F_3x16_Male_Horizontal_THT
+DIN41612 connector, type F, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 F
+0
+48
+48
+Connector_DIN
+DIN41612_Q2_2x16_Male_Horizontal_THT
+DIN41612 connector, type Q/2, Horizontal, 2 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 Q/2
+0
+32
+32
+Connector_DIN
+DIN41612_Q2_2x16_Male_Vertical_THT
+DIN41612 connector, type Q/2, Vertical, 2 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 Q/2
+0
+32
+32
+Connector_DIN
+DIN41612_Q3_2x10_Male_Horizontal_THT
+DIN41612 connector, type Q/3, Horizontal, 2 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 Q/3
+0
+20
+20
+Connector_DIN
+DIN41612_Q3_2x10_Male_Vertical_THT
+DIN41612 connector, type Q/3, Vertical, 2 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 Q/3
+0
+20
+20
+Connector_DIN
+DIN41612_Q_2x32_Male_Horizontal_THT
+DIN41612 connector, type Q, Horizontal, 2 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 Q
+0
+64
+64
+Connector_DIN
+DIN41612_Q_2x32_Male_Vertical_THT
+DIN41612 connector, type Q, Vertical, 2 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 Q
+0
+64
+64
+Connector_DIN
+DIN41612_R2_2x16_Male_Horizontal_THT
+DIN41612 connector, type R/2, Horizontal, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R/2
+0
+32
+32
+Connector_DIN
+DIN41612_R2_2x16_Male_Vertical_THT
+DIN41612 connector, type R/2, Vertical, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R/2
+0
+32
+32
+Connector_DIN
+DIN41612_R2_3x16_Male_Horizontal_THT
+DIN41612 connector, type R/2, Horizontal, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R/2
+0
+48
+48
+Connector_DIN
+DIN41612_R2_3x16_Male_Vertical_THT
+DIN41612 connector, type R/2, Vertical, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R/2
+0
+48
+48
+Connector_DIN
+DIN41612_R3_2x10_Male_Horizontal_THT
+DIN41612 connector, type R/3, Horizontal, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R/3
+0
+20
+20
+Connector_DIN
+DIN41612_R3_2x10_Male_Vertical_THT
+DIN41612 connector, type R/3, Vertical, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R/3
+0
+20
+20
+Connector_DIN
+DIN41612_R3_3x10_Male_Horizontal_THT
+DIN41612 connector, type R/3, Horizontal, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R/3
+0
+30
+30
+Connector_DIN
+DIN41612_R3_3x10_Male_Vertical_THT
+DIN41612 connector, type R/3, Vertical, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R/3
+0
+30
+30
+Connector_DIN
+DIN41612_R_1x32_Male_Horizontal_THT
+DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R
+0
+32
+32
+Connector_DIN
+DIN41612_R_1x32_Male_Vertical_THT
+DIN41612 connector, type R, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R
+0
+32
+32
+Connector_DIN
+DIN41612_R_2x16_Male_Horizontal_THT
+DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R
+0
+32
+32
+Connector_DIN
+DIN41612_R_2x16_Male_Vertical_THT
+DIN41612 connector, type R, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R
+0
+32
+32
+Connector_DIN
+DIN41612_R_2x32_Male_Horizontal_THT
+DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R
+0
+64
+64
+Connector_DIN
+DIN41612_R_2x32_Male_Vertical_THT
+DIN41612 connector, type R, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R
+0
+64
+64
+Connector_DIN
+DIN41612_R_3x16_Male_Horizontal_THT
+DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R
+0
+48
+48
+Connector_DIN
+DIN41612_R_3x16_Male_Vertical_THT
+DIN41612 connector, type R, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R
+0
+48
+48
+Connector_DIN
+DIN41612_R_3x32_Male_Horizontal_THT
+DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R
+0
+96
+96
+Connector_DIN
+DIN41612_R_3x32_Male_Vertical_THT
+DIN41612 connector, type R, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
+DIN 41612 IEC 60603 R
+0
+96
+96
+Connector_HDMI
+HDMI_A_Contact_Technology_HDMI-19APL2_Horizontal
+HDMI Contact Technology Type A http://www.contactswitch.com/en/download.aspx?id=1449
+HDMI Contact Technology Type A
+0
+23
+20
+Connector_HDMI
+HDMI_A_Kycon_KDMIX-SL1-NS-WS-B15_VerticalRightAngle
+HDMI, Type A, Kycon KDMIX-SL1-NS-WS-B15, Vertical Right Angle, http://www.kycon.com/Pub_Eng_Draw/KDMIX-SL1-NS-WS-B15.pdf
+hdmi type a
+0
+23
+20
+Connector_HDMI
+HDMI_Micro-D_Molex_46765-0x01
+HDMI, Micro, Type D, SMD, 0.4mm pitch, 19 ckt, right angle (http://www.molex.com/pdm_docs/sd/467651301_sd.pdf)
+hdmi micro type d right angle smd
+0
+23
+20
+Connector_HDMI
+HDMI_Micro-D_Molex_46765-1x01
+HDMI, Micro, Type D, THT, 0.4mm pitch, 19 ckt, right angle (http://www.molex.com/pdm_docs/sd/467651301_sd.pdf)
+hdmi micro type d right angle tht
+0
+23
+20
+Connector_HDMI
+HDMI_Micro-D_Molex_46765-2x0x
+HDMI, Micro, Type D, THT/SMD hybrid, 0.4mm pitch, 19 ckt, right angle (http://www.molex.com/pdm_docs/sd/467651301_sd.pdf)
+hdmi micro type d right angle tht smd hybrid 
+0
+23
+20
+Connector_Hirose
+Hirose_BM24_BM24-40DP-2-0.35V_2x20_P0.35mm_PowerPin2_Vertical
+Hirose BM24 series connector, BM24-40DP/2-0.35V (https://www.hirose.com/product/en/download_file/key_name/BM24/category/Catalog/doc_file_id/47680/?file_category_id=4&item_id=50&is_series=1)
+connector Hirose  BM24 40pin header
+0
+44
+42
+Connector_Hirose
+Hirose_BM24_BM24-40DS-2-0.35V_2x20_P0.35mm_PowerPin2_Vertical
+Hirose BM24 series connector, BM24-40DS/2-0.35V (https://www.hirose.com/product/en/download_file/key_name/BM24/category/Catalog/doc_file_id/47680/?file_category_id=4&item_id=50&is_series=1)
+connector Hirose 40pin receptacle vertical
+0
+42
+42
+Connector_Hirose
+Hirose_DF3EA-02P-2H_1x02-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-02P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+4
+3
+Connector_Hirose
+Hirose_DF3EA-03P-2H_1x03-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-03P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+5
+4
+Connector_Hirose
+Hirose_DF3EA-04P-2H_1x04-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-04P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+6
+5
+Connector_Hirose
+Hirose_DF3EA-05P-2H_1x05-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-05P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+7
+6
+Connector_Hirose
+Hirose_DF3EA-06P-2H_1x06-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-06P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+8
+7
+Connector_Hirose
+Hirose_DF3EA-07P-2H_1x07-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-07P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+9
+8
+Connector_Hirose
+Hirose_DF3EA-08P-2H_1x08-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-08P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+10
+9
+Connector_Hirose
+Hirose_DF3EA-09P-2H_1x09-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-09P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+11
+10
+Connector_Hirose
+Hirose_DF3EA-10P-2H_1x10-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-10P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+12
+11
+Connector_Hirose
+Hirose_DF3EA-11P-2H_1x11-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-11P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+13
+12
+Connector_Hirose
+Hirose_DF3EA-12P-2H_1x12-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-12P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+14
+13
+Connector_Hirose
+Hirose_DF3EA-13P-2H_1x13-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-13P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+15
+14
+Connector_Hirose
+Hirose_DF3EA-14P-2H_1x14-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-14P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+16
+15
+Connector_Hirose
+Hirose_DF3EA-15P-2H_1x15-1MP_P2.00mm_Horizontal
+Hirose  series connector, DF3EA-15P-2H (https://www.hirose.com/product/document?clcode=CL0543-0332-0-51&productname=DF3EA-5P-2H(51)&series=DF3&documenttype=2DDrawing&lang=en&documentid=0001163317), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
 17
+16
+Connector_Hirose
+Hirose_DF11-4DP-2DSA_2x02_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-4DP-2DSA, 2 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+4
+4
+Connector_Hirose
+Hirose_DF11-6DP-2DSA_2x03_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-6DP-2DSA, 3 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+6
+6
+Connector_Hirose
+Hirose_DF11-8DP-2DSA_2x04_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-8DP-2DSA, 4 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+8
+8
+Connector_Hirose
+Hirose_DF11-10DP-2DSA_2x05_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-10DP-2DSA, 5 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+10
+10
+Connector_Hirose
+Hirose_DF11-12DP-2DSA_2x06_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-12DP-2DSA, 6 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+12
+12
+Connector_Hirose
+Hirose_DF11-14DP-2DSA_2x07_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-14DP-2DSA, 7 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+14
+14
+Connector_Hirose
+Hirose_DF11-16DP-2DSA_2x08_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-16DP-2DSA, 8 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+16
+16
+Connector_Hirose
+Hirose_DF11-18DP-2DSA_2x09_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-18DP-2DSA, 9 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+18
+18
+Connector_Hirose
+Hirose_DF11-20DP-2DSA_2x10_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-20DP-2DSA, 10 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+20
+20
+Connector_Hirose
+Hirose_DF11-22DP-2DSA_2x11_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-22DP-2DSA, 11 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+22
+22
+Connector_Hirose
+Hirose_DF11-24DP-2DSA_2x12_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-24DP-2DSA, 12 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+24
+24
+Connector_Hirose
+Hirose_DF11-26DP-2DSA_2x13_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-26DP-2DSA, 13 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+26
+26
+Connector_Hirose
+Hirose_DF11-28DP-2DSA_2x14_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-28DP-2DSA, 14 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+28
+28
+Connector_Hirose
+Hirose_DF11-30DP-2DSA_2x15_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-30DP-2DSA, 15 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+30
+30
+Connector_Hirose
+Hirose_DF11-32DP-2DSA_2x16_P2.00mm_Vertical
+Hirose DF11 through hole, DF11-32DP-2DSA, 16 Pins per row (https://www.hirose.com/product/document?clcode=&productname=&series=DF11&documenttype=Catalog&lang=en&documentid=D31688_en), generated with kicad-footprint-generator
+connector Hirose DF11 vertical
+0
+32
+32
+Connector_Hirose
+Hirose_DF12_DF12C3.0-10DS-0.5V_2x05_P0.50mm_Vertical
+Hirose DF12C SMD, DF12C3.0-10DS-0.5V, 10 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0694-9-81&productname=DF12C(3.0)-50DS-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000994748), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+20
+10
+Connector_Hirose
+Hirose_DF12_DF12C3.0-14DS-0.5V_2x07_P0.50mm_Vertical
+Hirose DF12C SMD, DF12C3.0-14DS-0.5V, 14 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0694-9-81&productname=DF12C(3.0)-50DS-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000994748), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+28
+14
+Connector_Hirose
+Hirose_DF12_DF12C3.0-20DS-0.5V_2x10_P0.50mm_Vertical
+Hirose DF12C SMD, DF12C3.0-20DS-0.5V, 20 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0694-9-81&productname=DF12C(3.0)-50DS-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000994748), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+40
+20
+Connector_Hirose
+Hirose_DF12_DF12C3.0-30DS-0.5V_2x15_P0.50mm_Vertical
+Hirose DF12C SMD, DF12C3.0-30DS-0.5V, 30 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0694-9-81&productname=DF12C(3.0)-50DS-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000994748), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+60
+30
+Connector_Hirose
+Hirose_DF12_DF12C3.0-32DS-0.5V_2x16_P0.50mm_Vertical
+Hirose DF12C SMD, DF12C3.0-32DS-0.5V, 32 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0694-9-81&productname=DF12C(3.0)-50DS-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000994748), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+64
+32
+Connector_Hirose
+Hirose_DF12_DF12C3.0-36DS-0.5V_2x18_P0.50mm_Vertical
+Hirose DF12C SMD, DF12C3.0-36DS-0.5V, 36 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0694-9-81&productname=DF12C(3.0)-50DS-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000994748), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+72
+36
+Connector_Hirose
+Hirose_DF12_DF12C3.0-40DS-0.5V_2x20_P0.50mm_Vertical
+Hirose DF12C SMD, DF12C3.0-40DS-0.5V, 40 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0694-9-81&productname=DF12C(3.0)-50DS-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000994748), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+80
+40
+Connector_Hirose
+Hirose_DF12_DF12C3.0-50DS-0.5V_2x25_P0.50mm_Vertical
+Hirose DF12C SMD, DF12C3.0-50DS-0.5V, 50 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0694-9-81&productname=DF12C(3.0)-50DS-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000994748), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+100
+50
+Connector_Hirose
+Hirose_DF12_DF12C3.0-60DS-0.5V_2x30_P0.50mm_Vertical
+Hirose DF12C SMD, DF12C3.0-60DS-0.5V, 60 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0694-9-81&productname=DF12C(3.0)-50DS-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000994748), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+120
+60
+Connector_Hirose
+Hirose_DF12_DF12E3.0-10DP-0.5V_2x05_P0.50mm_Vertical
+Hirose DF12E SMD, DF12E3.0-10DP-0.5V, 10 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0834-6-81&productname=DF12E(3.0)-50DP-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000992393), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+20
+10
+Connector_Hirose
+Hirose_DF12_DF12E3.0-14DP-0.5V_2x07_P0.50mm_Vertical
+Hirose DF12E SMD, DF12E3.0-14DP-0.5V, 14 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0834-6-81&productname=DF12E(3.0)-50DP-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000992393), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+28
+14
+Connector_Hirose
+Hirose_DF12_DF12E3.0-20DP-0.5V_2x10_P0.50mm_Vertical
+Hirose DF12E SMD, DF12E3.0-20DP-0.5V, 20 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0834-6-81&productname=DF12E(3.0)-50DP-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000992393), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+40
+20
+Connector_Hirose
+Hirose_DF12_DF12E3.0-30DP-0.5V_2x15_P0.50mm_Vertical
+Hirose DF12E SMD, DF12E3.0-30DP-0.5V, 30 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0834-6-81&productname=DF12E(3.0)-50DP-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000992393), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+60
+30
+Connector_Hirose
+Hirose_DF12_DF12E3.0-32DP-0.5V_2x16_P0.50mm_Vertical
+Hirose DF12E SMD, DF12E3.0-32DP-0.5V, 32 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0834-6-81&productname=DF12E(3.0)-50DP-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000992393), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+64
+32
+Connector_Hirose
+Hirose_DF12_DF12E3.0-36DP-0.5V_2x18_P0.50mm_Vertical
+Hirose DF12E SMD, DF12E3.0-36DP-0.5V, 36 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0834-6-81&productname=DF12E(3.0)-50DP-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000992393), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+72
+36
+Connector_Hirose
+Hirose_DF12_DF12E3.0-40DP-0.5V_2x20_P0.50mm_Vertical
+Hirose DF12E SMD, DF12E3.0-40DP-0.5V, 40 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0834-6-81&productname=DF12E(3.0)-50DP-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000992393), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+80
+40
+Connector_Hirose
+Hirose_DF12_DF12E3.0-50DP-0.5V_2x25_P0.50mm_Vertical
+Hirose DF12E SMD, DF12E3.0-50DP-0.5V, 50 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0834-6-81&productname=DF12E(3.0)-50DP-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000992393), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+100
+50
+Connector_Hirose
+Hirose_DF12_DF12E3.0-60DP-0.5V_2x30_P0.50mm_Vertical
+Hirose DF12E SMD, DF12E3.0-60DP-0.5V, 60 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0834-6-81&productname=DF12E(3.0)-50DP-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000992393), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+120
+60
+Connector_Hirose
+Hirose_DF12_DF12E3.0-80DP-0.5V_2x40_P0.50mm_Vertical
+Hirose DF12E SMD, DF12E3.0-80DP-0.5V, 80 Pins per row (https://www.hirose.com/product/document?clcode=CL0537-0834-6-81&productname=DF12E(3.0)-50DP-0.5V(81)&series=DF12&documenttype=2DDrawing&lang=en&documentid=0000992393), generated with kicad-footprint-generator
+connector Hirose DF12 vertical
+0
+160
+80
+Connector_Hirose
+Hirose_DF13-02P-1.25DSA_1x02_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-02P-1.25DSA, 2 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+2
+2
+Connector_Hirose
+Hirose_DF13-02P-1.25DS_1x02_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-02P-1.25DS, 2 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+2
+2
+Connector_Hirose
+Hirose_DF13-03P-1.25DSA_1x03_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-03P-1.25DSA, 3 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+3
+3
+Connector_Hirose
+Hirose_DF13-03P-1.25DS_1x03_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-03P-1.25DS, 3 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+3
+3
+Connector_Hirose
+Hirose_DF13-04P-1.25DSA_1x04_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-04P-1.25DSA, 4 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+4
+4
+Connector_Hirose
+Hirose_DF13-04P-1.25DS_1x04_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-04P-1.25DS, 4 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+4
+4
+Connector_Hirose
+Hirose_DF13-05P-1.25DSA_1x05_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-05P-1.25DSA, 5 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+5
+5
+Connector_Hirose
+Hirose_DF13-05P-1.25DS_1x05_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-05P-1.25DS, 5 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+5
+5
+Connector_Hirose
+Hirose_DF13-06P-1.25DSA_1x06_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-06P-1.25DSA, 6 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+6
+6
+Connector_Hirose
+Hirose_DF13-06P-1.25DS_1x06_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-06P-1.25DS, 6 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+6
+6
+Connector_Hirose
+Hirose_DF13-07P-1.25DSA_1x07_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-07P-1.25DSA, 7 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+7
+7
+Connector_Hirose
+Hirose_DF13-07P-1.25DS_1x07_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-07P-1.25DS, 7 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+7
+7
+Connector_Hirose
+Hirose_DF13-08P-1.25DSA_1x08_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-08P-1.25DSA, 8 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+8
+8
+Connector_Hirose
+Hirose_DF13-08P-1.25DS_1x08_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-08P-1.25DS, 8 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+8
+8
+Connector_Hirose
+Hirose_DF13-09P-1.25DSA_1x09_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-09P-1.25DSA, 9 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+9
+9
+Connector_Hirose
+Hirose_DF13-09P-1.25DS_1x09_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-09P-1.25DS, 9 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+9
+9
+Connector_Hirose
+Hirose_DF13-10P-1.25DSA_1x10_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-10P-1.25DSA, 10 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+10
+10
+Connector_Hirose
+Hirose_DF13-10P-1.25DS_1x10_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-10P-1.25DS, 10 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+10
+10
+Connector_Hirose
+Hirose_DF13-11P-1.25DSA_1x11_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-11P-1.25DSA, 11 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+11
+11
+Connector_Hirose
+Hirose_DF13-11P-1.25DS_1x11_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-11P-1.25DS, 11 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+11
+11
+Connector_Hirose
+Hirose_DF13-12P-1.25DSA_1x12_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-12P-1.25DSA, 12 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+12
+12
+Connector_Hirose
+Hirose_DF13-12P-1.25DS_1x12_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-12P-1.25DS, 12 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+12
+12
+Connector_Hirose
+Hirose_DF13-13P-1.25DSA_1x13_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-13P-1.25DSA, 13 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+13
+13
+Connector_Hirose
+Hirose_DF13-14P-1.25DSA_1x14_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-14P-1.25DSA, 14 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+14
+14
+Connector_Hirose
+Hirose_DF13-14P-1.25DS_1x14_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-14P-1.25DS, 14 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+14
+14
+Connector_Hirose
+Hirose_DF13-15P-1.25DSA_1x15_P1.25mm_Vertical
+Hirose DF13 through hole, DF13-15P-1.25DSA, 15 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-2P-1.25DSA%2850%29/), generated with kicad-footprint-generator
+connector Hirose DF13 vertical
+0
+15
+15
+Connector_Hirose
+Hirose_DF13-15P-1.25DS_1x15_P1.25mm_Horizontal
+Hirose DF13 through hole, DF13-15P-1.25DS, 15 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13-4P-1.25DS%2820%29/), generated with kicad-footprint-generator
+connector Hirose DF13 horizontal
+0
+15
+15
+Connector_Hirose
+Hirose_DF13C_CL535-0402-2-51_1x02-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0402-2-51, 2 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+4
+3
+Connector_Hirose
+Hirose_DF13C_CL535-0403-5-51_1x03-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0403-5-51, 3 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+5
+4
+Connector_Hirose
+Hirose_DF13C_CL535-0404-8-51_1x04-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0404-8-51, 4 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+6
+5
+Connector_Hirose
+Hirose_DF13C_CL535-0405-0-51_1x05-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0405-0-51, 5 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+7
+6
+Connector_Hirose
+Hirose_DF13C_CL535-0406-3-51_1x06-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0406-3-51, 6 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+8
+7
+Connector_Hirose
+Hirose_DF13C_CL535-0407-6-51_1x07-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0407-6-51, 7 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+9
+8
+Connector_Hirose
+Hirose_DF13C_CL535-0408-9-51_1x08-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0408-9-51, 8 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+10
+9
+Connector_Hirose
+Hirose_DF13C_CL535-0409-1-51_1x09-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0409-1-51, 9 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+11
+10
+Connector_Hirose
+Hirose_DF13C_CL535-0410-4-51_1x10-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0410-4-51, 10 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+12
+11
+Connector_Hirose
+Hirose_DF13C_CL535-0411-3-51_1x11-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0411-3-51, 11 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+13
+12
+Connector_Hirose
+Hirose_DF13C_CL535-0412-6-51_1x12-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0412-6-51, 12 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+14
+13
+Connector_Hirose
+Hirose_DF13C_CL535-0414-1-51_1x14-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0414-1-51, 14 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+16
+15
+Connector_Hirose
+Hirose_DF13C_CL535-0415-4-51_1x15-1MP_P1.25mm_Vertical
+Hirose DF13C SMD, CL535-0415-4-51, 15 Pins per row (https://www.hirose.com/product/en/products/DF13/DF13C-10P-1.25V%2851%29/), generated with kicad-footprint-generator
+connector Hirose DF13C vertical
+0
+17
+16
+Connector_Hirose
+Hirose_DF52-2S-0.8H_1x02-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-2S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+4
+3
+Connector_Hirose
+Hirose_DF52-3S-0.8H_1x03-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-3S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+5
+4
+Connector_Hirose
+Hirose_DF52-4S-0.8H_1x04-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-4S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+6
+5
+Connector_Hirose
+Hirose_DF52-5S-0.8H_1x05-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-5S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+7
+6
+Connector_Hirose
+Hirose_DF52-6S-0.8H_1x06-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-6S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+8
+7
+Connector_Hirose
+Hirose_DF52-7S-0.8H_1x07-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-7S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+9
+8
+Connector_Hirose
+Hirose_DF52-8S-0.8H_1x08-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-8S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+10
+9
+Connector_Hirose
+Hirose_DF52-9S-0.8H_1x09-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-9S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+11
+10
+Connector_Hirose
+Hirose_DF52-10S-0.8H_1x10-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-10S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+12
+11
+Connector_Hirose
+Hirose_DF52-11S-0.8H_1x11-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-11S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+13
+12
+Connector_Hirose
+Hirose_DF52-12S-0.8H_1x12-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-12S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+14
+13
+Connector_Hirose
+Hirose_DF52-14S-0.8H_1x14-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-14S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+16
+15
+Connector_Hirose
+Hirose_DF52-15S-0.8H_1x15-1MP_P0.80mm_Horizontal
+Hirose  series connector, DF52-15S-0.8H (https://www.hirose.com/product/en/products/DF52/DF52-3S-0.8H%2821%29/), generated with kicad-footprint-generator
+connector Hirose  top entry
+0
+17
+16
+Connector_Hirose
+Hirose_DF63-5P-3.96DSA_1x05_P3.96mm_Vertical
+Hirose DF63 through hole, DF63-5P-3.96DSA, 5 Pins per row (https://www.hirose.com/product/en/products/DF63/), generated with kicad-footprint-generator
+connector Hirose DF63 vertical
+0
+5
+5
+Connector_Hirose
+Hirose_DF63-6P-3.96DSA_1x06_P3.96mm_Vertical
+Hirose DF63 through hole, DF63-6P-3.96DSA, 6 Pins per row (https://www.hirose.com/product/en/products/DF63/), generated with kicad-footprint-generator
+connector Hirose DF63 vertical
+0
+6
+6
+Connector_Hirose
+Hirose_DF63M-1P-3.96DSA_1x01_P3.96mm_Vertical
+Hirose DF63 through hole, DF63M-1P-3.96DSA, 1 Pins per row (https://www.hirose.com/product/en/products/DF63/), generated with kicad-footprint-generator
+connector Hirose DF63 vertical
+0
+1
+1
+Connector_Hirose
+Hirose_DF63M-2P-3.96DSA_1x02_P3.96mm_Vertical
+Hirose DF63 through hole, DF63M-2P-3.96DSA, 2 Pins per row (https://www.hirose.com/product/en/products/DF63/), generated with kicad-footprint-generator
+connector Hirose DF63 vertical
+0
+2
+2
+Connector_Hirose
+Hirose_DF63M-3P-3.96DSA_1x03_P3.96mm_Vertical
+Hirose DF63 through hole, DF63M-3P-3.96DSA, 3 Pins per row (https://www.hirose.com/product/en/products/DF63/), generated with kicad-footprint-generator
+connector Hirose DF63 vertical
+0
+3
+3
+Connector_Hirose
+Hirose_DF63M-4P-3.96DSA_1x04_P3.96mm_Vertical
+Hirose DF63 through hole, DF63M-4P-3.96DSA, 4 Pins per row (https://www.hirose.com/product/en/products/DF63/), generated with kicad-footprint-generator
+connector Hirose DF63 vertical
+0
+4
+4
+Connector_Hirose
+Hirose_DF63R-1P-3.96DSA_1x01_P3.96mm_Vertical
+Hirose DF63 through hole, DF63R-1P-3.96DSA, 1 Pins per row (https://www.hirose.com/product/en/products/DF63/), generated with kicad-footprint-generator
+connector Hirose DF63 vertical
+0
+1
+1
+Connector_Hirose
+Hirose_DF63R-2P-3.96DSA_1x02_P3.96mm_Vertical
+Hirose DF63 through hole, DF63R-2P-3.96DSA, 2 Pins per row (https://www.hirose.com/product/en/products/DF63/), generated with kicad-footprint-generator
+connector Hirose DF63 vertical
+0
+2
+2
+Connector_Hirose
+Hirose_DF63R-3P-3.96DSA_1x03_P3.96mm_Vertical
+Hirose DF63 through hole, DF63R-3P-3.96DSA, 3 Pins per row (https://www.hirose.com/product/en/products/DF63/), generated with kicad-footprint-generator
+connector Hirose DF63 vertical
+0
+3
+3
+Connector_Hirose
+Hirose_DF63R-4P-3.96DSA_1x04_P3.96mm_Vertical
+Hirose DF63 through hole, DF63R-4P-3.96DSA, 4 Pins per row (https://www.hirose.com/product/en/products/DF63/), generated with kicad-footprint-generator
+connector Hirose DF63 vertical
+0
+4
+4
+Connector_Hirose
+Hirose_DF63R-5P-3.96DSA_1x05_P3.96mm_Vertical
+Hirose DF63 through hole, DF63R-5P-3.96DSA, 5 Pins per row (https://www.hirose.com/product/en/products/DF63/), generated with kicad-footprint-generator
+connector Hirose DF63 vertical
+0
+5
+5
+Connector_JAE
+JAE_LY20-4P-DLT1_2x02_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-4P-DLT1, 2 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+4
+4
+Connector_JAE
+JAE_LY20-4P-DT1_2x02_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-4P-DT1, 2 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+4
+4
+Connector_JAE
+JAE_LY20-6P-DLT1_2x03_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-6P-DLT1, 3 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+6
+6
+Connector_JAE
+JAE_LY20-6P-DT1_2x03_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-6P-DT1, 3 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+6
+6
+Connector_JAE
+JAE_LY20-8P-DLT1_2x04_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-8P-DLT1, 4 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+8
+8
+Connector_JAE
+JAE_LY20-8P-DT1_2x04_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-8P-DT1, 4 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+8
+8
+Connector_JAE
+JAE_LY20-10P-DLT1_2x05_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-10P-DLT1, 5 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+10
+10
+Connector_JAE
+JAE_LY20-10P-DT1_2x05_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-10P-DT1, 5 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+10
+10
+Connector_JAE
+JAE_LY20-12P-DLT1_2x06_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-12P-DLT1, 6 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+12
+12
+Connector_JAE
+JAE_LY20-12P-DT1_2x06_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-12P-DT1, 6 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+12
+12
+Connector_JAE
+JAE_LY20-14P-DLT1_2x07_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-14P-DLT1, 7 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+14
+14
+Connector_JAE
+JAE_LY20-14P-DT1_2x07_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-14P-DT1, 7 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+14
+14
+Connector_JAE
+JAE_LY20-16P-DLT1_2x08_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-16P-DLT1, 8 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+16
+16
+Connector_JAE
+JAE_LY20-16P-DT1_2x08_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-16P-DT1, 8 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+16
+16
+Connector_JAE
+JAE_LY20-18P-DLT1_2x09_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-18P-DLT1, 9 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+18
+18
+Connector_JAE
+JAE_LY20-18P-DT1_2x09_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-18P-DT1, 9 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+18
+18
+Connector_JAE
+JAE_LY20-20P-DLT1_2x10_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-20P-DLT1, 10 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+20
+20
+Connector_JAE
+JAE_LY20-20P-DT1_2x10_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-20P-DT1, 10 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+20
+20
+Connector_JAE
+JAE_LY20-22P-DLT1_2x11_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-22P-DLT1, 11 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+22
+22
+Connector_JAE
+JAE_LY20-22P-DT1_2x11_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-22P-DT1, 11 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+22
+22
+Connector_JAE
+JAE_LY20-24P-DLT1_2x12_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-24P-DLT1, 12 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+24
+24
+Connector_JAE
+JAE_LY20-24P-DT1_2x12_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-24P-DT1, 12 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+24
+24
+Connector_JAE
+JAE_LY20-26P-DLT1_2x13_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-26P-DLT1, 13 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+26
+26
+Connector_JAE
+JAE_LY20-26P-DT1_2x13_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-26P-DT1, 13 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+26
+26
+Connector_JAE
+JAE_LY20-28P-DLT1_2x14_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-28P-DLT1, 14 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+28
+28
+Connector_JAE
+JAE_LY20-28P-DT1_2x14_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-28P-DT1, 14 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+28
+28
+Connector_JAE
+JAE_LY20-30P-DLT1_2x15_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-30P-DLT1, 15 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+30
+30
+Connector_JAE
+JAE_LY20-30P-DT1_2x15_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-30P-DT1, 15 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+30
+30
+Connector_JAE
+JAE_LY20-32P-DLT1_2x16_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-32P-DLT1, 16 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+32
+32
+Connector_JAE
+JAE_LY20-32P-DT1_2x16_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-32P-DT1, 16 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+32
+32
+Connector_JAE
+JAE_LY20-34P-DLT1_2x17_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-34P-DLT1, 17 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+34
+34
+Connector_JAE
+JAE_LY20-34P-DT1_2x17_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-34P-DT1, 17 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+34
+34
+Connector_JAE
+JAE_LY20-36P-DLT1_2x18_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-36P-DLT1, 18 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+36
+36
+Connector_JAE
+JAE_LY20-36P-DT1_2x18_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-36P-DT1, 18 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+36
+36
+Connector_JAE
+JAE_LY20-38P-DLT1_2x19_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-38P-DLT1, 19 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+38
+38
+Connector_JAE
+JAE_LY20-38P-DT1_2x19_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-38P-DT1, 19 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+38
+38
+Connector_JAE
+JAE_LY20-40P-DLT1_2x20_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-40P-DLT1, 20 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+40
+40
+Connector_JAE
+JAE_LY20-40P-DT1_2x20_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-40P-DT1, 20 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+40
+40
+Connector_JAE
+JAE_LY20-42P-DLT1_2x21_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-42P-DLT1, 21 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+42
+42
+Connector_JAE
+JAE_LY20-42P-DT1_2x21_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-42P-DT1, 21 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+42
+42
+Connector_JAE
+JAE_LY20-44P-DLT1_2x22_P2.00mm_Horizontal
+Molex LY 20 series connector, LY20-44P-DLT1, 22 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ038187.pdf), generated with kicad-footprint-generator
+connector JAE  top entry
+0
+44
+44
+Connector_JAE
+JAE_LY20-44P-DT1_2x22_P2.00mm_Vertical
+Molex LY 20 series connector, LY20-44P-DT1, 22 Circuits (http://www.jae.com/z-en/pdf_download_exec.cfm?param=SJ103130.pdf), generated with kicad-footprint-generator
+connector JAE  side entry
+0
+44
+44
+Connector_JAE
+JAE_MM70-314-310B1
+http://www.heilind.com/marketing/documents/jae/JAE_MM70.pdf
+connector JAE MXM
+0
+280
+279
+Connector_JAE
+JAE_SIM_Card_SF72S006
+SIM Card, Push-Push, https://www.jae.com/direct/topics/topics_file_download/topics_id=68892&ext_no=06&index=0&_lang=en&v=202003111511468456809
+SIM Card with Detect Switch
+0
+18
+9
+Connector_PCBEdge
+4UCON_10156_2x40_P1.27mm_Socket_Horizontal
+4UCON 10156 Card edge socket with 80 contacts (40 each side), through-hole, http://www.4uconnector.com/online/object/4udrawing/10156.pdf
+4UCON 10156 Card edge socket with 80 contacts
+0
+80
+80
+Connector_PCBEdge
+BUS_AT
+AT ISA 16 bits Bus Edge Connector
+BUS ISA AT Edge connector
+0
+98
+98
+Connector_PCBEdge
+BUS_PCI
+PCI bus Edge Connector
+PCI bus Edge Connector
+0
+240
+120
+Connector_PCBEdge
+BUS_PCI_Express_Mini
+Mini-PCI Express bus connector (https://s3.amazonaws.com/fit-iot/download/facet-cards/documents/PCI_Express_miniCard_Electromechanical_specs_rev1.2.pdf#page=11)
+mini pcie
+0
+54
+53
+Connector_PCBEdge
+BUS_PCI_Express_Mini_Dual
+Mini-PCI Express bus connector full size with dual clips (https://s3.amazonaws.com/fit-iot/download/facet-cards/documents/PCI_Express_miniCard_Electromechanical_specs_rev1.2.pdf#page=28)
+mini pcie
+0
+54
+53
+Connector_PCBEdge
+BUS_PCI_Express_Mini_Full
+Mini-PCI Express bus connector full size with clips (https://s3.amazonaws.com/fit-iot/download/facet-cards/documents/PCI_Express_miniCard_Electromechanical_specs_rev1.2.pdf#page=24)
+mini pcie
+0
+54
+53
+Connector_PCBEdge
+BUS_PCI_Express_Mini_Half
+Mini-PCI Express bus connector half size with clips (https://s3.amazonaws.com/fit-iot/download/facet-cards/documents/PCI_Express_miniCard_Electromechanical_specs_rev1.2.pdf#page=25)
+mini pcie
+0
+54
+53
+Connector_PCBEdge
+BUS_PCIexpress_x1
+PCIexpress Bus Edge Connector x1 http://www.ritrontek.com/uploadfile/2016/1026/20161026105231124.pdf#page=70
+PCIe
+0
+36
+36
+Connector_PCBEdge
+BUS_PCIexpress_x4
+PCIexpress Bus Edge Connector x1 http://www.ritrontek.com/uploadfile/2016/1026/20161026105231124.pdf#page=70
+PCIe
+0
+64
+64
+Connector_PCBEdge
+BUS_PCIexpress_x8
+PCIexpress Bus Edge Connector x1 http://www.ritrontek.com/uploadfile/2016/1026/20161026105231124.pdf#page=70
+PCIe
+0
+98
+98
+Connector_PCBEdge
+BUS_PCIexpress_x16
+PCIexpress Bus Edge Connector x1 http://www.ritrontek.com/uploadfile/2016/1026/20161026105231124.pdf#page=70
+PCIe
+0
+164
+164
+Connector_PCBEdge
+Samtec_MECF-05-0_-L-DV_2x05_P1.27mm_Polarized_Edge
+Highspeed card edge connector for PCB's with 05 contacts (polarized)
+conn samtec card-edge high-speed
+0
+8
+8
+Connector_PCBEdge
+Samtec_MECF-05-0_-NP-L-DV_2x05_P1.27mm_Edge
+Highspeed card edge connector for PCB's with 05 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+10
+10
+Connector_PCBEdge
+Samtec_MECF-05-01-L-DV-WT_2x05_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 05 contacts (polarized)
+conn samtec card-edge high-speed
+0
+10
+8
+Connector_PCBEdge
+Samtec_MECF-05-01-L-DV_2x05_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 05 contacts (polarized)
+conn samtec card-edge high-speed
+0
+8
+8
+Connector_PCBEdge
+Samtec_MECF-05-01-NP-L-DV-WT_2x05_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 05 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+12
+10
+Connector_PCBEdge
+Samtec_MECF-05-01-NP-L-DV_2x05_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 05 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+10
+10
+Connector_PCBEdge
+Samtec_MECF-05-02-L-DV-WT_2x05_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 05 contacts (polarized)
+conn samtec card-edge high-speed
+0
+10
+8
+Connector_PCBEdge
+Samtec_MECF-05-02-L-DV_2x05_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 05 contacts (polarized)
+conn samtec card-edge high-speed
+0
+8
+8
+Connector_PCBEdge
+Samtec_MECF-05-02-NP-L-DV-WT_2x05_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 05 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+12
+10
+Connector_PCBEdge
+Samtec_MECF-05-02-NP-L-DV_2x05_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 05 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+10
+10
+Connector_PCBEdge
+Samtec_MECF-08-0_-L-DV_2x08_P1.27mm_Polarized_Edge
+Highspeed card edge connector for PCB's with 08 contacts (polarized)
+conn samtec card-edge high-speed
+0
+14
+14
+Connector_PCBEdge
+Samtec_MECF-08-0_-NP-L-DV_2x08_P1.27mm_Edge
+Highspeed card edge connector for PCB's with 08 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+16
+16
+Connector_PCBEdge
+Samtec_MECF-08-01-L-DV-WT_2x08_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 08 contacts (polarized)
+conn samtec card-edge high-speed
+0
+16
+14
+Connector_PCBEdge
+Samtec_MECF-08-01-L-DV_2x08_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 08 contacts (polarized)
+conn samtec card-edge high-speed
+0
+14
+14
+Connector_PCBEdge
+Samtec_MECF-08-01-NP-L-DV-WT_2x08_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 08 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+18
+16
+Connector_PCBEdge
+Samtec_MECF-08-01-NP-L-DV_2x08_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 08 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+16
+16
+Connector_PCBEdge
+Samtec_MECF-08-02-L-DV-WT_2x08_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 08 contacts (polarized)
+conn samtec card-edge high-speed
+0
+16
+14
+Connector_PCBEdge
+Samtec_MECF-08-02-L-DV_2x08_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 08 contacts (polarized)
+conn samtec card-edge high-speed
+0
+14
+14
+Connector_PCBEdge
+Samtec_MECF-08-02-NP-L-DV-WT_2x08_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 08 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+18
+16
+Connector_PCBEdge
+Samtec_MECF-08-02-NP-L-DV_2x08_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 08 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+16
+16
+Connector_PCBEdge
+Samtec_MECF-20-0_-L-DV_2x20_P1.27mm_Polarized_Edge
+Highspeed card edge connector for PCB's with 20 contacts (polarized)
+conn samtec card-edge high-speed
+0
+38
+38
+Connector_PCBEdge
+Samtec_MECF-20-0_-NP-L-DV_2x20_P1.27mm_Edge
+Highspeed card edge connector for PCB's with 20 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+40
+40
+Connector_PCBEdge
+Samtec_MECF-20-01-L-DV-WT_2x20_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 20 contacts (polarized)
+conn samtec card-edge high-speed
+0
+40
+38
+Connector_PCBEdge
+Samtec_MECF-20-01-L-DV_2x20_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 20 contacts (polarized)
+conn samtec card-edge high-speed
+0
+38
+38
+Connector_PCBEdge
+Samtec_MECF-20-01-NP-L-DV-WT_2x20_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 20 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+42
+40
+Connector_PCBEdge
+Samtec_MECF-20-01-NP-L-DV_2x20_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 20 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+40
+40
+Connector_PCBEdge
+Samtec_MECF-20-02-L-DV-WT_2x20_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 20 contacts (polarized)
+conn samtec card-edge high-speed
+0
+40
+38
+Connector_PCBEdge
+Samtec_MECF-20-02-L-DV_2x20_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 20 contacts (polarized)
+conn samtec card-edge high-speed
+0
+38
+38
+Connector_PCBEdge
+Samtec_MECF-20-02-NP-L-DV-WT_2x20_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 20 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+42
+40
+Connector_PCBEdge
+Samtec_MECF-20-02-NP-L-DV_2x20_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 20 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+40
+40
+Connector_PCBEdge
+Samtec_MECF-30-0_-L-DV_2x30_P1.27mm_Polarized_Edge
+Highspeed card edge connector for PCB's with 30 contacts (polarized)
+conn samtec card-edge high-speed
+0
+58
+58
+Connector_PCBEdge
+Samtec_MECF-30-0_-NP-L-DV_2x30_P1.27mm_Edge
+Highspeed card edge connector for PCB's with 30 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+60
+60
+Connector_PCBEdge
+Samtec_MECF-30-01-L-DV-WT_2x30_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 30 contacts (polarized)
+conn samtec card-edge high-speed
+0
+60
+58
+Connector_PCBEdge
+Samtec_MECF-30-01-L-DV_2x30_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 30 contacts (polarized)
+conn samtec card-edge high-speed
+0
+58
+58
+Connector_PCBEdge
+Samtec_MECF-30-01-NP-L-DV-WT_2x30_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 30 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+62
+60
+Connector_PCBEdge
+Samtec_MECF-30-01-NP-L-DV_2x30_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 30 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+60
+60
+Connector_PCBEdge
+Samtec_MECF-30-02-L-DV-WT_2x30_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 30 contacts (polarized)
+conn samtec card-edge high-speed
+0
+60
+58
+Connector_PCBEdge
+Samtec_MECF-30-02-L-DV_2x30_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 30 contacts (polarized)
+conn samtec card-edge high-speed
+0
+58
+58
+Connector_PCBEdge
+Samtec_MECF-30-02-NP-L-DV-WT_2x30_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 30 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+62
+60
+Connector_PCBEdge
+Samtec_MECF-30-02-NP-L-DV_2x30_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 30 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+60
+60
+Connector_PCBEdge
+Samtec_MECF-40-0_-L-DV_2x40_P1.27mm_Polarized_Edge
+Highspeed card edge connector for PCB's with 40 contacts (polarized)
+conn samtec card-edge high-speed
+0
+78
+78
+Connector_PCBEdge
+Samtec_MECF-40-0_-NP-L-DV_2x40_P1.27mm_Edge
+Highspeed card edge connector for PCB's with 40 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+80
+80
+Connector_PCBEdge
+Samtec_MECF-40-01-L-DV-WT_2x40_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 40 contacts (polarized)
+conn samtec card-edge high-speed
+0
+80
+78
+Connector_PCBEdge
+Samtec_MECF-40-01-L-DV_2x40_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 40 contacts (polarized)
+conn samtec card-edge high-speed
+0
+78
+78
+Connector_PCBEdge
+Samtec_MECF-40-01-NP-L-DV-WT_2x40_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 40 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+82
+80
+Connector_PCBEdge
+Samtec_MECF-40-01-NP-L-DV_2x40_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 40 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+80
+80
+Connector_PCBEdge
+Samtec_MECF-40-02-L-DV-WT_2x40_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 40 contacts (polarized)
+conn samtec card-edge high-speed
+0
+80
+78
+Connector_PCBEdge
+Samtec_MECF-40-02-L-DV_2x40_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 40 contacts (polarized)
+conn samtec card-edge high-speed
+0
+78
+78
+Connector_PCBEdge
+Samtec_MECF-40-02-NP-L-DV-WT_2x40_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 40 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+82
+80
+Connector_PCBEdge
+Samtec_MECF-40-02-NP-L-DV_2x40_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 40 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+80
+80
+Connector_PCBEdge
+Samtec_MECF-50-0_-L-DV_2x50_P1.27mm_Polarized_Edge
+Highspeed card edge connector for PCB's with 50 contacts (polarized)
+conn samtec card-edge high-speed
+0
+98
+98
+Connector_PCBEdge
+Samtec_MECF-50-0_-NP-L-DV_2x50_P1.27mm_Edge
+Highspeed card edge connector for PCB's with 50 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+100
+100
+Connector_PCBEdge
+Samtec_MECF-50-01-L-DV-WT_2x50_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 50 contacts (polarized)
+conn samtec card-edge high-speed
+0
+100
+98
+Connector_PCBEdge
+Samtec_MECF-50-01-L-DV_2x50_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 50 contacts (polarized)
+conn samtec card-edge high-speed
+0
+98
+98
+Connector_PCBEdge
+Samtec_MECF-50-01-NP-L-DV-WT_2x50_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 50 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+102
+100
+Connector_PCBEdge
+Samtec_MECF-50-01-NP-L-DV_2x50_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 50 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+100
+100
+Connector_PCBEdge
+Samtec_MECF-50-02-L-DV-WT_2x50_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 50 contacts (polarized)
+conn samtec card-edge high-speed
+0
+100
+98
+Connector_PCBEdge
+Samtec_MECF-50-02-L-DV_2x50_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 50 contacts (polarized)
+conn samtec card-edge high-speed
+0
+98
+98
+Connector_PCBEdge
+Samtec_MECF-50-02-NP-L-DV-WT_2x50_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 50 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+102
+100
+Connector_PCBEdge
+Samtec_MECF-50-02-NP-L-DV_2x50_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 50 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+100
+100
+Connector_PCBEdge
+Samtec_MECF-60-0_-L-DV_2x60_P1.27mm_Polarized_Edge
+Highspeed card edge connector for PCB's with 60 contacts (polarized)
+conn samtec card-edge high-speed
+0
+116
+116
+Connector_PCBEdge
+Samtec_MECF-60-0_-NP-L-DV_2x60_P1.27mm_Edge
+Highspeed card edge connector for PCB's with 60 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+120
+120
+Connector_PCBEdge
+Samtec_MECF-60-01-L-DV-WT_2x60_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 60 contacts (polarized)
+conn samtec card-edge high-speed
+0
+118
+116
+Connector_PCBEdge
+Samtec_MECF-60-01-L-DV_2x60_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 60 contacts (polarized)
+conn samtec card-edge high-speed
+0
+116
+116
+Connector_PCBEdge
+Samtec_MECF-60-01-NP-L-DV-WT_2x60_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 60 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+122
+120
+Connector_PCBEdge
+Samtec_MECF-60-01-NP-L-DV_2x60_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 60 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+120
+120
+Connector_PCBEdge
+Samtec_MECF-60-02-L-DV-WT_2x60_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 60 contacts (polarized)
+conn samtec card-edge high-speed
+0
+118
+116
+Connector_PCBEdge
+Samtec_MECF-60-02-L-DV_2x60_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 60 contacts (polarized)
+conn samtec card-edge high-speed
+0
+116
+116
+Connector_PCBEdge
+Samtec_MECF-60-02-NP-L-DV-WT_2x60_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 60 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+122
+120
+Connector_PCBEdge
+Samtec_MECF-60-02-NP-L-DV_2x60_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 60 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+120
+120
+Connector_PCBEdge
+Samtec_MECF-70-0_-L-DV_2x70_P1.27mm_Polarized_Edge
+Highspeed card edge connector for PCB's with 70 contacts (polarized)
+conn samtec card-edge high-speed
+0
+136
+136
+Connector_PCBEdge
+Samtec_MECF-70-0_-NP-L-DV_2x70_P1.27mm_Edge
+Highspeed card edge connector for PCB's with 70 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+140
+140
+Connector_PCBEdge
+Samtec_MECF-70-01-L-DV-WT_2x70_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 70 contacts (polarized)
+conn samtec card-edge high-speed
+0
+138
+136
+Connector_PCBEdge
+Samtec_MECF-70-01-L-DV_2x70_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 70 contacts (polarized)
+conn samtec card-edge high-speed
+0
+136
+136
+Connector_PCBEdge
+Samtec_MECF-70-01-NP-L-DV-WT_2x70_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 70 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+142
+140
+Connector_PCBEdge
+Samtec_MECF-70-01-NP-L-DV_2x70_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 1.6mm PCB's with 70 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+140
+140
+Connector_PCBEdge
+Samtec_MECF-70-02-L-DV-WT_2x70_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 70 contacts (polarized)
+conn samtec card-edge high-speed
+0
+138
+136
+Connector_PCBEdge
+Samtec_MECF-70-02-L-DV_2x70_P1.27mm_Polarized_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 70 contacts (polarized)
+conn samtec card-edge high-speed
+0
+136
+136
+Connector_PCBEdge
+Samtec_MECF-70-02-NP-L-DV-WT_2x70_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 70 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+142
+140
+Connector_PCBEdge
+Samtec_MECF-70-02-NP-L-DV_2x70_P1.27mm_Socket_Horizontal
+Highspeed card edge connector for 2.4mm PCB's with 70 contacts (not polarized)
+conn samtec card-edge high-speed
+0
+140
+140
+Connector_PCBEdge
+molex_EDGELOCK_2-CKT
+https://www.molex.com/pdm_docs/sd/2008900106_sd.pdf
+Connector PCBEdge molex EDGELOCK
+0
+2
+2
+Connector_PCBEdge
+molex_EDGELOCK_4-CKT
+https://www.molex.com/pdm_docs/sd/2008900106_sd.pdf
+Connector PCBEdge molex EDGELOCK
+0
+4
+4
+Connector_PCBEdge
+molex_EDGELOCK_6-CKT
+https://www.molex.com/pdm_docs/sd/2008900106_sd.pdf
+Connector PCBEdge molex EDGELOCK
+0
+6
+6
+Connector_PCBEdge
+molex_EDGELOCK_8-CKT
+https://www.molex.com/pdm_docs/sd/2008900106_sd.pdf
+Connector PCBEdge molex EDGELOCK
+0
+8
+8
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_2-G-7,62_1x02_P7.62mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/2-G-7,62; number of pins: 02; pin pitch: 7.62mm; Angled || order number: 1766233 12A 630V
+phoenix_contact connector GMSTBA_01x02_G_7.62mm
+0
+2
+2
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_2-G_1x02_P7.50mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/2-G; number of pins: 02; pin pitch: 7.50mm; Angled || order number: 1766343 12A 630V
+phoenix_contact connector GMSTBA_01x02_G_7.50mm
+0
+2
+2
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_3-G-7,62_1x03_P7.62mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/3-G-7,62; number of pins: 03; pin pitch: 7.62mm; Angled || order number: 1766246 12A 630V
+phoenix_contact connector GMSTBA_01x03_G_7.62mm
+0
+3
+3
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_3-G_1x03_P7.50mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/3-G; number of pins: 03; pin pitch: 7.50mm; Angled || order number: 1766356 12A 630V
+phoenix_contact connector GMSTBA_01x03_G_7.50mm
+0
+3
+3
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_4-G-7,62_1x04_P7.62mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/4-G-7,62; number of pins: 04; pin pitch: 7.62mm; Angled || order number: 1766259 12A 630V
+phoenix_contact connector GMSTBA_01x04_G_7.62mm
+0
+4
+4
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_4-G_1x04_P7.50mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/4-G; number of pins: 04; pin pitch: 7.50mm; Angled || order number: 1766369 12A 630V
+phoenix_contact connector GMSTBA_01x04_G_7.50mm
+0
+4
+4
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_5-G-7,62_1x05_P7.62mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/5-G-7,62; number of pins: 05; pin pitch: 7.62mm; Angled || order number: 1766262 12A 630V
+phoenix_contact connector GMSTBA_01x05_G_7.62mm
+0
+5
+5
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_5-G_1x05_P7.50mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/5-G; number of pins: 05; pin pitch: 7.50mm; Angled || order number: 1766372 12A 630V
+phoenix_contact connector GMSTBA_01x05_G_7.50mm
+0
+5
+5
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_6-G-7,62_1x06_P7.62mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/6-G-7,62; number of pins: 06; pin pitch: 7.62mm; Angled || order number: 1766275 12A 630V
+phoenix_contact connector GMSTBA_01x06_G_7.62mm
+0
+6
+6
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_6-G_1x06_P7.50mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/6-G; number of pins: 06; pin pitch: 7.50mm; Angled || order number: 1766385 12A 630V
+phoenix_contact connector GMSTBA_01x06_G_7.50mm
+0
+6
+6
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_7-G-7,62_1x07_P7.62mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/7-G-7,62; number of pins: 07; pin pitch: 7.62mm; Angled || order number: 1766288 12A 630V
+phoenix_contact connector GMSTBA_01x07_G_7.62mm
+0
+7
+7
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_7-G_1x07_P7.50mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/7-G; number of pins: 07; pin pitch: 7.50mm; Angled || order number: 1766398 12A 630V
+phoenix_contact connector GMSTBA_01x07_G_7.50mm
+0
+7
+7
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_8-G-7,62_1x08_P7.62mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/8-G-7,62; number of pins: 08; pin pitch: 7.62mm; Angled || order number: 1766291 12A 630V
+phoenix_contact connector GMSTBA_01x08_G_7.62mm
+0
+8
+8
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_8-G_1x08_P7.50mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/8-G; number of pins: 08; pin pitch: 7.50mm; Angled || order number: 1766408 12A 630V
+phoenix_contact connector GMSTBA_01x08_G_7.50mm
+0
+8
+8
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_9-G-7,62_1x09_P7.62mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/9-G-7,62; number of pins: 09; pin pitch: 7.62mm; Angled || order number: 1766301 12A 630V
+phoenix_contact connector GMSTBA_01x09_G_7.62mm
+0
+9
+9
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_9-G_1x09_P7.50mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/9-G; number of pins: 09; pin pitch: 7.50mm; Angled || order number: 1766411 12A 630V
+phoenix_contact connector GMSTBA_01x09_G_7.50mm
+0
+9
+9
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_10-G-7,62_1x10_P7.62mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/10-G-7,62; number of pins: 10; pin pitch: 7.62mm; Angled || order number: 1766314 12A 630V
+phoenix_contact connector GMSTBA_01x10_G_7.62mm
+0
+10
+10
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_10-G_1x10_P7.50mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/10-G; number of pins: 10; pin pitch: 7.50mm; Angled || order number: 1766424 12A 630V
+phoenix_contact connector GMSTBA_01x10_G_7.50mm
+0
+10
+10
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_11-G-7,62_1x11_P7.62mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/11-G-7,62; number of pins: 11; pin pitch: 7.62mm; Angled || order number: 1766327 12A 630V
+phoenix_contact connector GMSTBA_01x11_G_7.62mm
+0
+11
+11
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_11-G_1x11_P7.50mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/11-G; number of pins: 11; pin pitch: 7.50mm; Angled || order number: 1766437 12A 630V
+phoenix_contact connector GMSTBA_01x11_G_7.50mm
+0
+11
+11
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_12-G-7,62_1x12_P7.62mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/12-G-7,62; number of pins: 12; pin pitch: 7.62mm; Angled || order number: 1766330 12A 630V
+phoenix_contact connector GMSTBA_01x12_G_7.62mm
+0
+12
+12
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBA_2,5_12-G_1x12_P7.50mm_Horizontal
+Generic Phoenix Contact connector footprint for: GMSTBA_2,5/12-G; number of pins: 12; pin pitch: 7.50mm; Angled || order number: 1766440 12A 630V
+phoenix_contact connector GMSTBA_01x12_G_7.50mm
+0
+12
+12
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_2-G-7,62_1x02_P7.62mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/2-G-7,62; number of pins: 02; pin pitch: 7.62mm; Vertical || order number: 1766770 12A 630V
+phoenix_contact connector GMSTBVA_01x02_G_7.62mm
+0
+2
+2
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_2-G_1x02_P7.50mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/2-G; number of pins: 02; pin pitch: 7.50mm; Vertical || order number: 1766660 12A 630V
+phoenix_contact connector GMSTBVA_01x02_G_7.50mm
+0
+2
+2
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_3-G-7,62_1x03_P7.62mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/3-G-7,62; number of pins: 03; pin pitch: 7.62mm; Vertical || order number: 1766783 12A 630V
+phoenix_contact connector GMSTBVA_01x03_G_7.62mm
+0
+3
+3
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_3-G_1x03_P7.50mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/3-G; number of pins: 03; pin pitch: 7.50mm; Vertical || order number: 1766673 12A 630V
+phoenix_contact connector GMSTBVA_01x03_G_7.50mm
+0
+3
+3
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_4-G-7,62_1x04_P7.62mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/4-G-7,62; number of pins: 04; pin pitch: 7.62mm; Vertical || order number: 1766796 12A 630V
+phoenix_contact connector GMSTBVA_01x04_G_7.62mm
+0
+4
+4
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_4-G_1x04_P7.50mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/4-G; number of pins: 04; pin pitch: 7.50mm; Vertical || order number: 1766686 12A 630V
+phoenix_contact connector GMSTBVA_01x04_G_7.50mm
+0
+4
+4
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_5-G-7,62_1x05_P7.62mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/5-G-7,62; number of pins: 05; pin pitch: 7.62mm; Vertical || order number: 1766806 12A 630V
+phoenix_contact connector GMSTBVA_01x05_G_7.62mm
+0
+5
+5
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_5-G_1x05_P7.50mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/5-G; number of pins: 05; pin pitch: 7.50mm; Vertical || order number: 1766699 12A 630V
+phoenix_contact connector GMSTBVA_01x05_G_7.50mm
+0
+5
+5
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_6-G-7,62_1x06_P7.62mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/6-G-7,62; number of pins: 06; pin pitch: 7.62mm; Vertical || order number: 1766819 12A 630V
+phoenix_contact connector GMSTBVA_01x06_G_7.62mm
+0
+6
+6
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_6-G_1x06_P7.50mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/6-G; number of pins: 06; pin pitch: 7.50mm; Vertical || order number: 1766709 12A 630V
+phoenix_contact connector GMSTBVA_01x06_G_7.50mm
+0
+6
+6
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_7-G-7,62_1x07_P7.62mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/7-G-7,62; number of pins: 07; pin pitch: 7.62mm; Vertical || order number: 1766822 12A 630V
+phoenix_contact connector GMSTBVA_01x07_G_7.62mm
+0
+7
+7
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_7-G_1x07_P7.50mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/7-G; number of pins: 07; pin pitch: 7.50mm; Vertical || order number: 1766712 12A 630V
+phoenix_contact connector GMSTBVA_01x07_G_7.50mm
+0
+7
+7
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_8-G-7,62_1x08_P7.62mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/8-G-7,62; number of pins: 08; pin pitch: 7.62mm; Vertical || order number: 1766835 12A 630V
+phoenix_contact connector GMSTBVA_01x08_G_7.62mm
+0
+8
+8
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_8-G_1x08_P7.50mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/8-G; number of pins: 08; pin pitch: 7.50mm; Vertical || order number: 1766725 12A 630V
+phoenix_contact connector GMSTBVA_01x08_G_7.50mm
+0
+8
+8
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_9-G-7,62_1x09_P7.62mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/9-G-7,62; number of pins: 09; pin pitch: 7.62mm; Vertical || order number: 1766848 12A 630V
+phoenix_contact connector GMSTBVA_01x09_G_7.62mm
+0
+9
+9
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_9-G_1x09_P7.50mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/9-G; number of pins: 09; pin pitch: 7.50mm; Vertical || order number: 1766738 12A 630V
+phoenix_contact connector GMSTBVA_01x09_G_7.50mm
+0
+9
+9
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_10-G-7,62_1x10_P7.62mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/10-G-7,62; number of pins: 10; pin pitch: 7.62mm; Vertical || order number: 1766851 12A 630V
+phoenix_contact connector GMSTBVA_01x10_G_7.62mm
+0
+10
+10
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_10-G_1x10_P7.50mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/10-G; number of pins: 10; pin pitch: 7.50mm; Vertical || order number: 1766741 12A 630V
+phoenix_contact connector GMSTBVA_01x10_G_7.50mm
+0
+10
+10
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_11-G-7,62_1x11_P7.62mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/11-G-7,62; number of pins: 11; pin pitch: 7.62mm; Vertical || order number: 1766864 12A 630V
+phoenix_contact connector GMSTBVA_01x11_G_7.62mm
+0
+11
+11
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_11-G_1x11_P7.50mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/11-G; number of pins: 11; pin pitch: 7.50mm; Vertical || order number: 1766754 12A 630V
+phoenix_contact connector GMSTBVA_01x11_G_7.50mm
+0
+11
+11
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_12-G-7,62_1x12_P7.62mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/12-G-7,62; number of pins: 12; pin pitch: 7.62mm; Vertical || order number: 1766877 12A 630V
+phoenix_contact connector GMSTBVA_01x12_G_7.62mm
+0
+12
+12
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBVA_2,5_12-G_1x12_P7.50mm_Vertical
+Generic Phoenix Contact connector footprint for: GMSTBVA_2,5/12-G; number of pins: 12; pin pitch: 7.50mm; Vertical || order number: 1766767 12A 630V
+phoenix_contact connector GMSTBVA_01x12_G_7.50mm
+0
+12
+12
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_2-GF-7,62_1x02_P7.62mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/2-GF-7,62; number of pins: 02; pin pitch: 7.62mm; Vertical; threaded flange || order number: 1829154 12A 630V
+phoenix_contact connector GMSTBV_01x02_GF_7.62mm
+0
+2
+2
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_2-GF-7,62_1x02_P7.62mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/2-GF-7,62; number of pins: 02; pin pitch: 7.62mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1829154 12A 630V
+phoenix_contact connector GMSTBV_01x02_GF_7.62mm_MH
+0
+2
+2
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_3-GF-7,62_1x03_P7.62mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/3-GF-7,62; number of pins: 03; pin pitch: 7.62mm; Vertical; threaded flange || order number: 1829167 12A 630V
+phoenix_contact connector GMSTBV_01x03_GF_7.62mm
+0
+3
+3
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_3-GF-7,62_1x03_P7.62mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/3-GF-7,62; number of pins: 03; pin pitch: 7.62mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1829167 12A 630V
+phoenix_contact connector GMSTBV_01x03_GF_7.62mm_MH
+0
+3
+3
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_4-GF-7,62_1x04_P7.62mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/4-GF-7,62; number of pins: 04; pin pitch: 7.62mm; Vertical; threaded flange || order number: 1829170 12A 630V
+phoenix_contact connector GMSTBV_01x04_GF_7.62mm
+0
+4
+4
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_4-GF-7,62_1x04_P7.62mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/4-GF-7,62; number of pins: 04; pin pitch: 7.62mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1829170 12A 630V
+phoenix_contact connector GMSTBV_01x04_GF_7.62mm_MH
+0
+4
+4
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_5-GF-7,62_1x05_P7.62mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/5-GF-7,62; number of pins: 05; pin pitch: 7.62mm; Vertical; threaded flange || order number: 1829183 12A 630V
+phoenix_contact connector GMSTBV_01x05_GF_7.62mm
+0
+5
+5
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_5-GF-7,62_1x05_P7.62mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/5-GF-7,62; number of pins: 05; pin pitch: 7.62mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1829183 12A 630V
+phoenix_contact connector GMSTBV_01x05_GF_7.62mm_MH
+0
+5
+5
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_6-GF-7,62_1x06_P7.62mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/6-GF-7,62; number of pins: 06; pin pitch: 7.62mm; Vertical; threaded flange || order number: 1829196 12A 630V
+phoenix_contact connector GMSTBV_01x06_GF_7.62mm
+0
+6
+6
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_6-GF-7,62_1x06_P7.62mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/6-GF-7,62; number of pins: 06; pin pitch: 7.62mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1829196 12A 630V
+phoenix_contact connector GMSTBV_01x06_GF_7.62mm_MH
+0
+6
+6
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_7-GF-7,62_1x07_P7.62mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/7-GF-7,62; number of pins: 07; pin pitch: 7.62mm; Vertical; threaded flange || order number: 1829206 12A 630V
+phoenix_contact connector GMSTBV_01x07_GF_7.62mm
+0
+7
+7
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_7-GF-7,62_1x07_P7.62mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/7-GF-7,62; number of pins: 07; pin pitch: 7.62mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1829206 12A 630V
+phoenix_contact connector GMSTBV_01x07_GF_7.62mm_MH
+0
+7
+7
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_8-GF-7,62_1x08_P7.62mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/8-GF-7,62; number of pins: 08; pin pitch: 7.62mm; Vertical; threaded flange || order number: 1829219 12A 630V
+phoenix_contact connector GMSTBV_01x08_GF_7.62mm
+0
+8
+8
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_8-GF-7,62_1x08_P7.62mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/8-GF-7,62; number of pins: 08; pin pitch: 7.62mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1829219 12A 630V
+phoenix_contact connector GMSTBV_01x08_GF_7.62mm_MH
+0
+8
+8
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_9-GF-7,62_1x09_P7.62mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/9-GF-7,62; number of pins: 09; pin pitch: 7.62mm; Vertical; threaded flange || order number: 1829222 12A 630V
+phoenix_contact connector GMSTBV_01x09_GF_7.62mm
+0
+9
+9
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_9-GF-7,62_1x09_P7.62mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/9-GF-7,62; number of pins: 09; pin pitch: 7.62mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1829222 12A 630V
+phoenix_contact connector GMSTBV_01x09_GF_7.62mm_MH
+0
+9
+9
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_10-GF-7,62_1x10_P7.62mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/10-GF-7,62; number of pins: 10; pin pitch: 7.62mm; Vertical; threaded flange || order number: 1829235 12A 630V
+phoenix_contact connector GMSTBV_01x10_GF_7.62mm
+0
+10
+10
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_10-GF-7,62_1x10_P7.62mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/10-GF-7,62; number of pins: 10; pin pitch: 7.62mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1829235 12A 630V
+phoenix_contact connector GMSTBV_01x10_GF_7.62mm_MH
+0
+10
+10
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_11-GF-7,62_1x11_P7.62mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/11-GF-7,62; number of pins: 11; pin pitch: 7.62mm; Vertical; threaded flange || order number: 1829248 12A 630V
+phoenix_contact connector GMSTBV_01x11_GF_7.62mm
+0
+11
+11
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_11-GF-7,62_1x11_P7.62mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/11-GF-7,62; number of pins: 11; pin pitch: 7.62mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1829248 12A 630V
+phoenix_contact connector GMSTBV_01x11_GF_7.62mm_MH
+0
+11
+11
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_12-GF-7,62_1x12_P7.62mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/12-GF-7,62; number of pins: 12; pin pitch: 7.62mm; Vertical; threaded flange || order number: 1829251 12A 630V
+phoenix_contact connector GMSTBV_01x12_GF_7.62mm
+0
+12
+12
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTBV_2,5_12-GF-7,62_1x12_P7.62mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTBV_2,5/12-GF-7,62; number of pins: 12; pin pitch: 7.62mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1829251 12A 630V
+phoenix_contact connector GMSTBV_01x12_GF_7.62mm_MH
+0
+12
+12
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_2-GF-7,62_1x02_P7.62mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/2-GF-7,62; number of pins: 02; pin pitch: 7.62mm; Angled; threaded flange || order number: 1806229 12A 630V
+phoenix_contact connector GMSTB_01x02_GF_7.62mm
+0
+2
+2
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_2-GF-7,62_1x02_P7.62mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/2-GF-7,62; number of pins: 02; pin pitch: 7.62mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1806229 12A 630V
+phoenix_contact connector GMSTB_01x02_GF_7.62mm_MH
+0
+2
+2
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_3-GF-7,62_1x03_P7.62mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/3-GF-7,62; number of pins: 03; pin pitch: 7.62mm; Angled; threaded flange || order number: 1806232 12A 630V
+phoenix_contact connector GMSTB_01x03_GF_7.62mm
+0
+3
+3
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_3-GF-7,62_1x03_P7.62mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/3-GF-7,62; number of pins: 03; pin pitch: 7.62mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1806232 12A 630V
+phoenix_contact connector GMSTB_01x03_GF_7.62mm_MH
+0
+3
+3
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_4-GF-7,62_1x04_P7.62mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/4-GF-7,62; number of pins: 04; pin pitch: 7.62mm; Angled; threaded flange || order number: 1806245 12A 630V
+phoenix_contact connector GMSTB_01x04_GF_7.62mm
+0
+4
+4
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_4-GF-7,62_1x04_P7.62mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/4-GF-7,62; number of pins: 04; pin pitch: 7.62mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1806245 12A 630V
+phoenix_contact connector GMSTB_01x04_GF_7.62mm_MH
+0
+4
+4
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_5-GF-7,62_1x05_P7.62mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/5-GF-7,62; number of pins: 05; pin pitch: 7.62mm; Angled; threaded flange || order number: 1806258 12A 630V
+phoenix_contact connector GMSTB_01x05_GF_7.62mm
+0
+5
+5
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_5-GF-7,62_1x05_P7.62mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/5-GF-7,62; number of pins: 05; pin pitch: 7.62mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1806258 12A 630V
+phoenix_contact connector GMSTB_01x05_GF_7.62mm_MH
+0
+5
+5
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_6-GF-7,62_1x06_P7.62mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/6-GF-7,62; number of pins: 06; pin pitch: 7.62mm; Angled; threaded flange || order number: 1806261 12A 630V
+phoenix_contact connector GMSTB_01x06_GF_7.62mm
+0
+6
+6
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_6-GF-7,62_1x06_P7.62mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/6-GF-7,62; number of pins: 06; pin pitch: 7.62mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1806261 12A 630V
+phoenix_contact connector GMSTB_01x06_GF_7.62mm_MH
+0
+6
+6
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_7-GF-7,62_1x07_P7.62mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/7-GF-7,62; number of pins: 07; pin pitch: 7.62mm; Angled; threaded flange || order number: 1806274 12A 630V
+phoenix_contact connector GMSTB_01x07_GF_7.62mm
+0
+7
+7
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_7-GF-7,62_1x07_P7.62mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/7-GF-7,62; number of pins: 07; pin pitch: 7.62mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1806274 12A 630V
+phoenix_contact connector GMSTB_01x07_GF_7.62mm_MH
+0
+7
+7
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_8-GF-7,62_1x08_P7.62mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/8-GF-7,62; number of pins: 08; pin pitch: 7.62mm; Angled; threaded flange || order number: 1806287 12A 630V
+phoenix_contact connector GMSTB_01x08_GF_7.62mm
+0
+8
+8
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_8-GF-7,62_1x08_P7.62mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/8-GF-7,62; number of pins: 08; pin pitch: 7.62mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1806287 12A 630V
+phoenix_contact connector GMSTB_01x08_GF_7.62mm_MH
+0
+8
+8
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_9-GF-7,62_1x09_P7.62mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/9-GF-7,62; number of pins: 09; pin pitch: 7.62mm; Angled; threaded flange || order number: 1806290 12A 630V
+phoenix_contact connector GMSTB_01x09_GF_7.62mm
+0
+9
+9
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_9-GF-7,62_1x09_P7.62mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/9-GF-7,62; number of pins: 09; pin pitch: 7.62mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1806290 12A 630V
+phoenix_contact connector GMSTB_01x09_GF_7.62mm_MH
+0
+9
+9
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_10-GF-7,62_1x10_P7.62mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/10-GF-7,62; number of pins: 10; pin pitch: 7.62mm; Angled; threaded flange || order number: 1806300 12A 630V
+phoenix_contact connector GMSTB_01x10_GF_7.62mm
+0
+10
+10
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_10-GF-7,62_1x10_P7.62mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/10-GF-7,62; number of pins: 10; pin pitch: 7.62mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1806300 12A 630V
+phoenix_contact connector GMSTB_01x10_GF_7.62mm_MH
+0
+10
+10
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_11-GF-7,62_1x11_P7.62mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/11-GF-7,62; number of pins: 11; pin pitch: 7.62mm; Angled; threaded flange || order number: 1806313 12A 630V
+phoenix_contact connector GMSTB_01x11_GF_7.62mm
+0
+11
+11
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_11-GF-7,62_1x11_P7.62mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/11-GF-7,62; number of pins: 11; pin pitch: 7.62mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1806313 12A 630V
+phoenix_contact connector GMSTB_01x11_GF_7.62mm_MH
+0
+11
+11
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_12-GF-7,62_1x12_P7.62mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/12-GF-7,62; number of pins: 12; pin pitch: 7.62mm; Angled; threaded flange || order number: 1806326 12A 630V
+phoenix_contact connector GMSTB_01x12_GF_7.62mm
+0
+12
+12
+Connector_Phoenix_GMSTB
+PhoenixContact_GMSTB_2,5_12-GF-7,62_1x12_P7.62mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: GMSTB_2,5/12-GF-7,62; number of pins: 12; pin pitch: 7.62mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x6.5 C or ISO 7049-ST 2.2x6.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1806326 12A 630V
+phoenix_contact connector GMSTB_01x12_GF_7.62mm_MH
+0
+12
+12
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_2-G-5.08_1x02_P5.08mm_Vertical
+Generic Phoenix Contact connector footprint for: MCV_1,5/2-G-5.08; number of pins: 02; pin pitch: 5.08mm; Vertical || order number: 1836299 8A 320V
+phoenix_contact connector MCV_01x02_G_5.08mm
+0
+2
+2
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_2-GF-5.08_1x02_P5.08mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MCV_1,5/2-GF-5.08; number of pins: 02; pin pitch: 5.08mm; Vertical; threaded flange || order number: 1847615 8A 320V
+phoenix_contact connector MCV_01x02_GF_5.08mm
+0
+2
+2
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_2-GF-5.08_1x02_P5.08mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MCV_1,5/2-GF-5.08; number of pins: 02; pin pitch: 5.08mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847615 8A 320V
+phoenix_contact connector MCV_01x02_GF_5.08mm_MH
+0
+2
+2
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_3-G-5.08_1x03_P5.08mm_Vertical
+Generic Phoenix Contact connector footprint for: MCV_1,5/3-G-5.08; number of pins: 03; pin pitch: 5.08mm; Vertical || order number: 1836309 8A 320V
+phoenix_contact connector MCV_01x03_G_5.08mm
+0
+3
+3
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_3-GF-5.08_1x03_P5.08mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MCV_1,5/3-GF-5.08; number of pins: 03; pin pitch: 5.08mm; Vertical; threaded flange || order number: 1847628 8A 320V
+phoenix_contact connector MCV_01x03_GF_5.08mm
+0
+3
+3
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_3-GF-5.08_1x03_P5.08mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MCV_1,5/3-GF-5.08; number of pins: 03; pin pitch: 5.08mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847628 8A 320V
+phoenix_contact connector MCV_01x03_GF_5.08mm_MH
+0
+3
+3
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_4-G-5.08_1x04_P5.08mm_Vertical
+Generic Phoenix Contact connector footprint for: MCV_1,5/4-G-5.08; number of pins: 04; pin pitch: 5.08mm; Vertical || order number: 1836312 8A 320V
+phoenix_contact connector MCV_01x04_G_5.08mm
+0
+4
+4
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_4-GF-5.08_1x04_P5.08mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MCV_1,5/4-GF-5.08; number of pins: 04; pin pitch: 5.08mm; Vertical; threaded flange || order number: 1847631 8A 320V
+phoenix_contact connector MCV_01x04_GF_5.08mm
+0
+4
+4
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_4-GF-5.08_1x04_P5.08mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MCV_1,5/4-GF-5.08; number of pins: 04; pin pitch: 5.08mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847631 8A 320V
+phoenix_contact connector MCV_01x04_GF_5.08mm_MH
+0
+4
+4
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_5-G-5.08_1x05_P5.08mm_Vertical
+Generic Phoenix Contact connector footprint for: MCV_1,5/5-G-5.08; number of pins: 05; pin pitch: 5.08mm; Vertical || order number: 1836325 8A 320V
+phoenix_contact connector MCV_01x05_G_5.08mm
+0
+5
+5
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_5-GF-5.08_1x05_P5.08mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MCV_1,5/5-GF-5.08; number of pins: 05; pin pitch: 5.08mm; Vertical; threaded flange || order number: 1847644 8A 320V
+phoenix_contact connector MCV_01x05_GF_5.08mm
+0
+5
+5
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_5-GF-5.08_1x05_P5.08mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MCV_1,5/5-GF-5.08; number of pins: 05; pin pitch: 5.08mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847644 8A 320V
+phoenix_contact connector MCV_01x05_GF_5.08mm_MH
+0
+5
+5
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_6-G-5.08_1x06_P5.08mm_Vertical
+Generic Phoenix Contact connector footprint for: MCV_1,5/6-G-5.08; number of pins: 06; pin pitch: 5.08mm; Vertical || order number: 1836338 8A 320V
+phoenix_contact connector MCV_01x06_G_5.08mm
+0
+6
+6
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_6-GF-5.08_1x06_P5.08mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MCV_1,5/6-GF-5.08; number of pins: 06; pin pitch: 5.08mm; Vertical; threaded flange || order number: 1847657 8A 320V
+phoenix_contact connector MCV_01x06_GF_5.08mm
+0
+6
+6
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_6-GF-5.08_1x06_P5.08mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MCV_1,5/6-GF-5.08; number of pins: 06; pin pitch: 5.08mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847657 8A 320V
+phoenix_contact connector MCV_01x06_GF_5.08mm_MH
+0
+6
+6
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_7-G-5.08_1x07_P5.08mm_Vertical
+Generic Phoenix Contact connector footprint for: MCV_1,5/7-G-5.08; number of pins: 07; pin pitch: 5.08mm; Vertical || order number: 1836341 8A 320V
+phoenix_contact connector MCV_01x07_G_5.08mm
+0
+7
+7
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_7-GF-5.08_1x07_P5.08mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MCV_1,5/7-GF-5.08; number of pins: 07; pin pitch: 5.08mm; Vertical; threaded flange || order number: 1847660 8A 320V
+phoenix_contact connector MCV_01x07_GF_5.08mm
+0
+7
+7
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_7-GF-5.08_1x07_P5.08mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MCV_1,5/7-GF-5.08; number of pins: 07; pin pitch: 5.08mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847660 8A 320V
+phoenix_contact connector MCV_01x07_GF_5.08mm_MH
+0
+7
+7
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_8-G-5.08_1x08_P5.08mm_Vertical
+Generic Phoenix Contact connector footprint for: MCV_1,5/8-G-5.08; number of pins: 08; pin pitch: 5.08mm; Vertical || order number: 1836354 8A 320V
+phoenix_contact connector MCV_01x08_G_5.08mm
+0
+8
+8
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_8-GF-5.08_1x08_P5.08mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MCV_1,5/8-GF-5.08; number of pins: 08; pin pitch: 5.08mm; Vertical; threaded flange || order number: 1847673 8A 320V
+phoenix_contact connector MCV_01x08_GF_5.08mm
+0
+8
+8
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_8-GF-5.08_1x08_P5.08mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MCV_1,5/8-GF-5.08; number of pins: 08; pin pitch: 5.08mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847673 8A 320V
+phoenix_contact connector MCV_01x08_GF_5.08mm_MH
+0
+8
+8
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_9-G-5.08_1x09_P5.08mm_Vertical
+Generic Phoenix Contact connector footprint for: MCV_1,5/9-G-5.08; number of pins: 09; pin pitch: 5.08mm; Vertical || order number: 1836367 8A 320V
+phoenix_contact connector MCV_01x09_G_5.08mm
+0
+9
+9
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_9-GF-5.08_1x09_P5.08mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MCV_1,5/9-GF-5.08; number of pins: 09; pin pitch: 5.08mm; Vertical; threaded flange || order number: 1847686 8A 320V
+phoenix_contact connector MCV_01x09_GF_5.08mm
+0
+9
+9
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_9-GF-5.08_1x09_P5.08mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MCV_1,5/9-GF-5.08; number of pins: 09; pin pitch: 5.08mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847686 8A 320V
+phoenix_contact connector MCV_01x09_GF_5.08mm_MH
+0
+9
+9
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_10-G-5.08_1x10_P5.08mm_Vertical
+Generic Phoenix Contact connector footprint for: MCV_1,5/10-G-5.08; number of pins: 10; pin pitch: 5.08mm; Vertical || order number: 1836370 8A 320V
+phoenix_contact connector MCV_01x10_G_5.08mm
+0
+10
+10
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_10-GF-5.08_1x10_P5.08mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MCV_1,5/10-GF-5.08; number of pins: 10; pin pitch: 5.08mm; Vertical; threaded flange || order number: 1847699 8A 320V
+phoenix_contact connector MCV_01x10_GF_5.08mm
+0
+10
+10
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_10-GF-5.08_1x10_P5.08mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MCV_1,5/10-GF-5.08; number of pins: 10; pin pitch: 5.08mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847699 8A 320V
+phoenix_contact connector MCV_01x10_GF_5.08mm_MH
+0
+10
+10
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_11-G-5.08_1x11_P5.08mm_Vertical
+Generic Phoenix Contact connector footprint for: MCV_1,5/11-G-5.08; number of pins: 11; pin pitch: 5.08mm; Vertical || order number: 1836383 8A 320V
+phoenix_contact connector MCV_01x11_G_5.08mm
+0
+11
+11
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_11-GF-5.08_1x11_P5.08mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MCV_1,5/11-GF-5.08; number of pins: 11; pin pitch: 5.08mm; Vertical; threaded flange || order number: 1847709 8A 320V
+phoenix_contact connector MCV_01x11_GF_5.08mm
+0
+11
+11
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_11-GF-5.08_1x11_P5.08mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MCV_1,5/11-GF-5.08; number of pins: 11; pin pitch: 5.08mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847709 8A 320V
+phoenix_contact connector MCV_01x11_GF_5.08mm_MH
+0
+11
+11
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_12-G-5.08_1x12_P5.08mm_Vertical
+Generic Phoenix Contact connector footprint for: MCV_1,5/12-G-5.08; number of pins: 12; pin pitch: 5.08mm; Vertical || order number: 1836396 8A 320V
+phoenix_contact connector MCV_01x12_G_5.08mm
+0
+12
+12
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_12-GF-5.08_1x12_P5.08mm_Vertical_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MCV_1,5/12-GF-5.08; number of pins: 12; pin pitch: 5.08mm; Vertical; threaded flange || order number: 1847712 8A 320V
+phoenix_contact connector MCV_01x12_GF_5.08mm
+0
+12
+12
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MCV_1,5_12-GF-5.08_1x12_P5.08mm_Vertical_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MCV_1,5/12-GF-5.08; number of pins: 12; pin pitch: 5.08mm; Vertical; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847712 8A 320V
+phoenix_contact connector MCV_01x12_GF_5.08mm_MH
+0
+12
+12
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_2-G-5.08_1x02_P5.08mm_Horizontal
+Generic Phoenix Contact connector footprint for: MC_1,5/2-G-5.08; number of pins: 02; pin pitch: 5.08mm; Angled || order number: 1836189 8A 320V
+phoenix_contact connector MC_01x02_G_5.08mm
+0
+2
+2
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_2-GF-5.08_1x02_P5.08mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MC_1,5/2-GF-5.08; number of pins: 02; pin pitch: 5.08mm; Angled; threaded flange || order number: 1847466 8A 320V
+phoenix_contact connector MC_01x02_GF_5.08mm
+0
+2
+2
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_2-GF-5.08_1x02_P5.08mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MC_1,5/2-GF-5.08; number of pins: 02; pin pitch: 5.08mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847466 8A 320V
+phoenix_contact connector MC_01x02_GF_5.08mm_MH
+0
+2
+2
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_3-G-5.08_1x03_P5.08mm_Horizontal
+Generic Phoenix Contact connector footprint for: MC_1,5/3-G-5.08; number of pins: 03; pin pitch: 5.08mm; Angled || order number: 1836192 8A 320V
+phoenix_contact connector MC_01x03_G_5.08mm
+0
+3
+3
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_3-GF-5.08_1x03_P5.08mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MC_1,5/3-GF-5.08; number of pins: 03; pin pitch: 5.08mm; Angled; threaded flange || order number: 1847479 8A 320V
+phoenix_contact connector MC_01x03_GF_5.08mm
+0
+3
+3
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_3-GF-5.08_1x03_P5.08mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MC_1,5/3-GF-5.08; number of pins: 03; pin pitch: 5.08mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847479 8A 320V
+phoenix_contact connector MC_01x03_GF_5.08mm_MH
+0
+3
+3
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_4-G-5.08_1x04_P5.08mm_Horizontal
+Generic Phoenix Contact connector footprint for: MC_1,5/4-G-5.08; number of pins: 04; pin pitch: 5.08mm; Angled || order number: 1836202 8A 320V
+phoenix_contact connector MC_01x04_G_5.08mm
+0
+4
+4
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_4-GF-5.08_1x04_P5.08mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MC_1,5/4-GF-5.08; number of pins: 04; pin pitch: 5.08mm; Angled; threaded flange || order number: 1847482 8A 320V
+phoenix_contact connector MC_01x04_GF_5.08mm
+0
+4
+4
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_4-GF-5.08_1x04_P5.08mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MC_1,5/4-GF-5.08; number of pins: 04; pin pitch: 5.08mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847482 8A 320V
+phoenix_contact connector MC_01x04_GF_5.08mm_MH
+0
+4
+4
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_5-G-5.08_1x05_P5.08mm_Horizontal
+Generic Phoenix Contact connector footprint for: MC_1,5/5-G-5.08; number of pins: 05; pin pitch: 5.08mm; Angled || order number: 1836215 8A 320V
+phoenix_contact connector MC_01x05_G_5.08mm
+0
+5
+5
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_5-GF-5.08_1x05_P5.08mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MC_1,5/5-GF-5.08; number of pins: 05; pin pitch: 5.08mm; Angled; threaded flange || order number: 1847495 8A 320V
+phoenix_contact connector MC_01x05_GF_5.08mm
+0
+5
+5
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_5-GF-5.08_1x05_P5.08mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MC_1,5/5-GF-5.08; number of pins: 05; pin pitch: 5.08mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847495 8A 320V
+phoenix_contact connector MC_01x05_GF_5.08mm_MH
+0
+5
+5
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_6-G-5.08_1x06_P5.08mm_Horizontal
+Generic Phoenix Contact connector footprint for: MC_1,5/6-G-5.08; number of pins: 06; pin pitch: 5.08mm; Angled || order number: 1836228 8A 320V
+phoenix_contact connector MC_01x06_G_5.08mm
+0
+6
+6
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_6-GF-5.08_1x06_P5.08mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MC_1,5/6-GF-5.08; number of pins: 06; pin pitch: 5.08mm; Angled; threaded flange || order number: 1847505 8A 320V
+phoenix_contact connector MC_01x06_GF_5.08mm
+0
+6
+6
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_6-GF-5.08_1x06_P5.08mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MC_1,5/6-GF-5.08; number of pins: 06; pin pitch: 5.08mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847505 8A 320V
+phoenix_contact connector MC_01x06_GF_5.08mm_MH
+0
+6
+6
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_7-G-5.08_1x07_P5.08mm_Horizontal
+Generic Phoenix Contact connector footprint for: MC_1,5/7-G-5.08; number of pins: 07; pin pitch: 5.08mm; Angled || order number: 1836231 8A 320V
+phoenix_contact connector MC_01x07_G_5.08mm
+0
+7
+7
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_7-GF-5.08_1x07_P5.08mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MC_1,5/7-GF-5.08; number of pins: 07; pin pitch: 5.08mm; Angled; threaded flange || order number: 1847518 8A 320V
+phoenix_contact connector MC_01x07_GF_5.08mm
+0
+7
+7
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_7-GF-5.08_1x07_P5.08mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MC_1,5/7-GF-5.08; number of pins: 07; pin pitch: 5.08mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847518 8A 320V
+phoenix_contact connector MC_01x07_GF_5.08mm_MH
+0
+7
+7
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_8-G-5.08_1x08_P5.08mm_Horizontal
+Generic Phoenix Contact connector footprint for: MC_1,5/8-G-5.08; number of pins: 08; pin pitch: 5.08mm; Angled || order number: 1836244 8A 320V
+phoenix_contact connector MC_01x08_G_5.08mm
+0
+8
+8
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_8-GF-5.08_1x08_P5.08mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MC_1,5/8-GF-5.08; number of pins: 08; pin pitch: 5.08mm; Angled; threaded flange || order number: 1847521 8A 320V
+phoenix_contact connector MC_01x08_GF_5.08mm
+0
+8
+8
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_8-GF-5.08_1x08_P5.08mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MC_1,5/8-GF-5.08; number of pins: 08; pin pitch: 5.08mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847521 8A 320V
+phoenix_contact connector MC_01x08_GF_5.08mm_MH
+0
+8
+8
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_9-G-5.08_1x09_P5.08mm_Horizontal
+Generic Phoenix Contact connector footprint for: MC_1,5/9-G-5.08; number of pins: 09; pin pitch: 5.08mm; Angled || order number: 1836257 8A 320V
+phoenix_contact connector MC_01x09_G_5.08mm
+0
+9
+9
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_9-GF-5.08_1x09_P5.08mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MC_1,5/9-GF-5.08; number of pins: 09; pin pitch: 5.08mm; Angled; threaded flange || order number: 1847534 8A 320V
+phoenix_contact connector MC_01x09_GF_5.08mm
+0
+9
+9
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_9-GF-5.08_1x09_P5.08mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MC_1,5/9-GF-5.08; number of pins: 09; pin pitch: 5.08mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847534 8A 320V
+phoenix_contact connector MC_01x09_GF_5.08mm_MH
+0
+9
+9
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_10-G-5.08_1x10_P5.08mm_Horizontal
+Generic Phoenix Contact connector footprint for: MC_1,5/10-G-5.08; number of pins: 10; pin pitch: 5.08mm; Angled || order number: 1836260 8A 320V
+phoenix_contact connector MC_01x10_G_5.08mm
+0
+10
+10
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_10-GF-5.08_1x10_P5.08mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MC_1,5/10-GF-5.08; number of pins: 10; pin pitch: 5.08mm; Angled; threaded flange || order number: 1847547 8A 320V
+phoenix_contact connector MC_01x10_GF_5.08mm
+0
+10
+10
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_10-GF-5.08_1x10_P5.08mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MC_1,5/10-GF-5.08; number of pins: 10; pin pitch: 5.08mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847547 8A 320V
+phoenix_contact connector MC_01x10_GF_5.08mm_MH
+0
+10
+10
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_11-G-5.08_1x11_P5.08mm_Horizontal
+Generic Phoenix Contact connector footprint for: MC_1,5/11-G-5.08; number of pins: 11; pin pitch: 5.08mm; Angled || order number: 1836273 8A 320V
+phoenix_contact connector MC_01x11_G_5.08mm
+0
+11
+11
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_11-GF-5.08_1x11_P5.08mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MC_1,5/11-GF-5.08; number of pins: 11; pin pitch: 5.08mm; Angled; threaded flange || order number: 1847550 8A 320V
+phoenix_contact connector MC_01x11_GF_5.08mm
+0
+11
+11
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_11-GF-5.08_1x11_P5.08mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MC_1,5/11-GF-5.08; number of pins: 11; pin pitch: 5.08mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847550 8A 320V
+phoenix_contact connector MC_01x11_GF_5.08mm_MH
+0
+11
+11
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_12-G-5.08_1x12_P5.08mm_Horizontal
+Generic Phoenix Contact connector footprint for: MC_1,5/12-G-5.08; number of pins: 12; pin pitch: 5.08mm; Angled || order number: 1836286 8A 320V
+phoenix_contact connector MC_01x12_G_5.08mm
+0
+12
+12
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_12-GF-5.08_1x12_P5.08mm_Horizontal_ThreadedFlange
+Generic Phoenix Contact connector footprint for: MC_1,5/12-GF-5.08; number of pins: 12; pin pitch: 5.08mm; Angled; threaded flange || order number: 1847563 8A 320V
+phoenix_contact connector MC_01x12_GF_5.08mm
+0
+12
+12
+Connector_Phoenix_MC_HighVoltage
+PhoenixContact_MC_1,5_12-GF-5.08_1x12_P5.08mm_Horizontal_ThreadedFlange_MountHole
+Generic Phoenix Contact connector footprint for: MC_1,5/12-GF-5.08; number of pins: 12; pin pitch: 5.08mm; Angled; threaded flange; footprint includes mount hole for mounting screw: ISO 1481-ST 2.2x4.5 C or ISO 7049-ST 2.2x4.5 C (http://www.fasteners.eu/standards/ISO/7049/) || order number: 1847563 8A 320V
+phoenix_contact connector MC_01x12_GF_5.08mm_MH
+0
+12
+12
+Connector_Pin
+Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork
+solder Pin_ with flat fork, hole diameter 0.7mm, length 6.5mm, width 1.8mm
+solder Pin_ with flat fork
+0
+1
+1
+Connector_Pin
+Pin_D0.9mm_L10.0mm_W2.4mm_FlatFork
+solder Pin_ with flat fork, hole diameter 0.9mm, length 10.0mm, width 2.4mm
+solder Pin_ with flat fork
+0
+1
+1
+Connector_Pin
+Pin_D1.0mm_L10.0mm
+solder Pin_ diameter 1.0mm, hole diameter 1.0mm (press fit), length 10.0mm
+solder Pin_ press fit
+0
+1
+1
+Connector_Pin
+Pin_D1.0mm_L10.0mm_LooseFit
+solder Pin_ diameter 1.0mm, hole diameter 1.2mm (loose fit), length 10.0mm
+solder Pin_ loose fit
+0
+1
+1
+Connector_Pin
+Pin_D1.1mm_L8.5mm_W2.5mm_FlatFork
+solder Pin_ with flat fork, hole diameter 1.1mm, length 8.5mm, width 2.5mm
+solder Pin_ with flat fork
+0
+1
+1
+Connector_Pin
+Pin_D1.1mm_L10.2mm_W3.5mm_Flat
+solder Pin_ with flat with hole, hole diameter 1.1mm, length 10.2mm, width 3.5mm
+solder Pin_ with flat fork
+0
+1
+1
+Connector_Pin
+Pin_D1.2mm_L10.2mm_W2.9mm_FlatFork
+solder Pin_ with flat with fork, hole diameter 1.2mm, length 11.3mm, width 3.0mm
+solder Pin_ with flat fork
+0
+1
+1
+Connector_Pin
+Pin_D1.2mm_L11.3mm_W3.0mm_Flat
+solder Pin_ with flat with hole, hole diameter 1.2mm, length 11.3mm, width 3.0mm
+solder Pin_ with flat fork
+0
+1
+1
+Connector_Pin
+Pin_D1.3mm_L10.0mm_W3.5mm_Flat
+solder Pin_ with flat with hole, hole diameter 1.3mm, length 10.0mm, width 3.5mm, e.g. Ettinger 13.13.865, https://katalog.ettinger.de/#p=434
+solder Pin_ with flat fork
+0
+1
+1
+Connector_Pin
+Pin_D1.3mm_L11.0mm
+solder Pin_ diameter 1.3mm, hole diameter 1.3mm, length 11.0mm
+solder Pin_ pressfit
+0
+1
+1
+Connector_Pin
+Pin_D1.3mm_L11.0mm_LooseFit
+solder Pin_ diameter 1.3mm, hole diameter 1.5mm (loose fit), length 11.0mm
+solder Pin_ loose fit
+0
+1
+1
+Connector_Pin
+Pin_D1.3mm_L11.3mm_W2.8mm_Flat
+solder Pin_ with flat with hole, hole diameter 1.3mm, length 11.3mm, width 2.8mm
+solder Pin_ with flat fork
+0
+1
+1
+Connector_Pin
+Pin_D1.4mm_L8.5mm_W2.8mm_FlatFork
+solder Pin_ with flat with fork, hole diameter 1.4mm, length 8.5mm, width 2.8mm, e.g. Ettinger 13.13.890, https://katalog.ettinger.de/#p=434
+solder Pin_ with flat fork
+0
+1
+1
