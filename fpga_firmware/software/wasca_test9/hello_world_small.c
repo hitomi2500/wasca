@@ -534,16 +534,6 @@ int main(void)
 
                 load_boot_rom(rom_id);
 
-                /* Mapper stuff. */
-                pRegs_16[MAPPER_WRITE_0] =      0xFFFF; /* Lock cs0 writes.                            */
-                pRegs_16[MAPPER_WRITE_1] =      0xFFFF; /* Lock cs0 writes.                            */
-                pRegs_16[MAPPER_WRITE_2] =      0xFFFF; /* Lock cs1 writes.                            */
-                pRegs_16[MAPPER_WRITE_3] =      0; /* Lock cs2 writes.                            */
-                pRegs_16[MAPPER_READ_0 ] = 0xFFFF;//     3; /* Unmap cs0, leave first 2 megs.              */
-                pRegs_16[MAPPER_READ_1 ] = 0xFFFF;//0x8100; /* Unmap cs0, leave regs and minipseudo areas. */
-                pRegs_16[MAPPER_READ_2 ] = 0xFFFF;//     0; /* Unmap cs1.                                  */
-                pRegs_16[MAPPER_READ_3 ] =      0; /* Unmap cs2.                                  */
-
                 logout(WL_LOG_IMPORTANT, "Boot ROM read done.");
             }
 
@@ -631,16 +621,6 @@ int main(void)
                 );
 #endif /* Log time it took to load backup memory data (DEBUG). */
 
-                /* Setup mapper stuff. */
-                pRegs_16[MAPPER_WRITE_0] = 0xFFFF;//     0; /* Lock cs0 writes.                            */
-                pRegs_16[MAPPER_WRITE_1] = 0xFFFF;//     0; /* Lock cs0 writes.                            */
-                pRegs_16[MAPPER_WRITE_2] = 0xFFFF; /* Keep all cs1 writes unlocked.               */
-                pRegs_16[MAPPER_WRITE_3] =      0; /* Lock cs2 writes.                            */
-                pRegs_16[MAPPER_READ_0 ] = 0xFFFF;//     0; /* Unmap cs0.                                  */
-                pRegs_16[MAPPER_READ_1 ] = 0xFFFF;//0x8100; /* Unmap cs0, leave regs and minipseudo areas. */
-                pRegs_16[MAPPER_READ_2 ] = 0xFFFF; /* Keep cs1 mapped.                            */
-                pRegs_16[MAPPER_READ_3 ] =      0; /* Unmap cs2.                                  */
-
                 /* Flush previous fifo content. */
                 pRegs_16[SNIFF_FILTER_CONTROL_REG_OFFSET] = 0x0A; /* Only writes on CS1. */
                 while(pRegs_16[SNIFF_FIFO_CONTENT_SIZE_REG_OFFSET] > 0)
@@ -659,6 +639,111 @@ int main(void)
                 logout(WL_LOG_IMPORTANT, "Backup RAM setup done.");
             }
 
+            /* Update mapper stuff, RAM first */
+            unsigned short mapper_write[4];
+            unsigned short mapper_read[4];
+            unsigned short i;
+        	for (i=0;i<4;i++) mapper_write[i] = 0; //lock all writes
+        	for (i=0;i<4;i++) mapper_read[i] = 0; //lock all reads
+
+        	switch (mode_reg & 0x00F0)
+            {
+            case 0:
+            	//no RAM - keep disabled
+            	break;
+            case 1:
+            	//0.5M RAM
+            	mapper_write[0] = 0x30;
+            	mapper_read[0] = 0x30;
+            	break;
+            case 2:
+            	//1M RAM, aliased
+            	mapper_write[0] = 0xF0;
+            	mapper_read[0] = 0xF0;
+            	break;
+            case 3:
+            	//2M RAM
+            	mapper_write[0] = 0xF0;
+            	mapper_read[0] = 0xF0;
+            	break;
+            case 4:
+            	//4M RAM
+            	mapper_write[0] = 0xF0;
+            	mapper_read[0] = 0xF0;
+            	break;
+            case 5:
+            	//8M RAM
+            	mapper_write[0] = 0xFF;
+            	mapper_read[0] = 0xFF;
+            	break;
+            case 6:
+            	//16M RAM
+            	mapper_write[0] = 0xFFFF;
+            	mapper_read[0] = 0xFFFF;
+            	break;
+            case 7:
+            	//32M RAM
+            	for (i=0;i<2;i++) mapper_write[i] = 0xFFFF;
+            	for (i=0;i<2;i++) mapper_read[i] = 0xFFFF;
+            	break;
+            case 8:
+            default:
+            	//48M RAM
+            	for (i=0;i<3;i++) mapper_write[i] = 0xFFFF;
+            	for (i=0;i<3;i++) mapper_read[i] = 0xFFFF;
+            	break;
+            }
+
+        	//backup next
+        	switch (mode_reg & 0x000F)
+            {
+            case 0:
+            	//no backup - keep disabled
+            	break;
+            case 1:
+            	//0.5M backup
+            	mapper_write[2] |= 0x1;
+            	mapper_read[2] |= 0x1;
+            	break;
+            case 2:
+            	//1M backup
+            	mapper_write[2] |= 0x3;
+            	mapper_read[2] |= 0x3;
+            	break;
+            case 3:
+            	//2M backup
+            	mapper_write[2] |= 0x7;
+            	mapper_read[2] |= 0x7;
+            	break;
+            case 4:
+            default:
+            	//4M backup
+            	mapper_write[2] |= 0xF;
+            	mapper_read[2] |= 0xF;
+            	break;
+            }
+
+        	//ROM is last
+        	switch (mode_reg & 0x000F)
+            {
+            case 0:
+            	//no ROM - keep disabled
+            	break;
+            default:
+            	//some ROM, enable entire CS0 as read-only
+            	for (i=0;i<2;i++) mapper_read[i] = 0xFFFF;
+            	break;
+            }
+
+        	//update the registers
+            pRegs_16[MAPPER_WRITE_0] = mapper_write[0];
+            pRegs_16[MAPPER_WRITE_1] = mapper_write[1];
+            pRegs_16[MAPPER_WRITE_2] = mapper_write[2];
+            pRegs_16[MAPPER_WRITE_3] =      0; /* Lock cs2 writes.                            */
+            pRegs_16[MAPPER_READ_0 ] = mapper_read[0];
+            pRegs_16[MAPPER_READ_1 ] = mapper_read[1];
+            pRegs_16[MAPPER_READ_2 ] = mapper_read[2];
+            pRegs_16[MAPPER_READ_3 ] =      0; /* Unmap cs2.                                  */
 
             /* Mode initialization ended : keep track of mode value
              * in order to detect change after that.
