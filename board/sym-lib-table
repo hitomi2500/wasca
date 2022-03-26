@@ -1,5 +1,4 @@
 (sym_lib_table
-  (lib (name "10M08SCE144I7G")(type "Legacy")(uri "${KIPRJMOD}/libraries/10M08SCE144I7G.lib")(options "")(descr "")(disabled))
   (lib (name "USB-MB-S")(type "KiCad")(uri "${KIPRJMOD}/USB-MB-S.kicad_sym")(options "")(descr ""))
   (lib (name "TP")(type "KiCad")(uri "${KIPRJMOD}/TP.kicad_sym")(options "")(descr ""))
   (lib (name "wasca")(type "KiCad")(uri "${KIPRJMOD}/wasca.kicad_sym")(options "")(descr ""))
