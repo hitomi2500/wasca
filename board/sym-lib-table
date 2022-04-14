@@ -6,4 +6,5 @@
   (lib (name "segata")(type "KiCad")(uri "${KIPRJMOD}/segata.kicad_sym")(options "")(descr ""))
   (lib (name "vache")(type "KiCad")(uri "${KIPRJMOD}/vache.kicad_sym")(options "")(descr ""))
   (lib (name "693063020911")(type "KiCad")(uri "${KIPRJMOD}/693063020911.kicad_sym")(options "")(descr ""))
+  (lib (name "shiro!")(type "KiCad")(uri "${KIPRJMOD}/shiro.kicad_sym")(options "")(descr ""))
 )
