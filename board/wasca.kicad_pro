@@ -56,7 +56,9 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "courtyards_overlap|100399999|81400001|00000000-0000-0000-0000-00005fc60c06|a65bce1b-3cdc-4847-8ae9-0a87cc53222a"
+      ],
       "meta": {
         "version": 2
       },
@@ -180,6 +182,7 @@
       ],
       "track_widths": [
         0.0,
+        0.1524,
         0.2031,
         0.4064,
         0.635,
@@ -435,8 +438,8 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
-        "via_diameter": 0.8,
-        "via_drill": 0.4,
+        "via_diameter": 0.7,
+        "via_drill": 0.3,
         "wire_width": 6
       }
     ],

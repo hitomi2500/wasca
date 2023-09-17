@@ -1,4 +1,4 @@
-22288506945231228
+22290201361205589
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -91881,6 +91881,13 @@ wasca
 0
 15
 15
+wasca
+BGA25C100P5X5_800X600X120N
+
+
+0
+24
+24
 wasca
 CARTRIDGE_EDGE_CONNECTOR2
 
