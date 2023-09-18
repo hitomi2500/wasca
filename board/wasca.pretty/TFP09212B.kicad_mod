@@ -2,7 +2,7 @@
   (layer "F.Cu")
   (descr "TFP09-2-12B-2")
   (tags "Connector")
-  (attr through_hole)
+  (attr smd)
   (fp_text reference "J**" (at 7.65 0) (layer "F.SilkS")
       (effects (font (size 1.27 1.27) (thickness 0.254)))
     (tstamp 49319706-8532-43ad-90a2-b0ec85e03cd4)

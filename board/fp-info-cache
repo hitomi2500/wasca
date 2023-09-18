@@ -1,4 +1,4 @@
-22290201361205589
+22259692617437632
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -91994,13 +91994,6 @@ QFP 0.5
 64
 64
 wasca
-L_4.2X4.2_LARGE
-
-
-0
-2
-2
-wasca
 MODULE_ESP32-CAM
 
 
@@ -92015,40 +92008,12 @@ MODULE_ESP32-CAM-HALF
 8
 8
 wasca
-MODULE_ESP32-DEVKITC-32D
-
-
-0
-38
-38
-wasca
-MicroUSB
-Molex 47642-0001 : Micro USB B connector, mid mount w/ through hole solder tab
-
-0
-9
-6
-wasca
 Multicomp_MC9A22-1034_2x05_P2.54mm_Horizontal
 http://www.farnell.com/cad/360651.pdf
 connector multicomp MC9A MC9A22
 0
 10
 10
-wasca
-NINJA_SW
-Ninja Switch
-pin header
-0
-3
-3
-wasca
-PCB_IF_ANT_2.4G
-PCB trace antenna for 2.4GHz applications (based on TI DN0007 Inverted F antenna reference design)
-
-0
-2
-2
 wasca
 Pin_Header_Straight_2x02
 Through hole pin header
@@ -92057,75 +92022,12 @@ pin header
 4
 4
 wasca
-Pin_Header_Straight_2x04
-Through hole straight pin header, 2x04, 2.54mm pitch, double rows
-Through hole pin header THT 2x04 2.54mm double row
-0
-8
-8
-wasca
-Pin_Header_Straight_2x05
-Through hole straight pin header, 2x05, 2.54mm pitch, double rows
-Through hole pin header THT 2x05 2.54mm double row
-0
-10
-10
-wasca
-Pinhead_2x3_SMD
-
-
-0
-6
-6
-wasca
-Pinhead_2x5_SMD
-
-
-0
-10
-10
-wasca
-QFN40_0.5mmPitch_6x6mm
-
-
-0
-49
-41
-wasca
-QFN48_EXP
-
-
-0
-49
-49
-wasca
-QFN56_EXP
-
-
-0
-57
-57
-wasca
 SHIRO!
 
 
 0
 0
 0
-wasca
-SMD_SW
-Light Touch Switch, https://www.mouser.jp/datasheet/2/15/SKQG-1155865.pdf
-
-0
-4
-2
-wasca
-SOT23-5_LARGEPADS
-SOT23-5
-
-0
-5
-5
 wasca
 SSOP28
 SSOP 28 pins
@@ -92189,31 +92091,3 @@ WIRE_PAD
 0
 1
 1
-wasca
-con-usb-USB-A-H
-USB SERIES A HOLE MOUNTED
-USB SERIES A HOLE MOUNTED
-0
-6
-6
-wasca
-con-usb-USB-MB-S
-USB SERIES MINI-B SURFACE MOUNTED
-USB SERIES MINI-B SURFACE MOUNTED
-0
-11
-11
-wasca
-microSD_HC_Hirose_DM3AT-SF-PEJM5
-Micro SD, SMD, right-angle, push-pull (https://www.hirose.com/product/en/download_file/key_name/DM3AT-SF-PEJM5/category/Drawing%20(2D)/doc_file_id/44099/?file_category_id=6&item_id=06090031000&is_series=)
-Micro SD
-0
-14
-11
-wasca
-sd_socket
-SD Card socket, 4UCON P/N 19607
-
-0
-19
-17
