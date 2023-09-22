@@ -15,6 +15,5 @@
 
 @set PATH=E:\msys64\mingw64\bin;E:\msys64\usr\bin;%PATH%
 
-make clean
 make firmware.hex
 make attosoc.bit
