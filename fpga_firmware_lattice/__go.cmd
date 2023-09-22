@@ -13,6 +13,8 @@
 @set GDK_PIXBUF_MODULE_FILE=%YOSYSHQ_ROOT%lib\gdk-pixbuf-2.0\2.10.0\loaders.cache
 @gdk-pixbuf-query-loaders.exe --update-cache
 
-yosys -p "synth_ecp5 -top top -json blinky.json" blinky.v
-nextpnr-ecp5 --json blinky.json --textcfg blinky_out_config --25k --package CABGA256 --lpf ecp5evn.lpf
-ecppack --svf blinky.svf blinky_out_config blinky.bit
+@set PATH=E:\msys64\mingw64\bin;E:\msys64\usr\bin;%PATH%
+
+make clean
+make firmware.hex
+make attosoc.bit
