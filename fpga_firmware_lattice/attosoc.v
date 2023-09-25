@@ -38,8 +38,8 @@ module attosoc (
 		reset_cnt <= reset_cnt + !resetn;
 	end
 
-	parameter integer MEM_WORDS = 8192;
-	parameter [31:0] STACKADDR = 32'h 0000_0000 + (4*MEM_WORDS);       // end of memory
+	parameter integer MEM_WORDS = 16384;
+	parameter [31:0] STACKADDR = 32'h 0000_1000;       // end of bootstrap part of memory
 	parameter [31:0] PROGADDR_RESET = 32'h 0000_0000;       // start of memory
 
 	reg [31:0] ram [0:MEM_WORDS-1];
