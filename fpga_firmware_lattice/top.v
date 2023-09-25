@@ -3,12 +3,15 @@ module top(
     output [7:0] led,
     output uart_tx,
     input uart_rx,
+	output clkout
 );
 
 wire clk;
 wire [7:0] int_led;
 
-pll_100_50 pll(
+assign clkout = clk;
+
+pll_25_133 pll(
     .clki(clkin),
     .clko(clk)
 );

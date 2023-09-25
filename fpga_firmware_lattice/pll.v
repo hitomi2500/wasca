@@ -1,17 +1,17 @@
-module pll_100_50(input clki, output clko);
-    (* ICP_CURRENT="12" *) (* LPF_RESISTOR="8" *) (* MFG_ENABLE_FILTEROPAMP="1" *) (* MFG_GMCREF_SEL="2" *)
+module pll_25_133(input clki, output clko);
+    (* ICP_CURRENT="6" *) (* LPF_RESISTOR="16" *) (* MFG_ENABLE_FILTEROPAMP="1" *) (* MFG_GMCREF_SEL="2" *)
     EHXPLLL #(
         .PLLRST_ENA("DISABLED"),
         .INTFB_WAKE("DISABLED"),
         .STDBY_ENABLE("DISABLED"),
         .DPHASE_SOURCE("DISABLED"),
         .CLKOP_FPHASE(0),
-        .CLKOP_CPHASE(11),
+        .CLKOP_CPHASE(4),
         .OUTDIVIDER_MUXA("DIVA"),
         .CLKOP_ENABLE("ENABLED"),
-        .CLKOP_DIV(12),
-        .CLKFB_DIV(1),
-        .CLKI_DIV(2),
+        .CLKOP_DIV(5),
+        .CLKFB_DIV(16),
+        .CLKI_DIV(3),
         .FEEDBK_PATH("CLKOP")
     ) pll_i (
         .CLKI(clki),

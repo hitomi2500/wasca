@@ -24,8 +24,8 @@ void delay() {
 }
 
 int main() {
-    // 9600 baud at 50MHz
-    reg_uart_clkdiv = 108;//5208;
+    // 115200 baud at 133MHz
+    reg_uart_clkdiv = 1155;
     while (1) {
         LED = 0xFF;
         print("hello world\n");
