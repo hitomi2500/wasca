@@ -39,3 +39,4 @@
 /fpga_firmware/wasca/wasca.xml
 /mcu_svf_player/Debug/
 /board/wasca-backups/
+/fpga_firmware_lattice/testbench.vcd

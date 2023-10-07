@@ -1,0 +1,112 @@
+[*]
+[*] GTKWave Analyzer v3.3.117 (w)1999-2023 BSI
+[*] Sat Oct 07 09:26:37 2023
+[*]
+[dumpfile] "E:\Saturn\Wasca\GIT\wasca\fpga_firmware_lattice\testbench.vcd"
+[dumpfile_mtime] "Sat Oct 07 08:31:56 2023"
+[dumpfile_size] 41976929
+[savefile] "E:\Saturn\Wasca\GIT\wasca\fpga_firmware_lattice\1.gtkw"
+[timestart] 7053000000000000
+[size] 1920 1017
+[pos] -61 -61
+*-45.784595 30832400000000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testbench.
+[treeopen] testbench.uut.
+[treeopen] testbench.uut.cpu.
+[sst_width] 290
+[signals_width] 289
+[sst_expanded] 1
+[sst_vpaned_height] 588
+@28
+testbench.clk
+testbench.sd_clk_i
+@c00022
+testbench.uut.mem_addr[31:0]
+@28
+(0)testbench.uut.mem_addr[31:0]
+(1)testbench.uut.mem_addr[31:0]
+(2)testbench.uut.mem_addr[31:0]
+(3)testbench.uut.mem_addr[31:0]
+(4)testbench.uut.mem_addr[31:0]
+(5)testbench.uut.mem_addr[31:0]
+(6)testbench.uut.mem_addr[31:0]
+(7)testbench.uut.mem_addr[31:0]
+(8)testbench.uut.mem_addr[31:0]
+(9)testbench.uut.mem_addr[31:0]
+(10)testbench.uut.mem_addr[31:0]
+(11)testbench.uut.mem_addr[31:0]
+(12)testbench.uut.mem_addr[31:0]
+(13)testbench.uut.mem_addr[31:0]
+(14)testbench.uut.mem_addr[31:0]
+(15)testbench.uut.mem_addr[31:0]
+(16)testbench.uut.mem_addr[31:0]
+(17)testbench.uut.mem_addr[31:0]
+(18)testbench.uut.mem_addr[31:0]
+(19)testbench.uut.mem_addr[31:0]
+(20)testbench.uut.mem_addr[31:0]
+(21)testbench.uut.mem_addr[31:0]
+(22)testbench.uut.mem_addr[31:0]
+(23)testbench.uut.mem_addr[31:0]
+(24)testbench.uut.mem_addr[31:0]
+(25)testbench.uut.mem_addr[31:0]
+(26)testbench.uut.mem_addr[31:0]
+(27)testbench.uut.mem_addr[31:0]
+(28)testbench.uut.mem_addr[31:0]
+(29)testbench.uut.mem_addr[31:0]
+(30)testbench.uut.mem_addr[31:0]
+(31)testbench.uut.mem_addr[31:0]
+@1401200
+-group_end
+@28
+testbench.uut.mem_valid
+testbench.uut.uart_tx
+@22
+testbench.uut.cpu.cpu_state[7:0]
+testbench.uut.cpu.current_pc[31:0]
+@820
+testbench.uut.cpu.dbg_ascii_state[127:0]
+testbench.uut.cpu.dbg_ascii_instr[63:0]
+@22
+testbench.uut.mem_addr[31:0]
+@c00022
+testbench.uut.mem_wdata[31:0]
+@28
+(0)testbench.uut.mem_wdata[31:0]
+(1)testbench.uut.mem_wdata[31:0]
+(2)testbench.uut.mem_wdata[31:0]
+(3)testbench.uut.mem_wdata[31:0]
+(4)testbench.uut.mem_wdata[31:0]
+(5)testbench.uut.mem_wdata[31:0]
+(6)testbench.uut.mem_wdata[31:0]
+(7)testbench.uut.mem_wdata[31:0]
+(8)testbench.uut.mem_wdata[31:0]
+(9)testbench.uut.mem_wdata[31:0]
+(10)testbench.uut.mem_wdata[31:0]
+(11)testbench.uut.mem_wdata[31:0]
+(12)testbench.uut.mem_wdata[31:0]
+(13)testbench.uut.mem_wdata[31:0]
+(14)testbench.uut.mem_wdata[31:0]
+(15)testbench.uut.mem_wdata[31:0]
+(16)testbench.uut.mem_wdata[31:0]
+(17)testbench.uut.mem_wdata[31:0]
+(18)testbench.uut.mem_wdata[31:0]
+(19)testbench.uut.mem_wdata[31:0]
+(20)testbench.uut.mem_wdata[31:0]
+(21)testbench.uut.mem_wdata[31:0]
+(22)testbench.uut.mem_wdata[31:0]
+(23)testbench.uut.mem_wdata[31:0]
+(24)testbench.uut.mem_wdata[31:0]
+(25)testbench.uut.mem_wdata[31:0]
+(26)testbench.uut.mem_wdata[31:0]
+(27)testbench.uut.mem_wdata[31:0]
+(28)testbench.uut.mem_wdata[31:0]
+(29)testbench.uut.mem_wdata[31:0]
+(30)testbench.uut.mem_wdata[31:0]
+(31)testbench.uut.mem_wdata[31:0]
+@1401200
+-group_end
+@22
+testbench.uut.mem_rdata[31:0]
+testbench.uut.mem_wstrb[3:0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -35,11 +35,6 @@ addi x29, zero, 0
 addi x30, zero, 0
 addi x31, zero, 0
 
-# Update LEDs
-li a0, 0x02000000
-li a1, 0xAA
-sw a1, 0(a0)
-
 call main
 
 loop:

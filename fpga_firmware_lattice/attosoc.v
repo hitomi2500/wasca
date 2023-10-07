@@ -26,7 +26,11 @@
 
 module attosoc (
 	input clk,
-	output reg [7:0] led,
+	output reg [2:0] led,
+	input sd_clk_i,
+	inout sd_cmd,
+	inout [3:0] sd_dat,
+	output sd_clk,
 	output uart_tx,
 	input uart_rx
 );
@@ -43,7 +47,7 @@ module attosoc (
 	parameter [31:0] PROGADDR_RESET = 32'h 0000_0000;       // start of memory
 
 	reg [31:0] ram [0:MEM_WORDS-1];
-	initial $readmemh("firmware.hex", ram);
+	initial $readmemh("bootstrap.hex", ram);
 	reg [31:0] ram_rdata;
 	reg ram_ready;
 
@@ -57,6 +61,7 @@ module attosoc (
 
 	always @(posedge clk)
         begin
+		//port 0
 		ram_ready <= 1'b0;
 		if (mem_addr[31:24] == 8'h00 && mem_valid) begin
 			if (mem_wstrb[0]) ram[mem_addr[23:2]][7:0] <= mem_wdata[7:0];
@@ -67,43 +72,37 @@ module attosoc (
 			ram_rdata <= ram[mem_addr[23:2]];
 			ram_ready <= 1'b1;
 		end
-        end
+		//port 1
+		sd_mem_ready <= 0;
+		if (sd_mem_adr[31:24] == 8'h00 && mem_valid) begin
+			if (sd_mem_stb) ram[mem_addr[23:2]] <= sd_mem_dat_o[31:0];
+			sd_mem_dat_i <= ram[mem_addr[23:2]];
+			sd_mem_ready <= 1'b1;
+		end
+    end
 
-	wire iomem_valid;
-	reg iomem_ready;
-	wire [31:0] iomem_addr;
-	wire [31:0] iomem_wdata;
-	wire [3:0] iomem_wstrb;
-	wire [31:0] iomem_rdata;
-
-	assign iomem_valid = mem_valid && (mem_addr[31:24] > 8'h 01);
-	assign iomem_wstrb = mem_wstrb;
-	assign iomem_addr = mem_addr;
-	assign iomem_wdata = mem_wdata;
-
-	wire        simpleuart_reg_div_sel = mem_valid && (mem_addr == 32'h 0200_0004);
-	wire [31:0] simpleuart_reg_div_do;
-
-	wire        simpleuart_reg_dat_sel = mem_valid && (mem_addr == 32'h 0200_0008);
-	wire [31:0] simpleuart_reg_dat_do;
-	wire simpleuart_reg_dat_wait;
+	//led control - write only
+	reg led_ready;
 
 	always @(posedge clk) begin
-		iomem_ready <= 1'b0;
-	  if (iomem_valid && iomem_wstrb[0] && mem_addr == 32'h 02000000) begin
-	    led <= iomem_wdata[7:0];
-			iomem_ready <= 1'b1;
+		led_ready <= 1'b0;
+		if (mem_valid && mem_wstrb[0] && mem_addr == 32'h 0200_0000) begin
+	    	led <= mem_wdata[2:0];
+			led_ready <= 1'b1;
 		end
 	end
 
+	//wishbone ready
+	assign mem_ready = (mem_valid && led_ready) ||
+						(mem_valid && sd_ready) ||
+	                	simpleuart_reg_div_sel || (simpleuart_reg_dat_sel && !simpleuart_reg_dat_wait) ||
+						ram_ready;
 
-	assign mem_ready = (iomem_valid && iomem_ready) ||
-	                   simpleuart_reg_div_sel || (simpleuart_reg_dat_sel && !simpleuart_reg_dat_wait) ||
-										 ram_ready;
-
+	//wishbone rdata mux
 	assign mem_rdata = simpleuart_reg_div_sel ? simpleuart_reg_div_do :
-										 simpleuart_reg_dat_sel ? simpleuart_reg_dat_do :
- 											ram_rdata;
+						simpleuart_reg_dat_sel ? simpleuart_reg_dat_do :
+						sd_regs_sel ? sd_rdata :
+ 						ram_rdata;
 
 	picorv32 #(
 		.STACKADDR(STACKADDR),
@@ -127,6 +126,15 @@ module attosoc (
 		.mem_rdata   (mem_rdata  )
 	);
 
+	//uart signals
+	wire        simpleuart_reg_div_sel = mem_valid && (mem_addr == 32'h 0200_0004);
+	wire [31:0] simpleuart_reg_div_do;
+
+	wire        simpleuart_reg_dat_sel = mem_valid && (mem_addr == 32'h 0200_0008);
+	wire [31:0] simpleuart_reg_dat_do;
+	wire simpleuart_reg_dat_wait;
+
+	//uart
 	simpleuart simpleuart (
 		.clk         (clk         ),
 		.resetn      (resetn      ),
@@ -143,7 +151,65 @@ module attosoc (
 		.reg_dat_di  (mem_wdata),
 		.reg_dat_do  (simpleuart_reg_dat_do),
 		.reg_dat_wait(simpleuart_reg_dat_wait)
-);
+	);
+
+	//sd signals
+	wire sd_regs_sel = mem_valid && (mem_addr[31 : 8] == 24'h 0200_00);
+	wire sd_cmd_i;
+	wire sd_cmd_o;
+	wire sd_cmd_oe;
+	assign sd_cmd = sd_cmd_oe ? sd_cmd_o : 1'bz;
+	assign sd_cmd_i = sd_cmd;
+	wire [3:0] sd_dat_i;
+	wire [3:0] sd_dat_o;
+	wire sd_dat_oe;
+	assign sd_dat = sd_dat_oe ? sd_dat_o : 4'bzzzz;
+	assign sd_dat_i = sd_dat;
+	wire sd_ready;
+	wire [31:0] sd_mem_dat_o;
+	reg [31:0] sd_mem_dat_i;
+	wire [31:0] sd_mem_adr;
+	wire [31:0] sd_rdata;
+	//wire sd_mem_sel;
+	//wire sd_mem_cyc;
+	wire sd_mem_stb;
+	reg sd_mem_ready;
+
+	//sd
+	sdc_controller sd_card_controller (
+		// WISHBONE common
+		.wb_clk_i    (clk         ),
+		.wb_rst_i    (resetn      ),
+		// WISHBONE slave
+		.wb_dat_i    (mem_wdata   ),
+		.wb_dat_o    (sd_rdata    ),
+		.wb_adr_i    (mem_addr[7:0]),
+		.wb_sel_i    (~4'b0	      ),
+		.wb_we_i     (mem_wstrb[0]),//using only 1 bit out of 4
+		.wb_cyc_i    (~1'b0		  ),
+		.wb_stb_i    (sd_regs_sel ),
+		.wb_ack_o    (sd_ready    ),
+		// WISHBONE master
+		.m_wb_dat_o  (sd_mem_dat_o),
+		.m_wb_dat_i  (sd_mem_dat_i),
+		.m_wb_adr_o  (sd_mem_adr  ),
+		//.m_wb_sel_o  (sd_mem_sel  ),
+		//.m_wb_cyc_o  (sd_mem_cyc  ),
+		.m_wb_stb_o  (sd_mem_stb  ),
+		.m_wb_ack_i  (sd_mem_ready),
+		//.m_wb_bte_o  ( ),
+		//SD BUS
+		.sd_cmd_dat_i  (sd_cmd_i   ),
+		.sd_cmd_out_o  (sd_cmd_o   ),
+		.sd_cmd_oe_o   (sd_cmd_oe  ),
+		.sd_dat_dat_i  (sd_dat_i   ),
+		.sd_dat_out_o  (sd_dat_o   ),
+		.sd_dat_oe_o   (sd_dat_oe  ),
+		.sd_clk_o_pad  (sd_clk     ),
+		.sd_clk_i_pad  (sd_clk_i   )
+		//.int_cmd  ( ),
+		//.int_data  ( )
+	);
 
 endmodule
 
