@@ -50,16 +50,19 @@ int main() {
 	//init ocsdc driver
 	struct mmc drv;
 	struct ocsdc priv;
-	ocsdc_mmc_init(&drv, &priv, 0x9e000000, 25000000);
-	print("1");
+	ocsdc_mmc_init(&drv, &priv, 0x03000000, 25000000);
+	putchar(0x50);
 
 	drv.has_init = 0;
 	int err = mmc_init(&drv);
+	//while (1) putchar(0x5A);
 	if (err != 0 || drv.has_init == 0) {
 		print("mmc_init failed\n\r");
 		return -1;
 	}
-	print("2");
+	putchar(0x51);
+
+	
 
 	print_mmcinfo(&drv);
 
@@ -69,7 +72,7 @@ int main() {
 		print("mmc_bread failed\n\r");
 		return -1;
 	}
-	print("3");
+	putchar(0x52);
 
 
     while (1) {

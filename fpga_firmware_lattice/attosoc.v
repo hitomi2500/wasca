@@ -154,7 +154,7 @@ module attosoc (
 	);
 
 	//sd signals
-	wire sd_regs_sel = mem_valid && (mem_addr[31 : 8] == 24'h 0200_00);
+	wire sd_regs_sel = mem_valid && (mem_addr[31 : 8] == 24'h 0300_00);
 	wire sd_cmd_i;
 	wire sd_cmd_o;
 	wire sd_cmd_oe;
@@ -179,7 +179,7 @@ module attosoc (
 	sdc_controller sd_card_controller (
 		// WISHBONE common
 		.wb_clk_i    (clk         ),
-		.wb_rst_i    (resetn      ),
+		.wb_rst_i    (~resetn      ),
 		// WISHBONE slave
 		.wb_dat_i    (mem_wdata   ),
 		.wb_dat_o    (sd_rdata    ),

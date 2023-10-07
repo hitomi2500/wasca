@@ -40,3 +40,4 @@
 /mcu_svf_player/Debug/
 /board/wasca-backups/
 /fpga_firmware_lattice/testbench.vcd
+/fpga_firmware_lattice/attosoc_tb.vvp
