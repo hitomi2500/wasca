@@ -54,13 +54,15 @@ int main() {
 	putchar(0x50);
 
 	drv.has_init = 0;
+	putchar(0x5F);
 	int err = mmc_init(&drv);
+	putchar(0x50);
 	//while (1) putchar(0x5A);
 	if (err != 0 || drv.has_init == 0) {
 		print("mmc_init failed\n\r");
 		return -1;
 	}
-	putchar(0x51);
+	putchar(0x5F);
 
 	
 
@@ -72,7 +74,7 @@ int main() {
 		print("mmc_bread failed\n\r");
 		return -1;
 	}
-	putchar(0x52);
+	putchar(0x50);
 
 
     while (1) {

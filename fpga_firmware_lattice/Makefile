@@ -1,7 +1,16 @@
 TRELLIS?=/usr/share/trellis
+BOOTSTRAP_SOURCES := start.s bootstrap.c mmc.c ocsdc.c stdlib_tiny.c
+BOOTSTRAP_OBJECTS := $(BOOTSTRAP_SOURCES:%.c=%.o)
+BOOTSTRAP_OBJECTS := $(BOOTSTRAP_OBJECTS:%.s=%.o)
 
-bootstrap.elf: sections.lds start.s bootstrap.c mmc.c ocsdc.c stdlib_tiny.c
-	riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -Wl,-Bstatic,-T,sections.lds,--strip-debug -ffreestanding -nostdlib -o bootstrap.elf start.s bootstrap.c mmc.c ocsdc.c stdlib_tiny.c
+%.o: %.c
+	riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -ffreestanding -nostdlib -c $< -o $@
+
+%.o: %.s
+	riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -ffreestanding -nostdlib -c $< -o $@
+
+bootstrap.elf: sections.lds $(BOOTSTRAP_OBJECTS)
+	riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -Wl,-Map,bootstrap.map,-Bstatic,-T,sections.lds,--strip-debug -ffreestanding -nostdlib $(BOOTSTRAP_OBJECTS) -o bootstrap.elf
 
 bootstrap.bin: bootstrap.elf
 	riscv64-unknown-elf-objcopy -O binary bootstrap.elf bootstrap.bin
@@ -30,7 +39,7 @@ prog: attosoc.svf
 	openocd -f ${TRELLIS}/misc/openocd/ecp5-versa5g.cfg -c "transport select jtag; init; svf $<; exit"
 
 clean:
-	rm -f *.vvp *.vcd *.elf *.bin *.hex *.bit *.svf *_out.config *.json
+	rm -f *.o *.vvp *.vcd *.elf *.bin *.hex *.bit *.svf *_out.config *.json
 
 .PHONY: attosoc_sim clean prog
 .PRECIOUS: attosoc.json attosoc_out.config attosoc.bit

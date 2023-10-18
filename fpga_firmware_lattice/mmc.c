@@ -28,6 +28,7 @@
 #include <string.h>
 
 void udelay(int t) {
+	return;//no delay for sim
 #define US_DELAY 100
 	volatile int us = US_DELAY;
 	while(t--) {

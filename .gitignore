@@ -41,3 +41,5 @@
 /board/wasca-backups/
 /fpga_firmware_lattice/testbench.vcd
 /fpga_firmware_lattice/attosoc_tb.vvp
+/fpga_firmware_lattice/*.o
+/fpga_firmware_lattice/bootstrap.map

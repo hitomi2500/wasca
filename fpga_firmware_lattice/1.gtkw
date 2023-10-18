@@ -1,14 +1,14 @@
 [*]
 [*] GTKWave Analyzer v3.3.117 (w)1999-2023 BSI
-[*] Sat Oct 07 20:57:16 2023
+[*] Wed Oct 18 07:07:17 2023
 [*]
 [dumpfile] "E:\Saturn\Wasca\GIT\wasca\fpga_firmware_lattice\testbench.vcd"
-[dumpfile_mtime] "Sat Oct 07 20:43:17 2023"
-[dumpfile_size] 28152855
+[dumpfile_mtime] "Wed Oct 18 06:57:51 2023"
+[dumpfile_size] 123048757
 [savefile] "E:\Saturn\Wasca\GIT\wasca\fpga_firmware_lattice\1.gtkw"
 [timestart] 0
 [size] 1920 1017
-[pos] -35 -35
+[pos] -113 -113
 *-50.784595 504000000000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testbench.
 [treeopen] testbench.uut.
@@ -60,7 +60,7 @@ testbench.uut.mem_addr[31:0]
 @28
 testbench.uut.uart_tx
 @22
-testbench.uut.cpu.cpu_state[7:0]
+testbench.uut.cpu.dbg_insn_addr[31:0]
 @820
 testbench.uut.cpu.dbg_ascii_state[127:0]
 testbench.uut.cpu.dbg_ascii_instr[63:0]
@@ -120,7 +120,7 @@ testbench.uut.sd_card_controller.wb_dat_o[31:0]
 @28
 testbench.uut.sd_card_controller.wb_cyc_i
 testbench.uut.sd_card_controller.wb_rst_i
-@23
+@22
 testbench.uut.sd_card_controller.wb_sel_i[3:0]
 [pattern_trace] 1
 [pattern_trace] 0
