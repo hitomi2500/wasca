@@ -42,6 +42,7 @@
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 `include "sd_defines.h" 
+`include "timescale.v"
 
 module sd_data_xfer_trig (
            input sd_clk,

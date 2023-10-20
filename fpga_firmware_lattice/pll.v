@@ -1,3 +1,5 @@
+`include "timescale.v"
+
 module pll_25_133(input clki, output clko);
     (* ICP_CURRENT="6" *) (* LPF_RESISTOR="16" *) (* MFG_ENABLE_FILTEROPAMP="1" *) (* MFG_GMCREF_SEL="2" *)
     EHXPLLL #(

@@ -57,17 +57,17 @@ void flush_dcache_range(void * start, void * end) {
 	}*/
 }
 
-static inline uint32_t ocsdc_read(struct ocsdc *dev, int offset)
+/*static inline */uint32_t ocsdc_read(struct ocsdc *dev, int offset)
 {
 	return readl(dev->iobase + offset);
 }
 
-static inline void ocsdc_write(struct ocsdc *dev, int offset, uint32_t data)
+/*static inline */void ocsdc_write(struct ocsdc *dev, int offset, uint32_t data)
 {
 	writel(data, dev->iobase + offset);
 }
 
-static void ocsdc_set_buswidth(struct ocsdc * dev, uint width) {
+void ocsdc_set_buswidth(struct ocsdc * dev, uint width) {
 	if (width == 4)
 		ocsdc_write(dev, OCSDC_CONTROL, 1);
 	else if (width == 1)
@@ -75,7 +75,7 @@ static void ocsdc_set_buswidth(struct ocsdc * dev, uint width) {
 }
 
 /* Set clock prescalar value based on the required clock in HZ */
-static void ocsdc_set_clock(struct ocsdc * dev, uint32_t clock)
+void ocsdc_set_clock(struct ocsdc * dev, uint32_t clock)
 {
 	//int clk_div = dev->clk_freq / (2.0 * clock) - 1;
 	int clk_div;
@@ -88,6 +88,8 @@ static void ocsdc_set_clock(struct ocsdc * dev, uint32_t clock)
 	else
 		clk_div = 7;
 
+	clk_div = 0;//force max clock for sim
+
 	////printf("ocsdc_set_clock %d, div %d\n\r", clock, clk_div);
 	//software reset
 	ocsdc_write(dev, OCSDC_SOFTWARE_RESET, 1);
@@ -97,7 +99,7 @@ static void ocsdc_set_clock(struct ocsdc * dev, uint32_t clock)
 	ocsdc_write(dev, OCSDC_SOFTWARE_RESET, 0);
 }
 
-static int ocsdc_finish(struct ocsdc * dev, struct mmc_cmd *cmd) {
+int ocsdc_finish(struct ocsdc * dev, struct mmc_cmd *cmd) {
 
 	int retval = 0;
 	while (1) {
@@ -132,7 +134,7 @@ static int ocsdc_finish(struct ocsdc * dev, struct mmc_cmd *cmd) {
 	return retval;
 }
 
-static int ocsdc_data_finish(struct ocsdc * dev) {
+int ocsdc_data_finish(struct ocsdc * dev) {
 	int status;
 
     while ((status = ocsdc_read(dev, OCSDC_DAT_INT_STATUS)) == 0);
@@ -148,7 +150,7 @@ static int ocsdc_data_finish(struct ocsdc * dev) {
     }
 }
 
-static void ocsdc_setup_data_xfer(struct ocsdc * dev, struct mmc_cmd *cmd, struct mmc_data *data) {
+void ocsdc_setup_data_xfer(struct ocsdc * dev, struct mmc_cmd *cmd, struct mmc_data *data) {
 
 	//invalidate cache
 	if (data->flags & MMC_DATA_READ) {
@@ -166,7 +168,7 @@ static void ocsdc_setup_data_xfer(struct ocsdc * dev, struct mmc_cmd *cmd, struc
 
 }
 
-static int ocsdc_send_cmd(struct mmc *mmc, struct mmc_cmd *cmd, struct mmc_data *data)
+int ocsdc_send_cmd(struct mmc *mmc, struct mmc_cmd *cmd, struct mmc_data *data)
 {
 	struct ocsdc * dev = mmc->priv;
 
@@ -206,7 +208,7 @@ static int ocsdc_send_cmd(struct mmc *mmc, struct mmc_cmd *cmd, struct mmc_data 
 }
 
 /* Initialize ocsdc controller */
-static int ocsdc_init(struct mmc *mmc)
+int ocsdc_init(struct mmc *mmc)
 {
 	struct ocsdc * dev = mmc->priv;
 
@@ -224,7 +226,7 @@ static int ocsdc_init(struct mmc *mmc)
 	return 0;
 }
 
-static void ocsdc_set_ios(struct mmc *mmc)
+void ocsdc_set_ios(struct mmc *mmc)
 {
 	/* Support only 4 bit if */
 	ocsdc_set_buswidth(mmc->priv, mmc->bus_width);

@@ -44,6 +44,8 @@
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 
+`include "timescale.v"
+
 module monostable_domain_cross(
     input rst,
     input clk_a,

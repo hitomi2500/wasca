@@ -43,6 +43,7 @@
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 `include "sd_defines.h"
+`include "timescale.v"
 
 module sd_wb_sel_ctrl(
            input wb_clk,

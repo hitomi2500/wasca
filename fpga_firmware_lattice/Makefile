@@ -4,6 +4,7 @@ BOOTSTRAP_OBJECTS := $(BOOTSTRAP_SOURCES:%.c=%.o)
 BOOTSTRAP_OBJECTS := $(BOOTSTRAP_OBJECTS:%.s=%.o)
 
 %.o: %.c
+	riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -ffreestanding -nostdlib -S $<
 	riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -ffreestanding -nostdlib -c $< -o $@
 
 %.o: %.s
@@ -18,7 +19,7 @@ bootstrap.bin: bootstrap.elf
 bootstrap.hex: bootstrap.bin
 	python3 makehex.py $^ 4096 > $@
 
-attosoc_tb.vvp: attosoc_tb.v attosoc.v picorv32.v simpleuart.v sd/sdc_controller.v sd/bistable_domain_cross.v sd/byte_en_reg.v sd/edge_detect.v sd/generic_dpram.v sd/generic_fifo_dc_gray.v sd/monostable_domain_cross.v sd/sd_clock_divider.v sd/sd_cmd_master.v sd/sd_cmd_serial_host.v sd/sd_controller_wb.v sd/sd_crc_7.v sd/sd_crc_16.v sd/sd_data_master.v sd/sd_data_serial_host.v sd/sd_data_xfer_trig.v sd/sd_fifo_filler.v sd/sd_wb_sel_ctrl.v
+attosoc_tb.vvp: attosoc_tb.v sd_fake.v sd_fake_rom.v attosoc.v picorv32.v simpleuart.v sd/sdc_controller.v sd/bistable_domain_cross.v sd/byte_en_reg.v sd/edge_detect.v sd/generic_dpram.v sd/generic_fifo_dc_gray.v sd/monostable_domain_cross.v sd/sd_clock_divider.v sd/sd_cmd_master.v sd/sd_cmd_serial_host.v sd/sd_controller_wb.v sd/sd_crc_7.v sd/sd_crc_16.v sd/sd_data_master.v sd/sd_data_serial_host.v sd/sd_data_xfer_trig.v sd/sd_fifo_filler.v sd/sd_wb_sel_ctrl.v
 	iverilog -s testbench -I sd -o $@ $^
 
 attosoc_sim: attosoc_tb.vvp bootstrap.hex

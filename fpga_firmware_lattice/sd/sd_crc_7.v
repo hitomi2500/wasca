@@ -2,6 +2,8 @@
 // CRC Generation Unit - Linear Feedback Shift Register implementation
 // (c) Kay Gorontzi, GHSi.de, distributed under the terms of LGPL
 // ==========================================================================
+`include "timescale.v"
+
 module sd_crc_7(BITVAL, ENABLE, BITSTRB, CLEAR, CRC);
    input        BITVAL;                            // Next input bit
    input        ENABLE;                            // Enable calculation

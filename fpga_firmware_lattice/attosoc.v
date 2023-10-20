@@ -17,6 +17,7 @@
  *  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
+`include "timescale.v"
 
 `ifdef PICORV32_V
 `error "attosoc.v must be read before picorv32.v!"
@@ -43,7 +44,7 @@ module attosoc (
 	end
 
 	parameter integer MEM_WORDS = 16384;
-	parameter [31:0] STACKADDR = 32'h 0000_1000;       // end of bootstrap part of memory
+	parameter [31:0] STACKADDR = 32'h 0001_0000;       // end of memory
 	parameter [31:0] PROGADDR_RESET = 32'h 0000_0000;       // start of memory
 
 	reg [31:0] ram [0:MEM_WORDS-1];
@@ -75,8 +76,8 @@ module attosoc (
 		//port 1
 		sd_mem_ready <= 0;
 		if (sd_mem_adr[31:24] == 8'h00 && mem_valid) begin
-			if (sd_mem_stb) ram[mem_addr[23:2]] <= sd_mem_dat_o[31:0];
-			sd_mem_dat_i <= ram[mem_addr[23:2]];
+			if (sd_mem_stb) ram[sd_mem_adr[23:2]] <= sd_mem_dat_o[31:0];
+			sd_mem_dat_i <= ram[sd_mem_adr[23:2]];
 			sd_mem_ready <= 1'b1;
 		end
     end

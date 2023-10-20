@@ -43,6 +43,8 @@
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 
+`include "timescale.v"
+
 module bistable_domain_cross(
     rst,
     clk_a,

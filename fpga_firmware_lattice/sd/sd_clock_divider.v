@@ -46,6 +46,8 @@
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 
+`include "timescale.v"
+
 module sd_clock_divider (
            input CLK,
            input [7:0] DIVIDER,

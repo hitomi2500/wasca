@@ -1,3 +1,5 @@
+`include "timescale.v"
+
 module top(
     input clk_25,
     output [2:0] led,

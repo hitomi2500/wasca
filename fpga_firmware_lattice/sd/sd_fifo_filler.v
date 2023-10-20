@@ -46,6 +46,7 @@
 //// from http://www.opencores.org/lgpl.shtml                     ////
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
+`include "timescale.v"
 
 module sd_fifo_filler(
            input wb_clk,

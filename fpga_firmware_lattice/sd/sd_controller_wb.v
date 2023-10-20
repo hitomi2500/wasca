@@ -46,6 +46,7 @@
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 `include "sd_defines.h"
+`include "timescale.v"
 
 module sd_controller_wb(
            // WISHBONE slave

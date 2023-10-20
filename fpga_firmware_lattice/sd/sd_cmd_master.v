@@ -47,6 +47,7 @@
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 `include "sd_defines.h"
+`include "timescale.v"
 
 module sd_cmd_master(
            input sd_clk,

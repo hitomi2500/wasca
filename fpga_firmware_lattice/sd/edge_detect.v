@@ -42,6 +42,8 @@
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 
+`include "timescale.v"
+
 module sd_edge_detect (
     input rst,
     input clk, 

@@ -16,8 +16,8 @@
  *  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
+`include "timescale.v"
 
-`timescale 1 ns / 1 ps
 // `default_nettype none
 // `define DEBUGNETS
 // `define DEBUGREGS

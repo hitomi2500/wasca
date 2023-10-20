@@ -55,6 +55,7 @@
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 `include "sd_defines.h"
+`include "timescale.v"
 
 module sdc_controller(
            // WISHBONE common

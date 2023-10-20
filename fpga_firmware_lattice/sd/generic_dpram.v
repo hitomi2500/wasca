@@ -93,7 +93,7 @@
 //
 //
 
-//`include "timescale.v"
+`include "timescale.v"
 
 `define VENDOR_FPGA
 //`define VENDOR_XILINX
@@ -143,6 +143,11 @@ module generic_dpram(
 	//
 	reg [dw-1:0] mem [(1<<aw) -1:0]; // instantiate memory
 	reg [aw-1:0] ra;                 // register read address
+	
+	integer i;
+	initial
+		for(i=0; i < (1<<aw); i = i+1)
+			mem[i] = 0;
 
 	// read operation
 	always @(posedge rclk)

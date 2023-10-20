@@ -47,6 +47,8 @@
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 
+`include "timescale.v"
+
 module sd_cmd_serial_host (
            sd_clk,
            rst,

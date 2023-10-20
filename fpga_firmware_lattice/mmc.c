@@ -68,19 +68,19 @@ static const int multipliers[] = {
 	80,
 };
 
-static void mmc_set_ios(struct mmc *mmc)
+void mmc_set_ios(struct mmc *mmc)
 {
 	mmc->set_ios(mmc);
 }
 
-static void mmc_set_bus_width(struct mmc *mmc, uint width)
+void mmc_set_bus_width(struct mmc *mmc, uint width)
 {
 	mmc->bus_width = width;
 
 	mmc_set_ios(mmc);
 }
 
-static void mmc_set_clock(struct mmc *mmc, uint clock)
+void mmc_set_clock(struct mmc *mmc, uint clock)
 {
 	if (clock > mmc->f_max)
 		clock = mmc->f_max;
@@ -93,7 +93,7 @@ static void mmc_set_clock(struct mmc *mmc, uint clock)
 	mmc_set_ios(mmc);
 }
 
-static int mmc_send_cmd(struct mmc *mmc, struct mmc_cmd *cmd, struct mmc_data *data)
+int mmc_send_cmd(struct mmc *mmc, struct mmc_cmd *cmd, struct mmc_data *data)
 {
 	int ret;
 
@@ -102,7 +102,7 @@ static int mmc_send_cmd(struct mmc *mmc, struct mmc_cmd *cmd, struct mmc_data *d
 	return ret;
 }
 
-static int mmc_go_idle(struct mmc* mmc)
+int mmc_go_idle(struct mmc* mmc)
 {
 	struct mmc_cmd cmd;
 	int err;
@@ -123,7 +123,7 @@ static int mmc_go_idle(struct mmc* mmc)
 	return 0;
 }
 
-static int mmc_send_if_cond(struct mmc *mmc)
+int mmc_send_if_cond(struct mmc *mmc)
 {
 	struct mmc_cmd cmd;
 	int err;
@@ -146,7 +146,7 @@ static int mmc_send_if_cond(struct mmc *mmc)
 	return 0;
 }
 
-static int sd_send_op_cond(struct mmc *mmc)
+int sd_send_op_cond(struct mmc *mmc)
 {
 	int timeout = 1000;
 	int err;
@@ -199,7 +199,7 @@ static int sd_send_op_cond(struct mmc *mmc)
 	return 0;
 }
 
-static int mmc_send_op_cond(struct mmc *mmc)
+int mmc_send_op_cond(struct mmc *mmc)
 {
 	int timeout = 10000;
 	struct mmc_cmd cmd;
@@ -251,7 +251,7 @@ static int mmc_send_op_cond(struct mmc *mmc)
 	return 0;
 }
 
-static int mmc_send_status(struct mmc *mmc, int timeout)
+int mmc_send_status(struct mmc *mmc, int timeout)
 {
 	struct mmc_cmd cmd;
 	int err, retries = 5;
@@ -287,7 +287,7 @@ static int mmc_send_status(struct mmc *mmc, int timeout)
 	return 0;
 }
 
-static int mmc_send_ext_csd(struct mmc *mmc, char *ext_csd)
+int mmc_send_ext_csd(struct mmc *mmc, char *ext_csd)
 {
 	struct mmc_cmd cmd;
 	struct mmc_data data;
@@ -308,7 +308,7 @@ static int mmc_send_ext_csd(struct mmc *mmc, char *ext_csd)
 	return err;
 }
 
-static int mmc_switch(struct mmc *mmc, char set, char index, char value)
+int mmc_switch(struct mmc *mmc, char set, char index, char value)
 {
 	struct mmc_cmd cmd;
 	int timeout = 1000;
@@ -330,7 +330,7 @@ static int mmc_switch(struct mmc *mmc, char set, char index, char value)
 
 }
 
-static int sd_switch(struct mmc *mmc, int mode, int group, char value, char *resp)
+int sd_switch(struct mmc *mmc, int mode, int group, char value, char *resp)
 {
 	struct mmc_cmd cmd;
 	struct mmc_data data;
@@ -350,7 +350,7 @@ static int sd_switch(struct mmc *mmc, int mode, int group, char value, char *res
 	return mmc_send_cmd(mmc, &cmd, &data);
 }
 
-static int sd_change_freq(struct mmc *mmc)
+int sd_change_freq(struct mmc *mmc)
 {
 	int err;
 	struct mmc_cmd cmd;
@@ -461,7 +461,7 @@ retry_scr:
 	return 0;
 }
 
-static int mmc_change_freq(struct mmc *mmc)
+int mmc_change_freq(struct mmc *mmc)
 {
 	char ext_csd[512];
 	char cardtype;
@@ -504,7 +504,7 @@ static int mmc_change_freq(struct mmc *mmc)
 	return 0;
 }
 
-static int mmc_startup(struct mmc *mmc)
+int mmc_startup(struct mmc *mmc)
 {
 	int err, width;
 	uint mult, freq;
@@ -754,7 +754,7 @@ static int mmc_startup(struct mmc *mmc)
 	return 0;
 }
 
-static int mmc_set_blocklen(struct mmc *mmc, int len)
+int mmc_set_blocklen(struct mmc *mmc, int len)
 {
 	struct mmc_cmd cmd;
 
@@ -765,7 +765,7 @@ static int mmc_set_blocklen(struct mmc *mmc, int len)
 	return mmc_send_cmd(mmc, &cmd, NULL);
 }
 
-static int mmc_read_blocks(struct mmc *mmc, void *dst, size_t start, size_t blkcnt)
+int mmc_read_blocks(struct mmc *mmc, void *dst, size_t start, size_t blkcnt)
 {
 	struct mmc_cmd cmd;
 	struct mmc_data data;

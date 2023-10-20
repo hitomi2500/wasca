@@ -51,34 +51,29 @@ int main() {
 	struct mmc drv;
 	struct ocsdc priv;
 	ocsdc_mmc_init(&drv, &priv, 0x03000000, 25000000);
-	putchar(0x50);
+	putchar(0x01);
 
 	drv.has_init = 0;
-	putchar(0x5F);
 	int err = mmc_init(&drv);
-	putchar(0x50);
-	//while (1) putchar(0x5A);
 	if (err != 0 || drv.has_init == 0) {
 		print("mmc_init failed\n\r");
 		return -1;
 	}
-	putchar(0x5F);
-
-	
+	putchar(0x02);
 
 	print_mmcinfo(&drv);
 
 	//read 1 block
-	print("attempting to read 1 block\n\r");
+	//print("attempting to read 1 block\n\r");
 	if (mmc_bread(&drv, 0, 1, buff) == 0) {
 		print("mmc_bread failed\n\r");
 		return -1;
 	}
-	putchar(0x50);
+	putchar(0x3);
 
 
     while (1) {
-        LED = 0xFF;
+        /*LED = 0xFF;
         //print("hello world\n");
         print("h\n");
         delay();
@@ -124,6 +119,6 @@ int main() {
 			i++;
 			seed = lsfr_next_random(seed);
 		}
-		print("Verifying complete\n");
+		print("Verifying complete\n");*/
     }
 }
