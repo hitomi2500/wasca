@@ -2,7 +2,7 @@
 
 module top(
     input clk_25,
-    output [2:0] led,
+    output [5:0] led,
     inout sd_cmd,
 	inout [3:0] sd_dat,
 	output sd_clk,
@@ -11,7 +11,6 @@ module top(
 );
 
 wire clk_133;
-wire [2:0] int_led;
 
 pll_25_133 pll(
     .clki(clk_25),
@@ -20,7 +19,7 @@ pll_25_133 pll(
 
 attosoc soc(
     .clk(clk_25),//clk_133
-    .led(int_led),
+    .led(led),
     .sd_clk_i(clk_25),
     .sd_cmd(sd_cmd),
     .sd_dat(sd_dat),
@@ -29,5 +28,4 @@ attosoc soc(
     .uart_rx(uart_rx)
 );
 
-assign led = ~int_led;
 endmodule

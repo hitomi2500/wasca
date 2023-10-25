@@ -27,7 +27,7 @@
 
 module attosoc (
 	input clk,
-	output reg [2:0] led,
+	output reg [5:0] led,
 	input sd_clk_i,
 	inout sd_cmd,
 	inout [3:0] sd_dat,
@@ -88,7 +88,7 @@ module attosoc (
 	always @(posedge clk) begin
 		led_ready <= 1'b0;
 		if (mem_valid && mem_wstrb[0] && mem_addr == 32'h 0200_0000) begin
-	    	led <= mem_wdata[2:0];
+	    	led <= mem_wdata[5:0];
 			led_ready <= 1'b1;
 		end
 	end
