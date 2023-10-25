@@ -17,4 +17,4 @@
 
 make clean
 make bootstrap.hex
-rem make attosoc.bit
+make attosoc.bit

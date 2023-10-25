@@ -46,12 +46,13 @@ int main() {
 	int i;
     // 115200 baud at 133MHz
     reg_uart_clkdiv = 1155;
+	print("Starting bootstrap...\n\r");
 
 	//init ocsdc driver
 	struct mmc drv;
 	struct ocsdc priv;
 	ocsdc_mmc_init(&drv, &priv, 0x03000000, 25000000);
-	putchar(0x01);
+	//putchar(0x01);
 
 	drv.has_init = 0;
 	int err = mmc_init(&drv);
@@ -59,26 +60,43 @@ int main() {
 		print("mmc_init failed\n\r");
 		return -1;
 	}
-	putchar(0x02);
+	//putchar(0x02);
 
 	print_mmcinfo(&drv);
 
 	//read 1 block
-	//print("attempting to read 1 block\n\r");
+	print("attempting to read 1 block\n\r");
 	if (mmc_bread(&drv, 0, 1, buff) == 0) {
 		print("mmc_bread failed\n\r");
 		return -1;
 	}
-	putchar(0x3);
+	//putchar(0x3);
+
+	//dumping data
+	for (int j=0;j<16;j++) {
+		for (int i=0;i<16;i++){
+			uint8_t code = buff[j*16+i]>>4;
+			if (code < 10)
+				putchar(code+'0');
+			else 
+				putchar(code+'A'-10);
+			code = buff[j*16+i] & 0xF;
+			if (code < 10)
+				putchar(code+'0');
+			else 
+				putchar(code+'A'-10);
+			print(" ");
+		}
+		print("\n\r");
+	}
 
 
     while (1) {
-        /*LED = 0xFF;
-        //print("hello world\n");
-        print("h\n");
+        LED = 0xFF;
         delay();
         LED = 0x00;
         delay();
+		/*
 		//print("Verifying ram beyond 0x1000\n");
 		print("VV\n");
 		//writing

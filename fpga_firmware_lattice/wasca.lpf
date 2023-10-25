@@ -13,6 +13,7 @@ LOCATE COMP "uart_rx" SITE "A9";
 IOBUF PORT "uart_tx" IO_TYPE=LVCMOS33;
 IOBUF PORT "uart_rx" IO_TYPE=LVCMOS33;
 
+#internal SD
 LOCATE COMP "sd_cmd" SITE "H12";
 LOCATE COMP "sd_clk" SITE "J12";
 LOCATE COMP "sd_dat[0]" SITE "K12";

@@ -47,7 +47,7 @@ module attosoc (
 	parameter [31:0] STACKADDR = 32'h 0001_0000;       // end of memory
 	parameter [31:0] PROGADDR_RESET = 32'h 0000_0000;       // start of memory
 
-	reg [31:0] ram [0:MEM_WORDS-1];
+	(* no_rw_check *) reg [31:0] ram [0:MEM_WORDS-1];
 	initial $readmemh("bootstrap.hex", ram);
 	reg [31:0] ram_rdata;
 	reg ram_ready;
