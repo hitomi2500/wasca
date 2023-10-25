@@ -44,8 +44,8 @@ int main() {
 	uint32_t seed = 0x100500;
 	uint32_t errors = 0;
 	int i;
-    // 115200 baud at 133MHz
-    reg_uart_clkdiv = 1155;
+    reg_uart_clkdiv = 217;// 115200 baud at 25MHz
+    //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
 	print("Starting bootstrap...\n\r");
 
 	//init ocsdc driver

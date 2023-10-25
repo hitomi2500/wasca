@@ -19,7 +19,7 @@ pll_25_133 pll(
 );
 
 attosoc soc(
-    .clk(clk_133),
+    .clk(clk_25),//clk_133
     .led(int_led),
     .sd_clk_i(clk_25),
     .sd_cmd(sd_cmd),
