@@ -26,7 +26,8 @@ void print(const char *p)
 
 void delay() {
     //for (volatile int i = 0; i < 2500000; i++)
-    for (volatile int i = 0; i < 250; i++)
+    for (volatile int i = 0; i < 750000; i++)
+    //for (volatile int i = 0; i < 250; i++)
         ;
 }
 
@@ -44,6 +45,7 @@ int main() {
 	uint32_t seed = 0x100500;
 	uint32_t errors = 0;
 	int i;
+	LED = 0x20;//red external
     reg_uart_clkdiv = 217;// 115200 baud at 25MHz
     //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
 	print("Starting bootstrap...\n\r");
@@ -60,9 +62,39 @@ int main() {
 		print("mmc_init failed\n\r");
 		return -1;
 	}
+	/*while(1)
+	{
+		int err = mmc_init(&drv);
+		if (err != 0 || drv.has_init == 0) {
+			print("mmc_init failed with error ");
+			uint8_t code = err & 0xF;
+			if (code < 10)
+				putchar(code+'0');
+			else 
+				putchar(code+'A'-10);
+			code = err>>4;
+			if (code < 10)
+				putchar(code+'0');
+			else 
+				putchar(code+'A'-10);
+			print("\n\r");
+		}
+		else
+		{
+			print("mmc_init OK\n\r");
+		}
+		LED = 0x20;//red external
+		delay();
+		LED = 0x0;//off
+		delay();
+	}*/
 	//putchar(0x02);
 
 	print_mmcinfo(&drv);
+
+	for (int i=0;i<8;i++)
+
+	{
 
 	//read 1 block
 	print("attempting to read 1 block\n\r");
@@ -75,12 +107,12 @@ int main() {
 	//dumping data
 	for (int j=0;j<16;j++) {
 		for (int i=0;i<16;i++){
-			uint8_t code = buff[j*16+i]>>4;
+			uint8_t code = buff[j*16+(i&0xC)+(3-i&0x3)] >> 4;
 			if (code < 10)
 				putchar(code+'0');
 			else 
 				putchar(code+'A'-10);
-			code = buff[j*16+i] & 0xF;
+			code = buff[j*16+(i&0xC)+(3-i&0x3)] & 0xF;
 			if (code < 10)
 				putchar(code+'0');
 			else 
@@ -90,6 +122,7 @@ int main() {
 		print("\n\r");
 	}
 
+	}
 
     while (1) {
         LED = 0xFF;
