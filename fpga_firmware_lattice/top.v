@@ -11,6 +11,11 @@ module top(
 );
 
 wire clk_133;
+reg clk_12_5;
+wire sd_clk_internal;
+
+initial clk_12_5 = 0;
+always @(posedge clk_25) clk_12_5 <= ~clk_12_5;
 
 pll_25_133 pll(
     .clki(clk_25),
@@ -23,9 +28,11 @@ attosoc soc(
     .sd_clk_i(clk_25),
     .sd_cmd(sd_cmd),
     .sd_dat(sd_dat),
-    .sd_clk(sd_clk),
+    .sd_clk(sd_clk_internal),
     .uart_tx(uart_tx),
     .uart_rx(uart_rx)
 );
+
+assign sd_clk = ~sd_clk_internal;
 
 endmodule
