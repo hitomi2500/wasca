@@ -859,6 +859,7 @@ size_t mmc_bread(struct mmc *mmc, size_t start, size_t blkcnt, void *dst)
 		return 0;
 
 	if ((start + blkcnt) > mmc->capacity / mmc->read_bl_len) {
+		print("MMC: block number exceeds max\n\r");
 		////printf("MMC: block number 0x%lx exceeds max(0x%lx)\n",
 			////start + blkcnt, mmc->capacity / mmc->read_bl_len);
 		return 0;

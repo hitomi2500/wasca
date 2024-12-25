@@ -1,5 +1,7 @@
 #include <stdint.h>
-#include "ocsdc.h"
+#include "fatfs/ff.h"
+#include "fatfs/mmc.h"
+#include "fatfs/ocsdc.h"
 
 #define LED (*(volatile uint32_t*)0x02000000)
 
@@ -9,7 +11,10 @@
 #define BLKSIZE 512
 #define BLKCNT 10
 
-char buff[BLKSIZE*BLKCNT] = {'\0'};
+FATFS FatFs;		/* FatFs work area needed for each volume */
+FIL Fil;			/* File object needed for each open file */
+
+char buff[BLKSIZE*BLKCNT];
 
 void putchar(char c)
 {
@@ -24,13 +29,26 @@ void print(const char *p)
         putchar(*(p++));
 }
 
+void print_hex(uint8_t value)
+{
+	uint8_t code = (value>>4);
+	if (code < 10)
+		putchar(code+'0');
+	else 
+		putchar(code+'A'-10);
+	code = value & 0xF;
+	if (code < 10)
+		putchar(code+'0');
+	else 
+		putchar(code+'A'-10);
+}
+
 void delay() {
     //for (volatile int i = 0; i < 2500000; i++)
     for (volatile int i = 0; i < 750000; i++)
     //for (volatile int i = 0; i < 250; i++)
         ;
 }
-
 
 uint32_t lsfr_next_random (uint32_t prev)
 {
@@ -48,7 +66,7 @@ int main() {
 	LED = 0x20;//red external
     reg_uart_clkdiv = 217;// 115200 baud at 25MHz
     //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
-	print("Starting bootstrap...\n\r");
+	print("\r\nStarting bootstrap...\r\n");
 
 	//init ocsdc driver
 	struct mmc drv;
@@ -59,8 +77,12 @@ int main() {
 	drv.has_init = 0;
 	int err = mmc_init(&drv);
 	if (err != 0 || drv.has_init == 0) {
-		print("mmc_init failed\n\r");
+		print("mmc_init failed\r\n");
 		return -1;
+	}
+	else
+	{
+		print("mmc_init OK\r\n");
 	}
 	/*while(1)
 	{
@@ -90,44 +112,176 @@ int main() {
 	}*/
 	//putchar(0x02);
 
-	print_mmcinfo(&drv);
+	//print_mmcinfo(&drv);
 
-	for (int i=0;i<8;i++)
+	//for (int i=0;i<4;i++)
+	int k=0;
 
 	{
 
 	//read 1 block
-	print("attempting to read 1 block\n\r");
-	if (mmc_bread(&drv, 0, 1, buff) == 0) {
-		print("mmc_bread failed\n\r");
-		return -1;
+	print("attempting to read block ");
+	if ((k>>4) > 9)
+		putchar('A'+(k>>4)-10);
+	else
+		putchar('0'+k>>4);
+	if ((k&0xF) > 9)
+		putchar('A'+(k&0xF)-10);
+	else
+		putchar('0'+(k&0xF));
+	print("\r\n");
+	//while (mmc_bread(&drv, k, 1, buff) != 1) {
+	while (mmc_bread(&drv, 0, 1, buff) != 1) {
+		print("mmc_bread failed\r\n");
+		//return -1;
 	}
 	//putchar(0x3);
 
 	//dumping data
-	for (int j=0;j<16;j++) {
-		for (int i=0;i<16;i++){
-			uint8_t code = buff[j*16+(i&0xC)+(3-i&0x3)] >> 4;
-			if (code < 10)
-				putchar(code+'0');
-			else 
-				putchar(code+'A'-10);
-			code = buff[j*16+(i&0xC)+(3-i&0x3)] & 0xF;
-			if (code < 10)
-				putchar(code+'0');
-			else 
-				putchar(code+'A'-10);
-			print(" ");
+	//for (int f=0;f<4;f++)
+	//	print("Next attempt:\n\r");
+
+		for (int j=0;j<32;j++) {
+			for (int i=0;i<16;i++){
+				uint8_t code = buff[j*32+(i&0xC)+(3-i&0x3)] >> 4;
+				if (code < 10)
+					putchar(code+'0');
+				else 
+					putchar(code+'A'-10);
+				code = buff[j*16+(i&0xC)+(3-i&0x3)] & 0xF;
+				if (code < 10)
+					putchar(code+'0');
+				else 
+					putchar(code+'A'-10);
+				print(" ");
+			}
+			print("\n\r");
 		}
-		print("\n\r");
-	}
+	//}
 
 	}
+
+	while (1);//halt
+
+	FRESULT fr = f_mount(&FatFs, "", 0);	//mount SD card
+	if (fr != FR_OK)
+	{
+		print("mount error ");
+		print_hex(fr);
+		print(" \r\n");
+	}
+
+	DIR _dir;
+	fr = f_opendir(&_dir, "/");
+	if (fr != FR_OK)
+	{
+		print("opendir error ");
+		print_hex(fr);
+		print(" \r\n");
+	}
+
+	FILINFO _filinfo;
+	f_readdir(&_dir,&_filinfo);
+	if (fr != FR_OK)
+	{
+		print("f_readdir error ");
+		print_hex(fr);
+		print(" \r\n");
+	}	
+
+	for (int i=0;i<10;i++)
+	{
+		disk_read(0,buff,0,1);
+	}
+
+	/*int res;
+	for (int i=0;i<16;i++)
+	{
+		res = disk_read(0,buff,i,1);
+		if (0 == res)
+		{
+			print("read ");
+			print_hex(i);
+			print(" ok \n\r");
+			//dumping data
+			for (int j=0;j<16;j++) {
+				for (int i=0;i<16;i++){
+					print_hex(buff[j*16+i]);
+					print(" ");
+				}
+				print("\n\r");
+			}
+		}
+		else
+		{
+			print("read ");
+			print_hex(i);
+			print(" error ");			
+			print_hex(res);
+			print(" \n\r");			
+		}
+	}*/
+		
+
+
+
+	fr = f_opendir(&_dir, "/");
+	if (fr != FR_OK)
+	{
+		print("opendir error ");
+		print_hex(fr);
+		print(" \r\n");
+	}
+
+	f_readdir(&_dir,&_filinfo);
+	if (fr != FR_OK)
+	{
+		print("f_readdir error ");
+		print_hex(fr);
+		print(" \r\n");
+	}	
+
+	print("FIRST FOUND:");
+	print(_filinfo.fname);
+	print("\r\n");
+
+	//fr = f_open(&Fil, "\\firmware.bin", FA_READ | FA_OPEN_ALWAYS);	/* Create a file */
+	//UINT readen;
+	//if (fr == FR_OK) {
+		//f_read(&Fil,buff,sizeof(buff),&readen);
+		//f_write(&Fil, "It works!\r\n", 11, &bw);	/* Write data to the file */
+		//fr = f_close(&Fil);							/* Close the file */
+		//dumping first 256 bytes
+		/*for (int j=0;j<16;j++) {
+			for (int i=0;i<16;i++){
+				uint8_t code = buff[j*16+(i&0xC)+(3-i&0x3)] >> 4;
+				if (code < 10)
+					putchar(code+'0');
+				else 
+					putchar(code+'A'-10);
+				code = buff[j*16+(i&0xC)+(3-i&0x3)] & 0xF;
+				if (code < 10)
+					putchar(code+'0');
+				else 
+					putchar(code+'A'-10);
+				print(" ");
+			}
+			print("\n\r");
+		}*/
+		LED = 0x40;//blue external
+	/*}
+	else
+	{
+		print("firmware.bin not found\n\r");
+		//LED = 0x20;//red external
+		LED = 0x08;//green external
+	}*/
+
 
     while (1) {
-        LED = 0xFF;
+        //LED = 0xFF;
         delay();
-        LED = 0x00;
+        //LED = 0x00;
         delay();
 		/*
 		//print("Verifying ram beyond 0x1000\n");
