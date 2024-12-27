@@ -1,5 +1,5 @@
 TRELLIS?=/usr/share/trellis
-BOOTSTRAP_SOURCES := start.S bootstrap.c fatfs/mmc.c fatfs/ocsdc.c stdlib_tiny.c stdlib_tiny_asm.S fatfs/ff.c fatfs/diskio.c fatfs/ffsystem.c fatfs/ffunicode.c
+BOOTSTRAP_SOURCES := start.S bootstrap.c stdlib_tiny.c stdlib_tiny_asm.S fatfs/ff.c fatfs/diskio.c fatfs/ffsystem.c fatfs/ffunicode.c fatfs/sdiodrv.c fatfs/sdspidrv.c fatfs/emmcdrv.c
 BOOTSTRAP_OBJECTS := $(BOOTSTRAP_SOURCES:%.c=%.o)
 BOOTSTRAP_OBJECTS := $(BOOTSTRAP_OBJECTS:%.S=%.o)
 
@@ -19,14 +19,14 @@ bootstrap.bin: bootstrap.elf
 bootstrap.hex: bootstrap.bin
 	python3 makehex.py $^ 16384 > $@
 
-attosoc_tb.vvp: attosoc_tb.v sd_fake.v sd_fake_rom.v attosoc.v picorv32.v simpleuart.v sd/sdc_controller.v sd/bistable_domain_cross.v sd/byte_en_reg.v sd/edge_detect.v sd/generic_dpram.v sd/generic_fifo_dc_gray.v sd/monostable_domain_cross.v sd/sd_clock_divider.v sd/sd_cmd_master.v sd/sd_cmd_serial_host.v sd/sd_controller_wb.v sd/sd_crc_7.v sd/sd_crc_16.v sd/sd_data_master.v sd/sd_data_serial_host.v sd/sd_data_xfer_trig.v sd/sd_fifo_filler.v sd/sd_wb_sel_ctrl.v
+attosoc_tb.vvp: attosoc_tb.v sd_fake.v sd_fake_rom.v attosoc.v picorv32.v simpleuart.v sd/sddma_mm2s.v sd/sddma_rxgears.v sd/sddma_txgears.v sd/sddma_s2mm.v sd/sddma.v sd/sdfifo.v sd/sdskid.v sd/sdio.v sd/sdwb.v sd/sdckgen.v sd/sdcmd.v sd/sdrxframe.v sd/sdtxframe.v sd/sdfrontend.v sd/sdio_top.v
 	iverilog -s testbench -I sd -o $@ $^
 
 attosoc_sim: attosoc_tb.vvp bootstrap.hex
 	vvp -N $<
 
-attosoc.json: top.v pll.v attosoc.v picorv32.v simpleuart.v  sd/sdc_controller.v sd/bistable_domain_cross.v sd/byte_en_reg.v sd/edge_detect.v sd/generic_dpram.v sd/generic_fifo_dc_gray.v sd/monostable_domain_cross.v sd/sd_clock_divider.v sd/sd_cmd_master.v sd/sd_cmd_serial_host.v sd/sd_controller_wb.v sd/sd_crc_7.v sd/sd_crc_16.v sd/sd_data_master.v sd/sd_data_serial_host.v sd/sd_data_xfer_trig.v sd/sd_fifo_filler.v sd/sd_wb_sel_ctrl.v bootstrap.hex
-	yosys -p "synth_ecp5 -json $@ -top top" top.v pll.v attosoc.v picorv32.v simpleuart.v sd/sdc_controller.v sd/bistable_domain_cross.v sd/byte_en_reg.v sd/edge_detect.v sd/generic_dpram.v sd/generic_fifo_dc_gray.v sd/monostable_domain_cross.v sd/sd_clock_divider.v sd/sd_cmd_master.v sd/sd_cmd_serial_host.v sd/sd_controller_wb.v sd/sd_crc_7.v sd/sd_crc_16.v sd/sd_data_master.v sd/sd_data_serial_host.v sd/sd_data_xfer_trig.v sd/sd_fifo_filler.v sd/sd_wb_sel_ctrl.v
+attosoc.json: top.v pll.v attosoc.v picorv32.v simpleuart.v sd/sddma_mm2s.v sd/sddma_rxgears.v sd/sddma_txgears.v sd/sddma_s2mm.v sd/sddma.v sd/sdfifo.v sd/sdskid.v sd/sdio.v sd/sdwb.v sd/sdckgen.v sd/sdcmd.v sd/sdrxframe.v sd/sdtxframe.v sd/sdfrontend.v sd/sdio_top.v bootstrap.hex
+	yosys -p "synth_ecp5 -json $@ -top top" top.v pll.v attosoc.v picorv32.v simpleuart.v sd/sddma_mm2s.v sd/sddma_rxgears.v sd/sddma_txgears.v sd/sddma_s2mm.v sd/sddma.v sd/sdfifo.v sd/sdskid.v sd/sdio.v sd/sdwb.v sd/sdckgen.v sd/sdcmd.v sd/sdrxframe.v sd/sdtxframe.v sd/sdfrontend.v sd/sdio_top.v
 
 attosoc_out.config: attosoc.json wasca.lpf
 	nextpnr-ecp5 --json attosoc.json --lpf wasca.lpf --textcfg $@ --25k --freq 50 --package CABGA256

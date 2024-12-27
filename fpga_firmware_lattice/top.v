@@ -1,13 +1,13 @@
 `include "timescale.v"
 
 module top(
-    input clk_25,
-    output [5:0] led,
-    inout sd_cmd,
-	inout [3:0] sd_dat,
-	output sd_clk,
-    output uart_tx,
-    input uart_rx
+    input wire clk_25,
+    output wire [5:0] led,
+    inout wire sd_cmd,
+	inout wire [3:0] sd_dat,
+	output wire sd_clk,
+    output wire uart_tx,
+    input wire uart_rx
 );
 
 wire clk_133;
@@ -17,10 +17,10 @@ wire sd_clk_internal;
 initial clk_12_5 = 0;
 always @(posedge clk_25) clk_12_5 <= ~clk_12_5;
 
-pll_25_133 pll(
+/*pll_25_133 pll(
     .clki(clk_25),
     .clko(clk_133)
-);
+);*/
 
 attosoc soc(
     .clk(clk_25),//clk_133

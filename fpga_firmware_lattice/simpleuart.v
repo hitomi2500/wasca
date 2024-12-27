@@ -19,21 +19,21 @@
 `include "timescale.v"
 
 module simpleuart (
-	input clk,
-	input resetn,
+	input wire clk,
+	input wire resetn,
 
-	output ser_tx,
-	input  ser_rx,
+	output wire ser_tx,
+	input  wire ser_rx,
 
-	input   [3:0] reg_div_we,
-	input  [31:0] reg_div_di,
-	output [31:0] reg_div_do,
+	input wire  [3:0] reg_div_we,
+	input wire [31:0] reg_div_di,
+	output wire [31:0] reg_div_do,
 
-	input         reg_dat_we,
-	input         reg_dat_re,
-	input  [31:0] reg_dat_di,
-	output [31:0] reg_dat_do,
-	output        reg_dat_wait
+	input wire        reg_dat_we,
+	input wire        reg_dat_re,
+	input wire [31:0] reg_dat_di,
+	output wire [31:0] reg_dat_do,
+	output wire       reg_dat_wait
 );
 	reg [31:0] cfg_divider;
 

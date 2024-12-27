@@ -26,14 +26,14 @@
 `define PICORV32_REGS picosoc_regs
 
 module attosoc (
-	input clk,
+	input wire clk,
 	output reg [5:0] led,
-	input sd_clk_i,
-	inout sd_cmd,
-	inout [3:0] sd_dat,
-	output sd_clk,
-	output uart_tx,
-	input uart_rx
+	input wire sd_clk_i,
+	inout wire sd_cmd,
+	inout wire [3:0] sd_dat,
+	output wire sd_clk,
+	output wire uart_tx,
+	input wire uart_rx
 );
 
 	reg [5:0] reset_cnt = 0;
@@ -163,8 +163,11 @@ module attosoc (
 	assign sd_cmd_i = sd_cmd;
 	wire [3:0] sd_dat_i;
 	wire [3:0] sd_dat_o;
-	wire sd_dat_oe;
-	assign sd_dat = sd_dat_oe ? sd_dat_o : 4'bzzzz;
+	wire [3:0] sd_dat_oe;
+	assign sd_dat[0] = sd_dat_oe[0] ? sd_dat_o[0] : 1'bz;
+	assign sd_dat[1] = sd_dat_oe[1] ? sd_dat_o[1] : 1'bz;
+	assign sd_dat[2] = sd_dat_oe[2] ? sd_dat_o[2] : 1'bz;
+	assign sd_dat[3] = sd_dat_oe[3] ? sd_dat_o[3] : 1'bz;
 	assign sd_dat_i = sd_dat;
 	wire sd_ready;
 	wire [31:0] sd_mem_dat_o;
@@ -177,7 +180,7 @@ module attosoc (
 	reg sd_mem_ready;
 
 	//sd
-	sdc_controller sd_card_controller (
+	/*sdc_controller sd_card_controller (
 		// WISHBONE common
 		.wb_clk_i    (clk         ),
 		.wb_rst_i    (~resetn      ),
@@ -210,6 +213,86 @@ module attosoc (
 		.sd_clk_i_pad  (sd_clk_i   )
 		//.int_cmd  ( ),
 		//.int_data  ( )
+	);*/
+
+	sdio_top #(
+		.LGFIFO(12),
+		.NUMIO(4),
+		//.MW(32),
+		.ADDRESS_WIDTH(48),//32
+		.DW(32),
+		.SW(32),
+		.OPT_DMA(0),
+		.OPT_LITTLE_ENDIAN(0),
+		//.AW(32),//ADDRESS_WIDTH-$clog2(DMA_DW/8)),
+		.HWDELAY(0),
+		.OPT_ISTREAM(0),
+		.OPT_OSTREAM(0),
+		.OPT_EMMC(0),
+		.OPT_SERDES(0),
+		.OPT_DDR(0),
+		.OPT_DS(0),
+		.OPT_CARD_DETECT(0),
+		.OPT_CRCTOKEN(1'b1),
+		.OPT_HWRESET(0),
+		.OPT_1P8V(0),
+		.OPT_COLLISION(0),
+		.LGTIMEOUT(23)
+	) 
+	sd_card_controller
+	(
+		.i_clk(clk),
+		.i_reset(~resetn),
+		.i_hsclk(clk),
+
+		// Control (Wishbone) interface
+		.i_wb_cyc(~1'b0),
+		.i_wb_stb(sd_regs_sel),
+		.i_wb_we(mem_wstrb[0]),
+		.i_wb_addr(mem_addr[2:0]),
+		.i_wb_data(mem_wdata),
+		.i_wb_sel(~4'b0),
+		//.o_wb_stall(?), unconnected?
+		.o_wb_ack(sd_ready),
+		.o_wb_data(sd_rdata),
+
+		// DMA (Wishbone) interface
+		//o_dma_cyc unconnected,
+		.o_dma_stb(sd_mem_stb),
+		//o_dma_we unconnected
+		.o_dma_addr(sd_mem_adr),
+		.o_dma_data(sd_mem_dat_o),
+		//o_dma_sel unconnected
+		.i_dma_stall(0),
+		.i_dma_ack(sd_mem_ready),
+		.i_dma_data(sd_mem_dat_i),
+		.i_dma_err(0),
+		
+		// External stream interface
+		.s_valid(0),
+		//s_ready unconnected,
+		.s_data(0),
+		//m_valid unconnected,
+		.m_ready(0),
+		//m_data unconnected,
+		//m_last unconnected,
+
+		// IO interface
+		.o_ck(sd_clk),
+		.i_ds(sd_clk_i),
+		.io_cmd_tristate(sd_cmd_oe),
+		.o_cmd(sd_cmd_o),
+		.i_cmd(sd_cmd_i),
+		.io_dat_tristate(sd_dat_oe),
+		.o_dat(sd_dat_o),
+		.i_dat(sd_dat_i),
+		
+		//
+		.i_card_detect(0)
+		//o_hwreset_n unconnected
+		//o_1p8v unconnected
+		//o_int unconnected
+		//o_debug unconnected
 	);
 	
 endmodule

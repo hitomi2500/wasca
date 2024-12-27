@@ -1,7 +1,7 @@
+#include <stdlib.h>
 #include <stdint.h>
 #include "fatfs/ff.h"
-#include "fatfs/mmc.h"
-#include "fatfs/ocsdc.h"
+#include "fatfs/sdiodrv.h"
 
 #define LED (*(volatile uint32_t*)0x02000000)
 
@@ -69,20 +69,18 @@ int main() {
 	print("\r\nStarting bootstrap...\r\n");
 
 	//init ocsdc driver
-	struct mmc drv;
-	struct ocsdc priv;
-	ocsdc_mmc_init(&drv, &priv, 0x03000000, 25000000);
+	struct SDIODRV * drv;
+	struct SDIO * sdio_dev_ptr = (SDIO *)0x03000000;
+	drv = sdio_init(sdio_dev_ptr);
 	//putchar(0x01);
 
-	drv.has_init = 0;
-	int err = mmc_init(&drv);
-	if (err != 0 || drv.has_init == 0) {
-		print("mmc_init failed\r\n");
+	if (NULL == drv) {
+		print("SDIO init failed\r\n");
 		return -1;
 	}
 	else
 	{
-		print("mmc_init OK\r\n");
+		print("SDIO init OK\r\n");
 	}
 	/*while(1)
 	{
@@ -131,8 +129,8 @@ int main() {
 		putchar('0'+(k&0xF));
 	print("\r\n");
 	//while (mmc_bread(&drv, k, 1, buff) != 1) {
-	while (mmc_bread(&drv, 0, 1, buff) != 1) {
-		print("mmc_bread failed\r\n");
+	while (sdio_read(&drv, 0, 1, buff) != 1) {
+		print("sdio_read failed\r\n");
 		//return -1;
 	}
 	//putchar(0x3);

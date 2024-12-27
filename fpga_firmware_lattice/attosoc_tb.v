@@ -19,7 +19,7 @@ module testbench();
 	wire [5:0] sd_emu_cmd_cmd;
 	wire [31:0] sd_emu_cmd_arg;
 
-	always #4 clk = (clk === 1'b0);
+	always #20 clk = (clk === 1'b0);
 	always #20 sd_clk_i = (sd_clk_i === 1'b0);
 
 	initial begin
