@@ -51,8 +51,7 @@
 
 #ifdef	STDIO_DEBUG
 #include <stdio.h>
-#define	DBGPRINTF	null
-//printf
+#define	DBGPRINTF	printf
 #else
 #define	DBGPRINTF	null
 #endif

@@ -57,8 +57,8 @@ typedef	struct	DISKIODRVR_S {
 } DISKIODRVR;
 
 DISKIODRVR	SDIODRVR  = { (DIO_INIT_FN)&sdio_init, (DIO_WRITE_FN)&sdio_write, (DIO_READ_FN)&sdio_read, (DIO_IOCTL_FN)&sdio_ioctl  };
-DISKIODRVR	SDSPIDRVR = { (DIO_INIT_FN)&sdspi_init,(DIO_WRITE_FN)&sdspi_write,(DIO_READ_FN)&sdspi_read,(DIO_IOCTL_FN)&sdspi_ioctl };
-DISKIODRVR	EMMCDRVR  = { (DIO_INIT_FN)&emmc_init, (DIO_WRITE_FN)&emmc_write, (DIO_READ_FN)&emmc_read, (DIO_IOCTL_FN)&emmc_ioctl };
+//DISKIODRVR	SDSPIDRVR = { (DIO_INIT_FN)&sdspi_init,(DIO_WRITE_FN)&sdspi_write,(DIO_READ_FN)&sdspi_read,(DIO_IOCTL_FN)&sdspi_ioctl };
+//DISKIODRVR	EMMCDRVR  = { (DIO_INIT_FN)&emmc_init, (DIO_WRITE_FN)&emmc_write, (DIO_READ_FN)&emmc_read, (DIO_IOCTL_FN)&emmc_ioctl };
 
 typedef	struct	FATDRIVE_S {
 	void		*fd_addr;

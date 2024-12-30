@@ -48,3 +48,4 @@
 /fpga_firmware_lattice/ocsdc.s
 /fpga_firmware_lattice/stdlib_tiny.s
 /.vscode/settings.json
+/fpga_firmware_lattice/fatfs/*.o

@@ -43,7 +43,7 @@ module attosoc (
 		reset_cnt <= reset_cnt + !resetn;
 	end
 
-	parameter integer MEM_WORDS = 16384;
+	parameter integer MEM_WORDS = 24576; //16384;
 	parameter [31:0] STACKADDR = 32'h 0001_0000;       // end of memory
 	parameter [31:0] PROGADDR_RESET = 32'h 0000_0000;       // start of memory
 
@@ -156,18 +156,21 @@ module attosoc (
 
 	//sd signals
 	wire sd_regs_sel = mem_valid && (mem_addr[31 : 8] == 24'h 0300_00);
+	reg sd_regs_sel_p1;
+	always @(posedge clk) sd_regs_sel_p1 = sd_regs_sel;
+	wire sd_regs_sel_pulse = sd_regs_sel && (~sd_regs_sel_p1);
 	wire sd_cmd_i;
 	wire sd_cmd_o;
 	wire sd_cmd_oe;
-	assign sd_cmd = sd_cmd_oe ? sd_cmd_o : 1'bz;
+	assign sd_cmd = (~sd_cmd_oe) ? sd_cmd_o : 1'bz;
 	assign sd_cmd_i = sd_cmd;
 	wire [3:0] sd_dat_i;
 	wire [3:0] sd_dat_o;
 	wire [3:0] sd_dat_oe;
-	assign sd_dat[0] = sd_dat_oe[0] ? sd_dat_o[0] : 1'bz;
-	assign sd_dat[1] = sd_dat_oe[1] ? sd_dat_o[1] : 1'bz;
-	assign sd_dat[2] = sd_dat_oe[2] ? sd_dat_o[2] : 1'bz;
-	assign sd_dat[3] = sd_dat_oe[3] ? sd_dat_o[3] : 1'bz;
+	assign sd_dat[0] = (~sd_dat_oe[0]) ? sd_dat_o[0] : 1'bz;
+	assign sd_dat[1] = (~sd_dat_oe[1]) ? sd_dat_o[1] : 1'bz;
+	assign sd_dat[2] = (~sd_dat_oe[2]) ? sd_dat_o[2] : 1'bz;
+	assign sd_dat[3] = (~sd_dat_oe[3]) ? sd_dat_o[3] : 1'bz;
 	assign sd_dat_i = sd_dat;
 	wire sd_ready;
 	wire [31:0] sd_mem_dat_o;
@@ -219,11 +222,11 @@ module attosoc (
 		.LGFIFO(12),
 		.NUMIO(4),
 		//.MW(32),
-		.ADDRESS_WIDTH(48),//32
+		.ADDRESS_WIDTH(32),//48
 		.DW(32),
 		.SW(32),
 		.OPT_DMA(0),
-		.OPT_LITTLE_ENDIAN(0),
+		.OPT_LITTLE_ENDIAN(1),
 		//.AW(32),//ADDRESS_WIDTH-$clog2(DMA_DW/8)),
 		.HWDELAY(0),
 		.OPT_ISTREAM(0),
@@ -246,10 +249,10 @@ module attosoc (
 		.i_hsclk(clk),
 
 		// Control (Wishbone) interface
-		.i_wb_cyc(~1'b0),
-		.i_wb_stb(sd_regs_sel),
+		.i_wb_cyc(sd_regs_sel),
+		.i_wb_stb(sd_regs_sel_pulse),
 		.i_wb_we(mem_wstrb[0]),
-		.i_wb_addr(mem_addr[2:0]),
+		.i_wb_addr(mem_addr[4:2]),
 		.i_wb_data(mem_wdata),
 		.i_wb_sel(~4'b0),
 		//.o_wb_stall(?), unconnected?

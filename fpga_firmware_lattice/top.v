@@ -33,6 +33,6 @@ attosoc soc(
     .uart_rx(uart_rx)
 );
 
-assign sd_clk = ~sd_clk_internal;
+assign sd_clk = sd_clk_internal;
 
 endmodule

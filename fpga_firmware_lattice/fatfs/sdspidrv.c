@@ -38,7 +38,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 // }}}
-//#define	STDIO_DEBUG
+#define	STDIO_DEBUG
 #include <stdlib.h>
 #include <stdint.h>
 typedef	uint8_t		BYTE;
@@ -46,21 +46,18 @@ typedef	uint16_t	WORD;
 typedef	uint32_t	DWORD, LBA_t, UINT;
 #include "diskio.h"
 
-//#ifdef	STDIO_DEBUG
+#ifdef	STDIO_DEBUG
 #include <stdio.h>
 #include <stdlib.h>
 
-#define	txstr(A)	(A)
-//printf("%s", A)
-#define	txhex(A)	(A)
-//printf("%08x", A)
-#define	txdecimal(A)	(A)
-//printf("%d", A)
+#define	txstr(A)	mini_printf("%s", A)
+#define	txhex(A)	mini_printf("%08x", A)
+#define	txdecimal(A)	mini_printf("%d", A)
 
-//#else
+#else
 // Embedded I/O functions txstr() and txhex
-//#include "txfns.h"
-//#endif
+#include "txfns.h"
+#endif
 
 #include "sdspidrv.h"
 
@@ -175,7 +172,7 @@ static	int	sdspi_read_ocr(SDSPIDRV *dev) {
 	unsigned	v;
 
 	if (SDDEBUG)
-		txstr("SDCARD: CMD58, READ-OCR\n");
+		txstr("SDCARD: CMD58, READ-OCR\r\n");
 
 	//
 	// CMD58 : READ-OCR
@@ -198,17 +195,17 @@ static	int	sdspi_read_ocr(SDSPIDRV *dev) {
 
 	dev->d_OCR = dev->d_dev->sd_data;
 	if (SDINFO) {
-		txstr("READ-OCR: OCR = "); txhex(dev->d_OCR); txstr("\n");
-	// printf("    OCR = 0x%08x%s\n", v, (v!=0x40ff8000)?"Shouldnt this be 0x40ff8000?":"");
+		txstr("READ-OCR: OCR = "); txhex(dev->d_OCR); txstr("\r\n");
+	// mini_printf("    OCR = 0x%08x%s\r\n", v, (v!=0x40ff8000)?"Shouldnt this be 0x40ff8000?":"");
 
 		if (dev->d_OCR & 0x80000000)
-			txstr("  Card is still powering up\n");
+			txstr("  Card is still powering up\r\n");
 		if (dev->d_OCR & 0x40000000)
-			txstr("  CCS: High capacity support\n");
+			txstr("  CCS: High capacity support\r\n");
 		if (dev->d_OCR & 0x20000000)
-			txstr("  UHS: USH-II card\n");
+			txstr("  UHS: USH-II card\r\n");
 		if (dev->d_OCR & 0x01000000)
-			txstr("  S18A: Switching to 1.8V allowed\n");
+			txstr("  S18A: Switching to 1.8V allowed\r\n");
 #ifdef	STDIO_DEBUG
 		int	mxv = 0, mnv = 0;
 		if (dev->d_OCR & 0x00800000) {
@@ -258,27 +255,27 @@ static	int	sdspi_read_ocr(SDSPIDRV *dev) {
 				mnv = 27;
 		}
 
-		printf("  Voltage ranges supported: %d.%dV - %d.%dV\n",
+		mini_printf("  Voltage ranges supported: %d.%dV - %d.%dV\r\n",
 			(mxv/10), (mxv%10), (mnv/10), (mnv%10));
 #else
 		if (dev->d_OCR & 0x00800000)
-			txstr("  3.6-3.5 V allowed\n");
+			txstr("  3.6-3.5 V allowed\r\n");
 		if (dev->d_OCR & 0x00400000)
-			txstr("  3.5-3.4 V allowed\n");
+			txstr("  3.5-3.4 V allowed\r\n");
 		if (dev->d_OCR & 0x00200000)
-			txstr("  3.4-3.3 V allowed\n");
+			txstr("  3.4-3.3 V allowed\r\n");
 		if (dev->d_OCR & 0x00100000)
-			txstr("  3.3-3.2 V allowed\n");
+			txstr("  3.3-3.2 V allowed\r\n");
 		if (dev->d_OCR & 0x00080000)
-			txstr("  3.2-3.1 V allowed\n");
+			txstr("  3.2-3.1 V allowed\r\n");
 		if (dev->d_OCR & 0x00040000)
-			txstr("  3.1-3.0 V allowed\n");
+			txstr("  3.1-3.0 V allowed\r\n");
 		if (dev->d_OCR & 0x00020000)
-			txstr("  3.0-2.9 V allowed\n");
+			txstr("  3.0-2.9 V allowed\r\n");
 		if (dev->d_OCR & 0x00010000)
-			txstr("  2.9-2.8 V allowed\n");
+			txstr("  2.9-2.8 V allowed\r\n");
 		if (dev->d_OCR & 0x00008000)
-			txstr("  2.8-2.7 V allowed\n");
+			txstr("  2.8-2.7 V allowed\r\n");
 #endif
 	}
 
@@ -293,7 +290,7 @@ static	int	sdspi_read_scr(SDSPIDRV *dev) {
 	unsigned	v;
 
 	if (SDDEBUG)
-		txstr("READ-SCR\n");
+		txstr("READ-SCR\r\n");
 
 	// The SCR register is 64 bits, and we can read it at fast speed
 	dev->d_dev->sd_data = SECTOR_8B | SPEED_FAST;
@@ -351,7 +348,7 @@ static	int	sdspi_read_csd(SDSPIDRV *dev) {
 		return -1;
 
 	if (SDDEBUG)
-		txstr("READ-CSD\n");
+		txstr("READ-CSD\r\n");
 
 	//
 	// Adjust the FIFO for a 4-word length
@@ -373,7 +370,7 @@ static	int	sdspi_read_csd(SDSPIDRV *dev) {
 	if ((v = dev->d_dev->sd_ctrl) != 0) {
 		txstr("READ-CSD: Invalid CSD return control value, ");
 		txhex(v);
-		txstr("\n");
+		txstr("\r\n");
 		sdcard_err |= SDERR_INIT | 0x20000;
 		return sdcard_err;
 	} if ((v = dev->d_dev->sd_data) != 0) {
@@ -382,7 +379,7 @@ static	int	sdspi_read_csd(SDSPIDRV *dev) {
 		else
 			txstr("READ-CSD: Unexpected return data, ");
 		txhex(v);
-		txstr("\n");
+		txstr("\r\n");
 		sdcard_err |= SDERR_INIT | 0x40000;
 		return sdcard_err;
 	}
@@ -399,7 +396,7 @@ static	int	sdspi_read_csd(SDSPIDRV *dev) {
 		txhex(ucsd[2]);
 		txstr(":");
 		txhex(ucsd[3]);
-		txstr("\n");
+		txstr("\r\n");
 	}
 
 	// 40,0e,00,32, 5b,59,00,00, e8,37,7f,80, 0a,40,00,23,
@@ -458,7 +455,7 @@ static	int	sdspi_read_cid(SDSPIDRV *dev) {
 	unsigned	v;
 
 	if (SDDEBUG)
-		txstr("READ-CID\n");
+		txstr("READ-CID\r\n");
 
 	// CMD10 : SEND_CID_COND
 	// Send CID condition to FIFO #1 (Requires reading from FIFO)
@@ -506,7 +503,7 @@ static	int	sdspi_read_cid(SDSPIDRV *dev) {
 		txhex(ucid[0]); txstr(":");
 		txhex(ucid[1]); txstr(":");
 		txhex(ucid[2]); txstr(":");
-		txhex(ucid[3]); txstr("\n");
+		txhex(ucid[3]); txstr("\r\n");
 	}
 
 	if ((v = dev->d_dev->sd_ctrl) != 0) { // 0
@@ -547,21 +544,21 @@ static	int	sdspi_read_cid(SDSPIDRV *dev) {
 		md = (dev->d_CID[13] & 0x0f);
 		md = (md << 8) | (dev->d_CID[14] & 0x0ff);
 
-		printf("CID:\n"
-"\tManufacturer ID:  0x%02x\n"
-"\tApplication ID:   %c%c\n"
-"\tProduct Name:     %c%c%c%c%c\n"
-"\tProduct Revision: %x.%x\n"
-"\tSerial Number:    0x%0x\n",
+		mini_printf("CID:\r\n"
+"\tManufacturer ID:  0x%02x\r\n"
+"\tApplication ID:   %c%c\r\n"
+"\tProduct Name:     %c%c%c%c%c\r\n"
+"\tProduct Revision: %x.%x\r\n"
+"\tSerial Number:    0x%0x\r\n",
 		dev->d_CID[0]&0x0ff,
 		dev->d_CID[1], dev->d_CID[2],
 		dev->d_CID[3], dev->d_CID[4], dev->d_CID[5],
 				dev->d_CID[6], dev->d_CID[7],
 		(dev->d_CID[8]>>4)&0xf, dev->d_CID[8]&0x0f,
 		sn);
-		printf(
-"\tYear of Man.:     %d\n"
-"\tMonth of Man.:    %d\n",
+		mini_printf(
+"\tYear of Man.:     %d\r\n"
+"\tMonth of Man.:    %d\r\n",
 	((md>>4)+2000), md&0x0f);
 	}
 #endif
@@ -706,7 +703,7 @@ SDSPIDRV *sdspi_init(SDSPI *dev) {
 	SCOPE->s_ctrl = WBSCOPE_DISABLE | SCOPEDELAY;
 #endif
 	if (SDDEBUG)
-		txstr("SDCARD-INIT\n");
+		txstr("SDCARD-INIT\r\n");
 
 	// Start us out slow, with a known sector length
 	dev->sd_data = SECTOR_512B | SPEED_SLOW;	// 128 word block length, 400kHz clock
@@ -718,7 +715,7 @@ SDSPIDRV *sdspi_init(SDSPI *dev) {
 
 	sdcard_err = 0;
 	if (dev->sd_ctrl & SDSPI_PRESENTN) {
-		txstr("SDCARD: No card present\n");
+		txstr("SDCARD: No card present\r\n");
 		dv->d_sector_count = 0;
 		dv->d_block_size   = 0;
 		sdcard_err = -1;
@@ -735,7 +732,7 @@ SDSPIDRV *sdspi_init(SDSPI *dev) {
 	//
 	//
 	if (SDDEBUG)
-		txstr("SDCARD: CMD0 GO_IDLE_STATE\n");
+		txstr("SDCARD: CMD0 GO_IDLE_STATE\r\n");
 
 	dev->sd_data = 0;
 	dev->sd_ctrl = SDSPI_GO_IDLE; // CMD zero
@@ -746,7 +743,7 @@ SDSPIDRV *sdspi_init(SDSPI *dev) {
 #ifdef	SCOPE
 		SCOPE->s_ctrl = WBSCOPE_TRIGGER | SCOPEDELAY;
 #endif
-		txstr("No response from card to reset command\n");
+		txstr("No response from card to reset command\r\n");
 #ifdef	GPIO_SD_RESET
 		*_gpio = GPIO_SET(GPIO_SD_RESET);
 #endif
@@ -784,7 +781,7 @@ SDSPIDRV *sdspi_init(SDSPI *dev) {
 		// operating at)
 		//
 		if (SDDEBUG)
-			txstr("SDCARD: CMD1 SEND_OP_COND\n");
+			txstr("SDCARD: CMD1 SEND_OP_COND\r\n");
 		dev->sd_data = 0x40000000;	// We support high capacity cards
 		dev->sd_ctrl = SDSPI_CMD+1;
 		SDSPI_WAIT_WHILE_BUSY(dv);
@@ -832,7 +829,7 @@ SDSPIDRV *sdspi_init(SDSPI *dev) {
 	//
 	//
 	if (SDDEBUG)
-		txstr("SDCARD: CMD8 SEND_IF_COND (3.3v)\n");
+		txstr("SDCARD: CMD8 SEND_IF_COND (3.3v)\r\n");
 	dev->sd_data = 0x001a5;
 	dev->sd_ctrl = (SDSPI_CMD|SDSPI_READREG)+8;
 	SDSPI_WAIT_WHILE_BUSY(dv);
@@ -870,7 +867,7 @@ SDSPIDRV *sdspi_init(SDSPI *dev) {
 		const int	MAX_ITERATIONS = 1500;
 
 		if (SDDEBUG)
-			txstr("SDCARD: ACMD41, Wait for startup\n");
+			txstr("SDCARD: ACMD41, Wait for startup\r\n");
 
 		int	iterations = 0;
 		do {
@@ -937,7 +934,7 @@ SDSPIDRV *sdspi_init(SDSPI *dev) {
 #endif
 			txstr("SDCard Err :");
 			txhex(sdcard_err);
-			txstr("\n");
+			txstr("\r\n");
 			dv->d_sector_count = 0;
 			dv->d_block_size   = 0;
 			return dv;
@@ -1036,12 +1033,12 @@ SDSPIDRV *sdspi_init(SDSPI *dev) {
 		WRITE_BL_LEN &= 0x0f;
 #ifdef	STDIO_DEBUG
 		if (SDDEBUG) {
-			printf("LO:\n"
-			"  C_SIZE_MULT  = %6d\n"
-			"  C_SIZE       = %6d\n"
-			"  READ_BL_LEN  = %6d\n"
-			"  SECTOR_SIZE  = %6d\n"
-			"  WRITE_BL_LEN = %6d\n",
+			mini_printf("LO:\r\n"
+			"  C_SIZE_MULT  = %6d\r\n"
+			"  C_SIZE       = %6d\r\n"
+			"  READ_BL_LEN  = %6d\r\n"
+			"  SECTOR_SIZE  = %6d\r\n"
+			"  WRITE_BL_LEN = %6d\r\n",
 					C_SIZE_MULT, C_SIZE,
 					READ_BL_LEN, SECTOR_SIZE,
 					WRITE_BL_LEN);
@@ -1071,11 +1068,11 @@ SDSPIDRV *sdspi_init(SDSPI *dev) {
 		dv->d_sector_count = (C_SIZE+1ul) * 1024;
 #ifdef	STDIO_DEBUG
 		if (SDDEBUG) {
-			printf("HS: C_SIZE = %d\n", C_SIZE);
-			printf("  From ... %02x%02x%02x\n",
+			mini_printf("HS: C_SIZE = %d\r\n", C_SIZE);
+			mini_printf("  From ... %02x%02x%02x\r\n",
 				dv->d_CSD[7]&0x0ff,dv->d_CSD[8]&0x0ff,
 				dv->d_CSD[9]&0x0ff);
-			printf("  Card Size = %lu\n", (unsigned long)dv->d_sector_count * 512ul);
+			mini_printf("  Card Size = %lu\r\n", (unsigned long)dv->d_sector_count * 512ul);
 		}
 #endif
 
@@ -1084,11 +1081,11 @@ SDSPIDRV *sdspi_init(SDSPI *dev) {
 	} else {
 		// {{{
 #ifdef	STDIO_DEBUG
-		printf("Unrecognizable CSD: %02x %02x %02x ...\n",
+		mini_printf("Unrecognizable CSD: %02x %02x %02x ...\r\n",
 			dv->d_CSD[0] & 0x0ff, dv->d_CSD[1] & 0x0ff,
 			dv->d_CSD[2] & 0x0ff);
 #else
-		txstr("Unrecognizable CSD type\n");
+		txstr("Unrecognizable CSD type\r\n");
 #endif	// STDIO_DEBUG
 		dv->d_sector_count = 0;
 		dv->d_block_size   = 0;
@@ -1136,7 +1133,7 @@ int	sdspi_read(SDSPIDRV *dev, const unsigned sector, const unsigned count, char 
 		unsigned	*ubuf = (unsigned *)&buf[k*512];
 
 		if (dev->d_dev->sd_ctrl & SDSPI_REMOVED) {
-			txstr("ERR: SD-Card was removed\n");
+			txstr("ERR: SD-Card was removed\r\n");
 			st = RES_ERROR;
 			break;
 		}
@@ -1199,7 +1196,7 @@ int	sdspi_write(SDSPIDRV *dev, const unsigned sector, const unsigned count, cons
 		const unsigned *ubuf = (unsigned *)(&buf[k*512]);
 
 		if (dev->d_dev->sd_ctrl & SDSPI_REMOVED) {
-			txstr("ERR: SD-Card was removed\n");
+			txstr("ERR: SD-Card was removed\r\n");
 			st = -1;
 			break;
 		}

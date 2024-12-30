@@ -1,5 +1,5 @@
 TRELLIS?=/usr/share/trellis
-BOOTSTRAP_SOURCES := start.S bootstrap.c stdlib_tiny.c stdlib_tiny_asm.S fatfs/ff.c fatfs/diskio.c fatfs/ffsystem.c fatfs/ffunicode.c fatfs/sdiodrv.c fatfs/sdspidrv.c fatfs/emmcdrv.c
+BOOTSTRAP_SOURCES := start.S bootstrap.c stdlib_tiny.c mini-printf.c stdlib_tiny_asm.S fatfs/ff.c fatfs/diskio.c fatfs/ffsystem.c fatfs/ffunicode.c fatfs/sdiodrv.c
 BOOTSTRAP_OBJECTS := $(BOOTSTRAP_SOURCES:%.c=%.o)
 BOOTSTRAP_OBJECTS := $(BOOTSTRAP_OBJECTS:%.S=%.o)
 
@@ -17,7 +17,7 @@ bootstrap.bin: bootstrap.elf
 	riscv64-unknown-elf-objcopy -O binary bootstrap.elf bootstrap.bin
 
 bootstrap.hex: bootstrap.bin
-	python3 makehex.py $^ 16384 > $@
+	python3 makehex.py $^ 24576 > $@
 
 attosoc_tb.vvp: attosoc_tb.v sd_fake.v sd_fake_rom.v attosoc.v picorv32.v simpleuart.v sd/sddma_mm2s.v sd/sddma_rxgears.v sd/sddma_txgears.v sd/sddma_s2mm.v sd/sddma.v sd/sdfifo.v sd/sdskid.v sd/sdio.v sd/sdwb.v sd/sdckgen.v sd/sdcmd.v sd/sdrxframe.v sd/sdtxframe.v sd/sdfrontend.v sd/sdio_top.v
 	iverilog -s testbench -I sd -o $@ $^

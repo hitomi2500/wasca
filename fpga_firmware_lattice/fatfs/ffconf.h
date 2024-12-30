@@ -61,14 +61,14 @@
 #define FF_PRINT_FLOAT	1
 #define FF_STRF_ENCODE	3
 /* FF_USE_STRFUNC switches string functions, f_gets(), f_putc(), f_puts() and
-/  f_printf().
+/  f_mini_printf().
 /
 /   0: Disable. FF_PRINT_LLI, FF_PRINT_FLOAT and FF_STRF_ENCODE have no effect.
 /   1: Enable without LF-CRLF conversion.
 /   2: Enable with LF-CRLF conversion.
 /
-/  FF_PRINT_LLI = 1 makes f_printf() support long long argument and FF_PRINT_FLOAT = 1/2
-/  makes f_printf() support floating point argument. These features want C99 or later.
+/  FF_PRINT_LLI = 1 makes f_mini_printf() support long long argument and FF_PRINT_FLOAT = 1/2
+/  makes f_mini_printf() support floating point argument. These features want C99 or later.
 /  When FF_LFN_UNICODE >= 1 with LFN enabled, string functions convert the character
 /  encoding in it. FF_STRF_ENCODE selects assumption of character encoding ON THE FILE
 /  to be read/written via those functions.
