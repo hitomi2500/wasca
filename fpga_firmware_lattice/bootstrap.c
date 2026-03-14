@@ -113,8 +113,6 @@ int main() {
 	else
 		mini_printf("opendir OK\r\n");
 
-	mini_printf("goto readdir...\r\n");
-
 	FILINFO _filinfo;
 	_filinfo.fname[0] = 'A';
 	
@@ -128,25 +126,6 @@ int main() {
 			mini_printf("f_readdir OK\r\n");*/
 		mini_printf("Found file:%s (%d)\r\n",_filinfo.fname,_filinfo.fsize);
 	}
-
-
-	/*for (int i=0;i<10;i++)
-	{
-		disk_read(0,buff,0,1);
-	}
-
-	fr = f_opendir(&_dir, "/");
-	if (fr != FR_OK)
-	{
-		mini_printf("opendir error %x \r\n",fr);
-	}
-
-	f_readdir(&_dir,&_filinfo);
-	if (fr != FR_OK)
-	{
-		mini_printf("f_readdir error %x \r\n",fr);
-	}	*/
-
 
 	int led_toggle = 1;
     while (1) {
