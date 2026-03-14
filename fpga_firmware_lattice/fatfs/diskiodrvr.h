@@ -42,6 +42,7 @@
 // }}}
 
 #include <stddef.h>
+#define _BOARD_HAS_SDIO 1
 
 typedef	struct DISKIODRVR_S *(*DIO_INIT_FN)(void *io_addr);
 typedef	int (*DIO_WRITE_FN)(void *, const unsigned, const unsigned, const char *);
@@ -71,14 +72,14 @@ typedef	struct	FATDRIVE_S {
 // there's one FATDRIVE triplet per drive on the board, and so that MAX_DRIVES
 // contains the number of items in the table.
 //
-#define	MAX_DRIVES	4
+#define	MAX_DRIVES	1
 FATDRIVE	DRIVES[MAX_DRIVES] = {
 #ifdef	_BOARD_HAS_SDIO
-		{ (void *)_sdio, &SDIODRVR, NULL },
+		{ (void *)0x03000000, &SDIODRVR, NULL }
 #else
-		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL }
 #endif
-#ifdef	_BOARD_HAS_SDSPI
+/*#ifdef	_BOARD_HAS_SDSPI
 		{ (void *)_sdspi, &SDSPIDRVR, NULL },
 #else
 		{ NULL, NULL, NULL },
@@ -88,7 +89,7 @@ FATDRIVE	DRIVES[MAX_DRIVES] = {
 #else
 		{ NULL, NULL, NULL },
 #endif
-		{NULL, NULL, NULL }
+		{NULL, NULL, NULL }*/
 	};
 
 #endif

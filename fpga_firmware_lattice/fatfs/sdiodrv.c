@@ -78,7 +78,7 @@ typedef	uint16_t WORD;
 typedef	uint32_t DWORD, LBA_t, UINT;
 #include "diskio.h"
 #include "sdiodrv.h"
-#include "..\mini-printf.h"
+#include "../mini-printf.h"
 
 // tx* -- debugging output functions
 // {{{
@@ -1158,6 +1158,19 @@ int	sdio_write_block(SDIODRV *dev, uint32_t sector, uint32_t *buf){// CMD 24
 			;
 	} else
 #endif
+
+	//scrambling data
+	uint8_t c;
+	uint8_t* buf8 = (uint8_t*)buf;
+	for (int i=0;i<512;i+=4){
+		c = buf8[i];
+		buf8[i] = buf8[i+3];
+		buf8[i+3] = c;
+		c = buf8[i+1];
+		buf8[i+1] = buf8[i+2];
+		buf8[i+2] = c;
+	}
+
 		for(int k=0; k<512/sizeof(uint32_t); k++)
 			dev->d_dev->sd_fifa = buf[k];
 
@@ -1275,7 +1288,19 @@ int	sdio_read_block(SDIODRV *dev, uint32_t sector, uint32_t *buf){// CMD 17
 			buf[k] = dev->d_dev->sd_fifa;
 
 	if (SDDEBUG && SDINFO)
-		sdio_dump_sector(buf);
+		sdio_dump_sector((const unsigned int*)buf);
+
+	//unscrambling data
+	uint8_t c;
+	uint8_t* buf8 = (uint8_t*)buf;
+	for (int i=0;i<512;i+=4){
+		c = buf8[i];
+		buf8[i] = buf8[i+3];
+		buf8[i+3] = c;
+		c = buf8[i+1];
+		buf8[i+1] = buf8[i+2];
+		buf8[i+2] = c;
+	}
 
 	RELEASE_MUTEX;
 

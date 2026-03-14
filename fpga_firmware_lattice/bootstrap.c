@@ -3,6 +3,7 @@
 #include "fatfs/ff.h"
 #include "fatfs/sdiodrv.h"
 #include "fatfs/diskio.h"
+#include "mini-printf.h"
 
 #define LED (*(volatile uint32_t*)0x02000000)
 
@@ -14,6 +15,10 @@
 
 FATFS FatFs;		/* FatFs work area needed for each volume */
 FIL Fil;			/* File object needed for each open file */
+
+PARTITION VolToPart[FF_VOLUMES] = {
+    {0, 1},     /* 1st partition on the pd#0 */
+};
 
 char buff[BLKSIZE*BLKCNT];
 
@@ -38,28 +43,16 @@ int main() {
     //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
 
 	volatile uint32_t* p32 = (uint32_t*) 0;
-	/*int i;
-	p32 = (uint32_t*) 0x03000000;
-	for (i=0;i<8;i++)
-		p32[i] = i*0x01241111;
-	volatile uint32_t v32;
-	//mini_printf("Dumping SDIO regs...\r\n");
-	mini_printf("\r\n");
-	for (i=0;i<8;i++)
-	{
-		mini_printf(" %d %x\r\n",i,p32[i]);
-	}*/
 
 	uint32_t seed = 0x100500;
 	uint32_t errors = 0;
 
 	mini_printf("Starting bootstrap...\r\n");
 
-	//init ocsdc driver
-	struct SDIODRV * drv;
+	//init sdio driver
+	/*struct SDIODRV * drv;
 	struct SDIO * sdio_dev_ptr = (SDIO *)0x03000000;
 	drv = sdio_init(sdio_dev_ptr);
-	//putchar(0x01);
 
 	if (NULL == drv) {
 		mini_printf("SDIO init failed\r\n");
@@ -68,62 +61,48 @@ int main() {
 	else
 	{
 		mini_printf("SDIO init OK\r\n");
-	}
-	/*while(1)
-	{
-		int err = mmc_init(&drv);
-		if (err != 0 || drv.has_init == 0) {
-			mini_printf("mmc_init failed with error %x\r\n".code);
+	}*/
+
+	//read some blocks
+
+	/*for (int k=0;k<16;k++)
+	{ 
+		if (sdio_read(drv, k, 1, buff) != RES_OK) {
+			mini_printf("sdio_read failed\r\n");
 		}
 		else
-		{
-			mini_printf("mmc_init OK\r\n");
+			mini_printf("sdio_read OK\r\n");
+
+		//unscrambling data
+		uint8_t c;
+		for (int i=0;i<512;i+=4){
+			c = buff[i];
+			buff[i] = buff[i+3];
+			buff[i+3] = c;
+			c = buff[i+1];
+			buff[i+1] = buff[i+2];
+			buff[i+2] = c;
 		}
-		LED = 0x20;//red external
-		delay();
-		LED = 0x0;//off
-		delay();
-	}*/
-	//putchar(0x02);
 
-	//read 1 block
-	mini_printf("attempting to read block %x\r\n",0);
-	//while (mmc_bread(&drv, k, 1, buff) != 1) {
-	if (sdio_read(drv, 0, 1, buff) != RES_OK) {
-		mini_printf("sdio_read failed\r\n");
+		//dumping data
+		mini_printf("dumping data at addr=0x%x\r\n",k*512);
+		for (int j=0;j<32;j++) {
+				for (int i=0;i<16;i++){
+					uint8_t code = buff[j*16+i];
+					mini_printf("%2x ",code);
+				}
+				mini_printf("\r\n");
+			}
 	}
-	else
-		mini_printf("sdio_read OK\r\n");
+	while (1);//halt*/
 
-	//unscrambling data
-	uint8_t c;
-	for (int i=0;i<512;i+=4){
-		c = buff[i];
-		buff[i] = buff[i+3];
-		buff[i+3] = c;
-		c = buff[i+1];
-		buff[i+1] = buff[i+2];
-		buff[i+2] = c;
-	}
-
-	//dumping data
-	mini_printf("dumping data:\r\n");
-
-	for (int j=0;j<32;j++) {
-		for (int i=0;i<16;i++){
-			uint8_t code = buff[j*16+i];
-			mini_printf("%2x ",code);
-		}
-		mini_printf("\r\n");
-	}
-
-	while (1);//halt
-
-	FRESULT fr = f_mount(&FatFs, "", 0);	//mount SD card
+	FRESULT fr = f_mount(&FatFs, "0:/", 1);	//mount SD card
 	if (fr != FR_OK)
 	{
 		mini_printf("mount error %x \r\n",fr);
 	}
+	else
+		mini_printf("mount OK\r\n");
 
 	DIR _dir;
 	fr = f_opendir(&_dir, "/");
@@ -131,15 +110,27 @@ int main() {
 	{
 		mini_printf("opendir error %x \r\n",fr);
 	}
+	else
+		mini_printf("opendir OK\r\n");
+
+	mini_printf("goto readdir...\r\n");
 
 	FILINFO _filinfo;
-	f_readdir(&_dir,&_filinfo);
-	if (fr != FR_OK)
-	{
-		mini_printf("f_readdir error %x \r\n",fr);
-	}	
+	_filinfo.fname[0] = 'A';
+	
+	while (_filinfo.fname[0] != 0) {
+		fr = f_readdir(&_dir,&_filinfo);
+		/*if (fr != FR_OK)
+		{
+			mini_printf("f_readdir error %x \r\n",fr);
+		}
+		else
+			mini_printf("f_readdir OK\r\n");*/
+		mini_printf("Found file:%s (%d)\r\n",_filinfo.fname,_filinfo.fsize);
+	}
 
-	for (int i=0;i<10;i++)
+
+	/*for (int i=0;i<10;i++)
 	{
 		disk_read(0,buff,0,1);
 	}
@@ -154,14 +145,14 @@ int main() {
 	if (fr != FR_OK)
 	{
 		mini_printf("f_readdir error %x \r\n",fr);
-	}	
+	}	*/
 
-	mini_printf("FIRST FOUND:%i\r\n",_filinfo.fname);
 
+	int led_toggle = 1;
     while (1) {
-        //LED = 0xFF;
-        delay();
-        //LED = 0x00;
+        LED = led_toggle;
+		led_toggle*=2;
+		if (led_toggle > 0x20) led_toggle = 1;
         delay();
 		/*
 		//mini_printf("Verifying ram beyond 0x1000\r\n");

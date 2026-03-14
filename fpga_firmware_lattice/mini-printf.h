@@ -64,6 +64,7 @@ int mini_vpprintf(int (*puts)(char* s, int len, void* buf), void* buf, const cha
 int mini_pprintf(int (*puts)(char*s, int len, void* buf), void* buf, const char *fmt, ...);
 int mini_printf(const char *fmt, ...);
 int mini_fputs(const char *str);
+void mini_putchar(char c);
 
 #ifdef __cplusplus
 }

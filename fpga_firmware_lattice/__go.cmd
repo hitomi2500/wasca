@@ -1,4 +1,4 @@
-@set YOSYSHQ_ROOT=E:\Saturn\Wasca\oss-cad-suite\
+@set YOSYSHQ_ROOT=D:\Saturn\Wasca\oss-cad-suite\
 
 @set SSL_CERT_FILE=%YOSYSHQ_ROOT%etc\cacert.pem
 
@@ -15,6 +15,8 @@
 
 @set PATH=E:\msys64\mingw64\bin;E:\msys64\usr\bin;%PATH%
 
-make clean
+rem make clean
 make bootstrap.hex
 make attosoc.bit
+copy attosoc.bit F:
+
