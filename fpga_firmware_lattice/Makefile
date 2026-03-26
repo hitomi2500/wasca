@@ -19,14 +19,14 @@ bootstrap.bin: bootstrap.elf
 bootstrap.hex: bootstrap.bin
 	python3 makehex.py $^ 24576 > $@
 
-attosoc_tb.vvp: attosoc_tb.v sd_fake.v sd_fake_rom.v attosoc.v picorv32.v simpleuart.v sd/sddma_mm2s.v sd/sddma_rxgears.v sd/sddma_txgears.v sd/sddma_s2mm.v sd/sddma.v sd/sdfifo.v sd/sdskid.v sd/sdio.v sd/sdwb.v sd/sdckgen.v sd/sdcmd.v sd/sdrxframe.v sd/sdtxframe.v sd/sdfrontend.v sd/sdio_top.v
+attosoc_tb.vvp: attosoc_tb.v sd_fake.v sd_fake_rom.v attosoc.v picorv32.v sdram_bridge.v simpleuart.v sniff_fifo.v sd/sddma_mm2s.v sd/sddma_rxgears.v sd/sddma_txgears.v sd/sddma_s2mm.v sd/sddma.v sd/sdfifo.v sd/sdskid.v sd/sdio.v sd/sdwb.v sd/sdckgen.v sd/sdcmd.v sd/sdrxframe.v sd/sdtxframe.v sd/sdfrontend.v sd/sdio_top.v
 	iverilog -s testbench -I sd -o $@ $^
 
 attosoc_sim: attosoc_tb.vvp bootstrap.hex
 	vvp -N $<
 
-attosoc.json: top.v pll.v attosoc.v picorv32.v simpleuart.v sd/sddma_mm2s.v sd/sddma_rxgears.v sd/sddma_txgears.v sd/sddma_s2mm.v sd/sddma.v sd/sdfifo.v sd/sdskid.v sd/sdio.v sd/sdwb.v sd/sdckgen.v sd/sdcmd.v sd/sdrxframe.v sd/sdtxframe.v sd/sdfrontend.v sd/sdio_top.v bootstrap.hex
-	yosys -p "synth_ecp5 -json $@ -top top" top.v pll.v attosoc.v picorv32.v simpleuart.v sd/sddma_mm2s.v sd/sddma_rxgears.v sd/sddma_txgears.v sd/sddma_s2mm.v sd/sddma.v sd/sdfifo.v sd/sdskid.v sd/sdio.v sd/sdwb.v sd/sdckgen.v sd/sdcmd.v sd/sdrxframe.v sd/sdtxframe.v sd/sdfrontend.v sd/sdio_top.v
+attosoc.json: top.v pll.v attosoc.v picorv32.v sdram_bridge.v simpleuart.v sniff_fifo.v sd/sddma_mm2s.v sd/sddma_rxgears.v sd/sddma_txgears.v sd/sddma_s2mm.v sd/sddma.v sd/sdfifo.v sd/sdskid.v sd/sdio.v sd/sdwb.v sd/sdckgen.v sd/sdcmd.v sd/sdrxframe.v sd/sdtxframe.v sd/sdfrontend.v sd/sdio_top.v bootstrap.hex
+	yosys -p "synth_ecp5 -json $@ -top top" top.v pll.v attosoc.v picorv32.v sdram_bridge.v simpleuart.v sniff_fifo.v sd/sddma_mm2s.v sd/sddma_rxgears.v sd/sddma_txgears.v sd/sddma_s2mm.v sd/sddma.v sd/sdfifo.v sd/sdskid.v sd/sdio.v sd/sdwb.v sd/sdckgen.v sd/sdcmd.v sd/sdrxframe.v sd/sdtxframe.v sd/sdfrontend.v sd/sdio_top.v
 
 attosoc_out.config: attosoc.json wasca.lpf
 	nextpnr-ecp5 --json attosoc.json --lpf wasca.lpf --textcfg $@ --25k --freq 50 --package CABGA256

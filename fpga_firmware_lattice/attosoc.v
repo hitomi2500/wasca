@@ -33,7 +33,27 @@ module attosoc (
 	inout wire [3:0] sd_dat,
 	output wire sd_clk,
 	output wire uart_tx,
-	input wire uart_rx
+	input wire uart_rx,
+	//A-bus slave interface
+	input [24:1] abus_address,
+	inout [15:0] abus_data,
+	input [2:0] abus_chipselect,
+	input abus_read,
+	input abus_write,
+	output abus_interrupt,
+	output abus_direction,
+	output abus_interrupt_disable_out,
+	//SDRAM port 1 (built into icesugar) master interface
+	output [12:0] sdram_addr,
+	output [1:0] sdram_ba,
+	output sdram_cas_n,
+	output sdram_cke,
+	output sdram_cs_n,
+	inout [15:0] sdram_dq,
+	output [1:0] sdram_dqm,
+	output sdram_ras_n,
+	output sdram_we_n,
+	output sdram_clk
 );
 
 	reg [5:0] reset_cnt = 0;
@@ -48,7 +68,7 @@ module attosoc (
 	parameter [31:0] PROGADDR_RESET = 32'h 0000_0000;       // start of memory
 
 	(* no_rw_check *) reg [31:0] ram [0:MEM_WORDS-1];
-	initial $readmemh("bootstrap.hex", ram);
+	initial $readmemh("D:/Saturn/Wasca/vivado/lattice_sim/hdl/bootstrap.hex", ram);
 	reg [31:0] ram_rdata;
 	reg ram_ready;
 
@@ -59,6 +79,18 @@ module attosoc (
 	wire [31:0] mem_wdata;
 	wire [3:0] mem_wstrb;
 	wire [31:0] mem_rdata;
+	
+	wire sdram_mem_ready;
+	wire sdram_regs_ready;
+    
+    //memory map :
+    // 00xx_xxxx  ram 96KB, writable by sd core
+    // 01xx_xxxx  SDRAM core registers
+    // 0200_0000  led control
+    // 0200_0004  uart divider
+    // 0200_0008  uart data
+    // 03xx_xxxx  SD registers
+    // 1xxx_xxxx  SDRAM area, 256MB
 
 	always @(posedge clk)
         begin
@@ -97,12 +129,16 @@ module attosoc (
 	assign mem_ready = (mem_valid && led_ready) ||
 						(mem_valid && sd_ready) ||
 	                	simpleuart_reg_div_sel || (simpleuart_reg_dat_sel && !simpleuart_reg_dat_wait) ||
+	                	(mem_valid && sdram_mem_ready) ||
+	                	(mem_valid && sdram_regs_ready) ||
 						ram_ready;
 
 	//wishbone rdata mux
 	assign mem_rdata = simpleuart_reg_div_sel ? simpleuart_reg_div_do :
 						simpleuart_reg_dat_sel ? simpleuart_reg_dat_do :
 						sd_regs_sel ? sd_rdata :
+						sdram_mem_sel ? sdram_mem_data :
+						sdram_regs_sel ? sdram_mem_data :
  						ram_rdata;
 
 	picorv32 #(
@@ -155,7 +191,7 @@ module attosoc (
 	);
 
 	//sd signals
-	wire sd_regs_sel = mem_valid && (mem_addr[31 : 8] == 24'h 0300_00);
+	wire sd_regs_sel = mem_valid && (mem_addr[31 : 24] == 8'h 03);
 	reg sd_regs_sel_p1;
 	always @(posedge clk) sd_regs_sel_p1 = sd_regs_sel;
 	wire sd_regs_sel_pulse = sd_regs_sel && (~sd_regs_sel_p1);
@@ -297,6 +333,66 @@ module attosoc (
 		//o_int unconnected
 		//o_debug unconnected
 	);
+	
+	//sdram signals
+	wire [31:0] sdram_mem_data;
+    wire [31:0] sdram_regs_data;
+    wire sdram_mem_sel = mem_valid && (mem_addr[31:28] == 4'h 1);
+    wire sdram_regs_sel = mem_valid && (mem_addr[31:24] == 8'h 01);
+    reg sdram_mem_sel_p1;
+    reg sdram_regs_sel_p1;
+	always @(posedge clk) sdram_mem_sel_p1 = sdram_mem_sel;
+	always @(posedge clk) sdram_regs_sel_p1 = sdram_regs_sel;
+	wire sdram_mem_sel_pulse = sdram_mem_sel && (~sdram_mem_sel_p1);
+	wire sdram_regs_sel_pulse = sdram_regs_sel && (~sdram_regs_sel_p1);
+	
+	sdram_bridge the_sdram_bridge (
+	   .clock(clk),
+	   //A-bus slave interface
+	   .abus_address(abus_address),
+	   .abus_data(abus_data),
+	   .abus_chipselect(abus_chipselect),
+	   .abus_read(abus_read),
+	   .abus_write(abus_write),
+	   .abus_interrupt(abus_interrupt),
+	   .abus_direction(abus_direction),
+	   .abus_interrupt_disable_out(abus_interrupt_disable_out),
+	   	//SDRAM port 1 (built into icesugar) master interface
+	   .sdram_addr(sdram_addr),
+	   .sdram_ba(sdram_ba),
+	   .sdram_cas_n(sdram_cas_n),
+	   .sdram_cke(sdram_cke),
+	   .sdram_cs_n(sdram_cs_n),
+	   .sdram_dq(sdram_dq),
+	   .sdram_dqm(sdram_dqm),
+	   .sdram_ras_n(sdram_ras_n),
+	   .sdram_we_n(sdram_we_n),
+	   .sdram_clk(sdram_clk),
+	   	//Wishbone SDRAM slave interface
+	   .wishbone_sdram_cyc_i(sdram_mem_sel),
+	   .wishbone_sdram_we_i(sdram_mem_sel ? mem_wstrb[0] : 1'b 0),
+	   .wishbone_sdram_addr_i(mem_addr[27:2]),
+	   .wishbone_sdram_data_i(mem_wdata),
+	   .wishbone_sdram_stb_i(sdram_mem_sel_pulse),
+	   .wishbone_sdram_sel_i({4{sdram_mem_sel}}),
+	   .wishbone_sdram_stall_o(),//unconnected?
+	   .wishbone_sdram_ack_o(sdram_mem_ready),
+	   .wishbone_sdram_data_o(sdram_mem_data),
+	   	//Wishbone registers slave interface
+	   .wishbone_regs_cyc_i(sdram_regs_sel),
+	   .wishbone_regs_we_i(sdram_regs_sel ? mem_wstrb[0] : 1'b 0),
+	   .wishbone_regs_addr_i(mem_addr[27:2]),
+	   .wishbone_regs_data_i(mem_wdata),
+	   .wishbone_regs_stb_i(sdram_regs_sel_pulse),
+	   .wishbone_regs_sel_i(sdram_regs_sel),
+	   .wishbone_regs_stall_o(),
+	   .wishbone_regs_ack_o(sdram_regs_ready),
+	   .wishbone_regs_data_o(sdram_regs_data),
+	   //resets
+	   .saturn_reset(saturn_reset),
+	   .reset(~resetn)
+	);
+	
 	
 endmodule
 

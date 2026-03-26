@@ -49,6 +49,19 @@ int main() {
 
 	mini_printf("Starting bootstrap...\r\n");
 
+	//sdram test
+	LED = 0xFF;//test start marker
+	volatile uint32_t * pSDRAM = (uint32_t *)0x10000000;
+	pSDRAM[0] = 0x12345678;
+	for (int i=0;i<24;i++)
+		pSDRAM[1<<i] = 0x11111111*i;
+	pSDRAM[0x1ffffff] = 0xdeafface;
+	volatile uint32_t a = pSDRAM[0];
+	for (int i=0;i<24;i++)
+		a = pSDRAM[1<<i];
+	a = pSDRAM[0x1ffffff];
+	LED = 0x00;//test end marker
+
 	//init sdio driver
 	/*struct SDIODRV * drv;
 	struct SDIO * sdio_dev_ptr = (SDIO *)0x03000000;

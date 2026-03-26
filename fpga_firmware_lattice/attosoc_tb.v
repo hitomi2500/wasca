@@ -18,8 +18,34 @@ module testbench();
 	wire sd_emu_cmd_en;
 	wire [5:0] sd_emu_cmd_cmd;
 	wire [31:0] sd_emu_cmd_arg;
+	
+	//A-bus slave interface
+	wire [24:1] abus_address;
+	wire [15:0] abus_data;
+	wire [2:0] abus_chipselect;
+	wire abus_read;
+	wire abus_write;
+	wire abus_interrupt;
+	wire abus_direction;
+	wire abus_interrupt_disable_out;
+	//SDRAM port 1 (built into icesugar) master interface
+	wire [12:0] sdram_addr;
+	wire [1:0] sdram_ba;
+	wire sdram_cas_n;
+	wire sdram_cke;
+	wire sdram_cs_n;
+	wire [15:0] sdram_dq;
+	wire [1:0] sdram_dqm;
+	wire sdram_ras_n;
+	wire sdram_we_n;
+	wire sdram_clk;
 
-	always #20 clk = (clk === 1'b0);
+	always begin
+	   #4 clk = (clk === 1'b0);
+	   #4 clk = (clk === 1'b0);
+	   #4 clk = (clk === 1'b0);
+	   #3 clk = (clk === 1'b0);
+	   end
 	always #20 sd_clk_i = (sd_clk_i === 1'b0);
 
 	initial begin
@@ -45,7 +71,27 @@ module testbench();
 		.sd_dat      (sd_dat      ),
 		.sd_clk      (sd_clk      ),
 		.uart_rx      (uart_rx      ),	
-		.uart_tx      (uart_tx      )
+		.uart_tx      (uart_tx      ),
+		//A-bus slave interface
+		.abus_address(abus_address),
+		.abus_data(abus_data),
+		.abus_chipselect(abus_chipselect),
+		.abus_read(abus_read),
+		.abus_write(abus_write),
+		.abus_interrupt(abus_interrupt),
+		.abus_direction(abus_direction),
+		.abus_interrupt_disable_out(abus_interrupt_disable_out),
+		//SDRAM port 1 (built into icesugar) master interface
+		.sdram_addr(sdram_addr),
+		.sdram_ba(sdram_ba),
+		.sdram_cas_n(sdram_cas_n),
+		.sdram_cke(sdram_cke),
+		.sdram_cs_n(sdram_cs_n),
+		.sdram_dq(sdram_dq),
+		.sdram_dqm(sdram_dqm),
+		.sdram_ras_n(sdram_ras_n),
+		.sdram_we_n(sdram_we_n),
+		.sdram_clk(sdram_clk)
 	);
 
 	sd_fake sd_emu (
@@ -71,5 +117,18 @@ module testbench();
 	//pullups for sd lines
 	assign (weak1,weak0) sd_cmd = ~0;
 	assign (weak1,weak0) sd_dat = ~0;
+	
+	mt48lc16m16a2 sdram_model(
+	   .Clk(sdram_clk),
+	   .Cs_n(sdram_cs_n),
+	   .Dqm(sdram_dqm),
+	   .Cas_n(sdram_cas_n),
+	   .Ras_n(sdram_ras_n),
+	   .Ba(sdram_ba),
+	   .Addr(sdram_addr),      
+	   .Dq(sdram_dq),
+	   .Cke(sdram_cke),
+	   .We_n(sdram_we_n)
+	   ); 
 
 endmodule

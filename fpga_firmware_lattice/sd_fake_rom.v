@@ -10,7 +10,12 @@ module sd_fake_rom(
       
    initial dout = 0;
 
-   initial $readmemh("bootstrap.hex", rom);
+   //initial $readmemh("D:/Saturn/Wasca/vivado/lattice_sim/hdl/bootstrap.hex", rom);
+    initial begin
+        for (i = 0; i < 1048575; i = i + 1) begin
+            rom[i] = 0;
+        end
+    end
   
    always @(posedge clk)
       dout <= rom[addr[19:0]];
