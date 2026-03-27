@@ -17,6 +17,7 @@ module top(
 	output wire abus_interrupt,
 	output wire abus_direction,
 	output wire abus_interrupt_disable_out,
+	output abus_buffers_enable,
 	//SDRAM port 1 (built into icesugar) master interface
 	output wire [12:0] sdram_addr,
 	output wire [1:0] sdram_ba,
@@ -51,28 +52,29 @@ attosoc soc(
     .sd_clk(sd_clk_internal),
     .uart_tx(uart_tx),
     .uart_rx(uart_rx),
-    		//A-bus slave interface
-		.abus_address(abus_address),
-		.abus_data(abus_data),
-		.abus_chipselect(abus_chipselect),
-		.abus_read(abus_read),
-		.abus_write(abus_write),
-		.abus_interrupt(abus_interrupt),
-		.abus_direction(abus_direction),
-		.abus_interrupt_disable_out(abus_interrupt_disable_out),
-		//SDRAM port 1 (built into icesugar) master interface
-		.sdram_addr(sdram_addr),
-		.sdram_ba(sdram_ba),
-		.sdram_cas_n(sdram_cas_n),
-		.sdram_cke(sdram_cke),
-		.sdram_cs_n(sdram_cs_n),
-		.sdram_dq(sdram_dq),
-		.sdram_dqm(sdram_dqm),
-		.sdram_ras_n(sdram_ras_n),
-		.sdram_we_n(sdram_we_n),
-		.sdram_clk(sdram_clk)
+    //A-bus slave interface
+    .abus_address(abus_address),
+    .abus_data(abus_data),
+    .abus_chipselect(abus_chipselect),
+    .abus_read(abus_read),
+    .abus_write(abus_write),
+    .abus_interrupt(abus_interrupt),
+    .abus_direction(abus_direction),
+    .abus_interrupt_disable_out(abus_interrupt_disable_out),
+    //SDRAM port 1 (built into icesugar) master interface
+    .sdram_addr(sdram_addr),
+    .sdram_ba(sdram_ba),
+    .sdram_cas_n(sdram_cas_n),
+    .sdram_cke(sdram_cke),
+    .sdram_cs_n(sdram_cs_n),
+    .sdram_dq(sdram_dq),
+    .sdram_dqm(sdram_dqm),
+    .sdram_ras_n(sdram_ras_n),
+    .sdram_we_n(sdram_we_n),
+    .sdram_clk(sdram_clk)
 );
 
 assign sd_clk = sd_clk_internal;
+assign abus_buffers_enable = 1'b1;
 
 endmodule
