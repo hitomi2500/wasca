@@ -181,9 +181,12 @@ module sdram_bridge (
     reg abus_cspulse7; 
     initial abus_cspulse7 = 0;
     wire abus_cspulse_off;
-    reg [24:1] abus_address_latched_prepatch;
-    initial abus_address_latched_prepatch = 0;
-    wire [24:1] abus_address_latched;
+    reg [24:1] abus_address_latched;
+	initial abus_address_latched = 0;
+    reg abus_cs0_regs_access;
+	initial abus_cs0_regs_access = 0;
+    reg abus_cs1_regs_access;
+	initial abus_cs1_regs_access = 0;
     reg [1:0] abus_chipselect_latched;
     initial abus_chipselect_latched = 0;
     reg abus_direction_internal; 
@@ -367,15 +370,15 @@ module sdram_bridge (
 	//it might be latched twice per transaction, but it's not a problem
 	//multiplexer was switched to address after previous transaction or after boot,
 	//so we have address ready to latch
+	//patching : for RAM 1M mode A19 and A20 should be set to zero
 	always @(posedge clock) 
 	   if (abus_cspulse)
-			abus_address_latched_prepatch <=  ( (wasca_mode == `MODE_RAM_1M) && (abus_address[24:21] == 4'h2) ) ? 
+			abus_address_latched <=  ( (wasca_mode == `MODE_RAM_1M) && (abus_address[24:21] == 4'h2) ) ? 
 	   { abus_address[24:21], 2'b0,abus_address[18:1]} : abus_address;
-	
-	//patching abus_address_latched : for RAM 1M mode A19 and A20 should be set to zero
-	//trying to do this asynchronously
-	assign abus_address_latched = abus_address_latched_prepatch;
-								
+
+	always @(posedge clock) abus_cs0_regs_access <= (abus_address[24:5] == {17'h1FFFF,3'b111}) ? 1'b1 : 0;
+	always @(posedge clock) abus_cs1_regs_access <= (abus_address[23:2] == {20'hFFFFF,2'b11}) ? 1'b1 : 0;
+									
 	//mapper write enable decode
 	always @(posedge clock)
 	   if (~abus_chipselect_buf[0])
@@ -432,40 +435,24 @@ module sdram_bridge (
 	always @(posedge clock)
 	   if (abus_chipselect_latched == 2'b0) begin
 	       //CS0 access
-	       if (abus_address_latched[24:1] == {21'h1FF0FF,3'h7}) //wasca specific SD card control register	           
-	           abus_data_out <= 16'hCDCD;
-	       else if (abus_address_latched[24:1] == {21'h1FFFFF,3'h0}) //wasca prepare counter
-	           abus_data_out <= REG_PCNTR;
-	       else if (abus_address_latched[24:1] == {21'h1FFFFF,3'h1}) //wasca status register
-	           abus_data_out <= REG_STATUS;
-	       else if (abus_address_latched[24:1] == {21'h1FFFFF,3'h2}) //wasca mode register
-	           abus_data_out <= REG_MODE;
-	       else if (abus_address_latched[24:1] == {21'h1FFFFF,3'h3}) //wasca hwver register
-	           abus_data_out <= REG_HWVER;
-	       else if (abus_address_latched[24:1] == {21'h1FFFFF,3'h4}) //wasca swver register
-	           abus_data_out <= REG_SWVER;
-	       else if (abus_address_latched[24:1] == {21'h1FFFFF,3'h5}) //wasca signature "wa"
-	           abus_data_out <= 16'h7761;
-	       else if (abus_address_latched[24:1] == {21'h1FFFFF,3'h6}) //wasca signature "sc"
-	           abus_data_out <= 16'h7363;
-	       else if (abus_address_latched[24:1] == {21'h1FFFFF,3'h7}) //wasca signature "a "
-	           abus_data_out <= 16'h6120;
-	       else //normal CS0 read access
-	           case (wasca_mode)
-	               `MODE_INIT: abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
-	               `MODE_POWER_MEMORY_05M : abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
-	               `MODE_POWER_MEMORY_1M : abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
-	               `MODE_POWER_MEMORY_2M : abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
-	               `MODE_POWER_MEMORY_4M : abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
-	               `MODE_RAM_1M : abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
-	               `MODE_RAM_4M : abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
-	               `MODE_ROM_KOF95 : abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
-	               `MODE_ROM_ULTRAMAN : abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
-	               `MODE_BOOT : abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
+		   if (abus_cs0_regs_access)
+		   		case (abus_address_latched[4:1])
+					4'h0 : abus_data_out <= 16'hCDCD; //wasca specific SD card control register	   
+					4'h8 :abus_data_out <= REG_PCNTR; //wasca prepare counter
+					4'h9 :abus_data_out <= REG_STATUS; //wasca status register
+					4'ha :abus_data_out <= REG_MODE; //wasca mode register
+					4'hb :abus_data_out <= REG_HWVER; //wasca hwver register
+					4'hc :abus_data_out <= REG_SWVER; //wasca swver register
+					4'hd :abus_data_out <= 16'h7761; //wasca signature "wa"
+					4'he :abus_data_out <= 16'h7363; //wasca signature "sc"
+					4'hf :abus_data_out <= 16'h6120; //wasca signature "a "
 				endcase
+	       else //normal CS0 read access
+		   	   //just output sdram data, no matter the mode
+			   abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
 			end
 	   else if (abus_chipselect_latched == 2'b1) begin //CS1 access
-	       if ( (abus_address_latched[23:1] == {20'hFFFFF,3'h6}) || (abus_address_latched[23:1] == {20'hFFFFF,3'h7}) )//saturn cart id register
+	       if (abus_cs1_regs_access)//saturn cart id register
 	           case (wasca_mode)
 	               `MODE_INIT: abus_data_out <= {sdram_datain_latched[7:0],sdram_datain_latched[15:8]};
 	               `MODE_POWER_MEMORY_05M : abus_data_out <= 16'hFF21;
@@ -478,6 +465,8 @@ module sdram_bridge (
 	               `MODE_ROM_ULTRAMAN : abus_data_out <= 16'hFFFF;
 	               `MODE_BOOT : abus_data_out <= 16'hFFFF;
 				endcase
+			else
+				abus_data_out <= {sdram_datain_latched[7:0],sdram_datain_latched[15:8]};
 			end
 		else //CS2 or dummy access
 		    ;//abus_data_out <= 16'hEEEE;

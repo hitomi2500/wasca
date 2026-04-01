@@ -84,7 +84,7 @@ module attosoc (
 	wire sdram_regs_ready;
 	
 	//sd signals
-	wire sd_regs_sel = mem_valid && (mem_addr[31 : 24] == 8'h 03);
+	wire sd_regs_sel = mem_valid && (mem_addr[28 : 24] == 5'h03);
 	reg sd_regs_sel_p1;
 	always @(posedge clk) sd_regs_sel_p1 = sd_regs_sel;
 	wire sd_regs_sel_pulse = sd_regs_sel && (~sd_regs_sel_p1);
@@ -127,16 +127,16 @@ module attosoc (
 		.dina(mem_wdata),
 		.douta(ram_rdata),
 		.clkb(clk),
-		.write_enb(((mem_addr[31:24] == 8'h00) && (mem_valid)) ? {4{sd_mem_stb}} : 4'b0),
-		.addrb(mem_addr[23:2]),
+		.write_enb({4{sd_mem_stb}}),
+		.addrb(sd_mem_adr[23:2]),
 		.dinb(sd_mem_dat_o),
 		.doutb(sd_mem_dat_i)
 	);
 
 	//port 0
-	always @(posedge clk) ram_ready <= (mem_addr[31:24] == 8'h00 && mem_valid) ? 1'b1 : 0;
+	always @(posedge clk) ram_ready <= (mem_addr[28:24] == 5'h00 && mem_valid) ? 1'b1 : 0;
 	//port 1    
-    always @(posedge clk) sd_mem_ready <= (sd_mem_adr[31:24] == 8'h00 && mem_valid) ? 1'b1 : 0;
+    always @(posedge clk) sd_mem_ready <= 1'b1;
 
 	//led control - write only
 	reg led_ready;
@@ -191,10 +191,10 @@ module attosoc (
 	);
 
 	//uart signals
-	wire        simpleuart_reg_div_sel = mem_valid && (mem_addr == 32'h 0200_0004);
+	wire        simpleuart_reg_div_sel = mem_valid && (mem_addr[28:24] == 5'h02) && (mem_addr[3:0] == 4'h4);
 	wire [31:0] simpleuart_reg_div_do;
 
-	wire        simpleuart_reg_dat_sel = mem_valid && (mem_addr == 32'h 0200_0008);
+	wire        simpleuart_reg_dat_sel = mem_valid && (mem_addr[28:24] == 5'h02) && (mem_addr[3:0] == 4'h8);
 	wire [31:0] simpleuart_reg_dat_do;
 	wire simpleuart_reg_dat_wait;
 
@@ -300,8 +300,8 @@ module attosoc (
 	//sdram signals
 	wire [31:0] sdram_mem_data;
     wire [31:0] sdram_regs_data;
-    wire sdram_mem_sel = mem_valid && (mem_addr[31:28] == 4'h 1);
-    wire sdram_regs_sel = mem_valid && (mem_addr[31:24] == 8'h 01);
+    wire sdram_mem_sel = mem_valid && (mem_addr[28] == 1'h1);
+    wire sdram_regs_sel = mem_valid && (mem_addr[28:24] == 5'h01);
     reg sdram_mem_sel_p1;
     reg sdram_regs_sel_p1;
 	always @(posedge clk) sdram_mem_sel_p1 = sdram_mem_sel;

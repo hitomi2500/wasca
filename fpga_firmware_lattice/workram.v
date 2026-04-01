@@ -58,9 +58,9 @@ module workram (dina, write_ena, addra, clka, douta,
 		.doutb(doutb[i*8 +: 8])
 	);*/
 	
-  /*reg [data_width-1:0] mem [data_depth-1:0] /* synthesis syn_ramstyle = "no_rw_check" */ ; 
+  reg [data_width-1:0] mem [16384-1:0] /* synthesis syn_ramstyle = "no_rw_check" */ ; 
 
-  /*always @(posedge clka) // Using port a.
+  always @(posedge clka) // Using port a.
   begin
     if (write_ena[0]) mem[addra][7:0] <= dina[7:0];
     if (write_ena[1]) mem[addra][15:8] <= dina[15:8];
@@ -76,15 +76,15 @@ module workram (dina, write_ena, addra, clka, douta,
     if (write_enb[2]) mem[addrb][23:16] <= dinb[23:16];
     if (write_enb[3]) mem[addrb][31:24] <= dinb[31:24];
     doutb <= mem[addrb];
-  end*/
+  end
   
   
   //using 16 + 8 dual mem architecture
   
-  reg [data_width-1:0] mem16 [16384-1:0] /* synthesis syn_ramstyle = "no_rw_check" */ ; 
-  reg [data_width-1:0] mem8 [4096-1:0] /* synthesis syn_ramstyle = "no_rw_check" */ ; 
+  /*reg [data_width-1:0] mem16 [16384-1:0] /* synthesis syn_ramstyle = "no_rw_check" */ ; 
+  /*reg [data_width-1:0] mem8 [4096-1:0] /* synthesis syn_ramstyle = "no_rw_check" */ ; 
 
-  always @(posedge clka) // Using port a.
+  /*always @(posedge clka) // Using port a.
   begin
     if (write_ena[0] && ~addra[14]) mem16[addra[13:0]][7:0] <= dina[7:0];
     if (write_ena[1] && ~addra[14]) mem16[addra[13:0]][15:8] <= dina[15:8];
@@ -108,6 +108,6 @@ module workram (dina, write_ena, addra, clka, douta,
     if (write_enb[2] && addrb[14]) mem8[addrb[11:0]][23:16] <= dinb[23:16];
     if (write_enb[3] && addrb[14]) mem8[addrb[11:0]][31:24] <= dinb[31:24];
     doutb <= (addrb[14]) ?  mem8[addrb[12:0]] : mem16[addrb[13:0]];
-  end
+  end*/
 
 endmodule
