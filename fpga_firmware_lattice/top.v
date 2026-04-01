@@ -38,10 +38,11 @@ wire sd_clk_internal;
 initial clk_12_5 = 0;
 always @(posedge clk_25) clk_12_5 <= ~clk_12_5;
 
-pll_25_133 pll(
+assign clk_133 = clk_25;
+/*pll_25_133 pll(
     .clki(clk_25),
     .clko(clk_133)
-);
+);*/
 
 attosoc soc(
     .clk(clk_133),

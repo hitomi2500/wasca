@@ -34,13 +34,12 @@ module workram (dina, write_ena, addra, clka, douta,
   parameter addr_width = 15;
   parameter data_width = 32;
   parameter data_depth = 24576;
-  input [addr_width-1:0] addra, addrb;
-  input [data_width-1:0] dina, dinb;
-  input clka, clkb;
-  input [3:0] write_ena;
-  input [3:0] write_enb;
-  output [data_width-1:0] douta, doutb;
-  reg [data_width-1:0] douta, doutb;
+  input wire [addr_width-1:0] addra, addrb;
+  input wire [data_width-1:0] dina, dinb;
+  input wire clka, clkb;
+  input wire [3:0] write_ena;
+  input wire [3:0] write_enb;
+  output reg [data_width-1:0] douta, doutb;
   
   /*genvar i;
 
@@ -58,7 +57,8 @@ module workram (dina, write_ena, addra, clka, douta,
 		.doutb(doutb[i*8 +: 8])
 	);*/
 	
-  reg [data_width-1:0] mem [16384-1:0] /* synthesis syn_ramstyle = "no_rw_check" */ ; 
+  reg [data_width-1:0] mem [data_depth-1:0] /* synthesis syn_ramstyle = "no_rw_check" */ ; 
+  initial $readmemh("bootstrap.hex", mem);
 
   always @(posedge clka) // Using port a.
   begin

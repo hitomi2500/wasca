@@ -47,7 +47,7 @@ int main() {
 	uint32_t seed = 0x100500;
 	uint32_t errors = 0;
 
-	mini_printf("Starting bootstrap...\r\n");
+	mini_printf("Bootstrap %s %s\r\n",__DATE__,__TIME__);
 
 	//sdram test
 	LED = 0xFF;//test start marker
@@ -61,6 +61,8 @@ int main() {
 		a = pSDRAM[1<<i];
 	a = pSDRAM[0x1ffffff];
 	LED = 0x00;//test end marker
+
+	mini_printf("SDRAM test complete\r\n");
 
 	//init sdio driver
 	/*struct SDIODRV * drv;

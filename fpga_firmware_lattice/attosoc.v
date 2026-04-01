@@ -69,7 +69,7 @@ module attosoc (
 
 	//(* syn_ramstyle = "block_ram" *) reg [31:0] internal_ram [0:MEM_WORDS-1];
 	//initial $readmemh("D:/Saturn/Wasca/vivado/lattice_sim/hdl/bootstrap.hex", internal_ram);
-	reg [31:0] ram_rdata;
+	wire [31:0] ram_rdata;
 	reg ram_ready;
 
 	wire mem_valid;
@@ -103,7 +103,7 @@ module attosoc (
 	assign sd_dat_i = sd_dat;
 	wire sd_ready;
 	wire [31:0] sd_mem_dat_o;
-	reg [31:0] sd_mem_dat_i;
+	wire [31:0] sd_mem_dat_i;
 	wire [31:0] sd_mem_adr;
 	wire [31:0] sd_rdata;
 	//wire sd_mem_sel;
