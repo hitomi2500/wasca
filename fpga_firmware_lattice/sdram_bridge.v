@@ -242,7 +242,7 @@ module sdram_bridge (
     reg sniffer_prefifo_full; 
     reg sniffer_data_write;
     reg sniffer_data_ack;
-    wire [10:0] sniffer_fifo_content_size; 
+    wire [9:0] sniffer_fifo_content_size; 
     wire sniffer_fifo_empty;
     wire sniffer_fifo_full;
     reg [15:0] sniffer_last_active_block; 
@@ -397,11 +397,11 @@ module sdram_bridge (
 	//latch transaction direction
 	always @(posedge clock)
 	   if ( (abus_write_pulse[0]) || (abus_write_pulse[1]) )
-	       my_little_transaction_dir <= `DIR_WRITE;
+	       my_little_transaction_dir <= 2'd`DIR_WRITE;
 	   else if (abus_read_pulse)
-	       my_little_transaction_dir <= `DIR_READ;
+	       my_little_transaction_dir <= 2'd`DIR_READ;
 	   else if (abus_anypulse_off && ~abus_cspulse_off) //ending anything but not cs
-	       my_little_transaction_dir <= `DIR_NONE;
+	       my_little_transaction_dir <= 2'd`DIR_NONE;
 
 	//latch chipselect number
 	always @(posedge clock)
@@ -541,31 +541,24 @@ module sdram_bridge (
 	always @(posedge clock)
 	   if (wishbone_regs_read)
 	       case (wishbone_regs_address[7:0])
-	           8'hc0 : wishbone_regs_readdata <= REG_MAPPER_READ[15:0];
-	           8'hc2 : wishbone_regs_readdata <= REG_MAPPER_READ[31:16];
-	           8'hc4 : wishbone_regs_readdata <= REG_MAPPER_READ[47:32];
-	           8'hc6 : wishbone_regs_readdata <= REG_MAPPER_READ[63:48];
-	           8'hc8 : wishbone_regs_readdata <= REG_MAPPER_WRITE[15:0];
-	           8'hca : wishbone_regs_readdata <= REG_MAPPER_WRITE[31:16];
-	           8'hcc : wishbone_regs_readdata <= REG_MAPPER_WRITE[47:32];
-	           8'hce : wishbone_regs_readdata <= REG_MAPPER_WRITE[63:48];
-	           8'hd0 : wishbone_regs_readdata <= counter_value[15:0];
-	           8'hd2 : wishbone_regs_readdata <= counter_value[31:16];
-	           8'hd4 : wishbone_regs_readdata <= {8'h0, counter_filter_control};
-	           //D6 is a reset, writeonly
-	           //D8 to DE are reserved
+	           8'hc0 : wishbone_regs_readdata <= REG_MAPPER_READ[31:0];
+	           8'hc4 : wishbone_regs_readdata <= REG_MAPPER_READ[63:32];
+	           8'hc8 : wishbone_regs_readdata <= REG_MAPPER_WRITE[31:0];
+	           8'hcc : wishbone_regs_readdata <= REG_MAPPER_WRITE[63:32];
+	           8'hd0 : wishbone_regs_readdata <= counter_value[31:0];
+	           8'hd4 : wishbone_regs_readdata <= {24'h0, counter_filter_control};
+	           //D8 to DÑ are reserved
 	           8'he0 : wishbone_regs_readdata <= sniffer_data_out;
-	           //E2 to E6 are reserved
-	           8'he8 : wishbone_regs_readdata <= {8'h0, sniffer_filter_control};
-	           8'hea : wishbone_regs_readdata <= {4'h0, sniffer_fifo_full, sniffer_fifo_content_size};
-	           //EC to EE are reserved
-	           8'hf0 : wishbone_regs_readdata <= REG_PCNTR;
-	           8'hf2 : wishbone_regs_readdata <= REG_STATUS;
-	           8'hf4 : wishbone_regs_readdata <= REG_MODE;
-	           8'hf6 : wishbone_regs_readdata <= REG_HWVER;
-	           8'hf8 : wishbone_regs_readdata <= REG_SWVER;
-	           8'hfa : wishbone_regs_readdata <= 16'habcd; //for debug, remove later
-	           default : wishbone_regs_readdata <= REG_HWVER; //to simplify mux
+	           //E4 is reserved
+	           8'he8 : wishbone_regs_readdata <= {4'h0, sniffer_fifo_full, sniffer_fifo_content_size, 8'h0, sniffer_filter_control};
+	           //EC is reserved
+	           8'hf0 : wishbone_regs_readdata <= {16'b0,REG_PCNTR};
+	           8'hf2 : wishbone_regs_readdata <= {16'b0,REG_STATUS};
+	           8'hf4 : wishbone_regs_readdata <= {16'b0,REG_MODE};
+	           8'hf6 : wishbone_regs_readdata <= {16'b0,REG_HWVER};
+	           8'hf8 : wishbone_regs_readdata <= {16'b0,REG_SWVER};
+	           8'hfa : wishbone_regs_readdata <= 32'h1234abcd; //for debug, remove later
+	           default : wishbone_regs_readdata <= {16'b0,REG_HWVER}; //to simplify mux
 	           endcase
 	
 	always @(posedge clock) wishbone_regs_readdatavalid <= wishbone_regs_readdatavalid_p1;

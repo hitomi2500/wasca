@@ -67,8 +67,8 @@ module attosoc (
 	parameter [31:0] STACKADDR = 32'h 0001_8000;       // end of memory
 	parameter [31:0] PROGADDR_RESET = 32'h 0000_0000;       // start of memory
 
-	(* no_rw_check *) reg [31:0] ram [0:MEM_WORDS-1];
-	initial $readmemh("D:/Saturn/Wasca/vivado/lattice_sim/hdl/bootstrap.hex", ram);
+	//(* syn_ramstyle = "block_ram" *) reg [31:0] internal_ram [0:MEM_WORDS-1];
+	//initial $readmemh("D:/Saturn/Wasca/vivado/lattice_sim/hdl/bootstrap.hex", internal_ram);
 	reg [31:0] ram_rdata;
 	reg ram_ready;
 
@@ -82,37 +82,61 @@ module attosoc (
 	
 	wire sdram_mem_ready;
 	wire sdram_regs_ready;
+	
+	//sd signals
+	wire sd_regs_sel = mem_valid && (mem_addr[31 : 24] == 8'h 03);
+	reg sd_regs_sel_p1;
+	always @(posedge clk) sd_regs_sel_p1 = sd_regs_sel;
+	wire sd_regs_sel_pulse = sd_regs_sel && (~sd_regs_sel_p1);
+	wire sd_cmd_i;
+	wire sd_cmd_o;
+	wire sd_cmd_oe;
+	assign sd_cmd = (~sd_cmd_oe) ? sd_cmd_o : 1'bz;
+	assign sd_cmd_i = sd_cmd;
+	wire [3:0] sd_dat_i;
+	wire [3:0] sd_dat_o;
+	wire [3:0] sd_dat_oe;
+	assign sd_dat[0] = (~sd_dat_oe[0]) ? sd_dat_o[0] : 1'bz;
+	assign sd_dat[1] = (~sd_dat_oe[1]) ? sd_dat_o[1] : 1'bz;
+	assign sd_dat[2] = (~sd_dat_oe[2]) ? sd_dat_o[2] : 1'bz;
+	assign sd_dat[3] = (~sd_dat_oe[3]) ? sd_dat_o[3] : 1'bz;
+	assign sd_dat_i = sd_dat;
+	wire sd_ready;
+	wire [31:0] sd_mem_dat_o;
+	reg [31:0] sd_mem_dat_i;
+	wire [31:0] sd_mem_adr;
+	wire [31:0] sd_rdata;
+	//wire sd_mem_sel;
+	//wire sd_mem_cyc;
+	wire sd_mem_stb;
+	reg sd_mem_ready;
     
     //memory map :
-    // 00xx_xxxx  ram 96KB, writable by sd core
+    // 00xx_xxxx  workram 96KB, writable by sd core
     // 01xx_xxxx  SDRAM core registers
     // 0200_0000  led control
     // 0200_0004  uart divider
     // 0200_0008  uart data
     // 03xx_xxxx  SD registers
     // 1xxx_xxxx  SDRAM area, 256MB
+	
+	workram workram_inst (
+		.clka(clk),
+		.write_ena(((mem_addr[31:24] == 8'h00) && (mem_valid)) ? mem_wstrb : 4'b0),
+		.addra(mem_addr[23:2]),
+		.dina(mem_wdata),
+		.douta(ram_rdata),
+		.clkb(clk),
+		.write_enb(((mem_addr[31:24] == 8'h00) && (mem_valid)) ? {4{sd_mem_stb}} : 4'b0),
+		.addrb(mem_addr[23:2]),
+		.dinb(sd_mem_dat_o),
+		.doutb(sd_mem_dat_i)
+	);
 
-	always @(posedge clk)
-        begin
-		//port 0
-		ram_ready <= 1'b0;
-		if (mem_addr[31:24] == 8'h00 && mem_valid) begin
-			if (mem_wstrb[0]) ram[mem_addr[23:2]][7:0] <= mem_wdata[7:0];
-			if (mem_wstrb[1]) ram[mem_addr[23:2]][15:8] <= mem_wdata[15:8];
-			if (mem_wstrb[2]) ram[mem_addr[23:2]][23:16] <= mem_wdata[23:16];
-			if (mem_wstrb[3]) ram[mem_addr[23:2]][31:24] <= mem_wdata[31:24];
-
-			ram_rdata <= ram[mem_addr[23:2]];
-			ram_ready <= 1'b1;
-		end
-		//port 1
-		sd_mem_ready <= 0;
-		if (sd_mem_adr[31:24] == 8'h00 && mem_valid) begin
-			if (sd_mem_stb) ram[sd_mem_adr[23:2]] <= sd_mem_dat_o[31:0];
-			sd_mem_dat_i <= ram[sd_mem_adr[23:2]];
-			sd_mem_ready <= 1'b1;
-		end
-    end
+	//port 0
+	always @(posedge clk) ram_ready <= (mem_addr[31:24] == 8'h00 && mem_valid) ? 1'b1 : 0;
+	//port 1    
+    always @(posedge clk) sd_mem_ready <= (sd_mem_adr[31:24] == 8'h00 && mem_valid) ? 1'b1 : 0;
 
 	//led control - write only
 	reg led_ready;
@@ -160,7 +184,10 @@ module attosoc (
 		.mem_addr    (mem_addr   ),
 		.mem_wdata   (mem_wdata  ),
 		.mem_wstrb   (mem_wstrb  ),
-		.mem_rdata   (mem_rdata  )
+		.mem_rdata   (mem_rdata  ),
+		.trap(),
+		.mem_la_read(),
+		.mem_la_write()
 	);
 
 	//uart signals
@@ -189,70 +216,6 @@ module attosoc (
 		.reg_dat_do  (simpleuart_reg_dat_do),
 		.reg_dat_wait(simpleuart_reg_dat_wait)
 	);
-
-	//sd signals
-	wire sd_regs_sel = mem_valid && (mem_addr[31 : 24] == 8'h 03);
-	reg sd_regs_sel_p1;
-	always @(posedge clk) sd_regs_sel_p1 = sd_regs_sel;
-	wire sd_regs_sel_pulse = sd_regs_sel && (~sd_regs_sel_p1);
-	wire sd_cmd_i;
-	wire sd_cmd_o;
-	wire sd_cmd_oe;
-	assign sd_cmd = (~sd_cmd_oe) ? sd_cmd_o : 1'bz;
-	assign sd_cmd_i = sd_cmd;
-	wire [3:0] sd_dat_i;
-	wire [3:0] sd_dat_o;
-	wire [3:0] sd_dat_oe;
-	assign sd_dat[0] = (~sd_dat_oe[0]) ? sd_dat_o[0] : 1'bz;
-	assign sd_dat[1] = (~sd_dat_oe[1]) ? sd_dat_o[1] : 1'bz;
-	assign sd_dat[2] = (~sd_dat_oe[2]) ? sd_dat_o[2] : 1'bz;
-	assign sd_dat[3] = (~sd_dat_oe[3]) ? sd_dat_o[3] : 1'bz;
-	assign sd_dat_i = sd_dat;
-	wire sd_ready;
-	wire [31:0] sd_mem_dat_o;
-	reg [31:0] sd_mem_dat_i;
-	wire [31:0] sd_mem_adr;
-	wire [31:0] sd_rdata;
-	//wire sd_mem_sel;
-	//wire sd_mem_cyc;
-	wire sd_mem_stb;
-	reg sd_mem_ready;
-
-	//sd
-	/*sdc_controller sd_card_controller (
-		// WISHBONE common
-		.wb_clk_i    (clk         ),
-		.wb_rst_i    (~resetn      ),
-		// WISHBONE slave
-		.wb_dat_i    (mem_wdata   ),
-		.wb_dat_o    (sd_rdata    ),
-		.wb_adr_i    (mem_addr[7:0]),
-		.wb_sel_i    (~4'b0	      ),
-		.wb_we_i     (mem_wstrb[0]),//using only 1 bit out of 4
-		.wb_cyc_i    (~1'b0		  ),
-		.wb_stb_i    (sd_regs_sel ),
-		.wb_ack_o    (sd_ready    ),
-		// WISHBONE master
-		.m_wb_dat_o  (sd_mem_dat_o),
-		.m_wb_dat_i  (sd_mem_dat_i),
-		.m_wb_adr_o  (sd_mem_adr  ),
-		//.m_wb_sel_o  (sd_mem_sel  ),
-		//.m_wb_cyc_o  (sd_mem_cyc  ),
-		.m_wb_stb_o  (sd_mem_stb  ),
-		.m_wb_ack_i  (sd_mem_ready),
-		//.m_wb_bte_o  ( ),
-		//SD BUS
-		.sd_cmd_dat_i  (sd_cmd_i   ),
-		.sd_cmd_out_o  (sd_cmd_o   ),
-		.sd_cmd_oe_o   (sd_cmd_oe  ),
-		.sd_dat_dat_i  (sd_dat_i   ),
-		.sd_dat_out_o  (sd_dat_o   ),
-		.sd_dat_oe_o   (sd_dat_oe  ),
-		.sd_clk_o_pad  (sd_clk     ),
-		.sd_clk_i_pad  (sd_clk_i   )
-		//.int_cmd  ( ),
-		//.int_data  ( )
-	);*/
 
 	sdio_top #(
 		.LGFIFO(12),
@@ -290,7 +253,7 @@ module attosoc (
 		.i_wb_we(mem_wstrb[0]),
 		.i_wb_addr(mem_addr[4:2]),
 		.i_wb_data(mem_wdata),
-		.i_wb_sel(~4'b0),
+		.i_wb_sel(4'b1111),
 		//.o_wb_stall(?), unconnected?
 		.o_wb_ack(sd_ready),
 		.o_wb_data(sd_rdata),
@@ -299,20 +262,20 @@ module attosoc (
 		//o_dma_cyc unconnected,
 		.o_dma_stb(sd_mem_stb),
 		//o_dma_we unconnected
-		.o_dma_addr(sd_mem_adr),
+		.o_dma_addr(sd_mem_adr[29:0]),
 		.o_dma_data(sd_mem_dat_o),
 		//o_dma_sel unconnected
-		.i_dma_stall(0),
+		.i_dma_stall(1'b0),
 		.i_dma_ack(sd_mem_ready),
 		.i_dma_data(sd_mem_dat_i),
-		.i_dma_err(0),
+		.i_dma_err(1'b0),
 		
 		// External stream interface
-		.s_valid(0),
+		.s_valid(1'b0),
 		//s_ready unconnected,
-		.s_data(0),
+		.s_data(32'b0),
 		//m_valid unconnected,
-		.m_ready(0),
+		.m_ready(1'b0),
 		//m_data unconnected,
 		//m_last unconnected,
 
@@ -327,7 +290,7 @@ module attosoc (
 		.i_dat(sd_dat_i),
 		
 		//
-		.i_card_detect(0)
+		.i_card_detect(1'b0)
 		//o_hwreset_n unconnected
 		//o_1p8v unconnected
 		//o_int unconnected
@@ -383,7 +346,7 @@ module attosoc (
 	   .wishbone_regs_we_i(sdram_regs_sel ? mem_wstrb[0] : 1'b 0),
 	   .wishbone_regs_addr_i(mem_addr[27:2]),
 	   .wishbone_regs_data_i(mem_wdata),
-	   .wishbone_regs_stb_i(sdram_regs_sel_pulse),
+	   .wishbone_regs_stb_i({4{sdram_regs_sel_pulse}}),
 	   .wishbone_regs_sel_i(sdram_regs_sel),
 	   .wishbone_regs_stall_o(),
 	   .wishbone_regs_ack_o(sdram_regs_ready),

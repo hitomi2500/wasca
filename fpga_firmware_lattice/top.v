@@ -17,7 +17,7 @@ module top(
 	output wire abus_interrupt,
 	output wire abus_direction,
 	output wire abus_interrupt_disable_out,
-	output abus_buffers_enable,
+	output wire abus_buffers_enable,
 	//SDRAM port 1 (built into icesugar) master interface
 	output wire [12:0] sdram_addr,
 	output wire [1:0] sdram_ba,
