@@ -369,12 +369,12 @@ module sdram_bridge (
 	//so we have address ready to latch
 	always @(posedge clock) 
 	   if (abus_cspulse)
-			abus_address_latched_prepatch <= abus_address;
+			abus_address_latched_prepatch <=  ( (wasca_mode == `MODE_RAM_1M) && (abus_address[24:21] == 4'h2) ) ? 
+	   { abus_address[24:21], 2'b0,abus_address[18:1]} : abus_address;
 	
 	//patching abus_address_latched : for RAM 1M mode A19 and A20 should be set to zero
 	//trying to do this asynchronously
-	assign abus_address_latched = ( (wasca_mode == `MODE_RAM_1M) && (abus_address_latched_prepatch[24:21] == 4'h2) ) ? 
-	   { abus_address_latched_prepatch[24:21], 2'b0,abus_address_latched_prepatch[18:1]} : abus_address_latched_prepatch;
+	assign abus_address_latched = abus_address_latched_prepatch;
 								
 	//mapper write enable decode
 	always @(posedge clock)
@@ -480,7 +480,7 @@ module sdram_bridge (
 				endcase
 			end
 		else //CS2 or dummy access
-		    abus_data_out <= 16'hEEEE;
+		    ;//abus_data_out <= 16'hEEEE;
 	
 	//wasca mode register write
 	always @(posedge clock)
@@ -547,7 +547,7 @@ module sdram_bridge (
 	           8'hcc : wishbone_regs_readdata <= REG_MAPPER_WRITE[63:32];
 	           8'hd0 : wishbone_regs_readdata <= counter_value[31:0];
 	           8'hd4 : wishbone_regs_readdata <= {24'h0, counter_filter_control};
-	           //D8 to DÑ are reserved
+	           //D8 to DC are reserved
 	           8'he0 : wishbone_regs_readdata <= sniffer_data_out;
 	           //E4 is reserved
 	           8'he8 : wishbone_regs_readdata <= {4'h0, sniffer_fifo_full, sniffer_fifo_content_size, 8'h0, sniffer_filter_control};
