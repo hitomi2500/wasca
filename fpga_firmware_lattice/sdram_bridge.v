@@ -34,6 +34,7 @@
 module sdram_bridge (
     //common clock
     input wire clock,
+    input wire sdram_clock,
     
     //A-bus slave interface
 	input wire [24:1] abus_address,
@@ -105,7 +106,10 @@ module sdram_bridge (
 	wire wishbone_sdram_read = wishbone_sdram_sel_i && ~wishbone_sdram_we_i;
 	reg wishbone_sdram_readdatavalid;
 	initial wishbone_sdram_readdatavalid = 0;
-	assign wishbone_sdram_ack_o = wishbone_sdram_readdatavalid;
+	//reg wishbone_sdram_readdatavalid_toggle;
+	//initial wishbone_sdram_readdatavalid_toggle = 0;
+	//reg wishbone_sdram_readdatavalid_toggle_d1;
+	//initial wishbone_sdram_readdatavalid_toggle_d1 = 0;
 	reg wishbone_sdram_waitrequest;
 	initial wishbone_sdram_waitrequest = 0;
 	assign wishbone_sdram_stall_o = wishbone_sdram_waitrequest;
@@ -222,13 +226,19 @@ module sdram_bridge (
     reg [15:0] sdram_datain_latched; 
 
     reg wishbone_sdram_complete;
-    reg wishbone_sdram_reset_pending;
-    reg wishbone_sdram_read_pending;
-    reg wishbone_sdram_read_pending_f1;
-    reg wishbone_sdram_write_pending;
+    reg wishbone_sdram_reset_pending_sdram;
+    wire wishbone_sdram_reset_pending_mcu;
+    reg wishbone_sdram_read_pending_mcu;
+    reg wishbone_sdram_read_pending_sdram;
+    reg wishbone_sdram_write_pending_mcu;
+    reg wishbone_sdram_write_pending_sdram;
     reg [25:0] wishbone_sdram_pending_address; 
     reg [31:0] wishbone_sdram_pending_data; 
     reg [31:0] wishbone_sdram_readdata_latched;
+    reg wishbone_sdram_write_ff1;
+    reg wishbone_sdram_write_ff2;
+    reg wishbone_sdram_read_ff1;
+    reg wishbone_sdram_read_ff2;
 
     reg wishbone_regs_readdatavalid_p1;
 
@@ -272,13 +282,18 @@ module sdram_bridge (
         sdram_datain_latched = 0;
     
         wishbone_sdram_complete = 0;
-        wishbone_sdram_reset_pending = 0;
-        wishbone_sdram_read_pending = 0;
-        wishbone_sdram_read_pending_f1 = 0;
-        wishbone_sdram_write_pending = 0;
+        wishbone_sdram_reset_pending_sdram = 0;
+        wishbone_sdram_read_pending_mcu = 0;
+        wishbone_sdram_read_pending_sdram = 0;
+        wishbone_sdram_write_pending_mcu = 0;
+        wishbone_sdram_write_pending_sdram = 0;
         wishbone_sdram_pending_address = 0;
         wishbone_sdram_pending_data = 0;
         wishbone_sdram_readdata_latched = 0;
+        wishbone_sdram_write_ff1 = 0;
+        wishbone_sdram_write_ff2 = 0;
+        wishbone_sdram_read_ff1 = 0;
+        wishbone_sdram_read_ff2 = 0;
     
         wishbone_regs_readdatavalid_p1 = 0;
     
@@ -321,35 +336,35 @@ module sdram_bridge (
 	
 	//abus transactions are async, so first we must latch incoming signals to get rid of metastability
 	//1st stage
-	always @(posedge clock) abus_address_ms <= abus_address;
-	always @(posedge clock) abus_data_ms <= abus_data;
-	always @(posedge clock) abus_chipselect_ms <= abus_chipselect; //work only with CS1 for now
-	always @(posedge clock) abus_read_ms <= abus_read;
-	always @(posedge clock) abus_write_ms <= abus_write;
+	always @(posedge sdram_clock) abus_address_ms <= abus_address;
+	always @(posedge sdram_clock) abus_data_ms <= abus_data;
+	always @(posedge sdram_clock) abus_chipselect_ms <= abus_chipselect; //work only with CS1 for now
+	always @(posedge sdram_clock) abus_read_ms <= abus_read;
+	always @(posedge sdram_clock) abus_write_ms <= abus_write;
     //2nd stage
-	always @(posedge clock) abus_address_buf <= abus_address_ms;
-	always @(posedge clock) abus_data_buf <= abus_data_ms;
-	always @(posedge clock) abus_chipselect_buf <= abus_chipselect_ms;
-	always @(posedge clock) abus_read_buf <= abus_read_ms;
-	always @(posedge clock) abus_write_buf <= abus_write_ms;
+	always @(posedge sdram_clock) abus_address_buf <= abus_address_ms;
+	always @(posedge sdram_clock) abus_data_buf <= abus_data_ms;
+	always @(posedge sdram_clock) abus_chipselect_buf <= abus_chipselect_ms;
+	always @(posedge sdram_clock) abus_read_buf <= abus_read_ms;
+	always @(posedge sdram_clock) abus_write_buf <= abus_write_ms;
 		
 	//abus read/write latch
-	always @(posedge clock) abus_write_buf2 <= abus_write_buf;
-	always @(posedge clock) abus_read_buf2 <= abus_read_buf;
-	always @(posedge clock) abus_read_buf3 <= abus_read_buf2;
-	always @(posedge clock) abus_read_buf4 <= abus_read_buf3;
-	always @(posedge clock) abus_read_buf5 <= abus_read_buf4;
-	always @(posedge clock) abus_read_buf6 <= abus_read_buf5;
-	always @(posedge clock) abus_read_buf7 <= abus_read_buf6;
-	always @(posedge clock) abus_chipselect_buf2 <= abus_chipselect_buf;
-	always @(posedge clock) abus_anypulse2 <= abus_anypulse;
-	always @(posedge clock) abus_anypulse3 <= abus_anypulse2;
-	always @(posedge clock) abus_cspulse2 <= abus_cspulse;
-	always @(posedge clock) abus_cspulse3 <= abus_cspulse2;
-	always @(posedge clock) abus_cspulse4 <= abus_cspulse3;
-	always @(posedge clock) abus_cspulse5 <= abus_cspulse4;
-	always @(posedge clock) abus_cspulse6 <= abus_cspulse5;
-	always @(posedge clock) abus_cspulse7 <= abus_cspulse6;
+	always @(posedge sdram_clock) abus_write_buf2 <= abus_write_buf;
+	always @(posedge sdram_clock) abus_read_buf2 <= abus_read_buf;
+	always @(posedge sdram_clock) abus_read_buf3 <= abus_read_buf2;
+	always @(posedge sdram_clock) abus_read_buf4 <= abus_read_buf3;
+	always @(posedge sdram_clock) abus_read_buf5 <= abus_read_buf4;
+	always @(posedge sdram_clock) abus_read_buf6 <= abus_read_buf5;
+	always @(posedge sdram_clock) abus_read_buf7 <= abus_read_buf6;
+	always @(posedge sdram_clock) abus_chipselect_buf2 <= abus_chipselect_buf;
+	always @(posedge sdram_clock) abus_anypulse2 <= abus_anypulse;
+	always @(posedge sdram_clock) abus_anypulse3 <= abus_anypulse2;
+	always @(posedge sdram_clock) abus_cspulse2 <= abus_cspulse;
+	always @(posedge sdram_clock) abus_cspulse3 <= abus_cspulse2;
+	always @(posedge sdram_clock) abus_cspulse4 <= abus_cspulse3;
+	always @(posedge sdram_clock) abus_cspulse5 <= abus_cspulse4;
+	always @(posedge sdram_clock) abus_cspulse6 <= abus_cspulse5;
+	always @(posedge sdram_clock) abus_cspulse7 <= abus_cspulse6;
 	
 	//abus write/read pulse is a falling edge since read and write signals are negative polarity
 	assign abus_write_pulse = abus_write_buf && ~abus_write_ms;
@@ -371,16 +386,16 @@ module sdram_bridge (
 	//multiplexer was switched to address after previous transaction or after boot,
 	//so we have address ready to latch
 	//patching : for RAM 1M mode A19 and A20 should be set to zero
-	always @(posedge clock) 
+	always @(posedge sdram_clock) 
 	   if (abus_cspulse)
 			abus_address_latched <=  ( (wasca_mode == `MODE_RAM_1M) && (abus_address[24:21] == 4'h2) ) ? 
 	   { abus_address[24:21], 2'b0,abus_address[18:1]} : abus_address;
 
-	always @(posedge clock) abus_cs0_regs_access <= (abus_address[24:5] == {17'h1FFFF,3'b111}) ? 1'b1 : 0;
-	always @(posedge clock) abus_cs1_regs_access <= (abus_address[23:2] == {20'hFFFFF,2'b11}) ? 1'b1 : 0;
+	always @(posedge sdram_clock) abus_cs0_regs_access <= (abus_address[24:5] == {17'h1FFFF,3'b111}) ? 1'b1 : 0;
+	always @(posedge sdram_clock) abus_cs1_regs_access <= (abus_address[23:2] == {20'hFFFFF,2'b11}) ? 1'b1 : 0;
 									
 	//mapper write enable decode
-	always @(posedge clock)
+	always @(posedge sdram_clock)
 	   if (~abus_chipselect_buf[0])
 	       mapper_write_enable <= REG_MAPPER_WRITE[$unsigned(abus_address_latched[24:20])];
 	   else if (~abus_chipselect_buf[1])
@@ -389,7 +404,7 @@ module sdram_bridge (
 	       mapper_write_enable <= REG_MAPPER_WRITE[48];
 	   
     //mapper read enable decode
-	always @(posedge clock)
+	always @(posedge sdram_clock)
 	   if (~abus_chipselect_buf[0])
 	       mapper_read_enable <= REG_MAPPER_READ[$unsigned(abus_address_latched[24:20])];
 	   else if (~abus_chipselect_buf[1])
@@ -398,7 +413,7 @@ module sdram_bridge (
 	       mapper_read_enable <= REG_MAPPER_READ[48];
 	
 	//latch transaction direction
-	always @(posedge clock)
+	always @(posedge sdram_clock)
 	   if ( (abus_write_pulse[0]) || (abus_write_pulse[1]) )
 	       my_little_transaction_dir <= 2'd`DIR_WRITE;
 	   else if (abus_read_pulse)
@@ -407,7 +422,7 @@ module sdram_bridge (
 	       my_little_transaction_dir <= 2'd`DIR_NONE;
 
 	//latch chipselect number
-	always @(posedge clock)
+	always @(posedge sdram_clock)
 	   if (abus_chipselect_pulse[0])
 	       abus_chipselect_latched <= "00";
 	   else if (abus_chipselect_pulse[1])
@@ -418,7 +433,7 @@ module sdram_bridge (
 	       abus_chipselect_latched <= "11";
 	
 	//if valid transaction captured, switch to corresponding multiplex mode
-	always @(posedge clock)
+	always @(posedge sdram_clock)
 	   if (abus_chipselect_latched == 2'b11)
 	       //chipselect deasserted
 	       abus_direction_internal <= 0; //high-z
@@ -432,7 +447,7 @@ module sdram_bridge (
 	       endcase
 		
 	//sync mux for abus read requests
-	always @(posedge clock)
+	always @(posedge sdram_clock)
 	   if (abus_chipselect_latched == 2'b0) begin
 	       //CS0 access
 		   if (abus_cs0_regs_access)
@@ -472,7 +487,7 @@ module sdram_bridge (
 		    ;//abus_data_out <= 16'hEEEE;
 	
 	//wasca mode register write
-	always @(posedge clock)
+	always @(posedge sdram_clock)
 	    //if (~saturn_reset) wasca_mode  <= MODE_INIT;
 	    if ( (my_little_transaction_dir == `DIR_WRITE) && (abus_chipselect_latched == 2'b0) && (abus_cspulse7) &&
 	        (abus_address_latched[23:1] == {20'hFFFFF,3'h2}) ) begin
@@ -591,46 +606,89 @@ module sdram_bridge (
 	
 	//---------------------- sdram wishbone interface -------------------
 	
+		       
+	pulsesync wishbone_sdram_reset_pending_sync (
+	   .src_clk(sdram_clock),
+	   .src_pulse(wishbone_sdram_reset_pending_sdram),
+	   .dst_clk(clock),
+	   .dst_pulse(wishbone_sdram_reset_pending_mcu)
+	);
+	
 	//to talk to sdram interface, wishbone requests are latched until sdram is ready to process them
 	always @(posedge clock)
-	   if (wishbone_sdram_reset_pending)
-	       wishbone_sdram_read_pending <= 0;
+	   if (wishbone_sdram_reset_pending_mcu)
+	       wishbone_sdram_read_pending_mcu <= 0;
 	   else if (wishbone_sdram_read)
-	       wishbone_sdram_read_pending <= 1'b1;
+	       wishbone_sdram_read_pending_mcu <= 1'b1;
+	       
+    always @(posedge sdram_clock) wishbone_sdram_read_ff1 <= wishbone_sdram_read;
+    always @(posedge sdram_clock) wishbone_sdram_read_ff2 <= wishbone_sdram_read_ff1;
+	
+	always @(posedge sdram_clock)
+	   if (wishbone_sdram_reset_pending_sdram)
+	       wishbone_sdram_read_pending_sdram <= 0;
+	   else if (wishbone_sdram_read_ff1 && ~wishbone_sdram_read_ff2)
+	       wishbone_sdram_read_pending_sdram <= 1'b1;	
 	       
 	always @(posedge clock)
-	   if (wishbone_sdram_reset_pending)
-	       wishbone_sdram_write_pending <= 0;
+	   if (wishbone_sdram_reset_pending_mcu)
+	       wishbone_sdram_write_pending_mcu <= 0;
 	   else if (wishbone_sdram_write)
-	       wishbone_sdram_write_pending <= 1'b1;
+	       wishbone_sdram_write_pending_mcu <= 1'b1;
+
+    always @(posedge sdram_clock) wishbone_sdram_write_ff1 <= wishbone_sdram_write;
+    always @(posedge sdram_clock) wishbone_sdram_write_ff2 <= wishbone_sdram_write_ff1;
+
+	always @(posedge sdram_clock)
+	   if (wishbone_sdram_reset_pending_sdram)
+	       wishbone_sdram_write_pending_sdram <= 0;
+	   else if (wishbone_sdram_write_ff1 && ~wishbone_sdram_write_ff2)
+	       wishbone_sdram_write_pending_sdram <= 1'b1;	       	
 	       
-	always @(posedge clock)
-	   if (wishbone_sdram_read)
+	always @(posedge sdram_clock)
+	   if (wishbone_sdram_read_ff1 && ~wishbone_sdram_read_ff2)
 	       wishbone_sdram_pending_address <= wishbone_sdram_address[25:0];
-	   else if (wishbone_sdram_write)
+	   else if (wishbone_sdram_write_ff1 && ~wishbone_sdram_write_ff2)
 	       wishbone_sdram_pending_address <= wishbone_sdram_address[25:0];
 
 	always @(posedge clock)
 	   if (wishbone_sdram_write)
 	       wishbone_sdram_pending_data <= wishbone_sdram_writedata;
 	       
-    always @(posedge clock) wishbone_sdram_read_pending_f1 <= wishbone_sdram_read_pending;	
 	assign wishbone_sdram_readdata = wishbone_sdram_readdata_latched;
 	
 	//wishbone_sdram_readdata_latched should be set by sdram interface directly
 	
+	//clock transfer for wishbone ack
+	pulsesync readdatavalid_sync (
+	   .src_clk(sdram_clock),
+	   .src_pulse(wishbone_sdram_readdatavalid),
+	   .dst_clk(clock),
+	   .dst_pulse(wishbone_sdram_ack_o)
+	);
+	/*always @(posedge sdram_clock)
+	   if (wishbone_sdram_readdatavalid)
+	       wishbone_sdram_readdatavalid_toggle = ~wishbone_sdram_readdatavalid_toggle;
+	       
+	always @(posedge clock) wishbone_sdram_readdatavalid_toggle_d1 <= wishbone_sdram_readdatavalid_toggle;
+
+	always @(posedge clock)
+	   if (wishbone_sdram_readdatavalid_toggle ^ wishbone_sdram_readdatavalid_toggle_d1)
+	       wishbone_sdram_ack_o = 1'b1;
+	   else
+	       wishbone_sdram_ack_o = 0;*/	
 
 	//------------------------------ SDRAM stuff ---------------------------------------
 	
 	// abus pending flag.
 	//	abus_anypulse might appear up to 3-4 times at transaction start, so we shouldn't issue ack until at least 3-4 cycles from the start
-	always @(posedge clock)
+	always @(posedge sdram_clock)
 	   if (abus_cspulse2)
 	       sdram_abus_pending <= 1'b1;
 	    else if (sdram_abus_complete)
 	       sdram_abus_pending <= 0;
 
-    always @(posedge clock) begin
+    always @(posedge sdram_clock) begin
         sdram_autorefresh_counter <= sdram_autorefresh_counter + 10'b1;
         case (sdram_mode)
             `SDRAM_INIT0 : begin
@@ -749,7 +807,7 @@ module sdram_bridge (
                 wishbone_sdram_complete <= 0;
                 wishbone_sdram_readdatavalid <= 0;
                 wishbone_sdram_waitrequest <= 1'b1;
-                wishbone_sdram_reset_pending <= 0;
+                wishbone_sdram_reset_pending_sdram <= 0;
                 // in idle mode we should check if any of the events occured:
 				// 1) abus transaction detected - priority 0
 				// 2) wishbone transaction detected - priority 1
@@ -771,14 +829,14 @@ module sdram_bridge (
 				        sdram_wait_counter <= 4'd5; // for writing we use a little longer activate delay, so that the data at the a-bus will become ready
 				    end
                 end
-                else if ( (wishbone_sdram_read_pending || wishbone_sdram_write_pending) && ~wishbone_sdram_complete ) begin
+                else if ( (wishbone_sdram_read_pending_sdram || wishbone_sdram_write_pending_sdram) && ~wishbone_sdram_complete ) begin
                     // something on wishbone, activating!
                     sdram_mode <= `SDRAM_WISHBONE_ACTIVATE;
                     sdram_ras_n <= 0;
                     sdram_addr <= wishbone_sdram_pending_address[21:9];
                     sdram_ba <= wishbone_sdram_pending_address[23:22];
                     sdram_wait_counter <= 4'd2; // tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
-                    if (wishbone_sdram_read_pending)
+                    if (wishbone_sdram_read_pending_sdram)
                         sdram_dqm <= 2'b00; //it's a read
                     else
                         sdram_dqm <= {~wishbone_sdram_byteenable[0],~wishbone_sdram_byteenable[1]}; //it's a write
@@ -911,7 +969,7 @@ module sdram_bridge (
 				sdram_ras_n <= 1'b1;
 				sdram_wait_counter <= sdram_wait_counter - 4'b1;
                 if (sdram_wait_counter == 0) begin
-                    if (wishbone_sdram_read_pending) begin
+                    if (wishbone_sdram_read_pending_sdram) begin
                         sdram_mode <= `SDRAM_WISHBONE_READ_AND_PRECHARGE;
                         sdram_ba <= wishbone_sdram_pending_address[23:22];
                         sdram_cas_n <= 0;
@@ -947,7 +1005,7 @@ module sdram_bridge (
                     wishbone_sdram_complete <= 1'b1;
                     sdram_dqm <= 2'b11;
                     wishbone_sdram_waitrequest <= 0;//single active cycle
-                    wishbone_sdram_reset_pending <= 1'b1;
+                    wishbone_sdram_reset_pending_sdram <= 1'b1;
                     wishbone_sdram_readdatavalid <= 1'b1;
                 end
             end
@@ -961,20 +1019,20 @@ module sdram_bridge (
 				sdram_wait_counter <= sdram_wait_counter - 4'b1;
 				wishbone_sdram_readdatavalid <= 0; //works as ack for write too, resetting early 
                 if (sdram_wait_counter == 4'd1) begin
-                    wishbone_sdram_reset_pending <= 1'b1;
+                    wishbone_sdram_reset_pending_sdram <= 1'b1;
                 end
                 if (sdram_wait_counter == 0) begin
                     sdram_mode <= `SDRAM_IDLE;
                     wishbone_sdram_complete <= 1'b1;
                     sdram_dqm <= 2'b11;
                     wishbone_sdram_waitrequest <= 0;//single active cycle
-					wishbone_sdram_reset_pending <= 0;
+					wishbone_sdram_reset_pending_sdram <= 0;
                 end
             end
         endcase
     end
 
-    assign sdram_clk = clock;
+    assign sdram_clk = sdram_clock;
 	
 	//------------------------------ A-bus transactions counter ---------------------------------------	
 	// counter filters transactions transferred over a-bus and counts them
@@ -987,7 +1045,7 @@ module sdram_bridge (
     // bit 3 - CS1
 	// bit 4 - CS2
 	
-	always @(posedge clock)
+	always @(posedge sdram_clock)
 	   if (counter_reset)
 	       counter_value <= 0;
 	    else if ( (counter_count_write) && (counter_filter_control[1]) ) begin
@@ -1023,7 +1081,7 @@ module sdram_bridge (
 	// 1) write was done to a different block
 	// 2) no write within 10 ms 
 	
-	always @(posedge clock) begin
+	always @(posedge sdram_clock) begin
 	   sniffer_pending_set <= 0;
 	   if ( (counter_count_write) && (sniffer_filter_control[1]) ) begin
 	       //write detected, checking state 
@@ -1046,24 +1104,24 @@ module sdram_bridge (
 	end
 	
 	//if an access passed thru filter, set the request as pending
-	always @(posedge clock)
+	always @(posedge sdram_clock)
 	   if (sniffer_pending_set)
 	       sniffer_pending_flag <= 1'b1;
 	   else if (sniffer_pending_reset)
 	       sniffer_pending_flag <= 0;
 	       
-	always @(posedge clock)
+	always @(posedge sdram_clock)
 	   if (sniffer_pending_set)
 	       sniffer_pending_block <= abus_address_latched[24:9];
     
     //if we have a pending request, and it's for a different block, fill prefifo
-    always @(posedge clock) sniffer_pending_reset <= ((sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block)) ? 1'b0 : 0;
-    always @(posedge clock) if ((sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block)) sniffer_last_active_block <= sniffer_pending_block;
-    always @(posedge clock) if ((sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block)) sniffer_prefifo <= sniffer_pending_block;
+    always @(posedge sdram_clock) sniffer_pending_reset <= ((sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block)) ? 1'b0 : 0;
+    always @(posedge sdram_clock) if ((sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block)) sniffer_last_active_block <= sniffer_pending_block;
+    always @(posedge sdram_clock) if ((sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block)) sniffer_prefifo <= sniffer_pending_block;
         
     // if we have a pending request, and it's for a different block, and prefifo is full, flush prefifo
     // if we don't have eny requests, but the timeout fired, flush prefifo as well
-    always @(posedge clock)
+    always @(posedge sdram_clock)
         if ( (sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block) && (sniffer_prefifo_full) )
             sniffer_data_write <= 1'b1;
         else if (sniffer_pending_timeout)
@@ -1071,27 +1129,27 @@ module sdram_bridge (
         else
             sniffer_data_write <= 0;
             
-    always @(posedge clock)
+    always @(posedge sdram_clock)
         if ( (sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block) )
             sniffer_prefifo_full <= 1'b1;
         else if (sniffer_pending_timeout)
             sniffer_prefifo_full <= 0;
 
-    always @(posedge clock)
+    always @(posedge sdram_clock)
         if ( (sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block) && (sniffer_prefifo_full) )
             sniffer_data_in <= sniffer_prefifo;
         else if (sniffer_pending_timeout)
             sniffer_data_in <= sniffer_prefifo;
     
     //timeout counter. resets when another pending is set
-    always @(posedge clock)
+    always @(posedge sdram_clock)
         if (sniffer_pending_set)
             sniffer_pending_timeout_counter <= 0;
         else if ($unsigned(sniffer_pending_timeout_counter) < $unsigned(32'd134217728))
             sniffer_pending_timeout_counter <= sniffer_pending_timeout_counter + 32'b1;
     
     //timeout comparator @ 10ms = 1160000
-    always @(posedge clock) sniffer_pending_timeout <= (sniffer_pending_timeout_counter == 32'd1160000) ? 1'b1 : 0;
+    always @(posedge sdram_clock) sniffer_pending_timeout <= (sniffer_pending_timeout_counter == 32'd1160000) ? 1'b1 : 0;
 
 	//sniffer_data_in_p1(15 downto 0) <= sniffer_last_active_block when rising_edge(clock);
 	//sniffer_data_in <= sniffer_data_in_p1 when rising_edge(clock);
@@ -1099,7 +1157,7 @@ module sdram_bridge (
 	//sniffer_data_out_p1 <= sniffer_data_out when rising_edge(clock);
 	
 	sniff_fifo sniff_fifo_inst (
-		.clock(clock),
+		.clock(sdram_clock),
 		.data(sniffer_data_in),
 		.rdreq(sniffer_data_ack),
 		.wrreq(sniffer_data_write),

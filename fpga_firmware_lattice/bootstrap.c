@@ -39,7 +39,9 @@ uint32_t lsfr_next_random (uint32_t prev)
 
 int main() {
 	LED = 0x20;//red external
-    reg_uart_clkdiv = 217;// 115200 baud at 25MHz
+    //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
+    reg_uart_clkdiv = 347;// 115200 baud at 40MHz
+    //reg_uart_clkdiv = 434;// 115200 baud at 50MHz
     //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
 
 	volatile uint32_t* p32 = (uint32_t*) 0;
@@ -47,22 +49,22 @@ int main() {
 	uint32_t seed = 0x100500;
 	uint32_t errors = 0;
 
-	mini_printf("Bootstrap %s %s\r\n",__DATE__,__TIME__);
-
+	mini_printf("Boot");
+	
 	//sdram test
 	LED = 0xFF;//test start marker
 	volatile uint32_t * pSDRAM = (uint32_t *)0x10000000;
 	pSDRAM[0] = 0x12345678;
 	for (int i=0;i<24;i++)
 		pSDRAM[1<<i] = 0x11111111*i;
-	pSDRAM[0x1ffffff] = 0xdeafface;
+	pSDRAM[0xffffff] = 0xdeafface;
 	volatile uint32_t a = pSDRAM[0];
 	for (int i=0;i<24;i++)
 		a = pSDRAM[1<<i];
-	a = pSDRAM[0x1ffffff];
+	a = pSDRAM[0xffffff];
 	LED = 0x00;//test end marker
 
-	mini_printf("SDRAM test complete\r\n");
+	mini_printf("strap %s %s\r\n",__DATE__,__TIME__);
 
 	//init sdio driver
 	/*struct SDIODRV * drv;

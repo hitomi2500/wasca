@@ -1,6 +1,6 @@
 `include "timescale.v"
 
-module pll_25_133(input clki, output clko);
+module pll_25_133(input clk_in_25, output clk_out_50, output clk_out_133);
     (* ICP_CURRENT="6" *) (* LPF_RESISTOR="16" *) (* MFG_ENABLE_FILTEROPAMP="1" *) (* MFG_GMCREF_SEL="2" *)
     EHXPLLL #(
         .PLLRST_ENA("DISABLED"),
@@ -11,14 +11,17 @@ module pll_25_133(input clki, output clko);
         .CLKOP_CPHASE(4),
         .OUTDIVIDER_MUXA("DIVA"),
         .CLKOP_ENABLE("ENABLED"),
-        .CLKOP_DIV(5),
-        .CLKFB_DIV(16),
+        .CLKOS_ENABLE("ENABLED"),
+        .CLKOP_DIV(12),//6
+        .CLKOS_DIV(20),//16
+        .CLKFB_DIV(8),//16
         .CLKI_DIV(3),
         .FEEDBK_PATH("CLKOP")
     ) pll_i (
-        .CLKI(clki),
-        .CLKFB(clko),
-        .CLKOP(clko),
+        .CLKI(clk_in_25),
+        .CLKFB(clk_out_133),
+        .CLKOP(clk_out_133),
+        .CLKOS(clk_out_50),
         .RST(1'b0),
         .STDBY(1'b0),
         .PHASESEL0(1'b0),

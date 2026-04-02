@@ -26,7 +26,8 @@
 `define PICORV32_REGS picosoc_regs
 
 module attosoc (
-	input wire clk,
+	input wire sdram_clk_i,
+	input wire mcu_clk_i,
 	output reg [5:0] led,
 	input wire sd_clk_i,
 	inout wire sd_cmd,
@@ -58,6 +59,7 @@ module attosoc (
 
 	reg [5:0] reset_cnt = 0;
 	wire resetn = &reset_cnt;
+	wire clk = mcu_clk_i;
 
 	always @(posedge clk) begin
 		reset_cnt <= reset_cnt + !resetn;
@@ -69,22 +71,22 @@ module attosoc (
 
 	//(* syn_ramstyle = "block_ram" *) reg [31:0] internal_ram [0:MEM_WORDS-1];
 	//initial $readmemh("D:/Saturn/Wasca/vivado/lattice_sim/hdl/bootstrap.hex", internal_ram);
-	wire [31:0] ram_rdata;
-	reg ram_ready;
+	wire [31:0] workram_rdata;
+	reg workram_ready;
 
-	wire mem_valid;
-	wire mem_instr;
-	wire mem_ready;
-	wire [31:0] mem_addr;
-	wire [31:0] mem_wdata;
-	wire [3:0] mem_wstrb;
-	wire [31:0] mem_rdata;
+	wire soc_valid;
+	wire soc_instr;
+	wire soc_ready;
+	wire [31:0] soc_addr;
+	wire [31:0] soc_wdata;
+	wire [3:0] soc_wstrb;
+	wire [31:0] soc_rdata;
 	
 	wire sdram_mem_ready;
 	wire sdram_regs_ready;
 	
 	//sd signals
-	wire sd_regs_sel = mem_valid && (mem_addr[28 : 24] == 5'h03);
+	wire sd_regs_sel = soc_valid && (soc_addr[28 : 24] == 5'h03);
 	reg sd_regs_sel_p1;
 	always @(posedge clk) sd_regs_sel_p1 = sd_regs_sel;
 	wire sd_regs_sel_pulse = sd_regs_sel && (~sd_regs_sel_p1);
@@ -122,10 +124,10 @@ module attosoc (
 	
 	workram workram_inst (
 		.clka(clk),
-		.write_ena(((mem_addr[31:24] == 8'h00) && (mem_valid)) ? mem_wstrb : 4'b0),
-		.addra(mem_addr[23:2]),
-		.dina(mem_wdata),
-		.douta(ram_rdata),
+		.write_ena(((soc_addr[31:24] == 8'h00) && (soc_valid)) ? soc_wstrb : 4'b0),
+		.addra(soc_addr[23:2]),
+		.dina(soc_wdata),
+		.douta(workram_rdata),
 		.clkb(clk),
 		.write_enb({4{sd_mem_stb}}),
 		.addrb(sd_mem_adr[23:2]),
@@ -134,7 +136,7 @@ module attosoc (
 	);
 
 	//port 0
-	always @(posedge clk) ram_ready <= (mem_addr[28:24] == 5'h00 && mem_valid) ? 1'b1 : 0;
+	always @(posedge clk) workram_ready <= (soc_addr[28:24] == 5'h00 && soc_valid) ? 1'b1 : 0;
 	//port 1    
     always @(posedge clk) sd_mem_ready <= 1'b1;
 
@@ -143,27 +145,27 @@ module attosoc (
 
 	always @(posedge clk) begin
 		led_ready <= 1'b0;
-		if (mem_valid && mem_wstrb[0] && mem_addr == 32'h 0200_0000) begin
-	    	led <= mem_wdata[5:0];
+		if (soc_valid && soc_wstrb[0] && (soc_addr[28:24] == 5'h02) && soc_addr[3:2] == 2'b0) begin
+	    	led <= soc_wdata[5:0];
 			led_ready <= 1'b1;
 		end
 	end
 
 	//wishbone ready
-	assign mem_ready = (mem_valid && led_ready) ||
-						(mem_valid && sd_ready) ||
+	assign soc_ready = (soc_valid && led_ready) ||
+						(soc_valid && sd_ready) ||
 	                	simpleuart_reg_div_sel || (simpleuart_reg_dat_sel && !simpleuart_reg_dat_wait) ||
-	                	(mem_valid && sdram_mem_ready) ||
-	                	(mem_valid && sdram_regs_ready) ||
-						ram_ready;
+	                	(soc_valid && sdram_mem_ready) ||
+	                	(soc_valid && sdram_regs_ready) ||
+						(soc_valid && workram_ready);
 
 	//wishbone rdata mux
-	assign mem_rdata = simpleuart_reg_div_sel ? simpleuart_reg_div_do :
+	assign soc_rdata = simpleuart_reg_div_sel ? simpleuart_reg_div_do :
 						simpleuart_reg_dat_sel ? simpleuart_reg_dat_do :
 						sd_regs_sel ? sd_rdata :
 						sdram_mem_sel ? sdram_mem_data :
 						sdram_regs_sel ? sdram_mem_data :
- 						ram_rdata;
+ 						workram_rdata;
 
 	picorv32 #(
 		.STACKADDR(STACKADDR),
@@ -178,23 +180,23 @@ module attosoc (
 	) cpu (
 		.clk         (clk        ),
 		.resetn      (resetn     ),
-		.mem_valid   (mem_valid  ),
-		.mem_instr   (mem_instr  ),
-		.mem_ready   (mem_ready  ),
-		.mem_addr    (mem_addr   ),
-		.mem_wdata   (mem_wdata  ),
-		.mem_wstrb   (mem_wstrb  ),
-		.mem_rdata   (mem_rdata  ),
+		.mem_valid   (soc_valid  ),
+		.mem_instr   (soc_instr  ),
+		.mem_ready   (soc_ready  ),
+		.mem_addr    (soc_addr   ),
+		.mem_wdata   (soc_wdata  ),
+		.mem_wstrb   (soc_wstrb  ),
+		.mem_rdata   (soc_rdata  ),
 		.trap(),
 		.mem_la_read(),
 		.mem_la_write()
 	);
 
 	//uart signals
-	wire        simpleuart_reg_div_sel = mem_valid && (mem_addr[28:24] == 5'h02) && (mem_addr[3:0] == 4'h4);
+	wire        simpleuart_reg_div_sel = soc_valid && (soc_addr[28:24] == 5'h02) && (soc_addr[3:2] == 2'b01);
 	wire [31:0] simpleuart_reg_div_do;
 
-	wire        simpleuart_reg_dat_sel = mem_valid && (mem_addr[28:24] == 5'h02) && (mem_addr[3:0] == 4'h8);
+	wire        simpleuart_reg_dat_sel = soc_valid && (soc_addr[28:24] == 5'h02) && (soc_addr[3:2] == 2'b10);
 	wire [31:0] simpleuart_reg_dat_do;
 	wire simpleuart_reg_dat_wait;
 
@@ -206,13 +208,13 @@ module attosoc (
 		.ser_tx      (uart_tx     ),
 		.ser_rx      (uart_rx     ),
 
-		.reg_div_we  (simpleuart_reg_div_sel ? mem_wstrb : 4'b 0000),
-		.reg_div_di  (mem_wdata),
+		.reg_div_we  (simpleuart_reg_div_sel ? soc_wstrb : 4'b 0000),
+		.reg_div_di  (soc_wdata),
 		.reg_div_do  (simpleuart_reg_div_do),
 
-		.reg_dat_we  (simpleuart_reg_dat_sel ? mem_wstrb[0] : 1'b 0),
-		.reg_dat_re  (simpleuart_reg_dat_sel && !mem_wstrb),
-		.reg_dat_di  (mem_wdata),
+		.reg_dat_we  (simpleuart_reg_dat_sel ? soc_wstrb[0] : 1'b 0),
+		.reg_dat_re  (simpleuart_reg_dat_sel && !soc_wstrb),
+		.reg_dat_di  (soc_wdata),
 		.reg_dat_do  (simpleuart_reg_dat_do),
 		.reg_dat_wait(simpleuart_reg_dat_wait)
 	);
@@ -250,9 +252,9 @@ module attosoc (
 		// Control (Wishbone) interface
 		.i_wb_cyc(sd_regs_sel),
 		.i_wb_stb(sd_regs_sel_pulse),
-		.i_wb_we(mem_wstrb[0]),
-		.i_wb_addr(mem_addr[4:2]),
-		.i_wb_data(mem_wdata),
+		.i_wb_we(soc_wstrb[0]),
+		.i_wb_addr(soc_addr[4:2]),
+		.i_wb_data(soc_wdata),
 		.i_wb_sel(4'b1111),
 		//.o_wb_stall(?), unconnected?
 		.o_wb_ack(sd_ready),
@@ -300,8 +302,8 @@ module attosoc (
 	//sdram signals
 	wire [31:0] sdram_mem_data;
     wire [31:0] sdram_regs_data;
-    wire sdram_mem_sel = mem_valid && (mem_addr[28] == 1'h1);
-    wire sdram_regs_sel = mem_valid && (mem_addr[28:24] == 5'h01);
+    wire sdram_mem_sel = soc_valid && (soc_addr[28] == 1'h1);
+    wire sdram_regs_sel = soc_valid && (soc_addr[28:24] == 5'h01);
     reg sdram_mem_sel_p1;
     reg sdram_regs_sel_p1;
 	always @(posedge clk) sdram_mem_sel_p1 = sdram_mem_sel;
@@ -311,6 +313,7 @@ module attosoc (
 	
 	sdram_bridge the_sdram_bridge (
 	   .clock(clk),
+	   .sdram_clock(sdram_clk_i),
 	   //A-bus slave interface
 	   .abus_address(abus_address),
 	   .abus_data(abus_data),
@@ -333,9 +336,9 @@ module attosoc (
 	   .sdram_clk(sdram_clk),
 	   	//Wishbone SDRAM slave interface
 	   .wishbone_sdram_cyc_i(sdram_mem_sel),
-	   .wishbone_sdram_we_i(sdram_mem_sel ? mem_wstrb[0] : 1'b 0),
-	   .wishbone_sdram_addr_i(mem_addr[27:2]),
-	   .wishbone_sdram_data_i(mem_wdata),
+	   .wishbone_sdram_we_i(sdram_mem_sel ? soc_wstrb[0] : 1'b 0),
+	   .wishbone_sdram_addr_i(soc_addr[27:2]),
+	   .wishbone_sdram_data_i(soc_wdata),
 	   .wishbone_sdram_stb_i(sdram_mem_sel_pulse),
 	   .wishbone_sdram_sel_i({4{sdram_mem_sel}}),
 	   .wishbone_sdram_stall_o(),//unconnected?
@@ -343,9 +346,9 @@ module attosoc (
 	   .wishbone_sdram_data_o(sdram_mem_data),
 	   	//Wishbone registers slave interface
 	   .wishbone_regs_cyc_i(sdram_regs_sel),
-	   .wishbone_regs_we_i(sdram_regs_sel ? mem_wstrb[0] : 1'b 0),
-	   .wishbone_regs_addr_i(mem_addr[27:2]),
-	   .wishbone_regs_data_i(mem_wdata),
+	   .wishbone_regs_we_i(sdram_regs_sel ? soc_wstrb[0] : 1'b 0),
+	   .wishbone_regs_addr_i(soc_addr[27:2]),
+	   .wishbone_regs_data_i(soc_wdata),
 	   .wishbone_regs_stb_i({4{sdram_regs_sel_pulse}}),
 	   .wishbone_regs_sel_i(sdram_regs_sel),
 	   .wishbone_regs_stall_o(),

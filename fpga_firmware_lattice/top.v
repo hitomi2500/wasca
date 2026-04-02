@@ -31,21 +31,19 @@ module top(
 	output wire sdram_clk
 );
 
+wire clk_50;
 wire clk_133;
-reg clk_12_5;
 wire sd_clk_internal;
 
-initial clk_12_5 = 0;
-always @(posedge clk_25) clk_12_5 <= ~clk_12_5;
-
-assign clk_133 = clk_25;
-/*pll_25_133 pll(
-    .clki(clk_25),
-    .clko(clk_133)
-);*/
+pll_25_133 pll(
+    .clk_in_25(clk_25),
+    .clk_out_50(clk_50),
+    .clk_out_133(clk_133)
+);
 
 attosoc soc(
-    .clk(clk_133),
+    .mcu_clk_i(clk_50),
+    .sdram_clk_i(clk_133),
     .led(led),
     .sd_clk_i(clk_25),
     .sd_cmd(sd_cmd),
