@@ -40,8 +40,8 @@ uint32_t lsfr_next_random (uint32_t prev)
 int main() {
 	LED = 0x20;//red external
     //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
-    //reg_uart_clkdiv = 347;// 115200 baud at 40MHz
-    reg_uart_clkdiv = 434;// 115200 baud at 50MHz
+    reg_uart_clkdiv = 347;// 115200 baud at 40MHz
+    //reg_uart_clkdiv = 434;// 115200 baud at 50MHz
     //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
 
 	volatile uint32_t* p32 = (uint32_t*) 0;
@@ -49,7 +49,7 @@ int main() {
 	uint32_t seed = 0x100500;
 	uint32_t errors = 0;
 
-	mini_printf("Boot");
+	mini_printf("Bootstrap start\r\n");
 
 	volatile uint32_t a;
 
@@ -60,8 +60,14 @@ int main() {
 	pWishboneRegs[1] = 0xdeadbeef;//STATUS
 	pWishboneRegs[4] = 0xfeedbead;//SWREG
 	a = pWishboneRegs[0];
+	if (a != 0x00004321)
+		mini_printf("WREG ERR1\r\n");
 	a = pWishboneRegs[1];
+	if (a != 0x0000beef)
+		mini_printf("WREG ERR2\r\n");
 	a = pWishboneRegs[4];
+	if (a != 0x0000bead)
+		mini_printf("WREG ERR3\r\n");
 	LED = 0x00;//test end marker
 
 	//sdram test
@@ -72,12 +78,19 @@ int main() {
 		pSDRAM[1<<i] = 0x11111111*i;
 	pSDRAM[0xffffff] = 0xdeafface;
 	a = pSDRAM[0];
-	for (int i=0;i<24;i++)
+	if (a != 0x00005678)
+		mini_printf("WMEM ERR1\r\n");
+	for (int i=0;i<24;i++) {
 		a = pSDRAM[1<<i];
+		if (a !=((0x1111*i) & 0xFFFF))
+			mini_printf("WMEM ERR2\r\n");
+	}
 	a = pSDRAM[0xffffff];
+	if (a != 0x0000face)
+		mini_printf("WMEM ERR3\r\n");
 	LED = 0x00;//test end marker
 
-	mini_printf("strap %s %s\r\n",__DATE__,__TIME__);
+	mini_printf("%s %s\r\n",__DATE__,__TIME__);
 
 	//init sdio driver
 	/*struct SDIODRV * drv;
