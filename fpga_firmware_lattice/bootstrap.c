@@ -40,8 +40,8 @@ uint32_t lsfr_next_random (uint32_t prev)
 int main() {
 	LED = 0x20;//red external
     //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
-    reg_uart_clkdiv = 347;// 115200 baud at 40MHz
-    //reg_uart_clkdiv = 434;// 115200 baud at 50MHz
+    //reg_uart_clkdiv = 347;// 115200 baud at 40MHz
+    reg_uart_clkdiv = 434;// 115200 baud at 50MHz
     //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
 
 	volatile uint32_t* p32 = (uint32_t*) 0;
@@ -50,7 +50,20 @@ int main() {
 	uint32_t errors = 0;
 
 	mini_printf("Boot");
-	
+
+	volatile uint32_t a;
+
+	//wishbone regs write test
+	LED = 0x01;//test start marker
+	volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
+	pWishboneRegs[0] = 0x87654321;//PCNTR
+	pWishboneRegs[1] = 0xdeadbeef;//STATUS
+	pWishboneRegs[4] = 0xfeedbead;//SWREG
+	a = pWishboneRegs[0];
+	a = pWishboneRegs[1];
+	a = pWishboneRegs[4];
+	LED = 0x00;//test end marker
+
 	//sdram test
 	LED = 0xFF;//test start marker
 	volatile uint32_t * pSDRAM = (uint32_t *)0x10000000;
@@ -58,7 +71,7 @@ int main() {
 	for (int i=0;i<24;i++)
 		pSDRAM[1<<i] = 0x11111111*i;
 	pSDRAM[0xffffff] = 0xdeafface;
-	volatile uint32_t a = pSDRAM[0];
+	a = pSDRAM[0];
 	for (int i=0;i<24;i++)
 		a = pSDRAM[1<<i];
 	a = pSDRAM[0xffffff];

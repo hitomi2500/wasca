@@ -116,9 +116,9 @@ module attosoc (
     //memory map :
     // 00xx_xxxx  workram 96KB, writable by sd core
     // 01xx_xxxx  SDRAM core registers
-    // 0200_0000  led control
-    // 0200_0004  uart divider
-    // 0200_0008  uart data
+    // 02xx_xxx0  led control reg
+    // 02xx_xxx4  uart divider reg
+    // 02xx_xxx8  uart data reg
     // 03xx_xxxx  SD registers
     // 1xxx_xxxx  SDRAM area, 256MB
 	
@@ -164,7 +164,7 @@ module attosoc (
 						simpleuart_reg_dat_sel ? simpleuart_reg_dat_do :
 						sd_regs_sel ? sd_rdata :
 						sdram_mem_sel ? sdram_mem_data :
-						sdram_regs_sel ? sdram_mem_data :
+						sdram_regs_sel ? sdram_regs_data :
  						workram_rdata;
 
 	picorv32 #(
