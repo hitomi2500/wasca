@@ -21,11 +21,13 @@ module testbench();
 	wire [31:0] sd_emu_cmd_arg;
 	
 	//A-bus slave interface
-	wire [24:1] abus_address;
+	reg [24:1] abus_address;
 	wire [15:0] abus_data;
-	wire [2:0] abus_chipselect;
-	wire abus_read;
-	wire abus_write;
+	reg [15:0] abus_data_out;
+	reg abus_data_oe;
+	reg [2:0] abus_chipselect;
+	reg abus_read;
+	reg [1:0] abus_write;
 	wire abus_interrupt;
 	wire abus_direction;
 	wire abus_interrupt_disable_out;
@@ -63,6 +65,82 @@ module testbench();
 
 	always @(led) begin
 		#1 $display("%b", led);
+	end
+	
+	task abus_write_task;
+        input [24:1] addr;
+        input [15:0] data;
+        input [2:0]  chipselect;
+    
+        begin
+            // Setup phase
+            abus_address     = addr;
+            abus_data_out    = data;
+            abus_data_oe     = 1'b1;
+            #10
+            abus_read        = 1'b1;
+            abus_write       = 2'b00;
+            #10
+            abus_chipselect  = chipselect;
+            #120
+            abus_chipselect  = 3'b111;
+            #10
+            abus_read        = 1'b1;
+            abus_write       = 2'b11;
+            #10
+            abus_data_oe     = 1'b0;
+        end
+    endtask
+	
+	task abus_write_burst2_task;
+        input [24:1] addr;
+        input [15:0] data1;
+        input [15:0] data2;
+        input [2:0]  chipselect;
+    
+        begin
+            // Setup phase
+            abus_address     = addr;
+            abus_data_out    = data1;
+            abus_data_oe     = 1'b1;
+            #10
+            abus_read        = 1'b1;
+            abus_write       = 2'b00;
+            #10
+            abus_chipselect  = chipselect;
+            #120
+            abus_chipselect  = 3'b111;
+            #10
+            abus_address     = addr + 24'b1;
+            abus_data_out    = data2;
+            #10
+            abus_chipselect  = chipselect;
+            #120
+            abus_chipselect  = 3'b111;
+            #10
+            abus_read        = 1'b1;
+            abus_write       = 2'b11;
+            #10
+            abus_data_oe     = 1'b0;
+        end
+    endtask
+	
+	//abus access emulation
+	integer i;
+	initial begin
+	    abus_address <= 0;
+	    abus_data_out <=  0;
+	    abus_chipselect <= 3'b111;
+	    abus_data_oe <= 1'b0;
+	    abus_read <= 1'b1;
+	    abus_write <= 2'b11;
+	    #500000
+	    abus_write_task( .addr({21'h0FFFFF,3'b111}), .data(16'h0004), .chipselect(3'b110));//set mode register
+	    for (i=0; i<1000; i=i+1) begin
+		      //write CS0
+		      abus_write_burst2_task( .addr(i*2), .data1((i*2)+16'h1234), .data2((i*2+1)+16'h1234), .chipselect(3'b110));
+		      //#200;
+		end
 	end
 
 	attosoc uut (
@@ -133,5 +211,7 @@ module testbench();
 	   .Cke(sdram_cke),
 	   .We_n(sdram_we_n)
 	   ); 
+	   
+	assign abus_data = (abus_data_oe) ? abus_data_out : {16{1'bZ}};
 
 endmodule

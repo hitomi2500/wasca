@@ -41,7 +41,7 @@ module sdram_bridge (
 	inout wire [15:0] abus_data,
 	input wire [2:0] abus_chipselect,
 	input wire abus_read,
-	input wire abus_write,
+	input wire [1:0] abus_write,
 	output wire abus_interrupt,
 	output wire abus_direction,
 	output wire abus_interrupt_disable_out,
@@ -367,12 +367,12 @@ module sdram_bridge (
 	always @(posedge sdram_clock) abus_cspulse7 <= abus_cspulse6;
 	
 	//abus write/read pulse is a falling edge since read and write signals are negative polarity
-	assign abus_write_pulse = abus_write_buf && ~abus_write_ms;
-	assign abus_read_pulse = abus_read_buf && ~abus_read_ms;
-	assign abus_chipselect_pulse = abus_chipselect_buf && ~abus_chipselect_ms;
-	assign abus_write_pulse_off = abus_write_ms && ~abus_write_buf;
-	assign abus_read_pulse_off = abus_read_ms && ~abus_read_buf;
-	assign abus_chipselect_pulse_off = abus_chipselect_ms && ~abus_chipselect_buf;
+	assign abus_write_pulse = abus_write_buf & ~abus_write_ms;
+	assign abus_read_pulse = abus_read_buf & ~abus_read_ms;
+	assign abus_chipselect_pulse = abus_chipselect_buf & ~abus_chipselect_ms;
+	assign abus_write_pulse_off = abus_write_ms & ~abus_write_buf;
+	assign abus_read_pulse_off = abus_read_ms & ~abus_read_buf;
+	assign abus_chipselect_pulse_off = abus_chipselect_ms & ~abus_chipselect_buf;
 	
 	assign abus_anypulse = abus_write_pulse[0] || abus_write_pulse[1] || abus_read_pulse || 
 				abus_chipselect_pulse[0] || abus_chipselect_pulse[1] || abus_chipselect_pulse[2];

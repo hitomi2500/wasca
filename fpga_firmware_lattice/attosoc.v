@@ -40,7 +40,7 @@ module attosoc (
 	inout [15:0] abus_data,
 	input [2:0] abus_chipselect,
 	input abus_read,
-	input abus_write,
+	input [1:0] abus_write,
 	output abus_interrupt,
 	output abus_direction,
 	output abus_interrupt_disable_out,

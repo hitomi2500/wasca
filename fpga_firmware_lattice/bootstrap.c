@@ -40,8 +40,8 @@ uint32_t lsfr_next_random (uint32_t prev)
 int main() {
 	LED = 0x20;//red external
     //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
-    reg_uart_clkdiv = 347;// 115200 baud at 40MHz
-    //reg_uart_clkdiv = 434;// 115200 baud at 50MHz
+    //reg_uart_clkdiv = 347;// 115200 baud at 40MHz
+    reg_uart_clkdiv = 432;//434;// 115200 baud at 50MHz
     //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
 
 	volatile uint32_t* p32 = (uint32_t*) 0;
@@ -49,13 +49,20 @@ int main() {
 	uint32_t seed = 0x100500;
 	uint32_t errors = 0;
 
-	mini_printf("Bootstrap start\r\n");
+	//mini_printf("Bootstrap start\r\n");
+	mini_printf("Boot");
+
+	//set mapper register
+	LED = 0x01;//test start marker
+	volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
+	pWishboneRegs[0xb] = 0xFFFFFFFF;//write mapper for CS0
+	pWishboneRegs[0xc] = 0x00000000;//write mapper for CS1 + CS2
+	LED = 0x00;//test start marker
 
 	volatile uint32_t a;
 
 	//wishbone regs write test
-	LED = 0x01;//test start marker
-	volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
+	LED = 0x02;//test start marker
 	pWishboneRegs[0] = 0x87654321;//PCNTR
 	pWishboneRegs[1] = 0xdeadbeef;//STATUS
 	pWishboneRegs[4] = 0xfeedbead;//SWREG
