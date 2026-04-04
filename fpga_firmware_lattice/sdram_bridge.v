@@ -85,6 +85,17 @@ module sdram_bridge (
 	input wire reset
 	);
 	
+	initial begin
+		sdram_addr = 0;
+		sdram_ba = 0;
+		sdram_cas_n = 1'b1;
+		sdram_cke = 1'b1;
+		sdram_cs_n = 1'b1;
+		sdram_dqm = 0;
+		sdram_ras_n = 1'b1;
+		sdram_we_n = 1'b1;
+	end;
+	
 	wire [25:0] wishbone_regs_address = wishbone_regs_addr_i;
 	wire [31:0] wishbone_regs_writedata = wishbone_regs_data_i;
 	reg [31:0] wishbone_regs_readdata;
@@ -680,15 +691,15 @@ module sdram_bridge (
         sdram_autorefresh_counter <= sdram_autorefresh_counter + 10'b1;
         case (sdram_mode)
             `SDRAM_INIT0 : begin
-            	//first stage init. cke off, dqm high,  others Z
-				sdram_addr <= {13{1'bZ}};
-                sdram_ba <= 2'bZZ;
-                sdram_cas_n <= 1'bZ;
+            	//first stage init. cke off, dqm high,  others in nop command
+				sdram_addr <= 0;
+                sdram_ba <= 0;
+                sdram_cas_n <= 1'b1;
                 sdram_cke <= 0;
-                sdram_cs_n <= 1'bZ;
+                sdram_cs_n <= 0;
                 sdram_dq_oe <= 0;
-                sdram_ras_n <= 1'bZ;
-                sdram_we_n <= 1'bZ;
+                sdram_ras_n <= 1'b1;
+                sdram_we_n <= 1'b1;
                 sdram_dqm <= 2'b11;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
 				wishbone_sdram_readdatavalid <= 0;
@@ -732,7 +743,7 @@ module sdram_bridge (
                     sdram_mode <= `SDRAM_INIT3;
                     sdram_ras_n <= 0;
                     sdram_cas_n <= 0;
-                    sdram_wait_counter <= 4'd7;
+                    sdram_wait_counter <= 4'd8;
                     end
                 end
                 
@@ -746,7 +757,7 @@ module sdram_bridge (
                     sdram_mode <= `SDRAM_INIT4;
                     sdram_ras_n <= 0;
                     sdram_cas_n <= 0;
-                    sdram_wait_counter <= 4'd7;
+                    sdram_wait_counter <= 4'd8;
                     end
                 end
                 
@@ -837,7 +848,7 @@ module sdram_bridge (
                     sdram_we_n <= 0;
                     sdram_addr[10] <= 1'b1;
                     sdram_autorefresh_counter <= 0;
-                    sdram_wait_counter <= 4'd1; // precharge all is fast
+                    sdram_wait_counter <= 4'd2; // precharge all is fast
                 end
             end
 
@@ -1020,7 +1031,7 @@ module sdram_bridge (
         endcase
     end
 
-    assign sdram_clk = sdram_clock;
+    assign sdram_clk = ~sdram_clock;
 	
 	//------------------------------ A-bus transactions counter ---------------------------------------	
 	// counter filters transactions transferred over a-bus and counts them

@@ -1,4 +1,5 @@
-`include "timescale.v"
+//`include "timescale.v"
+`timescale 10ps / 1ps
 
 module testbench();
 
@@ -44,13 +45,13 @@ module testbench();
 	wire sdram_clk;
 
 	always begin
-	   #4 sdram_clk_i = (sdram_clk_i === 1'b0);
-	   #4 sdram_clk_i = (sdram_clk_i === 1'b0);
-	   #4 sdram_clk_i = (sdram_clk_i === 1'b0);
-	   #3 sdram_clk_i = (sdram_clk_i === 1'b0);
+	   #375 sdram_clk_i = (sdram_clk_i === 1'b0);
+	   #375 sdram_clk_i = (sdram_clk_i === 1'b0);
+	   #375 sdram_clk_i = (sdram_clk_i === 1'b0);
+	   #375 sdram_clk_i = (sdram_clk_i === 1'b0);
 	   end
-	always #10 mcu_clk_i = (mcu_clk_i === 1'b0);
-	always #20 sd_clk_i = (sd_clk_i === 1'b0);
+	always #1000 mcu_clk_i = (mcu_clk_i === 1'b0);
+	always #2000 sd_clk_i = (sd_clk_i === 1'b0);
 
 	initial begin
 		$dumpfile("testbench.vcd");
@@ -64,7 +65,7 @@ module testbench();
 	end
 
 	always @(led) begin
-		#1 $display("%b", led);
+		#100 $display("%b", led);
 	end
 	
 	task abus_write_task;
@@ -77,17 +78,17 @@ module testbench();
             abus_address     = addr;
             abus_data_out    = data;
             abus_data_oe     = 1'b1;
-            #10
+            #1000
             abus_read        = 1'b1;
             abus_write       = 2'b00;
-            #10
+            #1000
             abus_chipselect  = chipselect;
-            #120
+            #12000
             abus_chipselect  = 3'b111;
-            #10
+            #1000
             abus_read        = 1'b1;
             abus_write       = 2'b11;
-            #10
+            #1000
             abus_data_oe     = 1'b0;
         end
     endtask
@@ -103,24 +104,24 @@ module testbench();
             abus_address     = addr;
             abus_data_out    = data1;
             abus_data_oe     = 1'b1;
-            #10
+            #1000
             abus_read        = 1'b1;
             abus_write       = 2'b00;
-            #10
+            #1000
             abus_chipselect  = chipselect;
-            #120
+            #12000
             abus_chipselect  = 3'b111;
-            #10
+            #1000
             abus_address     = addr + 24'b1;
             abus_data_out    = data2;
-            #10
+            #1000
             abus_chipselect  = chipselect;
-            #120
+            #12000
             abus_chipselect  = 3'b111;
-            #10
+            #1000
             abus_read        = 1'b1;
             abus_write       = 2'b11;
-            #10
+            #1000
             abus_data_oe     = 1'b0;
         end
     endtask
@@ -134,12 +135,12 @@ module testbench();
 	    abus_data_oe <= 1'b0;
 	    abus_read <= 1'b1;
 	    abus_write <= 2'b11;
-	    #500000
+	    #50000000
 	    abus_write_task( .addr({21'h0FFFFF,3'b111}), .data(16'h0004), .chipselect(3'b110));//set mode register
 	    for (i=0; i<1000; i=i+1) begin
 		      //write CS0
 		      abus_write_burst2_task( .addr(i*2), .data1((i*2)+16'h1234), .data2((i*2+1)+16'h1234), .chipselect(3'b110));
-		      //#200;
+		      //#20000;
 		end
 	end
 
