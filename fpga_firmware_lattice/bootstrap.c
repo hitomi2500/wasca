@@ -55,6 +55,8 @@ int main() {
 	//set mapper register
 	LED = 0x01;//test start marker
 	volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
+	pWishboneRegs[0x9] = 0xFFFFFFFF;//read mapper for CS0
+	pWishboneRegs[0xa] = 0x00000000;//read mapper for CS1 + CS2
 	pWishboneRegs[0xb] = 0xFFFFFFFF;//write mapper for CS0
 	pWishboneRegs[0xc] = 0x00000000;//write mapper for CS1 + CS2
 	LED = 0x00;//test start marker
