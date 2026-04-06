@@ -41,7 +41,7 @@ int main() {
 	LED = 0x20;//red external
     //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
     //reg_uart_clkdiv = 347;// 115200 baud at 40MHz
-    reg_uart_clkdiv = 432;//434;// 115200 baud at 50MHz
+    reg_uart_clkdiv = 434;//432;//434;// 115200 baud at 50MHz
     //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
 
 	volatile uint32_t* p32 = (uint32_t*) 0;
@@ -79,6 +79,8 @@ int main() {
 		mini_printf("WREG ERR3\r\n");
 	LED = 0x00;//test end marker
 
+	mini_printf("SDRAM test...\r\n");
+	//mini_printf("S\r\n");
 	//sdram test
 	LED = 0xFF;//test start marker
 	volatile uint32_t * pSDRAM = (uint32_t *)0x10000000;
@@ -97,8 +99,31 @@ int main() {
 	a = pSDRAM[0xffffff];
 	if (a != 0x0000face)
 		mini_printf("WMEM ERR3\r\n");
-	LED = 0x00;//test end marker
 
+
+	//writing
+	/*seed = 0x100500;
+	for (int i =0; i < (0x10000/sizeof(uint32_t)); i++)
+	{
+		p32[i] = seed;
+		seed = lsfr_next_random(seed);
+	}
+	seed = 0x100500;
+	errors = 0;
+	uint32_t readback;
+	for (int i =0; i < (0x10000/sizeof(uint32_t)); i++)
+	{
+		readback = p32[i];
+		if (readback != seed) {\
+			if (errors < 16)
+				mini_printf("SDRAM error: addr %x write %x read %x\r\n",i*4,seed,readback);
+			errors++;
+		}
+		seed = lsfr_next_random(seed);
+	}*/
+	LED = 0x00;//test end marker
+	mini_printf("SDRAM test DONE\r\n");
+	
 	mini_printf("%s %s\r\n",__DATE__,__TIME__);
 
 	//init sdio driver

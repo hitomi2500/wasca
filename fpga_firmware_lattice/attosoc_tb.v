@@ -181,20 +181,20 @@ module testbench();
 	    abus_data_oe <= 1'b0;
 	    abus_read <= 1'b1;
 	    abus_write <= 2'b11;
-	    #50000000 //prevent clashing
+	    #50000000; //prevent clashing
 	    /*#40000000 //clash!
 	    #1500
 	    #5250
 	    #750
 	    #750*/
-	    abus_write_task( .addr({21'h0FFFFF,3'b111}), .data(16'h0004), .chipselect(3'b110));//set mode register
+	    /*abus_write_task( .addr({21'h0FFFFF,3'b111}), .data(16'h0004), .chipselect(3'b110));//set mode register
 	    for (i=0; i<1000; i=i+1) begin
 		      //write CS0
 		      abus_write_burst2_task( .addr(i*2), .data1((i*2)+16'h1234), .data2((i*2+1)+16'h1234), .chipselect(3'b110));
 		      //read CS0
 		      abus_read_burst2_task( .addr(i*2), .chipselect(3'b110));
 		      //#20000;
-		end
+		end*/
 	end
 
 	attosoc uut (
