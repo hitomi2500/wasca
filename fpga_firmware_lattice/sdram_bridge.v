@@ -31,6 +31,18 @@
 `define SDRAM_WISHBONE_READ_AND_PRECHARGE 13
 `define SDRAM_WISHBONE_WRITE_AND_PRECHARGE 14
 
+`define TIMING_IDLE_TO_ACTIVATE_ABUS_READ 3  // tRCD = 21ns min ; 3 cycles @ 143mhz = 21ns
+`define TIMING_IDLE_TO_ACTIVATE_ABUS_WRITE 5 // for writing we use a little longer activate delay, so that the data at the a-bus will become ready
+`define TIMING_IDLE_TO_ACTIVATE_WISHBONE_RW 2 // tRCD = 21ns min ; 3 cycles @ 143mhz = 21ns
+`define TIMING_IDLE_TO_PRECHARGE 2 // precharge all is fast
+`define TIMING_PRECHARGE_TO_ACTIVATE 3 // tRCD = 21ns min ; 3 cycles @ 143mhz = 21ns
+`define TIMING_PRECHARGE_TO_AUTOREFRESH 7 // tRC = 63ns min ; 
+`define TIMING_ABUS_ACTIVATE_TO_WRITE 4 // tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+`define TIMING_ABUS_ACTIVATE_TO_READ 4 // 5 cut to 4 //tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+`define TIMING_WISHBONE_ACTIVATE_TO_WRITE 4 // tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+`define TIMING_WISHBONE_ACTIVATE_TO_READ 4 // tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+
+
 module sdram_bridge (
     //common clock
     input wire clock,
@@ -284,6 +296,10 @@ module sdram_bridge (
     reg [3:0] wasca_mode;
     reg [3:0] sdram_mode;
     
+// synopsys translate_off
+    time ABUS_request_time;
+// synopsys translate_on
+    
     initial begin
         sdram_abus_pending = 0;
         sdram_abus_complete = 0;
@@ -501,7 +517,8 @@ module sdram_bridge (
 	always @(posedge sdram_clock)
 	    //if (~saturn_reset) wasca_mode  <= MODE_INIT;
 	    if ( (my_little_transaction_dir == `DIR_WRITE) && (abus_chipselect_latched == 2'b0) && (abus_cspulse7) &&
-	        (abus_address_latched[23:1] == {20'hFFFFF,3'h2}) ) begin
+	        //(abus_address_latched[23:1] == {20'hFFFFF,3'h2}) ) begin
+			(abus_cs0_regs_access) && (abus_address_latched[4:1] == {1'h1,3'h2}) ) begin
 	        //wasca mode register
 	        REG_MODE <= abus_data_in;
 	        case (abus_data_in[3:0])
@@ -682,8 +699,14 @@ module sdram_bridge (
 	// abus pending flag.
 	//	abus_anypulse might appear up to 3-4 times at transaction start, so we shouldn't issue ack until at least 3-4 cycles from the start
 	always @(posedge sdram_clock)
-	   if (abus_cspulse2)
+	   if (abus_cspulse2) begin
+	       // synopsys translate_off
+	   	   if (sdram_abus_pending)
+	   	       $display ("ABUS ERROR at time %t: access when previous is pending", $time);
+	   	   // synopsys translate_on
 	       sdram_abus_pending <= 1'b1;
+	       ABUS_request_time <= $time;
+	       end
 	    else if (sdram_abus_complete)
 	       sdram_abus_pending <= 0;
 
@@ -728,7 +751,7 @@ module sdram_bridge (
                     sdram_ras_n <= 0;
                     sdram_we_n <= 0;
                     sdram_addr[10] <= 1'b1;
-                    sdram_wait_counter <= 4'd2;
+                    sdram_init_counter <= 0;
                     end
                 end
                 
@@ -737,13 +760,13 @@ module sdram_bridge (
                 sdram_ras_n <= 1'b1;
                 sdram_we_n <= 1'b1;
                 sdram_addr[10] <= 0;
-                sdram_wait_counter <= sdram_wait_counter - 4'b1;
-				if (sdram_wait_counter == 0) begin 
+                sdram_init_counter <= sdram_init_counter + 16'b1;
+                if (sdram_init_counter[2]) begin 
 				    // issue "auto refresh"                    
                     sdram_mode <= `SDRAM_INIT3;
                     sdram_ras_n <= 0;
                     sdram_cas_n <= 0;
-                    sdram_wait_counter <= 4'd8;
+                    sdram_init_counter <= 0;
                     end
                 end
                 
@@ -751,13 +774,13 @@ module sdram_bridge (
             	//move on with init
                 sdram_ras_n <= 1'b1;
                 sdram_cas_n <= 1'b1;
-                sdram_wait_counter <= sdram_wait_counter - 4'b1;
-				if (sdram_wait_counter == 0) begin 
+                sdram_init_counter <= sdram_init_counter + 16'b1;
+				if (sdram_init_counter[3]) begin 
 				    // issue "auto refresh"                    
                     sdram_mode <= `SDRAM_INIT4;
                     sdram_ras_n <= 0;
                     sdram_cas_n <= 0;
-                    sdram_wait_counter <= 4'd8;
+                    sdram_init_counter <= 0;
                     end
                 end
                 
@@ -765,8 +788,8 @@ module sdram_bridge (
             	//move on with init
                 sdram_ras_n <= 1'b1;
                 sdram_cas_n <= 1'b1;
-                sdram_wait_counter <= sdram_wait_counter - 4'b1;
-				if (sdram_wait_counter == 0) begin 
+                sdram_init_counter <= sdram_init_counter + 16'b1;
+				if (sdram_init_counter[3]) begin 
 				    // issue "mode register set command"                   
                     sdram_mode <= `SDRAM_INIT5;
                     sdram_ras_n <= 0;
@@ -775,7 +798,7 @@ module sdram_bridge (
                     //sdram_addr <= 13'b0001000110000; //write single, no testmode, cas 3, burst seq, burst len 1
                     //sdram_addr <= {3'b0,1'b1,2'b0,3'd2,1'b0,3'd0}; //write single, no testmode, cas 2, burst seq, burst len 1
                     sdram_addr <= {3'b0,1'b1,2'b0,3'd3,1'b0,3'd0}; //write single, no testmode, cas 3, burst seq, burst len 1
-                    sdram_wait_counter <= 4'd10;
+                    sdram_init_counter <= 0;
                     end
                 end
                 
@@ -785,8 +808,8 @@ module sdram_bridge (
                 sdram_cas_n <= 1'b1;
                 sdram_we_n <= 1'b1;
                 sdram_addr <= 0;
-                sdram_wait_counter <= sdram_wait_counter - 4'b1;
-				if (sdram_wait_counter == 0) begin 
+                sdram_init_counter <= sdram_init_counter + 16'b1;
+				if (sdram_init_counter[4]) begin 
 				    // init done, switching to working mode
                     sdram_mode <= `SDRAM_IDLE;
                     end
@@ -821,11 +844,11 @@ module sdram_bridge (
 				    sdram_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
 				    if (abus_write_buf == 2'b11) begin
 				        sdram_dqm <= 2'b00; //it's a read
-				        sdram_wait_counter <= 4'd3; // tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
+				        sdram_wait_counter <= 4'd`TIMING_IDLE_TO_ACTIVATE_ABUS_READ;
 				    end
 				    else begin
 				        sdram_dqm <= {abus_write_buf[0],abus_write_buf[1]}; //it's a write
-				        sdram_wait_counter <= 4'd5; // for writing we use a little longer activate delay, so that the data at the a-bus will become ready
+				        sdram_wait_counter <= 4'd`TIMING_IDLE_TO_ACTIVATE_ABUS_WRITE;
 				    end
                 end
                 else if ( (wishbone_sdram_read_pending_sdram || wishbone_sdram_write_pending_sdram) && ~wishbone_sdram_complete ) begin
@@ -834,7 +857,7 @@ module sdram_bridge (
                     sdram_ras_n <= 0;
                     sdram_addr <= wishbone_sdram_pending_address[21:9];
                     sdram_ba <= wishbone_sdram_pending_address[23:22];
-                    sdram_wait_counter <= 4'd2; // tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
+                    sdram_wait_counter <= 4'd`TIMING_IDLE_TO_ACTIVATE_WISHBONE_RW;
                     if (wishbone_sdram_read_pending_sdram)
                         sdram_dqm <= 2'b00; //it's a read
                     else
@@ -848,7 +871,7 @@ module sdram_bridge (
                     sdram_we_n <= 0;
                     sdram_addr[10] <= 1'b1;
                     sdram_autorefresh_counter <= 0;
-                    sdram_wait_counter <= 4'd2; // precharge all is fast
+                    sdram_wait_counter <= 4'd`TIMING_IDLE_TO_PRECHARGE;
                 end
             end
 
@@ -866,7 +889,7 @@ module sdram_bridge (
                         sdram_addr <= abus_address_latched[23:11];
                         sdram_ba[0] <= abus_address_latched[24];
                         sdram_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
-                        sdram_wait_counter <= 4'd3; // tRCD = 21ns min ; 3 cycles @ 116mhz = 25ns
+                        sdram_wait_counter <= 4'd`TIMING_PRECHARGE_TO_ACTIVATE;
                         if (abus_write_buf == 2'b11)
                             sdram_dqm <= 2'b00; //it's a read
                         else
@@ -877,7 +900,7 @@ module sdram_bridge (
                         sdram_mode <= `SDRAM_AUTOREFRESH2;
                         sdram_cas_n <= 0;
                         sdram_ras_n <= 0;
-                        sdram_wait_counter <= 4'd7; // 7 cut to 6 -- tRC = 63ns min ;  8 cycles @ 116mhz = 67ns
+                        sdram_wait_counter <= 4'd`TIMING_PRECHARGE_TO_AUTOREFRESH;
 				    end
 				end
             end
@@ -914,7 +937,7 @@ module sdram_bridge (
                         sdram_addr <= {3'b001,abus_address_latched[10:1]};
                         sdram_ba[0] <= abus_address_latched[24];
                         sdram_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
-                        sdram_wait_counter <= 4'd4; // tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+                        sdram_wait_counter <= 4'd`TIMING_ABUS_ACTIVATE_TO_WRITE;
                     end
                     else begin
                         sdram_mode <= `SDRAM_ABUS_READ_AND_PRECHARGE;
@@ -923,7 +946,7 @@ module sdram_bridge (
                         sdram_addr <= {3'b001,abus_address_latched[10:1]};
                         sdram_ba[0] <= abus_address_latched[24];
                         sdram_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
-                        sdram_wait_counter <= 4'd4; // 5 cut to 4 //tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+                        sdram_wait_counter <= 4'd`TIMING_ABUS_ACTIVATE_TO_READ;
                     end
                 end
             end
@@ -936,8 +959,13 @@ module sdram_bridge (
 				sdram_ba <= 2'b00;
 				sdram_cas_n <= 1'b1;
 				sdram_wait_counter <= sdram_wait_counter - 4'b1;
-                if (sdram_wait_counter == 4'b1)
+                if (sdram_wait_counter == 4'b1) begin
                     sdram_datain_latched <= sdram_dq_in;
+                    // synopsys translate_off
+                    if ($time - ABUS_request_time > 92)
+                        $display ("ABUS ERROR at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
+                    // synopsys translate_on
+                end
                 if (sdram_wait_counter == 0) begin
                     sdram_mode <= `SDRAM_IDLE;
                     sdram_abus_complete <= 1'b1;
@@ -973,7 +1001,7 @@ module sdram_bridge (
                         sdram_ba <= wishbone_sdram_pending_address[23:22];
                         sdram_cas_n <= 0;
                         sdram_addr <= {3'b001,1'b0,wishbone_sdram_pending_address[8:0]};
-                        sdram_wait_counter <= 4'd4; // tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+                        sdram_wait_counter <= 4'd`TIMING_WISHBONE_ACTIVATE_TO_READ;
                     end
                     else begin
                         sdram_mode <= `SDRAM_WISHBONE_WRITE_AND_PRECHARGE;
@@ -983,7 +1011,7 @@ module sdram_bridge (
                         sdram_dq_out <= wishbone_sdram_pending_data[15:0];
                         sdram_dq_oe <= 1'b1;
                         sdram_addr <= {3'b001,1'b0,wishbone_sdram_pending_address[8:0]};
-                        sdram_wait_counter <= 4'd4; // tRP = 21ns min ; 3 cycles @ 116mhz = 25ns
+                        sdram_wait_counter <= 4'd`TIMING_WISHBONE_ACTIVATE_TO_WRITE;
                         wishbone_sdram_readdatavalid <= 1'b1; //works as ack for write too, sending early 
                     end
                 end
@@ -1179,5 +1207,14 @@ module sdram_bridge (
 --        dout     => sniffer_data_out,
 --        data_count     => sniffer_fifo_content_size
 --    );*/
+
+    //------------------------------ A-bus timing checks ---------------------------------------
+    /*
+    // synopsys translate_off
+    always @(posedge sdram_clock)
+        if (abus_cspulse2 && ~(sdram_mode ==`SDRAM_IDLE)) begin
+            $display ("ABUS ERROR violation at time %t: request out of idle", $time);
+        end
+    // synopsys translate_on*/
 
 endmodule

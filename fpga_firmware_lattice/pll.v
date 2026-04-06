@@ -14,7 +14,7 @@ module pll_25_133(input clk_in_25, output clk_out_50, output clk_out_133);
         .CLKOS_ENABLE("ENABLED"),
         .CLKOP_DIV(6),//12//6
         .CLKOS_DIV(16),//20//16
-        .CLKFB_DIV(15),//8//16
+        .CLKFB_DIV(16),//8//16
         .CLKI_DIV(3),
         .FEEDBK_PATH("CLKOP")
     ) pll_i (
