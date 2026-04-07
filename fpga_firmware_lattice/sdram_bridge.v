@@ -102,7 +102,7 @@ module sdram_bridge (
 		sdram_ba = 0;
 		sdram_cas_n = 1'b1;
 		sdram_cke = 1'b1;
-		sdram_cs_n = 1'b1;
+		sdram_cs_n = 0;
 		sdram_dqm = 0;
 		sdram_ras_n = 1'b1;
 		sdram_we_n = 1'b1;
@@ -720,12 +720,12 @@ module sdram_bridge (
             `SDRAM_INIT0 : begin
             	//first stage init. cke off, dqm high,  others in nop command
 				//sdram_addr <= 0;
-                sdram_ba <= 0;
+                //sdram_ba <= 0;
                 sdram_cas_n <= 1'b1;
                 sdram_cke <= 0;
-                sdram_cs_n <= 0;
+                //sdram_cs_n <= 0;
                 sdram_dq_oe <= 0;
-                sdram_ras_n <= 1'b1;
+                //sdram_ras_n <= 1'b1;
                 sdram_dqm <= 2'b11;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
 				wishbone_sdram_readdatavalid <= 0;
@@ -739,13 +739,13 @@ module sdram_bridge (
             `SDRAM_INIT1 : begin
             	//another stage init. cke on, dqm high, set other pin
 				//sdram_addr <= 0;
-                sdram_ba <= 0;
+                //sdram_ba <= 0;
                 sdram_cas_n <= 1'b1;
                 sdram_cke <= 1'b1;
-                sdram_cs_n <= 0;
+                //sdram_cs_n <= 0;
                 sdram_dq_oe <= 0;
-                sdram_ras_n <= 1'b1;
-                sdram_dqm <= 2'b11;
+                //sdram_ras_n <= 1'b1;
+                //sdram_dqm <= 2'b11;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
                 if (sdram_init_counter[10]) begin 
                     // some smaller time elapsed, moving to next init - issue "precharge all"
@@ -819,15 +819,14 @@ module sdram_bridge (
                            
              `SDRAM_IDLE : begin
             	//sdram_addr <= 0;
-            	sdram_ba <= 0;
+            	//sdram_ba <= 0;
                 sdram_cas_n <= 1'b1;
                 sdram_cke <= 1'b1;
-                sdram_cs_n <= 0;
+                //sdram_cs_n <= 0;
                 sdram_dq_oe <= 0;
                 sdram_ras_n <= 1'b1;
                 //sdram_we_n <= 1'b1;
                 sdram_dqm <= 2'b11;
-                sdram_abus_complete <= 0;
                 wishbone_sdram_complete <= 0;
                 wishbone_sdram_readdatavalid <= 0;
                 wishbone_sdram_waitrequest <= 1'b1;
@@ -837,7 +836,7 @@ module sdram_bridge (
 				// 2) wishbone transaction detected - priority 1
 				// 3) autorefresh counter exceeded threshold - priority 2
 				// if none of these events occur, we keep staying in the idle mode
-				if ((sdram_abus_pending) &&  (~sdram_abus_complete)) begin
+				if (sdram_abus_pending) begin
 				    // something on abus, address should be stable already (is it???), so we activate row now
 				    sdram_mode <= `SDRAM_ABUS_ACTIVATE;
 				    sdram_ras_n <= 0;
@@ -919,7 +918,7 @@ module sdram_bridge (
             `SDRAM_ABUS_ACTIVATE : begin
                 // while waiting for row to be activated, we choose where to switch to - read or write
                 //sdram_addr <= 0;
-                sdram_ba <= 2'b00;
+                //sdram_ba <= 2'b00;
                 sdram_ras_n <= 1'b1;
                 // we keep updating dqm in activate stage, because it could change after abus pending
                 if (abus_write_buf == 2'b11)
@@ -958,7 +957,7 @@ module sdram_bridge (
                 // data should be latched at 2nd or 3rd clock (cas=2 or cas=3)
                 counter_count_read <= 0;
 				//sdram_addr <= 0;
-				sdram_ba <= 2'b00;
+				//sdram_ba <= 2'b00;
 				sdram_cas_n <= 1'b1;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
                 if (sdram_wait_counter == 3'b1) begin
@@ -968,9 +967,12 @@ module sdram_bridge (
                         $display ("ABUS ERROR at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
                     // synopsys translate_on
                 end
+                if (sdram_wait_counter == 3'd1) begin
+                    sdram_abus_complete <= 1'b1;
+                end
                 if (sdram_wait_counter == 0) begin
                     sdram_mode <= `SDRAM_IDLE;
-                    sdram_abus_complete <= 1'b1;
+                    sdram_abus_complete <= 0;
                     sdram_dqm <= 2'b11;
                 end
             end
@@ -979,14 +981,17 @@ module sdram_bridge (
                 // move on with writing
                 counter_count_write <= 0;
 				//sdram_addr <= 0;
-				sdram_ba <= 2'b00;
+				//sdram_ba <= 2'b00;
 				sdram_cas_n <= 1'b1;
 				sdram_we_n <= 1'b1;
 				sdram_dq_oe <= 0;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
+				if (sdram_wait_counter == 3'd1) begin
+                    sdram_abus_complete <= 1'b1;
+                end
                 if (sdram_wait_counter == 0) begin
                     sdram_mode <= `SDRAM_IDLE;
-                    sdram_abus_complete <= 1'b1;
+                    sdram_abus_complete <= 0;
                     sdram_dqm <= 2'b11;
                 end
             end
@@ -994,7 +999,7 @@ module sdram_bridge (
             `SDRAM_WISHBONE_ACTIVATE : begin
                 // while waiting for row to be activated, we choose where to switch to - read or write
 				//sdram_addr <= 0;
-				sdram_ba <= 2'b00;
+				//sdram_ba <= 2'b00;
 				sdram_ras_n <= 1'b1;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
                 if (sdram_wait_counter == 0) begin
@@ -1023,7 +1028,7 @@ module sdram_bridge (
                 // move on with reading, bus is a Z after idle
                 // data should be latched at 2nd/3rd or 3rd/4th clock (cas=2 or cas=3)
                 //sdram_addr <= 0;
-                sdram_ba <= 2'b00;
+                //sdram_ba <= 2'b00;
                 sdram_cas_n <= 1'b1;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
                 /*if (sdram_wait_counter == 4'd1) begin
@@ -1041,7 +1046,7 @@ module sdram_bridge (
 
             `SDRAM_WISHBONE_WRITE_AND_PRECHARGE : begin
                 //sdram_addr <= 0;
-                sdram_ba <= 2'b00;
+                //sdram_ba <= 2'b00;
                 sdram_cas_n <= 1'b1;
                 sdram_we_n <= 1'b1;
                 sdram_dq_oe <= 0;

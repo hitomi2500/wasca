@@ -44,7 +44,7 @@ int main() {
     reg_uart_clkdiv = 434;//432;//434;// 115200 baud at 50MHz
     //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
 
-	volatile uint32_t* p32 = (uint32_t*) 0;
+	//volatile uint32_t* p32 = (uint32_t*) 0;
 
 	uint32_t seed = 0x100500;
 	uint32_t errors = 0;
@@ -103,23 +103,27 @@ int main() {
 
 	//writing
 	seed = 0x100500;
-	for (int i =0; i < (0x10000/sizeof(uint32_t)); i++)
+	for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
 	{
-		p32[i] = seed;
+		pSDRAM[i] = (seed&0xFFFF);
 		seed = lsfr_next_random(seed);
+		if (i%0x40000 == 0)
+			mini_printf("SDRAM test: write pass addr %x \r\n",i*4);
 	}
 	seed = 0x100500;
 	errors = 0;
 	uint32_t readback;
-	for (int i =0; i < (0x10000/sizeof(uint32_t)); i++)
+	for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
 	{
-		readback = p32[i];
-		if (readback != seed) {\
+		readback = pSDRAM[i];
+		if (readback != (seed&0xFFFF)) {\
 			if (errors < 16)
-				mini_printf("SDRAM error: addr %x write %x read %x\r\n",i*4,seed,readback);
+				mini_printf("SDRAM error: addr %x write %x read %x\r\n",i*4,(seed&0xFFFF),readback);
 			errors++;
 		}
 		seed = lsfr_next_random(seed);
+		if (i%0x40000 == 0)
+			mini_printf("SDRAM test: read pass addr %x \r\n",i*4);
 	}
 	LED = 0x00;//test end marker
 	mini_printf("SDRAM test DONE\r\n");
