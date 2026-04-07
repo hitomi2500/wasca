@@ -37,6 +37,8 @@ for i in range(5):
     #copy build scripts
     for file_path in glob.glob(os.path.join('./', '__build.cmd')):
         shutil.copy(file_path, tmp_folder)
+    for file_path in glob.glob(os.path.join('./', '__run.cmd')):
+        shutil.copy(file_path, tmp_folder)
     for file_path in glob.glob(os.path.join('./', 'Makefile')):
         shutil.copy(file_path, tmp_folder)
     for file_path in glob.glob(os.path.join('./', 'makehex.py')):
