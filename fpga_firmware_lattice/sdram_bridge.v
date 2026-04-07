@@ -70,6 +70,18 @@ module sdram_bridge (
 	output reg sdram_we_n,
 	output wire sdram_clk,
 	
+	//SDRAM port 2 (external on wasca board) master interface
+	output reg [12:0] sdram2_addr,
+	output reg [1:0] sdram2_ba,
+	output reg sdram2_cas_n,
+	output reg sdram2_cke,
+	output reg sdram2_cs_n,
+	inout wire [7:0] sdram2_dq,
+	output reg [0:0] sdram2_dqm,
+	output reg sdram2_ras_n,
+	output reg sdram2_we_n,
+	output wire sdram2_clk,
+	
 	//Wishbone SDRAM slave interface
     input wire wishbone_sdram_cyc_i,
     input wire wishbone_sdram_we_i,
@@ -106,6 +118,14 @@ module sdram_bridge (
 		sdram_dqm = 0;
 		sdram_ras_n = 1'b1;
 		sdram_we_n = 1'b1;
+		sdram2_addr = 0;
+		sdram2_ba = 0;
+		sdram2_cas_n = 1'b1;
+		sdram2_cke = 1'b1;
+		sdram2_cs_n = 0;
+		sdram2_dqm = 0;
+		sdram2_ras_n = 1'b1;
+		sdram2_we_n = 1'b1;
 	end;
 	
 	wire [25:0] wishbone_regs_address = wishbone_regs_addr_i;
@@ -140,11 +160,18 @@ module sdram_bridge (
 	
 	reg [15:0] sdram_dq_out;
 	initial sdram_dq_out = 0;
+	reg [15:0] sdram2_dq_out;
+	initial sdram2_dq_out = 0;
 	reg sdram_dq_oe;
 	initial sdram_dq_oe = 0;
+	reg sdram2_dq_oe;
+	initial sdram2_dq_oe = 0;
 	wire [15:0] sdram_dq_in;
+	wire [15:0] sdram2_dq_in;
 	assign sdram_dq = (sdram_dq_oe) ? sdram_dq_out : {16{1'bZ}};
 	assign sdram_dq_in = sdram_dq;
+	assign sdram2_dq = (sdram2_dq_oe) ? sdram2_dq_out : {16{1'bZ}};
+	assign sdram2_dq_in = sdram2_dq;
 	
 	reg [24:1] abus_address_ms;
 	initial abus_address_ms = 0;
@@ -719,14 +746,14 @@ module sdram_bridge (
         case (sdram_mode)
             `SDRAM_INIT0 : begin
             	//first stage init. cke off, dqm high,  others in nop command
-				//sdram_addr <= 0;
-                //sdram_ba <= 0;
                 sdram_cas_n <= 1'b1;
                 sdram_cke <= 0;
-                //sdram_cs_n <= 0;
                 sdram_dq_oe <= 0;
-                //sdram_ras_n <= 1'b1;
                 sdram_dqm <= 2'b11;
+                sdram2_cas_n <= 1'b1;
+                sdram2_cke <= 0;
+                sdram2_dq_oe <= 0;
+                sdram2_dqm <= 1'b1;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
 				wishbone_sdram_readdatavalid <= 0;
                 if (sdram_init_counter[15]) begin 
@@ -738,14 +765,10 @@ module sdram_bridge (
                 
             `SDRAM_INIT1 : begin
             	//another stage init. cke on, dqm high, set other pin
-				//sdram_addr <= 0;
-                //sdram_ba <= 0;
                 sdram_cas_n <= 1'b1;
                 sdram_cke <= 1'b1;
-                //sdram_cs_n <= 0;
-                sdram_dq_oe <= 0;
-                //sdram_ras_n <= 1'b1;
-                //sdram_dqm <= 2'b11;
+                sdram2_cas_n <= 1'b1;
+                sdram2_cke <= 1'b1;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
                 if (sdram_init_counter[10]) begin 
                     // some smaller time elapsed, moving to next init - issue "precharge all"
@@ -753,6 +776,9 @@ module sdram_bridge (
                     sdram_ras_n <= 0;
                     sdram_we_n <= 0;
                     sdram_addr[10] <= 1'b1;
+                    sdram2_ras_n <= 0;
+                    sdram2_we_n <= 0;
+                    sdram2_addr[10] <= 1'b1;
                     sdram_init_counter <= 0;
                     end
                 end
@@ -762,12 +788,17 @@ module sdram_bridge (
                 sdram_ras_n <= 1'b1;
                 sdram_we_n <= 1'b1;
                 sdram_addr[10] <= 0;
+                sdram2_ras_n <= 1'b1;
+                sdram2_we_n <= 1'b1;
+                sdram2_addr[10] <= 0;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
                 if (sdram_init_counter[2]) begin 
 				    // issue "auto refresh"                    
                     sdram_mode <= `SDRAM_INIT3;
                     sdram_ras_n <= 0;
                     sdram_cas_n <= 0;
+                    sdram2_ras_n <= 0;
+                    sdram2_cas_n <= 0;
                     sdram_init_counter <= 0;
                     end
                 end
@@ -776,12 +807,16 @@ module sdram_bridge (
             	//move on with init
                 sdram_ras_n <= 1'b1;
                 sdram_cas_n <= 1'b1;
+                sdram2_ras_n <= 1'b1;
+                sdram2_cas_n <= 1'b1;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
 				if (sdram_init_counter[3]) begin 
 				    // issue "auto refresh"                    
                     sdram_mode <= `SDRAM_INIT4;
                     sdram_ras_n <= 0;
                     sdram_cas_n <= 0;
+                    sdram2_ras_n <= 0;
+                    sdram2_cas_n <= 0;
                     sdram_init_counter <= 0;
                     end
                 end
@@ -790,6 +825,8 @@ module sdram_bridge (
             	//move on with init
                 sdram_ras_n <= 1'b1;
                 sdram_cas_n <= 1'b1;
+                sdram2_ras_n <= 1'b1;
+                sdram2_cas_n <= 1'b1;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
 				if (sdram_init_counter[3]) begin 
 				    // issue "mode register set command"                   
@@ -797,9 +834,11 @@ module sdram_bridge (
                     sdram_ras_n <= 0;
                     sdram_cas_n <= 0;
                     sdram_we_n <= 0;
-                    //sdram_addr <= 13'b0001000110000; //write single, no testmode, cas 3, burst seq, burst len 1
-                    //sdram_addr <= {3'b0,1'b1,2'b0,3'd2,1'b0,3'd0}; //write single, no testmode, cas 2, burst seq, burst len 1
                     sdram_addr <= {3'b0,1'b1,2'b0,3'd3,1'b0,3'd0}; //write single, no testmode, cas 3, burst seq, burst len 1
+                    sdram2_ras_n <= 0;
+                    sdram2_cas_n <= 0;
+                    sdram2_we_n <= 0;
+                    sdram2_addr <= {3'b0,1'b1,2'b0,3'd3,1'b0,3'd0}; //write single, no testmode, cas 3, burst seq, burst len 1
                     sdram_init_counter <= 0;
                     end
                 end
@@ -809,7 +848,9 @@ module sdram_bridge (
                 sdram_ras_n <= 1'b1;
                 sdram_cas_n <= 1'b1;
                 sdram_we_n <= 1'b1;
-                //sdram_addr <= 0;
+                sdram2_ras_n <= 1'b1;
+                sdram2_cas_n <= 1'b1;
+                sdram2_we_n <= 1'b1;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
 				if (sdram_init_counter[4]) begin 
 				    // init done, switching to working mode
@@ -818,15 +859,16 @@ module sdram_bridge (
                 end
                            
              `SDRAM_IDLE : begin
-            	//sdram_addr <= 0;
-            	//sdram_ba <= 0;
                 sdram_cas_n <= 1'b1;
                 sdram_cke <= 1'b1;
-                //sdram_cs_n <= 0;
                 sdram_dq_oe <= 0;
                 sdram_ras_n <= 1'b1;
-                //sdram_we_n <= 1'b1;
                 sdram_dqm <= 2'b11;
+                sdram2_cas_n <= 1'b1;
+                sdram2_cke <= 1'b1;
+                sdram2_dq_oe <= 0;
+                sdram2_ras_n <= 1'b1;
+                sdram2_dqm <= 2'b11;
                 wishbone_sdram_complete <= 0;
                 wishbone_sdram_readdatavalid <= 0;
                 wishbone_sdram_waitrequest <= 1'b1;
@@ -843,12 +885,18 @@ module sdram_bridge (
 				    sdram_addr <= abus_address_latched[23:11];
 				    sdram_ba[0] <= abus_address_latched[24];
 				    sdram_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
+				    sdram2_ras_n <= 0;
+				    sdram2_addr <= abus_address_latched[23:11];
+				    sdram2_ba[0] <= abus_address_latched[24];
+				    sdram2_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
 				    if (abus_write_buf == 2'b11) begin
 				        sdram_dqm <= 2'b00; //it's a read
+				        sdram2_dqm <= 1'b0; //it's a read
 				        sdram_wait_counter <= 3'd`TIMING_IDLE_TO_ACTIVATE_ABUS_READ;
 				    end
 				    else begin
 				        sdram_dqm <= {abus_write_buf[0],abus_write_buf[1]}; //it's a write
+				        sdram2_dqm <= abus_write_buf[0]; //it's a write
 				        sdram_wait_counter <= 3'd`TIMING_IDLE_TO_ACTIVATE_ABUS_WRITE;
 				    end
                 end
@@ -858,11 +906,18 @@ module sdram_bridge (
                     sdram_ras_n <= 0;
                     sdram_addr <= wishbone_sdram_pending_address[21:9];
                     sdram_ba <= wishbone_sdram_pending_address[23:22];
+                    sdram2_ras_n <= 0;
+                    sdram2_addr <= wishbone_sdram_pending_address[21:9];
+                    sdram2_ba <= wishbone_sdram_pending_address[23:22];
                     sdram_wait_counter <= 3'd`TIMING_IDLE_TO_ACTIVATE_WISHBONE_RW;
-                    if (wishbone_sdram_read_pending_sdram)
+                    if (wishbone_sdram_read_pending_sdram) begin
                         sdram_dqm <= 2'b00; //it's a read
-                    else
+                        sdram2_dqm <= 1'b0; //it's a read
+                    end
+                    else begin
                         sdram_dqm <= {~wishbone_sdram_byteenable[0],~wishbone_sdram_byteenable[1]}; //it's a write
+                        sdram2_dqm <= ~wishbone_sdram_byteenable[0]; //it's a write
+                    end
                 end
                 else if ( sdram_autorefresh_counter[9] ) begin
                     // 512 cycles autorefresh
@@ -871,6 +926,9 @@ module sdram_bridge (
                     sdram_ras_n <= 0;
                     sdram_we_n <= 0;
                     sdram_addr[10] <= 1'b1;
+                    sdram2_ras_n <= 0;
+                    sdram2_we_n <= 0;
+                    sdram2_addr[10] <= 1'b1;
                     sdram_autorefresh_counter <= 0;
                     sdram_wait_counter <= 3'd`TIMING_IDLE_TO_PRECHARGE;
                 end
@@ -880,6 +938,9 @@ module sdram_bridge (
                 sdram_ras_n <= 1'b1;
                 sdram_we_n <= 1'b1;
                 sdram_addr[10] <= 0;					
+                sdram2_ras_n <= 1'b1;
+                sdram2_we_n <= 1'b1;
+                sdram2_addr[10] <= 0;					
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
 				if (sdram_wait_counter == 0) begin
 				    //switching to ABUS in case of ABUS request caught us between refresh stages
@@ -890,17 +951,27 @@ module sdram_bridge (
                         sdram_addr <= abus_address_latched[23:11];
                         sdram_ba[0] <= abus_address_latched[24];
                         sdram_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
+                        sdram2_ras_n <= 0;
+                        sdram2_addr <= abus_address_latched[23:11];
+                        sdram2_ba[0] <= abus_address_latched[24];
+                        sdram2_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
                         sdram_wait_counter <= 3'd`TIMING_PRECHARGE_TO_ACTIVATE;
-                        if (abus_write_buf == 2'b11)
+                        if (abus_write_buf == 2'b11) begin
                             sdram_dqm <= 2'b00; //it's a read
-                        else
+                            sdram2_dqm <= 1'b0; //it's a read
+                        end
+                        else begin
                             sdram_dqm <= {abus_write_buf[0],abus_write_buf[1]}; //it's a write
+                            sdram2_dqm <= abus_write_buf[0]; //it's a write
+                        end
                     end
                     else begin
                         //second autorefresh stage - autorefresh command 
                         sdram_mode <= `SDRAM_AUTOREFRESH2;
                         sdram_cas_n <= 0;
                         sdram_ras_n <= 0;
+                        sdram2_cas_n <= 0;
+                        sdram2_ras_n <= 0;
                         sdram_wait_counter <= 3'd`TIMING_PRECHARGE_TO_AUTOREFRESH;
 				    end
 				end
@@ -910,6 +981,8 @@ module sdram_bridge (
                 // here we wait for autorefresh to end and move on to idle state
                 sdram_cas_n <= 1'b1;
                 sdram_ras_n <= 1'b1;
+                sdram2_cas_n <= 1'b1;
+                sdram2_ras_n <= 1'b1;
                 sdram_wait_counter <= sdram_wait_counter - 3'b1;
                 if (sdram_wait_counter == 0)
                     sdram_mode <= `SDRAM_IDLE;
@@ -917,14 +990,17 @@ module sdram_bridge (
 
             `SDRAM_ABUS_ACTIVATE : begin
                 // while waiting for row to be activated, we choose where to switch to - read or write
-                //sdram_addr <= 0;
-                //sdram_ba <= 2'b00;
                 sdram_ras_n <= 1'b1;
+                sdram2_ras_n <= 1'b1;
                 // we keep updating dqm in activate stage, because it could change after abus pending
-                if (abus_write_buf == 2'b11)
+                if (abus_write_buf == 2'b11) begin
                     sdram_dqm <= 2'b00; //it's a read
-                else
+                    sdram2_dqm <= 1'b0; //it's a read
+                end
+                else begin
                     sdram_dqm <= {abus_write_buf[0],abus_write_buf[1]}; //it's a write
+                    sdram2_dqm <= abus_write_buf[0]; //it's a write
+                end
                 sdram_wait_counter <= sdram_wait_counter - 3'b1;
                 if (sdram_wait_counter == 0) begin
                     if ( my_little_transaction_dir == `DIR_WRITE) begin //&& (mapper_write_enable) ) begin
@@ -938,6 +1014,13 @@ module sdram_bridge (
                         sdram_addr <= {3'b001,abus_address_latched[10:1]};
                         sdram_ba[0] <= abus_address_latched[24];
                         sdram_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
+                        sdram2_cas_n <= 0;
+                        sdram2_we_n <= 0;
+                        sdram2_dq_out <= abus_data_in[7:0];
+                        sdram2_dq_oe <= 1'b1;
+                        sdram2_addr <= {3'b001,abus_address_latched[10:1]};
+                        sdram2_ba[0] <= abus_address_latched[24];
+                        sdram2_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
                         sdram_wait_counter <= 3'd`TIMING_ABUS_ACTIVATE_TO_WRITE;
                     end
                     else begin
@@ -947,6 +1030,10 @@ module sdram_bridge (
                         sdram_addr <= {3'b001,abus_address_latched[10:1]};
                         sdram_ba[0] <= abus_address_latched[24];
                         sdram_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
+                        sdram2_cas_n <= 0;
+                        sdram2_addr <= {3'b001,abus_address_latched[10:1]};
+                        sdram2_ba[0] <= abus_address_latched[24];
+                        sdram2_ba[1] <= abus_chipselect_buf[0]; //if CS0 is active, it's 0, else it's 1
                         sdram_wait_counter <= 3'd`TIMING_ABUS_ACTIVATE_TO_READ;
                     end
                 end
@@ -956,9 +1043,8 @@ module sdram_bridge (
                 // move on with reading, bus is a Z after idle
                 // data should be latched at 2nd or 3rd clock (cas=2 or cas=3)
                 counter_count_read <= 0;
-				//sdram_addr <= 0;
-				//sdram_ba <= 2'b00;
 				sdram_cas_n <= 1'b1;
+				sdram2_cas_n <= 1'b1;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
                 if (sdram_wait_counter == 3'b1) begin
                     sdram_datain_latched <= sdram_dq_in;
@@ -974,17 +1060,19 @@ module sdram_bridge (
                     sdram_mode <= `SDRAM_IDLE;
                     sdram_abus_complete <= 0;
                     sdram_dqm <= 2'b11;
+                    sdram2_dqm <= 1'b1;
                 end
             end
 
             `SDRAM_ABUS_WRITE_AND_PRECHARGE : begin
                 // move on with writing
                 counter_count_write <= 0;
-				//sdram_addr <= 0;
-				//sdram_ba <= 2'b00;
 				sdram_cas_n <= 1'b1;
 				sdram_we_n <= 1'b1;
 				sdram_dq_oe <= 0;
+				sdram2_cas_n <= 1'b1;
+				sdram2_we_n <= 1'b1;
+				sdram2_dq_oe <= 0;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
 				if (sdram_wait_counter == 3'd1) begin
                     sdram_abus_complete <= 1'b1;
@@ -993,14 +1081,14 @@ module sdram_bridge (
                     sdram_mode <= `SDRAM_IDLE;
                     sdram_abus_complete <= 0;
                     sdram_dqm <= 2'b11;
+                    sdram2_dqm <= 1'b1;
                 end
             end
 
             `SDRAM_WISHBONE_ACTIVATE : begin
                 // while waiting for row to be activated, we choose where to switch to - read or write
-				//sdram_addr <= 0;
-				//sdram_ba <= 2'b00;
 				sdram_ras_n <= 1'b1;
+				sdram2_ras_n <= 1'b1;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
                 if (sdram_wait_counter == 0) begin
                     if (wishbone_sdram_read_pending_sdram) begin
@@ -1008,6 +1096,9 @@ module sdram_bridge (
                         sdram_ba <= wishbone_sdram_pending_address[23:22];
                         sdram_cas_n <= 0;
                         sdram_addr <= {3'b001,1'b0,wishbone_sdram_pending_address[8:0]};
+                        sdram2_ba <= wishbone_sdram_pending_address[23:22];
+                        sdram2_cas_n <= 0;
+                        sdram2_addr <= {3'b001,1'b0,wishbone_sdram_pending_address[8:0]};
                         sdram_wait_counter <= 3'd`TIMING_WISHBONE_ACTIVATE_TO_READ;
                     end
                     else begin
@@ -1018,6 +1109,12 @@ module sdram_bridge (
                         sdram_dq_out <= wishbone_sdram_pending_data[15:0];
                         sdram_dq_oe <= 1'b1;
                         sdram_addr <= {3'b001,1'b0,wishbone_sdram_pending_address[8:0]};
+                        sdram2_cas_n <= 0;
+                        sdram2_we_n <= 0;
+                        sdram2_ba <= wishbone_sdram_pending_address[23:22];
+                        sdram2_dq_out <= wishbone_sdram_pending_data[7:0];
+                        sdram2_dq_oe <= 1'b1;
+                        sdram2_addr <= {3'b001,1'b0,wishbone_sdram_pending_address[8:0]};
                         sdram_wait_counter <= 3'd`TIMING_WISHBONE_ACTIVATE_TO_WRITE;
                         wishbone_sdram_readdatavalid <= 1'b1; //works as ack for write too, sending early 
                     end
@@ -1027,17 +1124,14 @@ module sdram_bridge (
             `SDRAM_WISHBONE_READ_AND_PRECHARGE : begin
                 // move on with reading, bus is a Z after idle
                 // data should be latched at 2nd/3rd or 3rd/4th clock (cas=2 or cas=3)
-                //sdram_addr <= 0;
-                //sdram_ba <= 2'b00;
                 sdram_cas_n <= 1'b1;
+                sdram2_cas_n <= 1'b1;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
-                /*if (sdram_wait_counter == 4'd1) begin
-                    wishbone_sdram_readdata_latched[15:0] <= sdram_dq_in;
-                end*/
                 if (sdram_wait_counter == 0) begin
                     sdram_mode <= `SDRAM_IDLE;
                     wishbone_sdram_complete <= 1'b1;
                     sdram_dqm <= 2'b11;
+                    sdram2_dqm <= 2'b1;
                     wishbone_sdram_waitrequest <= 0;//single active cycle
                     wishbone_sdram_reset_pending_sdram <= 1'b1;
                     wishbone_sdram_readdatavalid <= 1'b1;
@@ -1045,11 +1139,12 @@ module sdram_bridge (
             end
 
             `SDRAM_WISHBONE_WRITE_AND_PRECHARGE : begin
-                //sdram_addr <= 0;
-                //sdram_ba <= 2'b00;
                 sdram_cas_n <= 1'b1;
                 sdram_we_n <= 1'b1;
                 sdram_dq_oe <= 0;
+                sdram2_cas_n <= 1'b1;
+                sdram2_we_n <= 1'b1;
+                sdram2_dq_oe <= 0;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
 				wishbone_sdram_readdatavalid <= 0; //works as ack for write too, resetting early 
                 if (sdram_wait_counter == 3'd1) begin
@@ -1059,6 +1154,7 @@ module sdram_bridge (
                     sdram_mode <= `SDRAM_IDLE;
                     wishbone_sdram_complete <= 1'b1;
                     sdram_dqm <= 2'b11;
+                    sdram2_dqm <= 1'b1;
                     wishbone_sdram_waitrequest <= 0;//single active cycle
 					wishbone_sdram_reset_pending_sdram <= 0;
                 end
@@ -1076,6 +1172,7 @@ module sdram_bridge (
                     wishbone_sdram_readdata_latched[15:0] <= sdram_dq_in;
 
     assign sdram_clk = ~sdram_clock;
+    assign sdram2_clk = ~sdram_clock;
 	
 	//------------------------------ A-bus transactions counter ---------------------------------------	
 	// counter filters transactions transferred over a-bus and counts them
