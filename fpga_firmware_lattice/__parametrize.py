@@ -3,8 +3,9 @@ import glob
 import os
 import subprocess
 
-for i in range(5):
-    seed = i*100500+1234567
+i=1
+while i<10:
+    seed = i*12345678
     print ("SEED = ",str(seed))
     tmp_folder = 'temp_seed_'+str(seed)
     #delete prev run
@@ -56,4 +57,7 @@ for i in range(5):
         for line in file:
             if 'Max frequency for clock' in line:
                 print(line.strip()) 
+            if 'PASS at 133.33 MHz' in line:
+                i=100500 #skipping remaining cycles
+    i+=1
     

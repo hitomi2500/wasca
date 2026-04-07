@@ -84,7 +84,7 @@ int main() {
 	//sdram test
 	LED = 0xFF;//test start marker
 	volatile uint32_t * pSDRAM = (uint32_t *)0x10000000;
-	pSDRAM[0] = 0x12345678;
+	/*pSDRAM[0] = 0x12345678;
 	for (int i=0;i<24;i++)
 		pSDRAM[1<<i] = 0x11111111*i;
 	pSDRAM[0xffffff] = 0xdeafface;
@@ -98,11 +98,11 @@ int main() {
 	}
 	a = pSDRAM[0xffffff];
 	if (a != 0x0000face)
-		mini_printf("WMEM ERR3\r\n");
+		mini_printf("WMEM ERR3\r\n");*/
 
 
 	//writing
-	/*seed = 0x100500;
+	seed = 0x100500;
 	for (int i =0; i < (0x10000/sizeof(uint32_t)); i++)
 	{
 		p32[i] = seed;
@@ -120,7 +120,7 @@ int main() {
 			errors++;
 		}
 		seed = lsfr_next_random(seed);
-	}*/
+	}
 	LED = 0x00;//test end marker
 	mini_printf("SDRAM test DONE\r\n");
 	
