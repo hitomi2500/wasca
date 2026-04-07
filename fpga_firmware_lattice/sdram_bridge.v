@@ -726,7 +726,6 @@ module sdram_bridge (
                 sdram_cs_n <= 0;
                 sdram_dq_oe <= 0;
                 sdram_ras_n <= 1'b1;
-                sdram_we_n <= 1'b1;
                 sdram_dqm <= 2'b11;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
 				wishbone_sdram_readdatavalid <= 0;
@@ -746,7 +745,6 @@ module sdram_bridge (
                 sdram_cs_n <= 0;
                 sdram_dq_oe <= 0;
                 sdram_ras_n <= 1'b1;
-                sdram_we_n <= 1'b1;
                 sdram_dqm <= 2'b11;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
                 if (sdram_init_counter[10]) begin 
@@ -827,7 +825,7 @@ module sdram_bridge (
                 sdram_cs_n <= 0;
                 sdram_dq_oe <= 0;
                 sdram_ras_n <= 1'b1;
-                sdram_we_n <= 1'b1;
+                //sdram_we_n <= 1'b1;
                 sdram_dqm <= 2'b11;
                 sdram_abus_complete <= 0;
                 wishbone_sdram_complete <= 0;
