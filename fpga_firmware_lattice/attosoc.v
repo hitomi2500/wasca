@@ -54,7 +54,18 @@ module attosoc (
 	output [1:0] sdram_dqm,
 	output sdram_ras_n,
 	output sdram_we_n,
-	output sdram_clk
+	output sdram_clk,
+	//SDRAM port 2 (external on wasca board) master interface
+	output [12:0] sdram2_addr,
+	output [1:0] sdram2_ba,
+	output sdram2_cas_n,
+	output sdram2_cke,
+	output sdram2_cs_n,
+	inout [7:0] sdram2_dq,
+	output [0:0] sdram2_dqm,
+	output sdram2_ras_n,
+	output sdram2_we_n,
+	output sdram2_clk
 );
 
 	reg [5:0] reset_cnt = 0;
@@ -323,7 +334,7 @@ module attosoc (
 	   .abus_interrupt(abus_interrupt),
 	   .abus_direction(abus_direction),
 	   .abus_interrupt_disable_out(abus_interrupt_disable_out),
-	   	//SDRAM port 1 (built into icesugar) master interface
+	   //SDRAM port 1 (built into icesugar) master interface
 	   .sdram_addr(sdram_addr),
 	   .sdram_ba(sdram_ba),
 	   .sdram_cas_n(sdram_cas_n),
@@ -334,6 +345,17 @@ module attosoc (
 	   .sdram_ras_n(sdram_ras_n),
 	   .sdram_we_n(sdram_we_n),
 	   .sdram_clk(sdram_clk),
+	   //SDRAM port 2 (external on wasca board) master interface
+	   .sdram2_addr(sdram2_addr),
+	   .sdram2_ba(sdram2_ba),
+	   .sdram2_cas_n(sdram2_cas_n),
+	   .sdram2_cke(sdram2_cke),
+	   .sdram2_cs_n(sdram2_cs_n),
+	   .sdram2_dq(sdram2_dq),
+	   .sdram2_dqm(sdram2_dqm),
+	   .sdram2_ras_n(sdram2_ras_n),
+	   .sdram2_we_n(sdram2_we_n),
+	   .sdram2_clk(sdram2_clk),
 	   	//Wishbone SDRAM slave interface
 	   .wishbone_sdram_cyc_i(sdram_mem_sel),
 	   .wishbone_sdram_we_i(sdram_mem_sel ? soc_wstrb[0] : 1'b 0),

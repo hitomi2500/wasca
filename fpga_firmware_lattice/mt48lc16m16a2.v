@@ -72,6 +72,7 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
 
     reg       [addr_bits - 1 : 0] Mode_reg;
     reg       [data_bits - 1 : 0] Dq_reg, Dq_dqm;
+    reg       [data_bits - 1 : 0] Dq_dqm_write;
     reg        [col_bits - 1 : 0] Col_temp, Burst_counter;
 
     reg                           Act_b0, Act_b1, Act_b2, Act_b3;   // Bank Activate
@@ -850,11 +851,20 @@ endtask
             // Dqm operation
             if (Dqm[0] == 1'b0) Dq_dqm [ 7 : 0] = Dq [ 7 : 0];
             if (Dqm[1] == 1'b0) Dq_dqm [15 : 8] = Dq [15 : 8];
+            Dq_dqm_write = ~Dqm;
             // Write to memory
-            if (Bank == 2'b00) Bank0 [{Row, Col}] = Dq_dqm [15 : 0];
-            if (Bank == 2'b01) Bank1 [{Row, Col}] = Dq_dqm [15 : 0];
-            if (Bank == 2'b10) Bank2 [{Row, Col}] = Dq_dqm [15 : 0];
-            if (Bank == 2'b11) Bank3 [{Row, Col}] = Dq_dqm [15 : 0];
+            if ((Bank == 2'b00) && (Dq_dqm_write[0])) Bank0 [{Row, Col}][7:0] = Dq_dqm [7 : 0];
+            if ((Bank == 2'b00) && (Dq_dqm_write[1])) Bank0 [{Row, Col}][15:8] = Dq_dqm [15 : 8];
+            if ((Bank == 2'b01) && (Dq_dqm_write[0])) Bank1 [{Row, Col}][7:0] = Dq_dqm [7 : 0];
+            if ((Bank == 2'b01) && (Dq_dqm_write[1])) Bank1 [{Row, Col}][15:8] = Dq_dqm [15 : 8];
+            if ((Bank == 2'b10) && (Dq_dqm_write[0])) Bank2 [{Row, Col}][7:0] = Dq_dqm [7 : 0];
+            if ((Bank == 2'b10) && (Dq_dqm_write[1])) Bank2 [{Row, Col}][15:8] = Dq_dqm [15 : 8];
+            if ((Bank == 2'b11) && (Dq_dqm_write[0])) Bank3 [{Row, Col}][7:0] = Dq_dqm [7 : 0];
+            if ((Bank == 2'b11) && (Dq_dqm_write[1])) Bank3 [{Row, Col}][15:8] = Dq_dqm [15 : 8];
+            //if (Bank == 2'b00) Bank0 [{Row, Col}] = Dq_dqm [15 : 0];
+            //if (Bank == 2'b01) Bank1 [{Row, Col}] = Dq_dqm [15 : 0];
+            //if (Bank == 2'b10) Bank2 [{Row, Col}] = Dq_dqm [15 : 0];
+            //if (Bank == 2'b11) Bank3 [{Row, Col}] = Dq_dqm [15 : 0];
             // Output result
             if (Dqm == 2'b11) begin
                 if (Debug) $display("at time %t WRITE: Bank = %d Row = %d, Col = %d, Data = Hi-Z due to DQM", $time, Bank, Row, Col);

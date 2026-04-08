@@ -43,6 +43,18 @@ module testbench();
 	wire sdram_ras_n;
 	wire sdram_we_n;
 	wire sdram_clk;
+	//SDRAM port 2 (external on wasca board) master interface
+	wire [12:0] sdram2_addr;
+	wire [1:0] sdram2_ba;
+	wire sdram2_cas_n;
+	wire sdram2_cke;
+	wire sdram2_cs_n;
+	wire [7:0] sdram2_dq;
+	wire [7:0] sdram2_dq_dummy;
+	wire [0:0] sdram2_dqm;
+	wire sdram2_ras_n;
+	wire sdram2_we_n;
+	wire sdram2_clk;
 
 	always #375 sdram_clk_i = (sdram_clk_i === 1'b0); //133 Mhz
 	//always #350 sdram_clk_i = (sdram_clk_i === 1'b0); //143 Mhz
@@ -68,6 +80,7 @@ module testbench();
         input [24:1] addr;
         input [15:0] data;
         input [2:0]  chipselect;
+        input [1:0]  dqm;
     
         begin
             // Setup phase
@@ -76,7 +89,7 @@ module testbench();
             abus_data_oe     = 1'b1;
             #1000
             abus_read        = 1'b1;
-            abus_write       = 2'b00;
+            abus_write       = dqm;
             #1000
             abus_chipselect  = chipselect;
             #12000
@@ -116,6 +129,7 @@ module testbench();
         input [15:0] data1;
         input [15:0] data2;
         input [2:0]  chipselect;
+        input [1:0]  dqm;
     
         begin
             // Setup phase
@@ -124,7 +138,7 @@ module testbench();
             abus_data_oe     = 1'b1;
             #1000
             abus_read        = 1'b1;
-            abus_write       = 2'b00;
+            abus_write       = dqm;
             #1000
             abus_chipselect  = chipselect;
             #12000
@@ -187,14 +201,14 @@ module testbench();
 	    #5250
 	    #750
 	    #750*/
-	    /*abus_write_task( .addr({21'h0FFFFF,3'b111}), .data(16'h0004), .chipselect(3'b110));//set mode register
-	    for (i=0; i<1000; i=i+1) begin
+	    abus_write_task( .addr({21'h0FFFFF,3'b111}), .data(16'h0004), .chipselect(3'b110),.dqm(2'b00));//set mode register
+	    for (i=0; i<300; i=i+1) begin
 		      //write CS0
-		      abus_write_burst2_task( .addr(i*2), .data1((i*2)+16'h1234), .data2((i*2+1)+16'h1234), .chipselect(3'b110));
+		      abus_write_burst2_task( .addr(i*2), .data1((i*2)+16'h1234), .data2((i*2+1)+16'h1234), .chipselect(3'b110),.dqm(2'b00));
 		      //read CS0
 		      abus_read_burst2_task( .addr(i*2), .chipselect(3'b110));
 		      //#20000;
-		end*/
+		end
 	end
 
 	attosoc uut (
@@ -226,7 +240,18 @@ module testbench();
 		.sdram_dqm(sdram_dqm),
 		.sdram_ras_n(sdram_ras_n),
 		.sdram_we_n(sdram_we_n),
-		.sdram_clk(sdram_clk)
+		.sdram_clk(sdram_clk),
+		//SDRAM port 2 (external on wasca board) master interface
+		.sdram2_addr(sdram2_addr),
+		.sdram2_ba(sdram2_ba),
+		.sdram2_cas_n(sdram2_cas_n),
+		.sdram2_cke(sdram2_cke),
+		.sdram2_cs_n(sdram2_cs_n),
+		.sdram2_dq(sdram2_dq),
+		.sdram2_dqm(sdram2_dqm),
+		.sdram2_ras_n(sdram2_ras_n),
+		.sdram2_we_n(sdram2_we_n),
+		.sdram2_clk(sdram2_clk)
 	);
 
 	sd_fake sd_emu (
@@ -253,7 +278,7 @@ module testbench();
 	assign (weak1,weak0) sd_cmd = ~0;
 	assign (weak1,weak0) sd_dat = ~0;
 	
-	mt48lc16m16a2 sdram_model(
+	mt48lc16m16a2 sdram_internal(
 	   .Clk(sdram_clk),
 	   .Cs_n(sdram_cs_n),
 	   .Dqm(sdram_dqm),
@@ -265,6 +290,22 @@ module testbench();
 	   .Cke(sdram_cke),
 	   .We_n(sdram_we_n)
 	   ); 
+
+	mt48lc16m16a2 sdram_external(
+	   .Clk(sdram2_clk),
+	   .Cs_n(sdram2_cs_n),
+	   .Dqm({sdram2_dqm,sdram2_dqm}),
+	   .Cas_n(sdram2_cas_n),
+	   .Ras_n(sdram2_ras_n),
+	   .Ba(sdram2_ba),
+	   .Addr(sdram2_addr),      
+	   .Dq({sdram2_dq_dummy,sdram2_dq}),
+	   .Cke(sdram2_cke),
+	   .We_n(sdram2_we_n)
+	   ); 
+
+    //pullups for unused datalines on sdram 2
+    assign (weak1,weak0) sdram2_dq_dummy = ~0;
 	   
 	assign abus_data = (abus_data_oe) ? abus_data_out : {16{1'bZ}};
 
