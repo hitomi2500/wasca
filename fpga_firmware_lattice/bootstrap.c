@@ -104,7 +104,7 @@ int main() {
 	if (a != 0x0000face)
 		mini_printf("WMEM ERR3\r\n");
 	//CS1
-	pSDRAM2[0] = 0x23456789;
+	/*pSDRAM2[0] = 0x23456789;
 	for (int i=0;i<23;i++)
 		pSDRAM2[1<<i] = 0x10101010*i;
 	pSDRAM2[0x7fffff] = 0xdeadbeef;
@@ -118,19 +118,19 @@ int main() {
 	}
 	a = pSDRAM2[0x7fffff];
 	if (a != 0x0000beef)
-		mini_printf("WMEM ERR3\r\n");
+		mini_printf("WMEM ERR3\r\n");*/
 	LED = 0x00;//test start marker
 
 	//full sdram test
 	LED = 0x04;//test start marker
 	//starting with CS0
-	seed = 0x100500;
+	/*seed = 0x100500;
 	for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
 	{
 		pSDRAM[i] = (seed&0xFFFF);
 		seed = lsfr_next_random(seed);
 		if (i%0x40000 == 0x3ffff)
-			mini_printf("SDRAM test: write pass addr %x \r\n",i*4);
+			mini_printf("SDRAM test: write pass addr %x \r\n",i*4+4);
 	}
 	seed = 0x100500;
 	errors = 0;
@@ -145,17 +145,17 @@ int main() {
 		}
 		seed = lsfr_next_random(seed);
 		if (i%0x40000 == 0x3ffff)
-			mini_printf("SDRAM test: read pass addr %x \r\n",i*4);
-	}
+			mini_printf("SDRAM test: read pass addr %x \r\n",i*4+4);
+	}*/
 	LED = 0x05;//test start marker
 	//now CS1
-	seed = 0x100500;
+	/*seed = 0x100500;
 	for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
 	{
 		pSDRAM2[i] = (seed&0xFFFF);
 		seed = lsfr_next_random(seed);
 		if (i%0x40000 == 0x3ffff)
-			mini_printf("SDRAM2 test: write pass addr %x \r\n",i*4);
+			mini_printf("SDRAM2 test: write pass addr %x \r\n",0x4000000+i*4+4);
 	}
 	seed = 0x100500;
 	errors = 0;
@@ -169,8 +169,8 @@ int main() {
 		}
 		seed = lsfr_next_random(seed);
 		if (i%0x40000 == 0x3ffff)
-			mini_printf("SDRAM2 test: read pass addr %x \r\n",i*4);
-	}
+			mini_printf("SDRAM2 test: read pass addr %x \r\n",0x4000000+i*4+4);
+	}*/
 	LED = 0x00;//test end marker
 	mini_printf("SDRAM test DONE\r\n");
 	

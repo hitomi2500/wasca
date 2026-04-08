@@ -329,6 +329,8 @@ module sdram_bridge (
     reg [3:0] wasca_mode;
     reg [3:0] sdram_mode;
     reg [3:0] sdram_mode_negedge;
+	reg abus_chipselect_buf0_negedge;
+	reg wishbone_sdram_pending_address24_negedge;
     
 // synopsys translate_off
     time ABUS_request_time;
@@ -1130,12 +1132,14 @@ module sdram_bridge (
 
 	always @(negedge sdram_clock) sdram_wait_counter_negedge <= sdram_wait_counter;
 	always @(negedge sdram_clock) sdram_mode_negedge <= sdram_mode;
+	always @(negedge sdram_clock) abus_chipselect_buf0_negedge <= abus_chipselect_buf[0];
+	always @(negedge sdram_clock) wishbone_sdram_pending_address24_negedge <= wishbone_sdram_pending_address[24];
     
     //latching sdram data to ABUS on negative clock
     always @(negedge sdram_clock)
         if (sdram_mode_negedge == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
             if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd2)) begin
-                if (~abus_chipselect_buf[0])
+                if (~abus_chipselect_buf0_negedge)
                     sdram_datain_latched <= sdram_dq_in;
                 else
                     sdram_datain_latched[7:0] <= sdram2_dq_in;
@@ -1146,7 +1150,7 @@ module sdram_bridge (
             end
 			//second part for SDRAM2
 			if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd3)) begin
-                if (abus_chipselect_buf[0])
+                if (abus_chipselect_buf0_negedge)
                     sdram_datain_latched[15:8] <= sdram2_dq_in;
             end 
 		end
@@ -1155,13 +1159,13 @@ module sdram_bridge (
     always @(negedge sdram_clock)
         if (sdram_mode_negedge == `SDRAM_WISHBONE_READ_AND_PRECHARGE) begin
             if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd2))
-                if (~wishbone_sdram_pending_address[24])
+                if (~wishbone_sdram_pending_address24_negedge)
                     wishbone_sdram_readdata_latched[15:0] <= sdram_dq_in;
                 else
                     wishbone_sdram_readdata_latched[7:0] <= sdram2_dq_in;
 			//second part for SDRAM2
             if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd3))
-                if (wishbone_sdram_pending_address[24])
+                if (wishbone_sdram_pending_address24_negedge)
                     wishbone_sdram_readdata_latched[15:8] <= sdram2_dq_in;
 		end
 	
