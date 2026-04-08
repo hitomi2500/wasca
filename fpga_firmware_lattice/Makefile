@@ -29,7 +29,7 @@ attosoc.json: top.v pll.v attosoc.v picorv32.v pulsesync.v sdram_bridge.v simple
 	yosys -p "synth_ecp5 -json $@ -top top" top.v pll.v attosoc.v picorv32.v pulsesync.v sdram_bridge.v simpleuart.v sniff_fifo.v workram.v sd/sddma_mm2s.v sd/sddma_rxgears.v sd/sddma_txgears.v sd/sddma_s2mm.v sd/sddma.v sd/sdfifo.v sd/sdskid.v sd/sdio.v sd/sdwb.v sd/sdckgen.v sd/sdcmd.v sd/sdrxframe.v sd/sdtxframe.v sd/sdfrontend.v sd/sdio_top.v
 
 attosoc_out.config: attosoc.json wasca.lpf
-	nextpnr-ecp5 --seed 0 --json attosoc.json --lpf wasca.lpf --textcfg $@ --25k --freq 133 --package CABGA256 --parallel-refine
+	nextpnr-ecp5 -f --seed 0 --json attosoc.json --lpf wasca.lpf --textcfg $@ --25k --freq 133 --package CABGA256 --parallel-refine
 
 attosoc.bit: attosoc_out.config
 	ecppack --svf-rowsize 100000 --svf attosoc.svf $< $@

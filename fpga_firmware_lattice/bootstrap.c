@@ -99,7 +99,6 @@ int main() {
 		a = pSDRAM[1<<i];
 		if (a !=((0x1111*i) & 0xFFFF))
 			mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",1<<i,((0x1111*i) & 0xFFFF),a);
-			mini_printf("WMEM ERR2\r\n");
 	}
 	a = pSDRAM[0xffffff];
 	if (a != 0x0000face)

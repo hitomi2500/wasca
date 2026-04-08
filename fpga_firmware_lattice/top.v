@@ -28,7 +28,18 @@ module top(
 	output wire [1:0] sdram_dqm,
 	output wire sdram_ras_n,
 	output wire sdram_we_n,
-	output wire sdram_clk
+	output wire sdram_clk,
+	//SDRAM port 2 (external on wasca board) master interface
+	output [12:0] sdram2_addr,
+	output [1:0] sdram2_ba,
+	output sdram2_cas_n,
+	output sdram2_cke,
+	output sdram2_cs_n,
+	inout [7:0] sdram2_dq,
+	output [1:0] sdram2_dqm,
+	output sdram2_ras_n,
+	output sdram2_we_n,
+	output sdram2_clk
 );
 
 wire clk_50;
@@ -70,7 +81,18 @@ attosoc soc(
     .sdram_dqm(sdram_dqm),
     .sdram_ras_n(sdram_ras_n),
     .sdram_we_n(sdram_we_n),
-    .sdram_clk(sdram_clk)
+    .sdram_clk(sdram_clk),
+    //SDRAM port 2 (external on wasca board) master interface
+    .sdram2_addr(sdram2_addr),
+    .sdram2_ba(sdram2_ba),
+    .sdram2_cas_n(sdram2_cas_n),
+    .sdram2_cke(sdram2_cke),
+    .sdram2_cs_n(sdram2_cs_n),
+    .sdram2_dq(sdram2_dq),
+    .sdram2_dqm(sdram2_dqm),
+    .sdram2_ras_n(sdram2_ras_n),
+    .sdram2_we_n(sdram2_we_n),
+    .sdram2_clk(sdram2_clk),
 );
 
 assign sd_clk = sd_clk_internal;

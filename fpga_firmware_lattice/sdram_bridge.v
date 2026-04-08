@@ -125,7 +125,7 @@ module sdram_bridge (
 		sdram2_cs_n = 0;
 		sdram2_ras_n = 1'b1;
 		sdram2_we_n = 1'b1;
-	end;
+	end
 	
 	wire [25:0] wishbone_regs_address = wishbone_regs_addr_i;
 	wire [31:0] wishbone_regs_writedata = wishbone_regs_data_i;
@@ -1137,7 +1137,7 @@ module sdram_bridge (
     
     //latching sdram data to ABUS on negative clock
     always @(negedge sdram_clock)
-        if (sdram_mode_negedge == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
+		if (sdram_mode_negedge == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
             if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd2)) begin
                 if (~abus_chipselect_buf0_negedge)
                     sdram_datain_latched <= sdram_dq_in;
