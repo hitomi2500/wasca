@@ -749,8 +749,8 @@ module sdram_bridge (
 
     always @(posedge sdram_clock) begin
         sdram_autorefresh_counter <= sdram_autorefresh_counter + 10'b1;
-        sdram2_dq_out_reg <= {8'b0,sdram2_dq_out_reg[15:8]};
-        sdram2_dqm_reg <= {1'b0,sdram2_dqm_reg[1]};
+        sdram2_dq_out_reg[7:0] <= sdram2_dq_out_reg[15:8];
+        sdram2_dqm_reg[0] <= sdram2_dqm_reg[1];
         case (sdram_mode)
             `SDRAM_INIT0 : begin
             	//first stage init. cke off, dqm high,  others in nop command
