@@ -45,6 +45,7 @@ module top(
 wire clk_50;
 wire clk_133;
 wire sd_clk_internal;
+wire [0:0] sdram2_dqm_lo;
 
 pll_25_133 pll(
     .clk_in_25(clk_25),
@@ -89,7 +90,7 @@ attosoc soc(
     .sdram2_cke(sdram2_cke),
     .sdram2_cs_n(sdram2_cs_n),
     .sdram2_dq(sdram2_dq),
-    .sdram2_dqm(sdram2_dqm),
+    .sdram2_dqm(sdram2_dqm_lo),
     .sdram2_ras_n(sdram2_ras_n),
     .sdram2_we_n(sdram2_we_n),
     .sdram2_clk(sdram2_clk),
@@ -97,5 +98,6 @@ attosoc soc(
 
 assign sd_clk = sd_clk_internal;
 assign abus_buffers_enable = 1'b1;
+assign sdram2_dqm = {sdram2_dqm_l[0],sdram2_dqm_lo[0]};
 
 endmodule

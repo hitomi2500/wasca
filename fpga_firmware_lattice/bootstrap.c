@@ -110,15 +110,15 @@ int main() {
 	pSDRAM2[0x7fffff] = 0xdeadbeef;
 	a = pSDRAM2[0];
 	if (a != 0x0006789)
-		mini_printf("WMEM ERR1\r\n");
+		mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0,0x0006789,a);
 	for (int i=0;i<23;i++) {
 		a = pSDRAM2[1<<i];
 		if (a !=((0x1010*i) & 0xFFFF))
-			mini_printf("WMEM ERR2\r\n");
+			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",1<<i,((0x1010*i) & 0xFFFF),a);
 	}
 	a = pSDRAM2[0x7fffff];
 	if (a != 0x0000beef)
-		mini_printf("WMEM ERR3\r\n");*/
+		mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0x0000beef,a);*/
 	LED = 0x00;//test start marker
 
 	//full sdram test
