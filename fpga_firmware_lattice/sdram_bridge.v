@@ -274,7 +274,6 @@ module sdram_bridge (
     reg sdram_abus_pending; //abus request is detected and should be parsed
     reg sdram_abus_complete; 
     reg [2:0] sdram_wait_counter; 
-    reg [2:0] sdram_wait_counter_negedge; 
     //refresh interval should be no bigger than 7.8us = 906 clock cycles
     //to keep things simple, perfrorm autorefresh at 512 cycles
     reg [15:0] sdram_init_counter; 
@@ -328,9 +327,11 @@ module sdram_bridge (
     reg [2:0] my_little_transaction_dir;
     reg [3:0] wasca_mode;
     reg [3:0] sdram_mode;
-    reg [3:0] sdram_mode_negedge;
-	reg abus_chipselect_buf0_negedge;
-	reg wishbone_sdram_pending_address24_negedge;
+    
+    wire [2:0] sdram_wait_counter_negedge; 
+    wire [3:0] sdram_mode_negedge;
+	wire abus_chipselect_buf0_negedge;
+	wire wishbone_sdram_pending_address24_negedge;
     
 // synopsys translate_off
     time ABUS_request_time;
@@ -340,8 +341,7 @@ module sdram_bridge (
         sdram_abus_pending = 0;
         sdram_abus_complete = 0;
         sdram_wait_counter = 0;
-		sdram_wait_counter_negedge = 0;
-        sdram_init_counter = 0;
+		sdram_init_counter = 0;
         sdram_autorefresh_counter = 0;
         sdram_datain_latched = 0;
     
@@ -388,7 +388,11 @@ module sdram_bridge (
         my_little_transaction_dir = 0;
         wasca_mode = 0;
         sdram_mode = 0;
+        
+        /*sdram_wait_counter_negedge = 0;
 		sdram_mode_negedge = 0;
+		abus_chipselect_buf0_negedge = 0;
+		wishbone_sdram_pending_address24_negedge = 0;*/
     end
 
     assign abus_direction = abus_direction_internal;
@@ -1109,17 +1113,18 @@ module sdram_bridge (
             `SDRAM_WISHBONE_WRITE_AND_PRECHARGE : begin
                 sdram_cas_n <= 1'b1;
                 sdram_we_n <= 1'b1;
-                sdram_dq_oe <= 0;
+				//sdram_dq_oe <= 0;
                 sdram2_cas_n <= 1'b1;
                 sdram2_we_n <= 1'b1;
                 sdram2_dq_oe_pre <= 0;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
 				wishbone_sdram_readdatavalid <= 0; //works as ack for write too, resetting early 
                 if (sdram_wait_counter == 3'd1) begin
-                    wishbone_sdram_reset_pending_sdram <= 1'b1;
+                    wishbone_sdram_reset_pending_sdram <= 1'b1;					
                 end
                 if (sdram_wait_counter == 0) begin
                     sdram_mode <= `SDRAM_IDLE;
+					sdram_dq_oe <= 0;
                     wishbone_sdram_complete <= 1'b1;
                     sdram_dqm <= 2'b00;
                     sdram2_dqm_reg <= 2'b00;
@@ -1130,15 +1135,19 @@ module sdram_bridge (
         endcase
     end
 
-	always @(negedge sdram_clock) sdram_wait_counter_negedge <= sdram_wait_counter;
+	/*always @(negedge sdram_clock) sdram_wait_counter_negedge <= sdram_wait_counter;
 	always @(negedge sdram_clock) sdram_mode_negedge <= sdram_mode;
 	always @(negedge sdram_clock) abus_chipselect_buf0_negedge <= abus_chipselect_buf[0];
-	always @(negedge sdram_clock) wishbone_sdram_pending_address24_negedge <= wishbone_sdram_pending_address[24];
+	always @(negedge sdram_clock) wishbone_sdram_pending_address24_negedge <= wishbone_sdram_pending_address[24];*/
+	assign sdram_wait_counter_negedge = sdram_wait_counter;
+	assign sdram_mode_negedge = sdram_mode;
+	assign abus_chipselect_buf0_negedge = abus_chipselect_buf[0];
+	assign wishbone_sdram_pending_address24_negedge = wishbone_sdram_pending_address[24];
     
     //latching sdram data to ABUS on negative clock
-    always @(negedge sdram_clock)
+    always @(posedge sdram_clock)
 		if (sdram_mode_negedge == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
-            if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd2)) begin
+            if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
                 if (~abus_chipselect_buf0_negedge)
                     sdram_datain_latched <= sdram_dq_in;
                 else
@@ -1149,28 +1158,28 @@ module sdram_bridge (
                 // synopsys translate_on
             end
 			//second part for SDRAM2
-			if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd3)) begin
+			if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin //should be 5?
                 if (abus_chipselect_buf0_negedge)
                     sdram_datain_latched[15:8] <= sdram2_dq_in;
             end 
 		end
     
     //latching sdram data to Wishbone on negative clock
-    always @(negedge sdram_clock)
+    always @(posedge sdram_clock)
         if (sdram_mode_negedge == `SDRAM_WISHBONE_READ_AND_PRECHARGE) begin
-            if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd2))
+            if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd4)) //4 works!
                 if (~wishbone_sdram_pending_address24_negedge)
                     wishbone_sdram_readdata_latched[15:0] <= sdram_dq_in;
                 else
                     wishbone_sdram_readdata_latched[7:0] <= sdram2_dq_in;
 			//second part for SDRAM2
-            if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd3))
+            if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd4)) //should be 5?
                 if (wishbone_sdram_pending_address24_negedge)
-                    wishbone_sdram_readdata_latched[15:8] <= sdram2_dq_in;
+					wishbone_sdram_readdata_latched[15:8] <= sdram2_dq_in;
 		end
 	
-    assign sdram_clk = ~sdram_clock;
-    assign sdram2_clk = ~sdram_clock;
+    assign sdram_clk = sdram_clock;
+    assign sdram2_clk = sdram_clock;
 	
 	//------------------------------ A-bus transactions counter ---------------------------------------	
 	// counter filters transactions transferred over a-bus and counts them

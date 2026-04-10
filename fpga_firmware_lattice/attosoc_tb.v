@@ -43,6 +43,7 @@ module testbench();
 	wire sdram_ras_n;
 	wire sdram_we_n;
 	wire sdram_clk;
+	wire sdram_clk_skew;
 	//SDRAM port 2 (external on wasca board) master interface
 	wire [12:0] sdram2_addr;
 	wire [1:0] sdram2_ba;
@@ -55,6 +56,7 @@ module testbench();
 	wire sdram2_ras_n;
 	wire sdram2_we_n;
 	wire sdram2_clk;
+	wire sdram2_clk_skew;
 
 	always #375 sdram_clk_i = (sdram_clk_i === 1'b0); //133 Mhz
 	//always #350 sdram_clk_i = (sdram_clk_i === 1'b0); //143 Mhz
@@ -278,8 +280,11 @@ module testbench();
 	assign (weak1,weak0) sd_cmd = ~0;
 	assign (weak1,weak0) sd_dat = ~0;
 	
+	assign #120 sdram_clk_skew = sdram_clk;
+	assign #120 sdram2_clk_skew = sdram2_clk;
+	
 	mt48lc16m16a2 sdram_internal(
-	   .Clk(sdram_clk),
+	   .Clk(sdram_clk_skew),
 	   .Cs_n(sdram_cs_n),
 	   .Dqm(sdram_dqm),
 	   .Cas_n(sdram_cas_n),
@@ -292,7 +297,7 @@ module testbench();
 	   ); 
 
 	mt48lc16m16a2 sdram_external(
-	   .Clk(sdram2_clk),
+	   .Clk(sdram2_clk_skew),
 	   .Cs_n(sdram2_cs_n),
 	   .Dqm({sdram2_dqm,sdram2_dqm}),
 	   .Cas_n(sdram2_cas_n),
