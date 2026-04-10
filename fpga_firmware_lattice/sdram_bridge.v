@@ -171,8 +171,16 @@ module sdram_bridge (
 	wire [15:0] sdram_dq_in;
 	wire [7:0] sdram2_dq_in;
 	assign sdram_dq = (sdram_dq_oe) ? sdram_dq_out : {16{1'bZ}};
+	reg [15:0] sdram_dq_in_dummy_pipeline1;
+	reg [15:0] sdram_dq_in_dummy_pipeline2;
+	always @(posedge sdram_clock) sdram_dq_in_dummy_pipeline1 <= sdram_dq;
+	always @(posedge sdram_clock) sdram_dq_in_dummy_pipeline2 <= sdram_dq_in_dummy_pipeline1;
 	assign sdram_dq_in = sdram_dq;
 	assign sdram2_dq = (sdram2_dq_oe || sdram2_dq_oe_pre) ? sdram2_dq_out_reg[7:0] : {8{1'bZ}};
+	reg [7:0] sdram2_dq_in_dummy_pipeline1;
+	reg [7:0] sdram2_dq_in_dummy_pipeline2;
+	always @(posedge sdram_clock) sdram2_dq_in_dummy_pipeline1 <= sdram2_dq;
+	always @(posedge sdram_clock) sdram2_dq_in_dummy_pipeline2 <= sdram2_dq_in_dummy_pipeline1;
 	assign sdram2_dq_in = sdram2_dq;
 	reg [1:0] sdram2_dqm_reg;
 	initial sdram2_dqm_reg = 2'b0;
@@ -332,6 +340,8 @@ module sdram_bridge (
     wire [3:0] sdram_mode_negedge;
 	wire abus_chipselect_buf0_negedge;
 	wire wishbone_sdram_pending_address24_negedge;
+	
+	reg sdram2_delayed_read;
     
 // synopsys translate_off
     time ABUS_request_time;
@@ -393,6 +403,8 @@ module sdram_bridge (
 		sdram_mode_negedge = 0;
 		abus_chipselect_buf0_negedge = 0;
 		wishbone_sdram_pending_address24_negedge = 0;*/
+		
+		sdram2_delayed_read = 0;
     end
 
     assign abus_direction = abus_direction_internal;
@@ -1180,34 +1192,36 @@ module sdram_bridge (
 		end
     
     //latching sdram data to Wishbone on negative clock
-    always @(posedge sdram_clock)
+    always @(posedge sdram_clock) begin
+        sdram2_delayed_read <= 0;
         if (sdram_mode_negedge == `SDRAM_WISHBONE_READ_AND_PRECHARGE) begin
 			//SDRAM1
             if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd4)) //4 works!
                 if (~wishbone_sdram_pending_address24_negedge)
                     wishbone_sdram_readdata_latched[15:0] <= sdram_dq_in;
 			//first part for SDRAM2
-            if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd3)) //
-                if (wishbone_sdram_pending_address24_negedge)
+            if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd4)) //
+                if (wishbone_sdram_pending_address24_negedge) begin
                     wishbone_sdram_readdata_latched[7:0] <= sdram2_dq_in;
-			//second part for SDRAM2
-            if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd4)) //should be 5?
-                if (wishbone_sdram_pending_address24_negedge)
-					wishbone_sdram_readdata_latched[15:8] <= sdram2_dq_in;
+                    sdram2_delayed_read <= 1'b1;
+                end
 		end
-	
+		//second part for SDRAM2
+        if (sdram2_delayed_read) //should be 5?
+            wishbone_sdram_readdata_latched[15:8] <= sdram2_dq_in;
+	end
 
-	DELAYG #(
-		.DEL_VALUE(32)  // ~ 32 quants per 1ns
+	/*DELAYG #(
+		.DEL_VALUE(0)  // ~ 32 quants per 1ns
 	)	
-	dela_line_sdram1(
+	delay_line_sdram2(
     .A(sdram_clock),
     .Z(sdram2_clk)
-	);
+	);*/
 
 
     assign sdram_clk = sdram_clock;
-    //assign sdram2_clk = sdram_clock;
+    assign sdram2_clk = sdram_clock;
 	
 	//------------------------------ A-bus transactions counter ---------------------------------------	
 	// counter filters transactions transferred over a-bus and counts them
