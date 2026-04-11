@@ -124,8 +124,9 @@ int main() {
 	//full sdram test
 	LED = 0x04;//test start marker
 	//starting with CS0
-	/*seed = 0x100500;
-	for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
+	seed = 0x100500;
+	//for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
+	for (int i =0; i < (0x200000/sizeof(uint32_t)); i++)
 	{
 		pSDRAM[i] = (seed&0xFFFF);
 		seed = lsfr_next_random(seed);
@@ -135,7 +136,8 @@ int main() {
 	seed = 0x100500;
 	errors = 0;
 	uint32_t readback;
-	for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
+	//for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
+	for (int i =0; i < (0x200000/sizeof(uint32_t)); i++)
 	{
 		readback = pSDRAM[i];
 		if (readback != (seed&0xFFFF)) {\
@@ -146,11 +148,12 @@ int main() {
 		seed = lsfr_next_random(seed);
 		if (i%0x40000 == 0x3ffff)
 			mini_printf("SDRAM test: read pass addr %x \r\n",i*4+4);
-	}*/
+	}
 	LED = 0x05;//test start marker
 	//now CS1
-	/*seed = 0x100500;
-	for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
+	seed = 0x100500;
+	//for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
+	for (int i =0; i < (0x100000/sizeof(uint32_t)); i++)
 	{
 		pSDRAM2[i] = (seed&0xFFFF);
 		seed = lsfr_next_random(seed);
@@ -159,7 +162,8 @@ int main() {
 	}
 	seed = 0x100500;
 	errors = 0;
-	for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
+	//for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
+	for (int i =0; i < (0x100000/sizeof(uint32_t)); i++)
 	{
 		readback = pSDRAM2[i];
 		if (readback != (seed&0xFFFF)) {\
@@ -170,7 +174,7 @@ int main() {
 		seed = lsfr_next_random(seed);
 		if (i%0x40000 == 0x3ffff)
 			mini_printf("SDRAM2 test: read pass addr %x \r\n",0x4000000+i*4+4);
-	}*/
+	}
 	LED = 0x00;//test end marker
 	mini_printf("SDRAM test DONE\r\n");
 	

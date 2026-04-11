@@ -3,14 +3,21 @@ import glob
 import os
 import subprocess
 
+
+#delete prev run
+i=1
+while i<10:
+    seed = i*12345678
+    tmp_folder = 'temp_seed_'+str(seed)
+    if os.path.isdir(tmp_folder):
+        print ("Deleting ",tmp_folder)
+        shutil.rmtree(tmp_folder)
+    i+=1
 i=1
 while i<10:
     seed = i*12345678
     print ("SEED = ",str(seed))
     tmp_folder = 'temp_seed_'+str(seed)
-    #delete prev run
-    if os.path.isdir(tmp_folder):
-        shutil.rmtree(tmp_folder)
     #create folder and subfolders
     os.makedirs(tmp_folder, exist_ok=True)
     os.makedirs(tmp_folder + '/fatfs', exist_ok=True)

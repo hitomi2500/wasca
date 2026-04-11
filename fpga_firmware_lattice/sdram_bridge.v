@@ -1,5 +1,82 @@
 `include "timescale.v"
 
+module pll_shifted (
+    input  wire clki,      // 133 MHz input
+    output wire clk_0deg,  // 133 MHz, used as feedback / internal reference
+    output wire clk_shift, // 133 MHz, slightly delayed
+    output wire locked
+);
+
+    // These attributes are commonly emitted by ecppll / prjtrellis-generated code.
+    (* FREQUENCY_PIN_CLKI="125" *)
+    (* FREQUENCY_PIN_CLKOS="125" *)
+    (* FREQUENCY_PIN_CLKOP="125" *)
+    (* ICP_CURRENT="12" *)
+    (* LPF_RESISTOR="8" *)
+    (* MFG_ENABLE_FILTEROPAMP="1" *)
+    (* MFG_GMCREF_SEL="2" *)
+     EHXPLLL #(
+        .PLLRST_ENA("DISABLED"),
+        .INTFB_WAKE("DISABLED"),
+        .STDBY_ENABLE("DISABLED"),
+        .DPHASE_SOURCE("DISABLED"),
+
+        .OUTDIVIDER_MUXA("DIVA"),
+        .OUTDIVIDER_MUXB("DIVB"),
+        .OUTDIVIDER_MUXC("DIVC"),
+        .OUTDIVIDER_MUXD("DIVD"),
+
+        // 133 MHz -> VCO 1064 MHz -> 133 MHz outputs
+        .CLKI_DIV(1),
+        .CLKFB_DIV(8),
+
+        // Shifted replica on CLKOP
+        .CLKOP_ENABLE("ENABLED"),
+        .CLKOP_DIV(8),
+        .CLKOP_CPHASE(7),
+        .CLKOP_FPHASE(5),   // one fine delayed step
+
+        // Unshifted feedback clock on CLKOS
+        .CLKOS_ENABLE("ENABLED"),
+        .CLKOS_DIV(8),
+        .CLKOS_CPHASE(7),
+        .CLKOS_FPHASE(0),
+
+        .CLKOS2_ENABLE("DISABLED"),
+        .CLKOS3_ENABLE("DISABLED"),
+
+        // Feed back the unshifted output
+        .FEEDBK_PATH("CLKOS")
+    ) pll_i (
+        .CLKI(clki),
+        .CLKFB(clk_0deg),
+
+        .RST(1'b0),
+        .STDBY(1'b0),
+        .PHASESEL0(1'b0),
+        .PHASESEL1(1'b0),
+        .PHASEDIR(1'b0),
+        .PHASESTEP(1'b1),
+        .PHASELOADREG(1'b1),
+        .PLLWAKESYNC(1'b0),
+        .ENCLKOP(1'b0),
+        .ENCLKOS(1'b0),
+        .ENCLKOS2(1'b0),
+        .ENCLKOS3(1'b0),
+
+        .CLKOP(clk_shift),
+        .CLKOS(clk_0deg),
+        .CLKOS2(),
+        .CLKOS3(),
+        .LOCK(locked),
+
+        .CLKINTFB(),
+        .REFCLK(),
+        .INTLOCK()
+    );
+
+endmodule
+
 `define DIR_NONE 0
 `define DIR_WRITE 1
 `define DIR_READ 2
@@ -159,15 +236,21 @@ module sdram_bridge (
 	
 	reg [15:0] sdram_dq_out;
 	initial sdram_dq_out = 0;
-	reg [15:0] sdram2_dq_out_reg;
+	reg [31:0] sdram2_dq_out_reg;
 	initial sdram2_dq_out_reg = 0;
 	reg sdram_dq_oe;
 	initial sdram_dq_oe = 0;
 	reg sdram2_dq_oe_pre;
+	reg sdram2_dq_oe_pre2;
+	reg sdram2_dq_oe_pre3;
 	reg sdram2_dq_oe;
 	initial sdram2_dq_oe_pre = 0;
+	initial sdram2_dq_oe_pre2 = 0;
+	initial sdram2_dq_oe_pre3 = 0;
 	initial sdram2_dq_oe = 0;
-	always @(posedge sdram_clock) sdram2_dq_oe <= sdram2_dq_oe_pre;
+	always @(posedge sdram_clock) sdram2_dq_oe_pre2 <= sdram2_dq_oe_pre;
+	always @(posedge sdram_clock) sdram2_dq_oe_pre3 <= sdram2_dq_oe_pre2;
+	always @(posedge sdram_clock) sdram2_dq_oe <= sdram2_dq_oe_pre3;
 	wire [15:0] sdram_dq_in;
 	wire [7:0] sdram2_dq_in;
 	assign sdram_dq = (sdram_dq_oe) ? sdram_dq_out : {16{1'bZ}};
@@ -176,7 +259,9 @@ module sdram_bridge (
 	always @(posedge sdram_clock) sdram_dq_in_dummy_pipeline1 <= sdram_dq;
 	always @(posedge sdram_clock) sdram_dq_in_dummy_pipeline2 <= sdram_dq_in_dummy_pipeline1;
 	assign sdram_dq_in = sdram_dq;
-	assign sdram2_dq = (sdram2_dq_oe || sdram2_dq_oe_pre) ? sdram2_dq_out_reg[7:0] : {8{1'bZ}};
+	//reg sdram2_dq_oe_delay1;
+	//always @(posedge sdram_clock) sdram2_dq_oe_delay1 <= (sdram2_dq_oe || sdram2_dq_oe_pre);
+	assign sdram2_dq = (sdram2_dq_oe || sdram2_dq_oe_pre || sdram2_dq_oe_pre2 || sdram2_dq_oe_pre3) ? sdram2_dq_out_reg[7:0] : {8{1'bZ}};
 	reg [7:0] sdram2_dq_in_dummy_pipeline1;
 	reg [7:0] sdram2_dq_in_dummy_pipeline2;
 	always @(posedge sdram_clock) sdram2_dq_in_dummy_pipeline1 <= sdram2_dq;
@@ -766,6 +851,8 @@ module sdram_bridge (
     always @(posedge sdram_clock) begin
         sdram_autorefresh_counter <= sdram_autorefresh_counter + 10'b1;
         sdram2_dq_out_reg[7:0] <= sdram2_dq_out_reg[15:8];
+        sdram2_dq_out_reg[15:8] <= sdram2_dq_out_reg[23:16];
+        sdram2_dq_out_reg[23:16] <= sdram2_dq_out_reg[31:24];
         sdram2_dqm_reg[0] <= sdram2_dqm_reg[1];
         case (sdram_mode)
             `SDRAM_INIT0 : begin
@@ -1010,7 +1097,7 @@ module sdram_bridge (
                         if (~abus_chipselect_buf[1])//only writing if CS1
                             sdram2_we_n <= 0;    
                         sdram2_cas_n <= 0;
-                        sdram2_dq_out_reg[15:0] <= {abus_data_in[7:0],abus_data_in[15:8]};
+                        //sdram2_dq_out_reg[15:0] <= {abus_data_in[7:0],abus_data_in[15:8]};
                         sdram2_dq_oe_pre <= 1'b1;
                         sdram2_addr <= {3'b001,1'b0,abus_address_latched[8:1],1'b0};
                         sdram2_ba <= abus_address_latched[10:9];
@@ -1098,8 +1185,9 @@ module sdram_bridge (
                             sdram2_we_n <= 0;    
                         sdram2_cas_n <= 0;
                         sdram2_ba <= wishbone_sdram_pending_address[9:8];
-                        sdram2_dq_out_reg[15:0] <= wishbone_sdram_pending_data[15:0];
-                        sdram2_dq_oe_pre <= 1'b1;
+                        //sdram2_dq_out_reg[15:0] <= wishbone_sdram_pending_data[15:0];
+						sdram2_dq_out_reg <= 32'ha1b2c3d4; 
+						sdram2_dq_oe_pre <= 1'b1;
                         sdram2_addr <= {3'b001,1'b0,wishbone_sdram_pending_address[7:0],1'b0};
                         sdram_wait_counter <= 3'd`TIMING_WISHBONE_ACTIVATE_TO_WRITE;
                         wishbone_sdram_readdatavalid <= 1'b1; //works as ack for write too, sending early 
@@ -1126,7 +1214,7 @@ module sdram_bridge (
                 sdram_cas_n <= 1'b1;
                 sdram_we_n <= 1'b1;
 				//sdram_dq_oe <= 0;
-                sdram2_cas_n <= 1'b1;
+				sdram2_cas_n <= 1'b1;
                 sdram2_we_n <= 1'b1;
                 sdram2_dq_oe_pre <= 0;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
@@ -1212,13 +1300,19 @@ module sdram_bridge (
 	end
 
 	/*DELAYG #(
-		.DEL_VALUE(0)  // ~ 32 quants per 1ns
+		.DEL_VALUE(30)  // ~ 32 quants per 1ns
 	)	
 	delay_line_sdram2(
     .A(sdram_clock),
     .Z(sdram2_clk)
 	);*/
 
+	/*pll_shifted delay_pll_sdram2(
+		.clki(sdram_clock),
+    	.clk_0deg(),
+    	.clk_shift(sdram2_clk),
+    	.locked()
+	);*/
 
     assign sdram_clk = sdram_clock;
     assign sdram2_clk = sdram_clock;
