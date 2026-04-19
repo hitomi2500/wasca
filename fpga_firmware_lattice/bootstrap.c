@@ -104,21 +104,23 @@ int main() {
 	if (a != 0x0000face)
 		mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",0xffffff,0x0000face,a);
 	//CS1
-	pSDRAM2[0] = 0x6789;
-	for (int i=0;i<23;i++)
-		pSDRAM2[1<<i] = 0x1020*i;
-	pSDRAM2[0x7fffff] = 0xdeadbeef;
-	a = pSDRAM2[0];
-	if (a != 0x6789)
-		mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0,0x6789,a);
-	for (int i=0;i<23;i++) {
-		a = pSDRAM2[1<<i];
-		if (a !=((0x1020*i) & 0xFFFF))
-			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",1<<i,((0x1020*i) & 0xFFFF),a);
+	while(1) {
+		pSDRAM2[0] = 0x6789;
+		for (int i=0;i<23;i++)
+			pSDRAM2[1<<i] = 0x1020*i;
+		pSDRAM2[0x7fffff] = 0xdeadbeef;
+		a = pSDRAM2[0];
+		if (a != 0x6789)
+			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0,0x6789,a);
+		for (int i=0;i<23;i++) {
+			a = pSDRAM2[1<<i];
+			if (a !=((0x1020*i) & 0xFFFF))
+				mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",1<<i,((0x1020*i) & 0xFFFF),a);
+		}
+		a = pSDRAM2[0x7fffff];
+		if (a != 0xbeef)
+			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0xbeef,a);
 	}
-	a = pSDRAM2[0x7fffff];
-	if (a != 0xbeef)
-		mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0xbeef,a);
 	LED = 0x00;//test start marker
 
 	//full sdram test
@@ -163,6 +165,7 @@ int main() {
 	seed = 0x100500;
 	errors = 0;
 	//for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
+	//while(1)
 	for (int i =0; i < (0x100000/sizeof(uint32_t)); i++)
 	{
 		readback = pSDRAM2[i];

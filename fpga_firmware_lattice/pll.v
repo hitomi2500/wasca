@@ -12,9 +12,9 @@ module pll_25_133(input clk_in_25, output clk_out_50, output clk_out_133);
         .OUTDIVIDER_MUXA("DIVA"),
         .CLKOP_ENABLE("ENABLED"),
         .CLKOS_ENABLE("ENABLED"),
-        .CLKOP_DIV(6),//12//6
-        .CLKOS_DIV(15),//20//16
-        .CLKFB_DIV(15),//8//16
+        .CLKOP_DIV(6),//6//6
+        .CLKOS_DIV(15),//15//16
+        .CLKFB_DIV(15),//15//16
         .CLKI_DIV(3),
         .FEEDBK_PATH("CLKOP")
     ) pll_i (
@@ -34,12 +34,14 @@ module pll_25_133(input clk_in_25, output clk_out_50, output clk_out_133);
 endmodule
 
 /*module pll_25_133 (
-    input  wire clki,    // example: 100 MHz
-    output wire clko
+    input  wire clk_in_25,    // example: 100 MHz
+    output wire clk_out_50,
+    output wire clk_out_133
 );
 
     wire clkfb;
-    wire clk_mmcm;
+    wire clk_mmcm_133;
+    wire clk_mmcm_50;
 
     MMCME2_BASE #(
         .BANDWIDTH("OPTIMIZED"),
@@ -53,22 +55,29 @@ endmodule
         // Nearest 1/8-step options:
         //   5.375 -> 800/5.375 = 148.837 MHz
         //   5.250 -> 800/5.250 = 152.381 MHz
-        .CLKOUT0_DIVIDE_F(6),
+        .CLKOUT0_DIVIDE_F(16),
+        .CLKOUT1_DIVIDE(6),
 
         .CLKOUT0_PHASE(0.0),
         .CLKOUT0_DUTY_CYCLE(0.5)
     ) mmcm_i (
-        .CLKIN1   (clki),
+        .CLKIN1   (clk_in_25),
         .RST      (0),
         .CLKFBIN  (clkfb),
         .CLKFBOUT (clkfb),
-        .CLKOUT0  (clk_mmcm),
+        .CLKOUT0  (clk_mmcm_50),
+        .CLKOUT1  (clk_mmcm_133),
         .LOCKED   ()
     );
 
-    BUFG bufg_clk_out (
-        .I(clk_mmcm),
-        .O(clko)
+    BUFG bufg_clk_out133 (
+        .I(clk_mmcm_133),
+        .O(clk_out_133)
+    );
+
+    BUFG bufg_clk_out50 (
+        .I(clk_mmcm_50),
+        .O(clk_out_50)
     );
 
 endmodule*/

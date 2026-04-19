@@ -1,4 +1,4 @@
-@set YOSYSHQ_ROOT=E:\Saturn\Wasca\oss-cad-suite\
+@set YOSYSHQ_ROOT=D:\Saturn\Wasca\oss-cad-suite\
 
 @set SSL_CERT_FILE=%YOSYSHQ_ROOT%etc\cacert.pem
 

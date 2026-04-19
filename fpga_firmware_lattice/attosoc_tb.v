@@ -3,9 +3,10 @@
 
 module testbench();
 
-	reg sdram_clk_i;
-	reg mcu_clk_i;
-	reg sd_clk_i;
+	//reg sdram_clk_i;
+	//reg mcu_clk_i;
+	//reg sd_clk_i;
+	reg clk_25 = 0;
 	reg uart_rx = 0;
 
     wire [2:0] led;
@@ -58,17 +59,18 @@ module testbench();
 	wire sdram2_clk;
 	wire sdram2_clk_skew;
 
-	always #375 sdram_clk_i = (sdram_clk_i === 1'b0); //133 Mhz
+	//always #375 sdram_clk_i = (sdram_clk_i === 1'b0); //133 Mhz
 	//always #350 sdram_clk_i = (sdram_clk_i === 1'b0); //143 Mhz
-	always #1000 mcu_clk_i = (mcu_clk_i === 1'b0);//50 Mhz
-	always #2000 sd_clk_i = (sd_clk_i === 1'b0);//25 Mhz
+	//always #1000 mcu_clk_i = (mcu_clk_i === 1'b0);//50 Mhz
+	//always #2000 sd_clk_i = (sd_clk_i === 1'b0);//25 Mhz
+	always #2000 clk_25 = (clk_25 === 1'b0);//25 Mhz
 
 	initial begin
 		$dumpfile("testbench.vcd");
 		$dumpvars(0, testbench);
 
 		repeat (400) begin
-			repeat (50000) @(posedge mcu_clk_i);
+			repeat (25000) @(posedge clk_25);
 			$display("+50000 cycles");
 		end
 		$finish;
@@ -213,11 +215,12 @@ module testbench();
 		end
 	end
 
-	attosoc uut (
-		.sdram_clk_i      (sdram_clk_i      ),
-		.mcu_clk_i      (mcu_clk_i      ),
+	top uut (
+		//.sdram_clk_i      (sdram_clk_i      ),
+		//.mcu_clk_i      (mcu_clk_i      ),
+		.clk_25(clk_25),
 		.led      (led      ),
-		.sd_clk_i     (sd_clk_i),
+		//.sd_clk_i     (sd_clk_i),
 		.sd_cmd      (sd_cmd      ),
 		.sd_dat      (sd_dat      ),
 		.sd_clk      (sd_clk      ),

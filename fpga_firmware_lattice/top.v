@@ -30,16 +30,16 @@ module top(
 	output wire sdram_we_n,
 	output wire sdram_clk,
 	//SDRAM port 2 (external on wasca board) master interface
-	output [12:0] sdram2_addr,
-	output [1:0] sdram2_ba,
-	output sdram2_cas_n,
-	output sdram2_cke,
-	output sdram2_cs_n,
-	inout [7:0] sdram2_dq,
-	output [1:0] sdram2_dqm,
-	output sdram2_ras_n,
-	output sdram2_we_n,
-	output sdram2_clk
+	output wire [12:0] sdram2_addr,
+	output wire [1:0] sdram2_ba,
+	output wire sdram2_cas_n,
+	output wire sdram2_cke,
+	output wire sdram2_cs_n,
+	inout wire [7:0] sdram2_dq,
+	output wire [1:0] sdram2_dqm,
+	output wire sdram2_ras_n,
+	output wire sdram2_we_n,
+	output wire sdram2_clk
 );
 
 wire clk_50;
@@ -93,11 +93,11 @@ attosoc soc(
     .sdram2_dqm(sdram2_dqm_lo),
     .sdram2_ras_n(sdram2_ras_n),
     .sdram2_we_n(sdram2_we_n),
-    .sdram2_clk(sdram2_clk),
+    .sdram2_clk(sdram2_clk)
 );
 
 assign sd_clk = sd_clk_internal;
 assign abus_buffers_enable = 1'b1;
-assign sdram2_dqm = {sdram2_dqm_l[0],sdram2_dqm_lo[0]};
+assign sdram2_dqm = {sdram2_dqm_lo[0],sdram2_dqm_lo[0]};
 
 endmodule

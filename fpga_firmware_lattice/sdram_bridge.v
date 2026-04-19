@@ -26,20 +26,23 @@ module pll_shifted (
         .OUTDIVIDER_MUXC("DIVC"),
         .OUTDIVIDER_MUXD("DIVD"),
 
-        // 133 MHz -> VCO 1064 MHz -> 133 MHz outputs
         .CLKI_DIV(1),
-        .CLKFB_DIV(8),
+        .CLKFB_DIV(4),
 
         // Shifted replica on CLKOP
         .CLKOP_ENABLE("ENABLED"),
-        .CLKOP_DIV(8),
+        .CLKOP_DIV(16),
         .CLKOP_CPHASE(7),
-        .CLKOP_FPHASE(5),   // one fine delayed step
+        .CLKOP_FPHASE(0),
+		// 0 0 +616ps
+		// 1 0 +1600ps
+		// 3 0 +2000ps
+		// 7 0 +4700ps
 
         // Unshifted feedback clock on CLKOS
         .CLKOS_ENABLE("ENABLED"),
-        .CLKOS_DIV(8),
-        .CLKOS_CPHASE(7),
+        .CLKOS_DIV(4),
+        .CLKOS_CPHASE(3),
         .CLKOS_FPHASE(0),
 
         .CLKOS2_ENABLE("DISABLED"),
@@ -1097,7 +1100,7 @@ module sdram_bridge (
                         if (~abus_chipselect_buf[1])//only writing if CS1
                             sdram2_we_n <= 0;    
                         sdram2_cas_n <= 0;
-                        //sdram2_dq_out_reg[15:0] <= {abus_data_in[7:0],abus_data_in[15:8]};
+                        sdram2_dq_out_reg[15:0] <= {abus_data_in[7:0],abus_data_in[15:8]};
                         sdram2_dq_oe_pre <= 1'b1;
                         sdram2_addr <= {3'b001,1'b0,abus_address_latched[8:1],1'b0};
                         sdram2_ba <= abus_address_latched[10:9];
@@ -1185,8 +1188,7 @@ module sdram_bridge (
                             sdram2_we_n <= 0;    
                         sdram2_cas_n <= 0;
                         sdram2_ba <= wishbone_sdram_pending_address[9:8];
-                        //sdram2_dq_out_reg[15:0] <= wishbone_sdram_pending_data[15:0];
-						sdram2_dq_out_reg <= 32'ha1b2c3d4; 
+                        sdram2_dq_out_reg[15:0] <= wishbone_sdram_pending_data[15:0];
 						sdram2_dq_oe_pre <= 1'b1;
                         sdram2_addr <= {3'b001,1'b0,wishbone_sdram_pending_address[7:0],1'b0};
                         sdram_wait_counter <= 3'd`TIMING_WISHBONE_ACTIVATE_TO_WRITE;
@@ -1288,7 +1290,7 @@ module sdram_bridge (
                 if (~wishbone_sdram_pending_address24_negedge)
                     wishbone_sdram_readdata_latched[15:0] <= sdram_dq_in;
 			//first part for SDRAM2
-            if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd4)) //
+            if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd3)) //
                 if (wishbone_sdram_pending_address24_negedge) begin
                     wishbone_sdram_readdata_latched[7:0] <= sdram2_dq_in;
                     sdram2_delayed_read <= 1'b1;
@@ -1307,15 +1309,15 @@ module sdram_bridge (
     .Z(sdram2_clk)
 	);*/
 
-	/*pll_shifted delay_pll_sdram2(
+	pll_shifted delay_pll_sdram2(
 		.clki(sdram_clock),
     	.clk_0deg(),
     	.clk_shift(sdram2_clk),
     	.locked()
-	);*/
+	);
 
     assign sdram_clk = sdram_clock;
-    assign sdram2_clk = sdram_clock;
+    //assign sdram2_clk = sdram_clock;
 	
 	//------------------------------ A-bus transactions counter ---------------------------------------	
 	// counter filters transactions transferred over a-bus and counts them
