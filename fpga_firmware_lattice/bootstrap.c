@@ -104,7 +104,6 @@ int main() {
 	if (a != 0x0000face)
 		mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",0xffffff,0x0000face,a);
 	//CS1
-	while(1) {
 		pSDRAM2[0] = 0x6789;
 		for (int i=0;i<23;i++)
 			pSDRAM2[1<<i] = 0x1020*i;
@@ -120,15 +119,14 @@ int main() {
 		a = pSDRAM2[0x7fffff];
 		if (a != 0xbeef)
 			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0xbeef,a);
-	}
 	LED = 0x00;//test start marker
 
 	//full sdram test
 	LED = 0x04;//test start marker
 	//starting with CS0
 	seed = 0x100500;
-	//for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
-	for (int i =0; i < (0x200000/sizeof(uint32_t)); i++)
+	for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
+	//for (int i =0; i < (0x200000/sizeof(uint32_t)); i++)
 	{
 		pSDRAM[i] = (seed&0xFFFF);
 		seed = lsfr_next_random(seed);
@@ -138,8 +136,8 @@ int main() {
 	seed = 0x100500;
 	errors = 0;
 	uint32_t readback;
-	//for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
-	for (int i =0; i < (0x200000/sizeof(uint32_t)); i++)
+	for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
+	//for (int i =0; i < (0x200000/sizeof(uint32_t)); i++)
 	{
 		readback = pSDRAM[i];
 		if (readback != (seed&0xFFFF)) {\
@@ -154,8 +152,8 @@ int main() {
 	LED = 0x05;//test start marker
 	//now CS1
 	seed = 0x100500;
-	//for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
-	for (int i =0; i < (0x100000/sizeof(uint32_t)); i++)
+	for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
+	//for (int i =0; i < (0x100000/sizeof(uint32_t)); i++)
 	{
 		pSDRAM2[i] = (seed&0xFFFF);
 		seed = lsfr_next_random(seed);
@@ -164,9 +162,8 @@ int main() {
 	}
 	seed = 0x100500;
 	errors = 0;
-	//for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
-	//while(1)
-	for (int i =0; i < (0x100000/sizeof(uint32_t)); i++)
+	for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
+	//for (int i =0; i < (0x100000/sizeof(uint32_t)); i++)
 	{
 		readback = pSDRAM2[i];
 		if (readback != (seed&0xFFFF)) {\
