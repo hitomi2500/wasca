@@ -5,6 +5,10 @@
 #include "fatfs/diskio.h"
 #include "mini-printf.h"
 
+const unsigned char fallback_rom[] = {
+    #embed "wasca-fallback.bin"
+};
+
 #define LED (*(volatile uint32_t*)0x02000000)
 
 #define reg_uart_clkdiv (*(volatile uint32_t*)0x02000004)
@@ -49,6 +53,9 @@ int main() {
 	uint32_t seed = 0x100500;
 	uint32_t errors = 0;
 
+	volatile uint32_t * pSDRAM = (uint32_t *)0x10000000;
+	volatile uint32_t * pSDRAM2 = (uint32_t *)0x14000000;
+
 	//mini_printf("Bootstrap start\r\n");
 	mini_printf("Boot");
 
@@ -60,6 +67,16 @@ int main() {
 	pWishboneRegs[0xb] = 0xFFFFFFFF;//write mapper for CS0
 	pWishboneRegs[0xc] = 0x00000000;//write mapper for CS1 + CS2
 	LED = 0x00;//test start marker
+
+	//write fallback rom into CS0
+	uint32_t * fallback_rom_32 = (uint32_t *)fallback_rom;
+	for (int i=0;i<((sizeof(fallback_rom)/4)+1);i++) {
+		pSDRAM[i] = fallback_rom_32[i];
+	}
+
+	//skip sdram test to prevent destroying fallback rom
+	mini_printf("\r\nFallback ROM : %d bytes\r\n",sizeof(fallback_rom));
+	/*while(1);
 
 	volatile uint32_t a;
 
@@ -82,8 +99,6 @@ int main() {
 	mini_printf("SDRAM test...\r\n");
 	//mini_printf("S\r\n");
 	//sdram test
-	volatile uint32_t * pSDRAM = (uint32_t *)0x10000000;
-	volatile uint32_t * pSDRAM2 = (uint32_t *)0x14000000;
 	
 	//quicktest first
 	LED = 0x03;//test start marker
@@ -176,7 +191,7 @@ int main() {
 			mini_printf("SDRAM2 test: read pass addr %x \r\n",0x4000000+i*4+4);
 	}
 	LED = 0x00;//test end marker
-	mini_printf("SDRAM test DONE\r\n");
+	mini_printf("SDRAM test DONE\r\n");*/
 	
 	mini_printf("%s %s\r\n",__DATE__,__TIME__);
 
