@@ -6,7 +6,7 @@
 #include "mini-printf.h"
 
 const unsigned char fallback_rom[] = {
-    #embed "wasca-fallback.bin"
+    #embed "wasca-fallback.ss"
 };
 
 #define LED (*(volatile uint32_t*)0x02000000)
@@ -69,12 +69,12 @@ int main() {
 	LED = 0x00;//test start marker
 
 	//write fallback rom into CS0
-	uint32_t * fallback_rom_32 = (uint32_t *)fallback_rom;
-	for (int i=0;i<((sizeof(fallback_rom)/4)+1);i++) {
-		pSDRAM[i] = fallback_rom_32[i];
+	LED = 0x02;
+	uint16_t * fallback_rom_16 = (uint16_t *)fallback_rom;
+	for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
+		pSDRAM[i] = fallback_rom_16[i];
 	}
-
-	//skip sdram test to prevent destroying fallback rom
+	LED = 0x00;
 	mini_printf("\r\nFallback ROM : %d bytes\r\n",sizeof(fallback_rom));
 	/*while(1);
 

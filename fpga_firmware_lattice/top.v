@@ -13,7 +13,7 @@ module top(
 	inout wire [15:0] abus_data,
 	input wire [2:0] abus_chipselect,
 	input wire abus_read,
-	input wire abus_write,
+	input wire [1:0] abus_write,
 	output wire abus_interrupt,
 	output wire abus_direction,
 	output wire abus_interrupt_disable_out,
@@ -97,7 +97,7 @@ attosoc soc(
 );
 
 assign sd_clk = sd_clk_internal;
-assign abus_buffers_enable = 1'b1;
+assign abus_buffers_enable = 0;//1'b1;
 assign sdram2_dqm = {sdram2_dqm_lo[0],sdram2_dqm_lo[0]};
 
 endmodule

@@ -52,7 +52,7 @@ while i<10:
     for file_path in glob.glob(os.path.join('./', 'makehex.py')):
         shutil.copy(file_path, tmp_folder)
     #copy binaries
-    for file_path in glob.glob(os.path.join('./', 'wasca-fallback.bin')):
+    for file_path in glob.glob(os.path.join('./', 'wasca-fallback.ss')):
         shutil.copy(file_path, tmp_folder)
     #replace seed
     with open(tmp_folder+'/Makefile', 'r') as mf:

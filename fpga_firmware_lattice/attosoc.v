@@ -157,10 +157,14 @@ module attosoc (
 	always @(posedge clk) begin
 		led_ready <= 1'b0;
 		if (soc_valid && soc_wstrb[0] && (soc_addr[28:24] == 5'h02) && soc_addr[3:2] == 2'b0) begin
-	    	led <= soc_wdata[5:0];
+	    	//led[4:0] <= soc_wdata[4:0];
 			led_ready <= 1'b1;
 		end
 	end
+	assign led[1:0] = 0;
+	assign led[2] = ~abus_chipselect[0];
+	assign led[4:3] = 0;
+	assign led[5] = ~abus_chipselect[1];
 
 	//wishbone ready
 	assign soc_ready = (soc_valid && led_ready) ||

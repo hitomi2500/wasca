@@ -701,6 +701,7 @@ module sdram_bridge (
 	
 	assign abus_data_in = abus_data_buf;
 	assign abus_data = abus_direction_internal ? abus_data_out : {16{1'bZ}};
+	//assign abus_data = abus_direction_internal ? 16'h9abc : {16{1'bZ}};
 
 	//wishbone regs read interface
 	always @(posedge clock) wishbone_regs_readdatavalid_p1 <= wishbone_regs_read;
@@ -1252,7 +1253,7 @@ module sdram_bridge (
 			//SDRAM1
             if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
                 if (~abus_chipselect_buf0_negedge) begin
-                    sdram_datain_latched <= sdram_dq_in;
+                    sdram_datain_latched <= 16'h1234;//sdram_dq_in;
 	                // synopsys translate_off
 	                if ($time - ABUS_request_time > 92)
     	                $display ("ABUS ERROR R1 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
@@ -1262,7 +1263,7 @@ module sdram_bridge (
 			//first part for SDRAM2
             if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
                 if (abus_chipselect_buf0_negedge) begin
-                    sdram_datain_latched[7:0] <= sdram2_dq_in;
+                    sdram_datain_latched[7:0] <= 8'h78;//sdram2_dq_in;
 	                // synopsys translate_off
     	            if ($time - ABUS_request_time > 92)
         	            $display ("ABUS ERROR R2 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
@@ -1272,7 +1273,7 @@ module sdram_bridge (
 			//second part for SDRAM2
 			if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
                 if (abus_chipselect_buf0_negedge) begin
-                    sdram_datain_latched[15:8] <= sdram2_dq_in;
+                    sdram_datain_latched[15:8] <= 8'h56;//sdram2_dq_in;
 	                // synopsys translate_off
     	            if ($time - ABUS_request_time > 92)
         	            $display ("ABUS ERROR R3 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
