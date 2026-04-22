@@ -427,6 +427,7 @@ module sdram_bridge (
     wire [2:0] sdram_wait_counter_negedge; 
     wire [3:0] sdram_mode_negedge;
 	wire abus_chipselect_buf0_negedge;
+	wire abus_chipselect_buf1_negedge;
 	wire wishbone_sdram_pending_address24_negedge;
 	
 	reg sdram2_delayed_read;
@@ -1245,6 +1246,7 @@ module sdram_bridge (
 	assign sdram_wait_counter_negedge = sdram_wait_counter;
 	assign sdram_mode_negedge = sdram_mode;
 	assign abus_chipselect_buf0_negedge = abus_chipselect_buf[0];
+	assign abus_chipselect_buf1_negedge = abus_chipselect_buf[1];
 	assign wishbone_sdram_pending_address24_negedge = wishbone_sdram_pending_address[24];
     
     //latching sdram data to ABUS on negative clock
@@ -1262,7 +1264,7 @@ module sdram_bridge (
             end
 			//first part for SDRAM2
             if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
-                if (abus_chipselect_buf0_negedge) begin
+                if (~abus_chipselect_buf1_negedge) begin
                     sdram_datain_latched[7:0] <= 8'h78;//sdram2_dq_in;
 	                // synopsys translate_off
     	            if ($time - ABUS_request_time > 92)
@@ -1272,7 +1274,7 @@ module sdram_bridge (
             end
 			//second part for SDRAM2
 			if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
-                if (abus_chipselect_buf0_negedge) begin
+                if (~abus_chipselect_buf1_negedge) begin
                     sdram_datain_latched[15:8] <= 8'h56;//sdram2_dq_in;
 	                // synopsys translate_off
     	            if ($time - ABUS_request_time > 92)
