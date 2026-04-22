@@ -375,6 +375,7 @@ module sdram_bridge (
     reg [15:0] sdram_init_counter; 
     reg [9:0] sdram_autorefresh_counter; 
     reg [15:0] sdram_datain_latched; 
+    reg [15:0] sdram2_datain_latched; 
 
     reg wishbone_sdram_complete;
     reg wishbone_sdram_reset_pending_sdram;
@@ -443,6 +444,7 @@ module sdram_bridge (
 		sdram_init_counter = 0;
         sdram_autorefresh_counter = 0;
         sdram_datain_latched = 0;
+        sdram2_datain_latched = 0;
     
         wishbone_sdram_complete = 0;
         wishbone_sdram_reset_pending_sdram = 0;
@@ -639,7 +641,7 @@ module sdram_bridge (
 	   else if (abus_chipselect_latched == 2'b1) begin //CS1 access
 	       if (abus_cs1_regs_access)//saturn cart id register
 	           case (wasca_mode)
-	               `MODE_INIT: abus_data_out <= {sdram_datain_latched[7:0],sdram_datain_latched[15:8]};
+	               `MODE_INIT: abus_data_out <= {sdram2_datain_latched[7:0],sdram2_datain_latched[15:8]};
 	               `MODE_POWER_MEMORY_05M : abus_data_out <= 16'hFF21;
 	               `MODE_POWER_MEMORY_1M : abus_data_out <= 16'hFF22;
 	               `MODE_POWER_MEMORY_2M : abus_data_out <= 16'hFF23;
@@ -651,7 +653,7 @@ module sdram_bridge (
 	               `MODE_BOOT : abus_data_out <= 16'hFFFF;
 				endcase
 			else
-				abus_data_out <= {sdram_datain_latched[7:0],sdram_datain_latched[15:8]};
+				abus_data_out <= {sdram2_datain_latched[7:0],sdram2_datain_latched[15:8]};
 			end
 		else //CS2 or dummy access
 		    ;//abus_data_out <= 16'hEEEE;
@@ -702,7 +704,6 @@ module sdram_bridge (
 	
 	assign abus_data_in = abus_data_buf;
 	assign abus_data = abus_direction_internal ? abus_data_out : {16{1'bZ}};
-	//assign abus_data = abus_direction_internal ? 16'h9abc : {16{1'bZ}};
 
 	//wishbone regs read interface
 	always @(posedge clock) wishbone_regs_readdatavalid_p1 <= wishbone_regs_read;
@@ -1255,7 +1256,7 @@ module sdram_bridge (
 			//SDRAM1
             if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
                 if (~abus_chipselect_buf0_negedge) begin
-                    sdram_datain_latched <= 16'h1234;//sdram_dq_in;
+                    sdram_datain_latched <= sdram_dq_in;
 	                // synopsys translate_off
 	                if ($time - ABUS_request_time > 92)
     	                $display ("ABUS ERROR R1 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
@@ -1265,7 +1266,7 @@ module sdram_bridge (
 			//first part for SDRAM2
             if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
                 if (~abus_chipselect_buf1_negedge) begin
-                    sdram_datain_latched[7:0] <= 8'h78;//sdram2_dq_in;
+                    sdram2_datain_latched[7:0] <= sdram2_dq_in;
 	                // synopsys translate_off
     	            if ($time - ABUS_request_time > 92)
         	            $display ("ABUS ERROR R2 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
@@ -1275,7 +1276,7 @@ module sdram_bridge (
 			//second part for SDRAM2
 			if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
                 if (~abus_chipselect_buf1_negedge) begin
-                    sdram_datain_latched[15:8] <= 8'h56;//sdram2_dq_in;
+                    sdram2_datain_latched[15:8] <= sdram2_dq_in;
 	                // synopsys translate_off
     	            if ($time - ABUS_request_time > 92)
         	            $display ("ABUS ERROR R3 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
