@@ -206,12 +206,16 @@ module testbench();
 	    #750
 	    #750*/
 	    abus_write_task( .addr({21'h0FFFFF,3'b111}), .data(16'h0004), .chipselect(3'b110),.dqm(2'b00));//set mode register
-	    for (i=0; i<300; i=i+1) begin
+	    for (i=0; i<1024; i=i+1) begin
 		      //write CS0
 		      //abus_write_burst2_task( .addr(i*2), .data1((i*2)+16'h1234), .data2((i*2+1)+16'h1234), .chipselect(3'b110),.dqm(2'b00));
 		      //read CS0
 		      abus_read_burst2_task( .addr(i*2), .chipselect(3'b110));
 		      //#20000;
+		end
+		#100000
+	    for (i=0; i<100; i=i+1) begin
+		      abus_read_burst2_task( .addr(i*2), .chipselect(3'b101));
 		end
 	end
 

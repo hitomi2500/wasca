@@ -207,6 +207,24 @@ module sdram_bridge (
 		sdram2_we_n = 1'b1;
 	end
 	
+    assign sdram_clk = sdram_clock;
+    //assign sdram2_clk = sdram_clock;
+	
+	/*DELAYG #(
+		.DEL_VALUE(30)  // ~ 32 quants per 1ns
+	)	
+	delay_line_sdram2(
+    .A(sdram_clock),
+    .Z(sdram2_clk)
+	);*/
+
+	pll_shifted delay_pll_sdram2(
+		.clki(sdram_clock),
+    	.clk_0deg(),
+    	.clk_shift(sdram2_clk),
+    	.locked()
+	);
+	
 	wire [25:0] wishbone_regs_address = wishbone_regs_addr_i;
 	wire [31:0] wishbone_regs_writedata = wishbone_regs_data_i;
 	reg [31:0] wishbone_regs_readdata;
@@ -1304,24 +1322,6 @@ module sdram_bridge (
         if (sdram2_delayed_read) //should be 5?
             wishbone_sdram_readdata_latched[15:8] <= sdram2_dq_in;
 	end
-
-	/*DELAYG #(
-		.DEL_VALUE(30)  // ~ 32 quants per 1ns
-	)	
-	delay_line_sdram2(
-    .A(sdram_clock),
-    .Z(sdram2_clk)
-	);*/
-
-	pll_shifted delay_pll_sdram2(
-		.clki(sdram_clock),
-    	.clk_0deg(),
-    	.clk_shift(sdram2_clk),
-    	.locked()
-	);
-
-    assign sdram_clk = sdram_clock;
-    //assign sdram2_clk = sdram_clock;
 	
 	//------------------------------ A-bus transactions counter ---------------------------------------	
 	// counter filters transactions transferred over a-bus and counts them

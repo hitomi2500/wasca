@@ -28,7 +28,7 @@
 module attosoc (
 	input wire sdram_clk_i,
 	input wire mcu_clk_i,
-	output reg [5:0] led,
+	output wire [5:0] led,
 	input wire sd_clk_i,
 	inout wire sd_cmd,
 	inout wire [3:0] sd_dat,
