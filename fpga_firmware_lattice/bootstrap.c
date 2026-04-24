@@ -68,40 +68,9 @@ int main() {
 	pWishboneRegs[0xc] = 0x0000FFFF;//write mapper for CS1 + CS2
 	LED = 0x00;//test start marker
 
-	//write fallback rom into CS0
-	LED = 0x02;
-	uint16_t * fallback_rom_16 = (uint16_t *)fallback_rom;
-	for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
-		pSDRAM[i] = fallback_rom_16[i];
-	}
-	LED = 0x00;
-	mini_printf("\r\nFallback ROM : %d bytes\r\n",sizeof(fallback_rom));
-	/*while(1);
-
-	volatile uint32_t a;
-
-	//wishbone regs write test
-	LED = 0x02;//test start marker
-	pWishboneRegs[0] = 0x87654321;//PCNTR
-	pWishboneRegs[1] = 0xdeadbeef;//STATUS
-	pWishboneRegs[4] = 0xfeedbead;//SWREG
-	a = pWishboneRegs[0];
-	if (a != 0x00004321)
-		mini_printf("WREG ERR1\r\n");
-	a = pWishboneRegs[1];
-	if (a != 0x0000beef)
-		mini_printf("WREG ERR2\r\n");
-	a = pWishboneRegs[4];
-	if (a != 0x0000bead)
-		mini_printf("WREG ERR3\r\n");
-	LED = 0x00;//test end marker
-
-	mini_printf("SDRAM test...\r\n");
-	//mini_printf("S\r\n");
-	//sdram test
-	
-	//quicktest first
+	//quick SDRAM test
 	LED = 0x03;//test start marker
+	volatile uint32_t a;
 	//CS0
 	pSDRAM[0] = 0x12345678;
 	for (int i=0;i<24;i++)
@@ -135,6 +104,41 @@ int main() {
 		if (a != 0xbeef)
 			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0xbeef,a);
 	LED = 0x00;//test start marker
+
+	//write fallback rom into CS0
+	LED = 0x02;
+	uint16_t * fallback_rom_16 = (uint16_t *)fallback_rom;
+	for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
+		pSDRAM[i] = fallback_rom_16[i];
+	}
+	LED = 0x00;
+	LED = 0x03;
+	for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
+		pSDRAM2[i] = fallback_rom_16[i];
+	}
+	LED = 0x00;
+	mini_printf("\r\nFallback ROM : %d bytes\r\n",sizeof(fallback_rom));
+	/*while(1);
+
+	//wishbone regs write test
+	LED = 0x02;//test start marker
+	pWishboneRegs[0] = 0x87654321;//PCNTR
+	pWishboneRegs[1] = 0xdeadbeef;//STATUS
+	pWishboneRegs[4] = 0xfeedbead;//SWREG
+	a = pWishboneRegs[0];
+	if (a != 0x00004321)
+		mini_printf("WREG ERR1\r\n");
+	a = pWishboneRegs[1];
+	if (a != 0x0000beef)
+		mini_printf("WREG ERR2\r\n");
+	a = pWishboneRegs[4];
+	if (a != 0x0000bead)
+		mini_printf("WREG ERR3\r\n");
+	LED = 0x00;//test end marker
+
+	mini_printf("SDRAM test...\r\n");
+	//mini_printf("S\r\n");
+	//sdram test
 
 	//full sdram test
 	LED = 0x04;//test start marker

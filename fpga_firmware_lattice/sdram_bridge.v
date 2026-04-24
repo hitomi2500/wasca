@@ -449,7 +449,8 @@ module sdram_bridge (
 	wire abus_chipselect_buf1_negedge;
 	wire wishbone_sdram_pending_address24_negedge;
 	
-	reg sdram2_delayed_read;
+	reg sdram2_delayed_read_abus;
+	reg sdram2_delayed_read_wishbone;
     
 // synopsys translate_off
     time ABUS_request_time;
@@ -513,7 +514,9 @@ module sdram_bridge (
 		abus_chipselect_buf0_negedge = 0;
 		wishbone_sdram_pending_address24_negedge = 0;*/
 		
-		sdram2_delayed_read = 0;
+		sdram2_delayed_read_abus = 0;
+		sdram2_delayed_read_wishbone = 0;
+
     end
 
     assign abus_direction = abus_direction_internal;
@@ -1269,7 +1272,8 @@ module sdram_bridge (
 	assign wishbone_sdram_pending_address24_negedge = wishbone_sdram_pending_address[24];
     
     //latching sdram data to ABUS on negative clock
-    always @(posedge sdram_clock)
+    always @(posedge sdram_clock) begin
+		sdram2_delayed_read_abus <= 0;
 		if (sdram_mode_negedge == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
 			//SDRAM1
             if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
@@ -1282,30 +1286,30 @@ module sdram_bridge (
 				end
             end
 			//first part for SDRAM2
-            if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
+            if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd3)) begin
                 if (~abus_chipselect_buf1_negedge) begin
                     sdram2_datain_latched[7:0] <= sdram2_dq_in;
+					sdram2_delayed_read_abus <= 1'b1;
 	                // synopsys translate_off
     	            if ($time - ABUS_request_time > 92)
         	            $display ("ABUS ERROR R2 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
             	    // synopsys translate_on
 				end
             end
-			//second part for SDRAM2
-			if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
-                if (~abus_chipselect_buf1_negedge) begin
-                    sdram2_datain_latched[15:8] <= sdram2_dq_in;
-	                // synopsys translate_off
-    	            if ($time - ABUS_request_time > 92)
-        	            $display ("ABUS ERROR R3 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
-            	    // synopsys translate_on
-				end
-            end 
 		end
+		//second part for SDRAM2
+		if (sdram2_delayed_read_abus) begin
+           	sdram2_datain_latched[15:8] <= sdram2_dq_in;
+			// synopsys translate_off
+			if ($time - ABUS_request_time > 92)
+				$display ("ABUS ERROR R3 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
+			// synopsys translate_on
+		end
+	end
     
     //latching sdram data to Wishbone on negative clock
     always @(posedge sdram_clock) begin
-        sdram2_delayed_read <= 0;
+        sdram2_delayed_read_wishbone <= 0;
         if (sdram_mode_negedge == `SDRAM_WISHBONE_READ_AND_PRECHARGE) begin
 			//SDRAM1
             if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd4)) //4 works!
@@ -1315,11 +1319,11 @@ module sdram_bridge (
             if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd3)) //
                 if (wishbone_sdram_pending_address24_negedge) begin
                     wishbone_sdram_readdata_latched[7:0] <= sdram2_dq_in;
-                    sdram2_delayed_read <= 1'b1;
+                    sdram2_delayed_read_wishbone <= 1'b1;
                 end
 		end
 		//second part for SDRAM2
-        if (sdram2_delayed_read) //should be 5?
+        if (sdram2_delayed_read_wishbone) //should be 5?
             wishbone_sdram_readdata_latched[15:8] <= sdram2_dq_in;
 	end
 	

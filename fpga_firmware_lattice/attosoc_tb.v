@@ -200,6 +200,7 @@ module testbench();
 	    abus_read <= 1'b1;
 	    abus_write <= 2'b11;
 	    #50000000; //prevent clashing
+	    #50000000;
 	    /*#40000000 //clash!
 	    #1500
 	    #5250
