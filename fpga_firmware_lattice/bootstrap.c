@@ -106,11 +106,11 @@ int main() {
 	LED = 0x00;//test start marker
 
 	//write fallback rom into CS0
-	LED = 0x02;
 	uint16_t * fallback_rom_16 = (uint16_t *)fallback_rom;
-	for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
+	LED = 0x02;
+	/*for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
 		pSDRAM[i] = fallback_rom_16[i];
-	}
+	}*/
 	LED = 0x00;
 	LED = 0x03;
 	for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {

@@ -162,9 +162,9 @@ module attosoc (
 		end
 	end
 	assign led[1:0] = 0;
-	assign led[2] = ~abus_chipselect[0];
+	assign led[2] = ~abus_write[0];
 	assign led[4:3] = 0;
-	assign led[5] = ~abus_chipselect[1];
+	assign led[5] = ~abus_write[1];
 
 	//wishbone ready
 	assign soc_ready = (soc_valid && led_ready) ||
