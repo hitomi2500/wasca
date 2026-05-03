@@ -59,14 +59,21 @@ int main() {
 	//mini_printf("Bootstrap start\r\n");
 	mini_printf("Boot");
 
-	//set mapper register
+	//set registers
 	LED = 0x01;//test start marker
 	volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
+	pWishboneRegs[0x8] = 0xA;//sniffing only writes over CS1
 	pWishboneRegs[0x9] = 0xFFFFFFFF;//read mapper for CS0
 	pWishboneRegs[0xa] = 0x0000FFFF;//read mapper for CS1 + CS2
 	pWishboneRegs[0xb] = 0xFFFFFFFF;//write mapper for CS0
 	pWishboneRegs[0xc] = 0x0000FFFF;//write mapper for CS1 + CS2
 	LED = 0x00;//test start marker
+
+	//sniffer test
+	/*LED = 0xFF;
+	volatile uint32_t dummy = 0;
+	while(1)
+		dummy = pWishboneRegs[5];*/
 
 	//quick SDRAM test
 	LED = 0x03;//test start marker

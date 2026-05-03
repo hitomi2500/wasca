@@ -39,7 +39,12 @@ module top(
 	output wire [1:0] sdram2_dqm,
 	output wire sdram2_ras_n,
 	output wire sdram2_we_n,
-	output wire sdram2_clk
+	output wire sdram2_clk,
+	//debug
+	output wire debug_1,
+	output wire debug_2,
+	output wire debug_3,
+	output wire debug_4
 );
 
 wire clk_50;
@@ -93,11 +98,15 @@ attosoc soc(
     .sdram2_dqm(sdram2_dqm_lo),
     .sdram2_ras_n(sdram2_ras_n),
     .sdram2_we_n(sdram2_we_n),
-    .sdram2_clk(sdram2_clk)
+    .sdram2_clk(sdram2_clk),
+    .sdram_debug_1(debug_1)
 );
 
 assign sd_clk = sd_clk_internal;
 assign abus_buffers_enable = 0;//1'b1;
 assign sdram2_dqm = {sdram2_dqm_lo[0],sdram2_dqm_lo[0]};
+assign debug_2 = abus_read;
+assign debug_3 = abus_chipselect[0];
+assign debug_4 = abus_chipselect[1];
 
 endmodule

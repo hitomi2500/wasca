@@ -65,7 +65,9 @@ module attosoc (
 	output [0:0] sdram2_dqm,
 	output sdram2_ras_n,
 	output sdram2_we_n,
-	output sdram2_clk
+	output sdram2_clk,
+	//debug
+	output sdram_debug_1
 );
 
 	reg [5:0] reset_cnt = 0;
@@ -162,9 +164,9 @@ module attosoc (
 		end
 	end
 	assign led[1:0] = 0;
-	assign led[2] = ~abus_write[0];
+	assign led[2] = ~abus_chipselect[0];
 	assign led[4:3] = 0;
-	assign led[5] = ~abus_write[1];
+	assign led[5] = ~abus_chipselect[1];
 
 	//wishbone ready
 	assign soc_ready = (soc_valid && led_ready) ||
@@ -382,7 +384,9 @@ module attosoc (
 	   .wishbone_regs_data_o(sdram_regs_data),
 	   //resets
 	   .saturn_reset(saturn_reset),
-	   .reset(~resetn)
+	   .reset(~resetn),
+	   //debug
+	   .sdram_debug_1(sdram_debug_1)
 	);
 	
 	

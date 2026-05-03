@@ -8,9 +8,9 @@ module pll_shifted (
 );
 
     // These attributes are commonly emitted by ecppll / prjtrellis-generated code.
-    (* FREQUENCY_PIN_CLKI="125" *)
-    (* FREQUENCY_PIN_CLKOS="125" *)
-    (* FREQUENCY_PIN_CLKOP="125" *)
+    (* FREQUENCY_PIN_CLKI="133" *)
+    (* FREQUENCY_PIN_CLKOS="133" *)
+    (* FREQUENCY_PIN_CLKOP="133" *)
     (* ICP_CURRENT="12" *)
     (* LPF_RESISTOR="8" *)
     (* MFG_ENABLE_FILTEROPAMP="1" *)
@@ -32,12 +32,21 @@ module pll_shifted (
         // Shifted replica on CLKOP
         .CLKOP_ENABLE("ENABLED"),
         .CLKOP_DIV(16),
-        .CLKOP_CPHASE(7),
+        .CLKOP_CPHASE(5),
         .CLKOP_FPHASE(0),
-		// 0 0 +616ps
-		// 1 0 +1600ps
-		// 3 0 +2000ps
-		// 7 0 +4700ps
+		// 0 0 +616ps fails
+		// 1 0 +1600ps fails
+		// 2 0 fails
+		// 3 0 +2000ps almost works, 2-5 errors
+		// 4 0 works, 0-2 errors
+		// 5 0 works, 0-3 errors
+		// 6 0 works, 0-3 errors
+		// 7 0 +4700ps works, 0-3 errors
+		// 8 0 works, 0-3 errors
+		// 9 0 works, 0-4 errors
+		// 10 0 works, 1-4 errors
+		// 11 0 works, 0-4 errors
+		// 12 0 almost works, 2-5 errors
 
         // Unshifted feedback clock on CLKOS
         .CLKOS_ENABLE("ENABLED"),
@@ -186,7 +195,10 @@ module sdram_bridge (
 
     //resets
 	input wire saturn_reset,
-	input wire reset
+	input wire reset,
+	
+	//debug 
+	output wire sdram_debug_1
 	);
 	
 	initial begin
@@ -410,11 +422,11 @@ module sdram_bridge (
 
     reg wishbone_regs_readdatavalid_p1;
 
-    reg [7:0] counter_filter_control; 
+    //reg [7:0] counter_filter_control; 
     reg counter_reset;
     reg counter_count_read;
     reg counter_count_write;
-    reg [31:0] counter_value; 
+    //reg [31:0] counter_value; 
     reg [7:0] sniffer_filter_control; 
     reg [15:0] sniffer_data_in; 
     reg [15:0] sniffer_data_in_p1; 
@@ -430,9 +442,11 @@ module sdram_bridge (
     reg sniffer_pending_set; 
     reg sniffer_pending_reset; 
     reg sniffer_pending_flag; 
+    reg sniffer_pending_flag_d1; 
+    wire sniffer_pending_flag_pulse;
     reg [15:0] sniffer_pending_block; 
     reg sniffer_pending_timeout; 
-    reg [31:0] sniffer_pending_timeout_counter; 
+    reg [20:0] sniffer_pending_timeout_counter; 
 
     reg mapper_write_enable;
     reg mapper_read_enable;
@@ -453,6 +467,13 @@ module sdram_bridge (
 // synopsys translate_off
     time ABUS_request_time;
 // synopsys translate_on
+
+    reg sdram_debug_read_1;
+    reg sdram_debug_read_1_d1;
+    reg sdram_debug_read_1_d2;
+    reg sdram_debug_read_2;
+    reg sdram_debug_read_2_d1;
+    reg sdram_debug_read_2_d2;
     
     initial begin
         sdram_abus_pending = 0;
@@ -479,11 +500,11 @@ module sdram_bridge (
     
         wishbone_regs_readdatavalid_p1 = 0;
     
-        counter_filter_control = 0;
+        //counter_filter_control = 0;
         counter_reset = 0;
         counter_count_read = 0;
         counter_count_write = 0;
-        counter_value = 0;
+        //counter_value = 0;
     
         sniffer_filter_control = 0;
         sniffer_data_in = 0;
@@ -496,6 +517,7 @@ module sdram_bridge (
         sniffer_pending_set = 0;
         sniffer_pending_reset = 0;
         sniffer_pending_flag = 0;
+        sniffer_pending_flag_d1 = 0;
         sniffer_pending_block = 0;
         sniffer_pending_timeout = 0;
         sniffer_pending_timeout_counter = 0;
@@ -514,7 +536,13 @@ module sdram_bridge (
 		
 		sdram2_delayed_read_abus = 0;
 		sdram2_delayed_read_wishbone = 0;
-
+		
+		sdram_debug_read_1 = 0;
+		sdram_debug_read_1_d1 = 0;
+		sdram_debug_read_1_d2 = 0;
+		sdram_debug_read_2 = 0;
+		sdram_debug_read_2_d1 = 0;
+		sdram_debug_read_2_d2 = 0;
     end
 
     assign abus_direction = abus_direction_internal;
@@ -728,7 +756,7 @@ module sdram_bridge (
 	always @(posedge clock) wishbone_regs_readdatavalid_p1 <= wishbone_regs_read;
 
 	always @(posedge clock)
-	   if ( (wishbone_regs_read) && (wishbone_regs_address[7:0] == 8'he0) )
+	   if ( (wishbone_regs_read) && (wishbone_regs_address[3:0] == 4'h5) )
 	       sniffer_data_ack <= 1'b1;
        else
            sniffer_data_ack <= 0;
@@ -742,8 +770,8 @@ module sdram_bridge (
 	           4'h3 : wishbone_regs_readdata <= {16'b0,REG_HWVER};
 	           4'h4 : wishbone_regs_readdata <= {16'b0,REG_SWVER};
 	           4'h5 : wishbone_regs_readdata <= sniffer_data_out;
-	           4'h6 : wishbone_regs_readdata <= {24'h0, counter_filter_control};
-	           4'h7 : wishbone_regs_readdata <= counter_value[31:0];
+	           //4'h6 : wishbone_regs_readdata <= {24'h0, counter_filter_control};//disabled for now
+	           //4'h7 : wishbone_regs_readdata <= counter_value[31:0];//disabled for now
 	           4'h8 : wishbone_regs_readdata <= {4'h0, sniffer_fifo_full, sniffer_fifo_content_size, 8'h0, sniffer_filter_control};
 	           4'h9 : wishbone_regs_readdata <= REG_MAPPER_READ[31:0];
 	           4'ha : wishbone_regs_readdata <= REG_MAPPER_READ[63:32];
@@ -770,7 +798,7 @@ module sdram_bridge (
 	           //REG_HWVER is readonly
 	           4'h4 : REG_SWVER <= wishbone_regs_writedata;
 	           //sniffer_data_out is readonly
-	           4'h6 : counter_filter_control <= wishbone_regs_writedata[7:0];
+	           //4'h6 : counter_filter_control <= wishbone_regs_writedata[7:0];//disabled for now
 	           //counter_value is readonly
 	           4'h8 : sniffer_filter_control <= wishbone_regs_writedata[7:0];
 	           4'h9 : REG_MAPPER_READ[31:0] <= wishbone_regs_writedata;
@@ -1304,6 +1332,33 @@ module sdram_bridge (
 			// synopsys translate_on
 		end
 	end
+	
+    //latching debug
+    always @(posedge sdram_clock) begin
+        sdram_debug_read_1 <= 0;
+		if (sdram_mode_negedge == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
+			//SDRAM1
+            if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
+                if (~abus_chipselect_buf0_negedge) begin
+                    sdram_debug_read_1 <= 1'b1;
+				end
+            end
+		end
+	end
+	
+	always @(posedge sdram_clock) begin
+		sdram_debug_read_2 <= 0;
+		if (sdram2_delayed_read_abus) begin
+           	sdram_debug_read_2 <= 1'b1;
+		end
+	end
+
+    always @(posedge sdram_clock) sdram_debug_read_1_d1 <= sdram_debug_read_1;
+    always @(posedge sdram_clock) sdram_debug_read_1_d2 <= sdram_debug_read_1_d1;
+    always @(posedge sdram_clock) sdram_debug_read_2_d1 <= sdram_debug_read_2;
+    always @(posedge sdram_clock) sdram_debug_read_2_d2 <= sdram_debug_read_2_d1;
+    assign sdram_debug_1 = sdram_debug_read_1 || sdram_debug_read_1_d1 || sdram_debug_read_1_d2 ||
+                           sdram_debug_read_2 || sdram_debug_read_2_d1 || sdram_debug_read_2_d2;
     
     //latching sdram data to Wishbone on negative clock
     always @(posedge sdram_clock) begin
@@ -1336,7 +1391,7 @@ module sdram_bridge (
     // bit 3 - CS1
 	// bit 4 - CS2
 	
-	always @(posedge sdram_clock)
+	/*always @(posedge sdram_clock)
 	   if (counter_reset)
 	       counter_value <= 0;
 	    else if ( (counter_count_write) && (counter_filter_control[1]) ) begin
@@ -1365,31 +1420,34 @@ module sdram_bridge (
 		       counter_value <= counter_value + 32'd2;
 	       else if ( (~abus_chipselect_buf[2]) && (counter_filter_control[4]) )
 		       counter_value <= counter_value + 32'd2;
-	    end
+	    end*/
 	
 	//------------------------------ A-bus sniffer ---------------------------------------
-	// fifo should be written in 2 cases
-	// 1) write was done to a different block
-	// 2) no write within 10 ms 
+	// sniffer is necessary to implement memory syncing with SH-2 and riscv (mostly cs1 backup area)
+	// every time SH-2 performs an access that passes thru sniffer filter,
+	// its upper address (block address) is prepared for fifo writing
+	// fifo is actually written in 2 cases:
+	// 1) SH-2 access with a different block address is registered
+	// 2) no SH-2 transactions within 10 ms 
 	
 	always @(posedge sdram_clock) begin
 	   sniffer_pending_set <= 0;
 	   if ( (counter_count_write) && (sniffer_filter_control[1]) ) begin
 	       //write detected, checking state 
-	       if ( (~abus_chipselect_buf[0]) && (counter_filter_control[2]) )
+	       if ( (~abus_chipselect_buf[0]) && (sniffer_filter_control[2]) )
 	           sniffer_pending_set <= 1'b1;
-	       else if ( (~abus_chipselect_buf[1]) && (counter_filter_control[3]) )
+	       else if ( (~abus_chipselect_buf[1]) && (sniffer_filter_control[3]) )
 	           sniffer_pending_set <= 1'b1;
-	       else if ( (~abus_chipselect_buf[2]) && (counter_filter_control[4]) )
+	       else if ( (~abus_chipselect_buf[2]) && (sniffer_filter_control[4]) )
 	           sniffer_pending_set <= 1'b1;
 	   end
-	   else if ( (counter_count_read) && (counter_filter_control[0]) ) begin
+	   else if ( (counter_count_read) && (sniffer_filter_control[0]) ) begin
 	       //read detected, checking state 
-	       if ( (~abus_chipselect_buf[0]) && (counter_filter_control[2]) )
+	       if ( (~abus_chipselect_buf[0]) && (sniffer_filter_control[2]) )
 	           sniffer_pending_set <= 1'b1;
-	       else if ( (~abus_chipselect_buf[1]) && (counter_filter_control[3]) )
+	       else if ( (~abus_chipselect_buf[1]) && (sniffer_filter_control[3]) )
 		       sniffer_pending_set <= 1'b1;
-	       else if ( (~abus_chipselect_buf[2]) && (counter_filter_control[4]) )
+	       else if ( (~abus_chipselect_buf[2]) && (sniffer_filter_control[4]) )
 		       sniffer_pending_set <= 1'b1;
 	   end
 	end
@@ -1401,12 +1459,47 @@ module sdram_bridge (
 	   else if (sniffer_pending_reset)
 	       sniffer_pending_flag <= 0;
 	       
+	//reset after transaction is over, with 1-cycle debounce
 	always @(posedge sdram_clock)
-	   if (sniffer_pending_set)
+	   sniffer_pending_reset <= ( (abus_chipselect_buf == 3'b111) && (abus_chipselect_buf2 == 3'b111) ) ? 1'b1 : 0;
+	       
+	//to latch data only once at the start, creating rising pulse
+	always @(posedge sdram_clock) sniffer_pending_flag_d1 <= sniffer_pending_flag;
+	assign sniffer_pending_flag_pulse = sniffer_pending_flag && ~sniffer_pending_flag_d1;
+	//always @(posedge sdram_clock) sniffer_pending_flag_pulse_d1 <= sniffer_pending_flag_pulse;
+	       
+	//latching new data for fifo
+	always @(posedge sdram_clock)
+	   if (sniffer_pending_flag_pulse)
 	       sniffer_pending_block <= abus_address_latched[24:9];
     
+    // fifo write: either different block or timeout 
+    always @(posedge sdram_clock) begin
+        sniffer_data_write <= 0;
+        if ( (sniffer_pending_flag_pulse) && ( sniffer_pending_block != abus_address_latched[24:9]) )
+            sniffer_data_write <= 1'b1;
+        else if (sniffer_pending_timeout)
+            sniffer_data_write <= 1'b1;
+    end
+        
+    //timeout counter, 20 active bits, 7.8ms at 133mhz
+    always @(posedge sdram_clock)
+        if (sniffer_pending_set)
+            sniffer_pending_timeout_counter <= 0;
+        else if  ( (~sniffer_pending_timeout_counter[17]) || ((~sniffer_pending_timeout_counter[0])) ) //20
+            sniffer_pending_timeout_counter <= sniffer_pending_timeout_counter + 21'b1;
+    
+    //timeout comparator
+    always @(posedge sdram_clock)
+        if (sniffer_pending_set) 
+            sniffer_pending_timeout <= 0;
+        else
+            sniffer_pending_timeout <= sniffer_pending_timeout_counter[17] && ~sniffer_pending_timeout_counter[0];//20
+    
+    always @(posedge sdram_clock) sniffer_data_in = sniffer_pending_block;
+        
     //if we have a pending request, and it's for a different block, fill prefifo
-    always @(posedge sdram_clock) sniffer_pending_reset <= ((sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block)) ? 1'b0 : 0;
+    /*always @(posedge sdram_clock) sniffer_pending_reset <= ((sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block)) ? 1'b0 : 0;
     always @(posedge sdram_clock) if ((sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block)) sniffer_last_active_block <= sniffer_pending_block;
     always @(posedge sdram_clock) if ((sniffer_pending_flag) && (sniffer_pending_block != sniffer_last_active_block)) sniffer_prefifo <= sniffer_pending_block;
         
@@ -1440,7 +1533,7 @@ module sdram_bridge (
             sniffer_pending_timeout_counter <= sniffer_pending_timeout_counter + 32'b1;
     
     //timeout comparator @ 10ms = 1160000
-    always @(posedge sdram_clock) sniffer_pending_timeout <= (sniffer_pending_timeout_counter == 32'd1160000) ? 1'b1 : 0;
+    always @(posedge sdram_clock) sniffer_pending_timeout <= (sniffer_pending_timeout_counter == 32'd1160000) ? 1'b1 : 0;*/
 
 	//sniffer_data_in_p1(15 downto 0) <= sniffer_last_active_block when rising_edge(clock);
 	//sniffer_data_in <= sniffer_data_in_p1 when rising_edge(clock);
