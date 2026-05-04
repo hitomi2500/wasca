@@ -229,6 +229,10 @@ module sdram_bridge (
     .A(sdram_clock),
     .Z(sdram2_clk)
 	);*/
+	
+	wire sdram_clock_pll_delayed;
+	//assign sdram_clk = sdram_clock_pll_delayed;
+	//assign sdram2_clk = sdram_clock_pll_delayed;
 
 	pll_shifted delay_pll_sdram2(
 		.clki(sdram_clock),
@@ -749,7 +753,7 @@ module sdram_bridge (
 			    endcase
 			end        
 	
-	assign abus_data_in = abus_data_buf;
+	assign abus_data_in = abus_data;//abus_data_buf;
 	assign abus_data = abus_direction_internal ? abus_data_out : {16{1'bZ}};
 
 	//wishbone regs read interface

@@ -157,8 +157,8 @@ module testbench();
             #1000
             abus_read        = 1'b1;
             abus_write       = 2'b11;
-            #1000
             abus_data_oe     = 1'b0;
+            #1000;
         end
     endtask
     
