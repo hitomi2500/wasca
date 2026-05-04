@@ -1195,7 +1195,7 @@ module sdram_bridge (
                 counter_count_write <= 0;
 				sdram_cas_n <= 1'b1;
 				sdram_we_n <= 1'b1;
-				sdram_dq_oe <= 0;
+				//sdram_dq_oe <= 0;
 				sdram2_cas_n <= 1'b1;
 				sdram2_we_n <= 1'b1;
 				sdram2_dq_oe_pre <= 0;
@@ -1205,6 +1205,7 @@ module sdram_bridge (
                 end
                 if (sdram_wait_counter == 0) begin
                     sdram_mode <= `SDRAM_IDLE;
+                    sdram_dq_oe <= 0;
                     sdram_abus_complete <= 0;
                     sdram_dqm <= 2'b00;
                     sdram2_dqm_reg <= 2'b00;
