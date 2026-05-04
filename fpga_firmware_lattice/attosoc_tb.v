@@ -218,8 +218,10 @@ module testbench();
 	    for (i=0; i<100; i=i+1) begin
 		      //write CS1
 		      abus_write_burst2_task( .addr(i*2), .data1((i*2)+16'h1234), .data2((i*2+1)+16'h1234), .chipselect(3'b101),.dqm(2'b00));
+		end
+	    for (i=0; i<100; i=i+1) begin
 		      //read CS1
-		      //abus_read_burst2_task( .addr(i*2), .chipselect(3'b101));
+		      abus_read_burst2_task( .addr(i*2), .chipselect(3'b101));
 		end
 		#100000
 	    abus_write_burst2_task( .addr(24'h004000), .data1((i*2)+16'haabb), .data2((i*2+1)+16'hcdef), .chipselect(3'b101),.dqm(2'b00));

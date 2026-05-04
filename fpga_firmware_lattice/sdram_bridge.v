@@ -277,17 +277,8 @@ module sdram_bridge (
 	initial sdram2_dq_out_reg = 0;
 	reg sdram_dq_oe;
 	initial sdram_dq_oe = 0;
-	reg sdram2_dq_oe_pre;
-	reg sdram2_dq_oe_pre2;
-	reg sdram2_dq_oe_pre3;
 	reg sdram2_dq_oe;
-	initial sdram2_dq_oe_pre = 0;
-	initial sdram2_dq_oe_pre2 = 0;
-	initial sdram2_dq_oe_pre3 = 0;
 	initial sdram2_dq_oe = 0;
-	always @(posedge sdram_clock) sdram2_dq_oe_pre2 <= sdram2_dq_oe_pre;
-	always @(posedge sdram_clock) sdram2_dq_oe_pre3 <= sdram2_dq_oe_pre2;
-	always @(posedge sdram_clock) sdram2_dq_oe <= sdram2_dq_oe_pre3;
 	wire [15:0] sdram_dq_in;
 	wire [7:0] sdram2_dq_in;
 	assign sdram_dq = (sdram_dq_oe) ? sdram_dq_out : {16{1'bZ}};
@@ -296,9 +287,7 @@ module sdram_bridge (
 	always @(posedge sdram_clk) sdram_dq_in_dummy_pipeline1 <= sdram_dq;
 	always @(posedge sdram_clk) sdram_dq_in_dummy_pipeline2 <= sdram_dq_in_dummy_pipeline1;
 	assign sdram_dq_in = sdram_dq;
-	//reg sdram2_dq_oe_delay1;
-	//always @(posedge sdram_clock) sdram2_dq_oe_delay1 <= (sdram2_dq_oe || sdram2_dq_oe_pre);
-	assign sdram2_dq = (sdram2_dq_oe || sdram2_dq_oe_pre || sdram2_dq_oe_pre2 || sdram2_dq_oe_pre3) ? sdram2_dq_out_reg[7:0] : {8{1'bZ}};
+	assign sdram2_dq = (sdram2_dq_oe) ? sdram2_dq_out_reg[7:0] : {8{1'bZ}};
 	reg [7:0] sdram2_dq_in_dummy_pipeline1;
 	always @(posedge sdram2_clk) sdram2_dq_in_dummy_pipeline1 <= sdram2_dq;
 	assign sdram2_dq_in = sdram2_dq;
@@ -908,8 +897,8 @@ module sdram_bridge (
     always @(posedge sdram_clock) begin
         sdram_autorefresh_counter <= sdram_autorefresh_counter + 10'b1;
         sdram2_dq_out_reg[7:0] <= sdram2_dq_out_reg[15:8];
-        sdram2_dq_out_reg[15:8] <= sdram2_dq_out_reg[23:16];
-        sdram2_dq_out_reg[23:16] <= sdram2_dq_out_reg[31:24];
+        //sdram2_dq_out_reg[15:8] <= sdram2_dq_out_reg[23:16];
+        //sdram2_dq_out_reg[23:16] <= sdram2_dq_out_reg[31:24];
         sdram2_dqm_reg[0] <= sdram2_dqm_reg[1];
         case (sdram_mode)
             `SDRAM_INIT0 : begin
@@ -920,7 +909,7 @@ module sdram_bridge (
                 sdram_dqm <= 2'b11;
                 sdram2_cas_n <= 1'b1;
                 sdram2_cke <= 0;
-                sdram2_dq_oe_pre <= 0;
+                sdram2_dq_oe <= 0;
                 sdram2_dqm_reg <= 2'b11;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
 				wishbone_sdram_readdatavalid <= 0;
@@ -1147,7 +1136,8 @@ module sdram_bridge (
                             sdram_we_n <= 0;                        
                         sdram_cas_n <= 0;
                         sdram_dq_out <= {abus_data_in[7:0],abus_data_in[15:8]};
-                        sdram_dq_oe <= 1'b1;
+                        if (~abus_chipselect_buf[0])//only writing if CS0
+                            sdram_dq_oe <= 1'b1;
                         sdram_addr <= {3'b001,1'b0,abus_address_latched[9:1]};
                         sdram_ba <= abus_address_latched[11:10];
                         sdram2_dqm_reg <= {abus_write_buf[0],abus_write_buf[1]};
@@ -1155,7 +1145,8 @@ module sdram_bridge (
                             sdram2_we_n <= 0;    
                         sdram2_cas_n <= 0;
                         sdram2_dq_out_reg[15:0] <= {abus_data_in[7:0],abus_data_in[15:8]};
-                        sdram2_dq_oe_pre <= 1'b1;
+                        if (~abus_chipselect_buf[1])//only writing if CS1
+                            sdram2_dq_oe <= 1'b1;
                         sdram2_addr <= {3'b001,1'b0,abus_address_latched[8:1],1'b0};
                         sdram2_ba <= abus_address_latched[10:9];
                         sdram_wait_counter <= 3'd`TIMING_ABUS_ACTIVATE_TO_WRITE;
@@ -1198,7 +1189,7 @@ module sdram_bridge (
 				//sdram_dq_oe <= 0;
 				sdram2_cas_n <= 1'b1;
 				sdram2_we_n <= 1'b1;
-				sdram2_dq_oe_pre <= 0;
+				//sdram2_dq_oe <= 0;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
 				if (sdram_wait_counter == 3'd1) begin
                     sdram_abus_complete <= 1'b1;
@@ -1206,6 +1197,7 @@ module sdram_bridge (
                 if (sdram_wait_counter == 0) begin
                     sdram_mode <= `SDRAM_IDLE;
                     sdram_dq_oe <= 0;
+                    sdram2_dq_oe <= 0;
                     sdram_abus_complete <= 0;
                     sdram_dqm <= 2'b00;
                     sdram2_dqm_reg <= 2'b00;
@@ -1236,15 +1228,17 @@ module sdram_bridge (
                         sdram_cas_n <= 0;
                         sdram_ba <= wishbone_sdram_pending_address[10:9];
                         sdram_dq_out <= wishbone_sdram_pending_data[15:0];
-                        sdram_dq_oe <= 1'b1;
+                        if (~wishbone_sdram_pending_address[24])//only writing if in SDRAM1 range
+                            sdram_dq_oe <= 1'b1;
                         sdram_addr <= {3'b001,1'b0,wishbone_sdram_pending_address[8:0]};
                         sdram2_dqm_reg <={~wishbone_sdram_byteenable[0],~wishbone_sdram_byteenable[1]};
                         if (wishbone_sdram_pending_address[24])//only writing if in SDRAM2 range
                             sdram2_we_n <= 0;    
                         sdram2_cas_n <= 0;
                         sdram2_ba <= wishbone_sdram_pending_address[9:8];
-                        sdram2_dq_out_reg[15:0] <= wishbone_sdram_pending_data[15:0];
-						sdram2_dq_oe_pre <= 1'b1;
+                        sdram2_dq_out_reg[15:0] <= {wishbone_sdram_pending_data[15:0]};
+                        if (wishbone_sdram_pending_address[24])//only writing if in SDRAM2 range
+						    sdram2_dq_oe <= 1'b1;
                         sdram2_addr <= {3'b001,1'b0,wishbone_sdram_pending_address[7:0],1'b0};
                         sdram_wait_counter <= 3'd`TIMING_WISHBONE_ACTIVATE_TO_WRITE;
                         wishbone_sdram_readdatavalid <= 1'b1; //works as ack for write too, sending early 
@@ -1273,7 +1267,7 @@ module sdram_bridge (
 				//sdram_dq_oe <= 0;
 				sdram2_cas_n <= 1'b1;
                 sdram2_we_n <= 1'b1;
-                sdram2_dq_oe_pre <= 0;
+                //sdram2_dq_oe <= 0;
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
 				wishbone_sdram_readdatavalid <= 0; //works as ack for write too, resetting early 
                 if (sdram_wait_counter == 3'd1) begin
@@ -1282,6 +1276,7 @@ module sdram_bridge (
                 if (sdram_wait_counter == 0) begin
                     sdram_mode <= `SDRAM_IDLE;
 					sdram_dq_oe <= 0;
+                    sdram2_dq_oe <= 0;
                     wishbone_sdram_complete <= 1'b1;
                     sdram_dqm <= 2'b00;
                     sdram2_dqm_reg <= 2'b00;

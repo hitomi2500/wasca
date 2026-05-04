@@ -1,1 +1,1 @@
-copy attosoc.bit F:
+copy attosoc.bit G:
