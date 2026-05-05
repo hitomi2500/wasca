@@ -20,14 +20,14 @@ unsigned char buffer[1024];
 #define BLKSIZE 512
 #define BLKCNT 10
 
-FATFS FatFs;		/* FatFs work area needed for each volume */
-FIL Fil;			/* File object needed for each open file */
+__attribute__((aligned(4))) FATFS FatFs;		/* FatFs work area needed for each volume */
+__attribute__((aligned(4))) FIL Fil;			/* File object needed for each open file */
 
-PARTITION VolToPart[FF_VOLUMES] = {
+__attribute__((aligned(4))) PARTITION VolToPart[FF_VOLUMES] = {
     {0, 1},     /* 1st partition on the pd#0 */
 };
 
-char buff[BLKSIZE*BLKCNT];
+__attribute__((aligned(4))) char buff[BLKSIZE*BLKCNT];
 
 void delay() {
     //for (volatile int i = 0; i < 2500000; i++)
@@ -264,6 +264,10 @@ int main() {
 		mini_printf("mount OK\r\n");*/
 	mini_printf("OK\r\n");
 
+	//mini_printf("fs_type=%d\n", FatFs.fs_type);
+	//mini_printf("volbase=%x fatbase=%x dirbase=%x database=%x csize=%x\n",
+    //   FatFs.volbase, FatFs.fatbase, FatFs.dirbase, FatFs.database, FatFs.csize);
+
 	DIR _dir;
 	mini_printf("Open root dir...");
 	fr = f_opendir(&_dir, "");
@@ -290,18 +294,20 @@ int main() {
 			int size = _filinfo.fsize;
 			offset = 0;
 			error = f_open(&_file,_filinfo.fname,FA_READ);
-			mini_printf("%s : open error %d \r\n",_filinfo.fname,error);
+			//mini_printf("sclust=%x objsize=%x fptr=%x\n", _file.obj.sclust, _file.obj.objsize, _file.fptr);
+			//mini_printf("%s : open error %d \r\n",_filinfo.fname,error);
 			while(false == f_eof(&_file)) {
 				readen = -1;
+				for (int i=0;i<1024;i++)
+					buffer[i] - 0x17+i;
 				error = f_read(&_file,buffer,1024,&readen);
-				mini_printf("wasca.ss : read at offset %x, error %d, readen %d \r\n",offset,error,readen);
-				if (offset < 1000)
-					for (int i=0;i<512;i++) {
-						pSDRAM[offset+i] = buffer16[i];
-						mini_printf("%2x ",buffer[i]);
-						if (i%16==15)
-							mini_printf("\r\n");
-					}
+				//mini_printf("wasca.ss : read at offset %x, error %d, readen %d \r\n",offset,error,readen);
+				for (int i=0;i<512;i++) {
+					pSDRAM[offset+i] = buffer16[i];
+					mini_printf("%04x ",buffer16[i]);
+					if (i%16==15)
+						mini_printf("\r\n");
+				}
 				offset+=512;
 			}
 			f_close(&_file);
@@ -314,7 +320,7 @@ int main() {
 		}
 		else
 			mini_printf("f_readdir OK\r\n");*/
-		mini_printf("Found file:%s (%d)\r\n",_filinfo.fname,_filinfo.fsize);
+		//mini_printf("Found file:%s (%d)\r\n",_filinfo.fname,_filinfo.fsize);
 	}
 	if (0 == sh2_found)
 	{
