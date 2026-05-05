@@ -7,8 +7,19 @@ module pll_shifted (
     output wire locked
 );
 
+    assign clk_0deg = clki; 
+	assign locked = 1'b1;
+	
+	DELAYG #(
+		.DEL_MODE ("USER_DEFINED"),
+		.DEL_VALUE(100)
+	) u_idelay (
+		.A(clki),
+		.Z(clk_shift)
+	);
+
     // These attributes are commonly emitted by ecppll / prjtrellis-generated code.
-    (* FREQUENCY_PIN_CLKI="133" *)
+    /*(* FREQUENCY_PIN_CLKI="133" *)
     (* FREQUENCY_PIN_CLKOS="133" *)
     (* FREQUENCY_PIN_CLKOP="133" *)
     (* ICP_CURRENT="12" *)
@@ -85,7 +96,7 @@ module pll_shifted (
         .CLKINTFB(),
         .REFCLK(),
         .INTLOCK()
-    );
+    );*/
 
 endmodule
 

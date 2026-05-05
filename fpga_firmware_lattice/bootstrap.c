@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <stdint.h>
 #include "fatfs/ff.h"
 #include "fatfs/sdiodrv.h"
@@ -8,6 +9,8 @@
 const unsigned char fallback_rom[] = {
     #embed "wasca-fallback.ss"
 };
+
+unsigned char buffer[1024];
 
 #define LED (*(volatile uint32_t*)0x02000000)
 
@@ -42,13 +45,10 @@ uint32_t lsfr_next_random (uint32_t prev)
 }
 
 int main() {
-	LED = 0x20;//red external
     //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
     //reg_uart_clkdiv = 347;// 115200 baud at 40MHz
     reg_uart_clkdiv = 434;//432;//434;// 115200 baud at 50MHz
     //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
-
-	//volatile uint32_t* p32 = (uint32_t*) 0;
 
 	uint32_t seed = 0x100500;
 	uint32_t errors = 0;
@@ -56,18 +56,19 @@ int main() {
 	volatile uint32_t * pSDRAM = (uint32_t *)0x10000000;
 	volatile uint32_t * pSDRAM2 = (uint32_t *)0x14000000;
 
-	//mini_printf("Bootstrap start\r\n");
-	mini_printf("Boot");
+	uint16_t * buffer16 = (uint16_t *)buffer;
+
+	//mini_printf("Boot");
 
 	//set registers
-	LED = 0x01;//test start marker
+	//LED = 0x01;//test start marker
 	volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
 	pWishboneRegs[0x8] = 0xA;//sniffing only writes over CS1
 	pWishboneRegs[0x9] = 0xFFFFFFFF;//read mapper for CS0
 	pWishboneRegs[0xa] = 0x0000FFFF;//read mapper for CS1 + CS2
 	pWishboneRegs[0xb] = 0xFFFFFFFF;//write mapper for CS0
 	pWishboneRegs[0xc] = 0x0000FFFF;//write mapper for CS1 + CS2
-	LED = 0x00;//test start marker
+	//LED = 0x00;//test start marker
 
 	//sniffer test
 	/*LED = 0xFF;
@@ -76,7 +77,7 @@ int main() {
 		dummy = pWishboneRegs[5];*/
 
 	//quick SDRAM test
-	LED = 0x03;//test start marker
+	//LED = 0x03;//test start marker
 	volatile uint32_t a;
 	//CS0
 	pSDRAM[0] = 0x12345678;
@@ -110,21 +111,21 @@ int main() {
 		a = pSDRAM2[0x7fffff];
 		if (a != 0xbeef)
 			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0xbeef,a);
-	LED = 0x00;//test start marker
+	//LED = 0x00;//test start marker
 
 	//write fallback rom into CS0
 	uint16_t * fallback_rom_16 = (uint16_t *)fallback_rom;
-	LED = 0x02;
-	/*for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
-		pSDRAM[i] = fallback_rom_16[i];
-	}*/
-	LED = 0x00;
-	LED = 0x03;
+	//LED = 0x02;
 	for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
-		pSDRAM2[i] = fallback_rom_16[i];
+		pSDRAM[i] = fallback_rom_16[i];
 	}
-	LED = 0x00;
-	mini_printf("\r\nFallback ROM : %d bytes\r\n",sizeof(fallback_rom));
+	//LED = 0x00;
+	//LED = 0x03;
+	/*for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
+		pSDRAM2[i] = fallback_rom_16[i];
+	}*/
+	//LED = 0x00;
+	//mini_printf("\r\nFallback ROM : %d bytes\r\n",sizeof(fallback_rom));
 	/*while(1);
 
 	//wishbone regs write test
@@ -204,7 +205,7 @@ int main() {
 	LED = 0x00;//test end marker
 	mini_printf("SDRAM test DONE\r\n");*/
 	
-	mini_printf("%s %s\r\n",__DATE__,__TIME__);
+	mini_printf("\r\n\r\n%s %s\r\n",__DATE__,__TIME__);
 
 	//init sdio driver
 	/*struct SDIODRV * drv;
@@ -253,28 +254,60 @@ int main() {
 	}
 	while (1);//halt*/
 
+	mini_printf("Mount SD...");
 	FRESULT fr = f_mount(&FatFs, "0:/", 1);	//mount SD card
-	if (fr != FR_OK)
+	/*if (fr != FR_OK)
 	{
 		mini_printf("mount error %x \r\n",fr);
 	}
 	else
-		mini_printf("mount OK\r\n");
+		mini_printf("mount OK\r\n");*/
+	mini_printf("OK\r\n");
 
 	DIR _dir;
-	fr = f_opendir(&_dir, "/");
-	if (fr != FR_OK)
+	mini_printf("Open root dir...");
+	fr = f_opendir(&_dir, "");
+	/*if (fr != FR_OK)
 	{
 		mini_printf("opendir error %x \r\n",fr);
 	}
 	else
-		mini_printf("opendir OK\r\n");
+		mini_printf("opendir OK\r\n");*/
+	mini_printf("OK\r\n");
 
 	FILINFO _filinfo;
+	FIL _file;
 	_filinfo.fname[0] = 'A';
+	int offset;
+	unsigned int readen;
+	int sh2_found = 0;
+	pSDRAM = (uint32_t *)0x10000000;
+	int error;
 	
 	while (_filinfo.fname[0] != 0) {
 		fr = f_readdir(&_dir,&_filinfo);
+		if (memcmp(_filinfo.fname,"wasca.ss",8) == 0) {
+			int size = _filinfo.fsize;
+			offset = 0;
+			error = f_open(&_file,_filinfo.fname,FA_READ);
+			mini_printf("%s : open error %d \r\n",_filinfo.fname,error);
+			while(false == f_eof(&_file)) {
+				readen = -1;
+				error = f_read(&_file,buffer,1024,&readen);
+				mini_printf("wasca.ss : read at offset %x, error %d, readen %d \r\n",offset,error,readen);
+				if (offset < 1000)
+					for (int i=0;i<512;i++) {
+						pSDRAM[offset+i] = buffer16[i];
+						mini_printf("%2x ",buffer[i]);
+						if (i%16==15)
+							mini_printf("\r\n");
+					}
+				offset+=512;
+			}
+			f_close(&_file);
+			mini_printf("wasca.ss loaded, %d bytes, written %d\r\n",size,offset*2);
+			sh2_found = 1;
+		}
 		/*if (fr != FR_OK)
 		{
 			mini_printf("f_readdir error %x \r\n",fr);
@@ -282,6 +315,10 @@ int main() {
 		else
 			mini_printf("f_readdir OK\r\n");*/
 		mini_printf("Found file:%s (%d)\r\n",_filinfo.fname,_filinfo.fsize);
+	}
+	if (0 == sh2_found)
+	{
+		mini_printf("Cannot find wasca.sh2, using fallback ROM. %d bytes\r\n",sizeof(fallback_rom));
 	}
 
 	int led_toggle = 1;

@@ -6,7 +6,7 @@ import subprocess
 
 #delete prev run
 i=1
-while i<10:
+while i<50:
     seed = i*12345678
     tmp_folder = 'temp_seed_'+str(seed)
     if os.path.isdir(tmp_folder):
@@ -14,7 +14,7 @@ while i<10:
         shutil.rmtree(tmp_folder)
     i+=1
 i=1
-while i<10:
+while i<50:
     seed = i*12345678
     print ("SEED = ",str(seed))
     tmp_folder = 'temp_seed_'+str(seed)
