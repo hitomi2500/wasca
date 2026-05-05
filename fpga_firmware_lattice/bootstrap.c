@@ -304,9 +304,9 @@ int main() {
 				//mini_printf("wasca.ss : read at offset %x, error %d, readen %d \r\n",offset,error,readen);
 				for (int i=0;i<512;i++) {
 					pSDRAM[offset+i] = buffer16[i];
-					mini_printf("%04x ",buffer16[i]);
-					if (i%16==15)
-						mini_printf("\r\n");
+					//mini_printf("%04x ",buffer16[i]);
+					//if (i%16==15)
+					//	mini_printf("\r\n");
 				}
 				offset+=512;
 			}

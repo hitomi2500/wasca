@@ -647,13 +647,13 @@ module sdram_bridge (
 	//latch chipselect number
 	always @(posedge sdram_clock)
 	   if (abus_chipselect_pulse[0])
-	       abus_chipselect_latched <= "00";
+	       abus_chipselect_latched <= 2'b00;
 	   else if (abus_chipselect_pulse[1])
-	       abus_chipselect_latched <= "01";
+	       abus_chipselect_latched <= 2'b01;
 	   else if (abus_chipselect_pulse[2])
-	       abus_chipselect_latched <= "10";
+	       abus_chipselect_latched <= 2'b10;
 	   else if (abus_cspulse_off)
-	       abus_chipselect_latched <= "11";
+	       abus_chipselect_latched <= 2'b11;
 	
 	//if valid transaction captured, switch to corresponding multiplex mode
 	always @(posedge sdram_clock)
@@ -671,7 +671,7 @@ module sdram_bridge (
 		
 	//sync mux for abus read requests
 	always @(posedge sdram_clock)
-	   if (abus_chipselect_latched == 2'b0) begin
+	   if (abus_chipselect_latched == 2'b00) begin
 	       //CS0 access
 		   if (abus_cs0_regs_access)
 		   		case (abus_address_latched[4:1])
@@ -689,7 +689,7 @@ module sdram_bridge (
 		   	   //just output sdram data, no matter the mode
 			   abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
 			end
-	   else if (abus_chipselect_latched == 2'b1) begin //CS1 access
+	   else if (abus_chipselect_latched == 2'b01) begin //CS1 access
 	       if (abus_cs1_regs_access)//saturn cart id register
 	           case (wasca_mode)
 	               `MODE_INIT: abus_data_out <= {sdram2_datain_latched[7:0],sdram2_datain_latched[15:8]};
@@ -712,7 +712,7 @@ module sdram_bridge (
 	//wasca mode register write
 	always @(posedge sdram_clock)
 	    //if (~saturn_reset) wasca_mode  <= MODE_INIT;
-	    if ( (my_little_transaction_dir == `DIR_WRITE) && (abus_chipselect_latched == 2'b0) && (abus_cspulse7) &&
+	    if ( (my_little_transaction_dir == `DIR_WRITE) && (abus_chipselect_latched == 2'b00) && (abus_cspulse7) &&
 			(abus_cs0_regs_access) && (abus_address_latched[4:1] == {1'h1,3'h2}) ) begin
 	        //wasca mode register
 	        REG_MODE <= abus_data_in;
