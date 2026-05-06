@@ -671,11 +671,12 @@ module sdram_bridge (
 		
 	//sync mux for abus read requests
 	always @(posedge sdram_clock)
-	   if (abus_chipselect_latched == 2'b00) begin
-	       //CS0 access
-		   if (abus_cs0_regs_access)
+	   if ((abus_chipselect_latched == 2'b00) && (abus_cs0_regs_access)) begin
+	       //CS0 regs access
 		   		case (abus_address_latched[4:1])
 					4'h0 : abus_data_out <= 16'hCDCD; //wasca specific SD card control register	   
+					4'h2 : abus_data_out <= {7'b0,abus_address_latched[24:16]};
+					4'h3 : abus_data_out <= {abus_address_latched[15:1],1'b0};
 					4'h8 :abus_data_out <= REG_PCNTR; //wasca prepare counter
 					4'h9 :abus_data_out <= REG_STATUS; //wasca status register
 					4'ha :abus_data_out <= REG_MODE; //wasca mode register
@@ -685,14 +686,12 @@ module sdram_bridge (
 					4'he :abus_data_out <= 16'h7363; //wasca signature "sc"
 					4'hf :abus_data_out <= 16'h6120; //wasca signature "a "
 				endcase
-	       else //normal CS0 read access
-		   	   //just output sdram data, no matter the mode
-			   abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
 			end
-	   else if (abus_chipselect_latched == 2'b01) begin //CS1 access
-	       if (abus_cs1_regs_access)//saturn cart id register
+	   else if ((abus_chipselect_latched == 2'b01) && (abus_cs1_regs_access)) begin 
+	       //CS1 cart id reg access
 	           case (wasca_mode)
-	               `MODE_INIT: abus_data_out <= {sdram2_datain_latched[7:0],sdram2_datain_latched[15:8]};
+	               //`MODE_INIT: abus_data_out <= {sdram2_datain_latched[7:0],sdram2_datain_latched[15:8]};
+	               `MODE_INIT: abus_data_out <= 16'hFFFF;
 	               `MODE_POWER_MEMORY_05M : abus_data_out <= 16'hFF21;
 	               `MODE_POWER_MEMORY_1M : abus_data_out <= 16'hFF22;
 	               `MODE_POWER_MEMORY_2M : abus_data_out <= 16'hFF23;
@@ -703,11 +702,10 @@ module sdram_bridge (
 	               `MODE_ROM_ULTRAMAN : abus_data_out <= 16'hFFFF;
 	               `MODE_BOOT : abus_data_out <= 16'hFFFF;
 				endcase
-			else
-				abus_data_out <= {sdram2_datain_latched[7:0],sdram2_datain_latched[15:8]};
 			end
-		else //CS2 or dummy access
-		    ;//abus_data_out <= 16'hEEEE;
+		else
+		      //just output sdram data, no matter the mode
+			  abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
 	
 	//wasca mode register write
 	always @(posedge sdram_clock)
@@ -1325,7 +1323,8 @@ module sdram_bridge (
 			//first part for SDRAM2
             if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd3)) begin
                 if (~abus_chipselect_buf1_negedge) begin
-                    sdram2_datain_latched[7:0] <= sdram2_dq_in;
+                    //sdram2_datain_latched[7:0] <= sdram2_dq_in;
+					sdram_datain_latched[7:0] <= sdram2_dq_in;
 					sdram2_delayed_read_abus <= 1'b1;
 	                // synopsys translate_off
     	            if ($time - ABUS_request_time > 92)
@@ -1336,7 +1335,8 @@ module sdram_bridge (
 		end
 		//second part for SDRAM2
 		if (sdram2_delayed_read_abus) begin
-           	sdram2_datain_latched[15:8] <= sdram2_dq_in;
+           	//sdram2_datain_latched[15:8] <= sdram2_dq_in;
+           	sdram_datain_latched[15:8] <= sdram2_dq_in;
 			// synopsys translate_off
 			if ($time - ABUS_request_time > 92)
 				$display ("ABUS ERROR R3 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
