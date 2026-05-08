@@ -1,0 +1,34 @@
+ifeq ($(strip $(YAUL_INSTALL_ROOT)),)
+  $(error Undefined YAUL_INSTALL_ROOT (install root directory))
+endif
+
+include $(YAUL_INSTALL_ROOT)/share/build.pre.mk
+
+# Required for library usage
+include $(YAUL_INSTALL_ROOT)/share/build.tga.mk
+include $(YAUL_INSTALL_ROOT)/share/build.bcl.mk
+
+SH_PROGRAM:= wasca_menu
+SH_SRCS:= \
+    main.c \
+    font.c \
+    input.c \
+    video.c \
+    video_vdp1.c \
+    video_vdp2.c \
+    control.c
+
+SH_CFLAGS+= -Os -I. $(TGA_CFLAGS) $(BCL_CFLAGS) -save-temps
+SH_LDFLAGS+= $(TGA_LDFLAGS) $(BCL_LDFLAGS)
+
+IP_VERSION:= V0.001
+IP_RELEASE_DATE:= 20180214
+IP_AREAS:= JTUBKAEL
+IP_PERIPHERALS:= JAMKST
+IP_TITLE:= wasca menu
+IP_MASTER_STACK_ADDR:= 0x060C4000
+IP_SLAVE_STACK_ADDR:= 0x06001000
+IP_1ST_READ_ADDR:= 0x06004000
+IP_1ST_READ_SIZE:= 0
+
+include $(YAUL_INSTALL_ROOT)/share/build.post.ss.mk
