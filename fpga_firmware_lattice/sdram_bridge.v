@@ -284,7 +284,8 @@ module sdram_bridge (
 	
 	reg [15:0] sdram_dq_out;
 	initial sdram_dq_out = 0;
-	reg [31:0] sdram2_dq_out_reg;
+	//reg [31:0] sdram2_dq_out_reg;
+	reg [15:0] sdram2_dq_out_reg;
 	initial sdram2_dq_out_reg = 0;
 	reg sdram_dq_oe;
 	initial sdram_dq_oe = 0;
@@ -397,6 +398,14 @@ module sdram_bridge (
     initial REG_MAPPER_READ = 0;
     reg [63:0] REG_MAPPER_WRITE;
     initial REG_MAPPER_WRITE = 0;
+
+    //1M RAM aliasing reg
+    reg [0:0] REG_RAM_1M_ALIASING;
+    initial REG_RAM_1M_ALIASING = 0;
+    
+    // Cart ID reg
+    reg [15:0] REG_ID;
+    initial REG_ID = ~0;
     
     //------------------- sdram signals ---------------
     reg sdram_abus_pending; //abus request is detected and should be parsed
@@ -611,7 +620,7 @@ module sdram_bridge (
 	//patching : for RAM 1M mode A19 and A20 should be set to zero
 	always @(posedge sdram_clock) 
 	   if (abus_cspulse)
-			abus_address_latched <=  ( (wasca_mode == `MODE_RAM_1M) && (abus_address[24:21] == 4'h2) ) ? 
+			abus_address_latched <=  ( (REG_RAM_1M_ALIASING[0]) && (abus_address[24:21] == 4'h2) ) ? 
 	   { abus_address[24:21], 2'b0,abus_address[18:1]} : abus_address;
 
 	always @(posedge sdram_clock) abus_cs0_regs_access <= (abus_address[24:5] == {17'h1FFFF,3'b111}) ? 1'b1 : 0;
@@ -675,8 +684,6 @@ module sdram_bridge (
 	       //CS0 regs access
 		   		case (abus_address_latched[4:1])
 					4'h0 : abus_data_out <= 16'hCDCD; //wasca specific SD card control register	   
-					4'h2 : abus_data_out <= {7'b0,abus_address_latched[24:16]};
-					4'h3 : abus_data_out <= {abus_address_latched[15:1],1'b0};
 					4'h8 :abus_data_out <= REG_PCNTR; //wasca prepare counter
 					4'h9 :abus_data_out <= REG_STATUS; //wasca status register
 					4'ha :abus_data_out <= REG_MODE; //wasca mode register
@@ -689,19 +696,7 @@ module sdram_bridge (
 			end
 	   else if ((abus_chipselect_latched == 2'b01) && (abus_cs1_regs_access)) begin 
 	       //CS1 cart id reg access
-	           case (wasca_mode)
-	               //`MODE_INIT: abus_data_out <= {sdram2_datain_latched[7:0],sdram2_datain_latched[15:8]};
-	               `MODE_INIT: abus_data_out <= 16'hFFFF;
-	               `MODE_POWER_MEMORY_05M : abus_data_out <= 16'hFF21;
-	               `MODE_POWER_MEMORY_1M : abus_data_out <= 16'hFF22;
-	               `MODE_POWER_MEMORY_2M : abus_data_out <= 16'hFF23;
-	               `MODE_POWER_MEMORY_4M : abus_data_out <= 16'hFF24;
-	               `MODE_RAM_1M : abus_data_out <= 16'hFF5A;
-	               `MODE_RAM_4M : abus_data_out <= 16'hFF5C;
-	               `MODE_ROM_KOF95 : abus_data_out <= 16'hFFFF;
-	               `MODE_ROM_ULTRAMAN : abus_data_out <= 16'hFFFF;
-	               `MODE_BOOT : abus_data_out <= 16'hFFFF;
-				endcase
+	           abus_data_out <= REG_ID;
 			end
 		else
 		      //just output sdram data, no matter the mode
@@ -709,47 +704,9 @@ module sdram_bridge (
 	
 	//wasca mode register write
 	always @(posedge sdram_clock)
-	    //if (~saturn_reset) wasca_mode  <= MODE_INIT;
 	    if ( (my_little_transaction_dir == `DIR_WRITE) && (abus_chipselect_latched == 2'b00) && (abus_cspulse7) &&
-			(abus_cs0_regs_access) && (abus_address_latched[4:1] == {1'h1,3'h2}) ) begin
-	        //wasca mode register
-	        REG_MODE <= abus_data_in;
-	        case (abus_data_in[3:0])
-	            4'h1: wasca_mode  <= `MODE_POWER_MEMORY_05M;
-	            4'h2: wasca_mode  <= `MODE_POWER_MEMORY_1M;
-	            4'h3: wasca_mode  <= `MODE_POWER_MEMORY_2M;
-	            4'h4: wasca_mode  <= `MODE_POWER_MEMORY_4M;
-	            default:
-	                case (abus_data_in[7:4])
-	                    4'h1: wasca_mode  <= `MODE_RAM_1M;
-	                    4'h2: wasca_mode  <= `MODE_RAM_4M;
-	                    default:
-	                        case (abus_data_in[11:8])
-	                            4'h1: wasca_mode  <= `MODE_ROM_KOF95;
-	                            4'h2: wasca_mode  <= `MODE_ROM_ULTRAMAN;
-	                            endcase
-	                    endcase
-			    endcase
-			end
-		else if ( (wishbone_regs_write) && (wishbone_regs_address[7:0] == 8'hF4) ) begin
-            REG_MODE <= wishbone_regs_writedata;
-            case (wishbone_regs_writedata[3:0])
-	            4'h1: wasca_mode  <= `MODE_POWER_MEMORY_05M;
-	            4'h2: wasca_mode  <= `MODE_POWER_MEMORY_1M;
-	            4'h3: wasca_mode  <= `MODE_POWER_MEMORY_2M;
-	            4'h4: wasca_mode  <= `MODE_POWER_MEMORY_4M;
-	            default:
-	                case (wishbone_regs_writedata[7:4])
-	                    4'h1: wasca_mode  <= `MODE_RAM_1M;
-	                    4'h2: wasca_mode  <= `MODE_RAM_4M;
-	                    default:
-	                        case (wishbone_regs_writedata[11:8])
-	                            4'h1: wasca_mode  <= `MODE_ROM_KOF95;
-	                            4'h2: wasca_mode  <= `MODE_ROM_ULTRAMAN;
-	                            endcase
-	                    endcase
-			    endcase
-			end        
+			(abus_cs0_regs_access) && (abus_address_latched[4:1] == {1'h1,3'h2}) )
+	           REG_MODE <= abus_data_in;
 	
 	assign abus_data_in = abus_data;//abus_data_buf;
 	assign abus_data = abus_direction_internal ? abus_data_out : {16{1'bZ}};
@@ -779,6 +736,9 @@ module sdram_bridge (
 	           4'ha : wishbone_regs_readdata <= REG_MAPPER_READ[63:32];
 	           4'hb : wishbone_regs_readdata <= REG_MAPPER_WRITE[31:0];
 	           4'hc : wishbone_regs_readdata <= REG_MAPPER_WRITE[63:32];
+	           //D is counter reset
+	           4'he : wishbone_regs_readdata <= {31'b0,REG_RAM_1M_ALIASING};
+	           4'hf : wishbone_regs_readdata <= {16'b0,REG_ID};
 	           default : wishbone_regs_readdata <= {16'b0,REG_HWVER}; //to simplify mux
 	           endcase
 	
@@ -808,6 +768,8 @@ module sdram_bridge (
 	           4'hb : REG_MAPPER_WRITE[31:0] <= wishbone_regs_writedata;
 	           4'hc : REG_MAPPER_WRITE[63:32] <= wishbone_regs_writedata;
 	           //D is counter reset
+	           4'he : REG_RAM_1M_ALIASING <= wishbone_regs_writedata[0];
+	           4'hf : REG_ID <= wishbone_regs_writedata;
 	       endcase
 
 	//wishbone regs interface is only regs, so always ready to write.

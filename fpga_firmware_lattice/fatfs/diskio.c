@@ -114,8 +114,6 @@ DRESULT disk_write (
 		return RES_ERROR;
 	return (*DRIVES[pdrv].fd_driver->dio_write)(DRIVES[pdrv].fd_data,
 					sector, count, buff);
-	return (*DRIVES[pdrv].fd_driver->dio_ioctl)(DRIVES[pdrv].fd_data,
-						cmd, buff);
 }
 
 #endif
@@ -138,3 +136,53 @@ DRESULT disk_ioctl (
 						cmd, buff);
 }
 
+DWORD	get_fattime(void) {
+	DWORD	result;
+	unsigned	thedate, clocktime;
+
+#ifdef	_BOARD_HAS_VERSION
+	thedate   = *_version;
+#else
+	thedate = 0x20191001;
+#endif
+#ifdef	_BOARD_HAS_BUILDTIME
+	clocktime = *_buildtime;
+#else
+	clocktime = 0x0; // Midnight
+#endif
+
+#ifdef	_BOARD_HAS_RTC
+	clocktime = _rtc->r_clock;
+#endif
+
+	unsigned year, month, day, hrs, mns, sec;
+
+	year =  ((thedate & 0xf0000000)>>28)*1000 +
+		((thedate & 0x0f000000)>>24)*100 +
+		((thedate & 0x00f00000)>>20)*10 +
+		((thedate & 0x000f0000)>>16);
+	year -= 1980;
+
+	month = ((thedate & 0x00f000)>>12)*10 +
+		((thedate & 0x000f00)>> 8);
+
+	day   = ((thedate & 0x00f0)>> 4)*10 +
+		((thedate & 0x000f)    );
+
+	hrs   = ((clocktime & 0xf00000)>>20)*10 +
+		((clocktime & 0x0f0000)>>16);
+
+	mns   = ((clocktime & 0xf000)>>12)*10 +
+		((clocktime & 0x0f00)>> 8);
+
+	sec   = ((clocktime & 0xf0)>> 4)*10 +
+		((clocktime & 0x0f));
+
+	result = (sec & 0x01f) | ((mns & 0x3f)<<5)
+		| ((hrs & 0x01f)<<11)
+		| ((day & 0x01f)<<16)
+		| ((month & 0x0f)<<21)
+		| ((year & 0x0f)<<21);
+
+	return result;
+}

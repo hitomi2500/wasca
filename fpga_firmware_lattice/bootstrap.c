@@ -6,6 +6,21 @@
 #include "fatfs/diskio.h"
 #include "mini-printf.h"
 
+#define WISHBONE_REG_PCNTR 0x0
+#define WISHBONE_REG_STATUS 0x1
+#define WISHBONE_REG_MODE 0x2
+#define WISHBONE_REG_HWVER 0x3
+#define WISHBONE_REG_SWVER 0x4
+#define WISHBONE_REG_SNIFFER_DATA 0x5
+#define WISHBONE_REG_SNIFFER_CONTROL 0x8
+#define WISHBONE_REG_MAPPER_READ_LO 0x9
+#define WISHBONE_REG_MAPPER_READ_HI 0xa
+#define WISHBONE_REG_MAPPER_WRITE_LO 0xb
+#define WISHBONE_REG_MAPPER_WRITE_HI 0xc
+#define WISHBONE_REG_COUNTER_RESET 0xd
+#define WISHBONE_REG_RAM_1M_ALIASING 0xe
+#define WISHBONE_REG_ID 0xf
+
 const unsigned char fallback_rom[] = {
     #embed "wasca-fallback.ss"
 };
@@ -44,6 +59,45 @@ uint32_t lsfr_next_random (uint32_t prev)
 		return  (prev & 0x7FFFFFFF)* 2;
 }
 
+char* mini_strcpy(char* dest, const char* src) {
+    int i = 0;
+    while (src[i] != '\0') {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = '\0'; // Properly terminate the string
+    return dest;
+}
+
+char* mini_strcat(char* dest, const char* src) {
+    char* ptr = dest;
+    while (*ptr != '\0') ptr++; // Find end of dest
+    while ((*ptr++ = *src++) != '\0'); // Copy src to dest
+    return dest;
+}
+
+char* mini_strstr(const char *haystack, const char *needle) {
+    // If needle is empty, return the entire haystack
+    if (*needle == '\0') return (char *)haystack;
+
+    for (; *haystack != '\0'; haystack++) {
+        // If first character matches, check the rest
+        if (*haystack == *needle) {
+            const char *h = haystack;
+            const char *n = needle;
+            
+            // Compare characters
+            while (*h != '\0' && *n != '\0' && *h == *n) {
+                h++;
+                n++;
+            }
+            // If we reached the end of the needle, it's a match
+            if (*n == '\0') return (char *)haystack;
+        }
+    }
+    return NULL; // Needle not found
+}
+
 int main() {
     //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
     //reg_uart_clkdiv = 347;// 115200 baud at 40MHz
@@ -63,11 +117,11 @@ int main() {
 	//set registers
 	//LED = 0x01;//test start marker
 	volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
-	pWishboneRegs[0x8] = 0xA;//sniffing only writes over CS1
-	pWishboneRegs[0x9] = 0xFFFFFFFF;//read mapper for CS0
-	pWishboneRegs[0xa] = 0x0000FFFF;//read mapper for CS1 + CS2
-	pWishboneRegs[0xb] = 0xFFFFFFFF;//write mapper for CS0
-	pWishboneRegs[0xc] = 0x0000FFFF;//write mapper for CS1 + CS2
+	pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
+	pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//read mapper for CS0
+	pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x0000FFFF;//read mapper for CS1 + CS2
+	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//write mapper for CS0
+	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//write mapper for CS1 + CS2
 	//LED = 0x00;//test start marker
 
 	//sniffer test
@@ -281,90 +335,283 @@ int main() {
 
 	FILINFO _filinfo;
 	FIL _file;
-	_filinfo.fname[0] = 'A';
 	int offset;
 	unsigned int readen;
-	int sh2_found = 0;
 	pSDRAM = (uint32_t *)0x10000000;
 	int error;
-	
-	while (_filinfo.fname[0] != 0) {
-		fr = f_readdir(&_dir,&_filinfo);
-		if (memcmp(_filinfo.fname,"wasca.ss",8) == 0) {
-			int size = _filinfo.fsize;
-			offset = 0;
-			error = f_open(&_file,_filinfo.fname,FA_READ);
-			//mini_printf("sclust=%x objsize=%x fptr=%x\n", _file.obj.sclust, _file.obj.objsize, _file.fptr);
-			//mini_printf("%s : open error %d \r\n",_filinfo.fname,error);
-			while(false == f_eof(&_file)) {
-				readen = -1;
-				for (int i=0;i<1024;i++)
-					buffer[i] - 0x17+i;
-				error = f_read(&_file,buffer,1024,&readen);
-				//mini_printf("wasca.ss : read at offset %x, error %d, readen %d \r\n",offset,error,readen);
-				for (int i=0;i<512;i++) {
-					pSDRAM[offset+i] = buffer16[i];
-					//mini_printf("%04x ",buffer16[i]);
-					//if (i%16==15)
-					//	mini_printf("\r\n");
-				}
-				offset+=512;
+
+	if (FR_OK == f_stat("wasca.ss", &_filinfo))
+	{
+		int size = _filinfo.fsize;
+		offset = 0;
+		error = f_open(&_file,_filinfo.fname,FA_READ);
+		//mini_printf("sclust=%x objsize=%x fptr=%x\n", _file.obj.sclust, _file.obj.objsize, _file.fptr);
+		//mini_printf("%s : open error %d \r\n",_filinfo.fname,error);
+		while(false == f_eof(&_file)) {
+			readen = -1;
+			for (int i=0;i<1024;i++)
+				buffer[i] - 0x17+i;
+			error = f_read(&_file,buffer,1024,&readen);
+			//mini_printf("wasca.ss : read at offset %x, error %d, readen %d \r\n",offset,error,readen);
+			for (int i=0;i<512;i++) {
+				pSDRAM[offset+i] = buffer16[i];
+				//mini_printf("%04x ",buffer16[i]);
+				//if (i%16==15)
+				//	mini_printf("\r\n");
 			}
-			f_close(&_file);
-			mini_printf("wasca.ss loaded, %d bytes, written %d\r\n",size,offset*2);
-			sh2_found = 1;
+			offset+=512;
 		}
-		/*if (fr != FR_OK)
-		{
-			mini_printf("f_readdir error %x \r\n",fr);
+		f_close(&_file);
+		mini_printf("wasca.ss loaded, %d bytes, written %d\r\n",size,offset*2);
 		}
-		else
-			mini_printf("f_readdir OK\r\n");*/
-		//mini_printf("Found file:%s (%d)\r\n",_filinfo.fname,_filinfo.fsize);
-	}
-	if (0 == sh2_found)
+	else
 	{
 		mini_printf("Cannot find wasca.sh2, using fallback ROM. %d bytes\r\n",sizeof(fallback_rom));
 	}
 
-	int led_toggle = 1;
-    while (1) {
-        LED = led_toggle;
-		led_toggle*=2;
-		if (led_toggle > 0x20) led_toggle = 1;
-        delay();
-		/*
-		//mini_printf("Verifying ram beyond 0x1000\r\n");
-		mini_printf("VV\r\n");
-		//writing
-		i = 0x1000/sizeof(uint32_t);
-		seed = 0x100500;
-		//while ( i < (0x10000/sizeof(uint32_t)) )
-		while ( i < (0x1300/sizeof(uint32_t)) )
-		{
-			p32[i] = seed;
-			i++;
-			seed = lsfr_next_random(seed);
+	//preparing advertisement lines for modes at the middle of CS0
+	volatile uint32_t * pAdvertise = (uint32_t *)0x12000000;
+	char adv_string[64];
+	uint16_t * adv_string16 = (uint16_t*)adv_string;
+	int adv_offset = 0;
+	int id = 1;
+	//power memory 0.5
+	pAdvertise[adv_offset] = (id++)<<8;
+	memset(adv_string,0,64);
+	if (FR_OK == f_stat("backup05.bin", &_filinfo))
+		mini_strcpy(adv_string,"BACKUP 0.5M (backup05.bin)");
+	else
+		mini_strcpy(adv_string,"BACKUP 0.5M (New file: backup05.bin)");
+	for (int i=0; i<31;i++)
+		pAdvertise[adv_offset+i+1] = adv_string16[i];
+	adv_offset+= 32;
+	//power memory 1
+	memset(adv_string,0,64);
+	pAdvertise[adv_offset] = (id++)<<8;
+	if (FR_OK == f_stat("backup1.bin", &_filinfo))
+		mini_strcpy(adv_string,"BACKUP 1M (backup1.bin)");
+	else
+		mini_strcpy(adv_string,"BACKUP 1M (New file: backup1.bin)");
+	for (int i=0; i<31;i++)
+		pAdvertise[adv_offset+i+1] = adv_string16[i];
+	adv_offset+= 32;
+	//power memory 2
+	memset(adv_string,0,64);
+	pAdvertise[adv_offset] = (id++)<<8;
+	if (FR_OK == f_stat("backup2.bin", &_filinfo))
+		mini_strcpy(adv_string,"BACKUP 2M (backup2.bin)");
+	else
+		mini_strcpy(adv_string,"BACKUP 2M (New file: backup2.bin)");
+	for (int i=0; i<31;i++)
+		pAdvertise[adv_offset+i+1] = adv_string16[i];
+	adv_offset+= 32;
+	//power memory 4
+	memset(adv_string,0,64);
+	pAdvertise[adv_offset] = (id++)<<8;
+	if (FR_OK == f_stat("backup4.bin", &_filinfo))
+		mini_strcpy(adv_string,"BACKUP 4M (backup4.bin)");
+	else
+		mini_strcpy(adv_string,"BACKUP 4M (New file: backup4.bin)");
+	for (int i=0; i<31;i++)
+		pAdvertise[adv_offset+i+1] = adv_string16[i];
+	adv_offset+= 32;
+	//1M RAM
+	memset(adv_string,0,64);
+	pAdvertise[adv_offset] = (id++)<<8;
+	mini_strcpy(adv_string,"RAM 1M");
+	for (int i=0; i<31;i++)
+		pAdvertise[adv_offset+i+1] = adv_string16[i];
+	adv_offset+= 32;
+	//4M RAM
+	memset(adv_string,0,64);
+	pAdvertise[adv_offset] = (id++)<<8;
+	mini_strcpy(adv_string,"RAM 4M");
+	for (int i=0; i<31;i++)
+		pAdvertise[adv_offset+i+1] = adv_string16[i];
+	adv_offset+= 32;
+	//special Heart of Darkness mode
+	memset(adv_string,0,64);
+	pAdvertise[adv_offset] = (id++)<<8;
+	mini_strcpy(adv_string,"RAM (Heart of Darkness)");
+	for (int i=0; i<31;i++)
+		pAdvertise[adv_offset+i+1] = adv_string16[i];
+	adv_offset+= 32;
+	//now listing every ss file except wasca.ss
+	_filinfo.fname[0] = 1;
+	f_readdir(&_dir,NULL);//rewind to start
+	while (_filinfo.fname[0] != 0) {
+		fr = f_readdir(&_dir,&_filinfo);
+		if (mini_strstr(_filinfo.fname,".ss")) {
+			if (memcmp(_filinfo.fname,"wasca.ss",8) != 0) {
+				memset(adv_string,0,64);
+				pAdvertise[adv_offset] = (id++)<<8;
+				mini_strcpy(adv_string,"ROM (");
+				mini_strcat(adv_string,_filinfo.fname);
+				mini_strcat(adv_string,")");
+				for (int i=0; i<31;i++)
+					pAdvertise[adv_offset+i+1] = adv_string16[i];
+				adv_offset+= 32;
+			}
 		}
-		//reading
-		i = 0x1000/sizeof(uint32_t);
-		seed = 0x100500;
-		errors = 0;
-		//while ( i < (0x10000/sizeof(uint32_t)) )
-		while ( i < (0x1300/sizeof(uint32_t)) )
-		{
-			if (p32[i] != seed)
+	}
+	pAdvertise[adv_offset] = 0;//end of advertising list
+
+	//waiting for mode selection
+	mini_printf("Waiting for mode selection...");
+	while(pWishboneRegs[WISHBONE_REG_MODE] == 0)
+		;
+	mini_printf("done, mode %d\r\n",pWishboneRegs[2]);
+
+	//executing prepare sequence
+	switch (pWishboneRegs[WISHBONE_REG_MODE]) {
+		case 0:
+			//some error? we never advertised 0
+			pWishboneRegs[WISHBONE_REG_ID] = 0xFFFF;
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 101;
+			break;
+		case 1:
+			pWishboneRegs[WISHBONE_REG_ID] = 0xFF21;
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 1;
+			if (FR_OK != f_stat("backup05.bin", &_filinfo))
 			{
-				errors++;
-				if (errors < 10)
-				{
-					uint32_t addr = i*sizeof(uint32_t);
-					mini_printf("Error at address %x\r\n",addr);
+				f_open(&_file,"backup05.bin",FA_CREATE_ALWAYS | FA_WRITE);
+				for (int i=0;i<1024;i++)
+					f_write(&_file,buffer,1024,&readen);
+				f_close(&_file);
+			}
+			f_open(&_file,"backup05.bin",FA_READ);
+			offset = 0;
+			while(false == f_eof(&_file)) {
+				readen = -1;
+				f_read(&_file,buffer,1024,&readen);
+				for (int i=0;i<512;i++) {
+					pSDRAM2[offset+i] = buffer16[i];
+				}
+				offset+=512;
+				pWishboneRegs[WISHBONE_REG_PCNTR] = offset/10486;
+			}
+			f_close(&_file);
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			break;
+		case 2:
+			pWishboneRegs[WISHBONE_REG_ID] = 0xFF22;
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 1;
+			if (FR_OK != f_stat("backup1.bin", &_filinfo))
+			{
+				f_open(&_file,"backup1.bin",FA_CREATE_ALWAYS | FA_WRITE);
+				for (int i=0;i<2048;i++)
+					f_write(&_file,buffer,1024,&readen);
+				f_close(&_file);
+			}
+			f_open(&_file,"backup1.bin",FA_READ);
+			offset = 0;
+			while(false == f_eof(&_file)) {
+				readen = -1;
+				f_read(&_file,buffer,1024,&readen);
+				for (int i=0;i<512;i++) {
+					pSDRAM2[offset+i] = buffer16[i];
+				}
+				offset+=512;
+				pWishboneRegs[WISHBONE_REG_PCNTR] = offset/20972;
+			}
+			f_close(&_file);
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			break;
+		case 3:
+			pWishboneRegs[WISHBONE_REG_ID] = 0xFF23;
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 1;
+			if (FR_OK != f_stat("backup2.bin", &_filinfo))
+			{
+				f_open(&_file,"backup2.bin",FA_CREATE_ALWAYS | FA_WRITE);
+				for (int i=0;i<4096;i++)
+					f_write(&_file,buffer,1024,&readen);
+				f_close(&_file);
+			}
+			f_open(&_file,"backup2.bin",FA_READ);
+			offset = 0;
+			while(false == f_eof(&_file)) {
+				readen = -1;
+				f_read(&_file,buffer,1024,&readen);
+				for (int i=0;i<512;i++) {
+					pSDRAM2[offset+i] = buffer16[i];
+				}
+				offset+=512;
+				pWishboneRegs[WISHBONE_REG_PCNTR] = offset/41943;
+			}
+			f_close(&_file);
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			break;
+		case 4:
+			pWishboneRegs[WISHBONE_REG_ID] = 0xFF24;
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 1;
+			if (FR_OK != f_stat("backup4.bin", &_filinfo))
+			{
+				f_open(&_file,"backup4.bin",FA_CREATE_ALWAYS | FA_WRITE);
+				for (int i=0;i<8192;i++)
+					f_write(&_file,buffer,1024,&readen);
+				f_close(&_file);
+			}
+			f_open(&_file,"backup4.bin",FA_READ);
+			offset = 0;
+			while(false == f_eof(&_file)) {
+				readen = -1;
+				f_read(&_file,buffer,1024,&readen);
+				for (int i=0;i<512;i++) {
+					pSDRAM2[offset+i] = buffer16[i];
+				}
+				offset+=512;
+				pWishboneRegs[WISHBONE_REG_PCNTR] = offset/83886;
+			}
+			f_close(&_file);
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			break;
+		case 5:
+			pWishboneRegs[WISHBONE_REG_RAM_1M_ALIASING] = 0x1;
+			pWishboneRegs[WISHBONE_REG_ID] = 0xFF5A;
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			break;
+		case 6:
+			pWishboneRegs[WISHBONE_REG_ID] = 0xFF5C;
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			break;
+		case 7:
+			pWishboneRegs[WISHBONE_REG_ID] = 0xFFFF;
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			break;
+		default:
+			pWishboneRegs[WISHBONE_REG_ID] = 0xFFFF;
+			//getting rom
+			f_readdir(&_dir,NULL);//rewind to start
+			int id = 8;
+			while (_filinfo.fname[0] != 0) {
+				fr = f_readdir(&_dir,&_filinfo);
+				if (mini_strstr(_filinfo.fname,".ss")) {
+					if (memcmp(_filinfo.fname,"wasca.ss",8) != 0) {
+						if (id == pWishboneRegs[WISHBONE_REG_MODE]) {				
+							f_open(&_file,_filinfo.fname,FA_READ);
+							offset = 0;
+							while(false == f_eof(&_file)) {
+								readen = -1;
+								f_read(&_file,buffer,1024,&readen);
+								for (int i=0;i<512;i++) {
+									pSDRAM[offset+i] = buffer16[i];
+								}
+								offset+=512;
+								pWishboneRegs[WISHBONE_REG_PCNTR] = (100*offset)/_filinfo.fsize;
+							}
+							f_close(&_file);
+						}
+						id++;
+					}
 				}
 			}
-			i++;
-			seed = lsfr_next_random(seed);
-		}
-		mini_printf("Verifying complete\r\n");*/
+			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			break;
+	}
+
+	//main cycle
+	LED = 0xff;
+    while (1) {
+		
     }
 }

@@ -28,7 +28,7 @@
 module attosoc (
 	input wire sdram_clk_i,
 	input wire mcu_clk_i,
-	output wire [5:0] led,
+	output reg [5:0] led,
 	input wire sd_clk_i,
 	inout wire sd_cmd,
 	inout wire [3:0] sd_dat,
@@ -156,17 +156,18 @@ module attosoc (
 	//led control - write only
 	reg led_ready;
 
+    initial led = 0;
 	always @(posedge clk) begin
 		led_ready <= 1'b0;
 		if (soc_valid && soc_wstrb[0] && (soc_addr[28:24] == 5'h02) && soc_addr[3:2] == 2'b0) begin
-	    	//led[4:0] <= soc_wdata[4:0];
+	    	led[5:0] <= soc_wdata[5:0];
 			led_ready <= 1'b1;
 		end
 	end
-	assign led[1:0] = 0;
+	/*assign led[1:0] = 0;
 	assign led[2] = ~abus_chipselect[0];
 	assign led[4:3] = 0;
-	assign led[5] = ~abus_chipselect[1];
+	assign led[5] = ~abus_chipselect[1];*/
 
 	//wishbone ready
 	assign soc_ready = (soc_valid && led_ready) ||
@@ -177,8 +178,8 @@ module attosoc (
 						(soc_valid && workram_ready);
 
 	//wishbone rdata mux
-	assign soc_rdata = simpleuart_reg_div_sel ? simpleuart_reg_div_do :
-						simpleuart_reg_dat_sel ? simpleuart_reg_dat_do :
+	assign soc_rdata = //simpleuart_reg_div_sel ? simpleuart_reg_div_do :
+						//simpleuart_reg_dat_sel ? simpleuart_reg_dat_do :
 						sd_regs_sel ? sd_rdata :
 						sdram_mem_sel ? sdram_mem_data :
 						sdram_regs_sel ? sdram_regs_data :
