@@ -182,22 +182,6 @@ int main() {
 	//mini_printf("\r\nFallback ROM : %d bytes\r\n",sizeof(fallback_rom));
 	/*while(1);
 
-	//wishbone regs write test
-	LED = 0x02;//test start marker
-	pWishboneRegs[0] = 0x87654321;//PCNTR
-	pWishboneRegs[1] = 0xdeadbeef;//STATUS
-	pWishboneRegs[4] = 0xfeedbead;//SWREG
-	a = pWishboneRegs[0];
-	if (a != 0x00004321)
-		mini_printf("WREG ERR1\r\n");
-	a = pWishboneRegs[1];
-	if (a != 0x0000beef)
-		mini_printf("WREG ERR2\r\n");
-	a = pWishboneRegs[4];
-	if (a != 0x0000bead)
-		mini_printf("WREG ERR3\r\n");
-	LED = 0x00;//test end marker
-
 	mini_printf("SDRAM test...\r\n");
 	//mini_printf("S\r\n");
 	//sdram test
@@ -366,7 +350,7 @@ int main() {
 		}
 	else
 	{
-		mini_printf("Cannot find wasca.sh2, using fallback ROM. %d bytes\r\n",sizeof(fallback_rom));
+		mini_printf("Cannot find wasca.ss, using fallback ROM. %d bytes\r\n",sizeof(fallback_rom));
 	}
 
 	//preparing advertisement lines for modes at the middle of CS0
@@ -458,9 +442,11 @@ int main() {
 
 	//waiting for mode selection
 	mini_printf("Waiting for mode selection...");
+	pWishboneRegs[WISHBONE_REG_PCNTR] = 102;
 	while(pWishboneRegs[WISHBONE_REG_MODE] == 0)
 		;
-	mini_printf("done, mode %d\r\n",pWishboneRegs[2]);
+	mini_printf("done, mode %d\r\n",pWishboneRegs[WISHBONE_REG_MODE]);
+	pWishboneRegs[WISHBONE_REG_PCNTR] = 103;
 
 	//executing prepare sequence
 	switch (pWishboneRegs[WISHBONE_REG_MODE]) {

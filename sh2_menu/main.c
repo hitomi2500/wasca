@@ -82,9 +82,9 @@ void redraw_menu (int current_item) {
 
 int main(void)
 {
-	int sel = 0;
-	bool redrawMenu = true, redrawBG = true, key_pressed = false;
-	int menu_size=0;
+	//int sel = 0;
+	//bool redrawMenu = true, redrawBG = true, key_pressed = false;
+	//int menu_size=0;
 	char string_buf[128];
 
 	video_screen_mode_t screenMode =
@@ -134,8 +134,8 @@ int main(void)
 	while (vdp2_tvmd_vblank_out())
 		frame_counter++;
 
-	redrawMenu = true;
-	redrawBG = true;
+	//redrawMenu = true;
+	//redrawBG = true;
 
 	//register vblank handler
 	vdp_sync_vblank_out_set(suite_vblank_out_handler, NULL);
@@ -164,35 +164,45 @@ int main(void)
 		get_digital_keypress_anywhere(&controller);
 		
 		if(controller.pressed.button.up) {
+			wait_for_key_unpress();
 			current_item--;
 			if (current_item < 0)
 				current_item = list_size - 1;				
 		}
 		if(controller.pressed.button.down) {
+			wait_for_key_unpress();
 			current_item++;
 			if (current_item >= list_size)
 				current_item = 0;				
 		}
 		if ((preparing == 0) && (controller.pressed.button.a)) {
+			wait_for_key_unpress();
+			pWascaRegs[10] = current_item+1;
 			preparing = 1;
 			go_reboot = 1;
 		}
 		if ((preparing == 0) && (controller.pressed.button.b)) {
+			wait_for_key_unpress();
 			preparing = 2;
 			go_multiplayer = 1;
 		}
 		if ((preparing == 0) && (controller.pressed.button.c)) {
+			wait_for_key_unpress();
+			pWascaRegs[10] = current_item+1;
 			preparing = 1;
 			go_multiplayer = 1;
 		}
-		
+
 		if (preparing == 1) {
-			sprintf(string_buf,"Loading, %d%%     ",pWascaRegs[8]);
+			ClearText(70+strlen("Loading: ")*_fw,(list_size+8)*_fh,3*_fw,_fh);
+			sprintf(string_buf,"Loading: %3d percents     ",pWascaRegs[8]);
 			DrawString(string_buf, 70, (list_size+8)*_fh, FONT_WHITE);
-			if (pWascaRegs[8] == 100)
-				preparing = 2;
+			if (preparing == 1) {
+				if (pWascaRegs[8] == 100)
+					preparing = 2;
+			}
 		}
-		
+				
 		if (preparing == 2) {
 			if (go_reboot)
 				bios_execute();
@@ -204,6 +214,5 @@ int main(void)
 		redraw_menu(current_item);
 		vdp2_sync();
 		vdp2_sync_wait();
-		wait_for_key_unpress();
 	}
 }
