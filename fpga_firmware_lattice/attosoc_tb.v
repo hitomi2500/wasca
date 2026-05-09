@@ -206,6 +206,8 @@ module testbench();
 	    #5250
 	    #750
 	    #750*/
+	    //write mode reg
+	    abus_write_task( .addr({1'b1,20'hFFFFF,3'b010}), .data(16'h1234), .chipselect(3'b110), .dqm(2'b00));
 	    //read system regs
 	    abus_read_burst2_task( .addr({1'b1,20'hFFFFF,3'b000}), .chipselect(3'b110));
 	    abus_read_burst2_task( .addr({1'b1,20'hFFFFF,3'b010}), .chipselect(3'b110));

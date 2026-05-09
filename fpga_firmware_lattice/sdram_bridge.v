@@ -646,9 +646,9 @@ module sdram_bridge (
 	
 	//latch transaction direction
 	always @(posedge sdram_clock)
-	   if ( ( (abus_write_pulse[0]) || (abus_write_pulse[1]) ) && mapper_write_enable)
+	   if ( abus_cspulse3 && ( (~abus_write_buf[0]) || (~abus_write_buf[1]) ) && mapper_write_enable)
 	       my_little_transaction_dir <= 2'd`DIR_WRITE;
-	   else if (abus_read_pulse)
+	   else if ( abus_cspulse && ~abus_read_buf)
 	       my_little_transaction_dir <= 2'd`DIR_READ;
 	   else if (abus_anypulse_off && ~abus_cspulse_off) //ending anything but not cs
 	       my_little_transaction_dir <= 2'd`DIR_NONE;

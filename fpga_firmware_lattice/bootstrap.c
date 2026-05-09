@@ -21,6 +21,15 @@
 #define WISHBONE_REG_RAM_1M_ALIASING 0xe
 #define WISHBONE_REG_ID 0xf
 
+#define LED_OFF 0x0
+#define LED_EXT_RED 0x20
+#define LED_EXT_GREEN 0x10
+#define LED_EXT_BLUE 0x8
+#define LED_EXT_CYAN (LED_EXT_GREEN | LED_EXT_BLUE)
+#define LED_EXT_MAGENTA (LED_EXT_RED | LED_EXT_BLUE)
+#define LED_EXT_YELLOW (LED_EXT_RED | LED_EXT_GREEN)
+#define LED_EXT_WHITE (LED_EXT_RED | LED_EXT_GREEN | LED_EXT_BLUE)
+
 const unsigned char fallback_rom[] = {
     #embed "wasca-fallback.ss"
 };
@@ -98,40 +107,9 @@ char* mini_strstr(const char *haystack, const char *needle) {
     return NULL; // Needle not found
 }
 
-int main() {
-    //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
-    //reg_uart_clkdiv = 347;// 115200 baud at 40MHz
-    reg_uart_clkdiv = 434;//432;//434;// 115200 baud at 50MHz
-    //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
-
-	uint32_t seed = 0x100500;
-	uint32_t errors = 0;
-
+int sdram_quicktest() {
 	volatile uint32_t * pSDRAM = (uint32_t *)0x10000000;
 	volatile uint32_t * pSDRAM2 = (uint32_t *)0x14000000;
-
-	uint16_t * buffer16 = (uint16_t *)buffer;
-
-	//mini_printf("Boot");
-
-	//set registers
-	//LED = 0x01;//test start marker
-	volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
-	pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
-	pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//read mapper for CS0
-	pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x0000FFFF;//read mapper for CS1 + CS2
-	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//write mapper for CS0
-	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//write mapper for CS1 + CS2
-	//LED = 0x00;//test start marker
-
-	//sniffer test
-	/*LED = 0xFF;
-	volatile uint32_t dummy = 0;
-	while(1)
-		dummy = pWishboneRegs[5];*/
-
-	//quick SDRAM test
-	//LED = 0x03;//test start marker
 	volatile uint32_t a;
 	//CS0
 	pSDRAM[0] = 0x12345678;
@@ -165,29 +143,15 @@ int main() {
 		a = pSDRAM2[0x7fffff];
 		if (a != 0xbeef)
 			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0xbeef,a);
-	//LED = 0x00;//test start marker
+}
 
-	//write fallback rom into CS0
-	uint16_t * fallback_rom_16 = (uint16_t *)fallback_rom;
-	//LED = 0x02;
-	for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
-		pSDRAM[i] = fallback_rom_16[i];
-	}
-	//LED = 0x00;
-	//LED = 0x03;
-	/*for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
-		pSDRAM2[i] = fallback_rom_16[i];
-	}*/
-	//LED = 0x00;
-	//mini_printf("\r\nFallback ROM : %d bytes\r\n",sizeof(fallback_rom));
-	/*while(1);
-
+int sdram_test() {
+	uint32_t seed;
+	volatile uint32_t * pSDRAM = (uint32_t *)0x10000000;
+	volatile uint32_t * pSDRAM2 = (uint32_t *)0x14000000;
+	LED = LED_EXT_RED;
+	int errors = 0;
 	mini_printf("SDRAM test...\r\n");
-	//mini_printf("S\r\n");
-	//sdram test
-
-	//full sdram test
-	LED = 0x04;//test start marker
 	//starting with CS0
 	seed = 0x100500;
 	for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
@@ -211,10 +175,12 @@ int main() {
 			errors++;
 		}
 		seed = lsfr_next_random(seed);
-		if (i%0x40000 == 0x3ffff)
+		if (i%0x40000 == 0x3ffff) {
 			mini_printf("SDRAM test: read pass addr %x \r\n",i*4+4);
+			LED = (i&0x80000) ? LED_EXT_RED : LED_OFF;
+		}
 	}
-	LED = 0x05;//test start marker
+	LED = LED_EXT_RED;
 	//now CS1
 	seed = 0x100500;
 	for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
@@ -237,60 +203,45 @@ int main() {
 			errors++;
 		}
 		seed = lsfr_next_random(seed);
-		if (i%0x40000 == 0x3ffff)
+		if (i%0x40000 == 0x3ffff) {
 			mini_printf("SDRAM2 test: read pass addr %x \r\n",0x4000000+i*4+4);
+			LED = (i&0x80000) ? LED_EXT_RED : LED_OFF;
+		}
 	}
-	LED = 0x00;//test end marker
-	mini_printf("SDRAM test DONE\r\n");*/
+	LED =  LED_OFF;
+	mini_printf("SDRAM test DONE\r\n");
+	return errors;
+}
+
+int main() {
+	LED = LED_EXT_RED; //start with red led
+    //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
+    //reg_uart_clkdiv = 347;// 115200 baud at 40MHz
+    reg_uart_clkdiv = 434;//432;//434;// 115200 baud at 50MHz
+    //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
+
+	volatile uint32_t * pSDRAM = (uint32_t *)0x10000000;
+	volatile uint32_t * pSDRAM2 = (uint32_t *)0x14000000;
+
+	uint16_t * buffer16 = (uint16_t *)buffer;
+
+	//set registers
+	volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
+	pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
+	pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//read mapper for CS0
+	pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x0000FFFF;//read mapper for CS1 + CS2
+	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0x80000000;//write mapper for CS0
+	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x00000000;//write mapper for CS1 + CS2
+
+	sdram_quicktest();
+
+	//write fallback rom into CS0
+	uint16_t * fallback_rom_16 = (uint16_t *)fallback_rom;
+	for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
+		pSDRAM[i] = fallback_rom_16[i];
+	}
 	
 	mini_printf("\r\n\r\n%s %s\r\n",__DATE__,__TIME__);
-
-	//init sdio driver
-	/*struct SDIODRV * drv;
-	struct SDIO * sdio_dev_ptr = (SDIO *)0x03000000;
-	drv = sdio_init(sdio_dev_ptr);
-
-	if (NULL == drv) {
-		mini_printf("SDIO init failed\r\n");
-		return -1;
-	}
-	else
-	{
-		mini_printf("SDIO init OK\r\n");
-	}*/
-
-	//read some blocks
-
-	/*for (int k=0;k<16;k++)
-	{ 
-		if (sdio_read(drv, k, 1, buff) != RES_OK) {
-			mini_printf("sdio_read failed\r\n");
-		}
-		else
-			mini_printf("sdio_read OK\r\n");
-
-		//unscrambling data
-		uint8_t c;
-		for (int i=0;i<512;i+=4){
-			c = buff[i];
-			buff[i] = buff[i+3];
-			buff[i+3] = c;
-			c = buff[i+1];
-			buff[i+1] = buff[i+2];
-			buff[i+2] = c;
-		}
-
-		//dumping data
-		mini_printf("dumping data at addr=0x%x\r\n",k*512);
-		for (int j=0;j<32;j++) {
-				for (int i=0;i<16;i++){
-					uint8_t code = buff[j*16+i];
-					mini_printf("%2x ",code);
-				}
-				mini_printf("\r\n");
-			}
-	}
-	while (1);//halt*/
 
 	mini_printf("Mount SD...");
 	FRESULT fr = f_mount(&FatFs, "0:/", 1);	//mount SD card
@@ -301,10 +252,6 @@ int main() {
 	else
 		mini_printf("mount OK\r\n");*/
 	mini_printf("OK\r\n");
-
-	//mini_printf("fs_type=%d\n", FatFs.fs_type);
-	//mini_printf("volbase=%x fatbase=%x dirbase=%x database=%x csize=%x\n",
-    //   FatFs.volbase, FatFs.fatbase, FatFs.dirbase, FatFs.database, FatFs.csize);
 
 	DIR _dir;
 	mini_printf("Open root dir...");
@@ -321,7 +268,6 @@ int main() {
 	FIL _file;
 	int offset;
 	unsigned int readen;
-	pSDRAM = (uint32_t *)0x10000000;
 	int error;
 
 	if (FR_OK == f_stat("wasca.ss", &_filinfo))
@@ -329,24 +275,18 @@ int main() {
 		int size = _filinfo.fsize;
 		offset = 0;
 		error = f_open(&_file,_filinfo.fname,FA_READ);
-		//mini_printf("sclust=%x objsize=%x fptr=%x\n", _file.obj.sclust, _file.obj.objsize, _file.fptr);
-		//mini_printf("%s : open error %d \r\n",_filinfo.fname,error);
 		while(false == f_eof(&_file)) {
 			readen = -1;
 			for (int i=0;i<1024;i++)
 				buffer[i] - 0x17+i;
 			error = f_read(&_file,buffer,1024,&readen);
-			//mini_printf("wasca.ss : read at offset %x, error %d, readen %d \r\n",offset,error,readen);
-			for (int i=0;i<512;i++) {
+			for (int i=0;i<512;i++)
 				pSDRAM[offset+i] = buffer16[i];
-				//mini_printf("%04x ",buffer16[i]);
-				//if (i%16==15)
-				//	mini_printf("\r\n");
-			}
 			offset+=512;
 		}
 		f_close(&_file);
 		mini_printf("wasca.ss loaded, %d bytes, written %d\r\n",size,offset*2);
+		LED = LED_EXT_BLUE;//if sh2 bootrom found, change led to blue
 		}
 	else
 	{
@@ -447,6 +387,9 @@ int main() {
 		;
 	mini_printf("done, mode %d\r\n",pWishboneRegs[WISHBONE_REG_MODE]);
 	pWishboneRegs[WISHBONE_REG_PCNTR] = 103;
+	LED = LED_EXT_CYAN;
+
+	int creating_backup = 0;
 
 	//executing prepare sequence
 	switch (pWishboneRegs[WISHBONE_REG_MODE]) {
@@ -454,15 +397,19 @@ int main() {
 			//some error? we never advertised 0
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFFFF;
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 101;
+			LED = LED_EXT_RED;
 			break;
 		case 1:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF21;
-			pWishboneRegs[WISHBONE_REG_PCNTR] = 1;
 			if (FR_OK != f_stat("backup05.bin", &_filinfo))
 			{
+				creating_backup = 1;
 				f_open(&_file,"backup05.bin",FA_CREATE_ALWAYS | FA_WRITE);
-				for (int i=0;i<1024;i++)
+				for (int i=0;i<1024;i++) {
 					f_write(&_file,buffer,1024,&readen);
+					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/1024;
+					LED = (i&0x20) ? LED_EXT_MAGENTA : LED_OFF;
+				}
 				f_close(&_file);
 			}
 			f_open(&_file,"backup05.bin",FA_READ);
@@ -474,19 +421,27 @@ int main() {
 					pSDRAM2[offset+i] = buffer16[i];
 				}
 				offset+=512;
-				pWishboneRegs[WISHBONE_REG_PCNTR] = offset/10486;
+				pWishboneRegs[WISHBONE_REG_PCNTR] = (creating_backup) ? 50 + offset/10486 : offset/5243;
+				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
 			f_close(&_file);
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
+			LED = LED_EXT_GREEN;
 			break;
 		case 2:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF22;
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 1;
 			if (FR_OK != f_stat("backup1.bin", &_filinfo))
 			{
+				creating_backup = 1;
 				f_open(&_file,"backup1.bin",FA_CREATE_ALWAYS | FA_WRITE);
-				for (int i=0;i<2048;i++)
+				for (int i=0;i<2048;i++) {
 					f_write(&_file,buffer,1024,&readen);
+					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/2048;
+					LED = (i&0x20) ? LED_EXT_MAGENTA : LED_OFF;
+				}
 				f_close(&_file);
 			}
 			f_open(&_file,"backup1.bin",FA_READ);
@@ -498,19 +453,27 @@ int main() {
 					pSDRAM2[offset+i] = buffer16[i];
 				}
 				offset+=512;
-				pWishboneRegs[WISHBONE_REG_PCNTR] = offset/20972;
+				pWishboneRegs[WISHBONE_REG_PCNTR] = (creating_backup) ? 50 + offset/20972 : offset/10486;
+				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
 			f_close(&_file);
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
+			LED = LED_EXT_GREEN;
 			break;
 		case 3:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF23;
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 1;
 			if (FR_OK != f_stat("backup2.bin", &_filinfo))
 			{
+				creating_backup = 1;
 				f_open(&_file,"backup2.bin",FA_CREATE_ALWAYS | FA_WRITE);
-				for (int i=0;i<4096;i++)
+				for (int i=0;i<4096;i++) {
 					f_write(&_file,buffer,1024,&readen);
+					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/4096;
+					LED = (i&0x20) ? LED_EXT_MAGENTA : LED_OFF;
+				}
 				f_close(&_file);
 			}
 			f_open(&_file,"backup2.bin",FA_READ);
@@ -522,19 +485,27 @@ int main() {
 					pSDRAM2[offset+i] = buffer16[i];
 				}
 				offset+=512;
-				pWishboneRegs[WISHBONE_REG_PCNTR] = offset/41943;
+				pWishboneRegs[WISHBONE_REG_PCNTR] = (creating_backup) ? 50 + offset/41943 : offset/20972;
+				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
 			f_close(&_file);
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
+			LED = LED_EXT_GREEN;
 			break;
 		case 4:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF24;
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 1;
 			if (FR_OK != f_stat("backup4.bin", &_filinfo))
 			{
+				creating_backup = 1;
 				f_open(&_file,"backup4.bin",FA_CREATE_ALWAYS | FA_WRITE);
-				for (int i=0;i<8192;i++)
+				for (int i=0;i<8192;i++) {
 					f_write(&_file,buffer,1024,&readen);
+					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/8192;
+					LED = (i&0x20) ? LED_EXT_MAGENTA : LED_OFF;
+				}
 				f_close(&_file);
 			}
 			f_open(&_file,"backup4.bin",FA_READ);
@@ -546,23 +517,34 @@ int main() {
 					pSDRAM2[offset+i] = buffer16[i];
 				}
 				offset+=512;
-				pWishboneRegs[WISHBONE_REG_PCNTR] = offset/83886;
+				pWishboneRegs[WISHBONE_REG_PCNTR] = (creating_backup) ? 50 + offset/83886 : offset/41943;
+				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
 			f_close(&_file);
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
+			LED = LED_EXT_GREEN;
 			break;
 		case 5:
 			pWishboneRegs[WISHBONE_REG_RAM_1M_ALIASING] = 0x1;
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF5A;
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x00000000;//disable read for CS1
+			LED = LED_EXT_GREEN;
 			break;
 		case 6:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF5C;
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x00000000;//disable read for CS1
+			LED = LED_EXT_GREEN;
 			break;
 		case 7:
-			pWishboneRegs[WISHBONE_REG_ID] = 0xFFFF;
+			pWishboneRegs[WISHBONE_REG_ID] = 0x1234;
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
+			LED = LED_EXT_GREEN;
 			break;
 		default:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFFFF;
@@ -584,6 +566,7 @@ int main() {
 								}
 								offset+=512;
 								pWishboneRegs[WISHBONE_REG_PCNTR] = (100*offset)/_filinfo.fsize;
+								LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 							}
 							f_close(&_file);
 						}
@@ -592,11 +575,13 @@ int main() {
 				}
 			}
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//enable write for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
+			LED = LED_EXT_GREEN;
 			break;
 	}
 
 	//main cycle
-	LED = 0xff;
     while (1) {
 		
     }
