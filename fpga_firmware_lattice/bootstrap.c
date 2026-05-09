@@ -233,6 +233,14 @@ int main() {
 	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0x80000000;//write mapper for CS0
 	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x00000000;//write mapper for CS1 + CS2
 
+	/*volatile uint32_t sniff;
+	volatile uint32_t dummy;
+	while (1) {
+		sniff = pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL];
+		if (sniff & 0x03FF0000)
+			dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+	}*/
+
 	sdram_quicktest();
 
 	//write fallback rom into CS0
@@ -365,7 +373,7 @@ int main() {
 	f_readdir(&_dir,NULL);//rewind to start
 	while (_filinfo.fname[0] != 0) {
 		fr = f_readdir(&_dir,&_filinfo);
-		if (mini_strstr(_filinfo.fname,".ss")) {
+		if ( (mini_strstr(_filinfo.fname,".ss")) || (mini_strstr(_filinfo.fname,".bin")) || (mini_strstr(_filinfo.fname,".SS")) || (mini_strstr(_filinfo.fname,".BIN")) ) {
 			if (memcmp(_filinfo.fname,"wasca.ss",8) != 0) {
 				memset(adv_string,0,64);
 				pAdvertise[adv_offset] = (id++)<<8;
@@ -581,8 +589,60 @@ int main() {
 			break;
 	}
 
+	delay();
+	LED = LED_OFF;
+
+	//setup sniffer
+	switch (pWishboneRegs[WISHBONE_REG_MODE]) {
+		case 0:
+			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0x0;//broken config, not sniffing anything
+			break;
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
+			break;
+		case 5:
+		case 6:
+			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0x6;//sniffing only writes over CS0
+			break;
+		case 7:
+			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
+			
+			break;
+		default:
+			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xF;//sniffing all access over CS0 and CS1
+			break;
+    }
+
 	//main cycle
     while (1) {
-		
-    }
+		switch (pWishboneRegs[WISHBONE_REG_MODE]) {
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			//backup syncing
+			break;
+		case 5:
+		case 6:
+			//led blinking
+			break;
+		case 7:
+			//access led blinking
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+				//read fifo
+				volatile int dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+				LED = LED_EXT_GREEN;
+			}
+			else
+				LED = LED_OFF;
+			break;
+		default:
+			//access led blinking
+			break;
+  
+		}
+	}
 }
