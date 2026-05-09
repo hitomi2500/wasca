@@ -301,6 +301,25 @@ int main() {
 		mini_printf("Cannot find wasca.ss, using fallback ROM. %d bytes\r\n",sizeof(fallback_rom));
 	}
 
+	//getting roms list
+	char roms_filenames[32][64];
+	int roms_count = 0;
+	_filinfo.fname[0] = 1;
+	f_readdir(&_dir,NULL);//rewind to start
+	while (_filinfo.fname[0] != 0) {
+		fr = f_readdir(&_dir,&_filinfo);
+		if ( (mini_strstr(_filinfo.fname,".ss")) || (mini_strstr(_filinfo.fname,".bin")) || (mini_strstr(_filinfo.fname,".SS")) || (mini_strstr(_filinfo.fname,".BIN")) ) {
+			if ((memcmp(_filinfo.fname,"wasca.ss",8) != 0) && (memcmp(_filinfo.fname,"backup05.bin",12) != 0) && (memcmp(_filinfo.fname,"backup1.bin",11) != 0) &&
+			   												   (memcmp(_filinfo.fname,"backup2.bin",11) != 0) && (memcmp(_filinfo.fname,"backup4.bin",11) != 0) ){
+				if (roms_count < 10) {
+					memset(roms_filenames[roms_count],0,64);
+					mini_strcpy(roms_filenames[roms_count],_filinfo.fname);
+					roms_count++;
+				}
+			}
+		}
+	}
+
 	//preparing advertisement lines for modes at the middle of CS0
 	volatile uint32_t * pAdvertise = (uint32_t *)0x12000000;
 	char adv_string[64];
@@ -369,7 +388,7 @@ int main() {
 		pAdvertise[adv_offset+i+1] = adv_string16[i];
 	adv_offset+= 32;
 	//now listing every ss file except wasca.ss
-	_filinfo.fname[0] = 1;
+	/*_filinfo.fname[0] = 1;
 	f_readdir(&_dir,NULL);//rewind to start
 	while (_filinfo.fname[0] != 0) {
 		fr = f_readdir(&_dir,&_filinfo);
@@ -385,6 +404,17 @@ int main() {
 				adv_offset+= 32;
 			}
 		}
+	}*/
+	//now listing rom files
+	for (int i=0;i<roms_count;i++){
+		memset(adv_string,0,64);
+		pAdvertise[adv_offset] = (id++)<<8;
+		mini_strcpy(adv_string,"ROM (");
+		mini_strcat(adv_string,roms_filenames[i]);
+		mini_strcat(adv_string,")");
+		for (int i=0; i<31;i++)
+			pAdvertise[adv_offset+i+1] = adv_string16[i];
+		adv_offset+= 32;
 	}
 	pAdvertise[adv_offset] = 0;//end of advertising list
 
@@ -557,7 +587,7 @@ int main() {
 		default:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFFFF;
 			//getting rom
-			f_readdir(&_dir,NULL);//rewind to start
+			/*f_readdir(&_dir,NULL);//rewind to start
 			int id = 8;
 			while (_filinfo.fname[0] != 0) {
 				fr = f_readdir(&_dir,&_filinfo);
@@ -581,7 +611,21 @@ int main() {
 						id++;
 					}
 				}
+			}*/
+			f_open(&_file,roms_filenames[pWishboneRegs[WISHBONE_REG_MODE]-8],FA_READ);
+			int _size = f_size(&_file);
+			offset = 0;
+			while(false == f_eof(&_file)) {
+				readen = -1;
+				f_read(&_file,buffer,1024,&readen);
+				for (int i=0;i<512;i++) {
+					pSDRAM[offset+i] = buffer16[i];
+				}
+				offset+=512;
+				pWishboneRegs[WISHBONE_REG_PCNTR] = (100*offset)/_size;
+				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
+			f_close(&_file);
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//enable write for CS0
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
@@ -609,7 +653,6 @@ int main() {
 			break;
 		case 7:
 			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
-			
 			break;
 		default:
 			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xF;//sniffing all access over CS0 and CS1
@@ -628,6 +671,13 @@ int main() {
 		case 5:
 		case 6:
 			//led blinking
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+				//read fifo
+				volatile int dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+				LED = LED_EXT_GREEN;
+			}
+			else
+				LED = LED_OFF;
 			break;
 		case 7:
 			//access led blinking
@@ -640,9 +690,15 @@ int main() {
 				LED = LED_OFF;
 			break;
 		default:
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+				//read fifo
+				volatile int dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+				LED = LED_EXT_GREEN;
+			}
+			else
+				LED = LED_OFF;
 			//access led blinking
-			break;
-  
+			break;  
 		}
 	}
 }
