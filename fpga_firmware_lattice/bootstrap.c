@@ -407,7 +407,7 @@ int main() {
 		;
 	mini_printf("done, mode %d\r\n",pWishboneRegs[WISHBONE_REG_MODE]);
 	pWishboneRegs[WISHBONE_REG_PCNTR] = 103;
-	LED = LED_EXT_CYAN;
+	LED = LED_OFF;
 
 	int creating_backup = 0;
 
@@ -618,14 +618,92 @@ int main() {
 			break;
     }
 
-	//main cycle
-    while (1) {
-		switch (pWishboneRegs[WISHBONE_REG_MODE]) {
+	//remove bootable signature for everything except roms
+	switch (pWishboneRegs[WISHBONE_REG_MODE]) {
 		case 1:
 		case 2:
 		case 3:
 		case 4:
+		case 5:
+		case 6:
+		case 7:
+			for (int i=0;i<256;i++)
+				pSDRAM[i]  = 0;
+			break;
+		default:
+			break;
+    }
+
+	//main cycle
+    while (1) {
+		switch (pWishboneRegs[WISHBONE_REG_MODE]) {
+		case 1:
 			//backup syncing
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+				LED = LED_EXT_MAGENTA;
+				//read fifo
+				int offset = 512*pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+				//sync data
+				f_open(&_file,"backup05.bin",FA_OPEN_EXISTING | FA_WRITE);
+				f_lseek(&_file,offset);
+				for (int i=0;i<256;i++)
+					buffer[i] = pSDRAM2[offset+i];
+				f_write(&_file,buffer,512,&readen);
+				f_close(&_file);
+			}
+			else
+				LED = LED_OFF;
+			break;
+		case 2:
+			//backup syncing
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+				LED = LED_EXT_MAGENTA;
+				//read fifo
+				int offset = 512*pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+				//sync data
+				f_open(&_file,"backup1.bin",FA_OPEN_EXISTING | FA_WRITE);
+				f_lseek(&_file,offset);
+				for (int i=0;i<256;i++)
+					buffer[i] = pSDRAM2[offset+i];
+				f_write(&_file,buffer,512,&readen);
+				f_close(&_file);
+			}
+			else
+				LED = LED_OFF;
+			break;
+		case 3:
+			//backup syncing
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+				LED = LED_EXT_MAGENTA;
+				//read fifo
+				int offset = 512*pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+				//sync data
+				f_open(&_file,"backup2.bin",FA_OPEN_EXISTING | FA_WRITE);
+				f_lseek(&_file,offset);
+				for (int i=0;i<256;i++)
+					buffer[i] = pSDRAM2[offset+i];
+				f_write(&_file,buffer,512,&readen);
+				f_close(&_file);
+			}
+			else
+				LED = LED_OFF;
+			break;
+		case 4:
+			//backup syncing
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+				LED = LED_EXT_MAGENTA;
+				//read fifo
+				int offset = 512*pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+				//sync data
+				f_open(&_file,"backup4.bin",FA_OPEN_EXISTING | FA_WRITE);
+				f_lseek(&_file,offset);
+				for (int i=0;i<256;i++)
+					buffer[i] = pSDRAM2[offset+i];
+				f_write(&_file,buffer,512,&readen);
+				f_close(&_file);
+			}
+			else
+				LED = LED_OFF;
 			break;
 		case 5:
 		case 6:
