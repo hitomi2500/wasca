@@ -387,24 +387,6 @@ int main() {
 	for (int i=0; i<31;i++)
 		pAdvertise[adv_offset+i+1] = adv_string16[i];
 	adv_offset+= 32;
-	//now listing every ss file except wasca.ss
-	/*_filinfo.fname[0] = 1;
-	f_readdir(&_dir,NULL);//rewind to start
-	while (_filinfo.fname[0] != 0) {
-		fr = f_readdir(&_dir,&_filinfo);
-		if ( (mini_strstr(_filinfo.fname,".ss")) || (mini_strstr(_filinfo.fname,".bin")) || (mini_strstr(_filinfo.fname,".SS")) || (mini_strstr(_filinfo.fname,".BIN")) ) {
-			if (memcmp(_filinfo.fname,"wasca.ss",8) != 0) {
-				memset(adv_string,0,64);
-				pAdvertise[adv_offset] = (id++)<<8;
-				mini_strcpy(adv_string,"ROM (");
-				mini_strcat(adv_string,_filinfo.fname);
-				mini_strcat(adv_string,")");
-				for (int i=0; i<31;i++)
-					pAdvertise[adv_offset+i+1] = adv_string16[i];
-				adv_offset+= 32;
-			}
-		}
-	}*/
 	//now listing rom files
 	for (int i=0;i<roms_count;i++){
 		memset(adv_string,0,64);
@@ -568,13 +550,15 @@ int main() {
 			pWishboneRegs[WISHBONE_REG_RAM_1M_ALIASING] = 0x1;
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF5A;
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
-			pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x00000000;//disable read for CS1
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//enable write for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x00008000;//disable read for CS1
 			LED = LED_EXT_GREEN;
 			break;
 		case 6:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF5C;
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
-			pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x00000000;//disable read for CS1
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//enable write for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x00008000;//disable read for CS1
 			LED = LED_EXT_GREEN;
 			break;
 		case 7:
@@ -587,31 +571,6 @@ int main() {
 		default:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFFFF;
 			//getting rom
-			/*f_readdir(&_dir,NULL);//rewind to start
-			int id = 8;
-			while (_filinfo.fname[0] != 0) {
-				fr = f_readdir(&_dir,&_filinfo);
-				if (mini_strstr(_filinfo.fname,".ss")) {
-					if (memcmp(_filinfo.fname,"wasca.ss",8) != 0) {
-						if (id == pWishboneRegs[WISHBONE_REG_MODE]) {				
-							f_open(&_file,_filinfo.fname,FA_READ);
-							offset = 0;
-							while(false == f_eof(&_file)) {
-								readen = -1;
-								f_read(&_file,buffer,1024,&readen);
-								for (int i=0;i<512;i++) {
-									pSDRAM[offset+i] = buffer16[i];
-								}
-								offset+=512;
-								pWishboneRegs[WISHBONE_REG_PCNTR] = (100*offset)/_filinfo.fsize;
-								LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
-							}
-							f_close(&_file);
-						}
-						id++;
-					}
-				}
-			}*/
 			f_open(&_file,roms_filenames[pWishboneRegs[WISHBONE_REG_MODE]-8],FA_READ);
 			int _size = f_size(&_file);
 			offset = 0;
