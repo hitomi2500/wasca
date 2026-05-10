@@ -6399,957 +6399,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "IS66WVH8M8ALL-166B1LI:IS66WVH8M8ALL-166B1LI"
-			(pin_names
-				(offset 1.016)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "U"
-				(at -10.16 29.21 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Value" "IS66WVH8M8ALL-166B1LI"
-				(at -10.16 -35.56 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Footprint" "IS66WVH8M8ALL-166B1LI:BGA25C100P5X5_800X600X120N"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "PSRAM (Pseudo SRAM) Memory IC 64Mb (8M x 8) Parallel 166 MHz 36 ns 24-TFBGA (6x8)"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "SNAPEDA_PACKAGE_ID" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "B_NOM" "0.45"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "EMAX" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "VACANCIES" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "PACKAGE_TYPE" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "BODY_DIAMETER" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "THERMAL_PAD" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "Check_prices" "https://www.snapeda.com/parts/IS66WVH8M8ALL-166B1LI/ISSI%252C+Integrated+Silicon+Solution+Inc/view-part/?ref=eda"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "EMIN" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "JEDEC" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "Price" "None"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "ENOM" "1.0"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "COURTYARD_EXCESS" "1.0"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "D_NOM" "8.0"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "Purchase-URL" "https://www.snapeda.com/api/url_track_click_mouser/?unipart_id=1220267&manufacturer=ISSI, Integrated&part_name=IS66WVH8M8ALL-166B1LI&search_term=tbga-24"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "D_MAX" "8.1"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "A_MAX" "1.2"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "ALPHA_ROWS" "True"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "Package" "TBGA-24 ISSI"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "A_NOM" "1.2"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "A_MIN" "1.2"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "STANDARD" "IPC 7351B"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "PARTREV" "B2"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "DNOM" "1.0"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "SnapEDA_Link" "https://www.snapeda.com/parts/IS66WVH8M8ALL-166B1LI/ISSI%252C+Integrated+Silicon+Solution+Inc/view-part/?ref=snap"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "DMIN" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "E_NOM" "6.0"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "BALL_ROWS" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "DMAX" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "MANUFACTURER" "ISSI"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "IPC" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "PIN_COLUMNS" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "MF" "ISSI, Integrated"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "MAXIMUM_PACKAGE_HEIGHT" "1.2mm"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "BALL_COLUMNS" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "COLLAPSING_BALL" "True"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "PIN_COUNT_E" "5.0"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "PIN_COUNT_D" "5.0"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "E_MIN" "5.9"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "D_MIN" "7.9"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "MP" "IS66WVH8M8ALL-166B1LI"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "PINS" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "Availability" "In Stock"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "E_MAX" "6.1"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(symbol "IS66WVH8M8ALL-166B1LI_0_0"
-				(rectangle
-					(start -10.16 -33.02)
-					(end 10.16 27.94)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin input line
-					(at -15.24 17.78 0)
-					(length 5.08)
-					(name "~{CS}"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "A3"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -15.24 15.24 0)
-					(length 5.08)
-					(name "~{RESET}"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "A4"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin input clock
-					(at -15.24 7.62 0)
-					(length 5.08)
-					(name "~{CK}"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "B1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin input clock
-					(at -15.24 10.16 0)
-					(length 5.08)
-					(name "CK"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "B2"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 15.24 -27.94 180)
-					(length 5.08)
-					(name "VSS"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "B3"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 15.24 25.4 180)
-					(length 5.08)
-					(name "VCC"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "B4"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 15.24 -22.86 180)
-					(length 5.08)
-					(name "VSSQ"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "C1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at 15.24 15.24 180)
-					(length 5.08)
-					(name "RWDS"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "C3"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -15.24 -2.54 0)
-					(length 5.08)
-					(name "DQ2"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "C4"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 15.24 22.86 180)
-					(length 5.08)
-					(name "VCCQ"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "D1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -15.24 0 0)
-					(length 5.08)
-					(name "DQ1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "D2"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -15.24 2.54 0)
-					(length 5.08)
-					(name "DQ0"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "D3"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -15.24 -5.08 0)
-					(length 5.08)
-					(name "DQ3"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "D4"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -15.24 -7.62 0)
-					(length 5.08)
-					(name "DQ4"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "D5"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -15.24 -15.24 0)
-					(length 5.08)
-					(name "DQ7"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "E1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -15.24 -12.7 0)
-					(length 5.08)
-					(name "DQ6"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "E2"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at -15.24 -10.16 0)
-					(length 5.08)
-					(name "DQ5"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "E3"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 15.24 20.32 180)
-					(length 5.08)
-					(name "VCCQ__1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "E4"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 15.24 -25.4 180)
-					(length 5.08)
-					(name "VSSQ__1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "E5"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Logic_LevelTranslator:SN74LVC1T45DBV"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -16908,12 +15957,6 @@
 		(uuid "5bbde4f9-fcdb-4d27-a2d6-3847fcdd87ba")
 	)
 	(junction
-		(at 418.465 456.565)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5c1dc68f-bdd0-4cf0-9952-25ad00f9139a")
-	)
-	(junction
 		(at 96.52 133.35)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -17046,12 +16089,6 @@
 		(uuid "8e75264b-b45e-45ec-b230-7e1dce7d68b3")
 	)
 	(junction
-		(at 418.465 459.105)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "947c998f-c822-4cc9-aad0-4f282dbe7676")
-	)
-	(junction
 		(at 593.09 363.22)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -17112,12 +16149,6 @@
 		(uuid "aeaaa120-9cc5-4520-9a70-067fbc8f5b7b")
 	)
 	(junction
-		(at 419.1 405.765)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "b12aa606-39a1-4d80-bcdf-fc049f032c94")
-	)
-	(junction
 		(at 737.87 439.42)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -17146,12 +16177,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b66b83a0-313f-4b03-b851-c6e9577a6eb7")
-	)
-	(junction
-		(at 419.1 408.305)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "bd0c2584-c097-41bb-9a78-5da3dfae18b0")
 	)
 	(junction
 		(at 193.04 266.7)
@@ -18621,16 +17646,6 @@
 	)
 	(wire
 		(pts
-			(xy 419.1 405.765) (xy 419.1 408.305)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "09469941-9ed5-4c45-9e15-2477af6214ef")
-	)
-	(wire
-		(pts
 			(xy 99.06 85.09) (xy 99.06 97.79)
 		)
 		(stroke
@@ -19821,26 +18836,6 @@
 	)
 	(wire
 		(pts
-			(xy 416.56 408.305) (xy 419.1 408.305)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "33645d06-b67d-48f0-b4e9-d6a3ae26776b")
-	)
-	(wire
-		(pts
-			(xy 364.49 428.625) (xy 386.08 428.625)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3366d9c3-6d15-4ceb-a751-97a755e05e0c")
-	)
-	(wire
-		(pts
 			(xy 707.39 424.18) (xy 722.63 424.18)
 		)
 		(stroke
@@ -19858,16 +18853,6 @@
 			(type default)
 		)
 		(uuid "3382bf79-b686-4aeb-9419-c8ab591662bb")
-	)
-	(wire
-		(pts
-			(xy 386.08 433.705) (xy 364.49 433.705)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "33b06a51-c588-4502-91fc-11ab7d7b7dc5")
 	)
 	(wire
 		(pts
@@ -20048,16 +19033,6 @@
 			(type default)
 		)
 		(uuid "3a01de09-e522-46e1-a46b-d985184cd0ce")
-	)
-	(wire
-		(pts
-			(xy 386.08 438.785) (xy 364.49 438.785)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3a18a98a-bc02-4487-b960-9479bb6634b6")
 	)
 	(wire
 		(pts
@@ -20751,16 +19726,6 @@
 	)
 	(wire
 		(pts
-			(xy 386.08 413.385) (xy 364.49 413.385)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "509511d8-c4fa-43d5-b35f-081f2a7cbccd")
-	)
-	(wire
-		(pts
 			(xy 200.66 93.98) (xy 219.71 93.98)
 		)
 		(stroke
@@ -20768,16 +19733,6 @@
 			(type default)
 		)
 		(uuid "5099f397-6fe7-454f-899c-34e2b5f22ca7")
-	)
-	(wire
-		(pts
-			(xy 419.1 410.845) (xy 419.1 408.305)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "50ddafcc-602f-4be3-af03-9a1fbf59900e")
 	)
 	(wire
 		(pts
@@ -20838,16 +19793,6 @@
 			(type default)
 		)
 		(uuid "54093c93-5e7e-4c8d-8d94-40c077747c12")
-	)
-	(wire
-		(pts
-			(xy 386.08 423.545) (xy 364.49 423.545)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "54a3e2a0-2297-4e03-8eca-aa5f4ebdb7a5")
 	)
 	(wire
 		(pts
@@ -21188,16 +20133,6 @@
 			(type default)
 		)
 		(uuid "5cff09b0-b3d4-41a7-a6a4-7f917b40eda9")
-	)
-	(wire
-		(pts
-			(xy 386.08 415.925) (xy 364.5339 415.925)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5e0381db-c49d-482a-b4e4-7eb825cbfa4e")
 	)
 	(polyline
 		(pts
@@ -21641,16 +20576,6 @@
 	)
 	(wire
 		(pts
-			(xy 418.465 454.025) (xy 418.465 456.565)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6bf66545-38f5-4a83-803c-f57761c4654f")
-	)
-	(wire
-		(pts
 			(xy 739.14 59.69) (xy 764.54 59.69)
 		)
 		(stroke
@@ -21688,16 +20613,6 @@
 			(type default)
 		)
 		(uuid "6d36f2b1-3246-46a1-807d-96032d8e1520")
-	)
-	(wire
-		(pts
-			(xy 386.08 436.245) (xy 364.49 436.245)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6d55acd4-6200-420b-8f5c-bbd7a36bd909")
 	)
 	(wire
 		(pts
@@ -21768,16 +20683,6 @@
 			(type default)
 		)
 		(uuid "704ba6e6-ee13-4d9d-b544-d836a743bdda")
-	)
-	(wire
-		(pts
-			(xy 418.465 456.565) (xy 418.465 459.105)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "70a79c73-9565-4147-ae33-fdf5b55368fb")
 	)
 	(wire
 		(pts
@@ -22091,16 +20996,6 @@
 	)
 	(wire
 		(pts
-			(xy 418.465 459.105) (xy 418.465 460.375)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "786cd62c-29ce-44ce-afa5-cda8c11f41d8")
-	)
-	(wire
-		(pts
 			(xy 604.52 151.13) (xy 645.16 151.13)
 		)
 		(stroke
@@ -22138,16 +21033,6 @@
 			(type default)
 		)
 		(uuid "7a6711de-78ab-4b0f-bdab-ebe78c68428e")
-	)
-	(wire
-		(pts
-			(xy 386.08 446.405) (xy 364.49 446.405)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7ac6fa09-8de4-4e3c-b4a3-ae2a46cd9b10")
 	)
 	(bus
 		(pts
@@ -22298,16 +21183,6 @@
 			(type default)
 		)
 		(uuid "7fc6eda3-a41a-4ab9-935d-37e18cb30594")
-	)
-	(wire
-		(pts
-			(xy 416.56 459.105) (xy 418.465 459.105)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "80683902-b561-48cb-8326-cee9261e9add")
 	)
 	(wire
 		(pts
@@ -22768,16 +21643,6 @@
 			(type default)
 		)
 		(uuid "8b963561-586b-4575-b721-87e7914602c6")
-	)
-	(wire
-		(pts
-			(xy 419.1 405.765) (xy 461.01 405.765)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8c3b0a59-623e-4e34-b40a-7ff31b9bcff1")
 	)
 	(wire
 		(pts
@@ -23411,16 +22276,6 @@
 	)
 	(wire
 		(pts
-			(xy 416.56 454.025) (xy 418.465 454.025)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9d19cae7-3de0-4497-8740-a54657e2c8ca")
-	)
-	(wire
-		(pts
 			(xy 163.83 455.93) (xy 182.88 455.93)
 		)
 		(stroke
@@ -23889,16 +22744,6 @@
 		)
 		(uuid "ab784bfe-9dea-4df6-85f7-d8334dabfb38")
 	)
-	(wire
-		(pts
-			(xy 416.56 410.845) (xy 419.1 410.845)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "abf8c57b-ea6e-4d78-b15f-e6ab50fc7078")
-	)
 	(bus
 		(pts
 			(xy 157.48 213.36) (xy 157.48 215.9)
@@ -24138,16 +22983,6 @@
 			(type default)
 		)
 		(uuid "b48416b5-11c4-43d5-b4b2-b5717cc31584")
-	)
-	(wire
-		(pts
-			(xy 386.08 421.005) (xy 364.49 421.005)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b500d795-2293-49df-a040-40784b4d6874")
 	)
 	(wire
 		(pts
@@ -24751,16 +23586,6 @@
 	)
 	(wire
 		(pts
-			(xy 438.15 415.925) (xy 416.56 415.925)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d234be57-7206-41d2-abbd-2e1fa3a68386")
-	)
-	(wire
-		(pts
 			(xy 93.98 427.99) (xy 99.06 427.99)
 		)
 		(stroke
@@ -24808,16 +23633,6 @@
 			(type default)
 		)
 		(uuid "d337c492-7429-4618-b378-df29f72737e3")
-	)
-	(wire
-		(pts
-			(xy 386.08 443.865) (xy 364.49 443.865)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d3864658-55e5-4344-a0a0-3dff86c33561")
 	)
 	(wire
 		(pts
@@ -24908,16 +23723,6 @@
 			(type default)
 		)
 		(uuid "d53baa32-ba88-4646-9db3-0e9b0f0da4f0")
-	)
-	(wire
-		(pts
-			(xy 416.56 456.565) (xy 418.465 456.565)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d56d5eb6-1ffd-4df9-9481-3a00d9f897b4")
 	)
 	(wire
 		(pts
@@ -25801,16 +24606,6 @@
 	)
 	(wire
 		(pts
-			(xy 386.08 431.165) (xy 364.49 431.165)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f292a1d8-4774-441f-9b2c-bcc7d2914bda")
-	)
-	(wire
-		(pts
 			(xy 190.5 410.21) (xy 190.5 403.86)
 		)
 		(stroke
@@ -25868,26 +24663,6 @@
 			(type default)
 		)
 		(uuid "f4aae365-6c70-41da-9253-52b239e8f5e6")
-	)
-	(wire
-		(pts
-			(xy 416.56 405.765) (xy 419.1 405.765)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f4c50318-8684-44be-bb9a-db02b55e01c0")
-	)
-	(wire
-		(pts
-			(xy 386.08 441.325) (xy 364.49 441.325)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f4e04951-2efb-4c6f-b2e7-2cdf8666c6df")
 	)
 	(wire
 		(pts
@@ -27483,16 +26258,6 @@
 		)
 		(uuid "0fc5db66-6188-4c1f-bb14-0868bef113eb")
 	)
-	(label "SDRAM_AUX_CS"
-		(at 381 423.545 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "1087de9a-ef8c-4e23-9dd7-ded55af36bac")
-	)
 	(label "ABUS_3V_RD"
 		(at 613.41 133.35 0)
 		(effects
@@ -27852,16 +26617,6 @@
 			(justify right bottom)
 		)
 		(uuid "269b2bfe-f254-4d86-a522-8a3e5cdb4238")
-	)
-	(label "SDRAM_AUX_A10"
-		(at 381 446.405 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "2a1bb7e0-99cd-47da-8964-3f9d6482dd17")
 	)
 	(label "SDRAM_AUX_A11"
 		(at 405.13 344.17 180)
@@ -28343,16 +27098,6 @@
 		)
 		(uuid "4acfa969-b72f-4614-b89a-9fa3025f2c02")
 	)
-	(label "SDRAM_AUX_BA1"
-		(at 381 431.165 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "4b222abf-a276-4b13-897a-b802ae064bd4")
-	)
 	(label "SD_DAT0"
 		(at 746.76 452.12 180)
 		(effects
@@ -28512,16 +27257,6 @@
 			(justify left bottom)
 		)
 		(uuid "59cb2966-1e9c-4b3b-b3c8-7499378d8dde")
-	)
-	(label "SDRAM_AUX_DQ4"
-		(at 381 436.245 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "5a595989-7ca2-48e6-baa4-ad181150ec0f")
 	)
 	(label "SDRAM_AUX_A2"
 		(at 405.13 321.31 180)
@@ -28713,16 +27448,6 @@
 		)
 		(uuid "680c3e83-f590-4924-85a1-36d51b076683")
 	)
-	(label "SDRAM_AUX_DQM0"
-		(at 381 413.385 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "68b12cb5-a26f-45e4-bdee-7084da71e50d")
-	)
 	(label "SD_DAT2"
 		(at 698.5 69.85 180)
 		(effects
@@ -28742,16 +27467,6 @@
 			(justify right bottom)
 		)
 		(uuid "6a2bcc72-047b-4846-8583-1109e3552669")
-	)
-	(label "SDRAM_AUX_A1"
-		(at 381 443.865 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "6a77a002-e79d-4d2a-a655-082442d9d973")
 	)
 	(label "ABUS_3V_A12"
 		(at 279.4 83.82 0)
@@ -29293,16 +28008,6 @@
 		)
 		(uuid "88deea08-baa5-4041-beb7-01c299cf00e6")
 	)
-	(label "+3_3V"
-		(at 421.64 405.765 0)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify left bottom)
-		)
-		(uuid "897480e0-95b2-49c9-8e5a-006ec703db7e")
-	)
 	(label "ABUS_A22"
 		(at 142.24 146.05 0)
 		(effects
@@ -29653,26 +28358,6 @@
 		)
 		(uuid "a353a360-a1da-42d3-a5f2-38aafc184a50")
 	)
-	(label "SDRAM_AUX_DQ7"
-		(at 433.07 415.925 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "a41d443d-2d90-4366-bd62-9ff814242c35")
-	)
-	(label "SDRAM_AUX_BA0"
-		(at 381 421.005 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "a4af09f0-86b2-4c0b-bd64-0daaff55e0d3")
-	)
 	(label "ABUS_A11"
 		(at 205.74 66.04 0)
 		(effects
@@ -29973,16 +28658,6 @@
 		)
 		(uuid "bce25bd3-0fe5-4c8f-bd6c-39e2d62ee70a")
 	)
-	(label "SDRAM_AUX_DQ6"
-		(at 381 415.925 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "bda9aefb-6b6f-4e8b-8121-5b00add82dbc")
-	)
 	(label "ABUS_3V_D1"
 		(at 255.27 281.94 180)
 		(effects
@@ -30243,16 +28918,6 @@
 		)
 		(uuid "d6eab92b-b8d4-45c5-bc17-24dad6c8813c")
 	)
-	(label "SDRAM_AUX_DQ3"
-		(at 381 438.785 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "d710fdd2-1e8f-4cb8-972f-0e47b41f9831")
-	)
 	(label "SD_DET_A"
 		(at 760.73 354.33 180)
 		(effects
@@ -30342,16 +29007,6 @@
 			(justify right bottom)
 		)
 		(uuid "dc1d84c8-33da-4489-be8e-2a1de3001779")
-	)
-	(label "SDRAM_AUX_A0"
-		(at 381 441.325 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "dcea6c77-aa5b-4657-b5ad-b95fd2859c5b")
 	)
 	(label "ABUS_CS0"
 		(at 205.74 58.42 0)
@@ -30522,16 +29177,6 @@
 			(justify left bottom)
 		)
 		(uuid "e463ba2a-1cbc-4995-82d8-59710b3fcd2f")
-	)
-	(label "SDRAM_AUX_DQ5"
-		(at 381 433.705 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "e495f208-6094-4b30-86d6-3c84e73d96ef")
 	)
 	(label "SDRAM_AUX_DQ0"
 		(at 706.12 125.73 180)
@@ -30932,16 +29577,6 @@
 			(justify right bottom)
 		)
 		(uuid "fe431a80-868e-482d-aa91-c96eb8387d6a")
-	)
-	(label "SDRAM_AUX_A2"
-		(at 381 428.625 180)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify right bottom)
-		)
-		(uuid "fe81766d-5d35-47cf-8512-393d9713e4c6")
 	)
 	(label "ABUS_3V_A20"
 		(at 618.49 163.83 180)
@@ -35939,7 +34574,7 @@
 				)
 			)
 		)
-		(property "Footprint" "TFP09212B"
+		(property "Footprint" "wasca:TFP09212B"
 			(at 817.88 443.23 0)
 			(hide yes)
 			(show_name no)
@@ -42116,160 +40751,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 418.465 460.375 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "73291194-2dd1-4ce7-9f50-13838b86821b")
-		(property "Reference" "#PWR06"
-			(at 418.465 466.725 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 418.465 464.185 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 418.465 460.375 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 418.465 460.375 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 418.465 460.375 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "195f50e0-1b0f-4e96-817e-169df9d40078")
-		)
-		(instances
-			(project "wasca"
-				(path "/fdc60c06-30fa-4dfb-96b4-809b755999e1"
-					(reference "#PWR06")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 461.01 408.305 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "75871df4-3c14-422b-a88e-ccae09c82da8")
-		(property "Reference" "C5"
-			(at 461.264 406.527 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "0.1uF"
-			(at 461.264 410.337 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 461.01 408.305 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 461.01 408.305 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 461.01 408.305 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "64789b36-9d9f-49f2-bea0-ad50fe76cd5e")
-		)
-		(pin "2"
-			(uuid "8892fef3-f6e6-405b-aed8-221b2973aeff")
-		)
-		(instances
-			(project "wasca"
-				(path "/fdc60c06-30fa-4dfb-96b4-809b755999e1"
-					(reference "C5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Memory_RAM:MT48LC16M16A2TG")
 		(at 422.91 339.09 0)
 		(unit 1)
@@ -42502,742 +40983,6 @@
 			(project "wasca"
 				(path "/fdc60c06-30fa-4dfb-96b4-809b755999e1"
 					(reference "U3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 461.01 410.845 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "9d508f88-cf67-4d32-9baf-816a28995c21")
-		(property "Reference" "#PWR07"
-			(at 461.01 417.195 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 461.01 414.655 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 461.01 410.845 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 461.01 410.845 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 461.01 410.845 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5c895cf9-5c43-45e7-944f-0fd2c4fda990")
-		)
-		(instances
-			(project "wasca"
-				(path "/fdc60c06-30fa-4dfb-96b4-809b755999e1"
-					(reference "#PWR07")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "IS66WVH8M8ALL-166B1LI:IS66WVH8M8ALL-166B1LI")
-		(at 401.32 431.165 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a1e62b19-245d-4736-92b4-8c1b8a9a2216")
-		(property "Reference" "U6"
-			(at 401.32 398.78 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "IS66WVH8M8ALL-166B1LI"
-			(at 401.32 401.32 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "wasca:BGA25C100P5X5_800X600X120N"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Datasheet" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "PSRAM (Pseudo SRAM) Memory IC 64Mb (8M x 8) Parallel 166 MHz 36 ns 24-TFBGA (6x8)"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "SNAPEDA_PACKAGE_ID" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "B_NOM" "0.45"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "EMAX" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "VACANCIES" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "PACKAGE_TYPE" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "BODY_DIAMETER" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "THERMAL_PAD" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Check_prices" "https://www.snapeda.com/parts/IS66WVH8M8ALL-166B1LI/ISSI%252C+Integrated+Silicon+Solution+Inc/view-part/?ref=eda"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "EMIN" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "JEDEC" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Price" "None"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "ENOM" "1.0"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "COURTYARD_EXCESS" "1.0"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "D_NOM" "8.0"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Purchase-URL" "https://www.snapeda.com/api/url_track_click_mouser/?unipart_id=1220267&manufacturer=ISSI, Integrated&part_name=IS66WVH8M8ALL-166B1LI&search_term=tbga-24"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "D_MAX" "8.1"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "A_MAX" "1.2"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "ALPHA_ROWS" "True"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Package" "TBGA-24 ISSI"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "A_NOM" "1.2"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "A_MIN" "1.2"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "STANDARD" "IPC 7351B"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "PARTREV" "B2"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "DNOM" "1.0"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "SnapEDA_Link" "https://www.snapeda.com/parts/IS66WVH8M8ALL-166B1LI/ISSI%252C+Integrated+Silicon+Solution+Inc/view-part/?ref=snap"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "DMIN" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "E_NOM" "6.0"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "BALL_ROWS" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "DMAX" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "MANUFACTURER" "ISSI"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "IPC" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "PIN_COLUMNS" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "MF" "ISSI, Integrated"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "MAXIMUM_PACKAGE_HEIGHT" "1.2mm"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "BALL_COLUMNS" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "COLLAPSING_BALL" "True"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "PIN_COUNT_E" "5.0"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "PIN_COUNT_D" "5.0"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "E_MIN" "5.9"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "D_MIN" "7.9"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "MP" "IS66WVH8M8ALL-166B1LI"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "PINS" ""
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Availability" "In Stock"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "E_MAX" "6.1"
-			(at 401.32 431.165 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(pin "A3"
-			(uuid "da3abf06-23f4-4ddc-bf60-c33561b6563e")
-		)
-		(pin "A4"
-			(uuid "dbc09eec-9f66-4633-8e33-d8ab65f37f1a")
-		)
-		(pin "B1"
-			(uuid "90d2ab56-7be8-4221-90fb-98306bdcd664")
-		)
-		(pin "B2"
-			(uuid "0bb98e04-1f76-448f-bb89-2939b84a0015")
-		)
-		(pin "B3"
-			(uuid "6231c195-af21-4e5a-81cd-d7481c2c81a1")
-		)
-		(pin "B4"
-			(uuid "77e40946-bad4-4b4f-8f54-1b89843d66cf")
-		)
-		(pin "C1"
-			(uuid "12f15d97-84a1-4a71-b92e-0ddceba17a7e")
-		)
-		(pin "C3"
-			(uuid "2cef3d92-a226-49a4-a294-b5f6ea6b1ba1")
-		)
-		(pin "C4"
-			(uuid "5e5c819b-c36c-4ab8-87df-f26df0cbf5c1")
-		)
-		(pin "D1"
-			(uuid "e94bde99-070e-48cd-8611-a5708c483033")
-		)
-		(pin "D2"
-			(uuid "0c533f32-fc89-4cfe-bb9a-aaff1d1c88a3")
-		)
-		(pin "D3"
-			(uuid "694e6f56-2da4-4ae3-be86-7365a6139f12")
-		)
-		(pin "D4"
-			(uuid "dcfdee26-88c9-4c49-88e1-ddc599d408de")
-		)
-		(pin "D5"
-			(uuid "4fc3052b-285e-47ea-8633-9649eb035b30")
-		)
-		(pin "E1"
-			(uuid "7d8ac0fb-a49b-4b69-9876-e22e78bf7af3")
-		)
-		(pin "E2"
-			(uuid "fa93d1bf-5614-4237-9da6-19d2dc7f8509")
-		)
-		(pin "E3"
-			(uuid "be6cec16-3a1e-4fbf-8f11-e653cd9de642")
-		)
-		(pin "E4"
-			(uuid "1590fa73-b3b3-403d-8f8b-7b6429dfb7c9")
-		)
-		(pin "E5"
-			(uuid "c63e1480-b43d-4d9c-bf46-0d66152d9c56")
-		)
-		(instances
-			(project "wasca"
-				(path "/fdc60c06-30fa-4dfb-96b4-809b755999e1"
-					(reference "U6")
 					(unit 1)
 				)
 			)
