@@ -67,10 +67,6 @@
           ""
         ],
         [
-          "courtyards_overlap|49760001|101360001|00000000-0000-0000-0000-000061e1a332|654ea6f8-0869-4c8b-9ce2-7d6762bcae3e",
-          ""
-        ],
-        [
           "courtyards_overlap|69549999|81900001|00000000-0000-0000-0000-00005fd11231|00000000-0000-0000-0000-00005fd18b92",
           ""
         ],
@@ -265,7 +261,7 @@
         "allow_blind_buried_vias": false,
         "allow_microvias": false,
         "max_error": 0.005,
-        "min_clearance": 0.0,
+        "min_clearance": 0.1016,
         "min_connection": 0.0,
         "min_copper_edge_clearance": 0.01,
         "min_groove_width": 0.0,
@@ -278,7 +274,7 @@
         "min_text_height": 0.8,
         "min_text_thickness": 0.08,
         "min_through_hole_diameter": 0.3,
-        "min_track_width": 0.1524,
+        "min_track_width": 0.1016,
         "min_via_annular_width": 0.05,
         "min_via_diameter": 0.7,
         "solder_mask_clearance": 0.09999999999999999,
@@ -334,6 +330,7 @@
       ],
       "track_widths": [
         0.0,
+        0.1016,
         0.1524,
         0.2031,
         0.4064,
@@ -639,7 +636,7 @@
     "classes": [
       {
         "bus_width": 12,
-        "clearance": 0.2,
+        "clearance": 0.1524,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -650,11 +647,26 @@
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "priority": 2147483647,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.25,
+        "track_width": 0.1524,
         "tuning_profile": "",
-        "via_diameter": 0.7,
+        "via_diameter": 0.6,
         "via_drill": 0.3,
         "wire_width": 6
+      },
+      {
+        "clearance": 0.1016,
+        "diff_pair_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "Hires",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 0,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.1016,
+        "tuning_profile": "",
+        "via_diameter": 0.6,
+        "via_drill": 0.3
       }
     ],
     "meta": {
@@ -810,7 +822,7 @@
         "uuid": "fdc60c06-30fa-4dfb-96b4-809b755999e1"
       }
     ],
-    "used_designators": "",
+    "used_designators": "U6-7,U14,#PWR88",
     "variants": []
   },
   "sheets": [
