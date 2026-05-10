@@ -1,15 +1,62 @@
-(footprint "TEST_PAD" (version 20221018) (generator pcbnew)
-  (layer "F.Cu")
-  (descr "Test Pad - SMD")
-  (tags "CONN DEV")
-  (attr smd)
-  (fp_text reference "TP_VCC2" (at 0 -2.54) (layer "F.SilkS")
-      (effects (font (size 1.72974 1.08712) (thickness 0.27178)))
-    (tstamp c0285415-8107-4c4a-91ab-adf45521964c)
-  )
-  (fp_text value "TP" (at 0 -2.54) (layer "F.SilkS") hide
-      (effects (font (size 1.524 1.016) (thickness 0.254)))
-    (tstamp af56f87a-9291-4ae4-8814-c72ee41826e9)
-  )
-  (pad "1" smd circle (at 0 0) (size 0.889 0.889) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp b1a79595-c451-495b-b064-80f6c068a983))
+(footprint "TEST_PAD"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Test Pad - SMD")
+	(tags "CONN DEV")
+	(property "Reference" "TP_VCC2"
+		(at 0 -2.54 0)
+		(layer "F.SilkS")
+		(uuid "f211cefc-eae6-49be-8d98-3be837c7bca1")
+		(effects
+			(font
+				(size 1.72974 1.08712)
+				(thickness 0.27178)
+			)
+		)
+	)
+	(property "Value" "TP"
+		(at 0 -2.54 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "c697eafc-f8b0-4d7d-ac96-cf0b7a21422c")
+		(effects
+			(font
+				(size 1.524 1.016)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "40ba3c51-5313-488b-8a53-456a8fb1cf20")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "146c3f24-4d03-4513-982b-ee5d4c24d9a8")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(pad "1" smd circle
+		(at 0 0)
+		(size 0.889 0.889)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "675c95eb-4adf-48bb-a5ca-3b741700ba2c")
+	)
+	(embedded_fonts no)
 )

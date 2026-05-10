@@ -51,3 +51,4 @@
 /fpga_firmware_lattice/fatfs/*.o
 /fpga_firmware_lattice/fatfs/*.o
 /fpga_firmware_lattice/temp_seed_*/
+/board/.history/
