@@ -217,7 +217,6 @@ void backup_sync_sector(int sector, FIL * _file) {
 	int written = 0;
 	uint16_t * buffer16 = (uint16_t *)buffer;
 	volatile uint32_t * pSDRAM2 = (uint32_t *)0x14000000;
-	mini_printf("Sync %d\r\n",sector);
 	//sync data
 	for (int i=0;i<256;i++)
 		buffer16[i] = pSDRAM2[sector*256+i];
@@ -685,7 +684,6 @@ int main() {
 						//sync sectors 0 and 1 at the end, because that's what bios does?
 						backup_sync_sector(0,&_file);
 						backup_sync_sector(1,&_file);
-						mini_printf("Over done\r\n");
 						//stop overall sync mode
 						overall_backup_enable = 0;
 					}
@@ -702,11 +700,33 @@ int main() {
 		case 2:
 			//backup syncing + led blinking
 			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
-				LED = LED_EXT_MAGENTA;
-				//read fifo
-				int offset = 512*pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
-				//sync data
-				//TODO
+				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 1000) { //fifo overfill, error
+					LED = LED_EXT_RED;
+					while (1);
+				}
+				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 512) { //fifo half-full, switching to overall mode 
+					overall_backup_enable = 1;
+					overall_backup_counter = 0;
+				}
+				if (overall_backup_enable) {
+					LED = (overall_backup_counter & 0x20) ? LED_EXT_CYAN : LED_OFF;
+					sniffer_purge_fifo();
+					backup_sync_sector(overall_backup_counter,&_file);
+					sniffer_purge_fifo();
+					overall_backup_counter++;
+					if (overall_backup_counter*512 >= 2048*1024) {
+						//sync sectors 0 and 1 at the end, because that's what bios does?
+						backup_sync_sector(0,&_file);
+						backup_sync_sector(1,&_file);
+						//stop overall sync mode
+						overall_backup_enable = 0;
+					}
+				} else {
+					LED = LED_EXT_MAGENTA;
+					//read fifo
+					int sector = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+					backup_sync_sector(sector,&_file);
+				}
 			}
 			else
 				LED = LED_OFF;
@@ -714,11 +734,33 @@ int main() {
 		case 3:
 			//backup syncing + led blinking
 			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
-				LED = LED_EXT_MAGENTA;
-				//read fifo
-				int offset = 512*pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
-				//sync data
-				//TODO
+				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 1000) { //fifo overfill, error
+					LED = LED_EXT_RED;
+					while (1);
+				}
+				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 512) { //fifo half-full, switching to overall mode 
+					overall_backup_enable = 1;
+					overall_backup_counter = 0;
+				}
+				if (overall_backup_enable) {
+					LED = (overall_backup_counter & 0x20) ? LED_EXT_CYAN : LED_OFF;
+					sniffer_purge_fifo();
+					backup_sync_sector(overall_backup_counter,&_file);
+					sniffer_purge_fifo();
+					overall_backup_counter++;
+					if (overall_backup_counter*512 >= 4096*1024) {
+						//sync sectors 0 and 1 at the end, because that's what bios does?
+						backup_sync_sector(0,&_file);
+						backup_sync_sector(1,&_file);
+						//stop overall sync mode
+						overall_backup_enable = 0;
+					}
+				} else {
+					LED = LED_EXT_MAGENTA;
+					//read fifo
+					int sector = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+					backup_sync_sector(sector,&_file);
+				}
 			}
 			else
 				LED = LED_OFF;
@@ -726,11 +768,33 @@ int main() {
 		case 4:
 			//backup syncing + led blinking
 			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
-				LED = LED_EXT_MAGENTA;
-				//read fifo
-				int offset = 512*pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
-				//sync data
-				//TODO
+				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 1000) { //fifo overfill, error
+					LED = LED_EXT_RED;
+					while (1);
+				}
+				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 512) { //fifo half-full, switching to overall mode 
+					overall_backup_enable = 1;
+					overall_backup_counter = 0;
+				}
+				if (overall_backup_enable) {
+					LED = (overall_backup_counter & 0x20) ? LED_EXT_CYAN : LED_OFF;
+					sniffer_purge_fifo();
+					backup_sync_sector(overall_backup_counter,&_file);
+					sniffer_purge_fifo();
+					overall_backup_counter++;
+					if (overall_backup_counter*512 >= 8192*1024) {
+						//sync sectors 0 and 1 at the end, because that's what bios does?
+						backup_sync_sector(0,&_file);
+						backup_sync_sector(1,&_file);
+						//stop overall sync mode
+						overall_backup_enable = 0;
+					}
+				} else {
+					LED = LED_EXT_MAGENTA;
+					//read fifo
+					int sector = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+					backup_sync_sector(sector,&_file);
+				}
 			}
 			else
 				LED = LED_OFF;

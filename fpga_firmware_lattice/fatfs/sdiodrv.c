@@ -1130,7 +1130,6 @@ int	sdio_write_block(SDIODRV *dev, uint32_t sector, uint32_t *buf){// CMD 24
 	uint32_t * scrambled_buf32 = (uint32_t *)scrambled_buf;
 
 	//scrambling data
-	mini_printf("write: scrambling sector %x\r\n",sector);
 	uint8_t* buf8 = (uint8_t*)buf;
 	for (int i=0;i<512;i+=4){
 		scrambled_buf[i] = buf8[i+3];
@@ -1293,7 +1292,6 @@ int	sdio_read_block(SDIODRV *dev, uint32_t sector, uint32_t *buf){// CMD 17
 		sdio_dump_sector((const unsigned int*)scrambled_buf32);
 
 	//unscrambling data
-	mini_printf("read: unscrambling sector %x\r\n",sector);
 	uint8_t* buf8 = (uint8_t*)buf;
 	for (int i=0;i<512;i+=4){
 		buf8[i] = scrambled_buf[i+3];
