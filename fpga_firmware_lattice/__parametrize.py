@@ -45,6 +45,8 @@ while i<50:
     #copy build scripts
     for file_path in glob.glob(os.path.join('./', '__build.cmd')):
         shutil.copy(file_path, tmp_folder)
+    for file_path in glob.glob(os.path.join('./', '__build2.cmd')):
+        shutil.copy(file_path, tmp_folder)
     for file_path in glob.glob(os.path.join('./', '__run.cmd')):
         shutil.copy(file_path, tmp_folder)
     for file_path in glob.glob(os.path.join('./', 'Makefile')):

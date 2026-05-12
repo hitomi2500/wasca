@@ -213,6 +213,30 @@ int sdram_test() {
 	return errors;
 }
 
+void backup_sync_sector(int sector, FIL * _file) {
+	int written = 0;
+	uint16_t * buffer16 = (uint16_t *)buffer;
+	volatile uint32_t * pSDRAM2 = (uint32_t *)0x14000000;
+	mini_printf("Sync %d\r\n",sector);
+	//sync data
+	for (int i=0;i<256;i++)
+		buffer16[i] = pSDRAM2[sector*256+i];
+	f_lseek(_file,sector*512);
+	int result = f_write(_file,buffer,512,&written);
+	if (result)
+		mini_printf("Sync error at %d, written %d result %d\r\n",sector,written,result);
+	result = f_sync(_file);
+	if (result)
+		mini_printf("Sync error2 at %d, written %d result %d\r\n",sector,written,result);
+}
+
+void sniffer_purge_fifo () {
+	volatile int dummy;
+	volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
+	while ((pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 100) //purging fifo
+		dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+}
+
 int main() {
 	LED = LED_EXT_RED; //start with red led
     //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
@@ -224,21 +248,23 @@ int main() {
 	volatile uint32_t * pSDRAM2 = (uint32_t *)0x14000000;
 
 	uint16_t * buffer16 = (uint16_t *)buffer;
-
+	volatile int dummy;
+	
 	//set registers
 	volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
 	pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
 	pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//read mapper for CS0
 	pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x0000FFFF;//read mapper for CS1 + CS2
 	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0x80000000;//write mapper for CS0
-	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x00000000;//write mapper for CS1 + CS2
+	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//0x00000000;//write mapper for CS1 + CS2
 
+	//flush fifo debug
 	/*volatile uint32_t sniff;
-	volatile uint32_t dummy;
+	volatile uint32_t dummy2;
 	while (1) {
 		sniff = pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL];
-		if (sniff & 0x03FF0000)
-			dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+		if (sniff & 0x07FF0000)
+			dummy2 = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
 	}*/
 
 	sdram_quicktest();
@@ -425,26 +451,24 @@ int main() {
 			{
 				creating_backup = 1;
 				f_open(&_file,"backup05.bin",FA_CREATE_ALWAYS | FA_WRITE);
-				for (int i=0;i<1024;i++) {
-					f_write(&_file,buffer,1024,&readen);
-					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/1024;
-					LED = (i&0x20) ? LED_EXT_MAGENTA : LED_OFF;
+				for (int i=0;i<1024*2;i++) {
+					backup_sync_sector(i,&_file);
+					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/(1024*2);
+					LED = (i&0x40) ? LED_EXT_MAGENTA : LED_OFF;
 				}
 				f_close(&_file);
 			}
-			f_open(&_file,"backup05.bin",FA_READ);
-			offset = 0;
-			while(false == f_eof(&_file)) {
-				readen = -1;
+			f_open(&_file,"backup05.bin",FA_READ | FA_WRITE);
+			f_lseek(&_file,0);
+			for (int i=0;i<1024;i++) {
 				f_read(&_file,buffer,1024,&readen);
-				for (int i=0;i<512;i++) {
-					pSDRAM2[offset+i] = buffer16[i];
+				for (int j=0;j<512;j++) {
+					pSDRAM2[i*512+j] = buffer16[j];
 				}
-				offset+=512;
-				pWishboneRegs[WISHBONE_REG_PCNTR] = (creating_backup) ? 50 + offset/10486 : offset/5243;
-				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
+				pWishboneRegs[WISHBONE_REG_PCNTR] = (creating_backup) ? 50 + (i*50)/1024 : (i*100)/1024;
+				LED = (i&0x20) ? LED_EXT_YELLOW : LED_OFF;
 			}
-			f_close(&_file);
+			//keep file open
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
 			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
@@ -457,14 +481,14 @@ int main() {
 			{
 				creating_backup = 1;
 				f_open(&_file,"backup1.bin",FA_CREATE_ALWAYS | FA_WRITE);
-				for (int i=0;i<2048;i++) {
-					f_write(&_file,buffer,1024,&readen);
-					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/2048;
-					LED = (i&0x20) ? LED_EXT_MAGENTA : LED_OFF;
+				for (int i=0;i<2048*2;i++) {
+					backup_sync_sector(i,&_file);
+					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/(2048*2);
+					LED = (i&0x40) ? LED_EXT_MAGENTA : LED_OFF;
 				}
 				f_close(&_file);
 			}
-			f_open(&_file,"backup1.bin",FA_READ);
+			f_open(&_file,"backup1.bin",FA_READ | FA_WRITE);
 			offset = 0;
 			while(false == f_eof(&_file)) {
 				readen = -1;
@@ -476,7 +500,7 @@ int main() {
 				pWishboneRegs[WISHBONE_REG_PCNTR] = (creating_backup) ? 50 + offset/20972 : offset/10486;
 				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
-			f_close(&_file);
+			//keep file open
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
 			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
@@ -489,14 +513,14 @@ int main() {
 			{
 				creating_backup = 1;
 				f_open(&_file,"backup2.bin",FA_CREATE_ALWAYS | FA_WRITE);
-				for (int i=0;i<4096;i++) {
-					f_write(&_file,buffer,1024,&readen);
-					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/4096;
-					LED = (i&0x20) ? LED_EXT_MAGENTA : LED_OFF;
+				for (int i=0;i<4096*2;i++) {
+					backup_sync_sector(i,&_file);
+					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/(4096*2);
+					LED = (i&0x40) ? LED_EXT_MAGENTA : LED_OFF;
 				}
 				f_close(&_file);
 			}
-			f_open(&_file,"backup2.bin",FA_READ);
+			f_open(&_file,"backup2.bin",FA_READ | FA_WRITE);
 			offset = 0;
 			while(false == f_eof(&_file)) {
 				readen = -1;
@@ -508,7 +532,7 @@ int main() {
 				pWishboneRegs[WISHBONE_REG_PCNTR] = (creating_backup) ? 50 + offset/41943 : offset/20972;
 				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
-			f_close(&_file);
+			//keep file open
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
 			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
@@ -521,14 +545,14 @@ int main() {
 			{
 				creating_backup = 1;
 				f_open(&_file,"backup4.bin",FA_CREATE_ALWAYS | FA_WRITE);
-				for (int i=0;i<8192;i++) {
-					f_write(&_file,buffer,1024,&readen);
-					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/8192;
-					LED = (i&0x20) ? LED_EXT_MAGENTA : LED_OFF;
+				for (int i=0;i<8192*2;i++) {
+					backup_sync_sector(i,&_file);
+					pWishboneRegs[WISHBONE_REG_PCNTR] = (i * 50)/(8192*2);
+					LED = (i&0x40) ? LED_EXT_MAGENTA : LED_OFF;
 				}
 				f_close(&_file);
 			}
-			f_open(&_file,"backup4.bin",FA_READ);
+			f_open(&_file,"backup4.bin",FA_READ | FA_WRITE);
 			offset = 0;
 			while(false == f_eof(&_file)) {
 				readen = -1;
@@ -540,7 +564,7 @@ int main() {
 				pWishboneRegs[WISHBONE_REG_PCNTR] = (creating_backup) ? 50 + offset/83886 : offset/41943;
 				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
-			f_close(&_file);
+			//keep file open
 			pWishboneRegs[WISHBONE_REG_PCNTR] = 100;
 			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
@@ -634,107 +658,113 @@ int main() {
 			break;
     }
 
+	int overall_backup_enable = 0;
+	int overall_backup_counter = 0;
+
 	//main cycle
     while (1) {
 		switch (pWishboneRegs[WISHBONE_REG_MODE]) {
 		case 1:
-			//backup syncing
-			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
-				LED = LED_EXT_MAGENTA;
-				//read fifo
-				int offset = 512*pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
-				//sync data
-				f_open(&_file,"backup05.bin",FA_OPEN_EXISTING | FA_WRITE);
-				f_lseek(&_file,offset);
-				for (int i=0;i<256;i++)
-					buffer[i] = pSDRAM2[offset+i];
-				f_write(&_file,buffer,512,&readen);
-				f_close(&_file);
+			//backup syncing + led blinking
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
+				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 1000) { //fifo overfill, error
+					LED = LED_EXT_RED;
+					while (1);
+				}
+				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 512) { //fifo half-full, switching to overall mode 
+					overall_backup_enable = 1;
+					overall_backup_counter = 0;
+				}
+				if (overall_backup_enable) {
+					LED = (overall_backup_counter & 0x20) ? LED_EXT_CYAN : LED_OFF;
+					sniffer_purge_fifo();
+					backup_sync_sector(overall_backup_counter,&_file);
+					sniffer_purge_fifo();
+					overall_backup_counter++;
+					if (overall_backup_counter*512 >= 1024*1024) {
+						//sync sectors 0 and 1 at the end, because that's what bios does?
+						backup_sync_sector(0,&_file);
+						backup_sync_sector(1,&_file);
+						mini_printf("Over done\r\n");
+						//stop overall sync mode
+						overall_backup_enable = 0;
+					}
+				} else {
+					LED = LED_EXT_MAGENTA;
+					//read fifo
+					int sector = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+					backup_sync_sector(sector,&_file);
+				}
 			}
 			else
 				LED = LED_OFF;
 			break;
 		case 2:
-			//backup syncing
-			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+			//backup syncing + led blinking
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				LED = LED_EXT_MAGENTA;
 				//read fifo
 				int offset = 512*pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
 				//sync data
-				f_open(&_file,"backup1.bin",FA_OPEN_EXISTING | FA_WRITE);
-				f_lseek(&_file,offset);
-				for (int i=0;i<256;i++)
-					buffer[i] = pSDRAM2[offset+i];
-				f_write(&_file,buffer,512,&readen);
-				f_close(&_file);
+				//TODO
 			}
 			else
 				LED = LED_OFF;
 			break;
 		case 3:
-			//backup syncing
-			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+			//backup syncing + led blinking
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				LED = LED_EXT_MAGENTA;
 				//read fifo
 				int offset = 512*pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
 				//sync data
-				f_open(&_file,"backup2.bin",FA_OPEN_EXISTING | FA_WRITE);
-				f_lseek(&_file,offset);
-				for (int i=0;i<256;i++)
-					buffer[i] = pSDRAM2[offset+i];
-				f_write(&_file,buffer,512,&readen);
-				f_close(&_file);
+				//TODO
 			}
 			else
 				LED = LED_OFF;
 			break;
 		case 4:
-			//backup syncing
-			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+			//backup syncing + led blinking
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				LED = LED_EXT_MAGENTA;
 				//read fifo
 				int offset = 512*pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
 				//sync data
-				f_open(&_file,"backup4.bin",FA_OPEN_EXISTING | FA_WRITE);
-				f_lseek(&_file,offset);
-				for (int i=0;i<256;i++)
-					buffer[i] = pSDRAM2[offset+i];
-				f_write(&_file,buffer,512,&readen);
-				f_close(&_file);
+				//TODO
 			}
 			else
 				LED = LED_OFF;
 			break;
 		case 5:
 		case 6:
-			//led blinking
-			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+			//led blinking only
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				//read fifo
-				volatile int dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+				dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
 				LED = LED_EXT_GREEN;
 			}
 			else
 				LED = LED_OFF;
 			break;
 		case 7:
-			//access led blinking
-			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+			//led blinking only
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				//read fifo
-				volatile int dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+				dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
 				LED = LED_EXT_GREEN;
 			}
 			else
 				LED = LED_OFF;
 			break;
 		default:
-			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x03FF0000) {
+			//led blinking only
+			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				//read fifo
-				volatile int dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+				dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
 				LED = LED_EXT_GREEN;
 			}
 			else
 				LED = LED_OFF;
-			//access led blinking
 			break;  
 		}
 	}

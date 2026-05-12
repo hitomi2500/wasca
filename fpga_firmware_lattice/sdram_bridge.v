@@ -259,6 +259,11 @@ module sdram_bridge (
 	assign wishbone_regs_data_o = wishbone_regs_readdata;
 	wire wishbone_regs_write = wishbone_regs_we_i;
 	wire wishbone_regs_read = wishbone_regs_sel_i && ~wishbone_regs_we_i;
+	reg wishbone_regs_read_d1;
+	initial wishbone_regs_read_d1 = 0;
+	reg wishbone_regs_read_d2;
+	initial wishbone_regs_read_d2 = 0;
+	wire wishbone_regs_read_sniffer_pulse;
 	reg wishbone_regs_readdatavalid;
 	initial wishbone_regs_readdatavalid = 0;
 	reg wishbone_regs_write_ff1;
@@ -1513,10 +1518,15 @@ module sdram_bridge (
 	//sniffer_data_write <= sniffer_data_write_p1 when rising_edge(clock);
 	//sniffer_data_out_p1 <= sniffer_data_out when rising_edge(clock);
 	
+	//moving fifo read pulse to sdram clock
+	always @(posedge sdram_clock) wishbone_regs_read_d1 <= wishbone_regs_read;
+	always @(posedge sdram_clock) wishbone_regs_read_d2 <= wishbone_regs_read_d1;
+	assign wishbone_regs_read_sniffer_pulse = wishbone_regs_read_d1 && ~wishbone_regs_read_d2 && (wishbone_regs_address[3:0] == 4'h5);
+	
 	sniff_fifo sniff_fifo_inst (
 		.clock(sdram_clock),
 		.data(sniffer_data_in),
-		.rdreq(sniffer_data_ack),
+		.rdreq(wishbone_regs_read_sniffer_pulse),//sniffer_data_ack),
 		.wrreq(sniffer_data_write),
 		.empty(sniffer_fifo_empty),
 		.full(sniffer_fifo_full),

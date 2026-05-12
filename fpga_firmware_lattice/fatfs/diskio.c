@@ -11,6 +11,8 @@
 #include "diskio.h"		/* Declarations FatFs MAI */
 #include "sdiodrv.h"
 #include "diskiodrvr.h"
+#include "../mini-printf.h"
+#include "string.h"
 
 #ifdef	STDIO_DEBUG
 #include <stdio.h>
@@ -99,6 +101,8 @@ DRESULT disk_read (
 /*-----------------------------------------------------------------------*/
 /* Write Sector(s)                                                       */
 /*-----------------------------------------------------------------------*/
+#define LED (*(volatile uint32_t*)0x02000000)
+#define LED_EXT_RED 0x20
 
 #if FF_FS_READONLY == 0
 
@@ -112,8 +116,34 @@ DRESULT disk_write (
 	if (pdrv >= MAX_DRIVES || NULL == DRIVES[pdrv].fd_addr
 			|| NULL == DRIVES[pdrv].fd_driver)
 		return RES_ERROR;
-	return (*DRIVES[pdrv].fd_driver->dio_write)(DRIVES[pdrv].fd_data,
+		DRESULT res = (*DRIVES[pdrv].fd_driver->dio_write)(DRIVES[pdrv].fd_data,
 					sector, count, buff);
+
+		disk_ioctl(pdrv, CTRL_SYNC, 0);
+
+		BYTE buf2[512];
+		if (count > 1)
+			mini_printf("disk_write: multiple sectors! %d\r\n",count);
+		disk_read(pdrv,buf2,sector,1);
+		if (0 != memcmp(buff,buf2,512)) {
+			mini_printf("disk_write: loopback error at sector %x\r\n",sector);
+			mini_printf("WRITE:\r\n");
+			for (int i=0;i<512;i++) {
+				mini_printf("%02x ",buff[i]);
+				if (i%16==15) mini_printf("\r\n");
+			}
+			mini_printf("READ:\r\n");
+			for (int i=0;i<512;i++) {
+				mini_printf("%02x ",buf2[i]);
+				if (i%16==15) mini_printf("\r\n");
+			}
+			LED = LED_EXT_RED;
+			while (1);
+		}
+		else 
+			mini_printf("disk_write: sector %x write OK\r\n",sector);
+
+		return res;
 }
 
 #endif

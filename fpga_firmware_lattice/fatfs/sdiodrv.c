@@ -1126,6 +1126,18 @@ static void sdio_dump_sector(const unsigned *ubuf) {
 int	sdio_write_block(SDIODRV *dev, uint32_t sector, uint32_t *buf){// CMD 24
 	// {{{
 	unsigned	dev_stat, card_stat, err = 0;
+	uint8_t scrambled_buf[512];
+	uint32_t * scrambled_buf32 = (uint32_t *)scrambled_buf;
+
+	//scrambling data
+	mini_printf("write: scrambling sector %x\r\n",sector);
+	uint8_t* buf8 = (uint8_t*)buf;
+	for (int i=0;i<512;i+=4){
+		scrambled_buf[i] = buf8[i+3];
+		scrambled_buf[i+1] = buf8[i+2];
+		scrambled_buf[i+2] = buf8[i+1];
+		scrambled_buf[i+3] = buf8[i];
+	}
 
 	if (SDDEBUG) {
 		txstr("SDIO-WRITE(BLK): ");
@@ -1150,7 +1162,7 @@ int	sdio_write_block(SDIODRV *dev, uint32_t sector, uint32_t *buf){// CMD 24
 #ifdef	INCLUDE_DMA_CONTROLLER
 	if (SDEXTDMA && (0 == (_zip->z_dma.d_ctrl & DMA_BUSY))) {
 		_zip->z_dma.d_len = 512;
-		_zip->z_dma.d_rd  = (char *)buf;
+		_zip->z_dma.d_rd  = (char *)scrambled_buf32;
 		_zip->z_dma.d_wr  = (char *)&dev->d_dev->sd_fifa;
 		_zip->z_dma.d_ctrl= DMAREQUEST|DMACLEAR|DMA_SRCWIDE
 				|DMA_CONSTDST|DMA_DSTWORD;
@@ -1159,20 +1171,8 @@ int	sdio_write_block(SDIODRV *dev, uint32_t sector, uint32_t *buf){// CMD 24
 	} else
 #endif
 
-	//scrambling data
-	uint8_t c;
-	uint8_t* buf8 = (uint8_t*)buf;
-	for (int i=0;i<512;i+=4){
-		c = buf8[i];
-		buf8[i] = buf8[i+3];
-		buf8[i+3] = c;
-		c = buf8[i+1];
-		buf8[i+1] = buf8[i+2];
-		buf8[i+2] = c;
-	}
-
 		for(int k=0; k<512/sizeof(uint32_t); k++)
-			dev->d_dev->sd_fifa = buf[k];
+			dev->d_dev->sd_fifa = scrambled_buf32[k];
 
 	// Set up the device address
 	// {{{
@@ -1236,6 +1236,8 @@ int	sdio_write_block(SDIODRV *dev, uint32_t sector, uint32_t *buf){// CMD 24
 int	sdio_read_block(SDIODRV *dev, uint32_t sector, uint32_t *buf){// CMD 17
 	// {{{
 	int	err = 0, dev_stat, card_stat;
+	uint8_t scrambled_buf[512];
+	uint32_t * scrambled_buf32 = (uint32_t *)scrambled_buf;
 
 	if (SDDEBUG) {
 		txstr("SDIO-READ(BLK): ");
@@ -1276,7 +1278,7 @@ int	sdio_read_block(SDIODRV *dev, uint32_t sector, uint32_t *buf){// CMD 17
 	if (SDEXTDMA && (0 == (_zip->z_dma.d_ctrl & DMA_BUSY))) {
 		_zip->z_dma.d_len = 512;
 		_zip->z_dma.d_rd  = (char *)&dev->d_dev->sd_fifa;
-		_zip->z_dma.d_wr  = (char *)buf;
+		_zip->z_dma.d_wr  = (char *)scrambled_buf32;
 		_zip->z_dma.d_ctrl= DMAREQUEST|DMACLEAR|DMA_DSTWIDE
 					| DMA_CONSTSRC|DMA_SRCWORD;
 		while(_zip->z_dma.d_ctrl & DMA_BUSY)
@@ -1285,21 +1287,19 @@ int	sdio_read_block(SDIODRV *dev, uint32_t sector, uint32_t *buf){// CMD 17
 	} else
 #endif
 		for(int k=0; k<512/sizeof(uint32_t); k++)
-			buf[k] = dev->d_dev->sd_fifa;
+			scrambled_buf32[k] = dev->d_dev->sd_fifa;
 
 	if (SDDEBUG && SDINFO)
-		sdio_dump_sector((const unsigned int*)buf);
+		sdio_dump_sector((const unsigned int*)scrambled_buf32);
 
 	//unscrambling data
-	uint8_t c;
+	mini_printf("read: unscrambling sector %x\r\n",sector);
 	uint8_t* buf8 = (uint8_t*)buf;
 	for (int i=0;i<512;i+=4){
-		c = buf8[i];
-		buf8[i] = buf8[i+3];
-		buf8[i+3] = c;
-		c = buf8[i+1];
-		buf8[i+1] = buf8[i+2];
-		buf8[i+2] = c;
+		buf8[i] = scrambled_buf[i+3];
+		buf8[i+1] = scrambled_buf[i+2];
+		buf8[i+2] = scrambled_buf[i+1];
+		buf8[i+3] = scrambled_buf[i];
 	}
 
 	RELEASE_MUTEX;
@@ -2030,6 +2030,8 @@ int	sdio_ioctl(SDIODRV *dev, char cmd, char *buf) {
 	// {{{
 	int		dstat;
 	unsigned	vc;
+	unsigned	status;
+	int ready;
 
 	vc = dev->d_dev->sd_cmd;
 	if (vc & SDIO_PRESENTN)
@@ -2041,6 +2043,13 @@ int	sdio_ioctl(SDIODRV *dev, char cmd, char *buf) {
 	case CTRL_SYNC: {
 			GRAB_MUTEX;
 			sdio_wait_while_busy(dev);
+			//cmd13-based wait
+			ready = 0;
+			while (0 == ready) {
+				status = sdio_get_r1(dev);
+				if ( (status & (1u << 8)) && (((status >> 9) & 0xF) == 4) )
+					ready = 1;
+				}
 			RELEASE_MUTEX;
 			return	RES_OK;
 		} break;
