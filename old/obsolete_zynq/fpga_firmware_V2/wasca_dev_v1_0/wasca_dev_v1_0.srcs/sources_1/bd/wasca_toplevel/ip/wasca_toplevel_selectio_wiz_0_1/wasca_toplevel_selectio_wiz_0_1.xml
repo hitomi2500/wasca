@@ -1,0 +1,2259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spirit:component xmlns:xilinx="http://www.xilinx.com" xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <spirit:vendor>xilinx.com</spirit:vendor>
+  <spirit:library>customized_ip</spirit:library>
+  <spirit:name>wasca_toplevel_selectio_wiz_0_1</spirit:name>
+  <spirit:version>1.0</spirit:version>
+  <spirit:busInterfaces>
+    <spirit:busInterface>
+      <spirit:name>io_reset</spirit:name>
+      <spirit:displayName>io_reset</spirit:displayName>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="reset" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="reset_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>RST</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>io_reset</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>POLARITY</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.IO_RESET.POLARITY">ACTIVE_HIGH</spirit:value>
+        </spirit:parameter>
+      </spirit:parameters>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>clk_reset</spirit:name>
+      <spirit:displayName>clk_reset</spirit:displayName>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="reset" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="reset_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>RST</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>clk_reset</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>POLARITY</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.CLK_RESET.POLARITY">ACTIVE_HIGH</spirit:value>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.clk_reset" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD&apos;))= true) or ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))=&quot;BUFIO&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_SERIALIZATION&apos;))=true))">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>sync_reset</spirit:name>
+      <spirit:displayName>sync_reset</spirit:displayName>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="reset" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="reset_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>RST</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>sync_reset</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>POLARITY</spirit:name>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.SYNC_RESET.POLARITY">ACTIVE_HIGH</spirit:value>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.sync_reset" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_IDDR_RST_TYPE&apos;))=&quot;SYNC&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_IDDR_RST_TYPE&apos;))=&quot;SYNC&quot;)">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>Clk_in</spirit:name>
+      <spirit:displayName>Clk_in</spirit:displayName>
+      <spirit:description>Single Ended Clock</spirit:description>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="clock" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="clock_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CLK</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>clk_in</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>FREQ_HZ</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.CLK_IN.FREQ_HZ">100000000</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>PHASE</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.CLK_IN.PHASE">0.000</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>CLK_DOMAIN</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.CLK_IN.CLK_DOMAIN">wasca_toplevel_processing_system7_0_0_FCLK_CLK0</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>ASSOCIATED_BUSIF</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.CLK_IN.ASSOCIATED_BUSIF"/>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>ASSOCIATED_RESET</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.CLK_IN.ASSOCIATED_RESET"/>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.Clk_in" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory_QDR&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory&quot;)) and (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))=&quot;BUFPLL&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1)) or ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))=&quot;MMCM&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))  or ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_SIG_TYPE&apos;))=&quot;SINGLE&quot;)) or ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_SIG_TYPE&apos;))=&quot;SINGLE&quot;))))">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>diff_clk_in</spirit:name>
+      <spirit:displayName>diff_clk_in</spirit:displayName>
+      <spirit:description>Differential Input Clock</spirit:description>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="diff_clock" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="diff_clock_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CLK_N</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>clk_in_n</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CLK_P</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>clk_in_p</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.diff_clk_in" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory_QDR&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory&quot;)) and (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))!=&quot;BUFPLL&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1)) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))!=&quot;MMCM&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))  and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_SIG_TYPE&apos;))!=&quot;SINGLE&quot;)) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_SIG_TYPE&apos;))!=&quot;SINGLE&quot;))))">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>data_out_from_device</spirit:name>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data_rtl" spirit:version="1.0"/>
+      <spirit:slave/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>DATA</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>data_out_from_device</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>LAYERED_METADATA</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.DATA_OUT_FROM_DEVICE.LAYERED_METADATA">undef</spirit:value>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.data_out_from_device" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;SINGLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;DIFF&quot;))">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>data_in_to_device</spirit:name>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="data_rtl" spirit:version="1.0"/>
+      <spirit:master/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>DATA</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>data_in_to_device</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>LAYERED_METADATA</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.DATA_IN_TO_DEVICE.LAYERED_METADATA">undef</spirit:value>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.data_in_to_device" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;INPUTS&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;SINGLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;DIFF&quot;)">true</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>clk_out</spirit:name>
+      <spirit:displayName>clk_out</spirit:displayName>
+      <spirit:description>Clock Output to Device</spirit:description>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="clock" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="clock_rtl" spirit:version="1.0"/>
+      <spirit:master/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CLK</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>clk_out</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:parameters>
+        <spirit:parameter>
+          <spirit:name>FREQ_HZ</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.CLK_OUT.FREQ_HZ">100000000</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>PHASE</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.CLK_OUT.PHASE">0.000</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>CLK_DOMAIN</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.CLK_OUT.CLK_DOMAIN">wasca_toplevel_selectio_wiz_0_0_clk_out</spirit:value>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>ASSOCIATED_BUSIF</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.CLK_OUT.ASSOCIATED_BUSIF"/>
+        </spirit:parameter>
+        <spirit:parameter>
+          <spirit:name>ASSOCIATED_RESET</spirit:name>
+          <spirit:value spirit:resolve="generated" spirit:id="BUSIFPARAM_VALUE.CLK_OUT.ASSOCIATED_RESET"/>
+        </spirit:parameter>
+      </spirit:parameters>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.clk_out" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_SERIALIZATION&apos;))=false) and (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))!=&quot;BUFPLL&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1)) or (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))!=&quot;MMCM&quot;) ) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))))">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>clk_div_out</spirit:name>
+      <spirit:displayName>clk_div_out</spirit:displayName>
+      <spirit:description>Divided Clock Output to Device</spirit:description>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="clock" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="clock_rtl" spirit:version="1.0"/>
+      <spirit:master/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CLK</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>clk_div_out</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.clk_div_out" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_SERIALIZATION&apos;))=true) and (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))=&quot;BUFIO&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1)) or ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))=&quot;BUFIO2&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))))">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>clk_to_pins</spirit:name>
+      <spirit:displayName>clk_to_pins</spirit:displayName>
+      <spirit:description>Forwarded Clock to Pins</spirit:description>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="clock" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="signal" spirit:name="clock_rtl" spirit:version="1.0"/>
+      <spirit:master/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CLK</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>clk_to_pins</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.clk_to_pins" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD&apos;))= true) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD_SIG_TYPE&apos;))=&quot;SINGLE&quot;))">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+    <spirit:busInterface>
+      <spirit:name>diff_clk_to_pins</spirit:name>
+      <spirit:displayName>diff_clk_to_pins</spirit:displayName>
+      <spirit:description>Differential Forwarded Clock</spirit:description>
+      <spirit:busType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="diff_clock" spirit:version="1.0"/>
+      <spirit:abstractionType spirit:vendor="xilinx.com" spirit:library="interface" spirit:name="diff_clock_rtl" spirit:version="1.0"/>
+      <spirit:master/>
+      <spirit:portMaps>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CLK_N</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>clk_to_pins_n</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+        <spirit:portMap>
+          <spirit:logicalPort>
+            <spirit:name>CLK_P</spirit:name>
+          </spirit:logicalPort>
+          <spirit:physicalPort>
+            <spirit:name>clk_to_pins_p</spirit:name>
+          </spirit:physicalPort>
+        </spirit:portMap>
+      </spirit:portMaps>
+      <spirit:vendorExtensions>
+        <xilinx:busInterfaceInfo>
+          <xilinx:enablement>
+            <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="BUSIF_ENABLEMENT.diff_clk_to_pins" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD&apos;))= true) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD_SIG_TYPE&apos;))=&quot;DIFF&quot;))">false</xilinx:isEnabled>
+          </xilinx:enablement>
+        </xilinx:busInterfaceInfo>
+      </spirit:vendorExtensions>
+    </spirit:busInterface>
+  </spirit:busInterfaces>
+  <spirit:model>
+    <spirit:ports>
+      <spirit:port>
+        <spirit:name>data_in_from_pins</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.data_in_from_pins" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;INPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;SINGLE&quot;))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>data_in_from_pins_p</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.data_in_from_pins_p" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;INPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;DIFF&quot;))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>data_in_from_pins_n</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.data_in_from_pins_n" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;INPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;DIFF&quot;))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>data_out_to_pins</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.data_out_to_pins" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;SINGLE&quot;))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>data_out_to_pins_p</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.data_out_to_pins_p" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))!=&quot;SINGLE&quot;))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>data_out_to_pins_n</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.data_out_to_pins_n" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))!=&quot;SINGLE&quot;))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>data_to_and_from_pins</spirit:name>
+        <spirit:wire>
+          <spirit:direction>inout</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.data_to_and_from_pins" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;SINGLE&quot;))">true</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>data_to_and_from_pins_p</spirit:name>
+        <spirit:wire>
+          <spirit:direction>inout</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.data_to_and_from_pins_p" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))!=&quot;SINGLE&quot;))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>data_to_and_from_pins_n</spirit:name>
+        <spirit:wire>
+          <spirit:direction>inout</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.data_to_and_from_pins_n" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))!=&quot;SINGLE&quot;))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>clk_in</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.clk_in" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory_QDR&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory&quot;)) and (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))=&quot;BUFPLL&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1)) or ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))=&quot;MMCM&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))  or ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_SIG_TYPE&apos;))=&quot;SINGLE&quot;)) or ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_SIG_TYPE&apos;))=&quot;SINGLE&quot;))))">true</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>clk_in_p</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.clk_in_p" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory_QDR&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory&quot;)) and (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))!=&quot;BUFPLL&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1)) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))!=&quot;MMCM&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))  and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_SIG_TYPE&apos;))!=&quot;SINGLE&quot;)) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_SIG_TYPE&apos;))!=&quot;SINGLE&quot;))))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>clk_in_n</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.clk_in_n" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory_QDR&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory&quot;)) and (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))!=&quot;BUFPLL&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1)) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))!=&quot;MMCM&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))  and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_SIG_TYPE&apos;))!=&quot;SINGLE&quot;)) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_SIG_TYPE&apos;))!=&quot;SINGLE&quot;))))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>clock_enable</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.clock_enable" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_EN&apos;))= true)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>clk_div_in</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.clk_div_in" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_SERIALIZATION&apos;))=true) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))=&quot;MMCM&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))=&quot;BUFPLL&quot;)))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>data_out_from_device</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DATA_RATE_STRING&apos;)))*(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;)))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.data_out_from_device" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;SINGLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;DIFF&quot;))">true</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>clk_reset</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.clk_reset" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD&apos;))= true) or ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))=&quot;BUFIO&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_SERIALIZATION&apos;))=true))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>io_reset</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>delay_clk</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.delay_clk" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VARIABLE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VARIABLE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1) or (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VARIABLE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VARIABLE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot;)) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_SERIALIZATION&apos;))=false))))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>delay_reset</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.delay_reset" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VARIABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VARIABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>delay_tap_in</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))*5-1)">4</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.delay_tap_in" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>delay_tap_out</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))*5-1)">4</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.delay_tap_out" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>delay_data_cal</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.delay_data_cal" xilinx:dependency="spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_IN_DELAY&apos;))=&quot;VARIABLE&quot;">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>delay_data_ce</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.delay_data_ce" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_IN_DELAY&apos;))=&quot;VARIABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VARIABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VARIABLE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>delay_data_inc</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.delay_data_inc" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_IN_DELAY&apos;))=&quot;VARIABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VARIABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VARIABLE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>in_delay_reset</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.in_delay_reset" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;INPUTS&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;  or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VARIABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>in_delay_tap_in</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))*5-1)">4</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.in_delay_tap_in" xilinx:dependency="((((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;INPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>in_delay_tap_out</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))*5-1)">4</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.in_delay_tap_out" xilinx:dependency="((((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;INPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>in_delay_data_ce</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.in_delay_data_ce" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;INPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VARIABLE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>in_delay_data_inc</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.in_delay_data_inc" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;INPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VAR_LOADABLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))=&quot;VARIABLE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>out_delay_reset</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.out_delay_reset" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;)) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VARIABLE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>out_delay_tap_in</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))*5-1)">4</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.out_delay_tap_in" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>out_delay_tap_out</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))*5-1)">4</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.out_delay_tap_out" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>out_delay_data_ce</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.out_delay_data_ce" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;)) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VARIABLE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>out_delay_data_inc</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.out_delay_data_inc" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;)) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VARIABLE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))=&quot;VAR_LOADABLE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>ref_clock</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.ref_clock" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))!=&quot;NONE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))!=&quot;NONE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_DELAY&apos;))!=&quot;NONE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>delay_locked</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.delay_locked" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY&apos;))!=&quot;NONE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY&apos;))!=&quot;NONE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_DELAY&apos;))!=&quot;NONE&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>phase_shiftout</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.phase_shiftout" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_PHASE_DETECTOR&apos;))= true)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>phase_incdec</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.phase_incdec" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_PHASE_DETECTOR&apos;))= true)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>phase_valid</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.phase_valid" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_PHASE_DETECTOR&apos;))= true)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>cq</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.cq" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))=&quot;Memory_QDR&quot;)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>cqn</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.cqn" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))=&quot;Memory_QDR&quot;)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>dqs</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.dqs" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))=&quot;Memory&quot;)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>dqsn</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.dqsn" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))=&quot;Memory&quot; and spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_SIG_TYPE&apos;))=&quot;DIFF&quot;)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>clk_to_pins</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.clk_to_pins" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD&apos;))= true) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD_SIG_TYPE&apos;))=&quot;SINGLE&quot;))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>clk_to_pins_p</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.clk_to_pins_p" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD&apos;))= true) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD_SIG_TYPE&apos;))=&quot;DIFF&quot;))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>clk_to_pins_n</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.clk_to_pins_n" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD&apos;))= true) and ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;OUTPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_FWD_SIG_TYPE&apos;))=&quot;DIFF&quot;))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>bitslip</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.bitslip" xilinx:dependency="((((spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;INPUTS&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_INTERFACE_TYPE&apos;))=&quot;NETWORKING&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_SERIALIZATION&apos;))=true) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1)) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_ENABLE_BITSLIP&apos;))=true))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>train</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.train" xilinx:dependency="spirit:decode(id(&apos;MODELPARAM_VALUE.C_ENABLE_TRAIN&apos;))=true">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>tristate_output</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.tristate_output" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot; and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;SINGLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;DIFF&quot;))">true</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>clk_div_out</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.clk_div_out" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))!=&quot;Memory&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_SERIALIZATION&apos;))=true) and (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))=&quot;BUFIO&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1)) or ((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))=&quot;BUFIO2&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>clk_out</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.clk_out" xilinx:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_SERIALIZATION&apos;))=false) and (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))!=&quot;BUFPLL&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1)) or (((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_CLK_BUF&apos;))!=&quot;MMCM&quot;) ) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))!=1))))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>locked_in</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.locked_in" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))=&quot;Memory&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))=&quot;BUFPLL&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>locked_out</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.locked_out" xilinx:dependency="(((spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE&apos;))=&quot;Memory&quot;) or (spirit:decode(id(&apos;MODELPARAM_VALUE.C_CLK_BUF&apos;))=&quot;BUFPLL&quot;)) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_DEVICE&apos;))=1))">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>data_in_to_device</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long" spirit:resolve="dependent" spirit:dependency="((spirit:decode(id(&apos;MODELPARAM_VALUE.C_DATA_RATE_STRING&apos;)))*(spirit:decode(id(&apos;MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH&apos;)))-1)">0</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.data_in_to_device" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;INPUTS&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;SEPARATE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_DIR&apos;))=&quot;BIDIR&quot;) and (spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;SINGLE&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_BUS_SIG_TYPE&apos;))=&quot;DIFF&quot;)">true</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>sync_reset</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.sync_reset" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_IDDR_RST_TYPE&apos;))=&quot;SYNC&quot; or spirit:decode(id(&apos;MODELPARAM_VALUE.C_SELIO_IDDR_RST_TYPE&apos;))=&quot;SYNC&quot;)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>debug_in</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">1</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.debug_in" xilinx:dependency="(spirit:decode(id(&apos;MODELPARAM_VALUE.C_USE_PHASE_DETECTOR&apos;))= true)">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+    </spirit:ports>
+    <spirit:modelParameters>
+      <spirit:modelParameter xsi:type="spirit:nameValueTypeType" spirit:dataType="string">
+        <spirit:name>c_component_name</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.c_component_name">wasca_toplevel_selectio_wiz_0_1</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_INCLUDE_IDELAYCTRL</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_INCLUDE_IDELAYCTRL">1</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_INCLUDE_IDELAYCTRL_BUFG</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_INCLUDE_IDELAYCTRL_BUFG">1</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_DEVICE_FAMILY</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_DEVICE_FAMILY" spirit:order="44">zynq</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_NOTES</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_NOTES" spirit:order="45">None</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_BUS_DIR</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_BUS_DIR" spirit:order="46">BIDIR</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_BUS_SIG_TYPE</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_BUS_SIG_TYPE" spirit:order="47">SINGLE</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_BUS_IO_STD</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_BUS_IO_STD" spirit:order="48">LVCMOS33</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_USE_SERIALIZATION</spirit:name>
+        <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_USE_SERIALIZATION" spirit:order="49">false</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_SERIALIZATION_FACTOR</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SERIALIZATION_FACTOR" spirit:order="50">4</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_USE_PHASE_DETECTOR</spirit:name>
+        <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_USE_PHASE_DETECTOR" spirit:order="51">false</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_ENABLE_BITSLIP</spirit:name>
+        <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_ENABLE_BITSLIP" spirit:order="52">false</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_ENABLE_TRAIN</spirit:name>
+        <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_ENABLE_TRAIN" spirit:order="53">false</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_TRAIN_CONSTANT</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_TRAIN_CONSTANT" spirit:order="54">0</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_SYSTEM_DATA_WIDTH</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SYSTEM_DATA_WIDTH" spirit:order="55">1</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_BUS_IN_DELAY</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_BUS_IN_DELAY" spirit:order="56">NONE</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_SELIO_BUS_IN_DELAY</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_BUS_IN_DELAY" spirit:order="57">NONE</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_BUS_IN_TAP</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_BUS_IN_TAP" spirit:order="58">0</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_SELIO_BUS_IN_TAP</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_BUS_IN_TAP" spirit:order="59">0</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_BUS_TAP_RESET</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_BUS_TAP_RESET" spirit:order="60">FROM_ZERO</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_BUS_TAP_WRAP</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_BUS_TAP_WRAP" spirit:order="61">STAY_AT_LIMIT</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_BUS_OUT_DELAY</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_BUS_OUT_DELAY" spirit:order="62">NONE</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_SELIO_BUS_OUT_DELAY</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_BUS_OUT_DELAY" spirit:order="63">NONE</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_BUS_OUT_TAP</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_BUS_OUT_TAP" spirit:order="64">0</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_SELIO_BUS_OUT_TAP</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_BUS_OUT_TAP" spirit:order="65">0</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_CLK_SIG_TYPE</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CLK_SIG_TYPE" spirit:order="66">SINGLE</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_CLK_IO_STD</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CLK_IO_STD" spirit:order="67">LVCMOS18</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_SELIO_CLK_SIG_TYPE</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_CLK_SIG_TYPE" spirit:order="68">SINGLE</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_SELIO_CLK_IO_STD</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_CLK_IO_STD" spirit:order="69">LVCMOS33</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_CLK_BUF</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CLK_BUF" spirit:order="70">BUFIO2</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_SELIO_CLK_BUF</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_CLK_BUF" spirit:order="71">MMCM</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_ACTIVE_EDGE</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_ACTIVE_EDGE" spirit:order="72">RISING</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_SELIO_ACTIVE_EDGE</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_ACTIVE_EDGE" spirit:order="73">SDR</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_INTERFACE_TYPE</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_INTERFACE_TYPE" spirit:order="74">NETWORKING</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_SELIO_INTERFACE_TYPE</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_INTERFACE_TYPE" spirit:order="75">NETWORKING</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_DDR_ALIGNMENT</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_DDR_ALIGNMENT" spirit:order="76">C0</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_SELIO_DDR_ALIGNMENT</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_DDR_ALIGNMENT" spirit:order="77">SAME_EDGE_PIPELINED</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_SELIO_ODDR_ALIGNMENT</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_ODDR_ALIGNMENT" spirit:order="78">SAME_EDGE</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_CLK_DELAY</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CLK_DELAY" spirit:order="79">NONE</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_CLK_TAP</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CLK_TAP" spirit:order="80">0</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_CLK_TAP_reset</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CLK_TAP_reset" spirit:order="81">FROM_ZERO</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_CLK_TAP_wrap</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CLK_TAP_wrap" spirit:order="82">STAY_AT_LIMIT</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_CLK_FWD</spirit:name>
+        <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CLK_FWD" spirit:order="83">false</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_USE_TEMPLATE</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_USE_TEMPLATE" spirit:order="84">Custom</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_DATA_RATE_STRING</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_DATA_RATE_STRING" spirit:order="85">1</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="integer">
+        <spirit:name>C_DEVICE</spirit:name>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_DEVICE" spirit:order="86">2</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_IDDR_RST_TYPE</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_IDDR_RST_TYPE" spirit:order="87">ASYNC</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_SELIO_IDDR_RST_TYPE</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SELIO_IDDR_RST_TYPE" spirit:order="88">ASYNC</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_CLK_EN</spirit:name>
+        <spirit:value spirit:format="bool" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CLK_EN" spirit:order="89">false</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_CLK_FWD_SIG_TYPE</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CLK_FWD_SIG_TYPE" spirit:order="90">SINGLE</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_CLK_FWD_IO_STD</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CLK_FWD_IO_STD" spirit:order="91">LVCMOS33</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_CONFIG_CLK_FWD</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_CONFIG_CLK_FWD" spirit:order="92">false</spirit:value>
+      </spirit:modelParameter>
+      <spirit:modelParameter spirit:dataType="string">
+        <spirit:name>C_DDR_CLK_BUF</spirit:name>
+        <spirit:value spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_DDR_CLK_BUF" spirit:order="93">BUFR</spirit:value>
+      </spirit:modelParameter>
+    </spirit:modelParameters>
+  </spirit:model>
+  <spirit:choices>
+    <spirit:choice>
+      <spirit:name>choice_list_0cfd65a5</spirit:name>
+      <spirit:enumeration>BUFR</spirit:enumeration>
+      <spirit:enumeration>BUFIO</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_1b3193b3</spirit:name>
+      <spirit:enumeration>LVCMOS18</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_4c0213cd</spirit:name>
+      <spirit:enumeration>2</spirit:enumeration>
+      <spirit:enumeration>3</spirit:enumeration>
+      <spirit:enumeration>4</spirit:enumeration>
+      <spirit:enumeration>5</spirit:enumeration>
+      <spirit:enumeration>6</spirit:enumeration>
+      <spirit:enumeration>7</spirit:enumeration>
+      <spirit:enumeration>8</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_8d71bae4</spirit:name>
+      <spirit:enumeration>SYNC</spirit:enumeration>
+      <spirit:enumeration>ASYNC</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_9cb1a9b4</spirit:name>
+      <spirit:enumeration>SDR</spirit:enumeration>
+      <spirit:enumeration>DDR</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_1b8c5b09</spirit:name>
+      <spirit:enumeration spirit:text="To zero">FROM_ZERO</spirit:enumeration>
+      <spirit:enumeration spirit:text="To half max">FROM_HALF_MAX</spirit:enumeration>
+      <spirit:enumeration spirit:text="Not applicable">NOT_APP</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_1da8bfe3</spirit:name>
+      <spirit:enumeration spirit:text="External Clock">BUFIO</spirit:enumeration>
+      <spirit:enumeration spirit:text="Internal Clock">MMCM</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_1e43203c</spirit:name>
+      <spirit:enumeration spirit:text="Input">INPUTS</spirit:enumeration>
+      <spirit:enumeration spirit:text="Output">OUTPUTS</spirit:enumeration>
+      <spirit:enumeration spirit:text="Bidirectional">BIDIR</spirit:enumeration>
+      <spirit:enumeration spirit:text="Input And Output">SEPARATE</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_258e1e75</spirit:name>
+      <spirit:enumeration spirit:text="HSTL II">HSTL_II</spirit:enumeration>
+      <spirit:enumeration spirit:text="HSTL II 18">HSTL_II_18</spirit:enumeration>
+      <spirit:enumeration spirit:text="SSTL135">SSTL135</spirit:enumeration>
+      <spirit:enumeration spirit:text="SSTL15">SSTL15</spirit:enumeration>
+      <spirit:enumeration spirit:text="SSTL18 II">SSTL18_II</spirit:enumeration>
+      <spirit:enumeration spirit:text="HSUL 12">HSUL_12</spirit:enumeration>
+      <spirit:enumeration spirit:text="SSTL135 R">SSTL135_R</spirit:enumeration>
+      <spirit:enumeration spirit:text="SSTL15 R">SSTL15_R</spirit:enumeration>
+      <spirit:enumeration spirit:text="MOBILE DDR">MOBILE_DDR</spirit:enumeration>
+      <spirit:enumeration spirit:text="LVCMOS33">LVCMOS33</spirit:enumeration>
+      <spirit:enumeration spirit:text="LVCMOS25">LVCMOS25</spirit:enumeration>
+      <spirit:enumeration spirit:text="LVCMOS18">LVCMOS18</spirit:enumeration>
+      <spirit:enumeration spirit:text="LVCMOS15">LVCMOS15</spirit:enumeration>
+      <spirit:enumeration spirit:text="LVCMOS12">LVCMOS12</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_2adcaf32</spirit:name>
+      <spirit:enumeration spirit:text="Synchronous">SYNC</spirit:enumeration>
+      <spirit:enumeration spirit:text="Asynchronous">ASYNC</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_39cb7e55</spirit:name>
+      <spirit:enumeration spirit:text="Networking">NETWORKING</spirit:enumeration>
+      <spirit:enumeration spirit:text="Networking pipelined">NETWORKING_PIPELINED</spirit:enumeration>
+      <spirit:enumeration spirit:text="Retimed">RETIMED</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_3bb7fcef</spirit:name>
+      <spirit:enumeration spirit:text="Both clock edges (alignment = none)">NONE</spirit:enumeration>
+      <spirit:enumeration spirit:text="Rising clock edge (alignment = C0)">C0</spirit:enumeration>
+      <spirit:enumeration spirit:text="Falling clock edge (alignment = C1)">C1</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_3c2d3ec7</spirit:name>
+      <spirit:enumeration spirit:text="Single-ended">SINGLE</spirit:enumeration>
+      <spirit:enumeration spirit:text="Differential">DIFF</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_3e378a1b</spirit:name>
+      <spirit:enumeration spirit:text="None">NONE</spirit:enumeration>
+      <spirit:enumeration spirit:text="Fixed">FIXED</spirit:enumeration>
+      <spirit:enumeration spirit:text="Variable">VARIABLE</spirit:enumeration>
+      <spirit:enumeration spirit:text="Variable loadable">VAR_LOADABLE</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_45573aba</spirit:name>
+      <spirit:enumeration spirit:text="HSTL I">HSTL_I</spirit:enumeration>
+      <spirit:enumeration spirit:text="HSTL I 18">HSTL_I_18</spirit:enumeration>
+      <spirit:enumeration spirit:text="HSTL II">HSTL_II</spirit:enumeration>
+      <spirit:enumeration spirit:text="HSTL II 18">HSTL_II_18</spirit:enumeration>
+      <spirit:enumeration spirit:text="SSTL135">SSTL135</spirit:enumeration>
+      <spirit:enumeration spirit:text="SSTL15">SSTL15</spirit:enumeration>
+      <spirit:enumeration spirit:text="SSTL18 I">SSTL18_I</spirit:enumeration>
+      <spirit:enumeration spirit:text="SSTL18 II">SSTL18_II</spirit:enumeration>
+      <spirit:enumeration spirit:text="HSUL 12">HSUL_12</spirit:enumeration>
+      <spirit:enumeration spirit:text="SSTL135 R">SSTL135_R</spirit:enumeration>
+      <spirit:enumeration spirit:text="SSTL15 R">SSTL15_R</spirit:enumeration>
+      <spirit:enumeration spirit:text="MOBILE DDR">MOBILE_DDR</spirit:enumeration>
+      <spirit:enumeration spirit:text="LVCMOS33">LVCMOS33</spirit:enumeration>
+      <spirit:enumeration spirit:text="LVCMOS25">LVCMOS25</spirit:enumeration>
+      <spirit:enumeration spirit:text="LVCMOS18">LVCMOS18</spirit:enumeration>
+      <spirit:enumeration spirit:text="LVCMOS15">LVCMOS15</spirit:enumeration>
+      <spirit:enumeration spirit:text="LVCMOS12">LVCMOS12</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_9e328cea</spirit:name>
+      <spirit:enumeration spirit:text="None">NONE</spirit:enumeration>
+      <spirit:enumeration spirit:text="Fixed">FIXED</spirit:enumeration>
+      <spirit:enumeration spirit:text="Variable">VARIABLE</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_aeff3ba5</spirit:name>
+      <spirit:enumeration spirit:text="BUFG = The wizard will instantiate a BUFG">BUFG</spirit:enumeration>
+      <spirit:enumeration spirit:text="BUFIO2 = The wizard will instantiate a BUFIO2">BUFIO2</spirit:enumeration>
+      <spirit:enumeration spirit:text="BUFPLL = The wizard will instantiate a BUFPLL">BUFPLL</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_b234d33b</spirit:name>
+      <spirit:enumeration spirit:text="Custom">Custom</spirit:enumeration>
+      <spirit:enumeration spirit:text="SGMII">SGMII</spirit:enumeration>
+      <spirit:enumeration spirit:text="DVI Receiver">DVI_Receiver</spirit:enumeration>
+      <spirit:enumeration spirit:text="DVI Transmitter">DVI_Transmitter</spirit:enumeration>
+      <spirit:enumeration spirit:text="Camera Link Receiver">Camera_Link_Receiver</spirit:enumeration>
+      <spirit:enumeration spirit:text="Camera Link Transmitter">Camera_Link_Transmitter</spirit:enumeration>
+      <spirit:enumeration spirit:text="Chip to Chip">Chip_to_Chip</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_c0171793</spirit:name>
+      <spirit:enumeration spirit:text="Networking">NETWORKING</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_c2b1971d</spirit:name>
+      <spirit:enumeration spirit:text="Opposite Edge">OPPOSITE_EDGE</spirit:enumeration>
+      <spirit:enumeration spirit:text="Same Edge">SAME_EDGE</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_c55e399b</spirit:name>
+      <spirit:enumeration spirit:text="Opposite Edge">OPPOSITE_EDGE</spirit:enumeration>
+      <spirit:enumeration spirit:text="Same Edge">SAME_EDGE</spirit:enumeration>
+      <spirit:enumeration spirit:text="Same Edge Piplelined">SAME_EDGE_PIPELINED</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_d0437f92</spirit:name>
+      <spirit:enumeration spirit:text="None">NONE</spirit:enumeration>
+      <spirit:enumeration spirit:text="Fixed">FIXED</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_d9200fd8</spirit:name>
+      <spirit:enumeration spirit:text="Stay at limit">STAY_AT_LIMIT</spirit:enumeration>
+      <spirit:enumeration spirit:text="Wrap around">WRAPAROUND</spirit:enumeration>
+      <spirit:enumeration spirit:text="Not applicable">NOT_APP</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_pairs_fef3465d</spirit:name>
+      <spirit:enumeration spirit:text="Both rising and falling">BOTH_RISE_FALL</spirit:enumeration>
+      <spirit:enumeration spirit:text="Data is not clocked">NONE</spirit:enumeration>
+      <spirit:enumeration spirit:text="Rising">RISING</spirit:enumeration>
+    </spirit:choice>
+  </spirit:choices>
+  <spirit:description>The SelectIO Interface Wizard creates a HDL file (Verilog or VHDL) that contains IO logic such as SERDES and IODELAY blocks customized to the user&apos;s interface requirements.</spirit:description>
+  <spirit:parameters>
+    <spirit:parameter>
+      <spirit:name>Component_Name</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Component_Name" spirit:order="1">wasca_toplevel_selectio_wiz_0_1</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>NOTES</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.NOTES" spirit:order="2">None</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USE_TEMPLATE</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.USE_TEMPLATE" spirit:choiceRef="choice_pairs_b234d33b" spirit:order="3">Custom</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>BUS_DIR</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.BUS_DIR" spirit:choiceRef="choice_pairs_1e43203c" spirit:order="4">BIDIR</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>BUS_SIG_TYPE</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.BUS_SIG_TYPE" spirit:choiceRef="choice_pairs_3c2d3ec7" spirit:order="5">SINGLE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>BUS_IO_STD</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.BUS_IO_STD" spirit:choiceRef="choice_pairs_258e1e75" spirit:order="6">LVCMOS33</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USE_PHASE_DETECTOR</spirit:name>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.USE_PHASE_DETECTOR" spirit:order="7">false</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_ACTIVE_EDGE</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_ACTIVE_EDGE" spirit:choiceRef="choice_list_9cb1a9b4" spirit:order="8">SDR</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>USE_SERIALIZATION</spirit:name>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.USE_SERIALIZATION" spirit:order="9">false</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SERIALIZATION_FACTOR</spirit:name>
+      <spirit:displayName>Serialization Factor</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.SERIALIZATION_FACTOR" spirit:choiceRef="choice_list_4c0213cd" spirit:order="10">4</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>ENABLE_BITSLIP</spirit:name>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.ENABLE_BITSLIP" spirit:order="11">false</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>ENABLE_TRAIN</spirit:name>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.ENABLE_TRAIN" spirit:order="12">false</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>TRAIN_CONSTANT</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.TRAIN_CONSTANT" spirit:order="13">0</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SYSTEM_DATA_WIDTH</spirit:name>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.SYSTEM_DATA_WIDTH" spirit:order="14" spirit:minimum="1" spirit:maximum="16" spirit:rangeType="long">1</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>INTERFACE_TYPE</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.INTERFACE_TYPE" spirit:choiceRef="choice_pairs_39cb7e55" spirit:order="15">NETWORKING</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_INTERFACE_TYPE</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_INTERFACE_TYPE" spirit:choiceRef="choice_pairs_c0171793" spirit:order="16">NETWORKING</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>BUS_IN_DELAY</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.BUS_IN_DELAY" spirit:choiceRef="choice_pairs_9e328cea" spirit:order="17">NONE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_BUS_IN_DELAY</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_BUS_IN_DELAY" spirit:choiceRef="choice_pairs_3e378a1b" spirit:order="18">NONE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>BUS_IN_TAP</spirit:name>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.BUS_IN_TAP" spirit:order="19" spirit:minimum="0" spirit:maximum="255" spirit:rangeType="long">0</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_BUS_IN_TAP</spirit:name>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_BUS_IN_TAP" spirit:order="20" spirit:minimum="0" spirit:maximum="31" spirit:rangeType="long">0</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>BUS_TAP_RESET</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.BUS_TAP_RESET" spirit:choiceRef="choice_pairs_1b8c5b09" spirit:order="21">NOT_APP</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>BUS_TAP_WRAP</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.BUS_TAP_WRAP" spirit:choiceRef="choice_pairs_d9200fd8" spirit:order="22">NOT_APP</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>BUS_OUT_DELAY</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.BUS_OUT_DELAY" spirit:choiceRef="choice_pairs_d0437f92" spirit:order="23">NONE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_BUS_OUT_DELAY</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_BUS_OUT_DELAY" spirit:choiceRef="choice_pairs_3e378a1b" spirit:order="24">NONE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>BUS_OUT_TAP</spirit:name>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.BUS_OUT_TAP" spirit:order="25" spirit:minimum="0" spirit:maximum="31" spirit:rangeType="long">0</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_BUS_OUT_TAP</spirit:name>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_BUS_OUT_TAP" spirit:order="26" spirit:minimum="0" spirit:maximum="31" spirit:rangeType="long">0</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CLK_SIG_TYPE</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.CLK_SIG_TYPE" spirit:choiceRef="choice_pairs_3c2d3ec7" spirit:order="27">SINGLE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_CLK_SIG_TYPE</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_CLK_SIG_TYPE" spirit:choiceRef="choice_pairs_3c2d3ec7" spirit:order="28">SINGLE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CLK_IO_STD</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.CLK_IO_STD" spirit:choiceRef="choice_list_1b3193b3" spirit:order="29">LVCMOS18</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_CLK_IO_STD</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_CLK_IO_STD" spirit:choiceRef="choice_pairs_45573aba" spirit:order="30">LVCMOS33</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CLK_BUF</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.CLK_BUF" spirit:choiceRef="choice_pairs_aeff3ba5" spirit:order="31">BUFIO2</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_CLK_BUF</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_CLK_BUF" spirit:choiceRef="choice_pairs_1da8bfe3" spirit:order="26.1">MMCM</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>ACTIVE_EDGE</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.ACTIVE_EDGE" spirit:choiceRef="choice_pairs_fef3465d" spirit:order="33">RISING</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>DDR_ALIGNMENT</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.DDR_ALIGNMENT" spirit:choiceRef="choice_pairs_3bb7fcef" spirit:order="34">C0</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_DDR_ALIGNMENT</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_DDR_ALIGNMENT" spirit:choiceRef="choice_pairs_c55e399b" spirit:order="35">SAME_EDGE_PIPELINED</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_ODDR_ALIGNMENT</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_ODDR_ALIGNMENT" spirit:choiceRef="choice_pairs_c2b1971d" spirit:order="36">SAME_EDGE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CLK_DELAY</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.CLK_DELAY" spirit:choiceRef="choice_pairs_d0437f92" spirit:order="37">NONE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CLK_TAP</spirit:name>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.CLK_TAP" spirit:order="38" spirit:minimum="0" spirit:maximum="31" spirit:rangeType="long">0</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CLK_FWD</spirit:name>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.CLK_FWD" spirit:order="39">false</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CLK_FWD_SER</spirit:name>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.CLK_FWD_SER" spirit:order="40">false</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>IDDR_RST_TYPE</spirit:name>
+      <spirit:displayName>IDDR Reset Type</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.IDDR_RST_TYPE" spirit:choiceRef="choice_list_8d71bae4" spirit:order="41">ASYNC</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SELIO_IDDR_RST_TYPE</spirit:name>
+      <spirit:displayName>IDDR Reset Type</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.SELIO_IDDR_RST_TYPE" spirit:choiceRef="choice_pairs_2adcaf32" spirit:order="42">ASYNC</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CLK_EN</spirit:name>
+      <spirit:displayName>Use Clk Enable</spirit:displayName>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.CLK_EN" spirit:order="43">false</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CONFIG_CLK_FWD</spirit:name>
+      <spirit:displayName>Config Clk Fwd</spirit:displayName>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.CONFIG_CLK_FWD" spirit:order="44">false</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CLK_FWD_SIG_TYPE</spirit:name>
+      <spirit:displayName>Type</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.CLK_FWD_SIG_TYPE" spirit:choiceRef="choice_pairs_3c2d3ec7" spirit:order="45">SINGLE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CLK_FWD_IO_STD</spirit:name>
+      <spirit:displayName>Standard</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.CLK_FWD_IO_STD" spirit:choiceRef="choice_pairs_45573aba" spirit:order="46">LVCMOS33</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>DDR_CLK_BUF</spirit:name>
+      <spirit:displayName>DDR Clk Buffer</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.DDR_CLK_BUF" spirit:choiceRef="choice_list_0cfd65a5" spirit:order="47">BUFR</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>INCLUDE_IDELAYCTRL</spirit:name>
+      <spirit:displayName>Include DELAYCTRL</spirit:displayName>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.INCLUDE_IDELAYCTRL" spirit:order="60">true</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>INCLUDE_IDELAYCTRL_BUFG</spirit:name>
+      <spirit:displayName>Include Global Buffer</spirit:displayName>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.INCLUDE_IDELAYCTRL_BUFG" spirit:order="68">true</spirit:value>
+    </spirit:parameter>
+  </spirit:parameters>
+  <spirit:vendorExtensions>
+    <xilinx:coreExtensions>
+      <xilinx:displayName>SelectIO Interface Wizard</xilinx:displayName>
+      <xilinx:coreRevision>7</xilinx:coreRevision>
+      <xilinx:configElementInfos>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.CLK_IN.CLK_DOMAIN" xilinx:valueSource="default_prop"/>
+        <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.CLK_IN.FREQ_HZ" xilinx:valueSource="user_prop"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.BUS_DIR" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.BUS_IO_STD" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLK_FWD" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CLK_FWD_IO_STD" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.SELIO_BUS_IN_DELAY" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.SELIO_CLK_BUF" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.SELIO_CLK_IO_STD" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.SELIO_INTERFACE_TYPE" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.SERIALIZATION_FACTOR" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.SYSTEM_DATA_WIDTH" xilinx:valueSource="user"/>
+      </xilinx:configElementInfos>
+    </xilinx:coreExtensions>
+    <xilinx:packagingInfo>
+      <xilinx:xilinxVersion>2016.2</xilinx:xilinxVersion>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="2215b8b8"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="5a2833ca"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="4beaa73c"/>
+      <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="e203201d"/>
+      <xilinx:checksum xilinx:scope="parameters" xilinx:value="789f6972"/>
+    </xilinx:packagingInfo>
+  </spirit:vendorExtensions>
+</spirit:component>

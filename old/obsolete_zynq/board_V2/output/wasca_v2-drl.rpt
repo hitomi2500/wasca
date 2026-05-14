@@ -1,0 +1,25 @@
+Drill report for J:\wasca\board_V2\wasca_v2.kicad_pcb
+Created on 04.06.2016 14:55:18
+
+Copper Layer Stackup:
+    =============================================================
+    L1 :  Front                     front
+    L2 :  Back                      back
+
+
+Drill file 'J:wasca_v2.drl' contains
+    plated through holes:
+    =============================================================
+    T1  0,30mm  0,012"  (243 holes)
+    T2  0,40mm  0,016"  (270 holes)
+    T3  0,76mm  0,030"  (13 holes)
+
+    Total plated holes count 526
+
+
+Drill file 'J:wasca_v2-NPTH.drl' contains
+    unplated through holes:
+    =============================================================
+    T1  1,50mm  0,059"  (2 holes)
+
+    Total unplated holes count 2

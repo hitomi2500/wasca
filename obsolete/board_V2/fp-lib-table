@@ -1,3 +1,0 @@
-(fp_lib_table
-  (lib (name wasca)(type KiCad)(uri "$(KIPRJMOD)\\wasca.pretty")(options "")(descr ""))
-)
