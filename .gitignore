@@ -54,3 +54,6 @@
 /board/.history/
 /board_module/wasca-backups/
 /board/tmpenfmmbg5.rpt
+/board/tmp*.rpt
+/board*.lck
+/board/*.lck
