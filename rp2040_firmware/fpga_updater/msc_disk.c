@@ -26,6 +26,11 @@
 #include "bsp/board_api.h"
 #include "tusb.h"
 
+extern int log_printf(const char *fmt, ...);
+extern void w25q_page_program(uint32_t addr, const uint8_t *data, uint16_t len);
+extern void w25q_sector_erase_4k(uint32_t addr);
+int attosoc_bit_starting_lba = 0;
+
 #if CFG_TUD_MSC
 
 // whether host does safe-eject
@@ -232,8 +237,33 @@ int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t* 
     (void) lba; (void) offset; (void) buffer;
 #endif
   } else {
-    //sectors beyound ram-mapped area
-    //TODO:  do flashing here
+    //sectors beyound ram-mapped area, not writing into ram
+  }
+
+  //detecting attosoc.bit start
+  if (7 == lba) {
+    //root directory write, checking if attosoc.bit exists
+    for (int i=0;i<16;i++) {
+      if (0 == memcmp(&(buffer[i*32]),"ATTOSOC BIT",11)) {
+        attosoc_bit_starting_lba = buffer[i*32+26];
+        if (attosoc_bit_starting_lba)
+        attosoc_bit_starting_lba+=6;
+          log_printf("attosoc.bit found at lba %d\r\n",attosoc_bit_starting_lba);
+      }
+    }
+  }
+
+  if ( (attosoc_bit_starting_lba) && ( lba >= attosoc_bit_starting_lba) ) {
+    int address = lba * DISK_BLOCK_SIZE;
+    //erase in necessary
+    if (lba % 4096 == 0)
+      w25q_sector_erase_4k(address);
+    //write
+    w25q_page_program(address,buffer,256);
+    w25q_page_program(address,&(buffer[256]),256);
+    //debug print
+    if ((lba-attosoc_bit_starting_lba)%100 == 0)
+      log_printf("writing attosoc.bit sector %d lba %d\r\n",lba-attosoc_bit_starting_lba,lba);
   }
 
   return (int32_t) bufsize;

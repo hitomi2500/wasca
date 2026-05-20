@@ -25,6 +25,8 @@
 
 #include "bsp/board_api.h"
 #include "tusb.h"
+#include <stdarg.h>
+#include "pico/stdlib.h"
 
 //--------------------------------------------------------------------+
 // MACRO CONSTANT TYPEDEF PROTYPES
@@ -45,6 +47,15 @@ static uint32_t blink_interval_ms = BLINK_NOT_MOUNTED;
 
 void led_blinking_task(void);
 void cdc_task(void);
+int log_printf(const char *fmt, ...);
+
+#define QSPI_CLK_PIN 7
+#define QSPI_CS_PIN 3
+#define QSPI_D0_PIN 5
+#define QSPI_D1_PIN 11
+#define QSPI_D2_PIN 1
+#define QSPI_D3_PIN 12
+#define PROGRAMN_PIN 18
 
 /*------------- MAIN -------------*/
 int main(void) {
@@ -56,6 +67,26 @@ int main(void) {
     .speed = TUSB_SPEED_AUTO
   };
   tusb_init(BOARD_TUD_RHPORT, &dev_init);
+
+  gpio_init(QSPI_CLK_PIN);
+  gpio_init(QSPI_CS_PIN);
+  gpio_init(QSPI_D0_PIN);
+  gpio_init(QSPI_D1_PIN);
+  gpio_init(QSPI_D2_PIN);
+  gpio_init(QSPI_D3_PIN);
+  gpio_init(PROGRAMN_PIN);
+  gpio_set_dir(QSPI_CLK_PIN, GPIO_OUT);
+  gpio_set_dir(QSPI_CS_PIN, GPIO_OUT);
+  gpio_set_dir(QSPI_D0_PIN, GPIO_OUT);
+  gpio_set_dir(QSPI_D1_PIN, GPIO_IN);
+  gpio_set_dir(QSPI_D2_PIN, GPIO_IN);
+  gpio_set_dir(QSPI_D3_PIN, GPIO_IN);
+  gpio_set_dir(PROGRAMN_PIN, GPIO_IN);
+  gpio_put(QSPI_CLK_PIN,0);
+  gpio_put(QSPI_CS_PIN,0);
+  gpio_put(QSPI_D0_PIN,0);
+  gpio_put(QSPI_D1_PIN,0);
+  gpio_put(PROGRAMN_PIN,0);
 
   if (board_init_after_tusb) {
     board_init_after_tusb();
@@ -109,15 +140,17 @@ void cdc_task(void) {
     if (tud_cdc_available()) {
       // read data
       char buf[64];
-      uint32_t count = tud_cdc_read(buf, sizeof(buf));
+      //uint32_t count = tud_cdc_read(buf, sizeof(buf));
+      sprintf(buf,"Hello!!!!!\r\n");
+      uint32_t count  = strlen(buf);
       (void) count;
 
       // Echo back
       // Note: Skip echo by commenting out write() and write_flush()
       // for throughput test e.g
       //    $ dd if=/dev/zero of=/dev/ttyACM0 count=10000
-      tud_cdc_write(buf, count);
-      tud_cdc_write_flush();
+      //tud_cdc_write(buf, count);
+      //tud_cdc_write_flush();
     }
   }
 }
@@ -153,4 +186,27 @@ void led_blinking_task(void) {
 
   board_led_write(led_state);
   led_state = 1 - led_state; // toggle
+
+}
+
+char sprintf_buffer[256];
+int
+log_printf(const char *fmt, ...)
+{
+	int ret;
+	va_list va;
+	va_start(va, fmt);
+	ret = vsnprintf(sprintf_buffer, 512, fmt, va);
+	va_end(va);
+
+  if (ret) {
+    tud_cdc_write(sprintf_buffer, ret);
+    tud_cdc_write_flush();
+  }
+
+	return ret;
+}
+
+void write_flash_page(uint32_t sector, uint8_t* buffer) {
+  //gpio_put(LED_PIN, state ? LED_STATE_ON : (1 - LED_STATE_ON));
 }

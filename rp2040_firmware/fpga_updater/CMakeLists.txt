@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(fpga_updater fpga_updater.c usb_descriptors.c msc_disk.c)
+add_executable(fpga_updater fpga_updater.c usb_descriptors.c msc_disk.c spi.c)
 
 pico_set_program_name(fpga_updater "fpga_updater")
 pico_set_program_version(fpga_updater "0.1")
