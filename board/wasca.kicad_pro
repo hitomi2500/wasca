@@ -544,11 +544,26 @@
         "microvia_drill": 0.1,
         "name": "Hires",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 0,
+        "priority": 1,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.1524,
         "tuning_profile": "",
         "via_diameter": 0.5,
+        "via_drill": 0.3
+      },
+      {
+        "clearance": 0.1524,
+        "diff_pair_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "Power",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 0,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.2031,
+        "tuning_profile": "",
+        "via_diameter": 0.7,
         "via_drill": 0.3
       }
     ],
@@ -557,7 +572,12 @@
     },
     "net_colors": null,
     "netclass_assignments": null,
-    "netclass_patterns": []
+    "netclass_patterns": [
+      {
+        "netclass": "Power",
+        "pattern": "*+*V"
+      }
+    ]
   },
   "pcbnew": {
     "last_paths": {
@@ -819,7 +839,7 @@
         "uuid": "fdc60c06-30fa-4dfb-96b4-809b755999e1"
       }
     ],
-    "used_designators": "SW3",
+    "used_designators": "SW3,TP13-16",
     "variants": []
   },
   "sheets": [
