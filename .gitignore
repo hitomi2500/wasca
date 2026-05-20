@@ -57,3 +57,4 @@
 /board/tmp*.rpt
 /board*.lck
 /board/*.lck
+/board/jlcpcb/

@@ -38504,7 +38504,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Value" "74ALVC164245"
+		(property "Value" "74ALVC164245DGG:11-JSM"
 			(at 223.52 260.35 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -38777,7 +38777,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Value" "74ALVC164245"
+		(property "Value" "74ALVC164245DGG:11-JSM"
 			(at 223.52 134.62 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -39198,7 +39198,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Value" "74ALVC164245"
+		(property "Value" "74ALVC164245DGG:11-JSM"
 			(at 247.65 34.29 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -44301,7 +44301,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "ESP32_CAM_HALF"
+		(property "Value" "2.54-1*8P母环保"
 			(at 985.012 540.258 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -44890,7 +44890,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SN74LVC1T45DBV"
+		(property "Value" "SN74LVC1T45DBVR"
 			(at 81.28 396.24 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -45530,7 +45530,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SN74LVC1T45DBV"
+		(property "Value" "SN74LVC1T45DBVR"
 			(at 68.58 438.15 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -46244,7 +46244,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SN74LVC1T45DBV"
+		(property "Value" "SN74LVC1T45DBVR"
 			(at 177.8 393.7 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -46884,7 +46884,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SN74LVC1T45DBV"
+		(property "Value" "SN74LVC1T45DBVR"
 			(at 177.8 430.53 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -47524,7 +47524,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SN74LVC1T45DBV"
+		(property "Value" "SN74LVC1T45DBVR"
 			(at 177.8 466.09 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -49792,7 +49792,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25804"
+		(property "LCSC" " C15401"
 			(at 668.02 67.31 90)
 			(hide yes)
 			(show_name no)
@@ -49840,7 +49840,7 @@
 				)
 			)
 		)
-		(property "Value" "XC6206PxxxMR"
+		(property "Value" "XC6206P252MR"
 			(at 471.17 557.53 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -51530,7 +51530,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25804"
+		(property "LCSC" " C15401"
 			(at 934.72 295.91 90)
 			(hide yes)
 			(show_name no)
@@ -51579,7 +51579,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "W25Q16JVSS"
+		(property "Value" "P25Q16SH-SSH-IR"
 			(at 981.71 292.0999 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -51623,7 +51623,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C82317"
+		(property "LCSC" "C7466814"
 			(at 970.28 290.83 0)
 			(hide yes)
 			(show_name no)
@@ -54713,7 +54713,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MT48LC16M16A2TG"
+		(property "Value" "W9825G6KH-6"
 			(at 430.1333 275.59 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -55208,7 +55208,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25804"
+		(property "LCSC" " C15401"
 			(at 1115.06 102.87 90)
 			(hide yes)
 			(show_name no)
@@ -57150,7 +57150,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25804"
+		(property "LCSC" " C15401"
 			(at 934.72 293.37 90)
 			(hide yes)
 			(show_name no)
@@ -57674,7 +57674,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MT48LC16M16A2TG"
+		(property "Value" "W9825G6KH-6"
 			(at 430.0094 372.11 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -58938,7 +58938,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Crystal_GND24"
+		(property "Value" "X322512MSB4SI"
 			(at 181.61 612.1399 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -59080,7 +59080,7 @@
 				)
 			)
 		)
-		(property "Value" "SG-8002CE"
+		(property "Value" "SX2M25.000M20F30TNN"
 			(at 802.64 257.7398 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -59145,7 +59145,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C49207939"
+		(property "LCSC" "C2901601"
 			(at 789.94 261.62 0)
 			(hide yes)
 			(show_name no)
@@ -59306,7 +59306,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25804"
+		(property "LCSC" " C15401"
 			(at 934.72 290.83 90)
 			(hide yes)
 			(show_name no)
@@ -59754,7 +59754,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_Push"
+		(property "Value" "TS-1101-C-W"
 			(at 81.28 608.33 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -59764,7 +59764,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_SPST_EVQP2_ShortPushTravel_H2.5mm"
+		(property "Footprint" "Button_Switch_SMD:SW_Tactile_SPST_NO_Straight_CK_PTS636Sx25SMTRLFS"
 			(at 81.28 608.33 0)
 			(hide yes)
 			(show_name no)
@@ -59831,6 +59831,17 @@
 			)
 		)
 		(property "KLC_S4.1" ""
+			(at 81.28 613.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318938"
 			(at 81.28 613.41 0)
 			(hide yes)
 			(show_name no)
@@ -60113,7 +60124,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25804"
+		(property "LCSC" " C15401"
 			(at 934.72 283.21 90)
 			(hide yes)
 			(show_name no)
@@ -61188,7 +61199,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "W25Q16JVSS"
+		(property "Value" "P25Q16SH-SSH-IR"
 			(at 144.78 622.2999 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -61232,7 +61243,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C82317"
+		(property "LCSC" "C7466814"
 			(at 133.35 621.03 0)
 			(hide yes)
 			(show_name no)
@@ -61634,7 +61645,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25804"
+		(property "LCSC" " C15401"
 			(at 934.72 288.29 90)
 			(hide yes)
 			(show_name no)
@@ -61816,7 +61827,7 @@
 				)
 			)
 		)
-		(property "Value" "USB_C_Receptacle_USB2.0_16P"
+		(property "Value" "UC09-0B16F00P11"
 			(at 67.31 548.64 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -61881,7 +61892,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C3197885"
+		(property "LCSC" "C36936538"
 			(at 67.31 568.96 0)
 			(hide yes)
 			(show_name no)
@@ -62459,7 +62470,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25804"
+		(property "LCSC" " C15401"
 			(at 934.72 285.75 90)
 			(hide yes)
 			(show_name no)
@@ -64348,7 +64359,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Value" "693063020911"
+		(property "Value" "SD-CARD 11P"
 			(at 801.37 436.88 0)
 			(hide yes)
 			(show_name no)
@@ -64512,7 +64523,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C266602"
+		(property "LCSC" "C7529393"
 			(at 801.37 436.88 0)
 			(hide yes)
 			(show_name no)
@@ -64706,7 +64717,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25804"
+		(property "LCSC" " C15401"
 			(at 654.05 69.85 90)
 			(hide yes)
 			(show_name no)
@@ -66757,7 +66768,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_Push"
+		(property "Value" "TS-1101-C-W"
 			(at 600.71 31.75 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -66767,7 +66778,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_SMD:SW_SPST_EVQP2_ShortPushTravel_H2.5mm"
+		(property "Footprint" "Button_Switch_SMD:SW_Tactile_SPST_NO_Straight_CK_PTS636Sx25SMTRLFS"
 			(at 600.71 31.75 0)
 			(hide yes)
 			(show_name no)
@@ -66834,6 +66845,17 @@
 			)
 		)
 		(property "KLC_S4.1" ""
+			(at 600.71 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C318938"
 			(at 600.71 36.83 0)
 			(hide yes)
 			(show_name no)
