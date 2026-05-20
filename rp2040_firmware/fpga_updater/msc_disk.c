@@ -36,20 +36,20 @@ static bool ejected = false;
 // CFG_EXAMPLE_MSC_READONLY defined
 
 #define README_CONTENTS \
-"This is tinyusb's MassStorage Class demo.\r\n\r\n\
-If you find any bugs or get any questions, feel free to file an\r\n\
-issue at github.com/hathach/tinyusb"
+"This is a drive for flashing internal wasca firmware.\r\n\r\n\
+Drop your attosoc.bit file into this drive to start the update process"
 
 enum
 {
-  DISK_BLOCK_NUM  = 16, // 8KB is the smallest size that windows allow to mount
+  DISK_BLOCK_NUM_RAM  = 16, // 8KB is the smallest size that windows allow to mount
+  DISK_BLOCK_NUM_FULL = 2048,
   DISK_BLOCK_SIZE = 512
 };
 
 #ifdef CFG_EXAMPLE_MSC_READONLY
 const
 #endif
-uint8_t msc_disk[DISK_BLOCK_NUM][DISK_BLOCK_SIZE] =
+uint8_t msc_disk[DISK_BLOCK_NUM_RAM][DISK_BLOCK_SIZE] =
 {
   //------------- Block0: Boot Sector -------------//
   // byte_per_sector    = DISK_BLOCK_SIZE; fat12_sector_num_16  = DISK_BLOCK_NUM;
@@ -61,9 +61,9 @@ uint8_t msc_disk[DISK_BLOCK_NUM][DISK_BLOCK_SIZE] =
   // FAT magic code at offset 510-511
   {
       0xEB, 0x3C, 0x90, 0x4D, 0x53, 0x44, 0x4F, 0x53, 0x35, 0x2E, 0x30, 0x00, 0x02, 0x01, 0x01, 0x00,
-      0x01, 0x10, 0x00, 0x10, 0x00, 0xF8, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x29, 0x34, 0x12, 0x00, 0x00, 'T' , 'i' , 'n' , 'y' , 'U' ,
-      'S' , 'B' , ' ' , 'M' , 'S' , 'C' , 0x46, 0x41, 0x54, 0x31, 0x32, 0x20, 0x20, 0x20, 0x00, 0x00,
+      0x01, 0x10, 0x00, 0x00, 0x08, 0xF8, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x29, 0x34, 0x12, 0x00, 0x00, 'w' , 'a' , 's' , 'c' , 'a' ,
+      ' ' , 'F' , 'w' , 'U' , 'p' , 'd' , 0x46, 0x41, 0x54, 0x31, 0x32, 0x20, 0x20, 0x20, 0x00, 0x00,
 
       // Zero up to 2 last bytes of FAT magic code
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -107,7 +107,7 @@ uint8_t msc_disk[DISK_BLOCK_NUM][DISK_BLOCK_SIZE] =
   //------------- Block2: Root Directory -------------//
   {
       // first entry is volume label
-      'T' , 'i' , 'n' , 'y' , 'U' , 'S' , 'B' , ' ' , 'M' , 'S' , 'C' , 0x08, 0x00, 0x00, 0x00, 0x00,
+      'w' , 'a' , 's' , 'c' , 'a' , ' ' , 'F' , 'w' , 'U' , 'p' , 'd' , 0x08, 0x00, 0x00, 0x00, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4F, 0x6D, 0x65, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
       // second entry is readme file
       'R' , 'E' , 'A' , 'D' , 'M' , 'E' , ' ' , ' ' , 'T' , 'X' , 'T' , 0x20, 0x00, 0xC6, 0x52, 0x6D,
@@ -125,8 +125,8 @@ void tud_msc_inquiry_cb(uint8_t lun, uint8_t vendor_id[8], uint8_t product_id[16
 {
   (void) lun;
 
-  const char vid[] = "TinyUSB";
-  const char pid[] = "Mass Storage";
+  const char vid[] = "wasca";
+  const char pid[] = "Firmware Update";
   const char rev[] = "1.0";
 
   memcpy(vendor_id  , vid, strlen(vid));
@@ -156,7 +156,7 @@ void tud_msc_capacity_cb(uint8_t lun, uint32_t* block_count, uint16_t* block_siz
 {
   (void) lun;
 
-  *block_count = DISK_BLOCK_NUM;
+  *block_count = DISK_BLOCK_NUM_FULL;
   *block_size  = DISK_BLOCK_SIZE;
 }
 
@@ -190,10 +190,15 @@ int32_t tud_msc_read10_cb(uint8_t lun, uint32_t lba, uint32_t offset, void* buff
   (void) lun;
 
   // out of ramdisk
-  if ( lba >= DISK_BLOCK_NUM ) return -1;
+  if ( lba >= DISK_BLOCK_NUM_FULL ) return -1;
 
-  uint8_t const* addr = msc_disk[lba] + offset;
-  memcpy(buffer, addr, bufsize);
+  if ( lba < DISK_BLOCK_NUM_RAM ) {
+    uint8_t const* addr = msc_disk[lba] + offset;
+    memcpy(buffer, addr, bufsize);
+  } else {
+    //sectors beyound ram-mapped area
+    memset(buffer, 0, bufsize);
+  }
 
   return (int32_t) bufsize;
 }
@@ -216,14 +221,19 @@ int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t* 
   (void) lun;
 
   // out of ramdisk
-  if ( lba >= DISK_BLOCK_NUM ) return -1;
+  if ( lba >= DISK_BLOCK_NUM_FULL ) return -1;
 
+  if ( lba < DISK_BLOCK_NUM_RAM ) {
 #ifndef CFG_EXAMPLE_MSC_READONLY
-  uint8_t* addr = msc_disk[lba] + offset;
-  memcpy(addr, buffer, bufsize);
+    uint8_t* addr = msc_disk[lba] + offset;
+    memcpy(addr, buffer, bufsize);
 #else
-  (void) lba; (void) offset; (void) buffer;
+    (void) lba; (void) offset; (void) buffer;
 #endif
+  } else {
+    //sectors beyound ram-mapped area
+    //TODO:  do flashing here
+  }
 
   return (int32_t) bufsize;
 }
