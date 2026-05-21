@@ -23231,6 +23231,16 @@
 	)
 	(wire
 		(pts
+			(xy 250.19 575.31) (xy 273.05 575.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d2bfb68-fc4e-4545-a221-c233405eaab4")
+	)
+	(wire
+		(pts
 			(xy 1078.23 104.14) (xy 1056.64 104.14)
 		)
 		(stroke
@@ -25468,6 +25478,16 @@
 			(type default)
 		)
 		(uuid "58126faf-01a4-4f91-8e8c-ca9e47b48048")
+	)
+	(wire
+		(pts
+			(xy 250.19 580.39) (xy 273.05 580.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "58153be1-8fc5-4456-b8ed-5918d2376dbf")
 	)
 	(wire
 		(pts
@@ -27811,6 +27831,16 @@
 	)
 	(wire
 		(pts
+			(xy 250.19 554.99) (xy 273.05 554.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8f6da5a6-0613-499a-bcef-2810ef649c89")
+	)
+	(wire
+		(pts
 			(xy 509.27 85.09) (xy 509.27 91.44)
 		)
 		(stroke
@@ -28068,16 +28098,6 @@
 			(type default)
 		)
 		(uuid "93ecc34f-73dd-47ab-a7e6-4708cdee09b4")
-	)
-	(wire
-		(pts
-			(xy 250.19 575.31) (xy 273.05 575.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9422c7e8-df40-4683-bb94-5c2737aef2a5")
 	)
 	(wire
 		(pts
@@ -28408,16 +28428,6 @@
 			(type default)
 		)
 		(uuid "9b462586-fc18-4c07-9cf1-49684bba3f75")
-	)
-	(wire
-		(pts
-			(xy 250.19 580.39) (xy 273.05 580.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9b48909a-b09a-4a32-ac1c-6577a6ed81ed")
 	)
 	(wire
 		(pts
@@ -29551,16 +29561,6 @@
 	)
 	(wire
 		(pts
-			(xy 250.19 560.07) (xy 273.05 560.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b8571183-dd06-4d42-84cd-b6d65782cf6b")
-	)
-	(wire
-		(pts
 			(xy 233.68 153.67) (xy 252.73 153.67)
 		)
 		(stroke
@@ -29688,16 +29688,6 @@
 			(type default)
 		)
 		(uuid "bace1f2d-a180-42de-9350-9f31497d0b4d")
-	)
-	(wire
-		(pts
-			(xy 250.19 554.99) (xy 273.05 554.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bae23f94-7249-4b5b-a914-5c23eedb23f2")
 	)
 	(wire
 		(pts
@@ -30358,16 +30348,6 @@
 			(type default)
 		)
 		(uuid "d1c65edc-1bc9-46f4-a1ef-667146f0bb0e")
-	)
-	(wire
-		(pts
-			(xy 250.19 570.23) (xy 273.05 570.23)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d1f14544-07d4-402f-8241-997250022fba")
 	)
 	(wire
 		(pts
@@ -31178,6 +31158,16 @@
 			(type default)
 		)
 		(uuid "e2a556d4-9f66-44a1-a4b6-d11641a46cf0")
+	)
+	(wire
+		(pts
+			(xy 250.19 570.23) (xy 273.05 570.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e2cb2664-79de-467a-8049-1710c3e0b9ba")
 	)
 	(bus
 		(pts
@@ -32048,6 +32038,16 @@
 			(type default)
 		)
 		(uuid "f814be06-c195-4c82-83fc-02e288091e5e")
+	)
+	(wire
+		(pts
+			(xy 250.19 560.07) (xy 273.05 560.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8a3813d-7906-449e-b469-44753c79e7e8")
 	)
 	(wire
 		(pts
@@ -33653,26 +33653,6 @@
 		)
 		(uuid "118e958b-cea3-45d3-99d0-e094aa7006a6")
 	)
-	(label "FPGA_QSPI_D1"
-		(at 259.08 580.39 0)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify left bottom)
-		)
-		(uuid "122ff059-7eb5-413a-9b95-c368b86194f4")
-	)
-	(label "FPGA_QSPI_D3"
-		(at 259.08 575.31 0)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify left bottom)
-		)
-		(uuid "1247fa32-f7d9-41b1-85eb-011dae23ceba")
-	)
 	(label "ABUS_3V_A22"
 		(at 238.76 158.75 0)
 		(effects
@@ -33692,16 +33672,6 @@
 			(justify left bottom)
 		)
 		(uuid "12f8e43c-8f83-48d3-a9b5-5f3ebc0b6c43")
-	)
-	(label "FPGA_QSPI_D2"
-		(at 259.08 554.99 0)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify left bottom)
-		)
-		(uuid "1331ea05-a303-447d-a8cd-0dd338de4a2d")
 	)
 	(label "+5V_SATURN"
 		(at 72.39 363.22 180)
@@ -34183,6 +34153,16 @@
 		)
 		(uuid "2b49e20f-cfb3-42c2-b638-444d8cb4fd6a")
 	)
+	(label "FPGA_QSPI_D1"
+		(at 259.08 575.31 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left bottom)
+		)
+		(uuid "2cd64984-9eab-4d48-bfdb-cae732b7e8c5")
+	)
 	(label "SDRAM2_A2"
 		(at 750.57 133.35 180)
 		(effects
@@ -34423,6 +34403,16 @@
 		)
 		(uuid "35a1fb91-fb14-439a-8364-5ef2b5804516")
 	)
+	(label "FPGA_QSPI_D2"
+		(at 259.08 580.39 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left bottom)
+		)
+		(uuid "365132f0-91b0-435e-a4af-46537fb496ba")
+	)
 	(label "FPGA_QSPI_CS"
 		(at 741.68 74.93 0)
 		(effects
@@ -34623,6 +34613,16 @@
 		)
 		(uuid "3f4feadb-bf41-4c35-b4bd-f641fd9f339b")
 	)
+	(label "FPGA_QSPI_CS"
+		(at 259.08 570.23 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left bottom)
+		)
+		(uuid "3f6ee3f0-c33f-454f-a9af-f06eed44ffba")
+	)
 	(label "ABUS_3V_D12"
 		(at 255.27 325.12 0)
 		(effects
@@ -34792,6 +34792,16 @@
 			(justify right bottom)
 		)
 		(uuid "47957453-fce7-4d98-833c-e34bb8a852a5")
+	)
+	(label "FPGA_QSPI_CLK"
+		(at 259.08 560.07 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left bottom)
+		)
+		(uuid "49ac56d7-1dc1-46bb-945f-f44afdc1944e")
 	)
 	(label "SDRAM1_A5"
 		(at 410.21 300.99 180)
@@ -35383,6 +35393,16 @@
 		)
 		(uuid "68395f84-80ad-4cfd-8e80-ae31df6873e6")
 	)
+	(label "FPGA_QSPI_D3"
+		(at 259.08 554.99 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left bottom)
+		)
+		(uuid "689ad458-d4fa-4345-a912-34201f33ca02")
+	)
 	(label "SDRAM2_DQ5"
 		(at 750.57 87.63 180)
 		(effects
@@ -35953,16 +35973,6 @@
 		)
 		(uuid "82304da4-8b1a-469d-ab8c-452acdd068fb")
 	)
-	(label "FPGA_QSPI_CLK"
-		(at 259.08 570.23 0)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify left bottom)
-		)
-		(uuid "82bb8b10-bcde-43e5-bccb-e2e777bf37bf")
-	)
 	(label "ABUS_A5"
 		(at 142.24 170.18 0)
 		(effects
@@ -36432,16 +36442,6 @@
 			(justify right bottom)
 		)
 		(uuid "98ee3e3d-4db1-4c26-adbc-7979020269c5")
-	)
-	(label "FPGA_QSPI_CS"
-		(at 259.08 560.07 0)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify left bottom)
-		)
-		(uuid "9922cf5c-4067-4856-b5d0-fb569c895ad0")
 	)
 	(label "LEDG"
 		(at 918.21 99.06 0)
