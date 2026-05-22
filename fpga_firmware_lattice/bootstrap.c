@@ -728,6 +728,7 @@ void sync_mode () {
 
 int main() {
 	LED = LED_EXT_RED; //start with red led
+
     //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
     //reg_uart_clkdiv = 347;// 115200 baud at 40MHz
     reg_uart_clkdiv = 434;//432;//434;// 115200 baud at 50MHz
@@ -819,21 +820,31 @@ int main() {
 			}
 		}
 	}
-
-	prepare_advertisement(roms_count);
-
-	//waiting for mode selection
-	mini_printf("Waiting for mode selection...");
-	while(pWishboneRegs[WISHBONE_REG_MODE] == 0)
-		;
-	mini_printf("done, mode %d\r\n",pWishboneRegs[WISHBONE_REG_MODE]);
-	LED = LED_OFF;
-
-	prepare_mode();
-
+	
 	//main cycle
     while (1) {
-		sync_mode();
+		if (0 == pWishboneRegs[WISHBONE_REG_MODE]) {
+			//going into init mode on start or if user selects mode 0
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//read mapper for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x0000FFFF;//read mapper for CS1 + CS2
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//write mapper for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//0x00000000;//write mapper for CS1 + CS2
+			prepare_advertisement(roms_count);
 
+			//waiting for mode selection
+			mini_printf("Waiting for mode selection...");
+			while(pWishboneRegs[WISHBONE_REG_MODE] == 0)
+				;
+			mini_printf("done, mode %d\r\n",pWishboneRegs[WISHBONE_REG_MODE]);
+			
+			//disable blue led if it was first init
+			LED = LED_OFF;
+
+			//prepare chosen mode
+			prepare_mode();
+		}
+		else {
+			sync_mode();
+		}
 	}
 }
