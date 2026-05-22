@@ -363,7 +363,8 @@ void prepare_mode () {
 			}
 			//keep file open
 			report_readiness(100);
-			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
 			LED = LED_EXT_GREEN;
 			break;
@@ -395,7 +396,8 @@ void prepare_mode () {
 			}
 			//keep file open
 			report_readiness(100);
-			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
 			LED = LED_EXT_GREEN;
 			break;
@@ -427,7 +429,8 @@ void prepare_mode () {
 			}
 			//keep file open
 			report_readiness(100);
-			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
 			LED = LED_EXT_GREEN;
 			break;
@@ -459,7 +462,8 @@ void prepare_mode () {
 			}
 			//keep file open
 			report_readiness(100);
-			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
 			LED = LED_EXT_GREEN;
 			break;
