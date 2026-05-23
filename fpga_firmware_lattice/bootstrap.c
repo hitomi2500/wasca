@@ -756,27 +756,15 @@ int main() {
 		pSDRAM[i] = fallback_rom_16[i];
 	}
 	
-	mini_printf("\r\n\r\n%s %s\r\n",__DATE__,__TIME__);
+	mini_printf("\r\n\r\nwasca PicoRV %s %s\r\n",__DATE__,__TIME__);
 
 	mini_printf("Mount SD...");
 	FRESULT fr = f_mount(&FatFs, "0:/", 1);	//mount SD card
-	/*if (fr != FR_OK)
-	{
-		mini_printf("mount error %x \r\n",fr);
-	}
-	else
-		mini_printf("mount OK\r\n");*/
 	mini_printf("OK\r\n");
 
 	DIR _dir;
 	mini_printf("Open root dir...");
 	fr = f_opendir(&_dir, "");
-	/*if (fr != FR_OK)
-	{
-		mini_printf("opendir error %x \r\n",fr);
-	}
-	else
-		mini_printf("opendir OK\r\n");*/
 	mini_printf("OK\r\n");
 
 	FILINFO _filinfo;
@@ -805,6 +793,8 @@ int main() {
 	else
 	{
 		mini_printf("Cannot find wasca.ss, using fallback ROM. %d bytes\r\n",sizeof(fallback_rom));
+		//ToDo: saturn can still recover from missing wasca.ss, if some wasca-aware software is loaded by other means
+		//Maybe i should rewrite fallback rom to prevent SH2 locking.
 	}
 
 	//getting roms list
