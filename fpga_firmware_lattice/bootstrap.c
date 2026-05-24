@@ -6,11 +6,14 @@
 #include "fatfs/diskio.h"
 #include "mini-printf.h"
 
+#define VERSION_MAJOR 2
+#define VERSION_MINOR 1
+
 #define WISHBONE_REG_PCNTR 0x0
 #define WISHBONE_REG_STATUS 0x1
 #define WISHBONE_REG_MODE 0x2
 #define WISHBONE_REG_HWVER 0x3
-#define WISHBONE_REG_SWVER 0x4
+//#define WISHBONE_REG_SWVER 0x4
 #define WISHBONE_REG_SNIFFER_DATA 0x5
 #define WISHBONE_REG_SNIFFER_CONTROL 0x8
 #define WISHBONE_REG_MAPPER_READ_LO 0x9
@@ -740,15 +743,21 @@ int main() {
 
 	uint16_t * buffer16 = (uint16_t *)buffer;
 	volatile int dummy;
+
+	sdram_quicktest();
 	
-	//set registers
+	//set wishbone registers
 	pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
 	pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//read mapper for CS0
 	pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x0000FFFF;//read mapper for CS1 + CS2
 	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//write mapper for CS0
 	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//0x00000000;//write mapper for CS1 + CS2
 
-	sdram_quicktest();
+	//set memory-based registers
+	pSDRAM[0xfffffc] =  VERSION_MAJOR | VERSION_MINOR<<8; //Software version
+	pSDRAM[0xfffffd] =  0x6177; //signature "wa"
+	pSDRAM[0xfffffe] =  0x6373; //signature "sc"
+	pSDRAM[0xffffff] =  0x2061; //signature "a "
 
 	//write fallback rom into CS0
 	uint16_t * fallback_rom_16 = (uint16_t *)fallback_rom;

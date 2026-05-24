@@ -396,9 +396,9 @@ module sdram_bridge (
     reg [15:0] REG_MODE;
     initial REG_MODE = 0;
     reg [15:0] REG_HWVER;
-    initial REG_HWVER = 0;
-    reg [15:0] REG_SWVER;
-    initial REG_SWVER = 0;
+    initial REG_HWVER = 16'h200;
+    //reg [15:0] REG_SWVER;
+    //initial REG_SWVER = 0;
     reg [63:0] REG_MAPPER_READ;
     initial REG_MAPPER_READ = 0;
     reg [63:0] REG_MAPPER_WRITE;
@@ -688,15 +688,16 @@ module sdram_bridge (
 	   if ((abus_chipselect_latched == 2'b00) && (abus_cs0_regs_access)) begin
 	       //CS0 regs access
 		   		case (abus_address_latched[4:1])
-					4'h0 : abus_data_out <= 16'hCDCD; //wasca specific SD card control register	   
+					//4'h0 : abus_data_out <= 16'hCDCD; //wasca specific SD card control register	   
 					4'h8 :abus_data_out <= REG_PCNTR; //wasca prepare counter
 					4'h9 :abus_data_out <= REG_STATUS; //wasca status register
 					4'ha :abus_data_out <= REG_MODE; //wasca mode register
 					4'hb :abus_data_out <= REG_HWVER; //wasca hwver register
-					4'hc :abus_data_out <= REG_SWVER; //wasca swver register
-					4'hd :abus_data_out <= 16'h7761; //wasca signature "wa"
-					4'he :abus_data_out <= 16'h7363; //wasca signature "sc"
-					4'hf :abus_data_out <= 16'h6120; //wasca signature "a "
+					//4'hc :abus_data_out <= REG_SWVER; //wasca swver register
+					//4'hd :abus_data_out <= 16'h7761; //wasca signature "wa"
+					//4'he :abus_data_out <= 16'h7363; //wasca signature "sc"
+					//4'hf :abus_data_out <= 16'h6120; //wasca signature "a "
+                    default : abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]}; //for memory-based registers
 				endcase
 			end
 	   else if ((abus_chipselect_latched == 2'b01) && (abus_cs1_regs_access)) begin 
@@ -732,7 +733,7 @@ module sdram_bridge (
 	           4'h1 : wishbone_regs_readdata <= {16'b0,REG_STATUS};
 	           4'h2 : wishbone_regs_readdata <= {16'b0,REG_MODE};
 	           4'h3 : wishbone_regs_readdata <= {16'b0,REG_HWVER};
-	           4'h4 : wishbone_regs_readdata <= {16'b0,REG_SWVER};
+	           //4'h4 : wishbone_regs_readdata <= {16'b0,REG_SWVER};
 	           4'h5 : wishbone_regs_readdata <= sniffer_data_out;
 	           //4'h6 : wishbone_regs_readdata <= {24'h0, counter_filter_control};//disabled for now
 	           //4'h7 : wishbone_regs_readdata <= counter_value[31:0];//disabled for now
@@ -763,7 +764,7 @@ module sdram_bridge (
 	           4'h1 : REG_STATUS <= wishbone_regs_writedata;
 	           //REG_MODE is readonly here
 	           //REG_HWVER is readonly
-	           4'h4 : REG_SWVER <= wishbone_regs_writedata;
+	           //4'h4 : REG_SWVER <= wishbone_regs_writedata;
 	           //sniffer_data_out is readonly
 	           //4'h6 : counter_filter_control <= wishbone_regs_writedata[7:0];//disabled for now
 	           //counter_value is readonly
