@@ -10,7 +10,7 @@
 #define VERSION_MINOR 1
 
 #define WISHBONE_REG_PCNTR 0x0
-#define WISHBONE_REG_STATUS 0x1
+#define WISHBONE_REG_FSCNTRL 0x1
 #define WISHBONE_REG_MODE 0x2
 #define WISHBONE_REG_HWVER 0x3
 //#define WISHBONE_REG_SWVER 0x4
@@ -61,6 +61,9 @@ __attribute__((aligned(4))) FATFS FatFs;		/* FatFs work area needed for each vol
 
 int overall_backup_enable = 0;
 int overall_backup_counter = 0;
+
+extern void filesystem_access_init();
+extern void filesystem_access_scheduler();
 
 void delay() {
     //for (volatile int i = 0; i < 2500000; i++)
@@ -754,6 +757,7 @@ int main() {
 	pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//0x00000000;//write mapper for CS1 + CS2
 
 	//set memory-based registers
+	pSDRAM[0xfffd00] =  0; //filesystem status register
 	pSDRAM[0xfffffc] =  VERSION_MAJOR | VERSION_MINOR<<8; //Software version
 	pSDRAM[0xfffffd] =  0x6177; //signature "wa"
 	pSDRAM[0xfffffe] =  0x6373; //signature "sc"
@@ -823,6 +827,8 @@ int main() {
 			}
 		}
 	}
+
+	filesystem_access_init();
 	
 	//main cycle
     while (1) {
@@ -849,5 +855,6 @@ int main() {
 		else {
 			sync_mode();
 		}
+		filesystem_access_scheduler();
 	}
 }

@@ -1,5 +1,5 @@
 TRELLIS?=/usr/share/trellis
-BOOTSTRAP_SOURCES := start.S bootstrap.c stdlib_tiny.c mini-printf.c stdlib_tiny_asm.S fatfs/ff.c fatfs/diskio.c fatfs/ffsystem.c fatfs/ffunicode.c fatfs/sdiodrv.c
+BOOTSTRAP_SOURCES := start.S bootstrap.c filesystem.c stdlib_tiny.c mini-printf.c stdlib_tiny_asm.S fatfs/ff.c fatfs/diskio.c fatfs/ffsystem.c fatfs/ffunicode.c fatfs/sdiodrv.c
 BOOTSTRAP_OBJECTS := $(BOOTSTRAP_SOURCES:%.c=%.o)
 BOOTSTRAP_OBJECTS := $(BOOTSTRAP_OBJECTS:%.S=%.o)
 

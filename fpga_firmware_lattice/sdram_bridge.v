@@ -391,8 +391,8 @@ module sdram_bridge (
     // SH2 regs
     reg [15:0] REG_PCNTR;
     initial REG_PCNTR = 0;
-    reg [15:0] REG_STATUS;
-    initial REG_STATUS = 0;
+    reg [1:0] REG_FSCNTRL;
+    initial REG_FSCNTRL = 0;
     reg [15:0] REG_MODE;
     initial REG_MODE = 0;
     reg [15:0] REG_HWVER;
@@ -688,9 +688,8 @@ module sdram_bridge (
 	   if ((abus_chipselect_latched == 2'b00) && (abus_cs0_regs_access)) begin
 	       //CS0 regs access
 		   		case (abus_address_latched[4:1])
-					//4'h0 : abus_data_out <= 16'hCDCD; //wasca specific SD card control register	   
 					4'h8 :abus_data_out <= REG_PCNTR; //wasca prepare counter
-					4'h9 :abus_data_out <= REG_STATUS; //wasca status register
+					4'h9 :abus_data_out <= {14'b0,REG_FSCNTRL}; //wasca filesystem control register
 					4'ha :abus_data_out <= REG_MODE; //wasca mode register
 					4'hb :abus_data_out <= REG_HWVER; //wasca hwver register
 					//4'hc :abus_data_out <= REG_SWVER; //wasca swver register
@@ -708,11 +707,17 @@ module sdram_bridge (
 		      //just output sdram data, no matter the mode
 			  abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
 	
-	//wasca mode register write
+	//abus mode register write
 	always @(posedge sdram_clock)
 	    if ( (my_little_transaction_dir == `DIR_WRITE) && (abus_chipselect_latched == 2'b00) && (abus_cspulse7) &&
 			(abus_cs0_regs_access) && (abus_address_latched[4:1] == {1'h1,3'h2}) )
 	           REG_MODE <= abus_data_in;
+
+    //abus filesystem control register write
+    always @(posedge sdram_clock)
+	    if ( (my_little_transaction_dir == `DIR_WRITE) && (abus_chipselect_latched == 2'b00) && (abus_cspulse7) &&
+			(abus_cs0_regs_access) && (abus_address_latched[4:1] == {1'h1,3'h1}) )
+	           REG_FSCNTRL <= abus_data_in[1:0];
 	
 	assign abus_data_in = abus_data;//abus_data_buf;
 	assign abus_data = abus_direction_internal ? abus_data_out : {16{1'bZ}};
@@ -730,7 +735,7 @@ module sdram_bridge (
 	   if (wishbone_regs_read)
 	       case (wishbone_regs_address[3:0])
 	           4'h0 : wishbone_regs_readdata <= {16'b0,REG_PCNTR};
-	           4'h1 : wishbone_regs_readdata <= {16'b0,REG_STATUS};
+	           4'h1 : wishbone_regs_readdata <= {30'b0,REG_FSCNTRL};
 	           4'h2 : wishbone_regs_readdata <= {16'b0,REG_MODE};
 	           4'h3 : wishbone_regs_readdata <= {16'b0,REG_HWVER};
 	           //4'h4 : wishbone_regs_readdata <= {16'b0,REG_SWVER};
@@ -761,7 +766,7 @@ module sdram_bridge (
 	   if (wishbone_regs_write)
 	       case (wishbone_regs_address[3:0])
 	           4'h0 : REG_PCNTR <= wishbone_regs_writedata;
-	           4'h1 : REG_STATUS <= wishbone_regs_writedata;
+	           //REG_FSCNTRL is readonly here
 	           //REG_MODE is readonly here
 	           //REG_HWVER is readonly
 	           //4'h4 : REG_SWVER <= wishbone_regs_writedata;
