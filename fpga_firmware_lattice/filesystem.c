@@ -233,7 +233,23 @@ int filesystem_access_scheduler() {
 					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
 				}
 			} else if (0 == mini_strcmp(token,"TRUNCATE")) {
-				
+				int handle = mini_atoi(mini_strtok(NULL, " "));
+				int length = mini_atoi(mini_strtok(NULL, " "));
+				if (length <= 0)  {
+					mini_snprintf(reply_buffer,256,"ERR code=4 msg=\"wrong lenght\"");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				} else if (open_files[handle].obj.fs == 0) {
+					mini_snprintf(reply_buffer,256,"ERR code=5 msg=\"file not open\"");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				} else {
+					f_lseek(&open_files[handle],length);
+					f_truncate(&open_files[handle]);
+					mini_snprintf(reply_buffer,256,"OK data_len=%d",readen);
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				}
 			} else if (0 == mini_strcmp(token,"LIST")) {
 				
 			} else if (0 == mini_strcmp(token,"STAT")) {

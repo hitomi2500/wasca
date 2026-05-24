@@ -91,10 +91,14 @@ typedef	uint32_t DWORD, LBA_t, UINT;
 #ifndef	TXFNS_H
 #include <stdio.h>
 
-#define	txchr(A)		mini_putchar(A)
+/*#define	txchr(A)		mini_putchar(A)
 #define	txstr(A)		mini_fputs(A)
 #define	txhex(A)		mini_printf("%08x", A)
-#define	txdecimal(A)		mini_printf("%d", A)
+#define	txdecimal(A)		mini_printf("%d", A)*/
+#define txchr(x) ((void)0)
+#define txstr(x) ((void)0)
+#define txhex(x) ((void)0)
+#define txdecimal(x) ((void)0)
 #define	STDIO_DEBUG
 #else
 // extern	void	txstr(const char *);
