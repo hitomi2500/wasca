@@ -38,6 +38,8 @@ extern char* mini_strcpy(char* dest, const char* src);
 extern char* mini_strcat(char* dest, const char* src);
 extern char* mini_strstr(const char *haystack, const char *needle);
 
+extern unsigned char buffer[2048];
+
 static int is_delim(char c, const char *delim)
 {
     while (*delim) {
@@ -126,6 +128,7 @@ int filesystem_access_scheduler() {
 	uint8_t command_buffer[256];
 	uint8_t reply_buffer[256];
 	FRESULT res;
+	int readen;
 	//checking if command is available
 	if (0 == filesystem_command_active) {
 		if (pWishboneRegs[WISHBONE_REG_FSCNTRL]) {
@@ -182,19 +185,53 @@ int filesystem_access_scheduler() {
 				}
 			} else if (0 == mini_strcmp(token,"CLOSE")) {
 				//close file : handle
-				char * handle = mini_strtok(NULL, " ");
-				int ihandle = mini_atoi(handle);
-				if ( (ihandle >=0) && (ihandle <32) )
-					if (open_files[ihandle].obj.fs != 0) {
-						f_close(&(open_files[ihandle]));
+				char * handle_str = mini_strtok(NULL, " ");
+				int handle = mini_atoi(handle_str);
+				if ( (handle >=0) && (handle <32) )
+					if (open_files[handle].obj.fs != 0) {
+						f_close(&(open_files[handle]));
 						mini_snprintf(reply_buffer,256,"OK");
 						filesystem_command_active = 2; //execution complete
 						pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed
 					}
 			} else if (0 == mini_strcmp(token,"READ")) {
-				
+				int handle = mini_atoi(mini_strtok(NULL, " "));
+				int offset = mini_atoi(mini_strtok(NULL, " "));
+				int length = mini_atoi(mini_strtok(NULL, " "));
+				if ( (length <= 0) || (length > 2048) )  {
+					mini_snprintf(reply_buffer,256,"ERR code=4 msg=\"wrong lenght\"");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				} else if (open_files[handle].obj.fs == 0) {
+					mini_snprintf(reply_buffer,256,"ERR code=5 msg=\"file not open\"");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				} else {
+					f_lseek(&open_files[handle],offset);
+					f_read(&open_files[handle],buffer,length,&readen);
+					mini_snprintf(reply_buffer,256,"OK data_len=%d",readen);
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				}
 			} else if (0 == mini_strcmp(token,"WRITE")) {
-				
+				int handle = mini_atoi(mini_strtok(NULL, " "));
+				int offset = mini_atoi(mini_strtok(NULL, " "));
+				int length = mini_atoi(mini_strtok(NULL, " "));
+				if ( (length <= 0) || (length > 2048) )  {
+					mini_snprintf(reply_buffer,256,"ERR code=4 msg=\"wrong lenght\"");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				} else if (open_files[handle].obj.fs == 0) {
+					mini_snprintf(reply_buffer,256,"ERR code=5 msg=\"file not open\"");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				} else {
+					f_lseek(&open_files[handle],offset);
+					f_write(&open_files[handle],buffer,length,&readen);
+					mini_snprintf(reply_buffer,256,"OK data_len=%d",readen);
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				}
 			} else if (0 == mini_strcmp(token,"TRUNCATE")) {
 				
 			} else if (0 == mini_strcmp(token,"LIST")) {

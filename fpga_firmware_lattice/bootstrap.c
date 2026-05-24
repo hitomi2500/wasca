@@ -37,7 +37,7 @@ const unsigned char fallback_rom[] = {
     #embed "wasca-fallback.ss"
 };
 
-unsigned char buffer[1024];
+unsigned char buffer[2048];
 
 #define LED (*(volatile uint32_t*)0x02000000)
 
