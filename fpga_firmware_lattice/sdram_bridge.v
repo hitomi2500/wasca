@@ -378,6 +378,8 @@ module sdram_bridge (
 	initial abus_address_latched = 0;
     reg abus_cs0_regs_access;
 	initial abus_cs0_regs_access = 0;
+    reg abus_cs0_regs_write;
+	initial abus_cs0_regs_write = 0;
     reg abus_cs1_regs_access;
 	initial abus_cs1_regs_access = 0;
     reg [1:0] abus_chipselect_latched;
@@ -473,12 +475,6 @@ module sdram_bridge (
     reg [3:0] wasca_mode;
     reg [3:0] sdram_mode;
     
-    wire [2:0] sdram_wait_counter_negedge; 
-    wire [3:0] sdram_mode_negedge;
-	wire abus_chipselect_buf0_negedge;
-	wire abus_chipselect_buf1_negedge;
-	wire wishbone_sdram_pending_address24_negedge;
-	
 	reg sdram2_delayed_read_abus;
 	reg sdram2_delayed_read_wishbone;
     
@@ -547,11 +543,6 @@ module sdram_bridge (
         wasca_mode = 0;
         sdram_mode = 0;
         
-        /*sdram_wait_counter_negedge = 0;
-		sdram_mode_negedge = 0;
-		abus_chipselect_buf0_negedge = 0;
-		wishbone_sdram_pending_address24_negedge = 0;*/
-		
 		sdram2_delayed_read_abus = 0;
 		sdram2_delayed_read_wishbone = 0;
 		
@@ -706,17 +697,23 @@ module sdram_bridge (
 		else
 		      //just output sdram data, no matter the mode
 			  abus_data_out <= {sdram_datain_latched[7:0], sdram_datain_latched [15:8]};
-	
+
+    //abus regs write pre-latch to improve speed
+	always @(posedge sdram_clock)
+        if ( (my_little_transaction_dir == `DIR_WRITE) && (abus_chipselect_latched == 2'b00) && (abus_cspulse6) &&
+			(abus_cs0_regs_access) )
+	            abus_cs0_regs_write <= 1'b1;
+        else
+	            abus_cs0_regs_write <= 0;
+
 	//abus mode register write
 	always @(posedge sdram_clock)
-	    if ( (my_little_transaction_dir == `DIR_WRITE) && (abus_chipselect_latched == 2'b00) && (abus_cspulse7) &&
-			(abus_cs0_regs_access) && (abus_address_latched[4:1] == {1'h1,3'h2}) )
+	    if ( abus_cs0_regs_write && (abus_address_latched[4:1] == {1'h1,3'h2}) )
 	           REG_MODE <= abus_data_in;
 
     //abus filesystem control register write
     always @(posedge sdram_clock)
-	    if ( (my_little_transaction_dir == `DIR_WRITE) && (abus_chipselect_latched == 2'b00) && (abus_cspulse7) &&
-			(abus_cs0_regs_access) && (abus_address_latched[4:1] == {1'h1,3'h1}) )
+	    if ( abus_cs0_regs_write && (abus_address_latched[4:1] == {1'h1,3'h1}) )
 	           REG_FSCNTRL <= abus_data_in[1:0];
 	
 	assign abus_data_in = abus_data;//abus_data_buf;
@@ -1268,24 +1265,14 @@ module sdram_bridge (
             end
         endcase
     end
-
-	/*always @(negedge sdram_clock) sdram_wait_counter_negedge <= sdram_wait_counter;
-	always @(negedge sdram_clock) sdram_mode_negedge <= sdram_mode;
-	always @(negedge sdram_clock) abus_chipselect_buf0_negedge <= abus_chipselect_buf[0];
-	always @(negedge sdram_clock) wishbone_sdram_pending_address24_negedge <= wishbone_sdram_pending_address[24];*/
-	assign sdram_wait_counter_negedge = sdram_wait_counter;
-	assign sdram_mode_negedge = sdram_mode;
-	assign abus_chipselect_buf0_negedge = abus_chipselect_buf[0];
-	assign abus_chipselect_buf1_negedge = abus_chipselect_buf[1];
-	assign wishbone_sdram_pending_address24_negedge = wishbone_sdram_pending_address[24];
     
-    //latching sdram data to ABUS on negative clock
+    //latching sdram data to ABUS
     always @(posedge sdram_clock) begin
 		sdram2_delayed_read_abus <= 0;
-		if (sdram_mode_negedge == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
+		if (sdram_mode == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
 			//SDRAM1
-            if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
-                if (~abus_chipselect_buf0_negedge) begin
+            if (sdram_wait_counter == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
+                if (~abus_chipselect_buf[0]) begin
                     sdram_datain_latched <= sdram_dq_in;
 	                // synopsys translate_off
 	                if ($time - ABUS_request_time > 92)
@@ -1294,8 +1281,8 @@ module sdram_bridge (
 				end
             end
 			//first part for SDRAM2
-            if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd3)) begin
-                if (~abus_chipselect_buf1_negedge) begin
+            if (sdram_wait_counter == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd3)) begin
+                if (~abus_chipselect_buf[1]) begin
                     //sdram2_datain_latched[7:0] <= sdram2_dq_in;
 					sdram_datain_latched[7:0] <= sdram2_dq_in;
 					sdram2_delayed_read_abus <= 1'b1;
@@ -1320,10 +1307,10 @@ module sdram_bridge (
     //latching debug
     always @(posedge sdram_clock) begin
         sdram_debug_read_1 <= 0;
-		if (sdram_mode_negedge == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
+		if (sdram_mode == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
 			//SDRAM1
-            if (sdram_wait_counter_negedge == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
-                if (~abus_chipselect_buf0_negedge) begin
+            if (sdram_wait_counter == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
+                if (~abus_chipselect_buf[0]) begin
                     sdram_debug_read_1 <= 1'b1;
 				end
             end
@@ -1347,14 +1334,14 @@ module sdram_bridge (
     //latching sdram data to Wishbone on negative clock
     always @(posedge sdram_clock) begin
         sdram2_delayed_read_wishbone <= 0;
-        if (sdram_mode_negedge == `SDRAM_WISHBONE_READ_AND_PRECHARGE) begin
+        if (sdram_mode == `SDRAM_WISHBONE_READ_AND_PRECHARGE) begin
 			//SDRAM1
-            if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd4)) //4 works!
-                if (~wishbone_sdram_pending_address24_negedge)
+            if (sdram_wait_counter == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd4)) //4 works!
+                if (~wishbone_sdram_pending_address[24])
                     wishbone_sdram_readdata_latched[15:0] <= sdram_dq_in;
 			//first part for SDRAM2
-            if (sdram_wait_counter_negedge == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd3)) //
-                if (wishbone_sdram_pending_address24_negedge) begin
+            if (sdram_wait_counter == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd3)) //
+                if (wishbone_sdram_pending_address[24]) begin
                     wishbone_sdram_readdata_latched[7:0] <= sdram2_dq_in;
                     sdram2_delayed_read_wishbone <= 1'b1;
                 end
