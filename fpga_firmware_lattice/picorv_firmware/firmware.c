@@ -33,10 +33,6 @@
 #define LED_EXT_YELLOW (LED_EXT_RED | LED_EXT_GREEN)
 #define LED_EXT_WHITE (LED_EXT_RED | LED_EXT_GREEN | LED_EXT_BLUE)
 
-const unsigned char fallback_rom[] = {
-    #embed "wasca-fallback.ss"
-};
-
 unsigned char buffer[2048];
 
 #define LED (*(volatile uint32_t*)0x02000000)
@@ -117,108 +113,6 @@ char* mini_strstr(const char *haystack, const char *needle) {
         }
     }
     return NULL; // Needle not found
-}
-
-int sdram_quicktest() {
-	volatile uint32_t a;
-	//CS0
-	pSDRAM[0] = 0x12345678;
-	for (int i=0;i<24;i++)
-		pSDRAM[1<<i] = 0x11111111*i;
-	pSDRAM[0xffffff] = 0xdeafface;
-	a = pSDRAM[0];
-	if (a != 0x00005678)
-		mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",0,0x00005678,a);
-	for (int i=0;i<24;i++) {
-		a = pSDRAM[1<<i];
-		if (a !=((0x1111*i) & 0xFFFF))
-			mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",1<<i,((0x1111*i) & 0xFFFF),a);
-	}
-	a = pSDRAM[0xffffff];
-	if (a != 0x0000face)
-		mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",0xffffff,0x0000face,a);
-	//CS1
-		pSDRAM2[0] = 0x6789;
-		for (int i=0;i<23;i++)
-			pSDRAM2[1<<i] = 0x1020*i;
-		pSDRAM2[0x7fffff] = 0xdeadbeef;
-		a = pSDRAM2[0];
-		if (a != 0x6789)
-			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0,0x6789,a);
-		for (int i=0;i<23;i++) {
-			a = pSDRAM2[1<<i];
-			if (a !=((0x1020*i) & 0xFFFF))
-				mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",1<<i,((0x1020*i) & 0xFFFF),a);
-		}
-		a = pSDRAM2[0x7fffff];
-		if (a != 0xbeef)
-			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0xbeef,a);
-}
-
-int sdram_test() {
-	uint32_t seed;
-	LED = LED_EXT_RED;
-	int errors = 0;
-	mini_printf("SDRAM test...\r\n");
-	//starting with CS0
-	seed = 0x100500;
-	for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
-	//for (int i =0; i < (0x200000/sizeof(uint32_t)); i++)
-	{
-		pSDRAM[i] = (seed&0xFFFF);
-		seed = lsfr_next_random(seed);
-		if (i%0x40000 == 0x3ffff)
-			mini_printf("SDRAM test: write pass addr %x \r\n",i*4+4);
-	}
-	seed = 0x100500;
-	errors = 0;
-	uint32_t readback;
-	for (int i =0; i < (0x2000000/sizeof(uint32_t)); i++)
-	//for (int i =0; i < (0x200000/sizeof(uint32_t)); i++)
-	{
-		readback = pSDRAM[i];
-		if (readback != (seed&0xFFFF)) {\
-			if (errors < 16)
-				mini_printf("SDRAM error: addr %x write %x read %x\r\n",i*4,(seed&0xFFFF),readback);
-			errors++;
-		}
-		seed = lsfr_next_random(seed);
-		if (i%0x40000 == 0x3ffff) {
-			mini_printf("SDRAM test: read pass addr %x \r\n",i*4+4);
-			LED = (i&0x80000) ? LED_EXT_RED : LED_OFF;
-		}
-	}
-	LED = LED_EXT_RED;
-	//now CS1
-	seed = 0x100500;
-	for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
-	//for (int i =0; i < (0x100000/sizeof(uint32_t)); i++)
-	{
-		pSDRAM2[i] = (seed&0xFFFF);
-		seed = lsfr_next_random(seed);
-		if (i%0x40000 == 0x3ffff)
-			mini_printf("SDRAM2 test: write pass addr %x \r\n",0x4000000+i*4+4);
-	}
-	seed = 0x100500;
-	errors = 0;
-	for (int i =0; i < (0x1000000/sizeof(uint32_t)); i++)
-	//for (int i =0; i < (0x100000/sizeof(uint32_t)); i++)
-	{
-		readback = pSDRAM2[i];
-		if (readback != (seed&0xFFFF)) {\
-			if (errors < 16)
-				mini_printf("SDRAM2 error: addr %x write %x read %x\r\n",i*4,(seed&0xFFFF),readback);
-			errors++;
-		}
-		seed = lsfr_next_random(seed);
-		if (i%0x40000 == 0x3ffff) {
-			mini_printf("SDRAM2 test: read pass addr %x \r\n",0x4000000+i*4+4);
-			LED = (i&0x80000) ? LED_EXT_RED : LED_OFF;
-		}
-	}
-	LED =  LED_OFF;
-	mini_printf("SDRAM test DONE\r\n");
-	return errors;
 }
 
 void backup_sync_sector(int sector, FIL * _file) {
@@ -738,16 +632,12 @@ void sync_mode () {
 
 int main() {
 	LED = LED_EXT_RED; //start with red led
-
-    //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
-    //reg_uart_clkdiv = 347;// 115200 baud at 40MHz
-    reg_uart_clkdiv = 434;//432;//434;// 115200 baud at 50MHz
-    //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
+	//not setting uart, done in bootstrap
 
 	uint16_t * buffer16 = (uint16_t *)buffer;
 	volatile int dummy;
 
-	sdram_quicktest();
+	//not running sdram test, done in bootstrap
 	
 	//set wishbone registers
 	pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
@@ -763,13 +653,9 @@ int main() {
 	pSDRAM[0xfffffe] =  0x6373; //signature "sc"
 	pSDRAM[0xffffff] =  0x2061; //signature "a "
 
-	//write fallback rom into CS0
-	uint16_t * fallback_rom_16 = (uint16_t *)fallback_rom;
-	for (int i=0;i<((sizeof(fallback_rom)/2)+1);i++) {
-		pSDRAM[i] = fallback_rom_16[i];
-	}
+	//not writing fallback rom, done in bootstrap
 	
-	mini_printf("\r\n\r\nwasca PicoRV %s %s\r\n",__DATE__,__TIME__);
+	mini_printf("wasca firmware %s %s\r\n",__DATE__,__TIME__);
 
 	mini_printf("Mount SD...");
 	FRESULT fr = f_mount(&FatFs, "0:/", 1);	//mount SD card
@@ -785,30 +671,10 @@ int main() {
 	int offset;
 	int error;
 
+	//not writing wasca.ss, done in bootstrap
+	//but setting led if it's present
 	if (FR_OK == f_stat("wasca.ss", &_filinfo))
-	{
-		int size = _filinfo.fsize;
-		offset = 0;
-		error = f_open(&_file,_filinfo.fname,FA_READ);
-		while(false == f_eof(&_file)) {
-			int readen = -1;
-			for (int i=0;i<1024;i++)
-				buffer[i] - 0x17+i;
-			error = f_read(&_file,buffer,1024,&readen);
-			for (int i=0;i<512;i++)
-				pSDRAM[offset+i] = buffer16[i];
-			offset+=512;
-		}
-		f_close(&_file);
-		mini_printf("wasca.ss loaded, %d bytes, written %d\r\n",size,offset*2);
-		LED = LED_EXT_BLUE;//if sh2 bootrom found, change led to blue
-		}
-	else
-	{
-		mini_printf("Cannot find wasca.ss, using fallback ROM. %d bytes\r\n",sizeof(fallback_rom));
-		//ToDo: saturn can still recover from missing wasca.ss, if some wasca-aware software is loaded by other means
-		//Maybe i should rewrite fallback rom to prevent SH2 locking.
-	}
+		LED = LED_EXT_BLUE;
 
 	//getting roms list
 	int roms_count = 0;

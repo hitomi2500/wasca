@@ -79,7 +79,7 @@ module attosoc (
 	end
 
 	parameter integer MEM_WORDS = 24576; //16384;
-	parameter [31:0] STACKADDR = 32'h 0001_8000;       // end of memory
+	parameter [31:0] STACKADDR = 32'h 0001_7F00;       // end of memory excluding bootstrap's launch func
 	parameter [31:0] PROGADDR_RESET = 32'h 0000_0000;       // start of memory
 
 	//(* syn_ramstyle = "block_ram" *) reg [31:0] internal_ram [0:MEM_WORDS-1];

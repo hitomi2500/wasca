@@ -65,6 +65,8 @@ int overall_backup_counter = 0;
 extern void filesystem_access_init();
 extern void filesystem_access_scheduler();
 
+int launch_firmware(int firmware_size) __attribute__((section(".update_func.code")));
+
 void delay() {
     //for (volatile int i = 0; i < 2500000; i++)
     for (volatile int i = 0; i < 750000; i++)
@@ -121,38 +123,53 @@ char* mini_strstr(const char *haystack, const char *needle) {
 
 int sdram_quicktest() {
 	volatile uint32_t a;
+	int errors = 0;
 	//CS0
 	pSDRAM[0] = 0x12345678;
 	for (int i=0;i<24;i++)
 		pSDRAM[1<<i] = 0x11111111*i;
 	pSDRAM[0xffffff] = 0xdeafface;
 	a = pSDRAM[0];
-	if (a != 0x00005678)
+	if (a != 0x00005678) {
 		mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",0,0x00005678,a);
+		errors++;
+	}
 	for (int i=0;i<24;i++) {
 		a = pSDRAM[1<<i];
-		if (a !=((0x1111*i) & 0xFFFF))
+		if (a !=((0x1111*i) & 0xFFFF)) {
 			mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",1<<i,((0x1111*i) & 0xFFFF),a);
+			errors++;
+		}
 	}
 	a = pSDRAM[0xffffff];
-	if (a != 0x0000face)
+	if (a != 0x0000face) {
 		mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",0xffffff,0x0000face,a);
+		errors++;
+	}
 	//CS1
-		pSDRAM2[0] = 0x6789;
-		for (int i=0;i<23;i++)
-			pSDRAM2[1<<i] = 0x1020*i;
-		pSDRAM2[0x7fffff] = 0xdeadbeef;
-		a = pSDRAM2[0];
-		if (a != 0x6789)
-			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0,0x6789,a);
-		for (int i=0;i<23;i++) {
-			a = pSDRAM2[1<<i];
-			if (a !=((0x1020*i) & 0xFFFF))
-				mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",1<<i,((0x1020*i) & 0xFFFF),a);
+	pSDRAM2[0] = 0x6789;
+	for (int i=0;i<23;i++)
+		pSDRAM2[1<<i] = 0x1020*i;
+	pSDRAM2[0x7fffff] = 0xdeadbeef;
+	a = pSDRAM2[0];
+	if (a != 0x6789) {
+		mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0,0x6789,a);
+		errors++;
+	}
+	for (int i=0;i<23;i++) {
+		a = pSDRAM2[1<<i];
+		if (a !=((0x1020*i) & 0xFFFF)) {
+			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",1<<i,((0x1020*i) & 0xFFFF),a);
+			errors++;
 		}
-		a = pSDRAM2[0x7fffff];
-		if (a != 0xbeef)
-			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0xbeef,a);
+	}
+	a = pSDRAM2[0x7fffff];
+	if (a != 0xbeef) {
+		mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0xbeef,a);
+		errors++;
+	}
+	
+	return errors;
 }
 
 int sdram_test() {
@@ -737,17 +754,21 @@ void sync_mode () {
 }
 
 int main() {
-	LED = LED_EXT_RED; //start with red led
-
-    //reg_uart_clkdiv = 217;// 115200 baud at 25MHz
-    //reg_uart_clkdiv = 347;// 115200 baud at 40MHz
-    reg_uart_clkdiv = 434;//432;//434;// 115200 baud at 50MHz
-    //reg_uart_clkdiv = 1155;// 115200 baud at 133MHz
-
 	uint16_t * buffer16 = (uint16_t *)buffer;
 	volatile int dummy;
 
-	sdram_quicktest();
+	LED = LED_EXT_RED; //start with red led
+    reg_uart_clkdiv = 434;//432;//434;// 115200 baud at 50MHz
+
+	if (sdram_quicktest()) {
+		//SDRAM errors, aborting boot!
+		while (1) {
+			LED = LED_EXT_RED;
+			delay();
+			LED = LED_OFF;
+			delay();
+		}
+	}
 	
 	//set wishbone registers
 	pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
@@ -769,7 +790,7 @@ int main() {
 		pSDRAM[i] = fallback_rom_16[i];
 	}
 	
-	mini_printf("\r\n\r\nwasca PicoRV %s %s\r\n",__DATE__,__TIME__);
+	mini_printf("\r\n\r\nwasca bootstrap %s %s\r\n",__DATE__,__TIME__);
 
 	mini_printf("Mount SD...");
 	FRESULT fr = f_mount(&FatFs, "0:/", 1);	//mount SD card
@@ -788,12 +809,10 @@ int main() {
 	if (FR_OK == f_stat("wasca.ss", &_filinfo))
 	{
 		int size = _filinfo.fsize;
+		int readen = -1;
 		offset = 0;
 		error = f_open(&_file,_filinfo.fname,FA_READ);
 		while(false == f_eof(&_file)) {
-			int readen = -1;
-			for (int i=0;i<1024;i++)
-				buffer[i] - 0x17+i;
 			error = f_read(&_file,buffer,1024,&readen);
 			for (int i=0;i<512;i++)
 				pSDRAM[offset+i] = buffer16[i];
@@ -808,6 +827,27 @@ int main() {
 		mini_printf("Cannot find wasca.ss, using fallback ROM. %d bytes\r\n",sizeof(fallback_rom));
 		//ToDo: saturn can still recover from missing wasca.ss, if some wasca-aware software is loaded by other means
 		//Maybe i should rewrite fallback rom to prevent SH2 locking.
+	}
+
+	//if firmware.hex is present on SD, launch it instead of bootstrap
+	if (FR_OK == f_stat("firmware.rv", &_filinfo))
+	{
+		LED = LED_EXT_RED;//restoring red
+		int size = _filinfo.fsize;
+		int readen;
+		mini_printf("firmware.rv found, %d bytes, launching...\r\n",size);
+		//load new firmware to SDRAM2
+		offset = 0;
+		error = f_open(&_file,_filinfo.fname,FA_READ);
+		while(false == f_eof(&_file)) {
+			error = f_read(&_file,buffer,1024,&readen);
+			for (int i=0;i<512;i++)
+				pSDRAM2[offset+i] = buffer16[i];
+			offset+=512;
+		}
+		f_close(&_file);
+		//now execute the bootstrap update code
+		launch_firmware(size);
 	}
 
 	//getting roms list
@@ -857,4 +897,21 @@ int main() {
 		}
 		filesystem_access_scheduler();
 	}
+}
+
+int launch_firmware(int firmware_size) {
+	static volatile uint32_t * pSDRAM2_local  __attribute__((section(".update_func.data"))) = (uint32_t *)0x14000000;
+	static volatile uint16_t * pWorkRam_local  __attribute__((section(".update_func.data"))) = (uint16_t *)0x00000000;
+	//using only local variables
+	if (firmware_size > 0x17F00)
+		firmware_size = 0x17F00;
+
+	for (int i=0;i<(firmware_size/2+1);i++) {
+		pWorkRam_local[i] = pSDRAM2_local[i];
+	}
+	//reinitialize stack pointer
+	asm("li sp, 0x18000");// Load 0x18000 into the stack pointer
+	//jump
+	asm("lui  t0, 0x0");  // Load upper 20 bits
+	asm("jalr x0, 0(t0)"); // Jump to the address in t0
 }

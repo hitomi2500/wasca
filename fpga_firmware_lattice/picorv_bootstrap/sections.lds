@@ -1,6 +1,7 @@
 MEMORY
 {
-    RAM (xrw)       : ORIGIN = 0x00000000, LENGTH = 0x018000 /* 96 KB */
+    RAM (xrw)       : ORIGIN = 0x00000000, LENGTH = 0x17F00 /* almost 96 KB */
+    UPDATE_FUNC_RAM (xrw)       : ORIGIN = 0x00017F00, LENGTH = 0x100 /* 256 B */
 }
 
 SECTIONS {
@@ -17,7 +18,6 @@ SECTIONS {
         _etext = .;        /* define a global symbol at end of code */
         _sidata = _etext;  /* This is used by the startup in order to initialize the .data secion */
     } >RAM
-
 
     /* This is the initialized data section
     The program executes knowing that the data is in the RAM
@@ -58,4 +58,12 @@ SECTIONS {
         . = ALIGN(4);
         _heap_start = .;    /* define a global symbol at heap start */
     } >RAM
+
+    
+    .update_func :
+    {
+        . = ALIGN(4);
+        *(.update_func)
+        *(.update_func*)
+    } >UPDATE_FUNC_RAM
 }
