@@ -82,10 +82,8 @@ void redraw_menu (int current_item) {
 
 int main(void)
 {
-	//int sel = 0;
-	//bool redrawMenu = true, redrawBG = true, key_pressed = false;
-	//int menu_size=0;
 	char string_buf[128];
+	uint16_t counter;
 
 	video_screen_mode_t screenMode =
 	{
@@ -96,28 +94,9 @@ int main(void)
 		.colorsystem = VDP2_TVMD_TV_STANDARD_NTSC,
 	};
 
-	//show yaul logo in 240p
 	video_init(screenMode,false);
-	video_vdp2_set_cycle_patterns_cpu();
-	//background_set_from_assets(asset_bootlogo_bg,(int)(asset_bootlogo_bg_end-asset_bootlogo_bg),VIDEO_VDP2_NBG0_PNDR_START,VIDEO_VDP2_NBG0_CHPNDR_START);
+	//video_vdp2_set_cycle_patterns_cpu();
 	video_vdp2_set_cycle_patterns_nbg(screenMode);
-
-	//wait for 60 frames, either 1s or 1.2s
-//	for (int i=0;i<60;i++)
-//		vdp2_tvmd_vblank_in_next_wait(1);
-
-	//background_fade_to_black();
-
-	//show ponesound logo in 240p
-	video_vdp2_set_cycle_patterns_cpu();
-//	background_set_from_assets(asset_ponesnd_bg,(int)(asset_ponesnd_bg_end-asset_ponesnd_bg),VIDEO_VDP2_NBG0_PNDR_START,VIDEO_VDP2_NBG0_CHPNDR_START);
-	video_vdp2_set_cycle_patterns_nbg(screenMode);
-
-	//wait for 60 frames, either 1s or 1.2s
-//	for (int i=0;i<60;i++)
-//		vdp2_tvmd_vblank_in_next_wait(1);
-
-	//background_fade_to_black();
 
 	video_vdp2_clear_palette(0);
 	SetFontPalette();
@@ -133,9 +112,6 @@ int main(void)
 		frame_counter++;
 	while (vdp2_tvmd_vblank_out())
 		frame_counter++;
-
-	//redrawMenu = true;
-	//redrawBG = true;
 
 	//register vblank handler
 	vdp_sync_vblank_out_set(suite_vblank_out_handler, NULL);
@@ -192,26 +168,35 @@ int main(void)
 			preparing = 1;
 			go_multiplayer = 1;
 		}
+		
+		//ClearText(70+strlen("MODE: ")*_fw,(list_size+9)*_fh,10*_fw,_fh);
+		//sprintf(string_buf,"MODE: %04x",pWascaRegs[10]);
+		//DrawString(string_buf, 70, (list_size+9)*_fh, FONT_WHITE);
 
 		if (preparing == 1) {
+			counter = pWascaRegs[8];
 			ClearText(70+strlen("Loading: ")*_fw,(list_size+8)*_fh,3*_fw,_fh);
-			sprintf(string_buf,"Loading: %3d percents     ",pWascaRegs[8]);
+			sprintf(string_buf,"Loading: %3d percents     ",counter);
 			DrawString(string_buf, 70, (list_size+8)*_fh, FONT_WHITE);
-			if (preparing == 1) {
-				if (pWascaRegs[8] == 100)
-					preparing = 2;
-			}
-		}
-				
-		if (preparing == 2) {
-			if (go_reboot)
-				bios_execute();
-			if (go_multiplayer)
-				bios_cd_player_execute();
-				//exit();
+			if (counter == 100)
+				preparing = 2;
 		}
 
-		redraw_menu(current_item);
+		if (preparing == 2) {
+			ClearText(70+strlen("Loading: ")*_fw,(list_size+8)*_fh,15*_fw,_fh);
+			sprintf(string_buf,"Loading: complete");
+			DrawString(string_buf, 70, (list_size+8)*_fh, FONT_WHITE);
+
+			preparing = 0;
+			if (go_reboot)
+				bios_execute();
+			else if (go_multiplayer)
+				bios_cd_player_execute();
+		}
+
+		if (preparing == 0)
+			redraw_menu(current_item);
+
 		vdp2_sync();
 		vdp2_sync_wait();
 	}
