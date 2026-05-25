@@ -20,28 +20,30 @@ while i<50:
     tmp_folder = 'temp_seed_'+str(seed)
     #create folder and subfolders
     os.makedirs(tmp_folder, exist_ok=True)
+    os.makedirs(tmp_folder + '/picorv_bootstrap', exist_ok=True)
     os.makedirs(tmp_folder + '/fatfs', exist_ok=True)
-    os.makedirs(tmp_folder+ '/sd', exist_ok=True)
+    os.makedirs(tmp_folder+ '/hdl', exist_ok=True)
+    os.makedirs(tmp_folder+ '/hdl/sd', exist_ok=True)
     #copy verilog files
-    for file_path in glob.glob(os.path.join('./', '*.v')):
-        shutil.copy(file_path, tmp_folder)
-    for file_path in glob.glob(os.path.join('./sd/', '*.v')):
-        shutil.copy(file_path, tmp_folder+'/sd/')
-    for file_path in glob.glob(os.path.join('./', '*.lpf')):
-        shutil.copy(file_path, tmp_folder)
+    for file_path in glob.glob(os.path.join('./hdl/', '*.v')):
+        shutil.copy(file_path, tmp_folder+'/hdl/')
+    for file_path in glob.glob(os.path.join('./hdl/sd/', '*.v')):
+        shutil.copy(file_path, tmp_folder+'/hdl/sd/')
+    for file_path in glob.glob(os.path.join('./hdl/', '*.lpf')):
+        shutil.copy(file_path, tmp_folder+'/hdl/')
     #copy c/h sources
-    for file_path in glob.glob(os.path.join('./', '*.c')):
-        shutil.copy(file_path, tmp_folder)
+    for file_path in glob.glob(os.path.join('./picorv_bootstrap/', '*.c')):
+        shutil.copy(file_path, tmp_folder+'/picorv_bootstrap/')
     for file_path in glob.glob(os.path.join('./fatfs/', '*.c')):
         shutil.copy(file_path, tmp_folder+'/fatfs/')
-    for file_path in glob.glob(os.path.join('./', '*.h')):
-        shutil.copy(file_path, tmp_folder)
+    for file_path in glob.glob(os.path.join('./picorv_bootstrap/', '*.h')):
+        shutil.copy(file_path, tmp_folder+'/picorv_bootstrap/')
     for file_path in glob.glob(os.path.join('./fatfs/', '*.h')):
         shutil.copy(file_path, tmp_folder+'/fatfs/')
-    for file_path in glob.glob(os.path.join('./', '*.lds')):
-        shutil.copy(file_path, tmp_folder)
-    for file_path in glob.glob(os.path.join('./', '*.S')):
-        shutil.copy(file_path, tmp_folder)
+    for file_path in glob.glob(os.path.join('./picorv_bootstrap/', '*.lds')):
+        shutil.copy(file_path, tmp_folder+'/picorv_bootstrap/')
+    for file_path in glob.glob(os.path.join('./picorv_bootstrap/', '*.S')):
+        shutil.copy(file_path, tmp_folder+'/picorv_bootstrap/')
     #copy build scripts
     for file_path in glob.glob(os.path.join('./', '__build.cmd')):
         shutil.copy(file_path, tmp_folder)
@@ -54,8 +56,8 @@ while i<50:
     for file_path in glob.glob(os.path.join('./', 'makehex.py')):
         shutil.copy(file_path, tmp_folder)
     #copy binaries
-    for file_path in glob.glob(os.path.join('./', 'wasca-fallback.ss')):
-        shutil.copy(file_path, tmp_folder)
+    for file_path in glob.glob(os.path.join('./picorv_bootstrap/', 'wasca-fallback.ss')):
+        shutil.copy(file_path, tmp_folder+'/picorv_bootstrap/')
     #replace seed
     with open(tmp_folder+'/Makefile', 'r') as mf:
         mf_data = mf.read()

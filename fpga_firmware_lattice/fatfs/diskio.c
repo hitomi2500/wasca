@@ -11,7 +11,6 @@
 #include "diskio.h"		/* Declarations FatFs MAI */
 #include "sdiodrv.h"
 #include "diskiodrvr.h"
-#include "../mini-printf.h"
 #include "string.h"
 
 #ifdef	STDIO_DEBUG

@@ -78,7 +78,6 @@ typedef	uint16_t WORD;
 typedef	uint32_t DWORD, LBA_t, UINT;
 #include "diskio.h"
 #include "sdiodrv.h"
-#include "../mini-printf.h"
 
 // tx* -- debugging output functions
 // {{{
@@ -403,7 +402,7 @@ void	sdio_dump_cid(SDIODRV *dev) {
 	sn = (sn << 8) | (dev->d_CID[3] >> 24) & 0x0ff;
 	md = (dev->d_CID[3] >>  8) & 0x0fff;
 
-	mini_printf("CID:\r\n"
+	/*mini_printf("CID:\r\n"
 "\tManufacturer ID:  0x%02x\r\n"
 "\tApplication ID:   %c%c\r\n"
 "\tProduct Name:     %c%c%c%c%c\r\n"
@@ -422,7 +421,7 @@ void	sdio_dump_cid(SDIODRV *dev) {
 	mini_printf(
 "\tYear of Man.:     %d\r\n"
 "\tMonth of Man.:    %d\r\n",
-		((md>>4)+2000), md&0x0f);
+		((md>>4)+2000), md&0x0f);*/
 #endif
 }
 // }}}
@@ -650,8 +649,8 @@ void	sdio_dump_ocr(SDIODRV *dev) {
 				mxv = 28;
 			if (mnv == 0||mnv >= 27)
 				mnv = 27;
-		} mini_printf("  Voltage ranges supported: %d.%dV - %d.%dV\r\n",
-			(mxv/10), (mxv%10), (mnv/10), (mnv%10));
+		} /*mini_printf("  Voltage ranges supported: %d.%dV - %d.%dV\r\n",
+			(mxv/10), (mxv%10), (mnv/10), (mnv%10));*/
 #else
 		if (dev->d_OCR & 0x00800000) txstr("  3.6-3.5 V allowed\r\n");
 		if (dev->d_OCR & 0x00400000) txstr("  3.5-3.4 V allowed\r\n");
