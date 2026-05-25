@@ -21,6 +21,7 @@ while i<50:
     #create folder and subfolders
     os.makedirs(tmp_folder, exist_ok=True)
     os.makedirs(tmp_folder + '/picorv_bootstrap', exist_ok=True)
+    os.makedirs(tmp_folder + '/picorv_firmware', exist_ok=True)
     os.makedirs(tmp_folder + '/fatfs', exist_ok=True)
     os.makedirs(tmp_folder+ '/hdl', exist_ok=True)
     os.makedirs(tmp_folder+ '/hdl/sd', exist_ok=True)
@@ -34,16 +35,24 @@ while i<50:
     #copy c/h sources
     for file_path in glob.glob(os.path.join('./picorv_bootstrap/', '*.c')):
         shutil.copy(file_path, tmp_folder+'/picorv_bootstrap/')
+    for file_path in glob.glob(os.path.join('./picorv_firmware/', '*.c')):
+        shutil.copy(file_path, tmp_folder+'/picorv_firmware/')
     for file_path in glob.glob(os.path.join('./fatfs/', '*.c')):
         shutil.copy(file_path, tmp_folder+'/fatfs/')
     for file_path in glob.glob(os.path.join('./picorv_bootstrap/', '*.h')):
         shutil.copy(file_path, tmp_folder+'/picorv_bootstrap/')
+    for file_path in glob.glob(os.path.join('./picorv_firmware/', '*.h')):
+        shutil.copy(file_path, tmp_folder+'/picorv_firmware/')
     for file_path in glob.glob(os.path.join('./fatfs/', '*.h')):
         shutil.copy(file_path, tmp_folder+'/fatfs/')
     for file_path in glob.glob(os.path.join('./picorv_bootstrap/', '*.lds')):
         shutil.copy(file_path, tmp_folder+'/picorv_bootstrap/')
+    for file_path in glob.glob(os.path.join('./picorv_firmware/', '*.lds')):
+        shutil.copy(file_path, tmp_folder+'/picorv_firmware/')
     for file_path in glob.glob(os.path.join('./picorv_bootstrap/', '*.S')):
         shutil.copy(file_path, tmp_folder+'/picorv_bootstrap/')
+    for file_path in glob.glob(os.path.join('./picorv_firmware/', '*.S')):
+        shutil.copy(file_path, tmp_folder+'/picorv_firmware/')
     #copy build scripts
     for file_path in glob.glob(os.path.join('./', '__build.cmd')):
         shutil.copy(file_path, tmp_folder)
@@ -58,6 +67,8 @@ while i<50:
     #copy binaries
     for file_path in glob.glob(os.path.join('./picorv_bootstrap/', 'wasca-fallback.ss')):
         shutil.copy(file_path, tmp_folder+'/picorv_bootstrap/')
+    for file_path in glob.glob(os.path.join('./picorv_firmware/', 'wasca-fallback.ss')):
+        shutil.copy(file_path, tmp_folder+'/picorv_firmware/')
     #replace seed
     with open(tmp_folder+'/Makefile', 'r') as mf:
         mf_data = mf.read()

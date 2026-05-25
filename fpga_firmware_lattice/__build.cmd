@@ -17,4 +17,5 @@
 
 make clean
 make bootstrap.hex
+make firmware.hex
 make attosoc.bit

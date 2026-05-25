@@ -17,6 +17,7 @@
 
 rem make clean
 make bootstrap.hex
+make firmware.hex
 make attosoc.bit
 copy attosoc.bit F:
 
