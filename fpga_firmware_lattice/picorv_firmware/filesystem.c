@@ -29,6 +29,8 @@ extern volatile uint32_t * pSDRAM;
 extern volatile uint32_t * pSDRAM2;
 
 int filesystem_command_active = 0;
+int filesystem_last_list_item = 0;
+DIR filesystem_last_dir;
 
 #define MAX_FILES 16
 
@@ -128,7 +130,9 @@ int filesystem_access_scheduler() {
 	uint8_t command_buffer[256];
 	uint8_t reply_buffer[256];
 	FRESULT res;
+	FILINFO filinf;
 	int readen;
+	uint16_t * buffer16 = (uint16_t *)buffer;
 	//checking if command is available
 	if (0 == filesystem_command_active) {
 		if (pWishboneRegs[WISHBONE_REG_FSCNTRL]) {
@@ -183,6 +187,7 @@ int filesystem_access_scheduler() {
 						filesystem_command_active = 2; //execution complete
 						pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed					
 				}
+
 			} else if (0 == mini_strcmp(token,"CLOSE")) {
 				//close file : handle
 				char * handle_str = mini_strtok(NULL, " ");
@@ -194,6 +199,7 @@ int filesystem_access_scheduler() {
 						filesystem_command_active = 2; //execution complete
 						pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed
 					}
+
 			} else if (0 == mini_strcmp(token,"READ")) {
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				int offset = mini_atoi(mini_strtok(NULL, " "));
@@ -210,9 +216,13 @@ int filesystem_access_scheduler() {
 					f_lseek(&open_files[handle],offset);
 					f_read(&open_files[handle],buffer,length,&readen);
 					mini_snprintf(reply_buffer,256,"OK data_len=%d",readen);
+					//copy buffer to SDRAM
+					for (int i=0;i<1024;i++)
+						pSDRAM[0xfffc00+i] =  buffer16[i];
 					filesystem_command_active = 2; //execution complete
 					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
 				}
+
 			} else if (0 == mini_strcmp(token,"WRITE")) {
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				int offset = mini_atoi(mini_strtok(NULL, " "));
@@ -226,12 +236,16 @@ int filesystem_access_scheduler() {
 					filesystem_command_active = 2; //execution complete
 					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
 				} else {
+					//copy SDRAM to buffer
+					for (int i=0;i<1024;i++)
+						buffer16[i] = pSDRAM[0xfffc00+i];
 					f_lseek(&open_files[handle],offset);
 					f_write(&open_files[handle],buffer,length,&readen);
 					mini_snprintf(reply_buffer,256,"OK data_len=%d",readen);
 					filesystem_command_active = 2; //execution complete
 					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
 				}
+
 			} else if (0 == mini_strcmp(token,"TRUNCATE")) {
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				int length = mini_atoi(mini_strtok(NULL, " "));
@@ -250,20 +264,103 @@ int filesystem_access_scheduler() {
 					filesystem_command_active = 2; //execution complete
 					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
 				}
+
 			} else if (0 == mini_strcmp(token,"LIST")) {
+				char * path = mini_strtok(NULL, " ");
+				if (path[0] != 0) {
+					if (filesystem_last_dir.obj.fs)
+						f_closedir(&filesystem_last_dir);
+				    res = f_opendir(&filesystem_last_dir, path); 
+					if (res != FR_OK) {
+						mini_snprintf(reply_buffer,256,"ERR code=6 msg=\"dir not found\"");
+						filesystem_command_active = 2; //execution complete
+						pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+					} else {
+						res = f_readdir(&filesystem_last_dir, &filinf);
+						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
+						filesystem_command_active = 2; //execution complete
+						pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+					}
+				} else {
+					//continuing last listing
+					if (NULL == filesystem_last_dir.obj.fs) {
+						mini_snprintf(reply_buffer,256,"ERR code=7 msg=\"dir not open\"");
+						filesystem_command_active = 2; //execution complete
+						pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+					} else {
+						res = f_readdir(&filesystem_last_dir, &filinf);
+						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
+						filesystem_command_active = 2; //execution complete
+						pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+					}
+				}
 				
 			} else if (0 == mini_strcmp(token,"STAT")) {
+				char * filename = mini_strtok(NULL, " ");
+				if (FR_OK == f_stat(filename, &filinf)) {
+					mini_snprintf(reply_buffer,256,"OK name=\"%s\" size=%d",filinf.fname,filinf.fsize);
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				} else {
+					mini_snprintf(reply_buffer,256,"ERR code=7 msg=\"file not found\"");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				}
 				
 			} else if (0 == mini_strcmp(token,"MKDIR")) {
+				char * path = mini_strtok(NULL, " ");
+				if (FR_OK == f_mkdir(path)) {
+					mini_snprintf(reply_buffer,256,"OK");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				} else {
+					mini_snprintf(reply_buffer,256,"ERR code=8 msg=\"cannot create dir\"");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				}
 				
 			} else if (0 == mini_strcmp(token,"REMOVE")) {
+				char * filename = mini_strtok(NULL, " ");
+				if (FR_OK == f_unlink(filename)) {
+					mini_snprintf(reply_buffer,256,"OK");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				} else {
+					mini_snprintf(reply_buffer,256,"ERR code=9 msg=\"delete error\"");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				}
 				
 			} else if (0 == mini_strcmp(token,"RENAME")) {
+				char * old_filename = mini_strtok(NULL, " ");
+				char * new_filename = mini_strtok(NULL, " ");
+				if (FR_OK == f_rename(old_filename,new_filename)) {
+					mini_snprintf(reply_buffer,256,"OK");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				} else {
+					mini_snprintf(reply_buffer,256,"ERR code=10 msg=\"rename error\"");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				}
 				
 			} else if (0 == mini_strcmp(token,"FLUSH")) {
-				
+				int handle = mini_atoi(mini_strtok(NULL, " "));
+				if (FR_OK == f_sync(&open_files[handle])) {
+					mini_snprintf(reply_buffer,256,"OK");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				} else {
+					mini_snprintf(reply_buffer,256,"ERR code=11 msg=\"flush error\"");
+					filesystem_command_active = 2; //execution complete
+					pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
+				}
+
 			} else  {
 				//unknown command
+				mini_snprintf(reply_buffer,256,"ERR code=99 msg=\"unknown command\"");
+				filesystem_command_active = 2; //execution complete
+				pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as executed	
 			}
 			filesystem_command_active = 1;
 			pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as detected
