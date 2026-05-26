@@ -25,9 +25,123 @@ static void suite_vblank_out_handler(void *work __unused)
 
 void draw_char(uint8_t char_code, int  x, int y, int palette) {
 	uint32_t * p32 = (uint32_t *)VIDEO_VDP2_NBG0_PNDR_START;
-	p32[y*128+x] = 2*(palette*512+char_code*2);
-	p32[y*128+64+x] = 2*(palette*512+char_code*2+1);
+	if (x>=64) {
+		p32[64*63+y*128+x] = 2*(palette*512+char_code*2);
+		p32[64*63+y*128+64+x] = 2*(palette*512+char_code*2+1);
+	} else {
+		p32[y*128+x] = 2*(palette*512+char_code*2);
+		p32[y*128+64+x] = 2*(palette*512+char_code*2+1);
+	}
 }
+
+void fill_rect(int left, int top, int width, int height, int palette) {
+	for (int y=top; y<(top+height); y++)
+		for (int x=left; x<(left+width); x++)
+			draw_char(0,x,y,palette);
+}
+
+void draw_double_border(int left, int top, int width, int height, int palette) {
+	for (int y=top+1; y<(top+height-1); y++) {
+		draw_char(0xba,left,y,palette);
+		draw_char(0xba,left+width-1,y,palette);
+	}
+	for (int x=left+1; x<(left+width-1); x++) {
+		draw_char(0xcd,x,top,palette);
+		draw_char(0xcd,x,top+height-1,palette);
+	}
+	draw_char(0xc9,left,top,palette);
+	draw_char(0xbb,left+width-1,top,palette);
+	draw_char(0xc8,left,top+height-1,palette);
+	draw_char(0xbc,left+width-1,top+height-1,palette);
+}
+
+void draw_string(char * string, int left, int top, int palette) {
+	int i=0;
+	while (string[i]) {
+		draw_char(string[i],left+i,top,palette);
+		i++;
+	}
+}
+
+void draw_horizontal_line(int left, int top, int width, int palette) {
+	for (int x=left; x<(left+width); x++) {
+		draw_char(0xc4,x,top,palette);
+	}
+}
+
+void draw_vertical_line(int left, int top, int height, int palette) {
+	for (int y=top; y<(top+height); y++) {
+		draw_char(0xb3,left,y,palette);
+	}
+}
+
+
+void draw_panel(int x_offset) {
+	draw_double_border(x_offset,0,40,28,0);
+	fill_rect(x_offset+1,1,38,26,0);
+	//status string divider
+	draw_horizontal_line(x_offset+1,25,38,0);
+	draw_char(0xc7,x_offset,25,0);
+	draw_char(0xb6,x_offset+39,25,0);
+	//column dividers
+	draw_vertical_line(x_offset+20,1,25,0);
+	draw_vertical_line(x_offset+30,1,25,0);
+	draw_char(0xd1,x_offset+20,0,0);
+	draw_char(0xd1,x_offset+30,0,0);
+	draw_char(0xc1,x_offset+20,25,0);
+	draw_char(0xc1,x_offset+30,25,0);
+	//column labels
+	draw_string("Name",x_offset+10,1,4);
+	draw_string("Size",x_offset+24,1,4);
+	draw_string("Date",x_offset+33,1,4);
+	//test files
+	draw_string("..",x_offset+1,2,0);
+	draw_string("\x10UP--DIR\x11",x_offset+21,2,0);
+	draw_string("09.04.26",x_offset+31,2,0);
+	draw_string("SomeFolder",x_offset+1,3,0);
+	draw_string("\x10SUB-DIR\x11",x_offset+21,3,0);
+	draw_string("11.11.22",x_offset+31,3,0);
+	draw_string("Somefile.lza",x_offset+1,4,0);
+	draw_string("   100500",x_offset+21,4,0);
+	draw_string("02.05.96",x_offset+31,4,0);
+}
+
+void draw_screen() {
+	//panels
+	draw_panel(0);
+	draw_panel(40);
+	//path
+	draw_string(" 0:/",0,28,1);
+	//buttons
+	int button_x = 1;
+	draw_string("A",button_x,29,1);button_x++;
+	draw_string("View  ",button_x,29,2);button_x+=7;button_x++;
+	draw_string("B",button_x,29,1);button_x++;
+	draw_string("Copy  ",button_x,29,2);button_x+=7;button_x++;
+	draw_string("C",button_x,29,1);button_x++;
+	draw_string("Run   ",button_x,29,2);button_x+=7;button_x++;
+	draw_string("X",button_x,29,1);button_x++;
+	draw_string("Edit  ",button_x,29,2);button_x+=7;button_x++;
+	draw_string("Y",button_x,29,1);button_x++;
+	draw_string("Send  ",button_x,29,2);button_x+=7;button_x++;
+	draw_string("Z",button_x,29,1);button_x++;
+	draw_string("Delete",button_x,29,2);button_x+=7;button_x++;
+	draw_string("L",button_x,29,1);button_x++;
+	draw_string("LPanel",button_x,29,2);button_x+=7;button_x++;
+	draw_string("R",button_x,29,1);button_x++;
+	draw_string("RPanel",button_x,29,2);button_x+=7;button_x++;
+	draw_string("S",button_x,29,1);button_x++;
+	draw_string("Exit  ",button_x,29,2);button_x+=7;button_x++;
+}
+
+void draw_dialogbox(char * string, int palette) {
+	int len = strlen(string);
+	len+=4;
+	draw_double_border(40-len/2,11,len,7,palette);
+	fill_rect(40-len/2+1,12,len-2,5,palette);
+	draw_string(string,40-len/2+2,14,palette);
+}
+
 
 int main(void)
 {
@@ -48,32 +162,39 @@ int main(void)
 	video_vdp2_clear_palette(0);
 
 	video_vdp2_set_cycle_patterns_cpu(screenMode);
+
 	//load 8x16 font to VDP2 tiles
     uint8_t * p8 = (uint8_t *)VIDEO_VDP2_NBG0_CHPNDR_START;
 	for (int i=0;i<256;i++) {
 		for (int j=0;j<128;j++) {
-			p8[i*128+j] = (PC_FACE_MODERNDOS_8X16_FONT_LIST[i][j/8]&(1<<(7-j%8))) ? 2:1;
+			p8[i*128+j] = (PC_FACE_MODERNDOS_8X16_FONT_LIST[i][j/8]&(1<<(7-j%8))) ? 2:1; //cyan on blue
+			p8[1*256*128 + i*128+j] = (PC_FACE_MODERNDOS_8X16_FONT_LIST[i][j/8]&(1<<(7-j%8))) ? 3:0; //gray on black
+			p8[2*256*128 + i*128+j] = (PC_FACE_MODERNDOS_8X16_FONT_LIST[i][j/8]&(1<<(7-j%8))) ? 0:4; //black on greenish
+			p8[3*256*128 + i*128+j] = (PC_FACE_MODERNDOS_8X16_FONT_LIST[i][j/8]&(1<<(7-j%8))) ? 6:5; //white on lightgray
+			p8[4*256*128 + i*128+j] = (PC_FACE_MODERNDOS_8X16_FONT_LIST[i][j/8]&(1<<(7-j%8))) ? 7:1; //yellow on blue
 		}
 	}
 
-	//draw font
-	for (int y=0;y<8;y++)
-		for (int x=0;x<32;x++)
-			draw_char(y*32+x,x,y,0);
+	draw_screen();
 
-    /*uint32_t * p32 = (uint32_t *)VIDEO_VDP2_NBG0_PNDR_START;
-	for (int y=0;y<8;y++) {
-		for (int x=0;x<32;x++) {
-			p32[y*128+x] = 2*(y*64+x*2);
-			p32[y*128+64+x] = 2*(y*64+x*2+1);
-		}
-	}*/
+	//checking wasca signature
+	p8 = (uint8_t *)CS0(0x3FFFFFA);
+	if (memcmp(p8,"wasca ",6)) {
+		draw_dialogbox("wasca cartridge not detected!",3);
+		//while (1); //freeze
+	}
+	
 	
 	video_vdp2_set_cycle_patterns_nbg(screenMode);
 
 	video_vdp2_set_palette_part(FONT_PALETTE, &RGB888(1, 0, 0, 0), 0, 0);//black
-	video_vdp2_set_palette_part(FONT_PALETTE, &RGB888(1, 0, 0, 0xAA), 1, 1);//blue
-	video_vdp2_set_palette_part(FONT_PALETTE, &RGB888(1, 0, 0xAA, 0xAA), 2, 2);//cyan
+	video_vdp2_set_palette_part(FONT_PALETTE, &RGB888(1, 0, 0, 0x80), 1, 1);//blue
+	video_vdp2_set_palette_part(FONT_PALETTE, &RGB888(1, 0, 0xFF, 0xFF), 2, 2);//cyan
+	video_vdp2_set_palette_part(FONT_PALETTE, &RGB888(1, 0xC0, 0xC0, 0xC0), 3, 3);//gray
+	video_vdp2_set_palette_part(FONT_PALETTE, &RGB888(1, 0x04, 0xAA, 0xAC), 4, 4);//greenish
+	video_vdp2_set_palette_part(FONT_PALETTE, &RGB888(1, 0xAA, 0xAA, 0xAA), 5, 5);//lightgray
+	video_vdp2_set_palette_part(FONT_PALETTE, &RGB888(1, 0xFF, 0xFF, 0xFF), 6, 6);//white
+	video_vdp2_set_palette_part(FONT_PALETTE, &RGB888(1, 0xFC, 0xFE, 0x54), 7, 7);//yellow
 	//SetFontPalette();
 
 	//detect color system
@@ -107,7 +228,7 @@ int main(void)
 	int go_multiplayer = 0;
 	uint16_t* pWascaRegs = (uint16_t*)0x23FFFFE0;
 
-	DrawString("Text", 100, 100, FONT_WHITE);
+	//DrawString("Text", 100, 100, FONT_WHITE);
 	
 	while(true)
 	{
