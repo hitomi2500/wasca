@@ -52,7 +52,6 @@ extern unsigned char buffer[2048];
 
 uint8_t command_buffer[256];
 uint8_t reply_buffer[256];
-uint8_t work_buffer[256];
 
 static int is_delim(char c, const char *delim)
 {
@@ -265,22 +264,16 @@ int filesystem_access_scheduler() {
 			} else if (0 == mini_strcmp(token,"LIST")) {
 				mini_printf("FSCMD3\r\n");
 				char * path = mini_strtok(NULL, " ");
-				//if (mini_strlen(path)>10)
-				//	path[10] = 0;
-				if (path[0] != 0) {
+				if (path != 0) {
 					LED = LED_EXT_GREEN;
 					mini_printf("FSCMD4\r\n");
 					if (filesystem_last_dir_open) {
 						filesystem_last_dir_open = 0;
 						f_closedir(&filesystem_last_dir);
 					}
-					//path[0] = '/';
-					//path[1] = 0;
-					LED = LED_EXT_BLUE;
-					mini_strcpy(work_buffer,path);
-				    res = f_opendir(&filesystem_last_dir, work_buffer);
+				    res = f_opendir(&filesystem_last_dir, path);
 					if (res != FR_OK) {
-						mini_snprintf(reply_buffer,256,"E%d Dir %x %x %x %x not found",res,work_buffer,work_buffer[0],work_buffer[1],work_buffer[2]);
+						mini_snprintf(reply_buffer,256,"E%d Dir %x %x %x %x not found",res,path,path[0],path[1],path[2]);
 					} else {
 						filesystem_last_dir_open = 1;
 						res = f_readdir(&filesystem_last_dir, &filinf);
@@ -288,8 +281,9 @@ int filesystem_access_scheduler() {
 					}
 				} else {
 								mini_printf("FSCMD5\r\n");
+					LED = LED_EXT_BLUE;
 					//continuing last listing
-					if (NULL == filesystem_last_dir.obj.fs) {
+					if (0 == filesystem_last_dir_open) {
 						mini_snprintf(reply_buffer,256,"ERR Dir not open");
 					} else {
 						filesystem_last_dir_open = 1;

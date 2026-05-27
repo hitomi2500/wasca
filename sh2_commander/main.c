@@ -170,21 +170,31 @@ void draw_panel(int x_offset) {
 	sprintf(pReplyBuf,"No Reply");
 	execute_command("LIST /");
 	int line = 2;
-	if (strlen(pReplyBuf)>20) 
-		pReplyBuf[20] = 0;
-	draw_string(pReplyBuf,x_offset+1,line,0);
+	char * ptr = pReplyBuf;
+	if (0 == memcmp("OK name=",pReplyBuf,7)) {
+		ptr = &(pReplyBuf[9]);
+		ptr[strlen(ptr)-1] = 0;
+	}
+	if (strlen(ptr)>20) 
+		ptr[20] = 0;
+	draw_string(ptr,x_offset+1,line,0);
 	draw_string("    ????",x_offset+21,line,0);
 	draw_string("??.??.??",x_offset+31,line,0);
 	line++;
-	/*while ((strlen(pReplyBuf))&&(line<20)) {
+	while ((strlen(pReplyBuf))&&(line<20)) {
 		execute_command("LIST");
-		if (strlen(pReplyBuf)>20) 
-			pReplyBuf[20] = 0;
-		draw_string(pReplyBuf,x_offset+1,line,0);
+		ptr = pReplyBuf;
+		if (0 == memcmp("OK name=",pReplyBuf,7)) {
+			ptr = &(pReplyBuf[9]);
+			ptr[strlen(ptr)-1] = 0;
+		}
+		if (strlen(ptr)>20) 
+			ptr[20] = 0;
+		draw_string(ptr,x_offset+1,line,0);
 		draw_string("????",x_offset+21,line,0);
 		draw_string("??.??.??",x_offset+31,line,0);
 		line++;
-	}*/
+	}
 
 }
 
