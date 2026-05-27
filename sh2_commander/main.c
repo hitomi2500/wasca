@@ -10,8 +10,23 @@
 #include "control.h"
 #include "video_vdp2.h"
 
+	video_screen_mode_t screenMode =
+	{
+		.scanmode = VIDEO_SCANMODE_480I,
+		.x_res = VIDEO_X_RESOLUTION_320,
+		.y_res = VDP2_TVMD_VERT_240,
+		.x_res_doubled = true,
+		.colorsystem = VDP2_TVMD_TV_STANDARD_NTSC,
+	};
+
 int global_frame_count = 0;
 extern const uint8_t PC_FACE_MODERNDOS_8X16_FONT_LIST[256][16];
+int wasca_found = 0;
+uint16_t * FSSTAT = (uint16_t*)0x23FFFA00;
+uint16_t * FSCNTRL = (uint16_t*)0x23FFFFF2;
+uint16_t* pWascaRegs = (uint16_t*)0x23FFFFE0;
+uint8_t * pCmdBuf = (uint8_t*)0x23FFF800;
+uint8_t * pReplyBuf = (uint8_t*)0x23FFF900;
 
 static void suite_vblank_out_handler(void *work __unused)
 {
@@ -75,6 +90,47 @@ void draw_vertical_line(int left, int top, int height, int palette) {
 	}
 }
 
+void execute_command(char * command) {
+	int timeout;
+	//if (0==wasca_found) 
+	//	return;
+	//video_vdp2_set_cycle_patterns_nbg(screenMode);
+
+	if (FSSTAT[0] != 0) {
+		strcpy(pReplyBuf,"NotIdle");
+		//assuring idle state
+		FSCNTRL[0] = 0;
+
+		//waiting for cart to return to idle
+		timeout = 0;
+		while ((FSSTAT[0] != 0) && (timeout < 10)) {
+			FSCNTRL[0] = 0;
+			timeout++;
+			vdp2_sync();
+			vdp2_sync_wait();
+		}
+	}
+
+	//sending cmd
+	strcpy(pCmdBuf,command);
+	FSCNTRL[0] = 0xFFFF;
+
+	//waiting until command is executed
+	timeout = 0;
+	while ((FSSTAT[0] == 0) && (timeout < 300)) {
+		timeout++;
+		vdp2_sync();
+		vdp2_sync_wait();
+	}
+
+	if (timeout >= 300)
+		sprintf(pReplyBuf,"Tm%x %x %x",FSSTAT[0],FSSTAT[1],pWascaRegs[9]);
+	else
+		FSCNTRL[0] = 0;
+	//going back to idle\
+	//FSCNTRL[0] = 0;
+	//video_vdp2_set_cycle_patterns_cpu(screenMode);
+}
 
 void draw_panel(int x_offset) {
 	draw_double_border(x_offset,0,40,28,0);
@@ -94,16 +150,42 @@ void draw_panel(int x_offset) {
 	draw_string("Name",x_offset+10,1,4);
 	draw_string("Size",x_offset+24,1,4);
 	draw_string("Date",x_offset+33,1,4);
+	//panel path
+	draw_string(" 0:/ ",x_offset+18,0,2);
 	//test files
-	draw_string("..",x_offset+1,2,0);
+	/*draw_string("..",x_offset+1,2,0);
 	draw_string("\x10UP--DIR\x11",x_offset+21,2,0);
-	draw_string("09.04.26",x_offset+31,2,0);
+	draw_string("00.00.00",x_offset+31,2,0);
 	draw_string("SomeFolder",x_offset+1,3,0);
 	draw_string("\x10SUB-DIR\x11",x_offset+21,3,0);
 	draw_string("11.11.22",x_offset+31,3,0);
-	draw_string("Somefile.lza",x_offset+1,4,0);
+	draw_string("SomeFile.lza",x_offset+1,4,0);
 	draw_string("   100500",x_offset+21,4,0);
-	draw_string("02.05.96",x_offset+31,4,0);
+	draw_string("02.05.96",x_offset+31,4,0);*/
+
+	//reading files
+	//issuing first list command for root folder 
+	/*if (0 == wasca_found)
+		pReplyBuf = (uint8_t*)LWRAM(0);*/
+	sprintf(pReplyBuf,"No Reply");
+	execute_command("LIST /");
+	int line = 2;
+	if (strlen(pReplyBuf)>20) 
+		pReplyBuf[20] = 0;
+	draw_string(pReplyBuf,x_offset+1,line,0);
+	draw_string("    ????",x_offset+21,line,0);
+	draw_string("??.??.??",x_offset+31,line,0);
+	line++;
+	/*while ((strlen(pReplyBuf))&&(line<20)) {
+		execute_command("LIST");
+		if (strlen(pReplyBuf)>20) 
+			pReplyBuf[20] = 0;
+		draw_string(pReplyBuf,x_offset+1,line,0);
+		draw_string("????",x_offset+21,line,0);
+		draw_string("??.??.??",x_offset+31,line,0);
+		line++;
+	}*/
+
 }
 
 void draw_screen() {
@@ -148,20 +230,13 @@ int main(void)
 	char string_buf[128];
 	uint16_t counter;
 
-	video_screen_mode_t screenMode =
-	{
-		.scanmode = VIDEO_SCANMODE_480I,
-		.x_res = VIDEO_X_RESOLUTION_320,
-		.y_res = VDP2_TVMD_VERT_240,
-		.x_res_doubled = true,
-		.colorsystem = VDP2_TVMD_TV_STANDARD_NTSC,
-	};
-
 	video_init(screenMode,false);
 
 	video_vdp2_clear_palette(0);
 
 	video_vdp2_set_cycle_patterns_cpu(screenMode);
+
+	FSCNTRL[0] = 0xFFFF;
 
 	//load 8x16 font to VDP2 tiles
     uint8_t * p8 = (uint8_t *)VIDEO_VDP2_NBG0_CHPNDR_START;
@@ -178,12 +253,17 @@ int main(void)
 	draw_screen();
 
 	//checking wasca signature
-	p8 = (uint8_t *)CS0(0x3FFFFFA);
+	p8 = (uint8_t *)CS0(0x1FFFFFA);
 	if (memcmp(p8,"wasca ",6)) {
-		draw_dialogbox("wasca cartridge not detected!",3);
+		char _buf[32];
+		sprintf(_buf,"id:%x %x %x %x %x %x",p8[0],p8[1],p8[2],p8[3],p8[4],p8[5]);
+		//draw_dialogbox("wasca cartridge not detected!",3);
+		draw_dialogbox(_buf,3);
 		//while (1); //freeze
+		wasca_found = 0;
+	} else {
+		wasca_found = 1;
 	}
-	
 	
 	video_vdp2_set_cycle_patterns_nbg(screenMode);
 
@@ -226,7 +306,6 @@ int main(void)
 	int preparing = 0;
 	int go_reboot = 0;
 	int go_multiplayer = 0;
-	uint16_t* pWascaRegs = (uint16_t*)0x23FFFFE0;
 
 	//DrawString("Text", 100, 100, FONT_WHITE);
 	

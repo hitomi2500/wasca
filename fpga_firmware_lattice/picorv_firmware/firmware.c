@@ -619,13 +619,13 @@ void sync_mode () {
 			break;
 		default:
 			//led blinking only
-			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
+			/*if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				//read fifo
 				dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
 				LED = LED_EXT_GREEN;
 			}
 			else
-				LED = LED_OFF;
+				LED = LED_OFF;*/
 			break;  
 		}
 }

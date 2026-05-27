@@ -6,8 +6,15 @@
 #include "fatfs/diskio.h"
 #include "mini-printf.h"
 
-#define VERSION_MAJOR 2
-#define VERSION_MINOR 1
+#define LED_OFF 0x0
+#define LED_EXT_RED 0x20
+#define LED_EXT_GREEN 0x10
+#define LED_EXT_BLUE 0x8
+#define LED_EXT_CYAN (LED_EXT_GREEN | LED_EXT_BLUE)
+#define LED_EXT_MAGENTA (LED_EXT_RED | LED_EXT_BLUE)
+#define LED_EXT_YELLOW (LED_EXT_RED | LED_EXT_GREEN)
+#define LED_EXT_WHITE (LED_EXT_RED | LED_EXT_GREEN | LED_EXT_BLUE)
+#define LED (*(volatile uint32_t*)0x02000000)
 
 #define WISHBONE_REG_PCNTR 0x0
 #define WISHBONE_REG_FSCNTRL 0x1
@@ -117,6 +124,7 @@ int mini_atoi(const char *s)
 int filesystem_access_init() {
 	for (int i=0;i<MAX_FILES;i++)
 		open_files[i].obj.fs == 0;
+	LED = LED_EXT_YELLOW;
 }
 
 int available_file_handle() {
@@ -129,6 +137,7 @@ int available_file_handle() {
 int filesystem_access_scheduler() {
 	uint8_t command_buffer[256];
 	uint8_t reply_buffer[256];
+	uint16_t *reply_buffer16 = (uint16_t*)reply_buffer;
 	FRESULT res;
 	FILINFO filinf;
 	int readen;
@@ -136,14 +145,19 @@ int filesystem_access_scheduler() {
 	//checking if command is available
 	if (0 == filesystem_command_active) {
 		if (pWishboneRegs[WISHBONE_REG_FSCNTRL]) {
+			LED = LED_EXT_RED;
 			//new command detected, copying to buffer with transforming BE->LE
 			for (int i=0;i<128;i++) {
-				command_buffer[i*2] = pSDRAM[0xfffc00+i] >> 8;
-				command_buffer[i*2+1] = pSDRAM[0xfffc00+i];
-			}
+				command_buffer[i*2+1] = pSDRAM[0xfffc00+i] >> 8;
+				command_buffer[i*2] = pSDRAM[0xfffc00+i];
+			}			
 			command_buffer[256] = 0;//assuring string is terminated
+			mini_printf("FSCMD: ");
+			mini_printf(command_buffer);
+			mini_printf("\r\n");
 			//now parsing the buffer
 			char * token = mini_strtok(command_buffer, " ");
+			mini_printf("FSCMD2\r\n");
 			if (0 == mini_strcmp(token,"OPEN")) {
 				int handle = available_file_handle();
 				if (handle != -1) {
@@ -246,8 +260,11 @@ int filesystem_access_scheduler() {
 				}
 
 			} else if (0 == mini_strcmp(token,"LIST")) {
+				mini_printf("FSCMD3\r\n");
 				char * path = mini_strtok(NULL, " ");
 				if (path[0] != 0) {
+					LED = LED_EXT_GREEN;
+					mini_printf("FSCMD4\r\n");
 					if (filesystem_last_dir.obj.fs)
 						f_closedir(&filesystem_last_dir);
 				    res = f_opendir(&filesystem_last_dir, path); 
@@ -256,8 +273,10 @@ int filesystem_access_scheduler() {
 					} else {
 						res = f_readdir(&filesystem_last_dir, &filinf);
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
+						LED = LED_EXT_BLUE;
 					}
 				} else {
+								mini_printf("FSCMD5\r\n");
 					//continuing last listing
 					if (NULL == filesystem_last_dir.obj.fs) {
 						mini_snprintf(reply_buffer,256,"ERR Dir not open");
@@ -266,7 +285,8 @@ int filesystem_access_scheduler() {
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
 					}
 				}
-				
+							mini_printf("FSCMD6\r\n");
+
 			} else if (0 == mini_strcmp(token,"STAT")) {
 				char * filename = mini_strtok(NULL, " ");
 				if (FR_OK == f_stat(filename, &filinf)) {
@@ -309,19 +329,28 @@ int filesystem_access_scheduler() {
 				}
 
 			} else  {
+							mini_printf("FSCMD99\r\n");
 				//unknown command
 				mini_snprintf(reply_buffer,256,"ERR Unknown command");				
 			}
 
 			//report as complete
+			mini_printf("FSRPLY: ");
+			mini_printf(reply_buffer);
+			mini_printf("\r\n");
+			for (int i=0;i<128;i++)
+				pSDRAM[0xfffc80+i] = reply_buffer16[i];
 			filesystem_command_active = 1;
-			pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as detected
+			pSDRAM[0xfffd00] =  0x100; //mark command as detected
+			LED = LED_EXT_MAGENTA;
 		}
 	} else if (1 == filesystem_command_active) {
 		if (0 == pWishboneRegs[WISHBONE_REG_FSCNTRL]) {
+			mini_printf("FSRPLY2\r\n");
 			//SH2 confirmed execution end
 			filesystem_command_active = 0; //idle
-			pSDRAM[0xfffd00] =  filesystem_command_active; //mark command as idle
+			pSDRAM[0xfffd00] =  0; //mark command as idle
+			LED = LED_EXT_CYAN;
 		}
 	}
 }
