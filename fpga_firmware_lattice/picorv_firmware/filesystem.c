@@ -37,7 +37,8 @@ extern volatile uint32_t * pSDRAM2;
 
 int filesystem_command_active = 0;
 int filesystem_last_list_item = 0;
-DIR filesystem_last_dir;
+DIR filesystem_last_dir = {0};
+int filesystem_last_dir_open = 0;
 
 #define MAX_FILES 16
 
@@ -48,6 +49,10 @@ extern char* mini_strcat(char* dest, const char* src);
 extern char* mini_strstr(const char *haystack, const char *needle);
 
 extern unsigned char buffer[2048];
+
+uint8_t command_buffer[256];
+uint8_t reply_buffer[256];
+uint8_t work_buffer[256];
 
 static int is_delim(char c, const char *delim)
 {
@@ -135,8 +140,6 @@ int available_file_handle() {
 }
 
 int filesystem_access_scheduler() {
-	uint8_t command_buffer[256];
-	uint8_t reply_buffer[256];
 	uint16_t *reply_buffer16 = (uint16_t*)reply_buffer;
 	FRESULT res;
 	FILINFO filinf;
@@ -262,18 +265,26 @@ int filesystem_access_scheduler() {
 			} else if (0 == mini_strcmp(token,"LIST")) {
 				mini_printf("FSCMD3\r\n");
 				char * path = mini_strtok(NULL, " ");
+				//if (mini_strlen(path)>10)
+				//	path[10] = 0;
 				if (path[0] != 0) {
 					LED = LED_EXT_GREEN;
 					mini_printf("FSCMD4\r\n");
-					if (filesystem_last_dir.obj.fs)
+					if (filesystem_last_dir_open) {
+						filesystem_last_dir_open = 0;
 						f_closedir(&filesystem_last_dir);
-				    res = f_opendir(&filesystem_last_dir, path); 
+					}
+					//path[0] = '/';
+					//path[1] = 0;
+					LED = LED_EXT_BLUE;
+					mini_strcpy(work_buffer,path);
+				    res = f_opendir(&filesystem_last_dir, work_buffer);
 					if (res != FR_OK) {
-						mini_snprintf(reply_buffer,256,"ERR Dir not found");
+						mini_snprintf(reply_buffer,256,"E%d Dir %x %x %x %x not found",res,work_buffer,work_buffer[0],work_buffer[1],work_buffer[2]);
 					} else {
+						filesystem_last_dir_open = 1;
 						res = f_readdir(&filesystem_last_dir, &filinf);
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
-						LED = LED_EXT_BLUE;
 					}
 				} else {
 								mini_printf("FSCMD5\r\n");
@@ -281,6 +292,7 @@ int filesystem_access_scheduler() {
 					if (NULL == filesystem_last_dir.obj.fs) {
 						mini_snprintf(reply_buffer,256,"ERR Dir not open");
 					} else {
+						filesystem_last_dir_open = 1;
 						res = f_readdir(&filesystem_last_dir, &filinf);
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
 					}
