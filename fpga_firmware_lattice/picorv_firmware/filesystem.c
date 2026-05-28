@@ -128,7 +128,6 @@ int mini_atoi(const char *s)
 int filesystem_access_init() {
 	for (int i=0;i<MAX_FILES;i++)
 		open_files[i].obj.fs == 0;
-	LED = LED_EXT_YELLOW;
 }
 
 int available_file_handle() {
@@ -147,7 +146,6 @@ int filesystem_access_scheduler() {
 	//checking if command is available
 	if (0 == filesystem_command_active) {
 		if (pWishboneRegs[WISHBONE_REG_FSCNTRL]) {
-			LED = LED_EXT_RED;
 			//new command detected, copying to buffer with transforming BE->LE
 			for (int i=0;i<128;i++) {
 				command_buffer[i*2+1] = pSDRAM[0xfffc00+i] >> 8;
@@ -159,7 +157,6 @@ int filesystem_access_scheduler() {
 			mini_printf("\r\n");
 			//now parsing the buffer
 			char * token = mini_strtok(command_buffer, " ");
-			mini_printf("FSCMD2\r\n");
 			if (0 == mini_strcmp(token,"OPEN")) {
 				int handle = available_file_handle();
 				if (handle != -1) {
@@ -262,26 +259,21 @@ int filesystem_access_scheduler() {
 				}
 
 			} else if (0 == mini_strcmp(token,"LIST")) {
-				mini_printf("FSCMD3\r\n");
 				char * path = mini_strtok(NULL, " ");
 				if (path != 0) {
-					LED = LED_EXT_GREEN;
-					mini_printf("FSCMD4\r\n");
 					if (filesystem_last_dir_open) {
 						filesystem_last_dir_open = 0;
 						f_closedir(&filesystem_last_dir);
 					}
 				    res = f_opendir(&filesystem_last_dir, path);
 					if (res != FR_OK) {
-						mini_snprintf(reply_buffer,256,"E%d Dir %x %x %x %x not found",res,path,path[0],path[1],path[2]);
+						mini_snprintf(reply_buffer,256,"E%d Dir %s not found",res,path);
 					} else {
 						filesystem_last_dir_open = 1;
 						res = f_readdir(&filesystem_last_dir, &filinf);
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
 					}
 				} else {
-								mini_printf("FSCMD5\r\n");
-					LED = LED_EXT_BLUE;
 					//continuing last listing
 					if (0 == filesystem_last_dir_open) {
 						mini_snprintf(reply_buffer,256,"ERR Dir not open");
@@ -291,12 +283,12 @@ int filesystem_access_scheduler() {
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
 					}
 				}
-							mini_printf("FSCMD6\r\n");
 
 			} else if (0 == mini_strcmp(token,"STAT")) {
 				char * filename = mini_strtok(NULL, " ");
 				if (FR_OK == f_stat(filename, &filinf)) {
-					mini_snprintf(reply_buffer,256,"OK name=\"%s\" size=%d",filinf.fname,filinf.fsize);
+					int year = (filinf.fdate>>9)+1980;
+					mini_snprintf(reply_buffer,256,"OK name=\"%s\" size=%d date=\"%02d.%02d.%02d\"",filinf.fname,filinf.fsize,(filinf.fdate>>4)&0xf,(year>=2000) ? year-2000 : year-1900);
 				} else {
 					mini_snprintf(reply_buffer,256,"ERR File not found");
 				}
@@ -335,7 +327,6 @@ int filesystem_access_scheduler() {
 				}
 
 			} else  {
-							mini_printf("FSCMD99\r\n");
 				//unknown command
 				mini_snprintf(reply_buffer,256,"ERR Unknown command");				
 			}
