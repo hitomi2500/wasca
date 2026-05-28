@@ -290,10 +290,12 @@ int filesystem_access_scheduler() {
 				mini_printf("DELAY6\r\n");
 
 			} else if (0 == mini_strcmp(token,"STAT")) {
+				mini_printf("DELAY7\r\n");
 				char * filename = mini_strtok(NULL, " ");
+				mini_printf("DELAY8\r\n");
 				if (FR_OK == f_stat(filename, &filinf)) {
 					int year = (filinf.fdate>>9)+1980;
-					mini_snprintf(reply_buffer,256,"OK name=\"%s\" size=%d date=\"%02d.%02d.%02d\"",filinf.fname,filinf.fsize,(filinf.fdate>>4)&0xf,(year>=2000) ? year-2000 : year-1900);
+					mini_snprintf(reply_buffer,256,"OK name=\"%s\" size=\"%d\" date=\"%02d.%02d.%02d\"",filinf.fname,filinf.fsize,(filinf.fdate>>5)&0xf,(filinf.fdate)&0x1f,(year>=2000) ? year-2000 : year-1900);
 				} else {
 					mini_snprintf(reply_buffer,256,"ERR File not found");
 				}

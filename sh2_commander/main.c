@@ -92,8 +92,10 @@ void draw_vertical_line(int left, int top, int height, int palette) {
 
 void execute_command(char * command) {
 	int timeout;
-	if (0==wasca_found) 
+	if (0==wasca_found) {
+		strcpy(pReplyBuf,"No cart");
 		return;
+	}
 	//video_vdp2_set_cycle_patterns_nbg(screenMode);
 
 	if (FSSTAT[0] != 0) {
@@ -117,17 +119,17 @@ void execute_command(char * command) {
 
 	//waiting until command is executed
 	timeout = 0;
-	while ((FSSTAT[0] == 0) && (timeout < 300)) {
+	while ((FSSTAT[0] == 0) && (timeout < 10)) {
 		timeout++;
 		vdp2_sync();
 		vdp2_sync_wait();
 	}
 
-	if (timeout >= 300)
+	if (timeout >= 10)
 		sprintf(pReplyBuf,"Tm%x %x %x",FSSTAT[0],FSSTAT[1],pWascaRegs[9]);
 	else
 		FSCNTRL[0] = 0;
-	//going back to idle\
+	//going back to idle
 	//FSCNTRL[0] = 0;
 	//video_vdp2_set_cycle_patterns_cpu(screenMode);
 }
@@ -165,34 +167,87 @@ void draw_panel(int x_offset) {
 
 	//reading files
 	//issuing first list command for root folder 
-	if (0 == wasca_found)
-		pReplyBuf = (uint8_t*)LWRAM(0);
-	sprintf(pReplyBuf,"No Reply");
-	execute_command("LIST /");
 	int line = 2;
 	char * ptr = pReplyBuf;
+	char name[24];
+	char date[24];
+	char size[24];
+	char _buf[256];
+	int i =0;
+	sprintf(pReplyBuf,"No Reply");
+	execute_command("LIST /");
 	if (0 == memcmp("OK name=",pReplyBuf,7)) {
 		ptr = &(pReplyBuf[9]);
 		ptr[strlen(ptr)-1] = 0;
 	}
-	if (strlen(ptr)>20) 
-		ptr[20] = 0;
-	draw_string(ptr,x_offset+1,line,0);
-	draw_string("    ????",x_offset+21,line,0);
-	draw_string("??.??.??",x_offset+31,line,0);
+	if (strlen(ptr)>19) 
+		ptr[19] = 0;
+	strcpy(name,ptr);
+
+		sprintf(_buf,"STAT %s",name);
+		execute_command(_buf);
+		if (0 == memcmp("OK name=",pReplyBuf,7)) {
+			ptr = strstr(pReplyBuf,"size=");
+			i=0;
+			while ( (ptr[6+i]!='\"') && (i<12) ) {
+				size[i] = ptr[6+i];
+				i++;
+			}
+			size[i] = 0;
+			size[12] = 0;
+			ptr = strstr(pReplyBuf,"date=");
+			i=0;
+			while ( (ptr[6+i]!='\"') && (i<12) ) {
+				date[i] = ptr[6+i];
+				i++;
+			}
+			date[i] = 0;
+			date[12] = 0;
+		}
+
+	//draw_string(pReplyBuf,x_offset+1,line,0);
+	draw_string(name,x_offset+1,line,0);
+	draw_string(size,x_offset+21,line,0);
+	draw_string(date,x_offset+31,line,0);
+
 	line++;
 	while ((strlen(pReplyBuf))&&(line<20)) {
+		sprintf(pReplyBuf,"No Reply");
 		execute_command("LIST");
 		ptr = pReplyBuf;
 		if (0 == memcmp("OK name=",pReplyBuf,7)) {
 			ptr = &(pReplyBuf[9]);
 			ptr[strlen(ptr)-1] = 0;
 		}
-		if (strlen(ptr)>20) 
-			ptr[20] = 0;
-		draw_string(ptr,x_offset+1,line,0);
-		draw_string("????",x_offset+21,line,0);
-		draw_string("??.??.??",x_offset+31,line,0);
+		if (strlen(ptr)>19) 
+			ptr[19] = 0;
+		strcpy(name,ptr);
+
+		sprintf(_buf,"STAT %s",name);
+		execute_command(_buf);
+		if (0 == memcmp("OK name=",pReplyBuf,7)) {
+			ptr = strstr(pReplyBuf,"size=");
+			i=0;
+			while ( (ptr[6+i]!='\"') && (i<12) ) {
+				size[i] = ptr[6+i];
+				i++;
+			}
+			size[i] = 0;
+			size[12] = 0;
+			ptr = strstr(pReplyBuf,"date=");
+			i=0;
+			while ( (ptr[6+i]!='\"') && (i<12) ) {
+				date[i] = ptr[6+i];
+				i++;
+			}
+			date[i] = 0;
+			date[12] = 0;
+		}
+
+		//draw_string(pReplyBuf,x_offset+1,line,0);
+		draw_string(name,x_offset+1,line,0);
+		draw_string(size,x_offset+21,line,0);
+		draw_string(date,x_offset+31,line,0);
 		line++;
 	}
 
@@ -240,6 +295,14 @@ int main(void)
 	char string_buf[128];
 	uint16_t counter;
 
+	//checking wasca signature
+	uint8_t * p8 = (uint8_t *)CS0(0x1FFFFFA);
+	if (memcmp(p8,"wasca ",6)) {
+		wasca_found = 0;
+	} else {
+		wasca_found = 1;
+	}
+
 	video_init(screenMode,false);
 
 	video_vdp2_clear_palette(0);
@@ -249,7 +312,7 @@ int main(void)
 	FSCNTRL[0] = 0xFFFF;
 
 	//load 8x16 font to VDP2 tiles
-    uint8_t * p8 = (uint8_t *)VIDEO_VDP2_NBG0_CHPNDR_START;
+    p8 = (uint8_t *)VIDEO_VDP2_NBG0_CHPNDR_START;
 	for (int i=0;i<256;i++) {
 		for (int j=0;j<128;j++) {
 			p8[i*128+j] = (PC_FACE_MODERNDOS_8X16_FONT_LIST[i][j/8]&(1<<(7-j%8))) ? 2:1; //cyan on blue
@@ -262,19 +325,14 @@ int main(void)
 
 	draw_screen();
 
-	//checking wasca signature
-	p8 = (uint8_t *)CS0(0x1FFFFFA);
-	if (memcmp(p8,"wasca ",6)) {
-		char _buf[32];
+	if (0 == wasca_found) {
+		//char _buf[32];
 		//sprintf(_buf,"id:%x %x %x %x %x %x",p8[0],p8[1],p8[2],p8[3],p8[4],p8[5]);
 		draw_dialogbox("wasca cartridge not detected!",3);
 		//draw_dialogbox(_buf,3);
 		//while (1); //freeze
-		wasca_found = 0;
-	} else {
-		wasca_found = 1;
-	}
-	
+	}	
+
 	video_vdp2_set_cycle_patterns_nbg(screenMode);
 
 	video_vdp2_set_palette_part(FONT_PALETTE, &RGB888(1, 0, 0, 0), 0, 0);//black
