@@ -157,6 +157,7 @@ int filesystem_access_scheduler() {
 			mini_printf("\r\n");
 			//now parsing the buffer
 			char * token = mini_strtok(command_buffer, " ");
+			mini_printf("DELAY2\r\n");
 			if (0 == mini_strcmp(token,"OPEN")) {
 				int handle = available_file_handle();
 				if (handle != -1) {
@@ -259,8 +260,10 @@ int filesystem_access_scheduler() {
 				}
 
 			} else if (0 == mini_strcmp(token,"LIST")) {
+				mini_printf("DELAY3\r\n");
 				char * path = mini_strtok(NULL, " ");
 				if (path != 0) {
+					mini_printf("DELAY4\r\n");
 					if (filesystem_last_dir_open) {
 						filesystem_last_dir_open = 0;
 						f_closedir(&filesystem_last_dir);
@@ -274,6 +277,7 @@ int filesystem_access_scheduler() {
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
 					}
 				} else {
+					mini_printf("DELAY5\r\n");
 					//continuing last listing
 					if (0 == filesystem_last_dir_open) {
 						mini_snprintf(reply_buffer,256,"ERR Dir not open");
@@ -283,6 +287,7 @@ int filesystem_access_scheduler() {
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
 					}
 				}
+				mini_printf("DELAY6\r\n");
 
 			} else if (0 == mini_strcmp(token,"STAT")) {
 				char * filename = mini_strtok(NULL, " ");
