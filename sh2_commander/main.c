@@ -92,8 +92,8 @@ void draw_vertical_line(int left, int top, int height, int palette) {
 
 void execute_command(char * command) {
 	int timeout;
-	//if (0==wasca_found) 
-	//	return;
+	if (0==wasca_found) 
+		return;
 	//video_vdp2_set_cycle_patterns_nbg(screenMode);
 
 	if (FSSTAT[0] != 0) {
@@ -165,8 +165,8 @@ void draw_panel(int x_offset) {
 
 	//reading files
 	//issuing first list command for root folder 
-	/*if (0 == wasca_found)
-		pReplyBuf = (uint8_t*)LWRAM(0);*/
+	if (0 == wasca_found)
+		pReplyBuf = (uint8_t*)LWRAM(0);
 	sprintf(pReplyBuf,"No Reply");
 	execute_command("LIST /");
 	int line = 2;
@@ -266,9 +266,9 @@ int main(void)
 	p8 = (uint8_t *)CS0(0x1FFFFFA);
 	if (memcmp(p8,"wasca ",6)) {
 		char _buf[32];
-		sprintf(_buf,"id:%x %x %x %x %x %x",p8[0],p8[1],p8[2],p8[3],p8[4],p8[5]);
-		//draw_dialogbox("wasca cartridge not detected!",3);
-		draw_dialogbox(_buf,3);
+		//sprintf(_buf,"id:%x %x %x %x %x %x",p8[0],p8[1],p8[2],p8[3],p8[4],p8[5]);
+		draw_dialogbox("wasca cartridge not detected!",3);
+		//draw_dialogbox(_buf,3);
 		//while (1); //freeze
 		wasca_found = 0;
 	} else {
