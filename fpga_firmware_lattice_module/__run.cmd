@@ -1,0 +1,1 @@
+copy attosoc.bit F:

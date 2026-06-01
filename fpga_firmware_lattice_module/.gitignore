@@ -1,0 +1,8 @@
+abc.history
+*_out.config
+*.bit
+*.json
+*.svf
+*.elf
+*.hex
+*.bin
