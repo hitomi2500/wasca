@@ -22,11 +22,15 @@
 int global_frame_count = 0;
 extern const uint8_t PC_FACE_MODERNDOS_8X16_FONT_LIST[256][16];
 int wasca_found = 0;
-uint16_t * FSSTAT = (uint16_t*)0x23FFFA00;
-uint16_t * FSCNTRL = (uint16_t*)0x23FFFFF2;
-uint16_t* pWascaRegs = (uint16_t*)0x23FFFFE0;
-uint8_t * pCmdBuf = (uint8_t*)0x23FFF800;
-uint8_t * pReplyBuf = (uint8_t*)0x23FFF900;
+volatile uint16_t * FSSTAT = (uint16_t*)0x23FFFA00;
+volatile uint16_t * FSCNTRL = (uint16_t*)0x23FFFFF2;
+volatile uint16_t* pWascaRegs = (uint16_t*)0x23FFFFE0;
+volatile uint8_t * pFilesysCmdBuf = (uint8_t*)0x23FFF800;
+volatile uint8_t * pFilesysReplyBuf = (uint8_t*)0x23FFF900;
+volatile uint8_t * pFilesysDataBuf = (uint8_t*)0x23FFF000;
+
+char Left_Panel_Names[64][256];
+char Right_Panel_Names[64][256];
 
 static void suite_vblank_out_handler(void *work __unused)
 {
@@ -90,48 +94,53 @@ void draw_vertical_line(int left, int top, int height, int palette) {
 	}
 }
 
-void execute_command(char * command) {
-	int timeout;
+void execute_command(char * cmd_buf, char * reply_buf, char* data_buf) {
+	volatile int timeout;
 	if (0==wasca_found) {
-		strcpy(pReplyBuf,"No cart");
+		strcpy(reply_buf,"No cart");
 		return;
 	}
-	//video_vdp2_set_cycle_patterns_nbg(screenMode);
 
 	if (FSSTAT[0] != 0) {
-		strcpy(pReplyBuf,"NotIdle");
+		strcpy(reply_buf,"NotIdle");
 		//assuring idle state
 		FSCNTRL[0] = 0;
 
 		//waiting for cart to return to idle
 		timeout = 0;
-		while ((FSSTAT[0] != 0) && (timeout < 10)) {
+		while ((FSSTAT[0] != 0) && (timeout < 100000)) {
 			FSCNTRL[0] = 0;
 			timeout++;
-			vdp2_sync();
-			vdp2_sync_wait();
+			//vdp2_sync();
+			//vdp2_sync_wait();
 		}
 	}
 
 	//sending cmd
-	strcpy(pCmdBuf,command);
+	strcpy(pFilesysCmdBuf,cmd_buf);
 	FSCNTRL[0] = 0xFFFF;
 
 	//waiting until command is executed
 	timeout = 0;
-	while ((FSSTAT[0] == 0) && (timeout < 10)) {
+	while ((FSSTAT[0] == 0) && (timeout < 100000)) {
 		timeout++;
-		vdp2_sync();
-		vdp2_sync_wait();
+		//vdp2_sync();
+		//vdp2_sync_wait();
 	}
 
-	if (timeout >= 10)
-		sprintf(pReplyBuf,"Tm%x %x %x",FSSTAT[0],FSSTAT[1],pWascaRegs[9]);
-	else
+	if (timeout >= 100000)
+		sprintf(pFilesysReplyBuf,"Tm%x %x %x",FSSTAT[0],FSSTAT[1],pWascaRegs[9]);
+	else {
 		FSCNTRL[0] = 0;
-	//going back to idle
-	//FSCNTRL[0] = 0;
-	//video_vdp2_set_cycle_patterns_cpu(screenMode);
+		pFilesysReplyBuf[255] = 0;//assuring string end
+		strcpy(reply_buf,pFilesysReplyBuf);
+		if (data_buf)
+			memcpy(data_buf,pFilesysDataBuf,2048);
+	}
+}
+
+void read_panel_files(char * path, char ** names) {
+
 }
 
 void draw_panel(int x_offset) {
@@ -168,16 +177,16 @@ void draw_panel(int x_offset) {
 	//reading files
 	//issuing first list command for root folder 
 	int line = 2;
-	char * ptr = pReplyBuf;
+	char reply_buf[256];
+	char * ptr;
 	char name[24];
 	char date[24];
 	char size[24];
 	char _buf[256];
 	int i =0;
-	sprintf(pReplyBuf,"No Reply");
-	execute_command("LIST /");
-	if (0 == memcmp("OK name=",pReplyBuf,7)) {
-		ptr = &(pReplyBuf[9]);
+	execute_command("LIST /",reply_buf,NULL);
+	if (0 == memcmp("OK name=",reply_buf,7)) {
+		ptr = &(reply_buf[9]);
 		ptr[strlen(ptr)-1] = 0;
 	}
 	if (strlen(ptr)>19) 
@@ -185,9 +194,9 @@ void draw_panel(int x_offset) {
 	strcpy(name,ptr);
 
 		sprintf(_buf,"STAT %s",name);
-		execute_command(_buf);
-		if (0 == memcmp("OK name=",pReplyBuf,7)) {
-			ptr = strstr(pReplyBuf,"size=");
+		execute_command(_buf,reply_buf,NULL);
+		if (0 == memcmp("OK name=",reply_buf,7)) {
+			ptr = strstr(reply_buf,"size=");
 			i=0;
 			while ( (ptr[6+i]!='\"') && (i<12) ) {
 				size[i] = ptr[6+i];
@@ -195,7 +204,7 @@ void draw_panel(int x_offset) {
 			}
 			size[i] = 0;
 			size[12] = 0;
-			ptr = strstr(pReplyBuf,"date=");
+			ptr = strstr(reply_buf,"date=");
 			i=0;
 			while ( (ptr[6+i]!='\"') && (i<12) ) {
 				date[i] = ptr[6+i];
@@ -205,18 +214,16 @@ void draw_panel(int x_offset) {
 			date[12] = 0;
 		}
 
-	//draw_string(pReplyBuf,x_offset+1,line,0);
 	draw_string(name,x_offset+1,line,0);
 	draw_string(size,x_offset+21,line,0);
 	draw_string(date,x_offset+31,line,0);
 
 	line++;
-	while ((strlen(pReplyBuf))&&(line<20)) {
-		sprintf(pReplyBuf,"No Reply");
-		execute_command("LIST");
-		ptr = pReplyBuf;
-		if (0 == memcmp("OK name=",pReplyBuf,7)) {
-			ptr = &(pReplyBuf[9]);
+	while ((strlen(reply_buf))&&(line<20)) {
+		execute_command("LIST",reply_buf,NULL);
+		ptr = reply_buf;
+		if (0 == memcmp("OK name=",reply_buf,7)) {
+			ptr = &(reply_buf[9]);
 			ptr[strlen(ptr)-1] = 0;
 		}
 		if (strlen(ptr)>19) 
@@ -224,9 +231,9 @@ void draw_panel(int x_offset) {
 		strcpy(name,ptr);
 
 		sprintf(_buf,"STAT %s",name);
-		execute_command(_buf);
-		if (0 == memcmp("OK name=",pReplyBuf,7)) {
-			ptr = strstr(pReplyBuf,"size=");
+		execute_command(_buf,reply_buf,NULL);
+		if (0 == memcmp("OK name=",reply_buf,7)) {
+			ptr = strstr(reply_buf,"size=");
 			i=0;
 			while ( (ptr[6+i]!='\"') && (i<12) ) {
 				size[i] = ptr[6+i];
@@ -234,7 +241,7 @@ void draw_panel(int x_offset) {
 			}
 			size[i] = 0;
 			size[12] = 0;
-			ptr = strstr(pReplyBuf,"date=");
+			ptr = strstr(reply_buf,"date=");
 			i=0;
 			while ( (ptr[6+i]!='\"') && (i<12) ) {
 				date[i] = ptr[6+i];
@@ -244,7 +251,6 @@ void draw_panel(int x_offset) {
 			date[12] = 0;
 		}
 
-		//draw_string(pReplyBuf,x_offset+1,line,0);
 		draw_string(name,x_offset+1,line,0);
 		draw_string(size,x_offset+21,line,0);
 		draw_string(date,x_offset+31,line,0);
