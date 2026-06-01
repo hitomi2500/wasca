@@ -29,8 +29,16 @@ volatile uint8_t * pFilesysCmdBuf = (uint8_t*)0x23FFF800;
 volatile uint8_t * pFilesysReplyBuf = (uint8_t*)0x23FFF900;
 volatile uint8_t * pFilesysDataBuf = (uint8_t*)0x23FFF000;
 
-char Left_Panel_Names[64][256];
-char Right_Panel_Names[64][256];
+typedef struct {
+	char name[20];
+	char size[10];
+	char date[10];
+} panel_entry_t;
+
+panel_entry_t Left_Panel_Entries[256];
+panel_entry_t Right_Panel_Entries[256];
+int Left_Panel_Count;
+int Right_Panel_Count;
 
 static void suite_vblank_out_handler(void *work __unused)
 {
@@ -139,8 +147,62 @@ void execute_command(char * cmd_buf, char * reply_buf, char* data_buf) {
 	}
 }
 
-void read_panel_files(char * path, char ** names) {
+int read_panel_files(char * path, panel_entry_t * entries) {
+	char cmd_buf[256];
+	char reply_buf[256];
+	char full_name[256];
+	int current_file = 0;
+	int end_of_folder = 0;
+	char * ptr;
+	int i;
 
+	while (0 == end_of_folder) {
+		if (0 == current_file)
+			sprintf(cmd_buf,"LIST %s",path);
+		else
+			sprintf(cmd_buf,"LIST");
+		execute_command(cmd_buf,reply_buf,NULL);
+		if (0 == memcmp("OK name=",reply_buf,7)) {
+			ptr = &(reply_buf[9]);
+			ptr[strlen(ptr)-1] = 0; //removing " at the end
+			strcpy(full_name,ptr);
+			if (strlen(ptr)>19) 
+				ptr[19] = 0;
+			if (strlen(ptr)== 0) {
+				current_file--;
+				end_of_folder = 1;
+			}
+			strcpy(entries[current_file].name,ptr);
+		} else
+			end_of_folder = 1;
+
+		if (0 == end_of_folder) {
+			sprintf(cmd_buf,"STAT %s",full_name);
+			execute_command(cmd_buf,reply_buf,NULL);
+			if (0 == memcmp("OK name=",reply_buf,7)) {
+				ptr = strstr(reply_buf,"size=");
+				i=0;
+				while ( (ptr[6+i]!='\"') && (i<9) ) {
+					entries[current_file].size[i] = ptr[6+i];
+					i++;
+				}
+				entries[current_file].size[i] = 0;
+				entries[current_file].size[9] = 0;
+				ptr = strstr(reply_buf,"date=");
+				i=0;
+				while ( (ptr[6+i]!='\"') && (i<9) ) {
+					entries[current_file].date[i] = ptr[6+i];
+					i++;
+				}
+				entries[current_file].date[i] = 0;
+				entries[current_file].date[9] = 0;
+			}
+		}
+		current_file++;
+		if (current_file >=256)
+			end_of_folder = 1;
+	}
+	return current_file;
 }
 
 void draw_panel(int x_offset) {
@@ -174,9 +236,31 @@ void draw_panel(int x_offset) {
 	draw_string("   100500",x_offset+21,4,0);
 	draw_string("02.05.96",x_offset+31,4,0);*/
 
+	char buf[256];
+
+	if (0 ==x_offset) {
+		Left_Panel_Count = read_panel_files("/",Left_Panel_Entries);
+		sprintf(buf,"s=%d",Left_Panel_Count);
+		for (int i=0;i<Left_Panel_Count;i++) {
+			draw_string(Left_Panel_Entries[i].name,x_offset+1,i+2,0);
+			//draw_string(buf,x_offset+21,i+2,0);
+			draw_string(Left_Panel_Entries[i].size,x_offset+21,i+2,0);
+			draw_string(Left_Panel_Entries[i].date,x_offset+31,i+2,0);
+		}
+	}
+	else {
+		Right_Panel_Count = read_panel_files("/",Right_Panel_Entries);
+		for (int i=0;i<Right_Panel_Count;i++) {
+			draw_string(Right_Panel_Entries[i].name,x_offset+1,i+2,0);
+			//draw_string(buf,x_offset+21,i+2,0);
+			draw_string(Right_Panel_Entries[i].size,x_offset+21,i+2,0);
+			draw_string(Right_Panel_Entries[i].date,x_offset+31,i+2,0);
+		}
+	}
+
 	//reading files
 	//issuing first list command for root folder 
-	int line = 2;
+	/*int line = 2;
 	char reply_buf[256];
 	char * ptr;
 	char name[24];
@@ -255,7 +339,7 @@ void draw_panel(int x_offset) {
 		draw_string(size,x_offset+21,line,0);
 		draw_string(date,x_offset+31,line,0);
 		line++;
-	}
+	}*/
 
 }
 
