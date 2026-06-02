@@ -58,3 +58,4 @@
 /board*.lck
 /board/*.lck
 /board/jlcpcb/
+/fpga_firmware_lattice_module/temp_seed_*/
