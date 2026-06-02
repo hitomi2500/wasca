@@ -33,6 +33,7 @@ typedef struct {
 	char name[20];
 	char size[10];
 	char date[10];
+	int dir_flag;
 } panel_entry_t;
 
 panel_entry_t Left_Panel_Entries[256];
@@ -119,8 +120,6 @@ void execute_command(char * cmd_buf, char * reply_buf, char* data_buf) {
 		while ((FSSTAT[0] != 0) && (timeout < 100000)) {
 			FSCNTRL[0] = 0;
 			timeout++;
-			//vdp2_sync();
-			//vdp2_sync_wait();
 		}
 	}
 
@@ -132,8 +131,6 @@ void execute_command(char * cmd_buf, char * reply_buf, char* data_buf) {
 	timeout = 0;
 	while ((FSSTAT[0] == 0) && (timeout < 100000)) {
 		timeout++;
-		//vdp2_sync();
-		//vdp2_sync_wait();
 	}
 
 	if (timeout >= 100000)
@@ -169,7 +166,6 @@ int read_panel_files(char * path, panel_entry_t * entries) {
 			if (strlen(ptr)>19) 
 				ptr[19] = 0;
 			if (strlen(ptr)== 0) {
-				current_file--;
 				end_of_folder = 1;
 			}
 			strcpy(entries[current_file].name,ptr);
@@ -180,14 +176,21 @@ int read_panel_files(char * path, panel_entry_t * entries) {
 			sprintf(cmd_buf,"STAT %s",full_name);
 			execute_command(cmd_buf,reply_buf,NULL);
 			if (0 == memcmp("OK name=",reply_buf,7)) {
-				ptr = strstr(reply_buf,"size=");
-				i=0;
-				while ( (ptr[6+i]!='\"') && (i<9) ) {
-					entries[current_file].size[i] = ptr[6+i];
-					i++;
+				ptr = strstr(reply_buf,"dir=");
+				if (ptr[5]=='1') {
+					//directory
+					strcpy(entries[current_file].size,"\x10SUB-DIR\x11");
+				} else {
+					//file
+					ptr = strstr(reply_buf,"size=");
+					i=0;
+					while ( (ptr[6+i]!='\"') && (i<9) ) {
+						entries[current_file].size[i] = ptr[6+i];
+						i++;
+					}
+					entries[current_file].size[i] = 0;
+					entries[current_file].size[9] = 0;
 				}
-				entries[current_file].size[i] = 0;
-				entries[current_file].size[9] = 0;
 				ptr = strstr(reply_buf,"date=");
 				i=0;
 				while ( (ptr[6+i]!='\"') && (i<9) ) {
@@ -384,6 +387,10 @@ int main(void)
 {
 	char string_buf[128];
 	uint16_t counter;
+
+	//setting mode, for debug
+	//uint16_t* pWascaRegs = (uint16_t*)0x23FFFFE0;
+	//pWascaRegs[10] = 8;
 
 	//checking wasca signature
 	uint8_t * p8 = (uint8_t *)CS0(0x1FFFFFA);

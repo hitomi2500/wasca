@@ -3,4 +3,4 @@ cp Makefile_ss Makefile
 make
 cp Makefile_cue Makefile
 make
-
+cp -f wasca_commander.ss H:/wasca_commander.ss
