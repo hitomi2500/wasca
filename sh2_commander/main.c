@@ -327,8 +327,8 @@ void execute_selected_file() {
 			sprintf(cmd_buf,"READ %d %d %d",handle,offset,2048);
 			execute_command(cmd_buf,reply_buf,(uint8_t*)(CS0(offset)));
 			if (memcmp("OK",reply_buf,2)) {
-				//sprintf(cmd_buf,"Read error at handle %d offset %x",handle,offset);
-				//draw_dialogbox(reply_buf,3);
+				sprintf(cmd_buf,"Read error at handle %d offset %x",handle,offset);
+				draw_dialogbox(reply_buf,3);
 			}
 			p = strstr(reply_buf,"data_len=");
 			p += 9;
@@ -339,8 +339,78 @@ void execute_selected_file() {
 		}
 		//sprintf(cmd_buf,"Read done at handle %d last offset %x last len %x",handle,offset,data_len);
 		//draw_dialogbox(cmd_buf,3);
+		sprintf(cmd_buf,"CLOSE %d",handle);
+		execute_command(cmd_buf,reply_buf,NULL);
 		bios_execute();
 	}
+}
+
+void copy_selected_file() {
+	char cmd_buf[256];
+	char reply_buf[256];
+	char data_buffer[2048];
+	int src_handle;
+	int dst_handle;
+	int offset;
+	int data_len;
+	char * p;
+	//copy file
+	if (strcmp(Panel_Paths[0],Panel_Paths[1]) == 0) {
+		draw_dialogbox("Cannot copy to same folder",3);
+		return;
+	}
+	//open source file
+	sprintf(cmd_buf,"OPEN %s%s r",Panel_Paths[Current_Panel],Panel_Entries[Current_Panel][Current_Panel_File].name);
+	execute_command(cmd_buf,reply_buf,NULL);
+	if (memcmp("OK",reply_buf,2)) {
+		draw_dialogbox("Source open error",3);
+		return;
+	}
+	p = strstr(reply_buf,"handle=");
+	p += 7;
+	src_handle = atoi(p);
+
+	//open destination file
+	sprintf(cmd_buf,"OPEN %s%s w",Panel_Paths[Current_Panel ? 0 : 1],Panel_Entries[Current_Panel][Current_Panel_File].name);
+		execute_command(cmd_buf,reply_buf,NULL);
+	if (memcmp("OK",reply_buf,2)) {
+		draw_dialogbox("Destination open error",3);
+		return;
+	}
+	p = strstr(reply_buf,"handle=");
+	p += 7;
+	dst_handle = atoi(p);
+	
+	draw_dialogbox("Copying...",3);
+
+	//execute read until either error or eof
+	offset = 0;
+	data_len = 2048;
+	while (2048 == data_len) {
+		sprintf(cmd_buf,"READ %d %d %d",src_handle,offset,2048);
+		execute_command(cmd_buf,reply_buf,data_buffer);
+		if (memcmp("OK",reply_buf,2)) {
+			sprintf(cmd_buf,"Read error at handle %d offset %x",src_handle,offset);
+			draw_dialogbox(reply_buf,3);
+		}
+		p = strstr(reply_buf,"data_len=");
+		p += 9;
+		data_len = atoi(p);
+		//using the same data buffer, just writing it back
+		sprintf(cmd_buf,"WRITE %d %d %d",dst_handle,offset,data_len);
+		execute_command(cmd_buf,reply_buf,data_buffer);
+		if (memcmp("OK",reply_buf,2)) {
+			sprintf(cmd_buf,"Write error at handle %d offset %x",dst_handle,offset);
+			draw_dialogbox(reply_buf,3);
+		}
+		offset += data_len;				
+	}
+
+	sprintf(cmd_buf,"CLOSE %d",src_handle);
+	execute_command(cmd_buf,reply_buf,NULL);
+	sprintf(cmd_buf,"CLOSE %d",dst_handle);
+	execute_command(cmd_buf,reply_buf,NULL);
+	draw_dialogbox("Copy complete",3);
 }
 
 void enter_selected_folder() {
@@ -480,16 +550,19 @@ int main(void)
 		}
 		if ((controller.pressed.button.b)) {
 			wait_for_key_unpress();
+			copy_selected_file();
+			//update_required = 1;
 		}
 		if ((controller.pressed.button.c)) {
 			wait_for_key_unpress();
+			//execute file / open dir
 			if (Panel_Entries[Current_Panel][Current_Panel_File].dir_flag) {
 				enter_selected_folder();
 				update_required = 1;			
 			} else if (strstr(Panel_Entries[Current_Panel][Current_Panel_File].name,".ss") != 0)
 				execute_selected_file();
-			else
-				draw_dialogbox("wrong file",3);
+			//else
+			//	draw_dialogbox("wrong file",3);
 		}
 
 		if (update_required) {
