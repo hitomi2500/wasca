@@ -155,6 +155,13 @@ int read_panel_files(char * path, panel_entry_t * entries) {
 	char * ptr;
 	int i;
 
+	for (i=0;i<256;i++) {
+		entries[i].name[0] = 0;
+		entries[i].date[0] = 0;
+		entries[i].size[0] = 0;
+		entries[i].dir_flag = 0;
+	}
+
 	while (0 == end_of_folder) {
 		if (0 == current_file)
 			sprintf(cmd_buf,"LIST %s",path);
@@ -178,9 +185,11 @@ int read_panel_files(char * path, panel_entry_t * entries) {
 				ptr = strstr(reply_buf,"dir=");
 				if (ptr[5]=='1') {
 					//directory
+					entries[current_file].dir_flag = 1;
 					strcpy(entries[current_file].size,"\x10SUB-DIR\x11");
 				} else {
 					//file
+					entries[current_file].dir_flag = 0;
 					ptr = strstr(reply_buf,"size=");
 					i=0;
 					while ( (ptr[6+i]!='\"') && (i<9) ) {
@@ -209,7 +218,8 @@ int read_panel_files(char * path, panel_entry_t * entries) {
 
 void draw_panel(int x_offset) {
 	char buf[256];
-
+	int panel_index = (x_offset) ? 1 : 0;
+	
 	draw_double_border(x_offset,0,40,28,0);
 	fill_rect(x_offset+1,1,38,26,0);
 	//status string divider
@@ -228,12 +238,12 @@ void draw_panel(int x_offset) {
 	draw_string("Size",x_offset+24,1,4);
 	draw_string("Date",x_offset+33,1,4);
 	//panel path
-	draw_string(" 0:/ ",x_offset+18,0,2);
+	sprintf(buf," %.30s ",Panel_Paths[panel_index]);
+	draw_string(buf,x_offset+(40-strlen(buf))/2,0,2);
 
 	char name_buf[20];
 	
 	//files
-	int panel_index = (x_offset) ? 1 : 0;
 	Panel_Entries_Count[panel_index] = read_panel_files(Panel_Paths[panel_index],Panel_Entries[panel_index]);
 	for (int i=0;i<Panel_Entries_Count[0];i++) {
 		memcpy(name_buf,Panel_Entries[panel_index][i].name,20);
@@ -293,13 +303,13 @@ void draw_dialogbox(char * string, int palette) {
 }
 
 void execute_selected_file() {
-	char cmd_buf[80];
-	char reply_buf[80];
+	char cmd_buf[256];
+	char reply_buf[256];
 	int handle;
 	int offset;
 	int data_len;
 	char * p;
-	sprintf(cmd_buf,"OPEN %s r",Panel_Entries[Current_Panel][Current_Panel_File].name);
+	sprintf(cmd_buf,"OPEN %s%s r",Panel_Paths[Current_Panel],Panel_Entries[Current_Panel][Current_Panel_File].name);
 
 	//open file
 	execute_command(cmd_buf,reply_buf,NULL);
@@ -332,6 +342,15 @@ void execute_selected_file() {
 		bios_execute();
 	}
 }
+
+void enter_selected_folder() {
+	char buf[256];
+	sprintf(buf, "%s%s/",Panel_Paths[Current_Panel],Panel_Entries[Current_Panel][Current_Panel_File].name);
+	strcpy(Panel_Paths[Current_Panel],buf);
+	draw_dialogbox(buf,3);
+	Current_Panel_File = 0;
+}
+
 
 int main(void)
 {
@@ -436,22 +455,22 @@ int main(void)
 			wait_for_key_unpress();
 			Current_Panel_File--;
 			if (Current_Panel_File < 0)
-				Current_Panel_File = Panel_Entries_Count[Current_Panel] - 1;				
+				Current_Panel_File = Panel_Entries_Count[Current_Panel] - 2;				
 			update_required = 1;
 		}
 		if(controller.pressed.button.down) {
 			wait_for_key_unpress();
 			Current_Panel_File++;
-			if (Current_Panel_File >= Panel_Entries_Count[Current_Panel])
+			if (Current_Panel_File >= (Panel_Entries_Count[Current_Panel]-1))
 				Current_Panel_File = 0;	
 			update_required = 1;			
 		}
-		if(controller.pressed.button.left) {
+		if ((controller.pressed.button.left) || (controller.pressed.button.l)) {
 			wait_for_key_unpress();
 			Current_Panel = 0;
 			update_required = 1;			
 		}
-		if(controller.pressed.button.right) {
+		if ((controller.pressed.button.right) || (controller.pressed.button.r))  {
 			wait_for_key_unpress();
 			Current_Panel = 1;
 			update_required = 1;			
@@ -464,7 +483,13 @@ int main(void)
 		}
 		if ((controller.pressed.button.c)) {
 			wait_for_key_unpress();
-			execute_selected_file();
+			if (Panel_Entries[Current_Panel][Current_Panel_File].dir_flag) {
+				enter_selected_folder();
+				update_required = 1;			
+			} else if (strstr(Panel_Entries[Current_Panel][Current_Panel_File].name,".ss") != 0)
+				execute_selected_file();
+			else
+				draw_dialogbox("wrong file",3);
 		}
 
 		if (update_required) {
