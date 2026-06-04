@@ -32,7 +32,7 @@ firmware.bin: firmware.elf
 firmware.hex: firmware.bin
 	python3 makehex.py $^ 24576 > $@
 
-firmware.rv: firmware.bin
+wasca.rv: firmware.bin
 	cp $< $@
 
 attosoc_tb.vvp: hdl/attosoc_tb.v hdl/sd_fake.v hdl/sd_fake_rom.v hdl/attosoc.v hdl/picorv32.v hdl/pulsesync.v hdl/sdram_bridge.v hdl/simpleuart.v hdl/sniff_fifo.v hdl/workram.v hdl/sd/sddma_mm2s.v hdl/sd/sddma_rxgears.v hdl/sd/sddma_txgears.v hdl/sd/sddma_s2mm.v hdl/sd/sddma.v hdl/sd/sdfifo.v hdl/sd/sdskid.v hdl/sd/sdio.v hdl/sd/sdwb.v hdl/sd/sdckgen.v hdl/sd/sdcmd.v hdl/sd/sdrxframe.v hdl/sd/sdtxframe.v hdl/sd/sdfrontend.v hdl/sd/sdio_top.v

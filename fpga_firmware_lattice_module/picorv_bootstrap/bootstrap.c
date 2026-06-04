@@ -830,12 +830,12 @@ int main() {
 	}
 
 	//if firmware.hex is present on SD, launch it instead of bootstrap
-	if (FR_OK == f_stat("firmware.rv", &_filinfo))
+	if (FR_OK == f_stat("wasca.rv", &_filinfo))
 	{
 		LED = LED_EXT_RED;//restoring red
 		int size = _filinfo.fsize;
 		int readen;
-		mini_printf("firmware.rv found, %d bytes, launching...\r\n",size);
+		mini_printf("wasca.rv found, %d bytes, launching...\r\n",size);
 		//load new firmware to SDRAM2
 		offset = 0;
 		error = f_open(&_file,_filinfo.fname,FA_READ);
