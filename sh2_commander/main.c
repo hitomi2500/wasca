@@ -36,9 +36,9 @@ typedef struct {
 	int dir_flag;
 } panel_entry_t;
 
-panel_entry_t Left_Panel_Entries[256];
-panel_entry_t Right_Panel_Entries[256];
+panel_entry_t Panel_Entries[2][256];
 int Panel_Entries_Count[2];
+char Panel_Paths[2][256];
 
 int Current_Panel = 0;
 int Current_Panel_File = 0;
@@ -233,46 +233,26 @@ void draw_panel(int x_offset) {
 	char name_buf[20];
 	
 	//files
-	if (0 ==x_offset) {
-		Panel_Entries_Count[0] = read_panel_files("/",Left_Panel_Entries);
-		for (int i=0;i<Panel_Entries_Count[0];i++) {
-			memcpy(name_buf,Left_Panel_Entries[i].name,20);
-			if (strlen(name_buf)>19) 
-				name_buf[19] = 0;
-			draw_string(name_buf,x_offset+1,i+2,0);
-			draw_string(Left_Panel_Entries[i].size,x_offset+21,i+2,0);
-			draw_string(Left_Panel_Entries[i].date,x_offset+31,i+2,0);
-		}
-	}
-	else {
-		Panel_Entries_Count[1] = read_panel_files("/",Right_Panel_Entries);
-		for (int i=0;i<Panel_Entries_Count[1];i++) {
-			memcpy(name_buf,Right_Panel_Entries[i].name,20);
-			if (strlen(name_buf)>19) 
-				name_buf[19] = 0;
-			draw_string(name_buf,x_offset+1,i+2,0);
-			draw_string(Right_Panel_Entries[i].size,x_offset+21,i+2,0);
-			draw_string(Right_Panel_Entries[i].date,x_offset+31,i+2,0);
-		}
+	int panel_index = (x_offset) ? 1 : 0;
+	Panel_Entries_Count[panel_index] = read_panel_files(Panel_Paths[panel_index],Panel_Entries[panel_index]);
+	for (int i=0;i<Panel_Entries_Count[0];i++) {
+		memcpy(name_buf,Panel_Entries[panel_index][i].name,20);
+		if (strlen(name_buf)>19) 
+			name_buf[19] = 0;
+		draw_string(name_buf,x_offset+1,i+2,0);
+		draw_string(Panel_Entries[panel_index][i].size,x_offset+21,i+2,0);
+		draw_string(Panel_Entries[panel_index][i].date,x_offset+31,i+2,0);
 	}
 
 	//menu string
-	if ( (0==Current_Panel) && (0 ==x_offset) ){
+	if ( (Current_Panel == panel_index) ){
 		draw_string("\xb3                  \xb3         \xb3        ",x_offset+1,Current_Panel_File+2,5);
-		memcpy(name_buf,Left_Panel_Entries[Current_Panel_File].name,20);
+		memcpy(name_buf,Panel_Entries[panel_index][Current_Panel_File].name,20);
 			if (strlen(name_buf)>19) 
 				name_buf[19] = 0;
 		draw_string(name_buf,x_offset+1,Current_Panel_File+2,5);
-		draw_string(Left_Panel_Entries[Current_Panel_File].size,x_offset+21,Current_Panel_File+2,5);
-		draw_string(Left_Panel_Entries[Current_Panel_File].date,x_offset+31,Current_Panel_File+2,5);
-	} else if ( (0!=Current_Panel) && (0!=x_offset) ) {
-		draw_string("\xb3                  \xb3         \xb3        ",x_offset+1,Current_Panel_File+2,5);
-		memcpy(name_buf,Right_Panel_Entries[Current_Panel_File].name,20);
-			if (strlen(name_buf)>19) 
-				name_buf[19] = 0;
-		draw_string(name_buf,x_offset+1,Current_Panel_File+2,5);
-		draw_string(Right_Panel_Entries[Current_Panel_File].size,x_offset+21,Current_Panel_File+2,5);
-		draw_string(Right_Panel_Entries[Current_Panel_File].date,x_offset+31,Current_Panel_File+2,5);
+		draw_string(Panel_Entries[panel_index][Current_Panel_File].size,x_offset+21,Current_Panel_File+2,5);
+		draw_string(Panel_Entries[panel_index][Current_Panel_File].date,x_offset+31,Current_Panel_File+2,5);
 	}
 }
 
@@ -319,11 +299,7 @@ void execute_selected_file() {
 	int offset;
 	int data_len;
 	char * p;
-	if (0 == Current_Panel) {
-		sprintf(cmd_buf,"OPEN %s r",Left_Panel_Entries[Current_Panel_File].name);
-	} else {
-		sprintf(cmd_buf,"OPEN %s r",Right_Panel_Entries[Current_Panel_File].name);
-	}
+	sprintf(cmd_buf,"OPEN %s r",Panel_Entries[Current_Panel][Current_Panel_File].name);
 
 	//open file
 	execute_command(cmd_buf,reply_buf,NULL);
@@ -361,6 +337,8 @@ int main(void)
 {
 	char string_buf[128];
 	uint16_t counter;
+	strcpy(Panel_Paths[0],"/");
+	strcpy(Panel_Paths[1],"/");
 
 	//setting mode, for debug
 	//uint16_t* pWascaRegs = (uint16_t*)0x23FFFFE0;
