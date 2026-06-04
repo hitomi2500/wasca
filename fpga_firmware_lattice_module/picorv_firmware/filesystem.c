@@ -164,6 +164,7 @@ int filesystem_access_scheduler() {
 					//open file, args : path and mode
 					char * filename = mini_strtok(NULL, " ");
 					char * mode = mini_strtok(NULL, " ");
+					int wrong_mode = 0;
 					if (0 == mini_strcmp(mode,"r")) {
 						res = f_open(&(open_files[handle]),filename,FA_READ);
 					} else if (0 == mini_strcmp(mode,"r+")) {
@@ -181,9 +182,12 @@ int filesystem_access_scheduler() {
 					} else if (0 == mini_strcmp(mode,"w+x")) {
 						res = f_open(&(open_files[handle]),filename,FA_CREATE_NEW | FA_WRITE | FA_READ);
 					} else {
-						res = -1;
+						wrong_mode = 1;
 					}
-					if (res!= FR_OK) {
+					if (wrong_mode) {
+						mini_snprintf(reply_buffer,256,"ERR unknown access mode");
+						open_files[handle].obj.fs = 0;
+					} else if (res!= FR_OK) {
 						mini_snprintf(reply_buffer,256,"ERR file open error");
 						open_files[handle].obj.fs = 0;
 					} else {
@@ -220,7 +224,7 @@ int filesystem_access_scheduler() {
 					mini_snprintf(reply_buffer,256,"OK data_len=%d",readen);
 					//copy buffer to SDRAM
 					for (int i=0;i<1024;i++)
-						pSDRAM[0xfffc00+i] =  buffer16[i];
+						pSDRAM[0xfff800+i] =  buffer16[i];
 				}
 
 			} else if (0 == mini_strcmp(token,"WRITE")) {
@@ -234,7 +238,7 @@ int filesystem_access_scheduler() {
 				} else {
 					//copy SDRAM to buffer
 					for (int i=0;i<1024;i++)
-						buffer16[i] = pSDRAM[0xfffc00+i];
+						buffer16[i] = pSDRAM[0xfff800+i];
 					if (FR_OK == f_lseek(&open_files[handle],offset)) {
 						f_write(&open_files[handle],buffer,length,&readen);
 						mini_snprintf(reply_buffer,256,"OK data_len=%d",readen);
