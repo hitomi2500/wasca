@@ -30,7 +30,7 @@ volatile uint8_t * pFilesysReplyBuf = (uint8_t*)0x23FFF900;
 volatile uint8_t * pFilesysDataBuf = (uint8_t*)0x23FFF000;
 
 typedef struct {
-	char name[20];
+	char name[64];
 	char size[10];
 	char date[10];
 	int dir_flag;
@@ -150,7 +150,6 @@ void execute_command(char * cmd_buf, char * reply_buf, char* data_buf) {
 int read_panel_files(char * path, panel_entry_t * entries) {
 	char cmd_buf[256];
 	char reply_buf[256];
-	char full_name[256];
 	int current_file = 0;
 	int end_of_folder = 0;
 	char * ptr;
@@ -165,9 +164,6 @@ int read_panel_files(char * path, panel_entry_t * entries) {
 		if (0 == memcmp("OK name=",reply_buf,7)) {
 			ptr = &(reply_buf[9]);
 			ptr[strlen(ptr)-1] = 0; //removing " at the end
-			strcpy(full_name,ptr);
-			if (strlen(ptr)>19) 
-				ptr[19] = 0;
 			if (strlen(ptr)== 0) {
 				end_of_folder = 1;
 			}
@@ -176,7 +172,7 @@ int read_panel_files(char * path, panel_entry_t * entries) {
 			end_of_folder = 1;
 
 		if (0 == end_of_folder) {
-			sprintf(cmd_buf,"STAT %s",full_name);
+			sprintf(cmd_buf,"STAT %s",entries[current_file].name);
 			execute_command(cmd_buf,reply_buf,NULL);
 			if (0 == memcmp("OK name=",reply_buf,7)) {
 				ptr = strstr(reply_buf,"dir=");
@@ -234,12 +230,16 @@ void draw_panel(int x_offset) {
 	//panel path
 	draw_string(" 0:/ ",x_offset+18,0,2);
 
+	char name_buf[20];
 	
 	//files
 	if (0 ==x_offset) {
 		Panel_Entries_Count[0] = read_panel_files("/",Left_Panel_Entries);
 		for (int i=0;i<Panel_Entries_Count[0];i++) {
-			draw_string(Left_Panel_Entries[i].name,x_offset+1,i+2,0);
+			memcpy(name_buf,Left_Panel_Entries[i].name,20);
+			if (strlen(name_buf)>19) 
+				name_buf[19] = 0;
+			draw_string(name_buf,x_offset+1,i+2,0);
 			draw_string(Left_Panel_Entries[i].size,x_offset+21,i+2,0);
 			draw_string(Left_Panel_Entries[i].date,x_offset+31,i+2,0);
 		}
@@ -247,7 +247,10 @@ void draw_panel(int x_offset) {
 	else {
 		Panel_Entries_Count[1] = read_panel_files("/",Right_Panel_Entries);
 		for (int i=0;i<Panel_Entries_Count[1];i++) {
-			draw_string(Right_Panel_Entries[i].name,x_offset+1,i+2,0);
+			memcpy(name_buf,Right_Panel_Entries[i].name,20);
+			if (strlen(name_buf)>19) 
+				name_buf[19] = 0;
+			draw_string(name_buf,x_offset+1,i+2,0);
 			draw_string(Right_Panel_Entries[i].size,x_offset+21,i+2,0);
 			draw_string(Right_Panel_Entries[i].date,x_offset+31,i+2,0);
 		}
@@ -256,12 +259,18 @@ void draw_panel(int x_offset) {
 	//menu string
 	if ( (0==Current_Panel) && (0 ==x_offset) ){
 		draw_string("\xb3                  \xb3         \xb3        ",x_offset+1,Current_Panel_File+2,5);
-		draw_string(Left_Panel_Entries[Current_Panel_File].name,x_offset+1,Current_Panel_File+2,5);
+		memcpy(name_buf,Left_Panel_Entries[Current_Panel_File].name,20);
+			if (strlen(name_buf)>19) 
+				name_buf[19] = 0;
+		draw_string(name_buf,x_offset+1,Current_Panel_File+2,5);
 		draw_string(Left_Panel_Entries[Current_Panel_File].size,x_offset+21,Current_Panel_File+2,5);
 		draw_string(Left_Panel_Entries[Current_Panel_File].date,x_offset+31,Current_Panel_File+2,5);
 	} else if ( (0!=Current_Panel) && (0!=x_offset) ) {
 		draw_string("\xb3                  \xb3         \xb3        ",x_offset+1,Current_Panel_File+2,5);
-		draw_string(Right_Panel_Entries[Current_Panel_File].name,x_offset+1,Current_Panel_File+2,5);
+		memcpy(name_buf,Right_Panel_Entries[Current_Panel_File].name,20);
+			if (strlen(name_buf)>19) 
+				name_buf[19] = 0;
+		draw_string(name_buf,x_offset+1,Current_Panel_File+2,5);
 		draw_string(Right_Panel_Entries[Current_Panel_File].size,x_offset+21,Current_Panel_File+2,5);
 		draw_string(Right_Panel_Entries[Current_Panel_File].date,x_offset+31,Current_Panel_File+2,5);
 	}
@@ -303,6 +312,50 @@ void draw_dialogbox(char * string, int palette) {
 	draw_string(string,40-len/2+2,14,palette);
 }
 
+void execute_selected_file() {
+	char cmd_buf[80];
+	char reply_buf[80];
+	int handle;
+	int offset;
+	int data_len;
+	char * p;
+	if (0 == Current_Panel) {
+		sprintf(cmd_buf,"OPEN %s r",Left_Panel_Entries[Current_Panel_File].name);
+	} else {
+		sprintf(cmd_buf,"OPEN %s r",Right_Panel_Entries[Current_Panel_File].name);
+	}
+
+	//open file
+	execute_command(cmd_buf,reply_buf,NULL);
+	if (memcmp("OK",reply_buf,2)) {
+		draw_dialogbox("Open error",3);
+	} else {
+		draw_dialogbox("Loading...",3);
+		p = strstr(reply_buf,"handle=");
+		p += 7;
+		handle = atoi(p);
+		//execute read until either error or eof
+		offset = 0;
+		data_len = 2048;
+		while (2048 == data_len) {
+			sprintf(cmd_buf,"READ %d %d %d",handle,offset,2048);
+			execute_command(cmd_buf,reply_buf,(uint8_t*)(CS0(offset)));
+			if (memcmp("OK",reply_buf,2)) {
+				//sprintf(cmd_buf,"Read error at handle %d offset %x",handle,offset);
+				//draw_dialogbox(reply_buf,3);
+			}
+			p = strstr(reply_buf,"data_len=");
+			p += 9;
+			data_len = atoi(p);
+			//sprintf(cmd_buf,"d=%d, r=%s",data_len,reply_buf);
+			//draw_dialogbox(reply_buf,3);
+			offset += data_len;				
+		}
+		//sprintf(cmd_buf,"Read done at handle %d last offset %x last len %x",handle,offset,data_len);
+		//draw_dialogbox(cmd_buf,3);
+		bios_execute();
+	}
+}
 
 int main(void)
 {
@@ -390,8 +443,6 @@ int main(void)
 	}
 	
 	int update_required = 0;
-	int go_reboot = 0;
-	int go_multiplayer = 0;
 
 	//DrawString("Text", 100, 100, FONT_WHITE);
 	
@@ -429,25 +480,23 @@ int main(void)
 		}
 		if ((controller.pressed.button.a)) {
 			wait_for_key_unpress();
-			go_reboot = 1;
 		}
 		if ((controller.pressed.button.b)) {
 			wait_for_key_unpress();
-			go_multiplayer = 1;
 		}
 		if ((controller.pressed.button.c)) {
 			wait_for_key_unpress();
-			go_multiplayer = 1;
+			execute_selected_file();
 		}
 
 		if (update_required) {
 			draw_screen();
 		}
 
-		if (go_reboot)
+		/*if (go_reboot)
 			bios_execute();
 		else if (go_multiplayer)
-			bios_cd_player_execute();
+			bios_cd_player_execute();*/
 		
 		vdp2_sync();
 		vdp2_sync_wait();
