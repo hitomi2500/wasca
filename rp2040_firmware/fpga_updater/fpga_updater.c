@@ -25,6 +25,7 @@
 
 #include "bsp/board_api.h"
 #include "tusb.h"
+#include "pins.h"
 #include <stdarg.h>
 #include "pico/stdlib.h"
 
@@ -49,14 +50,6 @@ void led_blinking_task(void);
 void cdc_task(void);
 int log_printf(const char *fmt, ...);
 
-#define QSPI_CLK_PIN 7
-#define QSPI_CS_PIN 3
-#define QSPI_D0_PIN 5
-#define QSPI_D1_PIN 11
-#define QSPI_D2_PIN 1
-#define QSPI_D3_PIN 12
-#define PROGRAMN_PIN 18
-
 /*------------- MAIN -------------*/
 int main(void) {
   board_init();
@@ -75,18 +68,17 @@ int main(void) {
   gpio_init(QSPI_D2_PIN);
   gpio_init(QSPI_D3_PIN);
   gpio_init(PROGRAMN_PIN);
-  gpio_set_dir(QSPI_CLK_PIN, GPIO_OUT);
-  gpio_set_dir(QSPI_CS_PIN, GPIO_OUT);
-  gpio_set_dir(QSPI_D0_PIN, GPIO_OUT);
+  gpio_set_dir(QSPI_CLK_PIN, GPIO_IN);
+  gpio_set_dir(QSPI_CS_PIN, GPIO_IN);
+  gpio_set_dir(QSPI_D0_PIN, GPIO_IN);
   gpio_set_dir(QSPI_D1_PIN, GPIO_IN);
   gpio_set_dir(QSPI_D2_PIN, GPIO_IN);
   gpio_set_dir(QSPI_D3_PIN, GPIO_IN);
-  gpio_set_dir(PROGRAMN_PIN, GPIO_IN);
+  gpio_set_dir(PROGRAMN_PIN, GPIO_OUT);
   gpio_put(QSPI_CLK_PIN,0);
   gpio_put(QSPI_CS_PIN,0);
   gpio_put(QSPI_D0_PIN,0);
-  gpio_put(QSPI_D1_PIN,0);
-  gpio_put(PROGRAMN_PIN,0);
+  gpio_put(PROGRAMN_PIN,1);
 
   if (board_init_after_tusb) {
     board_init_after_tusb();
@@ -94,7 +86,7 @@ int main(void) {
 
   while (1) {
     tud_task(); // tinyusb device task
-    led_blinking_task();
+    //led_blinking_task();
 
     cdc_task();
   }
@@ -205,8 +197,4 @@ log_printf(const char *fmt, ...)
   }
 
 	return ret;
-}
-
-void write_flash_page(uint32_t sector, uint8_t* buffer) {
-  //gpio_put(LED_PIN, state ? LED_STATE_ON : (1 - LED_STATE_ON));
 }

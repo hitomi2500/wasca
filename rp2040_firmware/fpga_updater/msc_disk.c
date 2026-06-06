@@ -25,6 +25,9 @@
 
 #include "bsp/board_api.h"
 #include "tusb.h"
+#include "pins.h"
+#include "pico/stdlib.h"
+
 
 extern int log_printf(const char *fmt, ...);
 extern void w25q_page_program(uint32_t addr, const uint8_t *data, uint16_t len);
@@ -254,13 +257,18 @@ int32_t tud_msc_write10_cb(uint8_t lun, uint32_t lba, uint32_t offset, uint8_t* 
   }
 
   if ( (attosoc_bit_starting_lba) && ( lba >= attosoc_bit_starting_lba) ) {
-    int address = lba * DISK_BLOCK_SIZE;
+    int address = (lba-attosoc_bit_starting_lba) * DISK_BLOCK_SIZE;
+    //setup pins
+    gpio_put(PROGRAMN_PIN,0);//reset fpga
+    gpio_set_dir(QSPI_CLK_PIN, GPIO_OUT);
+    gpio_set_dir(QSPI_CS_PIN, GPIO_OUT);
+    gpio_set_dir(QSPI_D0_PIN, GPIO_OUT);
     //erase in necessary
-    if (lba % 4096 == 0)
+    if (address % 4096 == 0)
       w25q_sector_erase_4k(address);
     //write
     w25q_page_program(address,buffer,256);
-    w25q_page_program(address,&(buffer[256]),256);
+    w25q_page_program(address+256,&(buffer[256]),256);
     //debug print
     if ((lba-attosoc_bit_starting_lba)%100 == 0)
       log_printf("writing attosoc.bit sector %d lba %d\r\n",lba-attosoc_bit_starting_lba,lba);

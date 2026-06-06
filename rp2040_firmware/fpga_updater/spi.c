@@ -1,13 +1,7 @@
 #include "pico/stdlib.h"
 
 // Replace these macros with your GPIO writes/reads
-#define QSPI_CLK_PIN 7
-#define QSPI_CS_PIN 3
-#define QSPI_D0_PIN 5
-#define QSPI_D1_PIN 11
-#define QSPI_D2_PIN 1
-#define QSPI_D3_PIN 12
-#define PROGRAMN_PIN 18
+#include "pins.h"
 
 #define CS_LOW()     gpio_put(QSPI_CS_PIN,0)
 #define CS_HIGH()    gpio_put(QSPI_CS_PIN,1)
@@ -19,6 +13,9 @@
 
 static void spi_delay(void) {
     // small delay, or NOPs
+    volatile int i=0;
+    for (i=0;i<10;i++)
+        asm ("nop");
 }
 
 static uint8_t spi_txrx(uint8_t v) {
@@ -48,6 +45,14 @@ static void w25q_write_enable(void) {
     CS_LOW();
     spi_txrx(0x06);          // Write Enable
     CS_HIGH();
+    spi_delay();
+}
+
+static void w25q_write_disable(void) {
+    CS_LOW();
+    spi_txrx(0x04);          // Write Disable
+    CS_HIGH();
+    spi_delay();
 }
 
 static uint8_t w25q_read_status1(void) {
@@ -57,6 +62,7 @@ static uint8_t w25q_read_status1(void) {
     spi_txrx(0x05);          // Read Status Register-1
     s = spi_txrx(0xFF);
     CS_HIGH();
+    spi_delay();
 
     return s;
 }
@@ -64,6 +70,7 @@ static uint8_t w25q_read_status1(void) {
 static void w25q_wait_busy(void) {
     while (w25q_read_status1() & 0x01) {
         // WIP/BUSY bit
+        spi_delay();
     }
 }
 
@@ -88,7 +95,12 @@ void w25q_page_program(uint32_t addr, const uint8_t *data, uint16_t len) {
 
     CS_HIGH();
 
+    for (int i=0;i<10;i++)
+        spi_delay();
+
     w25q_wait_busy();
+
+    w25q_write_disable();
 }
 
 void w25q_sector_erase_4k(uint32_t addr) {
@@ -101,5 +113,10 @@ void w25q_sector_erase_4k(uint32_t addr) {
     spi_txrx(addr & 0xFF);
     CS_HIGH();
 
+    for (int i=0;i<10;i++)
+        spi_delay();
+
     w25q_wait_busy();
+
+    w25q_write_disable();
 }
