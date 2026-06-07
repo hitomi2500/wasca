@@ -185,16 +185,19 @@ int filesystem_access_scheduler() {
 						wrong_mode = 1;
 					}
 					if (wrong_mode) {
-						mini_snprintf(reply_buffer,256,"ERR unknown access mode");
+						mini_snprintf(reply_buffer,256,"ERR WRONG MODE");
+						open_files[handle].obj.fs = 0;
+					} else if (res == FR_NO_FILE){
+						mini_snprintf(reply_buffer,256,"ERR NO FILE");
 						open_files[handle].obj.fs = 0;
 					} else if (res!= FR_OK) {
-						mini_snprintf(reply_buffer,256,"ERR file open error");
+						mini_snprintf(reply_buffer,256,"ERR UNKNOWN");
 						open_files[handle].obj.fs = 0;
 					} else {
 						mini_snprintf(reply_buffer,256,"OK handle=%d",handle);
 					}
 				} else {
-						mini_snprintf(reply_buffer,256,"ERR Too many files");
+						mini_snprintf(reply_buffer,256,"ERR TOO MANY FILES");
 						
 				}
 
@@ -208,16 +211,16 @@ int filesystem_access_scheduler() {
 						open_files[handle].obj.fs = 0;
 						mini_snprintf(reply_buffer,256,"OK");
 					} else 
-						mini_snprintf(reply_buffer,256,"ERR File not open");
+						mini_snprintf(reply_buffer,256,"ERR WRONG HANDLE");
 
 			} else if (0 == mini_strcmp(token,"READ")) {
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				int offset = mini_atoi(mini_strtok(NULL, " "));
 				int length = mini_atoi(mini_strtok(NULL, " "));
 				if ( (length <= 0) || (length > 2048) )  {
-					mini_snprintf(reply_buffer,256,"ERR Invalid lenght");
+					mini_snprintf(reply_buffer,256,"ERR WRONG LENGTH");
 				} else if (open_files[handle].obj.fs == 0) {
-					mini_snprintf(reply_buffer,256,"ERR File not open");
+					mini_snprintf(reply_buffer,256,"ERR WRONG HANDLE");
 				} else {
 					f_lseek(&open_files[handle],offset);
 					f_read(&open_files[handle],buffer,length,&readen);

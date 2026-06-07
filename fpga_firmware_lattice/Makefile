@@ -1,5 +1,5 @@
 TRELLIS?=/usr/share/trellis
-BOOTSTRAP_SOURCES := picorv_bootstrap/start.S picorv_bootstrap/bootstrap.c picorv_bootstrap/filesystem.c picorv_bootstrap/stdlib_tiny.c picorv_bootstrap/mini-printf.c picorv_bootstrap/stdlib_tiny_asm.S fatfs/ff.c fatfs/diskio.c fatfs/ffsystem.c fatfs/ffunicode.c fatfs/sdiodrv.c
+BOOTSTRAP_SOURCES := picorv_bootstrap/start.S picorv_bootstrap/bootstrap.c picorv_bootstrap/stdlib_tiny.c picorv_bootstrap/mini-printf.c picorv_bootstrap/stdlib_tiny_asm.S fatfs/ff.c fatfs/diskio.c fatfs/ffsystem.c fatfs/ffunicode.c fatfs/sdiodrv.c
 BOOTSTRAP_OBJECTS := $(BOOTSTRAP_SOURCES:%.c=%.o)
 BOOTSTRAP_OBJECTS := $(BOOTSTRAP_OBJECTS:%.S=%.o)
 FIRMWARE_SOURCES := picorv_firmware/start.S picorv_firmware/firmware.c picorv_firmware/filesystem.c picorv_firmware/stdlib_tiny.c picorv_firmware/mini-printf.c picorv_firmware/stdlib_tiny_asm.S fatfs/ff.c fatfs/diskio.c fatfs/ffsystem.c fatfs/ffunicode.c fatfs/sdiodrv.c
