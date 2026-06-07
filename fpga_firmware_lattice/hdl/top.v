@@ -35,11 +35,14 @@ module top(
 	output wire sdram2_cas_n,
 	output wire sdram2_cke,
 	output wire sdram2_cs_n,
-	inout wire [7:0] sdram2_dq,
+	inout wire [15:0] sdram2_dq,
 	output wire [1:0] sdram2_dqm,
 	output wire sdram2_ras_n,
 	output wire sdram2_we_n,
 	output wire sdram2_clk,
+    //qspi port, unused
+    input wire qspi_cs,
+    input wire [3:0] qspi_d,
 	//debug
 	output wire debug_1,
 	output wire debug_2,
@@ -47,10 +50,14 @@ module top(
 	output wire debug_4
 );
 
+wire [7:0] sdram2_dq_lo;
+wire [7:0] sdram2_dq_hi;
 wire clk_50;
 wire clk_133;
 wire sd_clk_internal;
 wire [0:0] sdram2_dqm_lo;
+assign sdram2_dq_hi = {8{1'bz}};
+assign sdram2_dq = {sdram2_dq_hi,sdram2_dq_lo};
 
 pll_25_133 pll(
     .clk_in_25(clk_25),
@@ -94,7 +101,7 @@ attosoc soc(
     .sdram2_cas_n(sdram2_cas_n),
     .sdram2_cke(sdram2_cke),
     .sdram2_cs_n(sdram2_cs_n),
-    .sdram2_dq(sdram2_dq),
+    .sdram2_dq(sdram2_dq_lo),
     .sdram2_dqm(sdram2_dqm_lo),
     .sdram2_ras_n(sdram2_ras_n),
     .sdram2_we_n(sdram2_we_n),
@@ -105,8 +112,8 @@ attosoc soc(
 assign sd_clk = sd_clk_internal;
 assign abus_buffers_enable = 0;//1'b1;
 assign sdram2_dqm = {sdram2_dqm_lo[0],sdram2_dqm_lo[0]};
-assign debug_2 = abus_read;
-assign debug_3 = abus_chipselect[0];
+assign debug_2 = clk_25;
+assign debug_3 = clk_133;
 assign debug_4 = abus_chipselect[1];
 
 endmodule
