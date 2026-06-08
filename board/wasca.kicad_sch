@@ -56933,7 +56933,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
+		(property "Footprint" "wasca:LED_0805"
 			(at 621.03 100.33 0)
 			(hide yes)
 			(show_name no)
