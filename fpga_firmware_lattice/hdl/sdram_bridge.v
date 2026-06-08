@@ -10,13 +10,16 @@ module pll_shifted (
     assign clk_0deg = clki; 
 	assign locked = 1'b1;
 	
+    //120 WORKS
 	DELAYG #(
 		.DEL_MODE ("USER_DEFINED"),
-		.DEL_VALUE(100)
+		.DEL_VALUE(127)
 	) u_idelay (
 		.A(clki),
 		.Z(clk_shift)
 	);
+
+    //assign clk_shift = clki;
 
     // These attributes are commonly emitted by ecppll / prjtrellis-generated code.
     /*(* FREQUENCY_PIN_CLKI="133" *)
