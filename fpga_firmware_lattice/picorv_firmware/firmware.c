@@ -118,7 +118,12 @@ char* mini_strstr(const char *haystack, const char *needle) {
 int sdram_quicktest() {
 	volatile uint32_t a;
 	int errors = 0;
+	uint32_t backup[64];
 	//CS0
+	backup[0] = pSDRAM[0];
+	for (int i=0;i<24;i++)
+		backup[i+1] = pSDRAM[1<<i];
+	backup[31] = pSDRAM[0xffffff];
 	pSDRAM[0] = 0x12345678;
 	for (int i=0;i<24;i++)
 		pSDRAM[1<<i] = 0x11111111*i;
@@ -140,7 +145,15 @@ int sdram_quicktest() {
 		mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",0xffffff,0x0000face,a);
 		errors++;
 	}
+	pSDRAM[0] = backup[0];
+	for (int i=0;i<24;i++)
+		pSDRAM[1<<i] = backup[i+1];
+	pSDRAM[0xffffff] = backup[31];
 	//CS1
+	backup[0] = pSDRAM2[0];
+	for (int i=0;i<24;i++)
+		backup[i+1] = pSDRAM2[1<<i];
+	backup[31] = pSDRAM2[0xffffff];
 	pSDRAM2[0] = 0x6789;
 	for (int i=0;i<23;i++)
 		pSDRAM2[1<<i] = 0x1020*i;
@@ -162,7 +175,10 @@ int sdram_quicktest() {
 		mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0xbeef,a);
 		errors++;
 	}
-	
+	pSDRAM2[0] = backup[0];
+	for (int i=0;i<24;i++)
+		pSDRAM2[1<<i] = backup[i+1];
+	pSDRAM2[0xffffff] = backup[31];	
 	return errors;
 }
 
