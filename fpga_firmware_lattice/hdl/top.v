@@ -50,14 +50,14 @@ module top(
 	output wire debug_4
 );
 
-wire [7:0] sdram2_dq_lo;
-wire [7:0] sdram2_dq_hi;
+//wire [7:0] sdram2_dq_lo;
+//wire [7:0] sdram2_dq_hi;
 wire clk_50;
 wire clk_133;
 wire sd_clk_internal;
-wire [0:0] sdram2_dqm_lo;
-assign sdram2_dq_hi = {8{1'bz}};
-assign sdram2_dq = {sdram2_dq_hi,sdram2_dq_lo};
+//wire [0:0] sdram2_dqm_lo;
+//assign sdram2_dq_hi = {8{1'bz}};
+//assign sdram2_dq = {sdram2_dq_hi,sdram2_dq_lo};
 
 pll_25_133 pll(
     .clk_in_25(clk_25),
@@ -101,8 +101,10 @@ attosoc soc(
     .sdram2_cas_n(sdram2_cas_n),
     .sdram2_cke(sdram2_cke),
     .sdram2_cs_n(sdram2_cs_n),
-    .sdram2_dq(sdram2_dq_lo),
-    .sdram2_dqm(sdram2_dqm_lo),
+    //.sdram2_dq(sdram2_dq_lo),
+    //.sdram2_dqm(sdram2_dqm_lo),
+    .sdram2_dq(sdram2_dq),
+    .sdram2_dqm(sdram2_dqm),
     .sdram2_ras_n(sdram2_ras_n),
     .sdram2_we_n(sdram2_we_n),
     .sdram2_clk(sdram2_clk),
@@ -111,7 +113,7 @@ attosoc soc(
 
 assign sd_clk = sd_clk_internal;
 assign abus_buffers_enable = 0;//1'b1;
-assign sdram2_dqm = {sdram2_dqm_lo[0],sdram2_dqm_lo[0]};
+//assign sdram2_dqm = {sdram2_dqm_lo[0],sdram2_dqm_lo[0]};
 assign debug_2 = clk_25;
 assign debug_3 = clk_133;
 assign debug_4 = abus_chipselect[1];
