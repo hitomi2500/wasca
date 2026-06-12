@@ -17,6 +17,7 @@ SH_SRCS:= \
     video.c \
     video_vdp1.c \
     video_vdp2.c \
+    wascafs.c \
     control.c
 
 SH_CFLAGS+= -Os -I. $(TGA_CFLAGS) $(BCL_CFLAGS) -save-temps

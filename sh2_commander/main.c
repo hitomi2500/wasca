@@ -9,6 +9,7 @@
 #include "video.h"
 #include "control.h"
 #include "video_vdp2.h"
+#include "wascafs.h"
 
 	video_screen_mode_t screenMode =
 	{
@@ -309,17 +310,22 @@ void execute_selected_file() {
 	int offset;
 	int data_len;
 	char * p;
-	sprintf(cmd_buf,"OPEN %s%s r",Panel_Paths[Current_Panel],Panel_Entries[Current_Panel][Current_Panel_File].name);
+	//sprintf(cmd_buf,"OPEN %s%s r",Panel_Paths[Current_Panel],Panel_Entries[Current_Panel][Current_Panel_File].name);
 
+	//open dir
+	if (wascafs_chdir(Panel_Paths[Current_Panel]) != WFS_OK) {
+		draw_dialogbox("Dir open error",3);
+	}
 	//open file
-	execute_command(cmd_buf,reply_buf,NULL);
-	if (memcmp("OK",reply_buf,2)) {
+	//execute_command(cmd_buf,reply_buf,NULL);
+	if (wascafs_open(Panel_Entries[Current_Panel][Current_Panel_File].name,"r",&handle) != WFS_OK) {
+	//if (memcmp("OK",reply_buf,2)) {
 		draw_dialogbox("Open error",3);
 	} else {
 		draw_dialogbox("Loading...",3);
-		p = strstr(reply_buf,"handle=");
-		p += 7;
-		handle = atoi(p);
+		//p = strstr(reply_buf,"handle=");
+		//p += 7;
+		//handle = atoi(p);
 		//execute read until either error or eof
 		offset = 0;
 		data_len = 2048;
