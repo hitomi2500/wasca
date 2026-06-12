@@ -12,7 +12,7 @@ typedef enum
 
 //public api
 WFS_StatusType wascafs_chdir(char * directory);
-WFS_StatusType wascafs_list(int restart);
+WFS_StatusType wascafs_list(int restart, char* filename);
 WFS_StatusType wascafs_open(char * name, char * mode, int * handle);
 WFS_StatusType wascafs_close(int handle);
 WFS_StatusType wascafs_read(int handle, void * buffer, int offset, int count);

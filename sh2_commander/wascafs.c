@@ -102,18 +102,44 @@ WFS_StatusType wascafs_chdir(char * directory) {
  * inputs:
  *  restart - if this flag is set, first entry of the current directory is returned,
  *            if not - next entry, use multiple calls to get all entries
+ *  filename - string that will be updated with filename if call is successful
  * 
  * return value:
  *  WFS_OK if successful, error code otherwise
  */
 
-WFS_StatusType wascafs_list(int restart) {
+WFS_StatusType wascafs_list(int restart, char* filename) {
+    char * ptr;
     if (restart)
-        sprintf(command_buffer,"LIST");
-    else
         sprintf(command_buffer,"LIST %s",current_dir_debug);
-    return wascafs_execute_command(command_buffer,reply_buffer,0);
+    else
+        sprintf(command_buffer,"LIST");
+    WFS_StatusType status = wascafs_execute_command(command_buffer,reply_buffer,0);
+    if (status != WFS_OK)
+        return status;
+ 	if (0 == memcmp("OK name=",reply_buffer,7)) {
+		ptr = &(reply_buffer[9]);
+		ptr[strlen(ptr)-1] = 0; //removing " at the end
+		strcpy(filename,ptr);
+	} else
+		strcpy(filename,"");
+    return status;
 }
+
+/**
+ * wascafs_stat - get directory entry
+ * 
+ * inputs:
+ *  restart - if this flag is set, first entry of the current directory is returned,
+ *            if not - next entry, use multiple calls to get all entries
+ * 
+ * return value:
+ *  WFS_OK if successful, error code otherwise
+ */
+
+WFS_StatusType wascafs_stat(int restart, char* reply) {
+}
+
 
 /**
  * wascafs_open - open file

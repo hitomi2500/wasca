@@ -164,12 +164,17 @@ int read_panel_files(char * path, panel_entry_t * entries) {
 	}
 
 	while (0 == end_of_folder) {
+		wascafs_chdir(path);
 		if (0 == current_file)
-			sprintf(cmd_buf,"LIST %s",path);
+			wascafs_list(1,reply_buf);
 		else
-			sprintf(cmd_buf,"LIST");
-		execute_command(cmd_buf,reply_buf,NULL);
-		if (0 == memcmp("OK name=",reply_buf,7)) {
+			wascafs_list(0,reply_buf);
+		if (strlen(reply_buf)) {
+			strcpy(entries[current_file].name,reply_buf);
+		} else {
+			end_of_folder = 1;
+		}
+		/*if (0 == memcmp("OK name=",reply_buf,7)) {
 			ptr = &(reply_buf[9]);
 			ptr[strlen(ptr)-1] = 0; //removing " at the end
 			if (strlen(ptr)== 0) {
@@ -177,7 +182,7 @@ int read_panel_files(char * path, panel_entry_t * entries) {
 			}
 			strcpy(entries[current_file].name,ptr);
 		} else
-			end_of_folder = 1;
+			end_of_folder = 1;*/
 
 		if (0 == end_of_folder) {
 			sprintf(cmd_buf,"STAT %s",entries[current_file].name);
@@ -310,22 +315,15 @@ void execute_selected_file() {
 	int offset;
 	int data_len;
 	char * p;
-	//sprintf(cmd_buf,"OPEN %s%s r",Panel_Paths[Current_Panel],Panel_Entries[Current_Panel][Current_Panel_File].name);
-
 	//open dir
 	if (wascafs_chdir(Panel_Paths[Current_Panel]) != WFS_OK) {
 		draw_dialogbox("Dir open error",3);
 	}
 	//open file
-	//execute_command(cmd_buf,reply_buf,NULL);
 	if (wascafs_open(Panel_Entries[Current_Panel][Current_Panel_File].name,"r",&handle) != WFS_OK) {
-	//if (memcmp("OK",reply_buf,2)) {
 		draw_dialogbox("Open error",3);
 	} else {
 		draw_dialogbox("Loading...",3);
-		//p = strstr(reply_buf,"handle=");
-		//p += 7;
-		//handle = atoi(p);
 		//execute read until either error or eof
 		offset = 0;
 		data_len = 2048;
