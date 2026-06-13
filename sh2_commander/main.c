@@ -296,33 +296,27 @@ void execute_selected_file() {
 	//open dir
 	if (wascafs_chdir(Panel_Paths[Current_Panel]) != WFS_OK) {
 		draw_dialogbox("Dir open error",3);
+		return;
 	}
 	//open file
 	if (wascafs_open(Panel_Entries[Current_Panel][Current_Panel_File].name,"r",&handle) != WFS_OK) {
 		draw_dialogbox("Open error",3);
+		return;
 	} else {
 		draw_dialogbox("Loading...",3);
 		//execute read until either error or eof
 		offset = 0;
 		data_len = 2048;
 		while (2048 == data_len) {
-			sprintf(cmd_buf,"READ %d %d %d",handle,offset,2048);
-			execute_command(cmd_buf,reply_buf,(uint8_t*)(CS0(offset)));
-			if (memcmp("OK",reply_buf,2)) {
-				sprintf(cmd_buf,"Read error at handle %d offset %x",handle,offset);
-				draw_dialogbox(reply_buf,3);
+			data_len = 2048;
+			WFS_StatusType result = wascafs_read(handle,(uint8_t*)(CS0(offset)),offset,2048,&data_len);
+			if (result != WFS_OK) {
+				draw_dialogbox("Read error",3);
+				return;
 			}
-			p = strstr(reply_buf,"data_len=");
-			p += 9;
-			data_len = atoi(p);
-			//sprintf(cmd_buf,"d=%d, r=%s",data_len,reply_buf);
-			//draw_dialogbox(reply_buf,3);
-			offset += data_len;				
+			offset += data_len;
 		}
-		//sprintf(cmd_buf,"Read done at handle %d last offset %x last len %x",handle,offset,data_len);
-		//draw_dialogbox(cmd_buf,3);
-		sprintf(cmd_buf,"CLOSE %d",handle);
-		execute_command(cmd_buf,reply_buf,NULL);
+		wascafs_close(handle);
 		bios_execute();
 	}
 }
@@ -342,26 +336,24 @@ void copy_selected_file() {
 		return;
 	}
 	//open source file
-	sprintf(cmd_buf,"OPEN %s%s r",Panel_Paths[Current_Panel],Panel_Entries[Current_Panel][Current_Panel_File].name);
-	execute_command(cmd_buf,reply_buf,NULL);
-	if (memcmp("OK",reply_buf,2)) {
+	if (wascafs_chdir(Panel_Paths[Current_Panel]) != WFS_OK) {
+		draw_dialogbox("Source dir open error",3);
+		return;
+	}
+	if (wascafs_open(Panel_Entries[Current_Panel][Current_Panel_File].name,"r",&src_handle) != WFS_OK) {
 		draw_dialogbox("Source open error",3);
 		return;
 	}
-	p = strstr(reply_buf,"handle=");
-	p += 7;
-	src_handle = atoi(p);
 
 	//open destination file
-	sprintf(cmd_buf,"OPEN %s%s w",Panel_Paths[Current_Panel ? 0 : 1],Panel_Entries[Current_Panel][Current_Panel_File].name);
-		execute_command(cmd_buf,reply_buf,NULL);
-	if (memcmp("OK",reply_buf,2)) {
+	if (wascafs_chdir(Panel_Paths[Current_Panel ? 0 : 1]) != WFS_OK) {
+		draw_dialogbox("Destination dir open error",3);
+		return;
+	}
+	if (wascafs_open(Panel_Entries[Current_Panel][Current_Panel_File].name,"w",&dst_handle) != WFS_OK) {
 		draw_dialogbox("Destination open error",3);
 		return;
 	}
-	p = strstr(reply_buf,"handle=");
-	p += 7;
-	dst_handle = atoi(p);
 	
 	draw_dialogbox("Copying...",3);
 
@@ -369,7 +361,12 @@ void copy_selected_file() {
 	offset = 0;
 	data_len = 2048;
 	while (2048 == data_len) {
-		sprintf(cmd_buf,"READ %d %d %d",src_handle,offset,2048);
+		WFS_StatusType result = wascafs_read(src_handle,(uint8_t*)(CS0(offset)),offset,2048,&data_len);
+		if (result != WFS_OK) {
+			draw_dialogbox("Read error",3);
+			return;
+		}
+		/*sprintf(cmd_buf,"READ %d %d %d",src_handle,offset,2048);
 		execute_command(cmd_buf,reply_buf,data_buffer);
 		if (memcmp("OK",reply_buf,2)) {
 			sprintf(cmd_buf,"Read error at handle %d offset %x",src_handle,offset);
@@ -377,7 +374,7 @@ void copy_selected_file() {
 		}
 		p = strstr(reply_buf,"data_len=");
 		p += 9;
-		data_len = atoi(p);
+		data_len = atoi(p);*/
 		//using the same data buffer, just writing it back
 		sprintf(cmd_buf,"WRITE %d %d %d",dst_handle,offset,data_len);
 		execute_command(cmd_buf,reply_buf,data_buffer);
@@ -388,10 +385,8 @@ void copy_selected_file() {
 		offset += data_len;				
 	}
 
-	sprintf(cmd_buf,"CLOSE %d",src_handle);
-	execute_command(cmd_buf,reply_buf,NULL);
-	sprintf(cmd_buf,"CLOSE %d",dst_handle);
-	execute_command(cmd_buf,reply_buf,NULL);
+	wascafs_close(src_handle);
+	wascafs_close(dst_handle);
 	draw_dialogbox("Copy complete",3);
 }
 

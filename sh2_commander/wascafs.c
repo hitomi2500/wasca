@@ -249,20 +249,29 @@ WFS_StatusType wascafs_close(int handle) {
  *  handle - file handle
  *  buffer - buffer to store data
  *  offset - file read offset
- *  count  - number of bytes to read
+ *  count  - number of bytes to read, up to 2048
+ *  data_len - pointer to number of bytes written
  * 
  * return value:
  *  WFS_OK if successful, error code otherwise
  */
 
-WFS_StatusType wascafs_read(int handle, void * buffer, int offset, int count) {
+WFS_StatusType wascafs_read(int handle, void * buffer, int offset, int count, int* data_len) {
     WFS_StatusType status;
-    sprintf(command_buffer,"CLOSE %d",handle);
-    status = wascafs_execute_command(command_buffer,reply_buffer,0);
+    char * ptr;
+    if (data_len)
+        *data_len = 0;
+    if ( (count > 2048) || (count < 0) )
+        return WFS_WRONG_ACCESS_SIZE;
+    sprintf(command_buffer,"READ %d %d %d",handle,offset,count);
+    status = wascafs_execute_command(command_buffer,reply_buffer,buffer);
     if (WFS_OK != status)
         return status;
 
     if (0 == memcmp("OK",reply_buffer,2)) {
+        ptr = strstr(reply_buffer,"data_len=");
+        if (data_len)
+            *data_len = atoi(strtok(&(ptr[9])," \""));
 		return WFS_OK;
 	} else {
         return WFS_UNKNOWN_ERROR;
