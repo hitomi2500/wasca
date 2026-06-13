@@ -152,13 +152,14 @@ int filesystem_access_scheduler() {
 				command_buffer[i*2] = pSDRAM[0xfffc00+i];
 			}			
 			command_buffer[256] = 0;//assuring string is terminated
-			mini_printf("FSCMD: ");
-			mini_printf(command_buffer);
-			mini_printf("\r\n");
+			////mini_printf("FSCMD: ");
+			////mini_printf(command_buffer);
+			////mini_printf("\r\n");
 			//now parsing the buffer
 			char * token = mini_strtok(command_buffer, " ");
-			mini_printf("DELAY2\r\n");
+			////mini_printf("DELAY2\r\n");
 			if (0 == mini_strcmp(token,"OPEN")) {
+				LED = LED_EXT_WHITE;
 				int handle = available_file_handle();
 				if (handle != -1) {
 					//open file, args : path and mode
@@ -202,6 +203,7 @@ int filesystem_access_scheduler() {
 				}
 
 			} else if (0 == mini_strcmp(token,"CLOSE")) {
+				LED = LED_EXT_WHITE;
 				//close file : handle
 				char * handle_str = mini_strtok(NULL, " ");
 				int handle = mini_atoi(handle_str);
@@ -214,6 +216,7 @@ int filesystem_access_scheduler() {
 						mini_snprintf(reply_buffer,256,"ERR WRONG HANDLE");
 
 			} else if (0 == mini_strcmp(token,"READ")) {
+				LED = LED_EXT_CYAN;
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				int offset = mini_atoi(mini_strtok(NULL, " "));
 				int length = mini_atoi(mini_strtok(NULL, " "));
@@ -231,11 +234,12 @@ int filesystem_access_scheduler() {
 				}
 
 			} else if (0 == mini_strcmp(token,"WRITE")) {
+				LED = LED_EXT_MAGENTA;
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				int offset = mini_atoi(mini_strtok(NULL, " "));
 				int length = mini_atoi(mini_strtok(NULL, " "));
 				if ( (length <= 0) || (length > 2048) )  {
-					mini_snprintf(reply_buffer,256,"ERR WRONG LENGTH");
+					mini_snprintf(reply_buffer,256,"ERR Invalid lenght");
 				} else if (open_files[handle].obj.fs == 0) {
 					mini_snprintf(reply_buffer,256,"ERR File not open");
 				} else {
@@ -251,6 +255,7 @@ int filesystem_access_scheduler() {
 				}
 
 			} else if (0 == mini_strcmp(token,"TRUNCATE")) {
+				LED = LED_EXT_WHITE;
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				int length = mini_atoi(mini_strtok(NULL, " "));
 				if (length <= 0)  {
@@ -267,10 +272,11 @@ int filesystem_access_scheduler() {
 				}
 
 			} else if (0 == mini_strcmp(token,"LIST")) {
-				mini_printf("DELAY3\r\n");
+				LED = LED_EXT_WHITE;
+				////mini_printf("DELAY3\r\n");
 				char * path = mini_strtok(NULL, " ");
 				if (path != 0) {
-					mini_printf("DELAY4\r\n");
+					////mini_printf("DELAY4\r\n");
 					if (filesystem_last_dir_open) {
 						filesystem_last_dir_open = 0;
 						f_closedir(&filesystem_last_dir);
@@ -284,7 +290,7 @@ int filesystem_access_scheduler() {
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
 					}
 				} else {
-					mini_printf("DELAY5\r\n");
+					////mini_printf("DELAY5\r\n");
 					//continuing last listing
 					if (0 == filesystem_last_dir_open) {
 						mini_snprintf(reply_buffer,256,"ERR Dir not open");
@@ -294,21 +300,24 @@ int filesystem_access_scheduler() {
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
 					}
 				}
-				mini_printf("DELAY6\r\n");
+				////mini_printf("DELAY6\r\n");
 
 			} else if (0 == mini_strcmp(token,"STAT")) {
-				mini_printf("DELAY7\r\n");
+				LED = LED_EXT_WHITE;
+				////mini_printf("DELAY7\r\n");
 				char * filename = mini_strtok(NULL, " ");
-				mini_printf("DELAY8\r\n");
+				////mini_printf("DELAY8\r\n");
 				if (FR_OK == f_stat(filename, &filinf)) {
 					int year = (filinf.fdate>>9)+1980;
 					int dir = (filinf.fattrib & AM_DIR) ? 1 : 0;
-					mini_snprintf(reply_buffer,256,"OK name=\"%s\" size=\"%d\" date=\"%02d.%02d.%02d\" dir=\"%d\"",filinf.fname,filinf.fsize,(filinf.fdate>>5)&0xf,(filinf.fdate)&0x1f,(year>=2000) ? year-2000 : year-1900, dir);
+					//mini_snprintf(reply_buffer,256,"OK_name=\"%s\" size=\"%d\" date=\"%02d.%02d.%02d\" dir=\"%d\"",filinf.fname,filinf.fsize,(filinf.fdate>>5)&0xf,(filinf.fdate)&0x1f,(year>=2000) ? year-2000 : year-1900, dir);
+					mini_snprintf(reply_buffer,256,"OK name=\"%s\" size=\"%d\" date=\"%d\" time=\"%d\" dir=\"%d\"",filinf.fname,filinf.fsize,filinf.fdate,filinf.ftime,dir);
 				} else {
 					mini_snprintf(reply_buffer,256,"ERR File not found");
 				}
 				
 			} else if (0 == mini_strcmp(token,"MKDIR")) {
+				LED = LED_EXT_WHITE;
 				char * path = mini_strtok(NULL, " ");
 				if (FR_OK == f_mkdir(path)) {
 					mini_snprintf(reply_buffer,256,"OK");
@@ -317,6 +326,7 @@ int filesystem_access_scheduler() {
 				}
 				
 			} else if (0 == mini_strcmp(token,"REMOVE")) {
+				LED = LED_EXT_WHITE;
 				char * filename = mini_strtok(NULL, " ");
 				if (FR_OK == f_unlink(filename)) {
 					mini_snprintf(reply_buffer,256,"OK");
@@ -325,6 +335,7 @@ int filesystem_access_scheduler() {
 				}
 				
 			} else if (0 == mini_strcmp(token,"RENAME")) {
+				LED = LED_EXT_WHITE;
 				char * old_filename = mini_strtok(NULL, " ");
 				char * new_filename = mini_strtok(NULL, " ");
 				if (FR_OK == f_rename(old_filename,new_filename)) {
@@ -334,6 +345,7 @@ int filesystem_access_scheduler() {
 				}
 				
 			} else if (0 == mini_strcmp(token,"FLUSH")) {
+				LED = LED_EXT_WHITE;
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				if (FR_OK == f_sync(&open_files[handle])) {
 					mini_snprintf(reply_buffer,256,"OK");
@@ -347,22 +359,21 @@ int filesystem_access_scheduler() {
 			}
 
 			//report as complete
-			mini_printf("FSRPLY: ");
-			mini_printf(reply_buffer);
-			mini_printf("\r\n");
+			////mini_printf("FSRPLY: ");
+			////mini_printf(reply_buffer);
+			////mini_printf("\r\n");
 			for (int i=0;i<128;i++)
 				pSDRAM[0xfffc80+i] = reply_buffer16[i];
 			filesystem_command_active = 1;
 			pSDRAM[0xfffd00] =  0x100; //mark command as detected
-			LED = LED_EXT_MAGENTA;
 		}
 	} else if (1 == filesystem_command_active) {
 		if (0 == pWishboneRegs[WISHBONE_REG_FSCNTRL]) {
-			mini_printf("FSRPLY2\r\n");
+			////mini_printf("FSRPLY2\r\n");
 			//SH2 confirmed execution end
 			filesystem_command_active = 0; //idle
 			pSDRAM[0xfffd00] =  0; //mark command as idle
-			LED = LED_EXT_CYAN;
+			LED = LED_OFF;
 		}
 	}
 }

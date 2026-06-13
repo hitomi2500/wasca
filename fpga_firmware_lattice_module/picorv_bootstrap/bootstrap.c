@@ -71,6 +71,73 @@ void lock_and_blink_red() {
 	}
 }
 
+int sdram_quicktest() {
+	volatile uint32_t a;
+	int errors = 0;
+	uint32_t backup[64];
+	//CS0
+	backup[0] = pSDRAM[0];
+	for (int i=0;i<24;i++)
+		backup[i+1] = pSDRAM[1<<i];
+	backup[31] = pSDRAM[0xffffff];
+	pSDRAM[0] = 0x12345678;
+	for (int i=0;i<24;i++)
+		pSDRAM[1<<i] = 0x11111111*i;
+	pSDRAM[0xffffff] = 0xdeafface;
+	a = pSDRAM[0];
+	if (a != 0x00005678) {
+		mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",0,0x00005678,a);
+		errors++;
+	}
+	for (int i=0;i<24;i++) {
+		a = pSDRAM[1<<i];
+		if (a !=((0x1111*i) & 0xFFFF)) {
+			mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",1<<i,((0x1111*i) & 0xFFFF),a);
+			errors++;
+		}
+	}
+	a = pSDRAM[0xffffff];
+	if (a != 0x0000face) {
+		mini_printf("SDRAM QUICK error: addr %x write %x read %x\r\n",0xffffff,0x0000face,a);
+		errors++;
+	}
+	pSDRAM[0] = backup[0];
+	for (int i=0;i<24;i++)
+		pSDRAM[1<<i] = backup[i+1];
+	pSDRAM[0xffffff] = backup[31];
+	//CS1
+	backup[0] = pSDRAM2[0];
+	for (int i=0;i<24;i++)
+		backup[i+1] = pSDRAM2[1<<i];
+	backup[31] = pSDRAM2[0xffffff];
+	pSDRAM2[0] = 0x6789;
+	for (int i=0;i<23;i++)
+		pSDRAM2[1<<i] = 0x1020*i;
+	pSDRAM2[0x7fffff] = 0xdeadbeef;
+	a = pSDRAM2[0];
+	if (a != 0x6789) {
+		mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0,0x6789,a);
+		errors++;
+	}
+	for (int i=0;i<23;i++) {
+		a = pSDRAM2[1<<i];
+		if (a !=((0x1020*i) & 0xFFFF)) {
+			mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",1<<i,((0x1020*i) & 0xFFFF),a);
+			errors++;
+		}
+	}
+	a = pSDRAM2[0x7fffff];
+	if (a != 0xbeef) {
+		mini_printf("SDRAM2 QUICK error: addr %x write %x read %x\r\n",0x7fffff,0xbeef,a);
+		errors++;
+	}
+	pSDRAM2[0] = backup[0];
+	for (int i=0;i<24;i++)
+		pSDRAM2[1<<i] = backup[i+1];
+	pSDRAM2[0xffffff] = backup[31];	
+	return errors;
+}
+
 int main() {
 	uint16_t * buffer16 = (uint16_t *)buffer;
 	volatile int dummy;
@@ -99,6 +166,9 @@ int main() {
 	}
 	
 	mini_printf("\r\n\r\nwasca bootstrap %s %s\r\n",__DATE__,__TIME__);
+
+	sdram_quicktest();
+	mini_printf("SDRAM test done.\r\n");
 
 	mini_printf("Mount SD...");
 	FRESULT fr = f_mount(&FatFs, "0:/", 1);	//mount SD card
