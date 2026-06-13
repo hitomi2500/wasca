@@ -10,9 +10,20 @@ typedef enum
   WFS_UNKNOWN_ERROR  = 0x99
 } WFS_StatusType;
 
+typedef struct 
+{
+unsigned short year;
+unsigned char month;
+unsigned char date;
+unsigned char hour;
+unsigned char minute;
+unsigned char second;
+} WFS_DateTime;
+
 //public api
 WFS_StatusType wascafs_chdir(char * directory);
 WFS_StatusType wascafs_list(int restart, char* filename);
+WFS_StatusType wascafs_stat(char* filename, int * size, WFS_DateTime * datetime, int * dir_flag);
 WFS_StatusType wascafs_open(char * name, char * mode, int * handle);
 WFS_StatusType wascafs_close(int handle);
 WFS_StatusType wascafs_read(int handle, void * buffer, int offset, int count);

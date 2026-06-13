@@ -45,6 +45,8 @@ int Current_Panel = 0;
 int Current_Panel_File = 0;
 int Current_Panel_Offset = 0;
 
+//char debug[256];
+
 static void suite_vblank_out_handler(void *work __unused)
 {
     global_frame_count++;
@@ -151,12 +153,15 @@ void execute_command(char * cmd_buf, char * reply_buf, char* data_buf) {
 int read_panel_files(char * path, panel_entry_t * entries) {
 	char cmd_buf[256];
 	char reply_buf[256];
+	WFS_DateTime datetime;
 	int current_file = 0;
 	int end_of_folder = 0;
 	char * ptr;
-	int i;
+	//int i;
+	int size;
+	int dir_flag;
 
-	for (i=0;i<256;i++) {
+	for (int i=0;i<256;i++) {
 		entries[i].name[0] = 0;
 		entries[i].date[0] = 0;
 		entries[i].size[0] = 0;
@@ -174,46 +179,19 @@ int read_panel_files(char * path, panel_entry_t * entries) {
 		} else {
 			end_of_folder = 1;
 		}
-		/*if (0 == memcmp("OK name=",reply_buf,7)) {
-			ptr = &(reply_buf[9]);
-			ptr[strlen(ptr)-1] = 0; //removing " at the end
-			if (strlen(ptr)== 0) {
-				end_of_folder = 1;
-			}
-			strcpy(entries[current_file].name,ptr);
-		} else
-			end_of_folder = 1;*/
 
 		if (0 == end_of_folder) {
-			sprintf(cmd_buf,"STAT %s",entries[current_file].name);
-			execute_command(cmd_buf,reply_buf,NULL);
-			if (0 == memcmp("OK name=",reply_buf,7)) {
-				ptr = strstr(reply_buf,"dir=");
-				if (ptr[5]=='1') {
-					//directory
-					entries[current_file].dir_flag = 1;
-					strcpy(entries[current_file].size,"\x10SUB-DIR\x11");
-				} else {
-					//file
-					entries[current_file].dir_flag = 0;
-					ptr = strstr(reply_buf,"size=");
-					i=0;
-					while ( (ptr[6+i]!='\"') && (i<9) ) {
-						entries[current_file].size[i] = ptr[6+i];
-						i++;
-					}
-					entries[current_file].size[i] = 0;
-					entries[current_file].size[9] = 0;
-				}
-				ptr = strstr(reply_buf,"date=");
-				i=0;
-				while ( (ptr[6+i]!='\"') && (i<9) ) {
-					entries[current_file].date[i] = ptr[6+i];
-					i++;
-				}
-				entries[current_file].date[i] = 0;
-				entries[current_file].date[9] = 0;
+			wascafs_stat(entries[current_file].name,&size,&datetime,&dir_flag);
+			entries[current_file].dir_flag = dir_flag;
+			if (1 == dir_flag) {
+				//directory
+				strcpy(entries[current_file].size,"\x10SUB-DIR\x11");
+			} else {
+				//file
+				sprintf(entries[current_file].size,"%d",size);
 			}
+			int _year = (datetime.year > 2000) ? datetime.year-2000 : datetime.year-1900;
+			sprintf(entries[current_file].date,"%02d.%02d.%02d",datetime.date,datetime.month,_year);
 		}
 		current_file++;
 		if (current_file >=256)
@@ -260,7 +238,7 @@ void draw_panel(int x_offset) {
 		draw_string(Panel_Entries[panel_index][i].date,x_offset+31,i+2,0);
 	}
 
-	//menu string
+	//active string
 	if ( (Current_Panel == panel_index) ){
 		draw_string("\xb3                  \xb3         \xb3        ",x_offset+1,Current_Panel_File+2,5);
 		memcpy(name_buf,Panel_Entries[panel_index][Current_Panel_File].name,20);

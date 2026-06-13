@@ -303,7 +303,8 @@ int filesystem_access_scheduler() {
 				if (FR_OK == f_stat(filename, &filinf)) {
 					int year = (filinf.fdate>>9)+1980;
 					int dir = (filinf.fattrib & AM_DIR) ? 1 : 0;
-					mini_snprintf(reply_buffer,256,"OK name=\"%s\" size=\"%d\" date=\"%02d.%02d.%02d\" dir=\"%d\"",filinf.fname,filinf.fsize,(filinf.fdate>>5)&0xf,(filinf.fdate)&0x1f,(year>=2000) ? year-2000 : year-1900, dir);
+					//mini_snprintf(reply_buffer,256,"OK_name=\"%s\" size=\"%d\" date=\"%02d.%02d.%02d\" dir=\"%d\"",filinf.fname,filinf.fsize,(filinf.fdate>>5)&0xf,(filinf.fdate)&0x1f,(year>=2000) ? year-2000 : year-1900, dir);
+					mini_snprintf(reply_buffer,256,"OK name=\"%s\" size=\"%d\" date=\"%d\" time=\"%d\" dir=\"%d\"",filinf.fname,filinf.fsize,filinf.fdate,filinf.ftime,dir);
 				} else {
 					mini_snprintf(reply_buffer,256,"ERR File not found");
 				}

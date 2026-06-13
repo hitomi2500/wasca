@@ -75,6 +75,19 @@ static WFS_StatusType wascafs_execute_command(char * cmd_buf, char * reply_buf, 
     return WFS_OK;
 }
 
+static int fatfs_to_datetime(uint16_t fdate, uint16_t ftime, WFS_DateTime *datetime)
+{
+    datetime->year = ((fdate >> 9) & 0x7F) + 1980;
+    datetime->month  = ((fdate >> 5) & 0x0F);
+    datetime->date =  (fdate       & 0x1F);
+
+    datetime->hour = ((ftime >> 11) & 0x1F);
+    datetime->minute  = ((ftime >> 5)  & 0x3F);
+    datetime->second  = (ftime & 0x1F) * 2;
+
+    return 0;
+}
+
 /**
  * wascafs_chdir - change directory 
  * 
@@ -130,16 +143,44 @@ WFS_StatusType wascafs_list(int restart, char* filename) {
  * wascafs_stat - get directory entry
  * 
  * inputs:
- *  restart - if this flag is set, first entry of the current directory is returned,
- *            if not - next entry, use multiple calls to get all entries
+ *  filename - name of the file in current directory
+ *  size - int pointer, file size will be returned
+ *  datetime - struct pointer, file time will be returned
+ *  dir_flag - int pointer, 1 returned for dir, 0 for file
  * 
  * return value:
  *  WFS_OK if successful, error code otherwise
  */
 
-WFS_StatusType wascafs_stat(int restart, char* reply) {
+WFS_StatusType wascafs_stat(char* filename, int * size, WFS_DateTime * datetime, int * dir_flag) {
+    char * ptr;
+    char buf[256];
+    sprintf(command_buffer,"STAT %s%s",current_dir_debug,filename);
+    WFS_StatusType status = wascafs_execute_command(command_buffer,reply_buffer,0);
+    if (status != WFS_OK)
+        return status;
+    if (0 == memcmp("OK name=",reply_buffer,7)) {
+		ptr = strstr(reply_buffer,"dir=");
+		if (ptr[5]=='1') {
+			//directory
+			*dir_flag = 1;
+            *size = 0;
+		} else {
+			//file
+            *dir_flag = 0;
+			ptr = strstr(reply_buffer,"size=");
+            strcpy(buf,&(ptr[6]));
+            *size = atoi(strtok(buf," \""));
+        }
+        ptr = strstr(reply_buffer,"date=");
+        strcpy(buf,&(ptr[6]));
+        uint16_t fdate = atoi(strtok(buf," \""));
+        ptr = strstr(reply_buffer,"time=");
+        strcpy(buf,&(ptr[6]));
+        uint16_t ftime = atoi(strtok(buf," \""));
+        fatfs_to_datetime(fdate,ftime,datetime);
+	}
 }
-
 
 /**
  * wascafs_open - open file
