@@ -358,29 +358,20 @@ void copy_selected_file() {
 	draw_dialogbox("Copying...",3);
 
 	//execute read until either error or eof
+	WFS_StatusType result;
 	offset = 0;
 	data_len = 2048;
 	while (2048 == data_len) {
-		WFS_StatusType result = wascafs_read(src_handle,(uint8_t*)(CS0(offset)),offset,2048,&data_len);
+		result = wascafs_read(src_handle,(uint8_t*)(CS0(offset)),offset,2048,&data_len);
 		if (result != WFS_OK) {
 			draw_dialogbox("Read error",3);
 			return;
 		}
-		/*sprintf(cmd_buf,"READ %d %d %d",src_handle,offset,2048);
-		execute_command(cmd_buf,reply_buf,data_buffer);
-		if (memcmp("OK",reply_buf,2)) {
-			sprintf(cmd_buf,"Read error at handle %d offset %x",src_handle,offset);
-			draw_dialogbox(reply_buf,3);
-		}
-		p = strstr(reply_buf,"data_len=");
-		p += 9;
-		data_len = atoi(p);*/
 		//using the same data buffer, just writing it back
-		sprintf(cmd_buf,"WRITE %d %d %d",dst_handle,offset,data_len);
-		execute_command(cmd_buf,reply_buf,data_buffer);
-		if (memcmp("OK",reply_buf,2)) {
-			sprintf(cmd_buf,"Write error at handle %d offset %x",dst_handle,offset);
-			draw_dialogbox(reply_buf,3);
+		result = wascafs_write(dst_handle,(uint8_t*)(CS0(offset)),offset,data_len,&data_len);
+		if (result != WFS_OK) {
+			draw_dialogbox("Write error",3);
+			return;
 		}
 		offset += data_len;				
 	}

@@ -159,6 +159,7 @@ int filesystem_access_scheduler() {
 			char * token = mini_strtok(command_buffer, " ");
 			mini_printf("DELAY2\r\n");
 			if (0 == mini_strcmp(token,"OPEN")) {
+				LED = LED_EXT_WHITE;
 				int handle = available_file_handle();
 				if (handle != -1) {
 					//open file, args : path and mode
@@ -202,6 +203,7 @@ int filesystem_access_scheduler() {
 				}
 
 			} else if (0 == mini_strcmp(token,"CLOSE")) {
+				LED = LED_EXT_WHITE;
 				//close file : handle
 				char * handle_str = mini_strtok(NULL, " ");
 				int handle = mini_atoi(handle_str);
@@ -214,6 +216,7 @@ int filesystem_access_scheduler() {
 						mini_snprintf(reply_buffer,256,"ERR WRONG HANDLE");
 
 			} else if (0 == mini_strcmp(token,"READ")) {
+				LED = LED_EXT_CYAN;
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				int offset = mini_atoi(mini_strtok(NULL, " "));
 				int length = mini_atoi(mini_strtok(NULL, " "));
@@ -231,6 +234,7 @@ int filesystem_access_scheduler() {
 				}
 
 			} else if (0 == mini_strcmp(token,"WRITE")) {
+				LED = LED_EXT_MAGENTA;
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				int offset = mini_atoi(mini_strtok(NULL, " "));
 				int length = mini_atoi(mini_strtok(NULL, " "));
@@ -251,6 +255,7 @@ int filesystem_access_scheduler() {
 				}
 
 			} else if (0 == mini_strcmp(token,"TRUNCATE")) {
+				LED = LED_EXT_WHITE;
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				int length = mini_atoi(mini_strtok(NULL, " "));
 				if (length <= 0)  {
@@ -267,6 +272,7 @@ int filesystem_access_scheduler() {
 				}
 
 			} else if (0 == mini_strcmp(token,"LIST")) {
+				LED = LED_EXT_WHITE;
 				mini_printf("DELAY3\r\n");
 				char * path = mini_strtok(NULL, " ");
 				if (path != 0) {
@@ -297,6 +303,7 @@ int filesystem_access_scheduler() {
 				mini_printf("DELAY6\r\n");
 
 			} else if (0 == mini_strcmp(token,"STAT")) {
+				LED = LED_EXT_WHITE;
 				mini_printf("DELAY7\r\n");
 				char * filename = mini_strtok(NULL, " ");
 				mini_printf("DELAY8\r\n");
@@ -310,6 +317,7 @@ int filesystem_access_scheduler() {
 				}
 				
 			} else if (0 == mini_strcmp(token,"MKDIR")) {
+				LED = LED_EXT_WHITE;
 				char * path = mini_strtok(NULL, " ");
 				if (FR_OK == f_mkdir(path)) {
 					mini_snprintf(reply_buffer,256,"OK");
@@ -318,6 +326,7 @@ int filesystem_access_scheduler() {
 				}
 				
 			} else if (0 == mini_strcmp(token,"REMOVE")) {
+				LED = LED_EXT_WHITE;
 				char * filename = mini_strtok(NULL, " ");
 				if (FR_OK == f_unlink(filename)) {
 					mini_snprintf(reply_buffer,256,"OK");
@@ -326,6 +335,7 @@ int filesystem_access_scheduler() {
 				}
 				
 			} else if (0 == mini_strcmp(token,"RENAME")) {
+				LED = LED_EXT_WHITE;
 				char * old_filename = mini_strtok(NULL, " ");
 				char * new_filename = mini_strtok(NULL, " ");
 				if (FR_OK == f_rename(old_filename,new_filename)) {
@@ -335,6 +345,7 @@ int filesystem_access_scheduler() {
 				}
 				
 			} else if (0 == mini_strcmp(token,"FLUSH")) {
+				LED = LED_EXT_WHITE;
 				int handle = mini_atoi(mini_strtok(NULL, " "));
 				if (FR_OK == f_sync(&open_files[handle])) {
 					mini_snprintf(reply_buffer,256,"OK");
@@ -355,7 +366,6 @@ int filesystem_access_scheduler() {
 				pSDRAM[0xfffc80+i] = reply_buffer16[i];
 			filesystem_command_active = 1;
 			pSDRAM[0xfffd00] =  0x100; //mark command as detected
-			LED = LED_EXT_MAGENTA;
 		}
 	} else if (1 == filesystem_command_active) {
 		if (0 == pWishboneRegs[WISHBONE_REG_FSCNTRL]) {
@@ -363,7 +373,7 @@ int filesystem_access_scheduler() {
 			//SH2 confirmed execution end
 			filesystem_command_active = 0; //idle
 			pSDRAM[0xfffd00] =  0; //mark command as idle
-			LED = LED_EXT_CYAN;
+			LED = LED_OFF;
 		}
 	}
 }

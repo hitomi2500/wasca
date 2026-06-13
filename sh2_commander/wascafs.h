@@ -28,3 +28,4 @@ WFS_StatusType wascafs_stat(char* filename, int * size, WFS_DateTime * datetime,
 WFS_StatusType wascafs_open(char * name, char * mode, int * handle);
 WFS_StatusType wascafs_close(int handle);
 WFS_StatusType wascafs_read(int handle, void * buffer, int offset, int count, int* data_len);
+WFS_StatusType wascafs_write(int handle, void * buffer, int offset, int count, int* data_len);
