@@ -16,7 +16,7 @@ static char current_dir_debug[256];
 
 static WFS_StatusType wascafs_check_cartridge() {
 	//check wasca signature
-	unsigned char * p8 = (unsigned char *)CS0(0x1FFFFFA);
+	unsigned char * p8 = (unsigned char *)0x23FFFFFA;
 	if (memcmp(p8,"wasca ",6))
         return WFS_NO_CARTRIDGE;
     return WFS_OK;
