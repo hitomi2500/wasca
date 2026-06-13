@@ -152,12 +152,12 @@ int filesystem_access_scheduler() {
 				command_buffer[i*2] = pSDRAM[0xfffc00+i];
 			}			
 			command_buffer[256] = 0;//assuring string is terminated
-			mini_printf("FSCMD: ");
-			mini_printf(command_buffer);
-			mini_printf("\r\n");
+			////mini_printf("FSCMD: ");
+			////mini_printf(command_buffer);
+			////mini_printf("\r\n");
 			//now parsing the buffer
 			char * token = mini_strtok(command_buffer, " ");
-			mini_printf("DELAY2\r\n");
+			////mini_printf("DELAY2\r\n");
 			if (0 == mini_strcmp(token,"OPEN")) {
 				LED = LED_EXT_WHITE;
 				int handle = available_file_handle();
@@ -273,10 +273,10 @@ int filesystem_access_scheduler() {
 
 			} else if (0 == mini_strcmp(token,"LIST")) {
 				LED = LED_EXT_WHITE;
-				mini_printf("DELAY3\r\n");
+				////mini_printf("DELAY3\r\n");
 				char * path = mini_strtok(NULL, " ");
 				if (path != 0) {
-					mini_printf("DELAY4\r\n");
+					////mini_printf("DELAY4\r\n");
 					if (filesystem_last_dir_open) {
 						filesystem_last_dir_open = 0;
 						f_closedir(&filesystem_last_dir);
@@ -290,7 +290,7 @@ int filesystem_access_scheduler() {
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
 					}
 				} else {
-					mini_printf("DELAY5\r\n");
+					////mini_printf("DELAY5\r\n");
 					//continuing last listing
 					if (0 == filesystem_last_dir_open) {
 						mini_snprintf(reply_buffer,256,"ERR Dir not open");
@@ -300,13 +300,13 @@ int filesystem_access_scheduler() {
 						mini_snprintf(reply_buffer,256,"OK name=\"%s\"",filinf.fname);
 					}
 				}
-				mini_printf("DELAY6\r\n");
+				////mini_printf("DELAY6\r\n");
 
 			} else if (0 == mini_strcmp(token,"STAT")) {
 				LED = LED_EXT_WHITE;
-				mini_printf("DELAY7\r\n");
+				////mini_printf("DELAY7\r\n");
 				char * filename = mini_strtok(NULL, " ");
-				mini_printf("DELAY8\r\n");
+				////mini_printf("DELAY8\r\n");
 				if (FR_OK == f_stat(filename, &filinf)) {
 					int year = (filinf.fdate>>9)+1980;
 					int dir = (filinf.fattrib & AM_DIR) ? 1 : 0;
@@ -359,9 +359,9 @@ int filesystem_access_scheduler() {
 			}
 
 			//report as complete
-			mini_printf("FSRPLY: ");
-			mini_printf(reply_buffer);
-			mini_printf("\r\n");
+			////mini_printf("FSRPLY: ");
+			////mini_printf(reply_buffer);
+			////mini_printf("\r\n");
 			for (int i=0;i<128;i++)
 				pSDRAM[0xfffc80+i] = reply_buffer16[i];
 			filesystem_command_active = 1;
@@ -369,7 +369,7 @@ int filesystem_access_scheduler() {
 		}
 	} else if (1 == filesystem_command_active) {
 		if (0 == pWishboneRegs[WISHBONE_REG_FSCNTRL]) {
-			mini_printf("FSRPLY2\r\n");
+			////mini_printf("FSRPLY2\r\n");
 			//SH2 confirmed execution end
 			filesystem_command_active = 0; //idle
 			pSDRAM[0xfffd00] =  0; //mark command as idle

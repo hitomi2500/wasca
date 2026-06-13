@@ -536,13 +536,8 @@ int main(void)
 		if (update_required) {
 			draw_screen();
 		}
-
-		/*if (go_reboot)
-			bios_execute();
-		else if (go_multiplayer)
-			bios_cd_player_execute();*/
 		
-		vdp2_sync();
-		vdp2_sync_wait();
+		//vdp2_sync();
+		//vdp2_sync_wait();
 	}
 }
