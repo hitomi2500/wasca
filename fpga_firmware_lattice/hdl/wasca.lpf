@@ -20,8 +20,8 @@ IOBUF PORT "led[4]" IO_TYPE=LVCMOS33;
 IOBUF PORT "led[5]" IO_TYPE=LVCMOS33;
 
 #UART - lost, move to unused pins
-#LOCATE COMP "uart_tx" SITE "G4";
-LOCATE COMP "uart_tx" SITE "D6";
+LOCATE COMP "uart_tx" SITE "G4";
+#LOCATE COMP "uart_tx" SITE "D6";
 LOCATE COMP "uart_rx" SITE "G5";
 IOBUF PORT "uart_tx" IO_TYPE=LVCMOS33;
 IOBUF PORT "uart_rx" IO_TYPE=LVCMOS33;
@@ -318,8 +318,8 @@ IOBUF PORT "qspi_d[2]" IO_TYPE=LVCMOS33;
 IOBUF PORT "qspi_d[3]" IO_TYPE=LVCMOS33;
 
 #esp32 spi, currently used as debug
-#LOCATE COMP "debug_1" SITE "D6";
-LOCATE COMP "debug_1" SITE "K13";
+LOCATE COMP "debug_1" SITE "D6";
+#LOCATE COMP "debug_1" SITE "K13";
 LOCATE COMP "debug_2" SITE "E7";
 LOCATE COMP "debug_3" SITE "C6";
 LOCATE COMP "debug_4" SITE "C7";

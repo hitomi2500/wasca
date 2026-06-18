@@ -213,7 +213,7 @@ module sdram_bridge (
 	input wire reset,
 	
 	//debug 
-	output wire sdram_debug_1
+	output reg [3:0] sdram_debug
 	);
 	
 	initial begin
@@ -492,12 +492,12 @@ module sdram_bridge (
     time ABUS_request_time;
 // synopsys translate_on
 
-    reg sdram_debug_read_1;
+    /*reg sdram_debug_read_1;
     reg sdram_debug_read_1_d1;
     reg sdram_debug_read_1_d2;
     reg sdram_debug_read_2;
     reg sdram_debug_read_2_d1;
-    reg sdram_debug_read_2_d2;
+    reg sdram_debug_read_2_d2;*/
     
     initial begin
         sdram_abus_pending = 0;
@@ -556,12 +556,13 @@ module sdram_bridge (
 		//sdram2_delayed_read_abus = 0;
 		//sdram2_delayed_read_wishbone = 0;
 		
-		sdram_debug_read_1 = 0;
+		/*sdram_debug_read_1 = 0;
 		sdram_debug_read_1_d1 = 0;
 		sdram_debug_read_1_d2 = 0;
 		sdram_debug_read_2 = 0;
 		sdram_debug_read_2_d1 = 0;
-		sdram_debug_read_2_d2 = 0;
+		sdram_debug_read_2_d2 = 0;*/
+        sdram_debug = 0;
     end
 
     assign abus_direction = abus_direction_internal;
@@ -725,6 +726,10 @@ module sdram_bridge (
     always @(posedge sdram_clock)
 	    if ( abus_cs0_regs_write && (abus_address_latched[4:1] == {1'h1,3'h1}) )
 	           REG_FSCNTRL <= abus_data_in[1:0];
+	//profiling/debug in same register
+	always @(posedge sdram_clock)
+	    if ( abus_cs0_regs_write && (abus_address_latched[4:1] == {1'h1,3'h1}) )
+	           sdram_debug <= abus_data_in[7:4];
 	
 	assign abus_data_in = abus_data;//abus_data_buf;
 	assign abus_data = abus_direction_internal ? abus_data_out : {16{1'bZ}};
@@ -1323,17 +1328,17 @@ module sdram_bridge (
 	end
 	
     //latching debug
-    always @(posedge sdram_clock) begin
-        sdram_debug_read_1 <= 0;
-		if (sdram_mode == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
-			//SDRAM1
-            if (sdram_wait_counter == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
-                if (~abus_chipselect_buf[0]) begin
-                    sdram_debug_read_1 <= 1'b1;
-				end
-            end
-		end
-	end
+    // always @(posedge sdram_clock) begin
+    //     sdram_debug_read_1 <= 0;
+	// 	if (sdram_mode == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
+	// 		//SDRAM1
+    //         if (sdram_wait_counter == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
+    //             if (~abus_chipselect_buf[0]) begin
+    //                 sdram_debug_read_1 <= 1'b1;
+	// 			end
+    //         end
+	// 	end
+	// end
 	
 	/*always @(posedge sdram_clock) begin
 		sdram_debug_read_2 <= 0;
@@ -1342,12 +1347,12 @@ module sdram_bridge (
 		end
 	end*/
 
-    always @(posedge sdram_clock) sdram_debug_read_1_d1 <= sdram_debug_read_1;
-    always @(posedge sdram_clock) sdram_debug_read_1_d2 <= sdram_debug_read_1_d1;
-    always @(posedge sdram_clock) sdram_debug_read_2_d1 <= sdram_debug_read_2;
-    always @(posedge sdram_clock) sdram_debug_read_2_d2 <= sdram_debug_read_2_d1;
-    assign sdram_debug_1 = sdram_debug_read_1 || sdram_debug_read_1_d1 || sdram_debug_read_1_d2 ||
-                           sdram_debug_read_2 || sdram_debug_read_2_d1 || sdram_debug_read_2_d2;
+    // always @(posedge sdram_clock) sdram_debug_read_1_d1 <= sdram_debug_read_1;
+    // always @(posedge sdram_clock) sdram_debug_read_1_d2 <= sdram_debug_read_1_d1;
+    // always @(posedge sdram_clock) sdram_debug_read_2_d1 <= sdram_debug_read_2;
+    // always @(posedge sdram_clock) sdram_debug_read_2_d2 <= sdram_debug_read_2_d1;
+    // assign sdram_debug_1 = sdram_debug_read_1 || sdram_debug_read_1_d1 || sdram_debug_read_1_d2 ||
+    //                        sdram_debug_read_2 || sdram_debug_read_2_d1 || sdram_debug_read_2_d2;
     
     //latching sdram data to Wishbone on negative clock
     always @(posedge sdram_clock) begin
