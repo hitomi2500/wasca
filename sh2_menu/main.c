@@ -41,7 +41,7 @@ void redraw_menu (int current_item) {
 	y+=_fh;
 	int offset = 1;
 	int item = 0;
-	while ((pAdvertiseList[offset] != 0) &&(item < 24)) {
+	while ((pAdvertiseList[offset] != 0) &&(item < 20)) {
 		sprintf(string_buf,"%i. %s", pAdvertiseList[offset],&(pAdvertiseList[offset+1]));
 		DrawString(string_buf, x, y, (item == current_item) ? FONT_GREEN : FONT_WHITE);y+=_fh;
 		item++; 
@@ -101,7 +101,6 @@ int main(void)
 	}
 	
 	int current_item = 0;
-	//redraw_menu(current_item);
 	int preparing = 0;
 	int go_reboot = 0;
 	int go_multiplayer = 0;
@@ -128,6 +127,7 @@ int main(void)
 		if ((preparing == 0) && (controller.pressed.button.a)) {
 			wait_for_key_unpress();
 			pWascaRegs[10] = current_item+1;
+			ClearText(10,(list_size+4)*_fh,280,_fh*3);
 			preparing = 1;
 			go_reboot = 1;
 		}
@@ -139,27 +139,24 @@ int main(void)
 		if ((preparing == 0) && (controller.pressed.button.c)) {
 			wait_for_key_unpress();
 			pWascaRegs[10] = current_item+1;
+			ClearText(10,(list_size+4)*_fh,280,_fh*3);
 			preparing = 1;
 			go_multiplayer = 1;
 		}
-		
-		//ClearText(70+strlen("MODE: ")*_fw,(list_size+9)*_fh,10*_fw,_fh);
-		//sprintf(string_buf,"MODE: %04x",pWascaRegs[10]);
-		//DrawString(string_buf, 70, (list_size+9)*_fh, FONT_WHITE);
 
 		if (preparing == 1) {
 			counter = pWascaRegs[8];
-			ClearText(70+strlen("Loading: ")*_fw,(list_size+8)*_fh,3*_fw,_fh);
+			ClearText(70+strlen("Loading: ")*_fw,(list_size+5)*_fh,3*_fw,_fh);
 			sprintf(string_buf,"Loading: %3d percents     ",counter);
-			DrawString(string_buf, 70, (list_size+8)*_fh, FONT_WHITE);
+			DrawString(string_buf, 70, (list_size+5)*_fh, FONT_WHITE);
 			if (counter == 100)
 				preparing = 2;
 		}
 
 		if (preparing == 2) {
-			ClearText(70+strlen("Loading: ")*_fw,(list_size+8)*_fh,15*_fw,_fh);
+			ClearText(70+strlen("Loading: ")*_fw,(list_size+5)*_fh,15*_fw,_fh);
 			sprintf(string_buf,"Loading: complete");
-			DrawString(string_buf, 70, (list_size+8)*_fh, FONT_WHITE);
+			DrawString(string_buf, 70, (list_size+5)*_fh, FONT_WHITE);
 
 			preparing = 0;
 			if (go_reboot)

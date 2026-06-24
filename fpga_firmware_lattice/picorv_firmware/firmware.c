@@ -770,7 +770,7 @@ int main() {
 		if ( (mini_strstr(_filinfo.fname,".ss")) || (mini_strstr(_filinfo.fname,".bin")) || (mini_strstr(_filinfo.fname,".SS")) || (mini_strstr(_filinfo.fname,".BIN")) ) {
 			if ((memcmp(_filinfo.fname,"wasca.ss",8) != 0) && (memcmp(_filinfo.fname,"backup05.bin",12) != 0) && (memcmp(_filinfo.fname,"backup1.bin",11) != 0) &&
 			   												   (memcmp(_filinfo.fname,"backup2.bin",11) != 0) && (memcmp(_filinfo.fname,"backup4.bin",11) != 0) ){
-				if (roms_count < 10) {
+				if (roms_count < 11) {
 					memset(roms_filenames[roms_count],0,64);
 					mini_strcpy(roms_filenames[roms_count],_filinfo.fname);
 					roms_count++;
