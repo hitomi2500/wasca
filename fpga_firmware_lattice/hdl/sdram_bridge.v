@@ -293,8 +293,6 @@ module sdram_bridge (
 	
 	reg [15:0] sdram_dq_out;
 	initial sdram_dq_out = 0;
-	//reg [15:0] sdram2_dq_out_reg;
-	//initial sdram2_dq_out_reg = 0;
 	reg [15:0] sdram2_dq_out;
     initial sdram2_dq_out = 0;
 	reg sdram_dq_oe;
@@ -309,18 +307,12 @@ module sdram_bridge (
 	always @(posedge sdram_clk) sdram_dq_in_dummy_pipeline1 <= sdram_dq;
 	always @(posedge sdram_clk) sdram_dq_in_dummy_pipeline2 <= sdram_dq_in_dummy_pipeline1;
 	assign sdram_dq_in = sdram_dq;
-	//assign sdram2_dq = (sdram2_dq_oe) ? sdram2_dq_out_reg[7:0] : {8{1'bZ}};
 	assign sdram2_dq = (sdram2_dq_oe) ? sdram2_dq_out : {16{1'bZ}};
-	//reg [7:0] sdram2_dq_in_dummy_pipeline1;
     reg [15:0] sdram2_dq_in_dummy_pipeline1;
 	reg [15:0] sdram2_dq_in_dummy_pipeline2;
-	//always @(posedge sdram2_clk) sdram2_dq_in_dummy_pipeline1 <= sdram2_dq;
 	always @(posedge sdram_clk) sdram2_dq_in_dummy_pipeline1 <= sdram2_dq;
 	always @(posedge sdram_clk) sdram2_dq_in_dummy_pipeline2 <= sdram2_dq_in_dummy_pipeline1;
 	assign sdram2_dq_in = sdram2_dq;
-	//reg [1:0] sdram2_dqm_reg;
-	//initial sdram2_dqm_reg = 2'b0;
-	//assign sdram2_dqm[0] = sdram2_dqm_reg[0];
 	
 	reg [24:1] abus_address_ms;
 	initial abus_address_ms = 0;
@@ -485,19 +477,9 @@ module sdram_bridge (
     reg [3:0] wasca_mode;
     reg [3:0] sdram_mode;
     
-	//reg sdram2_delayed_read_abus;
-	//reg sdram2_delayed_read_wishbone;
-    
 // synopsys translate_off
     time ABUS_request_time;
 // synopsys translate_on
-
-    /*reg sdram_debug_read_1;
-    reg sdram_debug_read_1_d1;
-    reg sdram_debug_read_1_d2;
-    reg sdram_debug_read_2;
-    reg sdram_debug_read_2_d1;
-    reg sdram_debug_read_2_d2;*/
     
     initial begin
         sdram_abus_pending = 0;
@@ -552,16 +534,6 @@ module sdram_bridge (
         my_little_transaction_dir = 0;
         wasca_mode = 0;
         sdram_mode = 0;
-        
-		//sdram2_delayed_read_abus = 0;
-		//sdram2_delayed_read_wishbone = 0;
-		
-		/*sdram_debug_read_1 = 0;
-		sdram_debug_read_1_d1 = 0;
-		sdram_debug_read_1_d2 = 0;
-		sdram_debug_read_2 = 0;
-		sdram_debug_read_2_d1 = 0;
-		sdram_debug_read_2_d2 = 0;*/
         sdram_debug = 0;
     end
 
@@ -890,7 +862,6 @@ module sdram_bridge (
 
     always @(posedge sdram_clock) begin
         sdram_autorefresh_counter <= sdram_autorefresh_counter + 10'b1;
-        //sdram2_dqm_reg[0] <= sdram2_dqm_reg[1];
         case (sdram_mode)
             `SDRAM_INIT0 : begin
             	//first stage init. cke off, dqm high,  others in nop command
@@ -901,7 +872,6 @@ module sdram_bridge (
                 sdram2_cas_n <= 1'b1;
                 sdram2_cke <= 0;
                 sdram2_dq_oe <= 0;
-                //sdram2_dqm_reg <= 2'b11;
                 sdram2_dqm <= 2'b11;
                 sdram_init_counter <= sdram_init_counter + 16'b1;
 				wishbone_sdram_readdatavalid <= 0;
@@ -1017,7 +987,6 @@ module sdram_bridge (
                 sdram2_cke <= 1'b1;
                 sdram2_dq_oe <= 0;
                 sdram2_ras_n <= 1'b1;
-                //sdram2_dqm_reg <= 2'b00;
                 sdram2_dqm <= 2'b00;
                 wishbone_sdram_complete <= 0;
                 wishbone_sdram_readdatavalid <= 0;
@@ -1133,12 +1102,10 @@ module sdram_bridge (
                             sdram_dq_oe <= 1'b1;
                         sdram_addr <= {3'b001,1'b0,abus_address_latched[9:1]};
                         sdram_ba <= abus_address_latched[11:10];
-                        //sdram2_dqm_reg <= {abus_write_buf[0],abus_write_buf[1]};
                         sdram2_dqm <= {abus_write_buf[0],abus_write_buf[1]};
                         if (~abus_chipselect_buf[1])//only writing if CS1
                             sdram2_we_n <= 0;    
                         sdram2_cas_n <= 0;
-                        //sdram2_dq_out_reg[15:0] <= {abus_data_in[7:0],abus_data_in[15:8]};
                         sdram2_dq_out[15:0] <= {abus_data_in[7:0],abus_data_in[15:8]};
                         if (~abus_chipselect_buf[1])//only writing if CS1
                             sdram2_dq_oe <= 1'b1;
@@ -1185,7 +1152,6 @@ module sdram_bridge (
 				sdram2_cas_n <= 1'b1;
 				sdram2_we_n <= 1'b1;
 				//sdram2_dq_oe <= 0;
-                //sdram2_dq_out_reg[7:0] <= sdram2_dq_out_reg[15:8];
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
 				if (sdram_wait_counter == 3'd1) begin
                     sdram_abus_complete <= 1'b1;
@@ -1196,7 +1162,6 @@ module sdram_bridge (
                     sdram2_dq_oe <= 0;
                     sdram_abus_complete <= 0;
                     sdram_dqm <= 2'b00;
-                    //sdram2_dqm_reg <= 2'b00;
                     sdram2_dqm <= 2'b00;
                 end
             end
@@ -1228,13 +1193,11 @@ module sdram_bridge (
                         if (~wishbone_sdram_pending_address[24])//only writing if in SDRAM1 range
                             sdram_dq_oe <= 1'b1;
                         sdram_addr <= {3'b001,1'b0,wishbone_sdram_pending_address[8:0]};
-                        //sdram2_dqm_reg <={~wishbone_sdram_byteenable[0],~wishbone_sdram_byteenable[1]};
                         sdram2_dqm <={~wishbone_sdram_byteenable[0],~wishbone_sdram_byteenable[1]};
                         if (wishbone_sdram_pending_address[24])//only writing if in SDRAM2 range
                             sdram2_we_n <= 0;    
                         sdram2_cas_n <= 0;
                         sdram2_ba <= wishbone_sdram_pending_address[9:8];
-                        //sdram2_dq_out_reg[15:0] <= {wishbone_sdram_pending_data[15:0]};
                         sdram2_dq_out[15:0] <= wishbone_sdram_pending_data[15:0];
                         if (wishbone_sdram_pending_address[24])//only writing if in SDRAM2 range
 						    sdram2_dq_oe <= 1'b1;
@@ -1267,7 +1230,6 @@ module sdram_bridge (
 				sdram2_cas_n <= 1'b1;
                 sdram2_we_n <= 1'b1;
                 //sdram2_dq_oe <= 0;
-                //sdram2_dq_out_reg[7:0] <= sdram2_dq_out_reg[15:8];
 				sdram_wait_counter <= sdram_wait_counter - 3'b1;
 				wishbone_sdram_readdatavalid <= 0; //works as ack for write too, resetting early 
                 if (sdram_wait_counter == 3'd1) begin
@@ -1279,7 +1241,6 @@ module sdram_bridge (
                     sdram2_dq_oe <= 0;
                     wishbone_sdram_complete <= 1'b1;
                     sdram_dqm <= 2'b00;
-                    //sdram2_dqm_reg <= 2'b00;
                     sdram2_dqm <= 2'b00;
                     wishbone_sdram_waitrequest <= 0;//single active cycle
 					wishbone_sdram_reset_pending_sdram <= 0;
@@ -1290,7 +1251,6 @@ module sdram_bridge (
     
     //latching sdram data to ABUS
     always @(posedge sdram_clock) begin
-		//sdram2_delayed_read_abus <= 0;
 		if (sdram_mode == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
 			//SDRAM1
             if (sdram_wait_counter == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
@@ -1306,9 +1266,7 @@ module sdram_bridge (
             if (sdram_wait_counter == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd3)) begin
                 if (~abus_chipselect_buf[1]) begin
                     //sdram2_datain_latched[7:0] <= sdram2_dq_in;
-					//sdram_datain_latched[7:0] <= sdram2_dq_in;
                     sdram_datain_latched <= sdram2_dq_in;
-					//sdram2_delayed_read_abus <= 1'b1;
 	                // synopsys translate_off
     	            if ($time - ABUS_request_time > 92)
         	            $display ("ABUS ERROR R2 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
@@ -1316,15 +1274,6 @@ module sdram_bridge (
 				end
             end
 		end
-		//second part for SDRAM2
-		/*if (sdram2_delayed_read_abus) begin
-           	//sdram2_datain_latched[15:8] <= sdram2_dq_in;
-           	sdram_datain_latched[15:8] <= sdram2_dq_in;
-			// synopsys translate_off
-			if ($time - ABUS_request_time > 92)
-				$display ("ABUS ERROR R3 at time %t: sdram reply too late for READ, total time", $time,$time - ABUS_request_time);
-			// synopsys translate_on
-		end*/
 	end
 	
     //latching debug
@@ -1339,24 +1288,9 @@ module sdram_bridge (
     //         end
 	// 	end
 	// end
-	
-	/*always @(posedge sdram_clock) begin
-		sdram_debug_read_2 <= 0;
-		if (sdram2_delayed_read_abus) begin
-           	sdram_debug_read_2 <= 1'b1;
-		end
-	end*/
-
-    // always @(posedge sdram_clock) sdram_debug_read_1_d1 <= sdram_debug_read_1;
-    // always @(posedge sdram_clock) sdram_debug_read_1_d2 <= sdram_debug_read_1_d1;
-    // always @(posedge sdram_clock) sdram_debug_read_2_d1 <= sdram_debug_read_2;
-    // always @(posedge sdram_clock) sdram_debug_read_2_d2 <= sdram_debug_read_2_d1;
-    // assign sdram_debug_1 = sdram_debug_read_1 || sdram_debug_read_1_d1 || sdram_debug_read_1_d2 ||
-    //                        sdram_debug_read_2 || sdram_debug_read_2_d1 || sdram_debug_read_2_d2;
     
     //latching sdram data to Wishbone on negative clock
     always @(posedge sdram_clock) begin
-        //sdram2_delayed_read_wishbone <= 0;
         if (sdram_mode == `SDRAM_WISHBONE_READ_AND_PRECHARGE) begin
 			//SDRAM1
             if (sdram_wait_counter == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd4)) //4 works!
@@ -1365,14 +1299,9 @@ module sdram_bridge (
 			//first part for SDRAM2
             if (sdram_wait_counter == (3'd`TIMING_WISHBONE_ACTIVATE_TO_READ-3'd3)) //
                 if (wishbone_sdram_pending_address[24]) begin
-                    //wishbone_sdram_readdata_latched[7:0] <= sdram2_dq_in;
                     wishbone_sdram_readdata_latched[15:0] <= sdram2_dq_in;
-                    //sdram2_delayed_read_wishbone <= 1'b1;
                 end
 		end
-		//second part for SDRAM2
-        //if (sdram2_delayed_read_wishbone) //should be 5?
-        //    wishbone_sdram_readdata_latched[15:8] <= sdram2_dq_in;
 	end
 	
 	//------------------------------ A-bus transactions counter ---------------------------------------	

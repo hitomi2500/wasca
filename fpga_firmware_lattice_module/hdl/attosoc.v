@@ -67,7 +67,7 @@ module attosoc (
 	output sdram2_we_n,
 	output sdram2_clk,
 	//debug
-	output sdram_debug_1
+	output [3:0] sdram_debug
 );
 
 	reg [5:0] reset_cnt = 0;
@@ -387,7 +387,7 @@ module attosoc (
 	   .saturn_reset(saturn_reset),
 	   .reset(~resetn),
 	   //debug
-	   .sdram_debug_1(sdram_debug_1)
+	   .sdram_debug(sdram_debug)
 	);
 	
 	

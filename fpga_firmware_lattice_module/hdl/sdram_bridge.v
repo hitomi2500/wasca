@@ -18,6 +18,8 @@ module pll_shifted (
 		.Z(clk_shift)
 	);
 
+    //assign clk_shift = clki;
+
     // These attributes are commonly emitted by ecppll / prjtrellis-generated code.
     /*(* FREQUENCY_PIN_CLKI="133" *)
     (* FREQUENCY_PIN_CLKOS="133" *)
@@ -209,7 +211,7 @@ module sdram_bridge (
 	input wire reset,
 	
 	//debug 
-	output wire sdram_debug_1
+	output reg [3:0] sdram_debug
 	);
 	
 	initial begin
@@ -714,6 +716,10 @@ module sdram_bridge (
     always @(posedge sdram_clock)
 	    if ( abus_cs0_regs_write && (abus_address_latched[4:1] == {1'h1,3'h1}) )
 	           REG_FSCNTRL <= abus_data_in[1:0];
+	//profiling/debug in same register
+	always @(posedge sdram_clock)
+	    if ( abus_cs0_regs_write && (abus_address_latched[4:1] == {1'h1,3'h1}) )
+	           sdram_debug <= abus_data_in[7:4];
 	
 	assign abus_data_in = abus_data;//abus_data_buf;
 	assign abus_data = abus_direction_internal ? abus_data_out : {16{1'bZ}};
@@ -1304,17 +1310,17 @@ module sdram_bridge (
 	end
 	
     //latching debug
-    always @(posedge sdram_clock) begin
-        sdram_debug_read_1 <= 0;
-		if (sdram_mode == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
-			//SDRAM1
-            if (sdram_wait_counter == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
-                if (~abus_chipselect_buf[0]) begin
-                    sdram_debug_read_1 <= 1'b1;
-				end
-            end
-		end
-	end
+    // always @(posedge sdram_clock) begin
+    //     sdram_debug_read_1 <= 0;
+	// 	if (sdram_mode == `SDRAM_ABUS_READ_AND_PRECHARGE) begin
+	// 		//SDRAM1
+    //         if (sdram_wait_counter == (3'd`TIMING_ABUS_ACTIVATE_TO_READ-3'd4)) begin
+    //             if (~abus_chipselect_buf[0]) begin
+    //                 sdram_debug_read_1 <= 1'b1;
+	// 			end
+    //         end
+	// 	end
+	// end
 	
 	always @(posedge sdram_clock) begin
 		sdram_debug_read_2 <= 0;
