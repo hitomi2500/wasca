@@ -318,7 +318,7 @@ void prepare_mode () {
 				}
 				f_close(&_file);
 			}
-			f_open(&_file,"backup05.bin",FA_READ | FA_WRITE);
+			f_open(&_file,"backup05.bin",FA_READ);
 			f_lseek(&_file,0);
 			for (int i=0;i<1024;i++) {
 				f_read(&_file,buffer,1024,&readen);
@@ -328,6 +328,7 @@ void prepare_mode () {
 				report_readiness( (creating_backup) ? 50 + (i*50)/1024 : (i*100)/1024 );
 				LED = (i&0x20) ? LED_EXT_YELLOW : LED_OFF;
 			}
+			f_close(&_file);
 			//keep file open
 			report_readiness(100);
 			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
@@ -349,7 +350,7 @@ void prepare_mode () {
 				}
 				f_close(&_file);
 			}
-			f_open(&_file,"backup1.bin",FA_READ | FA_WRITE);
+			f_open(&_file,"backup1.bin",FA_READ);
 			offset = 0;
 			while(false == f_eof(&_file)) {
 				readen = -1;
@@ -361,6 +362,7 @@ void prepare_mode () {
 				report_readiness( (creating_backup) ? 50 + offset/20972 : offset/10486 );
 				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
+			f_close(&_file);
 			//keep file open
 			report_readiness(100);
 			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
@@ -382,7 +384,7 @@ void prepare_mode () {
 				}
 				f_close(&_file);
 			}
-			f_open(&_file,"backup2.bin",FA_READ | FA_WRITE);
+			f_open(&_file,"backup2.bin",FA_READ);
 			offset = 0;
 			while(false == f_eof(&_file)) {
 				readen = -1;
@@ -394,6 +396,7 @@ void prepare_mode () {
 				report_readiness( (creating_backup) ? 50 + offset/41943 : offset/20972 );
 				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
+			f_close(&_file);
 			//keep file open
 			report_readiness(100);
 			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
@@ -415,7 +418,7 @@ void prepare_mode () {
 				}
 				f_close(&_file);
 			}
-			f_open(&_file,"backup4.bin",FA_READ | FA_WRITE);
+			f_open(&_file,"backup4.bin",FA_READ);
 			offset = 0;
 			while(false == f_eof(&_file)) {
 				readen = -1;
@@ -427,6 +430,7 @@ void prepare_mode () {
 				report_readiness( (creating_backup) ? 50 + offset/83886 : offset/41943 );
 				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
+			f_close(&_file);
 			//keep file open
 			report_readiness(100);
 			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0xFFFFFFFF;//allow full CS0 RAM in backup more
@@ -469,7 +473,7 @@ void prepare_mode () {
 					pSDRAM[offset+i] = buffer16[i];
 				}
 				offset+=512;
-				report_readiness( (100*offset)/_size );
+				report_readiness( (200*offset)/_size );
 				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
 			f_close(&_file);
@@ -539,6 +543,7 @@ void sync_mode () {
 					overall_backup_counter = 0;
 				}
 				if (overall_backup_enable) {
+					f_open(&_file,"backup05.bin",FA_READ | FA_WRITE);
 					LED = (overall_backup_counter & 0x20) ? LED_EXT_CYAN : LED_OFF;
 					sniffer_purge_fifo();
 					backup_sync_sector(overall_backup_counter,&_file);
@@ -551,11 +556,14 @@ void sync_mode () {
 						//stop overall sync mode
 						overall_backup_enable = 0;
 					}
+					f_close(&_file);
 				} else {
 					LED = LED_EXT_MAGENTA;
 					//read fifo
 					int sector = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+					f_open(&_file,"backup05.bin",FA_READ | FA_WRITE);
 					backup_sync_sector(sector,&_file);
+					f_close(&_file);
 				}
 			}
 			else
@@ -573,6 +581,7 @@ void sync_mode () {
 					overall_backup_counter = 0;
 				}
 				if (overall_backup_enable) {
+					f_open(&_file,"backup1.bin",FA_READ | FA_WRITE);
 					LED = (overall_backup_counter & 0x20) ? LED_EXT_CYAN : LED_OFF;
 					sniffer_purge_fifo();
 					backup_sync_sector(overall_backup_counter,&_file);
@@ -585,11 +594,14 @@ void sync_mode () {
 						//stop overall sync mode
 						overall_backup_enable = 0;
 					}
+					f_close(&_file);
 				} else {
 					LED = LED_EXT_MAGENTA;
 					//read fifo
 					int sector = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+					f_open(&_file,"backup1.bin",FA_READ | FA_WRITE);
 					backup_sync_sector(sector,&_file);
+					f_close(&_file);
 				}
 			}
 			else
@@ -607,6 +619,7 @@ void sync_mode () {
 					overall_backup_counter = 0;
 				}
 				if (overall_backup_enable) {
+					f_open(&_file,"backup2.bin",FA_READ | FA_WRITE);
 					LED = (overall_backup_counter & 0x20) ? LED_EXT_CYAN : LED_OFF;
 					sniffer_purge_fifo();
 					backup_sync_sector(overall_backup_counter,&_file);
@@ -619,11 +632,14 @@ void sync_mode () {
 						//stop overall sync mode
 						overall_backup_enable = 0;
 					}
+					f_close(&_file);
 				} else {
 					LED = LED_EXT_MAGENTA;
 					//read fifo
 					int sector = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+					f_open(&_file,"backup2.bin",FA_READ | FA_WRITE);
 					backup_sync_sector(sector,&_file);
+					f_close(&_file);
 				}
 			}
 			else
@@ -641,6 +657,7 @@ void sync_mode () {
 					overall_backup_counter = 0;
 				}
 				if (overall_backup_enable) {
+					f_open(&_file,"backup4.bin",FA_READ | FA_WRITE);
 					LED = (overall_backup_counter & 0x20) ? LED_EXT_CYAN : LED_OFF;
 					sniffer_purge_fifo();
 					backup_sync_sector(overall_backup_counter,&_file);
@@ -653,11 +670,14 @@ void sync_mode () {
 						//stop overall sync mode
 						overall_backup_enable = 0;
 					}
+					f_close(&_file);
 				} else {
 					LED = LED_EXT_MAGENTA;
 					//read fifo
 					int sector = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
+					f_open(&_file,"backup4.bin",FA_READ | FA_WRITE);
 					backup_sync_sector(sector,&_file);
+					f_close(&_file);
 				}
 			}
 			else
@@ -730,14 +750,11 @@ int main() {
 	mini_printf("OK\r\n");
 
 	DIR _dir;
+	FILINFO _filinfo;
 	mini_printf("Open root dir...");
 	fr = f_opendir(&_dir, "");
 	mini_printf("OK\r\n");
 
-	FILINFO _filinfo;
-	FIL _file;
-	int offset;
-	int error;
 
 	//not writing wasca.ss, done in bootstrap
 	//but setting led if it's present
@@ -753,7 +770,7 @@ int main() {
 		if ( (mini_strstr(_filinfo.fname,".ss")) || (mini_strstr(_filinfo.fname,".bin")) || (mini_strstr(_filinfo.fname,".SS")) || (mini_strstr(_filinfo.fname,".BIN")) ) {
 			if ((memcmp(_filinfo.fname,"wasca.ss",8) != 0) && (memcmp(_filinfo.fname,"backup05.bin",12) != 0) && (memcmp(_filinfo.fname,"backup1.bin",11) != 0) &&
 			   												   (memcmp(_filinfo.fname,"backup2.bin",11) != 0) && (memcmp(_filinfo.fname,"backup4.bin",11) != 0) ){
-				if (roms_count < 10) {
+				if (roms_count < 11) {
 					memset(roms_filenames[roms_count],0,64);
 					mini_strcpy(roms_filenames[roms_count],_filinfo.fname);
 					roms_count++;
