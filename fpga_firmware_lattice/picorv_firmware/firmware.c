@@ -46,7 +46,7 @@ unsigned char buffer[2048];
 char roms_filenames[32][64];
 
 __attribute__((aligned(4))) PARTITION VolToPart[FF_VOLUMES] = {
-    {0, 1},     /* 1st partition on the pd#0 */
+    {0, 0},   // logical drive 0: physical drive 0, auto-detect
 };
 
 volatile uint32_t * pWishboneRegs = (uint32_t *)0x01000000;
