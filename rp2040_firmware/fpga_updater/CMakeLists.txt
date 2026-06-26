@@ -24,6 +24,8 @@ if (EXISTS ${picoVscode})
 endif()
 # ====================================================================================
 set(PICO_BOARD pico CACHE STRING "Board type")
+cmake_path(CONVERT "${PICO_SDK_PATH}" TO_CMAKE_PATH_LIST PICO_SDK_PATH_FIXED)
+set(PICO_DEFAULT_BOOT_STAGE2_FILE ${PICO_SDK_PATH_FIXED}/src/rp2040/boot_stage2/boot2_generic_03h.S)
 
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
