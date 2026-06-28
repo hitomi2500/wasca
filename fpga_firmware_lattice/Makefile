@@ -35,14 +35,14 @@ firmware.hex: firmware.bin
 wasca.rv: firmware.bin
 	cp $< $@
 
-attosoc_tb.vvp: hdl/attosoc_tb.v hdl/sd_fake.v hdl/sd_fake_rom.v hdl/attosoc.v hdl/picorv32.v hdl/pulsesync.v hdl/sdram_bridge.v hdl/simpleuart.v hdl/sniff_fifo.v hdl/workram.v hdl/sd/sddma_mm2s.v hdl/sd/sddma_rxgears.v hdl/sd/sddma_txgears.v hdl/sd/sddma_s2mm.v hdl/sd/sddma.v hdl/sd/sdfifo.v hdl/sd/sdskid.v hdl/sd/sdio.v hdl/sd/sdwb.v hdl/sd/sdckgen.v hdl/sd/sdcmd.v hdl/sd/sdrxframe.v hdl/sd/sdtxframe.v hdl/sd/sdfrontend.v hdl/sd/sdio_top.v
+attosoc_tb.vvp: hdl/attosoc_tb.v hdl/sd_fake.v hdl/sd_fake_rom.v hdl/attosoc.v hdl/picorv32.v hdl/pulsesync.v hdl/sdram_bridge.v hdl/simpleuart.v hdl/sniff_fifo.v hdl/workram.v hdl/sd/sddma_mm2s.v hdl/sd/sddma_rxgears.v hdl/sd/sddma_txgears.v hdl/sd/sddma_s2mm.v hdl/sd/sddma.v hdl/sd/sdfifo.v hdl/sd/sdskid.v hdl/sd/sdio.v hdl/sd/sdwb.v hdl/sd/sdckgen.v hdl/sd/sdcmd.v hdl/sd/sdrxframe.v hdl/sd/sdtxframe.v hdl/sd/sdfrontend.v hdl/sd/sdio_top.v hdl/i2s_test_core.v
 	iverilog -s testbench -I sd -o $@ $^
 
 attosoc_sim: attosoc_tb.vvp bootstrap.hex
 	vvp -N $<
 
-attosoc.json: hdl/top.v hdl/pll.v hdl/attosoc.v hdl/picorv32.v hdl/pulsesync.v hdl/sdram_bridge.v hdl/simpleuart.v hdl/sniff_fifo.v hdl/workram.v hdl/sd/sddma_mm2s.v hdl/sd/sddma_rxgears.v hdl/sd/sddma_txgears.v hdl/sd/sddma_s2mm.v hdl/sd/sddma.v hdl/sd/sdfifo.v hdl/sd/sdskid.v hdl/sd/sdio.v hdl/sd/sdwb.v hdl/sd/sdckgen.v hdl/sd/sdcmd.v hdl/sd/sdrxframe.v hdl/sd/sdtxframe.v hdl/sd/sdfrontend.v hdl/sd/sdio_top.v bootstrap.hex
-	yosys -p "synth_ecp5 -json $@ -top top" hdl/top.v hdl/pll.v hdl/attosoc.v hdl/picorv32.v hdl/pulsesync.v hdl/sdram_bridge.v hdl/simpleuart.v hdl/sniff_fifo.v hdl/workram.v hdl/sd/sddma_mm2s.v hdl/sd/sddma_rxgears.v hdl/sd/sddma_txgears.v hdl/sd/sddma_s2mm.v hdl/sd/sddma.v hdl/sd/sdfifo.v hdl/sd/sdskid.v hdl/sd/sdio.v hdl/sd/sdwb.v hdl/sd/sdckgen.v hdl/sd/sdcmd.v hdl/sd/sdrxframe.v hdl/sd/sdtxframe.v hdl/sd/sdfrontend.v hdl/sd/sdio_top.v
+attosoc.json: hdl/top.v hdl/pll.v hdl/attosoc.v hdl/picorv32.v hdl/pulsesync.v hdl/sdram_bridge.v hdl/simpleuart.v hdl/sniff_fifo.v hdl/workram.v hdl/sd/sddma_mm2s.v hdl/sd/sddma_rxgears.v hdl/sd/sddma_txgears.v hdl/sd/sddma_s2mm.v hdl/sd/sddma.v hdl/sd/sdfifo.v hdl/sd/sdskid.v hdl/sd/sdio.v hdl/sd/sdwb.v hdl/sd/sdckgen.v hdl/sd/sdcmd.v hdl/sd/sdrxframe.v hdl/sd/sdtxframe.v hdl/sd/sdfrontend.v hdl/sd/sdio_top.v hdl/i2s_test_core.v bootstrap.hex
+	yosys -p "synth_ecp5 -json $@ -top top" hdl/top.v hdl/pll.v hdl/attosoc.v hdl/picorv32.v hdl/pulsesync.v hdl/sdram_bridge.v hdl/simpleuart.v hdl/sniff_fifo.v hdl/workram.v hdl/sd/sddma_mm2s.v hdl/sd/sddma_rxgears.v hdl/sd/sddma_txgears.v hdl/sd/sddma_s2mm.v hdl/sd/sddma.v hdl/sd/sdfifo.v hdl/sd/sdskid.v hdl/sd/sdio.v hdl/sd/sdwb.v hdl/sd/sdckgen.v hdl/sd/sdcmd.v hdl/sd/sdrxframe.v hdl/sd/sdtxframe.v hdl/sd/sdfrontend.v hdl/sd/sdio_top.v hdl/i2s_test_core.v
 
 attosoc_out.config: attosoc.json hdl/wasca.lpf
 	nextpnr-ecp5 --force --speed 6 --seed 0 --json attosoc.json --lpf hdl/wasca.lpf --textcfg $@ --25k --freq 133 --package CABGA256 --parallel-refine

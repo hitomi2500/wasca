@@ -43,6 +43,12 @@ module top(
     //qspi port, unused
     input wire qspi_cs,
     input wire [3:0] qspi_d,
+    //i2c
+    input scsp_clk,
+    output ssel,
+    output i2s_bclk,
+    output i2s_lrclk,
+    output i2s_dout,
 	//debug
 	output wire debug_1,
 	output wire debug_2,
@@ -105,11 +111,23 @@ attosoc soc(
     .sdram_debug(sdram_debug)
 );
 
+/*i2s_test_core sinegen(
+    .clk(scsp_clk),
+    .bck(i2s_bclk),
+    .ws(i2s_lrclk),
+    .data(i2s_dout)
+);*/
+
+assign ssel = 1'b1;//I2S override, should be 1 if not using I2S
+assign i2s_bclk = 0;
+assign i2s_lrclk = 0;
+assign i2s_dout = 0;
+
 assign sd_clk = sd_clk_internal;
 assign abus_buffers_enable = 0;//1'b1;
-assign debug_1 = sdram_debug[0];
-assign debug_2 = sdram_debug[1];
-assign debug_3 = sdram_debug[2];
-assign debug_4 = sdram_debug[3];
+assign debug_1 = abus_address[0];//sdram_debug[0];
+assign debug_2 = abus_address[1];//sdram_debug[1];
+assign debug_3 = abus_address[2];//sdram_debug[2];
+assign debug_4 = abus_address[3];//sdram_debug[3];
 
 endmodule
