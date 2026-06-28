@@ -58,12 +58,19 @@ module testbench();
 	wire sdram2_we_n;
 	wire sdram2_clk;
 	wire sdram2_clk_skew;
+	//i2s
+	reg scsp_clk;
+    wire ssel;
+    wire i2s_bclk;
+    wire i2s_lrclk;
+    wire i2s_dout;
 
 	//always #375 sdram_clk_i = (sdram_clk_i === 1'b0); //133 Mhz
 	//always #350 sdram_clk_i = (sdram_clk_i === 1'b0); //143 Mhz
 	//always #1000 mcu_clk_i = (mcu_clk_i === 1'b0);//50 Mhz
 	//always #2000 sd_clk_i = (sd_clk_i === 1'b0);//25 Mhz
 	always #2000 clk_25 = (clk_25 === 1'b0);//25 Mhz
+	always #22 scsp_clk = (scsp_clk === 1'b0);//22.5 Mhz
 
 	initial begin
 		$dumpfile("testbench.vcd");
@@ -282,7 +289,12 @@ module testbench();
 		.sdram2_dqm(sdram2_dqm),
 		.sdram2_ras_n(sdram2_ras_n),
 		.sdram2_we_n(sdram2_we_n),
-		.sdram2_clk(sdram2_clk)
+		.sdram2_clk(sdram2_clk),
+		.scsp_clk(scsp_clk),
+		.ssel(ssel),
+		.i2s_bclk(i2s_bclk),
+		.i2s_lrclk(i2s_lrclk),
+		.i2s_dout(i2s_dout)
 	);
 
 	sd_fake sd_emu (

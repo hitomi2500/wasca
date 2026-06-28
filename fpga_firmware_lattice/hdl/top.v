@@ -111,17 +111,17 @@ attosoc soc(
     .sdram_debug(sdram_debug)
 );
 
-/*i2s_test_core sinegen(
+i2s_test_core test_gen(
     .clk(scsp_clk),
     .bck(i2s_bclk),
     .ws(i2s_lrclk),
     .data(i2s_dout)
-);*/
+);
 
-assign ssel = 1'b1;//I2S override, should be 1 if not using I2S
-assign i2s_bclk = 0;
-assign i2s_lrclk = 0;
-assign i2s_dout = 0;
+assign ssel = 0;//1'b1;//I2S override, should be 1 if not using I2S
+//assign i2s_bclk = 0;
+//assign i2s_lrclk = 0;
+//assign i2s_dout = 0;
 
 assign sd_clk = sd_clk_internal;
 assign abus_buffers_enable = 0;//1'b1;
