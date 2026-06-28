@@ -181,7 +181,7 @@ module sdram_bridge (
 	output reg sdram2_cke,
 	output reg sdram2_cs_n,
 	inout wire [15:0] sdram2_dq,
-	output wire [1:0] sdram2_dqm,
+	output reg [1:0] sdram2_dqm,
 	output reg sdram2_ras_n,
 	output reg sdram2_we_n,
 	output wire sdram2_clk,

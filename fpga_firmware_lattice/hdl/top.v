@@ -44,11 +44,11 @@ module top(
     input wire qspi_cs,
     input wire [3:0] qspi_d,
     //i2c
-    input scsp_clk,
-    output ssel,
-    output i2s_bclk,
-    output i2s_lrclk,
-    output i2s_dout,
+    input wire scsp_clk,
+    output wire ssel,
+    output wire i2s_bclk,
+    output wire i2s_lrclk,
+    output wire i2s_dout,
 	//debug
 	output wire debug_1,
 	output wire debug_2,
@@ -60,6 +60,9 @@ wire clk_50;
 wire clk_133;
 wire sd_clk_internal;
 wire [3:0] sdram_debug;
+wire i2s_bclk_internal;
+wire i2s_lrclk_internal;
+wire i2s_dout_internal;
 
 pll_25_133 pll(
     .clk_in_25(clk_25),
@@ -113,21 +116,24 @@ attosoc soc(
 
 i2s_test_core test_gen(
     .clk(scsp_clk),
-    .bck(i2s_bclk),
-    .ws(i2s_lrclk),
-    .data(i2s_dout)
+    .bck(i2s_bclk_internal),
+    .ws(i2s_lrclk_internal),
+    .data(i2s_dout_internal)
 );
 
-assign ssel = 0;//1'b1;//I2S override, should be 1 if not using I2S
+assign ssel = 1'b1;//I2S override, should be 1 if not using I2S
 //assign i2s_bclk = 0;
 //assign i2s_lrclk = 0;
 //assign i2s_dout = 0;
+assign i2s_bclk = i2s_bclk_internal;
+assign i2s_lrclk = i2s_lrclk_internal;
+assign i2s_dout = i2s_dout_internal;
 
 assign sd_clk = sd_clk_internal;
 assign abus_buffers_enable = 0;//1'b1;
-assign debug_1 = abus_address[0];//sdram_debug[0];
-assign debug_2 = abus_address[1];//sdram_debug[1];
-assign debug_3 = abus_address[2];//sdram_debug[2];
-assign debug_4 = abus_address[3];//sdram_debug[3];
+assign debug_1 = scsp_clk;//abus_address[0];//sdram_debug[0];
+assign debug_2 = i2s_bclk_internal;//abus_address[1];//sdram_debug[1];
+assign debug_3 = i2s_lrclk_internal;//abus_address[2];//sdram_debug[2];
+assign debug_4 = i2s_dout_internal;//abus_address[3];//sdram_debug[3];
 
 endmodule

@@ -70,7 +70,7 @@ module testbench();
 	//always #1000 mcu_clk_i = (mcu_clk_i === 1'b0);//50 Mhz
 	//always #2000 sd_clk_i = (sd_clk_i === 1'b0);//25 Mhz
 	always #2000 clk_25 = (clk_25 === 1'b0);//25 Mhz
-	always #22 scsp_clk = (scsp_clk === 1'b0);//22.5 Mhz
+	always #2214 scsp_clk = (scsp_clk === 1'b0);//22.5 Mhz
 
 	initial begin
 		$dumpfile("testbench.vcd");
