@@ -130,7 +130,7 @@ int main(void)
 	video_screen_mode_t screenMode =
 	{
 		.scanmode = VIDEO_SCANMODE_240P,
-		.x_res = VIDEO_X_RESOLUTION_320,
+		.x_res = VIDEO_X_RESOLUTION_352,
 		.y_res = VDP2_TVMD_VERT_240,
 		.x_res_doubled = false,
 		.colorsystem = VDP2_TVMD_TV_STANDARD_NTSC,

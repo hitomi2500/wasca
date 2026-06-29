@@ -82,7 +82,7 @@ while i<50:
         for line in file:
             if 'Max frequency for clock' in line:
                 print(line.strip()) 
-            if '(PASS at 141.68' in line:
+            if '(PASS at 143.76' in line:
                 i=100500 #skipping remaining cycles
     i+=1
     
