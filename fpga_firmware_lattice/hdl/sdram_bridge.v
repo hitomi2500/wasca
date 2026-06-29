@@ -1,109 +1,5 @@
 `include "timescale.v"
 
-module pll_shifted (
-    input  wire clki,      // 133 MHz input
-    output wire clk_0deg,  // 133 MHz, used as feedback / internal reference
-    output wire clk_shift, // 133 MHz, slightly delayed
-    output wire locked
-);
-
-    assign clk_0deg = clki; 
-	assign locked = 1'b1;
-	
-    //120 ?
-    //127 occasional cs1 errors
-	DELAYG #(
-		.DEL_MODE ("USER_DEFINED"),
-		.DEL_VALUE(120)
-	) u_idelay (
-		.A(clki),
-		.Z(clk_shift)
-	);
-
-    //assign clk_shift = clki;
-
-    // These attributes are commonly emitted by ecppll / prjtrellis-generated code.
-    /*(* FREQUENCY_PIN_CLKI="133" *)
-    (* FREQUENCY_PIN_CLKOS="133" *)
-    (* FREQUENCY_PIN_CLKOP="133" *)
-    (* ICP_CURRENT="12" *)
-    (* LPF_RESISTOR="8" *)
-    (* MFG_ENABLE_FILTEROPAMP="1" *)
-    (* MFG_GMCREF_SEL="2" *)
-     EHXPLLL #(
-        .PLLRST_ENA("DISABLED"),
-        .INTFB_WAKE("DISABLED"),
-        .STDBY_ENABLE("DISABLED"),
-        .DPHASE_SOURCE("DISABLED"),
-
-        .OUTDIVIDER_MUXA("DIVA"),
-        .OUTDIVIDER_MUXB("DIVB"),
-        .OUTDIVIDER_MUXC("DIVC"),
-        .OUTDIVIDER_MUXD("DIVD"),
-
-        .CLKI_DIV(1),
-        .CLKFB_DIV(4),
-
-        // Shifted replica on CLKOP
-        .CLKOP_ENABLE("ENABLED"),
-        .CLKOP_DIV(16),
-        .CLKOP_CPHASE(5),
-        .CLKOP_FPHASE(0),
-		// 0 0 +616ps fails
-		// 1 0 +1600ps fails
-		// 2 0 fails
-		// 3 0 +2000ps almost works, 2-5 errors
-		// 4 0 works, 0-2 errors
-		// 5 0 works, 0-3 errors
-		// 6 0 works, 0-3 errors
-		// 7 0 +4700ps works, 0-3 errors
-		// 8 0 works, 0-3 errors
-		// 9 0 works, 0-4 errors
-		// 10 0 works, 1-4 errors
-		// 11 0 works, 0-4 errors
-		// 12 0 almost works, 2-5 errors
-
-        // Unshifted feedback clock on CLKOS
-        .CLKOS_ENABLE("ENABLED"),
-        .CLKOS_DIV(4),
-        .CLKOS_CPHASE(3),
-        .CLKOS_FPHASE(0),
-
-        .CLKOS2_ENABLE("DISABLED"),
-        .CLKOS3_ENABLE("DISABLED"),
-
-        // Feed back the unshifted output
-        .FEEDBK_PATH("CLKOS")
-    ) pll_i (
-        .CLKI(clki),
-        .CLKFB(clk_0deg),
-
-        .RST(1'b0),
-        .STDBY(1'b0),
-        .PHASESEL0(1'b0),
-        .PHASESEL1(1'b0),
-        .PHASEDIR(1'b0),
-        .PHASESTEP(1'b1),
-        .PHASELOADREG(1'b1),
-        .PLLWAKESYNC(1'b0),
-        .ENCLKOP(1'b0),
-        .ENCLKOS(1'b0),
-        .ENCLKOS2(1'b0),
-        .ENCLKOS3(1'b0),
-
-        .CLKOP(clk_shift),
-        .CLKOS(clk_0deg),
-        .CLKOS2(),
-        .CLKOS3(),
-        .LOCK(locked),
-
-        .CLKINTFB(),
-        .REFCLK(),
-        .INTLOCK()
-    );*/
-
-endmodule
-
 `define DIR_NONE 0
 `define DIR_WRITE 1
 `define DIR_READ 2
@@ -234,26 +130,36 @@ module sdram_bridge (
 		sdram2_we_n = 1'b1;
 	end
 	
-    assign sdram_clk = sdram_clock;
-    //assign sdram2_clk = sdram_clock;
+    //assign sdram_clk = sdram_clock;
+    //127
+    //120 10+ errors
+    //110 154 errors
+    //100 4-6 errors
+    //95 585 errors
+    //90 14 errors
+    //80 100+ errors
+    //70 does not work
+	//30 does not work
+    DELAYG #(
+		.DEL_MODE ("USER_DEFINED"),
+		.DEL_VALUE(127)
+	) delay_line_sdram1 (
+		.A(sdram_clock),
+		.Z(sdram_clk)
+	);
 	
-	/*DELAYG #(
-		.DEL_VALUE(30)  // ~ 32 quants per 1ns
-	)	
-	delay_line_sdram2(
-    .A(sdram_clock),
-    .Z(sdram2_clk)
-	);*/
-	
-	wire sdram_clock_pll_delayed;
+	//wire sdram_clock_pll_delayed;
 	//assign sdram_clk = sdram_clock_pll_delayed;
 	//assign sdram2_clk = sdram_clock_pll_delayed;
 
-	pll_shifted delay_pll_sdram2(
-		.clki(sdram_clock),
-    	.clk_0deg(),
-    	.clk_shift(sdram2_clk),
-    	.locked()
+    //120 ?
+    //127 occasional cs1 errors
+	DELAYG #(
+		.DEL_MODE ("USER_DEFINED"),
+		.DEL_VALUE(120)
+	) delay_line_sdram2 (
+		.A(sdram_clock),
+		.Z(sdram2_clk)
 	);
 	
 	wire [25:0] wishbone_regs_address = wishbone_regs_addr_i;
