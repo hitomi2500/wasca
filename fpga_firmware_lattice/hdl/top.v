@@ -121,7 +121,7 @@ i2s_test_core test_gen(
     .data(i2s_dout_internal)
 );
 
-assign ssel = 1'b1;//I2S override, should be 1 if not using I2S
+assign ssel = 0;//1'b1;//I2S override, should be 1 if not using I2S
 //assign i2s_bclk = 0;
 //assign i2s_lrclk = 0;
 //assign i2s_dout = 0;

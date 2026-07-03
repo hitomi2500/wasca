@@ -1,3 +1,5 @@
+`timescale 1ns / 1ns
+
 //`include "timescale.v"
 `timescale 1ns / 1ns
 
