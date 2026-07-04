@@ -116,15 +116,15 @@ attosoc soc(
     .sdram_debug(sdram_debug)
 );
 
-i2s_test_core test_gen(
+/*i2s_test_core test_gen(
     .clk(scsp_clk),
     .bck(i2s_bclk_internal),
     .ws(i2s_lrclk_internal),
     .data(i2s_dout_internal),
     .ssel(i2s_ssel_internal)
-);
+);*/
 
-assign i2s_test_enable = sdram_debug[0];
+assign i2s_test_enable = 0;//sdram_debug[0];
 
 assign ssel = (i2s_test_enable) ? i2s_ssel_internal : 1'b1;//1'b1;//I2S override, should be 1 if not using I2S
 assign i2s_bclk = (i2s_test_enable) ? i2s_bclk_internal : 0;
