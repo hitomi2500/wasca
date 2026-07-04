@@ -63,6 +63,8 @@ wire [3:0] sdram_debug;
 wire i2s_bclk_internal;
 wire i2s_lrclk_internal;
 wire i2s_dout_internal;
+wire i2s_ssel_internal;
+wire i2s_test_enable;
 
 pll_25_133 pll(
     .clk_in_25(clk_25),
@@ -118,22 +120,22 @@ i2s_test_core test_gen(
     .clk(scsp_clk),
     .bck(i2s_bclk_internal),
     .ws(i2s_lrclk_internal),
-    .data(i2s_dout_internal)
+    .data(i2s_dout_internal),
+    .ssel(i2s_ssel_internal)
 );
 
-assign ssel = 0;//1'b1;//I2S override, should be 1 if not using I2S
-//assign i2s_bclk = 0;
-//assign i2s_lrclk = 0;
-//assign i2s_dout = 0;
-assign i2s_bclk = i2s_bclk_internal;
-assign i2s_lrclk = i2s_lrclk_internal;
-assign i2s_dout = i2s_dout_internal;
+assign i2s_test_enable = sdram_debug[0];
+
+assign ssel = (i2s_test_enable) ? i2s_ssel_internal : 1'b1;//1'b1;//I2S override, should be 1 if not using I2S
+assign i2s_bclk = (i2s_test_enable) ? i2s_bclk_internal : 0;
+assign i2s_lrclk = (i2s_test_enable) ? i2s_lrclk_internal : 0;
+assign i2s_dout = (i2s_test_enable) ? i2s_dout_internal : 0;
 
 assign sd_clk = sd_clk_internal;
 assign abus_buffers_enable = 0;//1'b1;
-assign debug_1 = scsp_clk;//abus_address[0];//sdram_debug[0];
-assign debug_2 = i2s_bclk_internal;//abus_address[1];//sdram_debug[1];
-assign debug_3 = i2s_lrclk_internal;//abus_address[2];//sdram_debug[2];
-assign debug_4 = i2s_dout_internal;//abus_address[3];//sdram_debug[3];
+assign debug_1 = 0;//scsp_clk;//abus_address[0];//sdram_debug[0];
+assign debug_2 = 0;//i2s_bclk_internal;//abus_address[1];//sdram_debug[1];
+assign debug_3 = 0;//i2s_lrclk_internal;//abus_address[2];//sdram_debug[2];
+assign debug_4 = 0;//i2s_dout_internal;//abus_address[3];//sdram_debug[3];
 
 endmodule

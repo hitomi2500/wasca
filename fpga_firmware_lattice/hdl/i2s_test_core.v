@@ -2,7 +2,8 @@ module i2s_test_core (
     input  wire clk,      // 22.5792 MHz
     output reg  bck  = 0,
     output reg  ws   = 0,
-    output reg  data = 0
+    output reg  data = 0,
+    output reg  ssel = 1'b1
 );
 
 //////////////////////////////////////////////////////////////
@@ -74,6 +75,7 @@ reg [1:0] mode = 0;
 // 0 silence
 // 1 left saw
 // 2 right saw
+// 3 ssel off
 
 //////////////////////////////////////////////////////////////
 
@@ -124,6 +126,7 @@ if(bck_fall) begin
                 case(mode)
                     0: mode <= 1;
                     1: mode <= 2;
+                    2: mode <= 3;
                     default: mode <= 0;
                 endcase
 
@@ -134,18 +137,27 @@ if(bck_fall) begin
             0: begin
                 left_sample  <= 0;
                 right_sample <= 0;
+                ssel <= 0;
             end
 
             1: begin
                 phaseL <= phaseL + INC500;
                 left_sample  <= phaseL[31:16];
                 right_sample <= 0;
+                ssel <= 0;
             end
 
             2: begin
                 phaseR <= phaseR + INC300;
                 left_sample  <= 0;
                 right_sample <= phaseR[31:16];
+                ssel <= 0;
+            end
+
+            3: begin
+                left_sample  <= 0;
+                right_sample <= 0;
+                ssel <= 1'b1;
             end
 
             endcase
