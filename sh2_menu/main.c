@@ -10,6 +10,9 @@
 #include "control.h"
 #include "video_vdp2.h"
 
+#define MENU_VERSION_MAJOR 1
+#define MENU_VERSION_MINOR 1
+
 int global_frame_count = 0;
 
 static void suite_vblank_out_handler(void *work __unused)
@@ -31,13 +34,22 @@ uint32_t NextRandom(uint32_t prev) {
 		return (prev & 0x7FFFFFFF) * 2;
 }
 
+void get_version_string(char * buf) {
+	uint16_t* pWascaRegs = (uint16_t*)0x23FFFFE0;
+	sprintf(buf, "v.%d.%d RISC-V %d.%d HW %d.%d",MENU_VERSION_MAJOR,MENU_VERSION_MINOR,
+		pWascaRegs[12]/256,pWascaRegs[12]%256,
+		pWascaRegs[11]/256,pWascaRegs[11]%256);
+}
+
 void redraw_menu (int current_item) {
 	char string_buf[128];
 	int x = 20;
 	int y = 10;
 	uint8_t* pAdvertiseList = (uint8_t*)0x23000000;
 
-	DrawString("wasca boot menu", x+40, y, FONT_WHITE);y+=_fh;
+	DrawString("wasca menu", x+40, y, FONT_WHITE);
+	get_version_string(string_buf);
+	DrawString(string_buf, x+40+12*_fw, y, FONT_WHITE);y+=_fh;
 	y+=_fh;
 	int offset = 1;
 	int item = 0;
