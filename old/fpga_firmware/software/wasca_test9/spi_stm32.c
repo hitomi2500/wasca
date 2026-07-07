@@ -433,8 +433,8 @@ void spi_exc_version(wl_verinfo_max_t* max_ver, wl_verinfo_stm_t* arm_ver)
     /* Write Nios build date and time. */
     char* build_date = __DATE__;
     char* build_time = __TIME__;
-    strcpy(max_ver_buff.build_date, build_date);
-    strcpy(max_ver_buff.build_time, build_time);
+    strncpy(max_ver_buff.build_date, build_date, sizeof(max_ver_buff.build_date) - 1);
+    strncpy(max_ver_buff.build_time, build_time, sizeof(max_ver_buff.build_time) - 1);
 
     /* Write OCRAM size. */
     max_ver_buff.ocram_size = ONCHIP_MEMORY2_0_SPAN;
