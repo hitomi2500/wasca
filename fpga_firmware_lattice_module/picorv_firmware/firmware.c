@@ -13,7 +13,7 @@
 #define WISHBONE_REG_FSCNTRL 0x1
 #define WISHBONE_REG_MODE 0x2
 #define WISHBONE_REG_HWVER 0x3
-//#define WISHBONE_REG_SWVER 0x4
+#define WISHBONE_REG_SWVER 0x4
 #define WISHBONE_REG_SNIFFER_DATA 0x5
 #define WISHBONE_REG_SNIFFER_CONTROL 0x8
 #define WISHBONE_REG_MAPPER_READ_LO 0x9
@@ -723,6 +723,9 @@ int main() {
 
 	uint16_t * buffer16 = (uint16_t *)buffer;
 	volatile int dummy;
+
+	//set version
+	pWishboneRegs[WISHBONE_REG_SWVER] = 0x0101; //software version register
 	
 	//set wishbone registers
 	pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1

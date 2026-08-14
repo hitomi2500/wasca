@@ -1,5 +1,11 @@
 `include "timescale.v"
 
+// 6/16/16/3 = 50 / 133.33 mhz
+// 6/17/17/3 = 50 / 141.68 mhz
+// 7/20/20/3 = 58.34 / 143.10 mhz
+// 8/23/23/4 = 50 / 143.75 mhz
+// 10/29/29/5 = 50 / 145 mhz
+
 module pll_25_133(input clk_in_25, output clk_out_50, output clk_out_133);
     (* ICP_CURRENT="6" *) (* LPF_RESISTOR="16" *) (* MFG_ENABLE_FILTEROPAMP="1" *) (* MFG_GMCREF_SEL="2" *)
     EHXPLLL #(
@@ -12,10 +18,10 @@ module pll_25_133(input clk_in_25, output clk_out_50, output clk_out_133);
         .OUTDIVIDER_MUXA("DIVA"),
         .CLKOP_ENABLE("ENABLED"),
         .CLKOS_ENABLE("ENABLED"),
-        .CLKOP_DIV(6),//6//6
-        .CLKOS_DIV(16),//15//16
-        .CLKFB_DIV(16),//15//16
-        .CLKI_DIV(3),
+        .CLKOP_DIV(10),
+        .CLKOS_DIV(29),
+        .CLKFB_DIV(29),
+        .CLKI_DIV(5),
         .FEEDBK_PATH("CLKOP")
     ) pll_i (
         .CLKI(clk_in_25),

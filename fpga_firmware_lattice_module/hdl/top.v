@@ -40,6 +40,15 @@ module top(
 	output wire sdram2_ras_n,
 	output wire sdram2_we_n,
 	output wire sdram2_clk,
+    //qspi port, unused
+    input wire qspi_cs,
+    input wire [3:0] qspi_d,
+    //i2c
+    input wire scsp_clk,
+    output wire ssel,
+    output wire i2s_bclk,
+    output wire i2s_lrclk,
+    output wire i2s_dout,
 	//debug
 	output wire debug_1,
 	output wire debug_2,
@@ -52,6 +61,11 @@ wire clk_133;
 wire sd_clk_internal;
 wire [3:0] sdram_debug;
 wire [0:0] sdram2_dqm_lo;
+wire i2s_bclk_internal;
+wire i2s_lrclk_internal;
+wire i2s_dout_internal;
+wire i2s_ssel_internal;
+wire i2s_test_enable;
 
 pll_25_133 pll(
     .clk_in_25(clk_25),
@@ -103,12 +117,27 @@ attosoc soc(
     .sdram_debug(sdram_debug)
 );
 
+/*i2s_test_core test_gen(
+    .clk(scsp_clk),
+    .bck(i2s_bclk_internal),
+    .ws(i2s_lrclk_internal),
+    .data(i2s_dout_internal),
+    .ssel(i2s_ssel_internal)
+);*/
+
+assign i2s_test_enable = 0;//sdram_debug[0];
+
+assign ssel = (i2s_test_enable) ? i2s_ssel_internal : 1'b1;//1'b1;//I2S override, should be 1 if not using I2S
+assign i2s_bclk = (i2s_test_enable) ? i2s_bclk_internal : 0;
+assign i2s_lrclk = (i2s_test_enable) ? i2s_lrclk_internal : 0;
+assign i2s_dout = (i2s_test_enable) ? i2s_dout_internal : 0;
+
 assign sd_clk = sd_clk_internal;
 assign abus_buffers_enable = 0;//1'b1;
 assign sdram2_dqm = {sdram2_dqm_lo[0],sdram2_dqm_lo[0]};
-assign debug_1 = sdram_debug[0];
-assign debug_2 = sdram_debug[1];
-assign debug_3 = sdram_debug[2];
-assign debug_4 = sdram_debug[3];
+assign debug_1 = 0;//scsp_clk;//abus_address[0];//sdram_debug[0];
+assign debug_2 = 0;//i2s_bclk_internal;//abus_address[1];//sdram_debug[1];
+assign debug_3 = 0;//i2s_lrclk_internal;//abus_address[2];//sdram_debug[2];
+assign debug_4 = 0;//i2s_dout_internal;//abus_address[3];//sdram_debug[3];
 
 endmodule

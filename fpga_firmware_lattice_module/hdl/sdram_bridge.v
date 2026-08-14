@@ -1,107 +1,5 @@
 `include "timescale.v"
 
-module pll_shifted (
-    input  wire clki,      // 133 MHz input
-    output wire clk_0deg,  // 133 MHz, used as feedback / internal reference
-    output wire clk_shift, // 133 MHz, slightly delayed
-    output wire locked
-);
-
-    assign clk_0deg = clki; 
-	assign locked = 1'b1;
-	
-	DELAYG #(
-		.DEL_MODE ("USER_DEFINED"),
-		.DEL_VALUE(100)
-	) u_idelay (
-		.A(clki),
-		.Z(clk_shift)
-	);
-
-    //assign clk_shift = clki;
-
-    // These attributes are commonly emitted by ecppll / prjtrellis-generated code.
-    /*(* FREQUENCY_PIN_CLKI="133" *)
-    (* FREQUENCY_PIN_CLKOS="133" *)
-    (* FREQUENCY_PIN_CLKOP="133" *)
-    (* ICP_CURRENT="12" *)
-    (* LPF_RESISTOR="8" *)
-    (* MFG_ENABLE_FILTEROPAMP="1" *)
-    (* MFG_GMCREF_SEL="2" *)
-     EHXPLLL #(
-        .PLLRST_ENA("DISABLED"),
-        .INTFB_WAKE("DISABLED"),
-        .STDBY_ENABLE("DISABLED"),
-        .DPHASE_SOURCE("DISABLED"),
-
-        .OUTDIVIDER_MUXA("DIVA"),
-        .OUTDIVIDER_MUXB("DIVB"),
-        .OUTDIVIDER_MUXC("DIVC"),
-        .OUTDIVIDER_MUXD("DIVD"),
-
-        .CLKI_DIV(1),
-        .CLKFB_DIV(4),
-
-        // Shifted replica on CLKOP
-        .CLKOP_ENABLE("ENABLED"),
-        .CLKOP_DIV(16),
-        .CLKOP_CPHASE(5),
-        .CLKOP_FPHASE(0),
-		// 0 0 +616ps fails
-		// 1 0 +1600ps fails
-		// 2 0 fails
-		// 3 0 +2000ps almost works, 2-5 errors
-		// 4 0 works, 0-2 errors
-		// 5 0 works, 0-3 errors
-		// 6 0 works, 0-3 errors
-		// 7 0 +4700ps works, 0-3 errors
-		// 8 0 works, 0-3 errors
-		// 9 0 works, 0-4 errors
-		// 10 0 works, 1-4 errors
-		// 11 0 works, 0-4 errors
-		// 12 0 almost works, 2-5 errors
-
-        // Unshifted feedback clock on CLKOS
-        .CLKOS_ENABLE("ENABLED"),
-        .CLKOS_DIV(4),
-        .CLKOS_CPHASE(3),
-        .CLKOS_FPHASE(0),
-
-        .CLKOS2_ENABLE("DISABLED"),
-        .CLKOS3_ENABLE("DISABLED"),
-
-        // Feed back the unshifted output
-        .FEEDBK_PATH("CLKOS")
-    ) pll_i (
-        .CLKI(clki),
-        .CLKFB(clk_0deg),
-
-        .RST(1'b0),
-        .STDBY(1'b0),
-        .PHASESEL0(1'b0),
-        .PHASESEL1(1'b0),
-        .PHASEDIR(1'b0),
-        .PHASESTEP(1'b1),
-        .PHASELOADREG(1'b1),
-        .PLLWAKESYNC(1'b0),
-        .ENCLKOP(1'b0),
-        .ENCLKOS(1'b0),
-        .ENCLKOS2(1'b0),
-        .ENCLKOS3(1'b0),
-
-        .CLKOP(clk_shift),
-        .CLKOS(clk_0deg),
-        .CLKOS2(),
-        .CLKOS3(),
-        .LOCK(locked),
-
-        .CLKINTFB(),
-        .REFCLK(),
-        .INTLOCK()
-    );*/
-
-endmodule
-
 `define DIR_NONE 0
 `define DIR_WRITE 1
 `define DIR_READ 2
@@ -233,25 +131,13 @@ module sdram_bridge (
 	end
 	
     assign sdram_clk = sdram_clock;
-    //assign sdram2_clk = sdram_clock;
-	
-	/*DELAYG #(
-		.DEL_VALUE(30)  // ~ 32 quants per 1ns
-	)	
-	delay_line_sdram2(
-    .A(sdram_clock),
-    .Z(sdram2_clk)
-	);*/
-	
-	wire sdram_clock_pll_delayed;
-	//assign sdram_clk = sdram_clock_pll_delayed;
-	//assign sdram2_clk = sdram_clock_pll_delayed;
 
-	pll_shifted delay_pll_sdram2(
-		.clki(sdram_clock),
-    	.clk_0deg(),
-    	.clk_shift(sdram2_clk),
-    	.locked()
+	DELAYG #(
+		.DEL_MODE ("USER_DEFINED"),
+		.DEL_VALUE(100)
+	) delay_line_sdram2 (
+		.A(sdram_clock),
+		.Z(sdram2_clk)
 	);
 	
 	wire [25:0] wishbone_regs_address = wishbone_regs_addr_i;
@@ -399,9 +285,9 @@ module sdram_bridge (
     reg [15:0] REG_MODE;
     initial REG_MODE = 0;
     reg [15:0] REG_HWVER;
-    initial REG_HWVER = 16'h200;
-    //reg [15:0] REG_SWVER;
-    //initial REG_SWVER = 0;
+    initial REG_HWVER = 16'h0001;
+    reg [15:0] REG_SWVER;
+    initial REG_SWVER = 0;
     reg [63:0] REG_MAPPER_READ;
     initial REG_MAPPER_READ = 0;
     reg [63:0] REG_MAPPER_WRITE;
@@ -482,13 +368,6 @@ module sdram_bridge (
 // synopsys translate_off
     time ABUS_request_time;
 // synopsys translate_on
-
-    reg sdram_debug_read_1;
-    reg sdram_debug_read_1_d1;
-    reg sdram_debug_read_1_d2;
-    reg sdram_debug_read_2;
-    reg sdram_debug_read_2_d1;
-    reg sdram_debug_read_2_d2;
     
     initial begin
         sdram_abus_pending = 0;
@@ -543,16 +422,10 @@ module sdram_bridge (
         my_little_transaction_dir = 0;
         wasca_mode = 0;
         sdram_mode = 0;
+        sdram_debug = 0;
         
 		sdram2_delayed_read_abus = 0;
 		sdram2_delayed_read_wishbone = 0;
-		
-		sdram_debug_read_1 = 0;
-		sdram_debug_read_1_d1 = 0;
-		sdram_debug_read_1_d2 = 0;
-		sdram_debug_read_2 = 0;
-		sdram_debug_read_2_d1 = 0;
-		sdram_debug_read_2_d2 = 0;
     end
 
     assign abus_direction = abus_direction_internal;
@@ -684,7 +557,7 @@ module sdram_bridge (
 					4'h9 :abus_data_out <= {14'b0,REG_FSCNTRL}; //wasca filesystem control register
 					4'ha :abus_data_out <= REG_MODE; //wasca mode register
 					4'hb :abus_data_out <= REG_HWVER; //wasca hwver register
-					//4'hc :abus_data_out <= REG_SWVER; //wasca swver register
+					4'hc :abus_data_out <= REG_SWVER; //wasca swver register
 					//4'hd :abus_data_out <= 16'h7761; //wasca signature "wa"
 					//4'he :abus_data_out <= 16'h7363; //wasca signature "sc"
 					//4'hf :abus_data_out <= 16'h6120; //wasca signature "a "
@@ -740,7 +613,7 @@ module sdram_bridge (
 	           4'h1 : wishbone_regs_readdata <= {30'b0,REG_FSCNTRL};
 	           4'h2 : wishbone_regs_readdata <= {16'b0,REG_MODE};
 	           4'h3 : wishbone_regs_readdata <= {16'b0,REG_HWVER};
-	           //4'h4 : wishbone_regs_readdata <= {16'b0,REG_SWVER};
+	           //SWVER is write-only 4'h4 : wishbone_regs_readdata <= {16'b0,REG_SWVER};
 	           4'h5 : wishbone_regs_readdata <= sniffer_data_out;
 	           //4'h6 : wishbone_regs_readdata <= {24'h0, counter_filter_control};//disabled for now
 	           //4'h7 : wishbone_regs_readdata <= counter_value[31:0];//disabled for now
@@ -771,7 +644,7 @@ module sdram_bridge (
 	           //REG_FSCNTRL is readonly here
 	           //REG_MODE is readonly here
 	           //REG_HWVER is readonly
-	           //4'h4 : REG_SWVER <= wishbone_regs_writedata;
+	           4'h4 : REG_SWVER <= wishbone_regs_writedata;
 	           //sniffer_data_out is readonly
 	           //4'h6 : counter_filter_control <= wishbone_regs_writedata[7:0];//disabled for now
 	           //counter_value is readonly
@@ -1321,20 +1194,6 @@ module sdram_bridge (
     //         end
 	// 	end
 	// end
-	
-	always @(posedge sdram_clock) begin
-		sdram_debug_read_2 <= 0;
-		if (sdram2_delayed_read_abus) begin
-           	sdram_debug_read_2 <= 1'b1;
-		end
-	end
-
-    always @(posedge sdram_clock) sdram_debug_read_1_d1 <= sdram_debug_read_1;
-    always @(posedge sdram_clock) sdram_debug_read_1_d2 <= sdram_debug_read_1_d1;
-    always @(posedge sdram_clock) sdram_debug_read_2_d1 <= sdram_debug_read_2;
-    always @(posedge sdram_clock) sdram_debug_read_2_d2 <= sdram_debug_read_2_d1;
-    assign sdram_debug_1 = sdram_debug_read_1 || sdram_debug_read_1_d1 || sdram_debug_read_1_d2 ||
-                           sdram_debug_read_2 || sdram_debug_read_2_d1 || sdram_debug_read_2_d2;
     
     //latching sdram data to Wishbone on negative clock
     always @(posedge sdram_clock) begin
