@@ -130,8 +130,25 @@ module sdram_bridge (
 		sdram2_we_n = 1'b1;
 	end
 	
-    assign sdram_clk = sdram_clock;
+    //assign sdram_clk = sdram_clock;
+    //127 does not work
+    //107 does not work
+    //20 500 errors
+	//0 500 errors
+    DELAYG #(
+		.DEL_MODE ("USER_DEFINED"),
+		.DEL_VALUE(40)
+	) delay_line_sdram1 (
+		.A(sdram_clock),
+		.Z(sdram_clk)
+	);
+	
+	//wire sdram_clock_pll_delayed;
+	//assign sdram_clk = sdram_clock_pll_delayed;
+	//assign sdram2_clk = sdram_clock_pll_delayed;
 
+    //120 ?
+    //127 occasional cs1 errors
 	DELAYG #(
 		.DEL_MODE ("USER_DEFINED"),
 		.DEL_VALUE(100)
@@ -192,8 +209,6 @@ module sdram_bridge (
 	always @(posedge sdram_clk) sdram_dq_in_dummy_pipeline2 <= sdram_dq_in_dummy_pipeline1;
 	assign sdram_dq_in = sdram_dq;
 	assign sdram2_dq = (sdram2_dq_oe) ? sdram2_dq_out_reg[7:0] : {8{1'bZ}};
-	reg [7:0] sdram2_dq_in_dummy_pipeline1;
-	always @(posedge sdram2_clk) sdram2_dq_in_dummy_pipeline1 <= sdram2_dq;
 	assign sdram2_dq_in = sdram2_dq;
 	reg [1:0] sdram2_dqm_reg;
 	initial sdram2_dqm_reg = 2'b0;

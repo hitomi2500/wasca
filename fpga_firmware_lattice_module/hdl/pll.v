@@ -2,6 +2,7 @@
 
 // 6/16/16/3 = 50 / 133.33 mhz
 // 6/17/17/3 = 50 / 141.68 mhz
+// 8/22/22/4 = 58.34 / 137.50 mhz
 // 7/20/20/3 = 58.34 / 143.10 mhz
 // 8/23/23/4 = 50 / 143.75 mhz
 // 10/29/29/5 = 50 / 145 mhz
@@ -18,10 +19,10 @@ module pll_25_133(input clk_in_25, output clk_out_50, output clk_out_133);
         .OUTDIVIDER_MUXA("DIVA"),
         .CLKOP_ENABLE("ENABLED"),
         .CLKOS_ENABLE("ENABLED"),
-        .CLKOP_DIV(10),
-        .CLKOS_DIV(29),
-        .CLKFB_DIV(29),
-        .CLKI_DIV(5),
+        .CLKOP_DIV(8),
+        .CLKOS_DIV(22),
+        .CLKFB_DIV(22),
+        .CLKI_DIV(4),
         .FEEDBK_PATH("CLKOP")
     ) pll_i (
         .CLKI(clk_in_25),
