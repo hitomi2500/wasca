@@ -6,8 +6,8 @@
 #include "fatfs/diskio.h"
 #include "mini-printf.h"
 
-#define VERSION_MAJOR 2
-#define VERSION_MINOR 1
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 2
 
 #define WISHBONE_REG_PCNTR 0x0
 #define WISHBONE_REG_FSCNTRL 0x1
@@ -34,6 +34,7 @@
 #define LED_EXT_WHITE (LED_EXT_RED | LED_EXT_GREEN | LED_EXT_BLUE)
 
 unsigned char buffer[2048];
+unsigned char recent_buf[16];
 
 #define LED (*(volatile uint32_t*)0x02000000)
 
@@ -265,6 +266,13 @@ void prepare_advertisement (int roms_count) {
 	for (int i=0; i<31;i++)
 		pAdvertise[adv_offset+i+1] = adv_string16[i];
 	adv_offset+= 32;
+	//48M RAM
+	memset(adv_string,0,64);
+	pAdvertise[adv_offset] = (id++)<<8;
+	mini_strcpy(adv_string,"RAM 48M");
+	for (int i=0; i<31;i++)
+		pAdvertise[adv_offset+i+1] = adv_string16[i];
+	adv_offset+= 32;
 	//special Heart of Darkness mode
 	memset(adv_string,0,64);
 	pAdvertise[adv_offset] = (id++)<<8;
@@ -272,7 +280,69 @@ void prepare_advertisement (int roms_count) {
 	for (int i=0; i<31;i++)
 		pAdvertise[adv_offset+i+1] = adv_string16[i];
 	adv_offset+= 32;
+	//if pskai.ss is present, add special pskai modes
+	if (FR_OK == f_stat("pskai.ss", &_filinfo)) {
+		id = 9;
+		//pskai + power memory 0.5
+		pAdvertise[adv_offset] = (id++)<<8;
+		memset(adv_string,0,64);
+		mini_strcpy(adv_string,"PSKAI + BACKUP 0.5M");
+		for (int i=0; i<31;i++)
+			pAdvertise[adv_offset+i+1] = adv_string16[i];
+		adv_offset+= 32;
+		//power memory 1
+		memset(adv_string,0,64);
+		pAdvertise[adv_offset] = (id++)<<8;
+		mini_strcpy(adv_string,"PSKAI + BACKUP 1M");
+		for (int i=0; i<31;i++)
+			pAdvertise[adv_offset+i+1] = adv_string16[i];
+		adv_offset+= 32;
+		//power memory 2
+		memset(adv_string,0,64);
+		pAdvertise[adv_offset] = (id++)<<8;
+		mini_strcpy(adv_string,"PSKAI + BACKUP 2M");
+		for (int i=0; i<31;i++)
+			pAdvertise[adv_offset+i+1] = adv_string16[i];
+		adv_offset+= 32;
+		//power memory 4
+		memset(adv_string,0,64);
+		pAdvertise[adv_offset] = (id++)<<8;
+		mini_strcpy(adv_string,"PSKAI + BACKUP 4M");
+		for (int i=0; i<31;i++)
+			pAdvertise[adv_offset+i+1] = adv_string16[i];
+		adv_offset+= 32;
+		//1M RAM
+		memset(adv_string,0,64);
+		pAdvertise[adv_offset] = (id++)<<8;
+		mini_strcpy(adv_string,"PSKAI + RAM 1M");
+		for (int i=0; i<31;i++)
+			pAdvertise[adv_offset+i+1] = adv_string16[i];
+		adv_offset+= 32;
+		//4M RAM
+		memset(adv_string,0,64);
+		pAdvertise[adv_offset] = (id++)<<8;
+		mini_strcpy(adv_string,"PSKAI + RAM 4M");
+		for (int i=0; i<31;i++)
+			pAdvertise[adv_offset+i+1] = adv_string16[i];
+		adv_offset+= 32;
+		//48M RAM
+		memset(adv_string,0,64);
+		pAdvertise[adv_offset] = (id++)<<8;
+		mini_strcpy(adv_string,"PSKAI + RAM 48M");
+		for (int i=0; i<31;i++)
+			pAdvertise[adv_offset+i+1] = adv_string16[i];
+		adv_offset+= 32;
+		//special Heart of Darkness mode
+		memset(adv_string,0,64);
+		pAdvertise[adv_offset] = (id++)<<8;
+		mini_strcpy(adv_string,"PSKAI + RAM (Heart of Darkness)");
+		for (int i=0; i<31;i++)
+			pAdvertise[adv_offset+i+1] = adv_string16[i];
+		adv_offset+= 32;
+
+	}
 	//now listing rom files
+	id = 17;
 	for (int i=0;i<roms_count;i++){
 		memset(adv_string,0,64);
 		pAdvertise[adv_offset] = (id++)<<8;
@@ -286,6 +356,52 @@ void prepare_advertisement (int roms_count) {
 	pAdvertise[adv_offset] = 0;//end of advertising list
 }
 
+// load recent used ids from recent.cfg
+void prepare_recent() {
+	FILINFO _filinfo;
+	int dummy = 0;
+	FIL _file;
+	volatile uint32_t * pRecent = (uint32_t *)0x11ffffe0;
+	if (FR_OK != f_stat("recent.cfg", &_filinfo))
+	{
+		f_open(&_file,"recent.cfg",FA_CREATE_ALWAYS | FA_WRITE);
+		memset(recent_buf,0,16);
+		f_write(&_file,recent_buf,16,&dummy);
+		f_close(&_file);
+	}
+	f_open(&_file,"recent.cfg",FA_READ);
+	f_read(&_file,recent_buf,16,&dummy);
+	f_close(&_file);
+	//copy recents to CS0
+	/*for (int i=0;i<4;i++)
+		pRecent[i] = recent_buf[i*4+3]<<24 | recent_buf[i*4+2]<<16 | recent_buf[i*4+1]<<8 | recent_buf[i*4];*/
+	for (int i=0;i<4;i++) {
+		pRecent[i*2] = recent_buf[i*4+1]<<8 | recent_buf[i*4];
+		pRecent[i*2+1] = recent_buf[i*2+3]<<8 | recent_buf[i*2+2];
+	}
+}
+
+// add recently used id to recent.cfg
+void append_recent(uint8_t id) {
+	int dummy = 0;
+	FIL _file;
+	volatile uint32_t * pRecent = (uint32_t *)0x11ffffe0;
+	prepare_recent();//in case it was not before
+	//check if recent is already in first 4 items, skip if yes
+	for (int i=0;i<4;i++)
+		if (recent_buf[i] == id)
+			return;
+	for (int i=0;i<15;i++)
+		recent_buf[15-i] = recent_buf[15-i-1];
+	recent_buf[0] = id;	
+	f_open(&_file,"recent.cfg",FA_READ | FA_WRITE);
+	f_write(&_file,recent_buf,16,&dummy);
+	f_close(&_file);
+	//copy recents to CS0
+	for (int i=0;i<4;i++)
+		pRecent[i] = recent_buf[i*4+3]<<24 | recent_buf[i*4+2]<<16 | recent_buf[i*4+1]<<8 | recent_buf[i*4];
+}
+
 void report_readiness (int percent) {
 	pWishboneRegs[WISHBONE_REG_PCNTR] = percent;
 }
@@ -297,15 +413,18 @@ void prepare_mode () {
 	unsigned int readen;
 	uint16_t * buffer16 = (uint16_t *)buffer;
 	int offset;
+	int roms_start_id = (FR_OK == f_stat("pskai.ss", &_filinfo)) ? 13 : 9;
+	int mode = pWishboneRegs[WISHBONE_REG_MODE];
 	//executing prepare sequence
-	switch (pWishboneRegs[WISHBONE_REG_MODE]) {
+	switch (mode) {
 		case 0:
 			//some error? we never advertised 0
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFFFF;
 			report_readiness(100);
 			LED = LED_EXT_RED;
 			break;
-		case 1:
+		case 1:  //BACKUP 0.5M
+		case 9:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF21;
 			if (FR_OK != f_stat("backup05.bin", &_filinfo))
 			{
@@ -336,7 +455,8 @@ void prepare_mode () {
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
 			LED = LED_EXT_GREEN;
 			break;
-		case 2:
+		case 2: //BACKUP 1M
+		case 10:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF22;
 			report_readiness(1);
 			if (FR_OK != f_stat("backup1.bin", &_filinfo))
@@ -370,7 +490,8 @@ void prepare_mode () {
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
 			LED = LED_EXT_GREEN;
 			break;
-		case 3:
+		case 3: //BACKUP 2M
+		case 11:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF23;
 			report_readiness(1);
 			if (FR_OK != f_stat("backup2.bin", &_filinfo))
@@ -404,7 +525,8 @@ void prepare_mode () {
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
 			LED = LED_EXT_GREEN;
 			break;
-		case 4:
+		case 4: //BACKUP 4M
+		case 12:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF24;
 			report_readiness(1);
 			if (FR_OK != f_stat("backup4.bin", &_filinfo))
@@ -438,7 +560,8 @@ void prepare_mode () {
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
 			LED = LED_EXT_GREEN;
 			break;
-		case 5:
+		case 5: //RAM 1M
+		case 13:
 			pWishboneRegs[WISHBONE_REG_RAM_1M_ALIASING] = 0x1;
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF5A;
 			report_readiness(100);
@@ -446,14 +569,24 @@ void prepare_mode () {
 			pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x00008000;//disable read for CS1
 			LED = LED_EXT_GREEN;
 			break;
-		case 6:
+		case 6: //RAM 4M
+		case 14:
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFF5C;
 			report_readiness(100);
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//enable write for CS0
 			pWishboneRegs[WISHBONE_REG_MAPPER_READ_HI] = 0x00008000;//disable read for CS1
 			LED = LED_EXT_GREEN;
 			break;
-		case 7:
+		case 7: //RAM 48M
+		case 15:
+			pWishboneRegs[WISHBONE_REG_ID] = 0xFF5C; //report to SH2 as 4M
+			report_readiness(100);
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//enable write for CS0
+			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//enable write for CS1
+			LED = LED_EXT_GREEN;
+			break;
+		case 8: //Heart of Darkness
+		case 16:
 			pWishboneRegs[WISHBONE_REG_ID] = 0x1234;
 			report_readiness(100);
 			pWishboneRegs[WISHBONE_REG_MAPPER_READ_LO] = 0x80000000;//disable read for CS0
@@ -461,9 +594,10 @@ void prepare_mode () {
 			LED = LED_EXT_GREEN;
 			break;
 		default:
+			//normal rom mode
 			pWishboneRegs[WISHBONE_REG_ID] = 0xFFFF;
 			//getting rom
-			f_open(&_file,roms_filenames[pWishboneRegs[WISHBONE_REG_MODE]-8],FA_READ);
+			f_open(&_file,roms_filenames[mode-17],FA_READ);
 			int _size = f_size(&_file);
 			offset = 0;
 			while(false == f_eof(&_file)) {
@@ -484,11 +618,31 @@ void prepare_mode () {
 			break;
 	}
 
+	//for pskai modes load PSKAI into CS0
+	if ( (mode >= 8) && (mode <= 16) ) {
+		//getting rom
+		f_open(&_file,"pskai.ss",FA_READ);
+		int _size = f_size(&_file);
+		offset = 0;
+		while(false == f_eof(&_file)) {
+			readen = -1;
+			f_read(&_file,buffer,1024,&readen);
+			for (int i=0;i<512;i++) {
+				pSDRAM[offset+i] = buffer16[i];
+			}
+			offset+=512;
+			report_readiness( (200*offset)/_size );
+			LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
+		}
+		f_close(&_file);
+		report_readiness(100);
+	}
+
 	delay();
 	LED = LED_OFF;
 
 	//setup sniffer
-	switch (pWishboneRegs[WISHBONE_REG_MODE]) {
+	switch (mode) {
 		case 0:
 			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0x0;//broken config, not sniffing anything
 			break;
@@ -496,13 +650,23 @@ void prepare_mode () {
 		case 2:
 		case 3:
 		case 4:
+		case 9:
+		case 10:
+		case 11:
+		case 12:
 			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
 			break;
 		case 5:
 		case 6:
+		case 13:
+		case 14:
 			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0x6;//sniffing only writes over CS0
 			break;
 		case 7:
+		case 15:
+			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xF;//sniffing all access over CS0 and CS1
+		case 8:
+		case 16:
 			pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
 			break;
 		default:
@@ -510,8 +674,8 @@ void prepare_mode () {
 			break;
     }
 
-	//remove bootable signature for everything except roms
-	switch (pWishboneRegs[WISHBONE_REG_MODE]) {
+	//remove bootable signature for everything except roms and pskai
+	switch (mode) {
 		case 1:
 		case 2:
 		case 3:
@@ -519,7 +683,8 @@ void prepare_mode () {
 		case 5:
 		case 6:
 		case 7:
-			for (int i=0;i<256;i++)
+		case 8:
+			for (int i=0;i<8192;i++)
 				pSDRAM[i]  = 0;
 			break;
 		default:
@@ -532,6 +697,7 @@ void sync_mode () {
 	volatile int dummy;
 	switch (pWishboneRegs[WISHBONE_REG_MODE]) {
 		case 1:
+		case 9:
 			//backup syncing + led blinking
 			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 1000) { //fifo overfill, error
@@ -570,6 +736,7 @@ void sync_mode () {
 				LED = LED_OFF;
 			break;
 		case 2:
+		case 10:
 			//backup syncing + led blinking
 			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 1000) { //fifo overfill, error
@@ -608,6 +775,7 @@ void sync_mode () {
 				LED = LED_OFF;
 			break;
 		case 3:
+		case 11:
 			//backup syncing + led blinking
 			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 1000) { //fifo overfill, error
@@ -646,6 +814,7 @@ void sync_mode () {
 				LED = LED_OFF;
 			break;
 		case 4:
+		case 12:
 			//backup syncing + led blinking
 			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				if ( (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL]>>16) > 1000) { //fifo overfill, error
@@ -685,16 +854,12 @@ void sync_mode () {
 			break;
 		case 5:
 		case 6:
-			//led blinking only
-			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
-				//read fifo
-				dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
-				LED = LED_EXT_GREEN;
-			}
-			else
-				LED = LED_OFF;
-			break;
 		case 7:
+		case 8:
+		case 13:
+		case 14:
+		case 15:
+		case 16:
 			//led blinking only
 			if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
 				//read fifo
@@ -705,14 +870,7 @@ void sync_mode () {
 				LED = LED_OFF;
 			break;
 		default:
-			//led blinking only
-			/*if (pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] & 0x07FF0000) {
-				//read fifo
-				dummy = pWishboneRegs[WISHBONE_REG_SNIFFER_DATA];
-				LED = LED_EXT_GREEN;
-			}
-			else
-				LED = LED_OFF;*/
+			//no activity for rom modes
 			break;  
 		}
 }
@@ -725,7 +883,7 @@ int main() {
 	volatile int dummy;
 
 	//set version
-	pWishboneRegs[WISHBONE_REG_SWVER] = 0x0101; //software version register
+	pWishboneRegs[WISHBONE_REG_SWVER] = VERSION_MAJOR << 8 | VERSION_MINOR; //Software version
 	
 	//set wishbone registers
 	pWishboneRegs[WISHBONE_REG_SNIFFER_CONTROL] = 0xA;//sniffing only writes over CS1
@@ -736,7 +894,7 @@ int main() {
 
 	//set memory-based registers
 	pSDRAM[0xfffd00] =  0; //filesystem status register
-	pSDRAM[0xfffffc] =  VERSION_MAJOR | VERSION_MINOR<<8; //Software version
+	pSDRAM[0xfffffc] =  VERSION_MAJOR << 8 | VERSION_MINOR; //Software version
 	pSDRAM[0xfffffd] =  0x6177; //signature "wa"
 	pSDRAM[0xfffffe] =  0x6373; //signature "sc"
 	pSDRAM[0xffffff] =  0x2061; //signature "a "
@@ -793,12 +951,14 @@ int main() {
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//write mapper for CS0
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//0x00000000;//write mapper for CS1 + CS2
 			prepare_advertisement(roms_count);
+			prepare_recent();
 
 			//waiting for mode selection
 			mini_printf("Waiting for mode selection...");
 			while(pWishboneRegs[WISHBONE_REG_MODE] == 0)
 				;
 			mini_printf("done, mode %d\r\n",pWishboneRegs[WISHBONE_REG_MODE]);
+			append_recent(pWishboneRegs[WISHBONE_REG_MODE]);
 			
 			//disable blue led if it was first init
 			LED = LED_OFF;
