@@ -3,9 +3,9 @@
     "GenerationSoftware": {
       "Vendor": "KiCad",
       "Application": "Pcbnew",
-      "Version": "7.0.7"
+      "Version": "10.0.0"
     },
-    "CreationDate": "2023-09-18T11:19:49+03:00"
+    "CreationDate": "2026-11-07T19:50:54+03:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
@@ -14,22 +14,31 @@
       "Revision": "1.6"
     },
     "Size": {
-      "X": 100.431,
+      "X": 100.381,
       "Y": 77.731
     },
-    "LayerNumber": 2,
+    "LayerNumber": 4,
     "BoardThickness": 1.6,
     "Finish": "None"
   },
   "DesignRules": [
     {
       "Layers": "Outer",
+      "PadToPad": 0.1524,
+      "PadToTrack": 0.1524,
+      "TrackToTrack": 0.1524,
+      "MinLineWidth": 0.1524,
+      "TrackToRegion": 0.1524,
+      "RegionToRegion": 0.1524
+    },
+    {
+      "Layers": "Inner",
       "PadToPad": 0.0,
       "PadToTrack": 0.0,
-      "TrackToTrack": 0.2,
+      "TrackToTrack": 0.1524,
       "MinLineWidth": 0.1524,
-      "TrackToRegion": 0.2,
-      "RegionToRegion": 0.2
+      "TrackToRegion": 0.1524,
+      "RegionToRegion": 0.1524
     }
   ],
   "FilesAttributes": [
@@ -39,8 +48,18 @@
       "FilePolarity": "Positive"
     },
     {
+      "Path": "wasca-In1_Cu.g1",
+      "FileFunction": "Copper,L2,Inr",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "wasca-In2_Cu.g2",
+      "FileFunction": "Copper,L3,Inr",
+      "FilePolarity": "Positive"
+    },
+    {
       "Path": "wasca-Back.gbl",
-      "FileFunction": "Copper,L2,Bot",
+      "FileFunction": "Copper,L4,Bot",
       "FilePolarity": "Positive"
     },
     {
@@ -90,10 +109,34 @@
     },
     {
       "Type": "Dielectric",
-      "Thickness": 1.51,
+      "Thickness": 0.1,
       "Material": "FR4",
-      "Name": "Front/Back",
-      "Notes": "Type: dielectric layer 1 (from Front to Back)"
+      "Name": "Front/In1.Cu",
+      "Notes": "Type: dielectric layer 1 (from Front to In1.Cu)"
+    },
+    {
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "In1.Cu"
+    },
+    {
+      "Type": "Dielectric",
+      "Thickness": 1.24,
+      "Material": "FR4",
+      "Name": "In1.Cu/In2.Cu",
+      "Notes": "Type: dielectric layer 2 (from In1.Cu to In2.Cu)"
+    },
+    {
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "In2.Cu"
+    },
+    {
+      "Type": "Dielectric",
+      "Thickness": 0.1,
+      "Material": "FR4",
+      "Name": "In2.Cu/Back",
+      "Notes": "Type: dielectric layer 3 (from In2.Cu to Back)"
     },
     {
       "Type": "Copper",

@@ -24411,6 +24411,16 @@
 	)
 	(wire
 		(pts
+			(xy 93.98 433.07) (xy 115.57 433.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3fabb89a-f697-4187-87b1-fb63cf7919cf")
+	)
+	(wire
+		(pts
 			(xy 533.4 604.52) (xy 524.51 604.52)
 		)
 		(stroke
@@ -34942,6 +34952,16 @@
 			(justify right bottom)
 		)
 		(uuid "4ecec819-55a0-4f8f-9342-7dde73fbd0a2")
+	)
+	(label "+3_3V"
+		(at 102.87 433.07 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left bottom)
+		)
+		(uuid "4f537d60-f30a-4787-8dd6-359fd519dba6")
 	)
 	(label "PROGRAMN"
 		(at 678.18 69.85 180)
@@ -45650,80 +45670,6 @@
 			(project "wasca"
 				(path "/fdc60c06-30fa-4dfb-96b4-809b755999e1"
 					(reference "U2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 93.98 433.07 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "00000000-0000-0000-0000-00006caac4cd")
-		(property "Reference" "#PWR09"
-			(at 93.98 439.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 93.98 436.88 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 93.98 433.07 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 93.98 433.07 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 93.98 433.07 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "def6977a-fd8d-4933-a605-ad61fc601680")
-		)
-		(instances
-			(project "wasca"
-				(path "/fdc60c06-30fa-4dfb-96b4-809b755999e1"
-					(reference "#PWR09")
 					(unit 1)
 				)
 			)
