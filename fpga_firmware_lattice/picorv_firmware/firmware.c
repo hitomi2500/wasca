@@ -7,7 +7,7 @@
 #include "mini-printf.h"
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 2
+#define VERSION_MINOR 4
 
 #define WISHBONE_REG_PCNTR 0x0
 #define WISHBONE_REG_FSCNTRL 0x1
@@ -357,7 +357,7 @@ void prepare_advertisement (int roms_count) {
 }
 
 // load recent used ids from recent.cfg
-void prepare_recent() {
+void prepare_recent(int roms_count) {
 	FILINFO _filinfo;
 	int dummy = 0;
 	FIL _file;
@@ -372,9 +372,11 @@ void prepare_recent() {
 	f_open(&_file,"recent.cfg",FA_READ);
 	f_read(&_file,recent_buf,16,&dummy);
 	f_close(&_file);
+	//replace recents above roms count with backup 0.5
+	for (int i=0;i<16;i++)
+		if (recent_buf[i]  >= (roms_count+17))
+			recent_buf[i] = 1;
 	//copy recents to CS0
-	/*for (int i=0;i<4;i++)
-		pRecent[i] = recent_buf[i*4+3]<<24 | recent_buf[i*4+2]<<16 | recent_buf[i*4+1]<<8 | recent_buf[i*4];*/
 	for (int i=0;i<4;i++) {
 		pRecent[i*2] = recent_buf[i*4+1]<<8 | recent_buf[i*4];
 		pRecent[i*2+1] = recent_buf[i*2+3]<<8 | recent_buf[i*2+2];
@@ -382,11 +384,11 @@ void prepare_recent() {
 }
 
 // add recently used id to recent.cfg
-void append_recent(uint8_t id) {
+void append_recent(uint8_t id, int roms_count) {
 	int dummy = 0;
 	FIL _file;
 	volatile uint32_t * pRecent = (uint32_t *)0x11ffffe0;
-	prepare_recent();//in case it was not before
+	prepare_recent(roms_count);//in case it was not before
 	//check if recent is already in first 4 items, skip if yes
 	for (int i=0;i<4;i++)
 		if (recent_buf[i] == id)
@@ -398,8 +400,10 @@ void append_recent(uint8_t id) {
 	f_write(&_file,recent_buf,16,&dummy);
 	f_close(&_file);
 	//copy recents to CS0
-	for (int i=0;i<4;i++)
-		pRecent[i] = recent_buf[i*4+3]<<24 | recent_buf[i*4+2]<<16 | recent_buf[i*4+1]<<8 | recent_buf[i*4];
+	for (int i=0;i<4;i++) {
+		pRecent[i*2] = recent_buf[i*4+1]<<8 | recent_buf[i*4];
+		pRecent[i*2+1] = recent_buf[i*2+3]<<8 | recent_buf[i*2+2];
+	}
 }
 
 void report_readiness (int percent) {
@@ -607,7 +611,9 @@ void prepare_mode () {
 					pSDRAM[offset+i] = buffer16[i];
 				}
 				offset+=512;
-				report_readiness( (200*offset)/_size );
+				int offset_div = offset>>8;
+				int _size_div = _size>>8;
+				report_readiness((200*offset_div)/_size_div);
 				LED = (offset&0x4000) ? LED_EXT_YELLOW : LED_OFF;
 			}
 			f_close(&_file);
@@ -951,14 +957,14 @@ int main() {
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_LO] = 0xFFFFFFFF;//write mapper for CS0
 			pWishboneRegs[WISHBONE_REG_MAPPER_WRITE_HI] = 0x0000FFFF;//0x00000000;//write mapper for CS1 + CS2
 			prepare_advertisement(roms_count);
-			prepare_recent();
+			prepare_recent(roms_count);
 
 			//waiting for mode selection
 			mini_printf("Waiting for mode selection...");
 			while(pWishboneRegs[WISHBONE_REG_MODE] == 0)
 				;
 			mini_printf("done, mode %d\r\n",pWishboneRegs[WISHBONE_REG_MODE]);
-			append_recent(pWishboneRegs[WISHBONE_REG_MODE]);
+			append_recent(pWishboneRegs[WISHBONE_REG_MODE],roms_count);
 			
 			//disable blue led if it was first init
 			LED = LED_OFF;
